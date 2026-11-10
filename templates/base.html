@@ -103,7 +103,7 @@
             <div class="flex items-center justify-between h-16 sm:h-20">
                 
                 <!-- Left: Mobile Menu Toggle & Desktop Search Form -->
-                <div class="flex items-center space-x-2 sm:space-x-3 w-1/4 min-w-[40px]">
+                <div class="flex items-center space-x-2 sm:space-x-3 w-auto lg:w-1/4">
                     <!-- Mobile Hamburger Button -->
                     <button id="mobileMenuBtn" type="button" class="lg:hidden p-1.5 text-neutral-800 hover:text-gold-600 focus:outline-none rounded" aria-label="Open Navigation Menu">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
@@ -119,10 +119,10 @@
                     </form>
                 </div>
 
-                <!-- Center: Majestic Luxury Brand Logo (Fluid responsive typography, never collides) -->
+                <!-- Center: Majestic Luxury Brand Logo (Fluid responsive typography, perfectly centered) -->
                 <div class="flex-1 text-center px-1 sm:px-4 min-w-0">
                     <a href="{% url 'core:home' %}" class="group inline-block py-1">
-                        <span class="font-display text-lg sm:text-2xl md:text-3xl font-bold tracking-[0.14em] sm:tracking-[0.24em] text-neutral-900 group-hover:text-gold-600 transition block truncate">
+                        <span class="font-display text-base sm:text-2xl md:text-3xl font-bold tracking-[0.14em] sm:tracking-[0.24em] text-neutral-900 group-hover:text-gold-600 transition block truncate">
                             LUCKJARY
                         </span>
                         <span class="block text-[7px] sm:text-[8px] md:text-[9px] tracking-[0.22em] sm:tracking-[0.38em] text-gold-600 uppercase font-sans font-semibold -mt-0.5">
@@ -131,8 +131,8 @@
                     </a>
                 </div>
 
-                <!-- Right: Utilities (Wishlist & Bag on mobile, plus Track & Account on tablet/desktop) -->
-                <div class="flex items-center justify-end space-x-2 sm:space-x-4 w-1/4 min-w-[70px]">
+                <!-- Right: Utilities (Wishlist, Profile, Shopping Bag - Always Visible) -->
+                <div class="flex items-center justify-end space-x-2 sm:space-x-4 w-auto lg:w-1/4">
                     
                     <!-- Order Tracking (Desktop/Tablet) -->
                     <a href="{% url 'orders:order_tracking' %}" class="hidden md:inline-flex items-center text-xs text-neutral-600 hover:text-gold-600 tracking-wider transition group" title="Track Order">
@@ -140,7 +140,7 @@
                         <span class="font-medium">Track</span>
                     </a>
 
-                    <!-- Wishlist (Compact on mobile) -->
+                    <!-- Wishlist -->
                     <a href="{% url 'core:wishlist' %}" class="relative p-1 text-neutral-700 hover:text-gold-600 transition" title="Curated Wishlist">
                         <svg class="w-5 h-5 hover:scale-110 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
                         {% if wishlist_count > 0 %}
@@ -148,10 +148,10 @@
                         {% endif %}
                     </a>
 
-                    <!-- Account / Vault Dropdown (Shown on tablet/desktop; on mobile it is in the menu drawer) -->
+                    <!-- Profile / Client Account Icon (Always Visible on Mobile and Desktop) -->
                     {% if user.is_authenticated %}
-                        <div class="relative group hidden sm:block">
-                            <a href="{% url 'accounts:profile' %}" class="p-1 flex items-center text-neutral-800 hover:text-gold-600 transition" title="My Account">
+                        <div class="relative group">
+                            <a href="{% url 'accounts:profile' %}" class="p-1 flex items-center text-neutral-800 hover:text-gold-600 transition" title="Client Vault">
                                 <svg class="w-5 h-5 hover:scale-110 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
                             </a>
                             <!-- Dropdown menu -->
@@ -173,7 +173,7 @@
                             </div>
                         </div>
                     {% else %}
-                        <a href="{% url 'accounts:login' %}" class="p-1 text-neutral-700 hover:text-gold-600 transition hidden sm:block" title="Sign In">
+                        <a href="{% url 'accounts:login' %}" class="p-1 text-neutral-700 hover:text-gold-600 transition" title="Sign In">
                             <svg class="w-5 h-5 hover:scale-110 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
                         </a>
                     {% endif %}
@@ -183,11 +183,6 @@
                         <svg class="w-5 h-5 hover:scale-110 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg>
                         <span id="cartCountBadge" class="absolute -top-1 -right-1 bg-neutral-900 text-[#C5A059] text-[9px] w-3.5 h-3.5 sm:w-4 sm:h-4 rounded-full flex items-center justify-center font-bold">
                             {{ cart_count|default:"0" }}
-                        </span>
-                    </a>
-                </div>
-            </div>
-        </div>
                         </span>
                     </a>
                 </div>
