@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<section class="max-w-md mx-auto px-4 py-16">
+    <div class="bg-white border border-[#E8DFD0] rounded-sm p-8 sm:p-10 shadow-sm space-y-6">
+        <div class="text-center space-y-2">
+            <span class="text-xs font-display tracking-[0.25em] text-[#C5A059] uppercase font-semibold">Join The Privé Club</span>
+            <h1 class="font-serif text-3xl text-neutral-900">Create Your Account</h1>
+            <p class="text-xs text-neutral-500 font-light">Enjoy bespoke concierge service, real-time order tracking, and private collection previews.</p>
+        </div>
+
+        <form method="POST" action="{% url 'accounts:register' %}" class="space-y-4 text-xs">
+            {% csrf_token %}
+            <div class="grid grid-cols-2 gap-3">
+                <div>
+                    <label class="block text-neutral-700 font-semibold mb-1 uppercase tracking-wider text-[11px]">First Name</label>
+                    <input type="text" name="first_name" required placeholder="Eleanor" class="w-full p-2.5 border border-neutral-300 rounded focus:outline-none focus:border-gold-500">
+                </div>
+                <div>
+                    <label class="block text-neutral-700 font-semibold mb-1 uppercase tracking-wider text-[11px]">Last Name</label>
+                    <input type="text" name="last_name" required placeholder="Vance" class="w-full p-2.5 border border-neutral-300 rounded focus:outline-none focus:border-gold-500">
+                </div>
+            </div>
+
+            <div>
+                <label class="block text-neutral-700 font-semibold mb-1 uppercase tracking-wider text-[11px]">Email Address *</label>
+                <input type="email" name="email" required placeholder="eleanor.vance@luxury.com" class="w-full p-2.5 border border-neutral-300 rounded focus:outline-none focus:border-gold-500">
+                <p class="text-[10px] text-neutral-400 mt-0.5">An email verification token will be generated to secure your account.</p>
+            </div>
+
+            <div>
+                <label class="block text-neutral-700 font-semibold mb-1 uppercase tracking-wider text-[11px]">Password (Min 6 Characters) *</label>
+                <input type="password" name="password" required placeholder="••••••••" class="w-full p-2.5 border border-neutral-300 rounded focus:outline-none focus:border-gold-500">
+            </div>
+
+            <div>
+                <label class="block text-neutral-700 font-semibold mb-1 uppercase tracking-wider text-[11px]">Confirm Password *</label>
+                <input type="password" name="password_confirm" required placeholder="••••••••" class="w-full p-2.5 border border-neutral-300 rounded focus:outline-none focus:border-gold-500">
+            </div>
+
+            <label class="flex items-start space-x-2 cursor-pointer pt-1">
+                <input type="checkbox" name="newsletter" checked class="mt-0.5 text-[#C5A059] rounded focus:ring-[#C5A059]">
+                <span class="text-[11px] text-neutral-600">Subscribe to the Luckjary Privé Club for early access to private diamond auctions and invitations.</span>
+            </label>
+
+            <button type="submit" class="w-full btn-gold py-3 text-xs uppercase font-display tracking-widest font-semibold rounded-sm shadow-md">
+                Create Account &rarr;
+            </button>
+        </form>
+
+        <div class="text-center pt-2 text-xs text-neutral-500">
+            <span>Already have an account?</span>
+            <a href="{% url 'accounts:login' %}" class="text-gold-700 font-semibold hover:underline ml-1">Sign In</a>
+        </div>
+    </div>
+</section>
+{% endblock %}

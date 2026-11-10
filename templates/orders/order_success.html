@@ -1,0 +1,94 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<section class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+    <div class="bg-white border border-[#E8DFD0] rounded-sm p-8 sm:p-12 shadow-sm text-center space-y-6">
+        
+        <!-- Luxury Confirmation Crest -->
+        <div class="w-16 h-16 bg-[#FAF7F0] border border-[#C5A059] rounded-full flex items-center justify-center mx-auto text-2xl text-gold-600 shadow-sm">
+            ✦
+        </div>
+
+        <div class="space-y-2">
+            <span class="text-xs font-display tracking-[0.25em] text-[#C5A059] uppercase font-bold">Commission Confirmed</span>
+            <h1 class="font-serif text-3xl sm:text-5xl text-neutral-900 font-light">
+                Thank You for Choosing Luckjary
+            </h1>
+            <p class="text-xs sm:text-sm text-neutral-600 max-w-lg mx-auto">
+                Your order <span class="font-mono font-bold text-neutral-900">#{{ order.order_number }}</span> has been authenticated and entered into our master atelier schedule.
+            </p>
+        </div>
+
+        <!-- Quick Summary Box -->
+        <div class="bg-[#FAF9F6] border border-[#E8DFD0] rounded-sm p-6 text-left max-w-xl mx-auto space-y-3 text-xs">
+            <div class="flex justify-between pb-2 border-b border-neutral-200">
+                <span class="text-neutral-500">Order Number:</span>
+                <span class="font-mono font-bold text-neutral-900">{{ order.order_number }}</span>
+            </div>
+            <div class="flex justify-between pb-2 border-b border-neutral-200">
+                <span class="text-neutral-500">Confirmation Sent To:</span>
+                <span class="font-semibold text-neutral-900">{{ order.email }}</span>
+            </div>
+            <div class="flex justify-between pb-2 border-b border-neutral-200">
+                <span class="text-neutral-500">Estimated Delivery:</span>
+                <span class="font-semibold text-neutral-900">{{ order.estimated_delivery|date:"F d, Y"|default:"Within 3 Business Days" }}</span>
+            </div>
+            <div class="flex justify-between pb-2 border-b border-neutral-200">
+                <span class="text-neutral-500">Insured Courier:</span>
+                <span class="font-semibold text-neutral-900">{{ order.carrier }}</span>
+            </div>
+            <div class="flex justify-between pt-1 text-sm font-serif">
+                <span class="font-bold text-neutral-900">Total Paid:</span>
+                <span class="font-bold text-neutral-900">${{ order.total_amount }}</span>
+            </div>
+        </div>
+
+        <!-- POST-PURCHASE AUTOMATIC ACCOUNT CREATION PROMPT (For Guest Checkout) -->
+        {% if is_guest %}
+        <div class="bg-gradient-to-br from-[#1C1C1C] to-[#121212] text-white p-8 rounded-sm text-left max-w-xl mx-auto shadow-xl border border-[#C5A059]/40 space-y-4">
+            <div class="flex items-center space-x-2">
+                <span class="text-gold-400 text-sm">✦</span>
+                <h3 class="font-display text-sm tracking-widest uppercase font-bold text-gold-400">
+                    Activate Your Luckjary Privé Client Account
+                </h3>
+            </div>
+            <p class="text-xs text-neutral-300 leading-relaxed">
+                Set a password to link this order, unlock 24/7 real-time tracking, download your official gemological certificates, and save your preferences for future bespoke commissions.
+            </p>
+
+            <form action="{% url 'accounts:guest_convert' order.order_number %}" method="POST" class="space-y-3 pt-2">
+                {% csrf_token %}
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+                    <div>
+                        <label class="block text-neutral-400 text-[11px] mb-1">Create Password (Min 6 chars)</label>
+                        <input type="password" name="password" required placeholder="••••••••" class="w-full p-2.5 bg-[#2B2B2B] border border-neutral-700 rounded text-white focus:outline-none focus:border-gold-500">
+                    </div>
+                    <div>
+                        <label class="block text-neutral-400 text-[11px] mb-1">Confirm Password</label>
+                        <input type="password" name="password_confirm" required placeholder="••••••••" class="w-full p-2.5 bg-[#2B2B2B] border border-neutral-700 rounded text-white focus:outline-none focus:border-gold-500">
+                    </div>
+                </div>
+
+                <button type="submit" class="w-full btn-gold py-3 text-xs uppercase font-display tracking-widest font-semibold rounded-sm">
+                    Activate My Account & Save Order
+                </button>
+            </form>
+        </div>
+        {% endif %}
+
+        <!-- Navigation CTAs -->
+        <div class="pt-4 flex flex-col sm:flex-row items-center justify-center gap-4">
+            <a href="{% url 'orders:order_tracking_direct' order.order_number %}" class="w-full sm:w-auto btn-gold px-8 py-3 text-xs uppercase font-display tracking-widest font-semibold rounded-sm shadow">
+                Track Real-Time Status &rarr;
+            </a>
+            <a href="{% url 'orders:order_detail' order.order_number %}" class="w-full sm:w-auto px-6 py-3 border border-neutral-300 hover:border-gold-500 text-xs uppercase font-display tracking-wider text-neutral-800 rounded-sm">
+                View Full Itemized Receipt
+            </a>
+            <a href="{% url 'catalog:product_list' %}" class="w-full sm:w-auto text-xs text-neutral-500 hover:text-gold-600 underline">
+                Continue Browsing
+            </a>
+        </div>
+    </div>
+</section>
+{% endblock %}

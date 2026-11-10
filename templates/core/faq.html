@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<section class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16 space-y-12">
+    <div class="text-center space-y-2">
+        <span class="text-xs font-display tracking-[0.25em] text-[#C5A059] uppercase font-bold">Client Care & Concierge</span>
+        <h1 class="font-serif text-3xl sm:text-5xl text-neutral-900 font-light">Frequently Asked Questions</h1>
+        <p class="text-xs text-neutral-500 font-light">Everything you need to know about our fine jewelry, ring sizing, insured shipping, and lifetime warranty.</p>
+    </div>
+
+    <!-- Ring Sizing Chart -->
+    <div class="bg-white border border-[#E8DFD0] rounded-sm p-6 sm:p-8 shadow-sm space-y-4">
+        <div class="flex items-center space-x-2">
+            <span class="text-gold-600 text-lg">✦</span>
+            <h3 class="font-display text-xs uppercase tracking-widest font-bold text-neutral-900">Official International Ring Size Guide</h3>
+        </div>
+        <div class="overflow-x-auto">
+            <table class="w-full text-xs text-left">
+                <thead class="bg-[#FAF9F6] border-b border-neutral-200 text-neutral-500 uppercase tracking-wider text-[11px]">
+                    <tr>
+                        <th class="py-2.5 px-3">US Size</th>
+                        <th class="py-2.5 px-3">Inner Diameter (mm)</th>
+                        <th class="py-2.5 px-3">Inner Circumference (mm)</th>
+                        <th class="py-2.5 px-3">UK / AU Size</th>
+                        <th class="py-2.5 px-3">EU Size</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-neutral-100 text-neutral-700">
+                    <tr><td class="py-2 px-3 font-bold">5</td><td class="py-2 px-3">15.7 mm</td><td class="py-2 px-3">49.3 mm</td><td class="py-2 px-3">J ½</td><td class="py-2 px-3">49</td></tr>
+                    <tr><td class="py-2 px-3 font-bold">6</td><td class="py-2 px-3">16.5 mm</td><td class="py-2 px-3">51.9 mm</td><td class="py-2 px-3">L ½</td><td class="py-2 px-3">52</td></tr>
+                    <tr class="bg-[#FAF7F0]"><td class="py-2 px-3 font-bold text-gold-700">7 (Standard)</td><td class="py-2 px-3">17.3 mm</td><td class="py-2 px-3">54.4 mm</td><td class="py-2 px-3">N ½</td><td class="py-2 px-3">54</td></tr>
+                    <tr><td class="py-2 px-3 font-bold">8</td><td class="py-2 px-3">18.1 mm</td><td class="py-2 px-3">57.0 mm</td><td class="py-2 px-3">P ½</td><td class="py-2 px-3">57</td></tr>
+                    <tr><td class="py-2 px-3 font-bold">9</td><td class="py-2 px-3">18.9 mm</td><td class="py-2 px-3">59.5 mm</td><td class="py-2 px-3">R ½</td><td class="py-2 px-3">60</td></tr>
+                </tbody>
+            </table>
+        </div>
+        <p class="text-[11px] text-neutral-500 italic">Unsure of your ring size? Luckjary offers complimentary resizing on all solitaire and trilogy rings within 60 days of purchase.</p>
+    </div>
+
+    <!-- FAQ Accordion -->
+    <div class="space-y-4">
+        <div class="bg-white border border-[#E8DFD0] rounded-sm p-6 space-y-2">
+            <h4 class="font-serif text-lg font-semibold text-neutral-900">How is my jewelry shipped and insured?</h4>
+            <p class="text-xs text-neutral-600 leading-relaxed font-light">
+                Every Luckjary parcel is dispatched via FedEx Luxury Priority Overnight or armored white-glove transport. All packages are 100% insured up to \$100,000 against loss, theft, or damage during transit. Direct adult signature is mandatory upon delivery.
+            </p>
+        </div>
+
+        <div class="bg-white border border-[#E8DFD0] rounded-sm p-6 space-y-2">
+            <h4 class="font-serif text-lg font-semibold text-neutral-900">What is the Luckjary Lifetime Warranty?</h4>
+            <p class="text-xs text-neutral-600 leading-relaxed font-light">
+                We stand behind our craftsmanship forever. Our lifetime warranty covers prong tightening, ultrasonic cleaning, rhodium re-dipping, and manufacturing defect repairs for life. Simply contact our concierge team to schedule an atelier maintenance service.
+            </p>
+        </div>
+
+        <div class="bg-white border border-[#E8DFD0] rounded-sm p-6 space-y-2">
+            <h4 class="font-serif text-lg font-semibold text-neutral-900">Do you accept bespoke custom commissions?</h4>
+            <p class="text-xs text-neutral-600 leading-relaxed font-light">
+                Yes. Our master atelier crafts custom engagement rings, anniversary suites, and heirloom resets. Contact our concierge to begin a one-on-one consultation with a senior gemologist.
+            </p>
+        </div>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<section class="max-w-md mx-auto px-4 py-16">
+    <div class="bg-white border border-[#E8DFD0] rounded-sm p-8 sm:p-10 shadow-sm space-y-6">
+        <div class="text-center space-y-2">
+            <span class="text-xs font-display tracking-[0.25em] text-[#C5A059] uppercase font-semibold">Client Sign In</span>
+            <h1 class="font-serif text-3xl text-neutral-900">Welcome to Luckjary</h1>
+            <p class="text-xs text-neutral-500 font-light">Access your order history, jewelry vault, and saved addresses.</p>
+        </div>
+
+        <form method="POST" action="{% url 'accounts:login' %}{% if next %}?next={{ next }}{% endif %}" class="space-y-4 text-xs">
+            {% csrf_token %}
+            <div>
+                <label class="block text-neutral-700 font-semibold mb-1 uppercase tracking-wider text-[11px]">Email Address</label>
+                <input type="email" name="email" required placeholder="client@example.com" class="w-full p-2.5 border border-neutral-300 rounded focus:outline-none focus:border-gold-500">
+            </div>
+
+            <div>
+                <div class="flex justify-between items-center mb-1">
+                    <label class="text-neutral-700 font-semibold uppercase tracking-wider text-[11px]">Password</label>
+                    <a href="{% url 'core:contact' %}" class="text-[11px] text-neutral-400 hover:text-gold-600">Forgot password?</a>
+                </div>
+                <input type="password" name="password" required placeholder="••••••••" class="w-full p-2.5 border border-neutral-300 rounded focus:outline-none focus:border-gold-500">
+            </div>
+
+            <button type="submit" class="w-full btn-gold py-3 text-xs uppercase font-display tracking-widest font-semibold rounded-sm shadow-md">
+                Sign In to Vault
+            </button>
+        </form>
+
+        <!-- Quick Demo Credentials Box -->
+        <div class="p-3 bg-[#FAF7F0] border border-[#E8DFD0] rounded text-[11px] text-neutral-600 space-y-1">
+            <p class="font-semibold text-neutral-900">Demo Accounts Available:</p>
+            <p><span class="font-medium text-neutral-800">Admin/Staff:</span> admin@luckjary.com / admin12345</p>
+            <p><span class="font-medium text-neutral-800">Client:</span> isabella.vance@example.com / luxury12345</p>
+        </div>
+
+        <div class="text-center pt-2 text-xs text-neutral-500">
+            <span>New to Luckjary Privé?</span>
+            <a href="{% url 'accounts:register' %}" class="text-gold-700 font-semibold hover:underline ml-1">Create an Account</a>
+        </div>
+    </div>
+</section>
+{% endblock %}

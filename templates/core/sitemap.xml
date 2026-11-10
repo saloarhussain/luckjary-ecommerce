@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+    <!-- Static Main Pages -->
+    <url>
+        <loc>{{ request.scheme }}://{{ request.get_host }}/</loc>
+        <changefreq>daily</changefreq>
+        <priority>1.0</priority>
+    </url>
+    <url>
+        <loc>{{ request.scheme }}://{{ request.get_host }}/shop/</loc>
+        <changefreq>daily</changefreq>
+        <priority>0.9</priority>
+    </url>
+    <url>
+        <loc>{{ request.scheme }}://{{ request.get_host }}/about/</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>{{ request.scheme }}://{{ request.get_host }}/faq/</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.6</priority>
+    </url>
+    <url>
+        <loc>{{ request.scheme }}://{{ request.get_host }}/contact/</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.6</priority>
+    </url>
+    <url>
+        <loc>{{ request.scheme }}://{{ request.get_host }}/track/</loc>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+
+    <!-- Category Pages -->
+    {% for cat in categories %}
+    <url>
+        <loc>{{ request.scheme }}://{{ request.get_host }}{{ cat.get_absolute_url }}</loc>
+        <changefreq>weekly</changefreq>
+        <priority>0.85</priority>
+    </url>
+    {% endfor %}
+
+    <!-- Product Detail Pages -->
+    {% for prod in products %}
+    <url>
+        <loc>{{ request.scheme }}://{{ request.get_host }}{{ prod.get_absolute_url }}</loc>
+        <lastmod>{{ prod.updated_at|date:"Y-m-d" }}</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.8</priority>
+    </url>
+    {% endfor %}
+</urlset>

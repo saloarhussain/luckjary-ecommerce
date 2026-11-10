@@ -1,0 +1,123 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<section class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-10">
+    <div class="flex items-center justify-between">
+        <div>
+            <a href="{% url 'accounts:profile' %}" class="text-xs text-neutral-500 hover:text-gold-600">&larr; Back to Client Vault</a>
+            <h1 class="font-serif text-3xl text-neutral-900 mt-2">Saved Addresses & Destinations</h1>
+            <p class="text-xs text-neutral-500 font-light">Manage your white-glove courier shipping destinations.</p>
+        </div>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+        
+        <!-- List of existing addresses (7 Cols) -->
+        <div class="lg:col-span-7 space-y-4">
+            <h3 class="font-display text-xs uppercase tracking-widest font-bold text-neutral-900 pb-2 border-b border-neutral-200">
+                Your Saved Locations ({{ addresses.count }})
+            </h3>
+
+            <div class="space-y-4">
+                {% for addr in addresses %}
+                <div class="bg-white border border-[#E8DFD0] rounded-sm p-6 shadow-sm space-y-3">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center space-x-2">
+                            <span class="font-bold text-neutral-900 text-sm">{{ addr.full_name }}</span>
+                            {% if addr.is_default %}
+                            <span class="text-[10px] uppercase font-bold text-gold-700 bg-gold-100 px-2 py-0.5 rounded">Default Shipping</span>
+                            {% endif %}
+                            <span class="text-[10px] text-neutral-400 uppercase tracking-wider">({{ addr.get_address_type_display }})</span>
+                        </div>
+
+                        <form method="POST" action="{% url 'accounts:addresses' %}" onsubmit="return confirm('Remove this address?');">
+                            {% csrf_token %}
+                            <input type="hidden" name="action" value="delete">
+                            <input type="hidden" name="address_id" value="{{ addr.id }}">
+                            <button type="submit" class="text-xs text-red-500 hover:underline">Delete</button>
+                        </form>
+                    </div>
+
+                    <div class="text-xs text-neutral-600 space-y-0.5">
+                        <p>{{ addr.street_address }}{% if addr.apartment_suite %}, {{ addr.apartment_suite }}{% endif %}</p>
+                        <p>{{ addr.city }}, {{ addr.state_province }} {{ addr.postal_code }}</p>
+                        <p>{{ addr.country }}</p>
+                        <p class="text-neutral-500 font-mono mt-1">{{ addr.phone_number }}</p>
+                    </div>
+                </div>
+                {% empty %}
+                <div class="bg-white border border-[#E8DFD0] rounded-sm p-10 text-center text-neutral-400 text-xs italic">
+                    You have no saved addresses yet. Add your first address using the form.
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Add Address Form (5 Cols) -->
+        <div class="lg:col-span-5">
+            <div class="bg-white border border-[#E8DFD0] rounded-sm p-6 sm:p-8 shadow-sm space-y-4 sticky top-28">
+                <h3 class="font-display text-xs uppercase tracking-widest font-bold text-neutral-900 pb-2 border-b border-neutral-100">
+                    Add New Destination
+                </h3>
+
+                <form method="POST" action="{% url 'accounts:addresses' %}" class="space-y-3 text-xs">
+                    {% csrf_token %}
+                    <input type="hidden" name="action" value="add">
+
+                    <div>
+                        <label class="block text-neutral-700 font-semibold mb-1">Recipient Full Name *</label>
+                        <input type="text" name="full_name" required placeholder="e.g. Isabella Vance" class="w-full p-2 border border-neutral-300 rounded focus:outline-none focus:border-gold-500">
+                    </div>
+
+                    <div>
+                        <label class="block text-neutral-700 font-semibold mb-1">Phone Number (For Courier) *</label>
+                        <input type="tel" name="phone_number" required placeholder="+1 (212) 555-0198" class="w-full p-2 border border-neutral-300 rounded focus:outline-none focus:border-gold-500">
+                    </div>
+
+                    <div>
+                        <label class="block text-neutral-700 font-semibold mb-1">Street Address *</label>
+                        <input type="text" name="street_address" required placeholder="740 Park Avenue" class="w-full p-2 border border-neutral-300 rounded focus:outline-none focus:border-gold-500">
+                    </div>
+
+                    <div>
+                        <label class="block text-neutral-700 font-semibold mb-1">Apt, Suite, Penthouse</label>
+                        <input type="text" name="apartment_suite" placeholder="Apt 14B" class="w-full p-2 border border-neutral-300 rounded focus:outline-none focus:border-gold-500">
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-2">
+                        <div>
+                            <label class="block text-neutral-700 font-semibold mb-1">City *</label>
+                            <input type="text" name="city" required placeholder="New York" class="w-full p-2 border border-neutral-300 rounded">
+                        </div>
+                        <div>
+                            <label class="block text-neutral-700 font-semibold mb-1">State / Prov *</label>
+                            <input type="text" name="state_province" required placeholder="NY" class="w-full p-2 border border-neutral-300 rounded">
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-2">
+                        <div>
+                            <label class="block text-neutral-700 font-semibold mb-1">Postal Code *</label>
+                            <input type="text" name="postal_code" required placeholder="10021" class="w-full p-2 border border-neutral-300 rounded">
+                        </div>
+                        <div>
+                            <label class="block text-neutral-700 font-semibold mb-1">Country *</label>
+                            <input type="text" name="country" required value="United States" class="w-full p-2 border border-neutral-300 rounded">
+                        </div>
+                    </div>
+
+                    <label class="flex items-center space-x-2 pt-2 cursor-pointer">
+                        <input type="checkbox" name="is_default" class="text-[#C5A059] rounded focus:ring-[#C5A059]">
+                        <span class="text-neutral-700 font-medium">Set as default shipping address</span>
+                    </label>
+
+                    <button type="submit" class="w-full btn-gold py-3 uppercase font-display tracking-widest font-semibold rounded-sm mt-3">
+                        Save Destination &rarr;
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

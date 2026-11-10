@@ -1,0 +1,370 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Dynamic SEO Meta Tags -->
+    <title>{% block title %}{{ meta_title|default:"Luckjary | Luxury Fine Jewelry, 18K Solid Gold & Diamonds" }}{% endblock %}</title>
+    <meta name="description" content="{% block meta_description %}{{ meta_description|default:'Discover handcrafted haute joaillerie at Luckjary. Explore engagement rings, 18K solid gold necklaces, diamond tennis bracelets, and bespoke bridal jewelry.' }}{% endblock %}">
+    <meta name="keywords" content="{% block meta_keywords %}luxury jewelry, fine jewelry, 18k solid gold, diamond ring, haute joaillerie, wedding jewelry, engagement rings, tennis bracelet{% endblock %}">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="{{ request.build_absolute_uri }}">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="{% block og_type %}website{% endblock %}">
+    <meta property="og:url" content="{{ request.build_absolute_uri }}">
+    <meta property="og:title" content="{% block og_title %}{{ meta_title|default:'Luckjary | Fine Jewelry & Certified Diamonds' }}{% endblock %}">
+    <meta property="og:description" content="{% block og_description %}{{ meta_description|default:'Handcrafted modern heirlooms forged in solid precious metals.' }}{% endblock %}">
+    <meta property="og:image" content="{% block og_image %}{{ og_image|default:'https://images.unsplash.com/photo-1605100804763-247f67b3557e?auto=format&fit=crop&w=1200&q=85' }}{% endblock %}">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{% block twitter_title %}{{ meta_title|default:'Luckjary | Fine Jewelry' }}{% endblock %}">
+    <meta name="twitter:description" content="{% block twitter_description %}{{ meta_description|default:'Fine jewelry crafted with conflict-free gemstones and solid 18k gold.' }}{% endblock %}">
+    <meta name="twitter:image" content="{% block twitter_image %}{{ og_image|default:'https://images.unsplash.com/photo-1605100804763-247f67b3557e?auto=format&fit=crop&w=1200&q=85' }}{% endblock %}">
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        gold: {
+                            50: '#FAF7F0',
+                            100: '#F4ECE0',
+                            200: '#E7D7BE',
+                            300: '#D9C199',
+                            400: '#CCAB75',
+                            500: '#C5A059',
+                            600: '#B08B44',
+                            700: '#8E6F31',
+                            800: '#6C5424',
+                            900: '#4C3B19',
+                        },
+                        onyx: '#121212',
+                        cream: '#FAF9F6',
+                    },
+                    fontFamily: {
+                        serif: ['Cormorant Garamond', 'Georgia', 'serif'],
+                        display: ['Cinzel', 'serif'],
+                        sans: ['Plus Jakarta Sans', 'system-ui', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{% static 'css/custom.css' %}">
+
+    <!-- JSON-LD Organization Schema -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "JewelryStore",
+      "name": "Luckjary",
+      "url": "https://www.luckjary.com",
+      "logo": "https://images.unsplash.com/photo-1605100804763-247f67b3557e?auto=format&fit=crop&w=500&q=80",
+      "description": "High luxury jewelry retail brand specializing in solid 18K gold, platinum, and certified diamonds.",
+      "priceRange": "$$$$",
+      "currenciesAccepted": "USD",
+      "paymentAccepted": "Credit Card, Apple Pay, Wire Transfer",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "740 5th Avenue, Suite 1800",
+        "addressLocality": "New York",
+        "addressRegion": "NY",
+        "postalCode": "10019",
+        "addressCountry": "US"
+      }
+    }
+    </script>
+    {% block extra_head %}{% endblock %}
+</head>
+<body class="bg-[#FAF9F6] text-[#222222] min-h-screen flex flex-col antialiased selection:bg-[#C5A059] selection:text-white">
+
+    <!-- Top Announcement Bar -->
+    <aside class="announcement-bar py-2 px-4 text-center text-xs tracking-widest uppercase border-b border-[#262626]">
+        <div class="max-w-7xl mx-auto flex items-center justify-center gap-4">
+            <span class="inline-block w-1.5 h-1.5 rounded-full bg-[#C5A059] animate-pulse"></span>
+            <span>Complimentary Insured Overnight Courier & Signature Velvet Lockbox on all orders</span>
+            <span class="hidden md:inline text-gold-500 font-semibold">• Code: LUCKJARY10 for 10% Off</span>
+        </div>
+    </aside>
+
+    <!-- Main Navigation Header -->
+    <header class="sticky top-0 z-40 bg-[#FAF9F6]/95 backdrop-blur-md border-b border-[#EBE6DF] transition-all">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                
+                <!-- Left Nav Links (Desktop) -->
+                <nav class="hidden lg:flex items-center space-x-7 text-xs uppercase tracking-widest font-medium text-neutral-700" aria-label="Main navigation">
+                    <a href="{% url 'catalog:product_list' %}" class="hover:text-gold-600 transition">High Jewelry</a>
+                    {% for cat in nav_categories %}
+                    <a href="{% url 'catalog:category_products' cat.slug %}" class="hover:text-gold-600 transition">{{ cat.name }}</a>
+                    {% endfor %}
+                    <a href="{% url 'core:about' %}" class="hover:text-gold-600 transition">Atelier</a>
+                </nav>
+
+                <!-- Brand Logo (Center) -->
+                <div class="flex-shrink-0 text-center">
+                    <a href="{% url 'core:home' %}" class="group block">
+                        <span class="font-display text-2xl sm:text-3xl font-bold tracking-[0.22em] text-neutral-900 group-hover:text-gold-600 transition">
+                            LUCKJARY
+                        </span>
+                        <span class="block text-[9px] tracking-[0.35em] text-gold-600 uppercase font-sans -mt-1 font-semibold">
+                            NEW YORK • HAUTE JOAILLERIE
+                        </span>
+                    </a>
+                </div>
+
+                <!-- Right Actions (Search, Wishlist, Account, Bag) -->
+                <div class="flex items-center space-x-4 sm:space-x-6">
+                    
+                    <!-- Search Bar Form (Desktop) -->
+                    <form action="{% url 'catalog:product_list' %}" method="GET" class="hidden md:flex items-center relative">
+                        <input type="text" name="q" value="{{ request.GET.q|default:'' }}" placeholder="Search rings, 18k gold..." 
+                               class="text-xs bg-white/70 border border-[#DDD5C7] rounded-full py-1.5 pl-3 pr-8 w-44 focus:w-56 transition-all duration-300 focus:outline-none focus:border-gold-500 focus:bg-white text-neutral-800 placeholder:text-neutral-400">
+                        <button type="submit" class="absolute right-2.5 text-neutral-400 hover:text-gold-600">
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                        </button>
+                    </form>
+
+                    <!-- Order Tracking Link -->
+                    <a href="{% url 'orders:order_tracking' %}" class="hidden sm:inline-flex items-center text-xs text-neutral-600 hover:text-gold-600 tracking-wider transition" title="Track Order">
+                        <svg class="w-4 h-4 mr-1 text-gold-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                        <span>Track</span>
+                    </a>
+
+                    <!-- Wishlist -->
+                    <a href="{% url 'core:wishlist' %}" class="relative text-neutral-700 hover:text-gold-600 transition" title="Curated Wishlist">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
+                        {% if wishlist_count > 0 %}
+                        <span class="absolute -top-1.5 -right-2 bg-gold-600 text-white text-[10px] w-4 h-4 rounded-full flex items-center justify-center font-bold">{{ wishlist_count }}</span>
+                        {% endif %}
+                    </a>
+
+                    <!-- Account / Profile -->
+                    {% if user.is_authenticated %}
+                        <div class="relative group">
+                            <a href="{% url 'accounts:profile' %}" class="flex items-center text-neutral-800 hover:text-gold-600 transition" title="My Account">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+                            </a>
+                            <!-- Dropdown menu -->
+                            <div class="absolute right-0 mt-2 w-48 bg-white border border-[#EBE6DF] shadow-xl rounded-md py-2 hidden group-hover:block transition z-50">
+                                <div class="px-4 py-1.5 border-b border-neutral-100">
+                                    <p class="text-[11px] text-neutral-400 uppercase tracking-wider">Signed in as</p>
+                                    <p class="text-xs font-semibold text-neutral-900 truncate">{{ user.get_full_name|default:user.email }}</p>
+                                </div>
+                                <a href="{% url 'accounts:profile' %}" class="block px-4 py-2 text-xs text-neutral-700 hover:bg-[#FAF7F0] hover:text-gold-600">Client Dashboard</a>
+                                <a href="{% url 'accounts:addresses' %}" class="block px-4 py-2 text-xs text-neutral-700 hover:bg-[#FAF7F0] hover:text-gold-600">Saved Addresses</a>
+                                {% if user.is_staff %}
+                                <a href="{% url 'orders:oms_dashboard' %}" class="block px-4 py-2 text-xs text-amber-700 font-semibold hover:bg-amber-50">Atelier OMS Portal</a>
+                                <a href="{% url 'admin:index' %}" class="block px-4 py-2 text-xs text-neutral-600 hover:bg-neutral-100">Django Admin</a>
+                                {% endif %}
+                                <div class="border-t border-neutral-100 my-1"></div>
+                                <a href="{% url 'accounts:logout' %}" class="block px-4 py-2 text-xs text-red-600 hover:bg-red-50">Sign Out</a>
+                            </div>
+                        </div>
+                    {% else %}
+                        <a href="{% url 'accounts:login' %}" class="text-neutral-700 hover:text-gold-600 transition" title="Sign In">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+                        </a>
+                    {% endif %}
+
+                    <!-- Shopping Bag / Cart -->
+                    <a href="{% url 'orders:cart' %}" class="open-cart-drawer relative text-neutral-800 hover:text-gold-600 transition" title="Shopping Bag">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg>
+                        <span id="cartCountBadge" class="absolute -top-1.5 -right-2 bg-neutral-900 text-[#C5A059] text-[10px] w-4 h-4 rounded-full flex items-center justify-center font-bold">
+                            {{ cart_count|default:"0" }}
+                        </span>
+                    </a>
+
+                    <!-- Mobile Menu Button -->
+                    <button id="mobileMenuBtn" type="button" class="lg:hidden text-neutral-800 hover:text-gold-600 p-1" aria-label="Toggle navigation menu">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"/></svg>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Mobile Dropdown Navigation -->
+            <div id="mobileMenu" class="hidden lg:hidden border-t border-[#EBE6DF] py-4 space-y-2 bg-[#FAF9F6]">
+                <form action="{% url 'catalog:product_list' %}" method="GET" class="mb-3">
+                    <input type="text" name="q" placeholder="Search fine jewelry..." class="w-full text-xs p-2.5 border border-[#DDD5C7] rounded bg-white">
+                </form>
+                <a href="{% url 'catalog:product_list' %}" class="block py-2 text-xs uppercase tracking-wider text-neutral-800 font-medium">All Jewelry</a>
+                {% for cat in nav_categories %}
+                <a href="{% url 'catalog:category_products' cat.slug %}" class="block py-2 text-xs uppercase tracking-wider text-neutral-700 hover:text-gold-600">{{ cat.name }}</a>
+                {% endfor %}
+                <a href="{% url 'core:about' %}" class="block py-2 text-xs uppercase tracking-wider text-neutral-700">Atelier Heritage</a>
+                <a href="{% url 'orders:order_tracking' %}" class="block py-2 text-xs uppercase tracking-wider text-gold-600 font-semibold">Track Order</a>
+                {% if user.is_staff %}
+                <a href="{% url 'orders:oms_dashboard' %}" class="block py-2 text-xs uppercase tracking-wider text-amber-700 font-bold">OMS Admin</a>
+                {% endif %}
+            </div>
+        </div>
+    </header>
+
+    <!-- Global Flash Messages Notification -->
+    {% if messages %}
+    <div class="max-w-4xl mx-auto px-4 mt-4 w-full">
+        {% for message in messages %}
+        <div class="flex items-center justify-between p-4 mb-2 text-xs font-medium rounded-sm border {% if message.tags == 'error' %}bg-red-50 text-red-800 border-red-200{% elif message.tags == 'success' %}bg-[#FAF7F0] text-[#7C6226] border-[#D9C199]{% else %}bg-neutral-100 text-neutral-800 border-neutral-300{% endif %} shadow-sm">
+            <div class="flex items-center space-x-2">
+                <span class="text-gold-600">✦</span>
+                <span>{{ message }}</span>
+            </div>
+            <button onclick="this.parentElement.remove()" class="text-neutral-400 hover:text-neutral-700 text-sm ml-4">&times;</button>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <!-- Main Content Slot -->
+    <main class="flex-grow">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Slide-Out Shopping Bag Drawer -->
+    <div id="cartOverlay" class="fixed inset-0 bg-black/60 z-50 hidden transition-opacity"></div>
+    <aside id="cartDrawer" class="fixed right-0 top-0 bottom-0 w-full max-w-md bg-white z-50 transform translate-x-full transition-transform duration-300 ease-in-out shadow-2xl flex flex-col border-l border-[#EBE6DF]">
+        <div class="p-6 border-b border-[#EBE6DF] flex items-center justify-between bg-[#FAF9F6]">
+            <div>
+                <h3 class="font-display text-lg tracking-widest text-neutral-900">YOUR SHOPPING BAG</h3>
+                <p class="text-xs text-neutral-500">{{ cart_count }} item{% if cart_count != 1 %}s{% endif %}</p>
+            </div>
+            <button id="closeCartDrawer" class="text-neutral-400 hover:text-neutral-800 text-xl font-light p-2">&times;</button>
+        </div>
+
+        <div class="flex-1 overflow-y-auto p-6 space-y-4">
+            {% if cart_items %}
+                {% for item in cart_items %}
+                <div class="flex items-center space-x-4 pb-4 border-b border-neutral-100">
+                    <img src="{{ item.product.primary_image }}" alt="{{ item.product.title }}" class="w-16 h-16 object-cover rounded border border-neutral-200">
+                    <div class="flex-1 min-w-0">
+                        <h4 class="text-xs font-semibold text-neutral-900 truncate">{{ item.product.title }}</h4>
+                        <p class="text-[11px] text-neutral-500">{{ item.material }} • {{ item.size }}</p>
+                        <p class="text-xs font-serif font-bold text-neutral-800 mt-1">${{ item.product.price }} &times; {{ item.quantity }}</p>
+                    </div>
+                    <form action="{% url 'orders:remove_from_cart' item.product_id %}" method="POST">
+                        {% csrf_token %}
+                        <button type="submit" class="text-neutral-400 hover:text-red-600 text-xs p-1" title="Remove">&times;</button>
+                    </form>
+                </div>
+                {% endfor %}
+            {% else %}
+                <div class="text-center py-16 text-neutral-400 space-y-3">
+                    <svg class="w-12 h-12 mx-auto text-neutral-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg>
+                    <p class="text-xs font-serif text-neutral-600 italic">Your velvet jewelry box is currently empty.</p>
+                    <a href="{% url 'catalog:product_list' %}" class="inline-block text-xs uppercase tracking-widest text-gold-600 font-semibold underline">Discover Pieces</a>
+                </div>
+            {% endif %}
+        </div>
+
+        {% if cart_items %}
+        <div class="p-6 bg-[#FAF9F6] border-t border-[#EBE6DF] space-y-3">
+            <div class="flex justify-between text-xs text-neutral-600">
+                <span>Subtotal</span>
+                <span class="font-semibold text-neutral-900">${{ cart_subtotal }}</span>
+            </div>
+            {% if cart_discount > 0 %}
+            <div class="flex justify-between text-xs text-emerald-700">
+                <span>Promotional Savings ({{ active_coupon }})</span>
+                <span>-${{ cart_discount }}</span>
+            </div>
+            {% endif %}
+            <div class="flex justify-between text-xs text-neutral-600">
+                <span>Insured White Glove Courier</span>
+                <span class="text-gold-600 font-semibold uppercase text-[11px]">Complimentary</span>
+            </div>
+            <div class="flex justify-between text-sm font-serif font-bold text-neutral-900 pt-2 border-t border-[#EBE6DF]">
+                <span>Estimated Total</span>
+                <span class="text-base">${{ cart_total }}</span>
+            </div>
+            <div class="grid grid-cols-2 gap-2 pt-2">
+                <a href="{% url 'orders:cart' %}" class="text-center py-2.5 px-3 border border-neutral-300 text-neutral-800 text-xs uppercase tracking-wider hover:border-gold-500 font-medium">View Bag</a>
+                <a href="{% url 'orders:checkout' %}" class="btn-gold text-center py-2.5 px-3 text-xs uppercase tracking-widest font-semibold">Checkout</a>
+            </div>
+        </div>
+        {% endif %}
+    </aside>
+
+    <!-- Luxury Footer -->
+    <footer class="bg-[#121212] text-[#E5E0D8] pt-16 pb-12 border-t border-[#262626]">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 pb-12 border-b border-[#262626]">
+                
+                <!-- Col 1: Brand Info -->
+                <div class="lg:col-span-2 space-y-4">
+                    <span class="font-display text-2xl font-bold tracking-[0.25em] text-white">LUCKJARY</span>
+                    <p class="text-xs text-neutral-400 leading-relaxed pr-6 max-w-sm">
+                        Crafting modern heirlooms in pure 18K solid gold, certified conflict-free diamonds, and rare natural gemstones. Each piece is hand-forged by master jewelers in our New York ateliers.
+                    </p>
+                    <div class="pt-2 text-xs text-[#C5A059] flex items-center space-x-2">
+                        <span>✦ Lifetime Warranty</span>
+                        <span>•</span>
+                        <span>✦ IGI / GIA Certified</span>
+                        <span>•</span>
+                        <span>✦ Conflict-Free</span>
+                    </div>
+                </div>
+
+                <!-- Col 2: The Collections -->
+                <div>
+                    <h4 class="font-display text-xs tracking-widest text-gold-400 uppercase font-semibold mb-4">Collections</h4>
+                    <ul class="space-y-2 text-xs text-neutral-400">
+                        <li><a href="{% url 'catalog:product_list' %}?style=classic" class="hover:text-white transition">Timeless Solitaires</a></li>
+                        <li><a href="{% url 'catalog:product_list' %}?category=bridal-high-jewelry" class="hover:text-white transition">Haute Bridal & Rings</a></li>
+                        <li><a href="{% url 'catalog:product_list' %}?category=necklaces" class="hover:text-white transition">Diamond Pendants</a></li>
+                        <li><a href="{% url 'catalog:product_list' %}?category=bracelets" class="hover:text-white transition">Tennis Bracelets</a></li>
+                        <li><a href="{% url 'catalog:product_list' %}?material=18k-solid-yellow-gold" class="hover:text-white transition">18K Solid Gold</a></li>
+                    </ul>
+                </div>
+
+                <!-- Col 3: Client Concierge -->
+                <div>
+                    <h4 class="font-display text-xs tracking-widest text-gold-400 uppercase font-semibold mb-4">Concierge</h4>
+                    <ul class="space-y-2 text-xs text-neutral-400">
+                        <li><a href="{% url 'orders:order_tracking' %}" class="hover:text-white transition">Track Real-Time Order</a></li>
+                        <li><a href="{% url 'core:about' %}" class="hover:text-white transition">Atelier Craftsmanship</a></li>
+                        <li><a href="{% url 'core:faq' %}" class="hover:text-white transition">Ring Sizing & Care Guide</a></li>
+                        <li><a href="{% url 'core:contact' %}" class="hover:text-white transition">Bespoke Jewelry Inquiry</a></li>
+                        <li><a href="{% url 'accounts:profile' %}" class="hover:text-white transition">Client Vault Dashboard</a></li>
+                    </ul>
+                </div>
+
+                <!-- Col 4: Privé Club Newsletter -->
+                <div>
+                    <h4 class="font-display text-xs tracking-widest text-gold-400 uppercase font-semibold mb-2">Luckjary Privé</h4>
+                    <p class="text-xs text-neutral-400 mb-3">Receive private previews, bespoke invitations, and $100 off your first heirloom commission.</p>
+                    <form action="{% url 'core:subscribe_newsletter' %}" method="POST" class="space-y-2">
+                        {% csrf_token %}
+                        <input type="email" name="email" required placeholder="Enter client email..." class="w-full text-xs px-3 py-2 bg-[#1C1C1C] border border-[#333] text-white rounded placeholder:text-neutral-500 focus:outline-none focus:border-gold-500">
+                        <button type="submit" class="w-full btn-gold text-xs py-2 uppercase tracking-widest font-semibold">Join the Privé Club</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Bottom Disclaimer & Copyright -->
+            <div class="pt-8 flex flex-col md:flex-row items-center justify-between text-xs text-neutral-500 gap-4">
+                <p>&copy; 2026 Luckjary Fine Jewelry LLC. All Rights Reserved. New York • Paris • Tokyo.</p>
+                <div class="flex items-center space-x-6">
+                    <a href="{% url 'core:robots_txt' %}" class="hover:text-neutral-300">Robots.txt</a>
+                    <a href="{% url 'core:sitemap_xml' %}" class="hover:text-neutral-300">Sitemap (XML)</a>
+                    <a href="{% url 'orders:order_tracking' %}" class="hover:text-gold-400">Order Management System</a>
+                    {% if user.is_staff %}
+                    <a href="{% url 'orders:oms_dashboard' %}" class="text-amber-400 font-semibold hover:underline">OMS Dashboard</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Interactive Scripts -->
+    <script src="{% static 'js/main.js' %}"></script>
+    {% block extra_scripts %}{% endblock %}
+</body>
+</html>

@@ -1,0 +1,160 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <div class="text-center max-w-xl mx-auto mb-10 space-y-1">
+        <span class="text-xs font-display tracking-[0.25em] text-[#C5A059] uppercase font-semibold">Your Selection</span>
+        <h1 class="font-serif text-3xl sm:text-4xl text-neutral-900">Shopping Bag</h1>
+    </div>
+
+    {% if cart_items %}
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-10">
+        
+        <!-- Cart Items List (8 Cols) -->
+        <div class="lg:col-span-8 space-y-4">
+            <div class="bg-white border border-[#E8DFD0] rounded-sm p-6 shadow-sm">
+                <div class="hidden sm:grid grid-cols-12 text-xs font-semibold text-neutral-400 uppercase tracking-wider pb-4 border-b border-neutral-100">
+                    <div class="col-span-6">Jewelry Piece</div>
+                    <div class="col-span-2 text-center">Quantity</div>
+                    <div class="col-span-2 text-right">Price</div>
+                    <div class="col-span-2 text-right">Total</div>
+                </div>
+
+                <div class="divide-y divide-neutral-100">
+                    {% for item in cart_items %}
+                    <div class="py-6 flex flex-col sm:grid sm:grid-cols-12 gap-4 items-center">
+                        <!-- Product Info -->
+                        <div class="col-span-6 flex items-center space-x-4 w-full">
+                            <img src="{{ item.product.primary_image }}" alt="{{ item.product.title }}" class="w-20 h-20 object-cover rounded-sm border border-neutral-200">
+                            <div>
+                                <h3 class="font-serif text-base font-semibold text-neutral-900">
+                                    <a href="{{ item.product.get_absolute_url }}" class="hover:text-gold-600">{{ item.product.title }}</a>
+                                </h3>
+                                <p class="text-[11px] text-neutral-500 mt-0.5">{{ item.material }}</p>
+                                <p class="text-[11px] text-neutral-500">Size: {{ item.size }}</p>
+                                <p class="text-[10px] text-neutral-400 mt-1">SKU: {{ item.product.sku }}</p>
+                            </div>
+                        </div>
+
+                        <!-- Quantity Controls -->
+                        <div class="col-span-2 flex items-center justify-center space-x-2 w-full sm:w-auto">
+                            <form action="{% url 'orders:update_cart' item.product_id %}" method="POST" class="inline">
+                                {% csrf_token %}
+                                <input type="hidden" name="action" value="decrease">
+                                <button type="submit" class="w-7 h-7 bg-neutral-100 border border-neutral-300 rounded text-xs flex items-center justify-center hover:bg-neutral-200">-</button>
+                            </form>
+                            <span class="text-xs font-semibold px-2">{{ item.quantity }}</span>
+                            <form action="{% url 'orders:update_cart' item.product_id %}" method="POST" class="inline">
+                                {% csrf_token %}
+                                <input type="hidden" name="action" value="increase">
+                                <button type="submit" class="w-7 h-7 bg-neutral-100 border border-neutral-300 rounded text-xs flex items-center justify-center hover:bg-neutral-200">+</button>
+                            </form>
+                        </div>
+
+                        <!-- Unit Price -->
+                        <div class="col-span-2 text-right text-xs text-neutral-600 hidden sm:block">
+                            ${{ item.product.price }}
+                        </div>
+
+                        <!-- Line Total & Remove -->
+                        <div class="col-span-2 flex items-center justify-between sm:justify-end space-x-3 w-full sm:w-auto">
+                            <span class="font-serif font-bold text-neutral-900 text-sm">${{ item.line_total }}</span>
+                            <form action="{% url 'orders:remove_from_cart' item.product_id %}" method="POST">
+                                {% csrf_token %}
+                                <button type="submit" class="text-neutral-400 hover:text-red-500 text-sm ml-2" title="Remove">&times;</button>
+                            </form>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- Complimentary Services Guarantee -->
+            <div class="bg-[#FAF7F0] border border-[#E8DFD0] p-4 rounded-sm flex items-center space-x-3 text-xs text-neutral-700">
+                <span class="text-gold-600 text-lg">✦</span>
+                <p>Every order is dispatched in our signature velvet lockbox, accompanied by an official Certificate of Authenticity and insured white-glove transport.</p>
+            </div>
+        </div>
+
+        <!-- Summary & Coupon Sidebar (4 Cols) -->
+        <div class="lg:col-span-4 space-y-6">
+            
+            <!-- Promotional Code Box -->
+            <div class="bg-white border border-[#E8DFD0] rounded-sm p-6 space-y-3 shadow-sm">
+                <h4 class="font-display text-xs uppercase tracking-widest font-bold text-neutral-900">Promotional Code</h4>
+                {% if active_coupon %}
+                <div class="flex items-center justify-between bg-emerald-50 border border-emerald-200 p-2.5 rounded text-xs text-emerald-800">
+                    <span class="font-semibold">{{ active_coupon }} applied</span>
+                    <a href="{% url 'orders:remove_coupon' %}" class="text-xs text-red-600 hover:underline">Remove</a>
+                </div>
+                {% else %}
+                <form action="{% url 'orders:apply_coupon' %}" method="POST" class="flex space-x-2">
+                    {% csrf_token %}
+                    <input type="text" name="coupon_code" placeholder="e.g. LUCKJARY10" class="flex-1 text-xs p-2.5 border border-neutral-300 rounded uppercase focus:outline-none focus:border-gold-500">
+                    <button type="submit" class="bg-neutral-900 text-white px-4 py-2 text-xs font-semibold uppercase tracking-wider rounded-sm hover:bg-neutral-800">Apply</button>
+                </form>
+                <p class="text-[11px] text-neutral-400">Try code <span class="font-mono text-neutral-700">LUCKJARY10</span> for 10% off your order.</p>
+                {% endif %}
+            </div>
+
+            <!-- Order Total Breakdown -->
+            <div class="bg-white border border-[#E8DFD0] rounded-sm p-6 space-y-4 shadow-sm">
+                <h4 class="font-display text-xs uppercase tracking-widest font-bold text-neutral-900 pb-3 border-b border-neutral-100">Order Summary</h4>
+                
+                <div class="space-y-2.5 text-xs text-neutral-600">
+                    <div class="flex justify-between">
+                        <span>Items Subtotal</span>
+                        <span class="font-semibold text-neutral-900">${{ cart_subtotal }}</span>
+                    </div>
+
+                    {% if cart_discount > 0 %}
+                    <div class="flex justify-between text-emerald-700 font-semibold">
+                        <span>Promotional Savings</span>
+                        <span>-${{ cart_discount }}</span>
+                    </div>
+                    {% endif %}
+
+                    <div class="flex justify-between">
+                        <span>Insured White Glove Courier</span>
+                        <span class="text-gold-600 font-semibold uppercase text-[11px]">Complimentary ($0.00)</span>
+                    </div>
+
+                    <div class="flex justify-between">
+                        <span>Signature Gift Presentation</span>
+                        <span class="text-gold-600 font-semibold uppercase text-[11px]">Included</span>
+                    </div>
+                </div>
+
+                <div class="pt-4 border-t border-neutral-200 flex justify-between items-baseline">
+                    <span class="font-serif text-base font-semibold text-neutral-900">Estimated Total</span>
+                    <span class="font-serif text-2xl font-bold text-neutral-900">${{ cart_total }}</span>
+                </div>
+
+                <div class="pt-2">
+                    <a href="{% url 'orders:checkout' %}" class="w-full btn-gold block text-center py-3.5 text-xs font-display uppercase tracking-widest font-semibold rounded-sm shadow-lg">
+                        Proceed to Luxury Checkout &rarr;
+                    </a>
+                </div>
+
+                <div class="text-center pt-2">
+                    <a href="{% url 'catalog:product_list' %}" class="text-xs text-neutral-500 hover:text-gold-600 underline">
+                        Continue Shopping
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <!-- Empty Cart State -->
+    <div class="bg-white border border-[#E8DFD0] rounded-sm p-16 text-center space-y-4 max-w-lg mx-auto shadow-sm">
+        <svg class="w-16 h-16 mx-auto text-neutral-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg>
+        <h2 class="font-serif text-2xl text-neutral-800">Your Shopping Bag is Empty</h2>
+        <p class="text-xs text-neutral-500 max-w-sm mx-auto">Explore our high jewelry collections to add handcrafted rings, necklaces, and bespoke pieces to your bag.</p>
+        <a href="{% url 'catalog:product_list' %}" class="btn-gold inline-block px-8 py-3 text-xs uppercase font-display tracking-widest font-semibold rounded-sm">
+            Discover Fine Jewelry
+        </a>
+    </div>
+    {% endif %}
+</section>
+{% endblock %}

@@ -1,0 +1,286 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <div class="text-center max-w-xl mx-auto mb-10 space-y-1">
+        <span class="text-xs font-display tracking-[0.25em] text-[#C5A059] uppercase font-semibold">Secure Atelier Checkout</span>
+        <h1 class="font-serif text-3xl sm:text-4xl text-neutral-900">Finalize Your Order</h1>
+    </div>
+
+    <form method="POST" action="{% url 'orders:checkout' %}" id="checkoutForm">
+        {% csrf_token %}
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-10">
+            
+            <!-- Checkout Form Fields (7 Cols) -->
+            <div class="lg:col-span-7 space-y-8">
+                
+                <!-- Account Status Banner -->
+                {% if not user.is_authenticated %}
+                <div class="bg-[#FAF7F0] border border-[#E8DFD0] p-4 rounded-sm flex items-center justify-between text-xs">
+                    <div>
+                        <span class="font-semibold text-neutral-900">Checking out as a Guest?</span>
+                        <p class="text-neutral-500">You can effortlessly create an account with 1 click right after purchase.</p>
+                    </div>
+                    <a href="{% url 'accounts:login' %}?next={% url 'orders:checkout' %}" class="text-gold-700 font-semibold underline ml-3 flex-shrink-0">
+                        Sign In Instead &rarr;
+                    </a>
+                </div>
+                {% else %}
+                <div class="bg-white border border-[#E8DFD0] p-4 rounded-sm flex items-center justify-between text-xs">
+                    <div>
+                        <span class="text-neutral-500">Signed in as:</span>
+                        <span class="font-semibold text-neutral-900 ml-1">{{ user.get_full_name|default:user.email }}</span>
+                    </div>
+                    <span class="text-gold-600 font-semibold uppercase text-[10px] tracking-wider">✦ Privé VIP Member</span>
+                </div>
+                {% endif %}
+
+                <!-- Section 1: Customer Contact -->
+                <div class="bg-white border border-[#E8DFD0] rounded-sm p-6 space-y-4 shadow-sm">
+                    <h3 class="font-display text-xs uppercase tracking-widest font-bold text-neutral-900 pb-2 border-b border-neutral-100">
+                        1. Contact Information
+                    </h3>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
+                        <div>
+                            <label class="block text-neutral-700 font-semibold mb-1">Full Name *</label>
+                            <input type="text" name="full_name" required 
+                                   value="{% if user.is_authenticated %}{{ user.get_full_name|default:user.username }}{% endif %}" 
+                                   placeholder="e.g. Lady Eleanor Vance" 
+                                   class="w-full p-2.5 border border-neutral-300 rounded focus:outline-none focus:border-gold-500">
+                        </div>
+
+                        <div>
+                            <label class="block text-neutral-700 font-semibold mb-1">Email Address for Insured Tracking *</label>
+                            <input type="email" name="email" required 
+                                   value="{% if user.is_authenticated %}{{ user.email }}{% endif %}" 
+                                   placeholder="e.g. eleanor.vance@luxury.com" 
+                                   class="w-full p-2.5 border border-neutral-300 rounded focus:outline-none focus:border-gold-500">
+                        </div>
+
+                        <div class="sm:col-span-2">
+                            <label class="block text-neutral-700 font-semibold mb-1">Phone Number (Required for Courier Direct Signature) *</label>
+                            <input type="tel" name="phone" required 
+                                   value="{% if user.is_authenticated %}{{ user.phone_number|default:'' }}{% endif %}" 
+                                   placeholder="+1 (212) 555-0199" 
+                                   class="w-full p-2.5 border border-neutral-300 rounded focus:outline-none focus:border-gold-500">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Section 2: Insured Shipping Address -->
+                <div class="bg-white border border-[#E8DFD0] rounded-sm p-6 space-y-4 shadow-sm">
+                    <h3 class="font-display text-xs uppercase tracking-widest font-bold text-neutral-900 pb-2 border-b border-neutral-100">
+                        2. White-Glove Shipping Destination
+                    </h3>
+
+                    {% if saved_addresses %}
+                    <div class="mb-4">
+                        <label class="block text-[11px] font-semibold text-neutral-600 mb-2 uppercase tracking-wider">Select from Saved Addresses:</label>
+                        <select onchange="fillSavedAddress(this)" class="w-full text-xs p-2.5 bg-[#FAF9F6] border border-neutral-300 rounded">
+                            <option value="">-- Or enter new destination below --</option>
+                            {% for addr in saved_addresses %}
+                            <option value="{{ addr.street_address }}" data-apt="{{ addr.apartment_suite|default:'' }}" data-city="{{ addr.city }}" data-state="{{ addr.state_province }}" data-zip="{{ addr.postal_code }}" data-country="{{ addr.country }}">
+                                {{ addr.full_name }} - {{ addr.street_address }}, {{ addr.city }} ({{ addr.address_type }})
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    {% endif %}
+
+                    <div class="space-y-4 text-xs">
+                        <div>
+                            <label class="block text-neutral-700 font-semibold mb-1">Street Address *</label>
+                            <input type="text" id="street_address" name="street_address" required 
+                                   value="{% if default_address %}{{ default_address.street_address }}{% endif %}" 
+                                   placeholder="e.g. 740 Park Avenue" 
+                                   class="w-full p-2.5 border border-neutral-300 rounded focus:outline-none focus:border-gold-500">
+                        </div>
+
+                        <div>
+                            <label class="block text-neutral-700 font-semibold mb-1">Apartment, Suite, Unit, Penthouse (Optional)</label>
+                            <input type="text" id="apartment_suite" name="apartment_suite" 
+                                   value="{% if default_address %}{{ default_address.apartment_suite|default:'' }}{% endif %}" 
+                                   placeholder="e.g. Penthouse 18B" 
+                                   class="w-full p-2.5 border border-neutral-300 rounded focus:outline-none focus:border-gold-500">
+                        </div>
+
+                        <div class="grid grid-cols-2 sm:grid-cols-3 gap-4">
+                            <div>
+                                <label class="block text-neutral-700 font-semibold mb-1">City *</label>
+                                <input type="text" id="city" name="city" required 
+                                       value="{% if default_address %}{{ default_address.city }}{% endif %}" 
+                                       placeholder="New York" 
+                                       class="w-full p-2.5 border border-neutral-300 rounded focus:outline-none focus:border-gold-500">
+                            </div>
+                            <div>
+                                <label class="block text-neutral-700 font-semibold mb-1">State / Province *</label>
+                                <input type="text" id="state_province" name="state_province" required 
+                                       value="{% if default_address %}{{ default_address.state_province }}{% endif %}" 
+                                       placeholder="NY" 
+                                       class="w-full p-2.5 border border-neutral-300 rounded focus:outline-none focus:border-gold-500">
+                            </div>
+                            <div class="col-span-2 sm:col-span-1">
+                                <label class="block text-neutral-700 font-semibold mb-1">Postal / ZIP Code *</label>
+                                <input type="text" id="postal_code" name="postal_code" required 
+                                       value="{% if default_address %}{{ default_address.postal_code }}{% endif %}" 
+                                       placeholder="10021" 
+                                       class="w-full p-2.5 border border-neutral-300 rounded focus:outline-none focus:border-gold-500">
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-neutral-700 font-semibold mb-1">Country *</label>
+                            <input type="text" id="country" name="country" required 
+                                   value="{% if default_address %}{{ default_address.country }}{% else %}United States{% endif %}" 
+                                   class="w-full p-2.5 border border-neutral-300 rounded focus:outline-none focus:border-gold-500">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Section 3: Luxury Presentation & Gift Card -->
+                <div class="bg-white border border-[#E8DFD0] rounded-sm p-6 space-y-4 shadow-sm">
+                    <h3 class="font-display text-xs uppercase tracking-widest font-bold text-neutral-900 pb-2 border-b border-neutral-100">
+                        3. Presentation & Gifting
+                    </h3>
+
+                    <label class="flex items-start space-x-3 cursor-pointer">
+                        <input type="checkbox" name="gift_wrapping" checked class="mt-1 text-[#C5A059] rounded focus:ring-[#C5A059]">
+                        <span class="text-xs text-neutral-800">
+                            <strong class="font-semibold">Complimentary Signature Luckjary Presentation:</strong>
+                            Hand-assembled emerald velvet jewelry case, gold foil wax seal, and certificate of gemological authenticity.
+                        </span>
+                    </label>
+
+                    <div>
+                        <label class="block text-xs text-neutral-700 font-semibold mb-1">Handwritten Atelier Gift Card Message (Optional)</label>
+                        <textarea name="gift_message" rows="2" placeholder="Write a custom personal message to be inscribed in calligraphy..." class="w-full text-xs p-2.5 border border-neutral-300 rounded focus:outline-none focus:border-gold-500"></textarea>
+                    </div>
+                </div>
+
+                <!-- Section 4: Payment Simulation -->
+                <div class="bg-white border border-[#E8DFD0] rounded-sm p-6 space-y-4 shadow-sm">
+                    <h3 class="font-display text-xs uppercase tracking-widest font-bold text-neutral-900 pb-2 border-b border-neutral-100">
+                        4. Secure Encrypted Payment
+                    </h3>
+
+                    <div class="space-y-3 text-xs">
+                        <label class="flex items-center space-x-3 p-3 border rounded border-gold-500 bg-[#FAF7F0] cursor-pointer">
+                            <input type="radio" name="payment_method" value="Credit Card (256-bit Encrypted Luxury Gateway)" checked class="text-[#C5A059]">
+                            <div class="flex-1 flex justify-between items-center">
+                                <span class="font-semibold text-neutral-900">Credit / Debit Card (Visa, MasterCard, Amex)</span>
+                                <span class="text-[11px] text-neutral-500">Encrypted</span>
+                            </div>
+                        </label>
+
+                        <div class="p-3 bg-neutral-50 border border-neutral-200 rounded space-y-3">
+                            <div>
+                                <label class="block text-[11px] text-neutral-500 mb-1">Card Number (Simulated Secure Gateway)</label>
+                                <input type="text" placeholder="•••• •••• •••• 4242" value="4242 •••• •••• 4242" class="w-full text-xs p-2 bg-white border border-neutral-300 rounded" readonly>
+                            </div>
+                            <div class="grid grid-cols-2 gap-3">
+                                <div>
+                                    <label class="block text-[11px] text-neutral-500 mb-1">Expiration</label>
+                                    <input type="text" value="12/28" class="w-full text-xs p-2 bg-white border border-neutral-300 rounded" readonly>
+                                </div>
+                                <div>
+                                    <label class="block text-[11px] text-neutral-500 mb-1">CVC</label>
+                                    <input type="text" value="888" class="w-full text-xs p-2 bg-white border border-neutral-300 rounded" readonly>
+                                </div>
+                            </div>
+                        </div>
+
+                        <label class="flex items-center space-x-3 p-3 border rounded border-neutral-200 hover:border-neutral-300 cursor-pointer">
+                            <input type="radio" name="payment_method" value="Apple Pay / Google Pay" class="text-[#C5A059]">
+                            <span class="font-semibold text-neutral-900">Apple Pay / Digital Wallet</span>
+                        </label>
+
+                        <label class="flex items-center space-x-3 p-3 border rounded border-neutral-200 hover:border-neutral-300 cursor-pointer">
+                            <input type="radio" name="payment_method" value="Bank Wire / Concierge Private Transfer" class="text-[#C5A059]">
+                            <span class="font-semibold text-neutral-900">Private Bank Wire / Concierge Transfer (Over $5,000)</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Order Review Sidebar (5 Cols) -->
+            <div class="lg:col-span-5 space-y-6">
+                <div class="bg-white border border-[#E8DFD0] rounded-sm p-6 space-y-4 shadow-sm sticky top-28">
+                    <h3 class="font-display text-xs uppercase tracking-widest font-bold text-neutral-900 pb-3 border-b border-neutral-100">
+                        Items in Your Commission ({{ cart_count }})
+                    </h3>
+
+                    <!-- Mini Cart List -->
+                    <div class="divide-y divide-neutral-100 max-h-72 overflow-y-auto pr-1">
+                        {% for item in cart_items %}
+                        <div class="py-3 flex items-center space-x-3">
+                            <img src="{{ item.product.primary_image }}" alt="{{ item.product.title }}" class="w-14 h-14 object-cover rounded border border-neutral-200">
+                            <div class="flex-1 min-w-0">
+                                <h4 class="text-xs font-semibold text-neutral-900 truncate">{{ item.product.title }}</h4>
+                                <p class="text-[11px] text-neutral-500">{{ item.material }} • {{ item.size }}</p>
+                                <p class="text-[11px] font-bold text-neutral-800">${{ item.product.price }} &times; {{ item.quantity }}</p>
+                            </div>
+                            <span class="text-xs font-serif font-bold text-neutral-900">${{ item.line_total }}</span>
+                        </div>
+                        {% endfor %}
+                    </div>
+
+                    <!-- Breakdown -->
+                    <div class="pt-4 border-t border-neutral-100 space-y-2 text-xs text-neutral-600">
+                        <div class="flex justify-between">
+                            <span>Subtotal</span>
+                            <span class="font-semibold text-neutral-900">${{ cart_subtotal }}</span>
+                        </div>
+                        {% if cart_discount > 0 %}
+                        <div class="flex justify-between text-emerald-700 font-semibold">
+                            <span>Promotional Savings ({{ active_coupon }})</span>
+                            <span>-${{ cart_discount }}</span>
+                        </div>
+                        {% endif %}
+                        <div class="flex justify-between">
+                            <span>Insured Armored Courier</span>
+                            <span class="text-gold-600 font-semibold uppercase text-[10px]">Complimentary ($0.00)</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span>Signature Gift Box & Certificate</span>
+                            <span class="text-gold-600 font-semibold uppercase text-[10px]">Complimentary</span>
+                        </div>
+                    </div>
+
+                    <!-- Grand Total -->
+                    <div class="pt-4 border-t border-neutral-200 flex justify-between items-baseline">
+                        <span class="font-serif text-base font-semibold text-neutral-900">Total Payable</span>
+                        <span class="font-serif text-2xl font-bold text-neutral-900">${{ cart_total }}</span>
+                    </div>
+
+                    <button type="submit" class="w-full btn-gold py-4 text-xs font-display uppercase tracking-widest font-semibold rounded-sm shadow-xl">
+                        Authorize Payment & Place Order &rarr;
+                    </button>
+
+                    <p class="text-[10px] text-center text-neutral-400">
+                        By placing your order, you agree to Luckjary's Terms of Atelier Commission and Privacy Policy. Direct adult signature required upon courier delivery.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </form>
+</section>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+function fillSavedAddress(selectElem) {
+    const selected = selectElem.options[selectElem.selectedIndex];
+    if (selected.value) {
+        document.getElementById('street_address').value = selected.value;
+        document.getElementById('apartment_suite').value = selected.getAttribute('data-apt') || '';
+        document.getElementById('city').value = selected.getAttribute('data-city') || '';
+        document.getElementById('state_province').value = selected.getAttribute('data-state') || '';
+        document.getElementById('postal_code').value = selected.getAttribute('data-zip') || '';
+        document.getElementById('country').value = selected.getAttribute('data-country') || 'United States';
+    }
+}
+</script>
+{% endblock %}

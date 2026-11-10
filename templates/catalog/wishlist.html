@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14">
+    <div class="text-center max-w-xl mx-auto mb-12 space-y-2">
+        <span class="text-xs font-display tracking-[0.25em] text-[#C5A059] uppercase font-semibold">Private Collection</span>
+        <h1 class="font-serif text-3xl sm:text-4xl text-neutral-900">Your Curated Wishlist</h1>
+        <div class="w-12 h-0.5 bg-[#C5A059] mx-auto mt-2"></div>
+    </div>
+
+    {% if products %}
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        {% for prod in products %}
+        <article class="product-card bg-white border border-[#E8DFD0] rounded-sm overflow-hidden flex flex-col justify-between group">
+            <div class="relative aspect-square overflow-hidden bg-neutral-50">
+                <a href="{{ prod.get_absolute_url }}">
+                    <img src="{{ prod.primary_image }}" alt="{{ prod.title }}" class="w-full h-full object-cover">
+                </a>
+                <form action="{% url 'core:toggle_wishlist' prod.id %}" method="POST" class="absolute top-3 right-3">
+                    {% csrf_token %}
+                    <button type="submit" class="w-8 h-8 rounded-full bg-white/90 text-red-500 flex items-center justify-center shadow" title="Remove from Wishlist">
+                        &times;
+                    </button>
+                </form>
+            </div>
+            <div class="p-5 flex flex-col flex-1 justify-between space-y-3">
+                <div>
+                    <p class="text-[11px] uppercase tracking-wider text-neutral-400">{{ prod.category.name }}</p>
+                    <h3 class="font-serif text-base text-neutral-900 mt-1 line-clamp-1">
+                        <a href="{{ prod.get_absolute_url }}">{{ prod.title }}</a>
+                    </h3>
+                    <p class="font-serif text-lg font-bold text-neutral-900 mt-2">${{ prod.price }}</p>
+                </div>
+                <form action="{% url 'orders:add_to_cart' prod.id %}" method="POST">
+                    {% csrf_token %}
+                    <input type="hidden" name="quantity" value="1">
+                    <button type="submit" class="w-full btn-gold py-2 text-xs uppercase tracking-widest font-semibold rounded-sm">
+                        Move to Bag
+                    </button>
+                </form>
+            </div>
+        </article>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="bg-white border border-[#E8DFD0] rounded-sm p-16 text-center space-y-4 max-w-lg mx-auto">
+        <svg class="w-12 h-12 mx-auto text-neutral-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
+        <h3 class="font-serif text-xl text-neutral-800">Your wishlist is currently empty</h3>
+        <p class="text-xs text-neutral-500">Save the creations that catch your eye as you explore our jewelry collections.</p>
+        <a href="{% url 'catalog:product_list' %}" class="btn-gold inline-block px-6 py-2.5 text-xs uppercase tracking-widest font-semibold rounded-sm">
+            Explore Creations
+        </a>
+    </div>
+    {% endif %}
+</section>
+{% endblock %}

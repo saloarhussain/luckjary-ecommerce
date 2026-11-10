@@ -1,0 +1,267 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="bg-neutral-900 text-white border-b border-neutral-800 py-8">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div>
+            <div class="flex items-center space-x-2">
+                <span class="inline-block w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                <span class="text-xs font-display tracking-[0.25em] text-[#C5A059] uppercase font-bold">Atelier OMS Console</span>
+            </div>
+            <h1 class="font-serif text-3xl text-white mt-1">Order Management & Fulfillment Operations</h1>
+            <p class="text-xs text-neutral-400 mt-1">Manage incoming jewelry commissions, carrier dispatch, tracking telemetry, and atelier inventory.</p>
+        </div>
+
+        <div class="flex items-center space-x-3">
+            <a href="{% url 'admin:orders_order_changelist' %}" target="_blank" class="px-4 py-2 bg-neutral-800 hover:bg-neutral-700 text-xs font-semibold rounded border border-neutral-700 transition">
+                Django Admin Orders &rarr;
+            </a>
+            <a href="{% url 'catalog:product_list' %}" class="btn-gold px-4 py-2 text-xs font-display uppercase tracking-wider font-semibold rounded">
+                Live Storefront
+            </a>
+        </div>
+    </div>
+</div>
+
+<main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-10">
+    
+    <!-- KPI Overview Cards -->
+    <div class="grid grid-cols-2 lg:grid-cols-5 gap-4 sm:gap-6">
+        <div class="bg-white border border-[#E8DFD0] rounded-sm p-5 shadow-sm space-y-1">
+            <span class="text-[11px] font-display uppercase tracking-widest text-neutral-400 font-semibold block">Gross Sales</span>
+            <p class="font-serif text-2xl sm:text-3xl font-bold text-neutral-900">${{ total_revenue }}</p>
+            <p class="text-[11px] text-emerald-600 font-medium">Captured via Stripe</p>
+        </div>
+
+        <div class="bg-white border border-[#E8DFD0] rounded-sm p-5 shadow-sm space-y-1">
+            <span class="text-[11px] font-display uppercase tracking-widest text-neutral-400 font-semibold block">Total Orders</span>
+            <p class="font-serif text-2xl sm:text-3xl font-bold text-neutral-900">{{ total_orders }}</p>
+            <p class="text-[11px] text-neutral-500">All-time commissions</p>
+        </div>
+
+        <div class="bg-white border border-[#E8DFD0] rounded-sm p-5 shadow-sm space-y-1">
+            <span class="text-[11px] font-display uppercase tracking-widest text-amber-600 font-semibold block">Pending / Queue</span>
+            <p class="font-serif text-2xl sm:text-3xl font-bold text-amber-700">{{ pending_count }}</p>
+            <p class="text-[11px] text-neutral-500">Awaiting intake</p>
+        </div>
+
+        <div class="bg-white border border-[#E8DFD0] rounded-sm p-5 shadow-sm space-y-1">
+            <span class="text-[11px] font-display uppercase tracking-widest text-sky-600 font-semibold block">Processing & QC</span>
+            <p class="font-serif text-2xl sm:text-3xl font-bold text-sky-700">{{ processing_count }}</p>
+            <p class="text-[11px] text-neutral-500">In atelier crafting</p>
+        </div>
+
+        <div class="bg-white border border-[#E8DFD0] rounded-sm p-5 shadow-sm space-y-1 col-span-2 lg:col-span-1">
+            <span class="text-[11px] font-display uppercase tracking-widest text-emerald-600 font-semibold block">In Courier Transit</span>
+            <p class="font-serif text-2xl sm:text-3xl font-bold text-emerald-700">{{ shipped_count }}</p>
+            <p class="text-[11px] text-neutral-500">Dispatched via FedEx</p>
+        </div>
+    </div>
+
+    <!-- Order Management Table Section -->
+    <div class="bg-white border border-[#E8DFD0] rounded-sm shadow-sm overflow-hidden space-y-6 p-6">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-neutral-100">
+            <div>
+                <h3 class="font-display text-sm tracking-widest uppercase font-bold text-neutral-900">Incoming Commissions Queue</h3>
+                <p class="text-xs text-neutral-500">Select any order to update shipping telemetry, tracking numbers, and fulfillment stage.</p>
+            </div>
+
+            <!-- Status Tabs & Search -->
+            <div class="flex flex-wrap items-center gap-2">
+                <a href="{% url 'orders:oms_dashboard' %}" class="px-3 py-1.5 text-xs rounded font-medium {% if not selected_status %}bg-neutral-900 text-white{% else %}bg-neutral-100 text-neutral-700 hover:bg-neutral-200{% endif %}">
+                    All ({{ total_orders }})
+                </a>
+                <a href="?status=PENDING" class="px-3 py-1.5 text-xs rounded font-medium {% if selected_status == 'PENDING' %}bg-amber-600 text-white{% else %}bg-amber-50 text-amber-800 hover:bg-amber-100{% endif %}">
+                    Pending ({{ pending_count }})
+                </a>
+                <a href="?status=PROCESSING" class="px-3 py-1.5 text-xs rounded font-medium {% if selected_status == 'PROCESSING' %}bg-sky-600 text-white{% else %}bg-sky-50 text-sky-800 hover:bg-sky-100{% endif %}">
+                    Processing ({{ processing_count }})
+                </a>
+                <a href="?status=SHIPPED" class="px-3 py-1.5 text-xs rounded font-medium {% if selected_status == 'SHIPPED' %}bg-indigo-600 text-white{% else %}bg-indigo-50 text-indigo-800 hover:bg-indigo-100{% endif %}">
+                    Shipped ({{ shipped_count }})
+                </a>
+                <a href="?status=DELIVERED" class="px-3 py-1.5 text-xs rounded font-medium {% if selected_status == 'DELIVERED' %}bg-emerald-600 text-white{% else %}bg-emerald-50 text-emerald-800 hover:bg-emerald-100{% endif %}">
+                    Delivered ({{ delivered_count }})
+                </a>
+            </div>
+        </div>
+
+        <!-- Orders Table -->
+        <div class="overflow-x-auto">
+            <table class="w-full text-left text-xs">
+                <thead class="bg-[#FAF9F6] text-neutral-500 uppercase tracking-wider text-[11px] border-b border-neutral-200">
+                    <tr>
+                        <th class="py-3 px-4">Order Ref</th>
+                        <th class="py-3 px-4">Customer & Contact</th>
+                        <th class="py-3 px-4">Status</th>
+                        <th class="py-3 px-4">Logistics / Tracking</th>
+                        <th class="py-3 px-4">Total</th>
+                        <th class="py-3 px-4 text-center">Actions</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-neutral-100">
+                    {% for ord in orders %}
+                    <tr class="hover:bg-neutral-50 transition">
+                        <td class="py-4 px-4 font-mono font-bold text-neutral-900">
+                            {{ ord.order_number }}
+                            <span class="block text-[10px] text-neutral-400 font-sans font-normal">{{ ord.created_at|date:"M d, Y H:i" }}</span>
+                        </td>
+                        <td class="py-4 px-4">
+                            <span class="font-semibold text-neutral-900 block">{{ ord.full_name }}</span>
+                            <span class="text-neutral-500 block">{{ ord.email }}</span>
+                            <span class="text-[10px] text-neutral-400">{{ ord.shipping_city }}, {{ ord.shipping_state }}</span>
+                        </td>
+                        <td class="py-4 px-4">
+                            <span class="inline-block px-2.5 py-1 rounded-full text-[10px] font-semibold uppercase tracking-wider
+                                {% if ord.status == 'DELIVERED' %}bg-emerald-100 text-emerald-800
+                                {% elif ord.status == 'SHIPPED' %}bg-sky-100 text-sky-800
+                                {% elif ord.status == 'PROCESSING' %}bg-amber-100 text-amber-800
+                                {% else %}bg-neutral-100 text-neutral-800{% endif %}">
+                                {{ ord.get_status_display }}
+                            </span>
+                        </td>
+                        <td class="py-4 px-4">
+                            <span class="font-medium text-neutral-800 block">{{ ord.carrier }}</span>
+                            {% if ord.tracking_number %}
+                            <span class="font-mono text-[11px] text-gold-700 bg-neutral-100 px-1.5 py-0.5 rounded">{{ ord.tracking_number }}</span>
+                            {% else %}
+                            <span class="text-[10px] text-neutral-400 italic">No tracking code yet</span>
+                            {% endif %}
+                        </td>
+                        <td class="py-4 px-4 font-serif font-bold text-neutral-900 text-sm">
+                            ${{ ord.total_amount }}
+                        </td>
+                        <td class="py-4 px-4 text-center space-x-2">
+                            <button type="button" onclick="openUpdateModal('{{ ord.order_number }}', '{{ ord.status }}', '{{ ord.carrier }}', '{{ ord.tracking_number|default:'' }}', '{{ ord.estimated_delivery|date:'Y-m-d'|default:'' }}')" 
+                                    class="btn-gold px-3 py-1.5 text-[11px] font-semibold rounded uppercase tracking-wider">
+                                Update
+                            </button>
+                            <a href="{% url 'orders:order_tracking_direct' ord.order_number %}" target="_blank" class="text-neutral-500 hover:text-gold-600 text-[11px] underline">
+                                Track Live
+                            </a>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="6" class="text-center py-10 text-neutral-400 italic">
+                            No orders matching the selected filter.
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Atelier Inventory Status Section -->
+    <div class="bg-white border border-[#E8DFD0] rounded-sm shadow-sm p-6 space-y-4">
+        <div class="flex items-center justify-between pb-3 border-b border-neutral-100">
+            <div>
+                <h3 class="font-display text-sm tracking-widest uppercase font-bold text-neutral-900">Atelier Inventory & Precious Metals Stock</h3>
+                <p class="text-xs text-neutral-500">Live units in New York vault. Alerts trigger automatically when stock dips below 10 units.</p>
+            </div>
+            <a href="{% url 'admin:catalog_product_changelist' %}" target="_blank" class="text-xs text-gold-700 font-semibold hover:underline">
+                Manage All Inventory in Admin &rarr;
+            </a>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {% for p in low_inventory_products %}
+            <div class="p-4 border {% if p.inventory <= 5 %}border-red-300 bg-red-50/40{% elif p.inventory <= 10 %}border-amber-300 bg-amber-50/40{% else %}border-neutral-200 bg-neutral-50{% endif %} rounded-sm flex items-center justify-between">
+                <div class="space-y-0.5">
+                    <h4 class="font-semibold text-xs text-neutral-900 truncate max-w-[180px]">{{ p.title }}</h4>
+                    <p class="text-[10px] text-neutral-500 font-mono">{{ p.sku }} • {{ p.karat_metal }}</p>
+                    <p class="text-xs font-serif font-bold text-neutral-800">${{ p.price }}</p>
+                </div>
+                <div class="text-right">
+                    <span class="text-lg font-bold {% if p.inventory <= 5 %}text-red-700{% elif p.inventory <= 10 %}text-amber-700{% else %}text-neutral-900{% endif %}">
+                        {{ p.inventory }}
+                    </span>
+                    <span class="block text-[10px] text-neutral-500 uppercase">In Vault</span>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</main>
+
+<!-- Status Update Modal -->
+<div id="updateModal" class="fixed inset-0 bg-black/60 z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-sm border border-[#E8DFD0] max-w-lg w-full p-6 sm:p-8 space-y-6 shadow-2xl">
+        <div class="flex items-center justify-between pb-4 border-b border-neutral-100">
+            <div>
+                <h3 class="font-display text-sm tracking-widest uppercase font-bold text-neutral-900">Update Fulfillment Telemetry</h3>
+                <p id="modalOrderRef" class="text-xs font-mono text-gold-700 font-bold mt-0.5">Order Ref</p>
+            </div>
+            <button onclick="closeUpdateModal()" class="text-neutral-400 hover:text-neutral-700 text-xl font-light">&times;</button>
+        </div>
+
+        <form method="POST" action="{% url 'orders:oms_dashboard' %}" class="space-y-4 text-xs">
+            {% csrf_token %}
+            <input type="hidden" name="update_order_status" value="1">
+            <input type="hidden" id="modalOrderInput" name="order_number" value="">
+
+            <div>
+                <label class="block font-semibold text-neutral-700 mb-1 uppercase tracking-wider text-[11px]">Milestone Status *</label>
+                <select id="modalStatusSelect" name="new_status" class="w-full p-2.5 bg-[#FAF9F6] border border-neutral-300 rounded font-semibold text-neutral-900">
+                    <option value="PENDING">PENDING - Awaiting Atelier Intake</option>
+                    <option value="PROCESSING">PROCESSING - In Production & QC Inspection</option>
+                    <option value="SHIPPED">SHIPPED - Dispatched with Armored Courier</option>
+                    <option value="DELIVERED">DELIVERED - Successfully Signed & Delivered</option>
+                    <option value="CANCELLED">CANCELLED - Refunded / Voided</option>
+                </select>
+            </div>
+
+            <div class="grid grid-cols-2 gap-3">
+                <div>
+                    <label class="block font-semibold text-neutral-700 mb-1">Carrier Network</label>
+                    <input type="text" id="modalCarrierInput" name="carrier" class="w-full p-2 border border-neutral-300 rounded">
+                </div>
+                <div>
+                    <label class="block font-semibold text-neutral-700 mb-1">Courier Tracking Code</label>
+                    <input type="text" id="modalTrackingInput" name="tracking_number" placeholder="e.g. FDX-994827104921-USA" class="w-full p-2 border border-neutral-300 rounded font-mono">
+                </div>
+            </div>
+
+            <div>
+                <label class="block font-semibold text-neutral-700 mb-1">Estimated Arrival Date</label>
+                <input type="date" id="modalEstDelivery" name="estimated_delivery" class="w-full p-2 border border-neutral-300 rounded">
+            </div>
+
+            <div>
+                <label class="block font-semibold text-neutral-700 mb-1">Activity Log Description (Visible on Customer Live Tracker)</label>
+                <input type="text" name="log_note" placeholder="e.g. Gemologist inspection approved. Sealed in signature velvet lockbox." class="w-full p-2 border border-neutral-300 rounded">
+            </div>
+
+            <div>
+                <label class="block font-semibold text-neutral-700 mb-1">Current Facility Location</label>
+                <input type="text" name="log_location" value="Luckjary Master Atelier, New York, NY" class="w-full p-2 border border-neutral-300 rounded">
+            </div>
+
+            <div class="pt-2 flex items-center justify-end space-x-3">
+                <button type="button" onclick="closeUpdateModal()" class="px-4 py-2 border border-neutral-300 text-neutral-700 font-semibold rounded">Cancel</button>
+                <button type="submit" class="btn-gold px-6 py-2 uppercase font-display tracking-wider font-semibold rounded">
+                    Commit Status Update &rarr;
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+function openUpdateModal(orderNum, status, carrier, tracking, estDelivery) {
+    document.getElementById('modalOrderRef').innerText = 'Order #' + orderNum;
+    document.getElementById('modalOrderInput').value = orderNum;
+    document.getElementById('modalStatusSelect').value = status;
+    document.getElementById('modalCarrierInput').value = carrier;
+    document.getElementById('modalTrackingInput').value = tracking;
+    document.getElementById('modalEstDelivery').value = estDelivery;
+    document.getElementById('updateModal').classList.remove('hidden');
+}
+
+function closeUpdateModal() {
+    document.getElementById('updateModal').classList.add('hidden');
+}
+</script>
+{% endblock %}

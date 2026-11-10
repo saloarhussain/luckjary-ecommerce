@@ -1,0 +1,114 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<section class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <div class="mb-6 flex items-center justify-between">
+        <a href="{% url 'accounts:profile' %}" class="text-xs text-neutral-500 hover:text-gold-600">&larr; Back to Client Vault</a>
+        <button onclick="window.print()" class="btn-outline-gold px-4 py-1.5 text-xs font-semibold rounded-sm">
+            Print Official Receipt
+        </button>
+    </div>
+
+    <div class="bg-white border border-[#E8DFD0] rounded-sm p-8 sm:p-12 shadow-sm space-y-8">
+        
+        <!-- Top Receipt Header -->
+        <div class="flex flex-col sm:flex-row justify-between items-start gap-4 pb-8 border-b border-neutral-200">
+            <div>
+                <span class="font-display text-2xl font-bold tracking-[0.2em] text-neutral-900">LUCKJARY</span>
+                <p class="text-[10px] tracking-[0.25em] text-[#C5A059] uppercase font-semibold">Haute Joaillerie Atelier</p>
+                <p class="text-xs text-neutral-500 mt-2">740 5th Avenue, Suite 1800<br>New York, NY 10019 • USA</p>
+            </div>
+            <div class="sm:text-right">
+                <span class="text-xs text-neutral-400 uppercase tracking-widest block">Official Commission Receipt</span>
+                <h2 class="font-mono text-xl font-bold text-neutral-900 mt-1">{{ order.order_number }}</h2>
+                <p class="text-xs text-neutral-500 mt-1">Date: {{ order.created_at|date:"F d, Y" }}</p>
+                <span class="inline-block mt-2 text-[11px] font-semibold uppercase px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800">
+                    Payment Verified ({{ order.payment_method }})
+                </span>
+            </div>
+        </div>
+
+        <!-- Client & Shipping Details -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-8 text-xs pb-6 border-b border-neutral-200">
+            <div>
+                <h4 class="font-display uppercase tracking-widest text-neutral-400 text-[11px] font-semibold mb-2">Commissioned By</h4>
+                <p class="font-semibold text-neutral-900">{{ order.full_name }}</p>
+                <p class="text-neutral-600">{{ order.email }}</p>
+                {% if order.phone %}<p class="text-neutral-600">{{ order.phone }}</p>{% endif %}
+            </div>
+
+            <div>
+                <h4 class="font-display uppercase tracking-widest text-neutral-400 text-[11px] font-semibold mb-2">Shipping Destination</h4>
+                <p class="font-semibold text-neutral-900">{{ order.shipping_street }}{% if order.shipping_apartment %}, {{ order.shipping_apartment }}{% endif %}</p>
+                <p class="text-neutral-600">{{ order.shipping_city }}, {{ order.shipping_state }} {{ order.shipping_zip }}</p>
+                <p class="text-neutral-600">{{ order.shipping_country }}</p>
+                <p class="text-gold-700 font-semibold mt-1">Carrier: {{ order.carrier }}</p>
+            </div>
+        </div>
+
+        <!-- Items Table -->
+        <div>
+            <h4 class="font-display uppercase tracking-widest text-neutral-900 text-xs font-bold mb-4">Itemized Haute Joaillerie</h4>
+            <table class="w-full text-xs text-left">
+                <thead class="bg-[#FAF9F6] border-b border-neutral-200 text-neutral-500 uppercase tracking-wider text-[11px]">
+                    <tr>
+                        <th class="py-3 px-4">Creation</th>
+                        <th class="py-3 px-4">Metal / Specifications</th>
+                        <th class="py-3 px-4 text-center">Qty</th>
+                        <th class="py-3 px-4 text-right">Price</th>
+                        <th class="py-3 px-4 text-right">Total</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-neutral-100">
+                    {% for itm in order.items.all %}
+                    <tr>
+                        <td class="py-4 px-4 font-semibold text-neutral-900">
+                            {{ itm.product_name }}
+                            <span class="block text-[10px] text-neutral-400 font-normal">SKU: {{ itm.product_sku }}</span>
+                        </td>
+                        <td class="py-4 px-4 text-neutral-600">
+                            {{ itm.selected_material }}<br>
+                            <span class="text-[11px] text-neutral-400">Size: {{ itm.selected_size }}</span>
+                        </td>
+                        <td class="py-4 px-4 text-center">{{ itm.quantity }}</td>
+                        <td class="py-4 px-4 text-right">${{ itm.unit_price }}</td>
+                        <td class="py-4 px-4 text-right font-serif font-bold text-neutral-900">${{ itm.line_total }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Financial Summary -->
+        <div class="flex justify-end pt-4 border-t border-neutral-200">
+            <div class="w-full sm:w-64 space-y-2 text-xs">
+                <div class="flex justify-between text-neutral-600">
+                    <span>Subtotal:</span>
+                    <span class="font-semibold text-neutral-900">${{ order.subtotal }}</span>
+                </div>
+                {% if order.discount_amount > 0 %}
+                <div class="flex justify-between text-emerald-700">
+                    <span>Discount:</span>
+                    <span>-${{ order.discount_amount }}</span>
+                </div>
+                {% endif %}
+                <div class="flex justify-between text-neutral-600">
+                    <span>Insured Courier:</span>
+                    <span class="font-semibold text-gold-600 uppercase">Complimentary</span>
+                </div>
+                <div class="flex justify-between text-sm font-serif font-bold text-neutral-900 pt-2 border-t border-neutral-200">
+                    <span>Total Paid:</span>
+                    <span>${{ order.total_amount }}</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer / Certification note -->
+        <div class="pt-8 border-t border-neutral-200 text-center text-[11px] text-neutral-400 space-y-1">
+            <p>Every piece is accompanied by Luckjary's Certificate of Authenticity and Lifetime Service Guarantee.</p>
+            <p>For bespoke sizing adjustments or inquiries, contact the concierge at concierge@luckjary.com.</p>
+        </div>
+    </div>
+</section>
+{% endblock %}

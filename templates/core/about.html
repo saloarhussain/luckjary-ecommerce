@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<section class="relative bg-[#121212] text-white py-24">
+    <div class="max-w-4xl mx-auto px-4 text-center space-y-4">
+        <span class="text-xs font-display tracking-[0.25em] text-[#C5A059] uppercase font-bold">The Heritage</span>
+        <h1 class="font-serif text-4xl sm:text-6xl text-white font-light">Crafting Modern Heirlooms</h1>
+        <p class="max-w-2xl mx-auto text-xs sm:text-sm text-neutral-300 font-light leading-relaxed">
+            Founded with a singular devotion to high jewelry mastery, Luckjary marries centuries of classical Roman goldsmithing with ethical modern diamond innovation.
+        </p>
+    </div>
+</section>
+
+<section class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-20 space-y-20">
+    <!-- Story Block 1 -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+        <div class="space-y-4">
+            <span class="text-xs font-display tracking-[0.2em] text-[#C5A059] uppercase font-bold">Atelier Philosophy</span>
+            <h2 class="font-serif text-3xl sm:text-4xl text-neutral-900">100% Recycled Solid Gold & Platinum</h2>
+            <p class="text-xs sm:text-sm text-neutral-600 leading-relaxed font-light">
+                We refuse compromise. Every ring shank, chain link, and prong bezel produced at Luckjary is forged exclusively from 100% certified recycled 18-karat gold and 950 pure platinum. By eliminating newly mined gold, we preserve our earth while maintaining pristine metallurgical purity and timeless density.
+            </p>
+        </div>
+        <div class="rounded-sm overflow-hidden aspect-[4/3] shadow-md">
+            <img src="https://images.unsplash.com/photo-1598560917505-59a3ad559071?auto=format&fit=crop&w=1000&q=80" alt="Master goldsmith forging gold" class="w-full h-full object-cover">
+        </div>
+    </div>
+
+    <!-- Story Block 2 -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center md:flex-row-reverse">
+        <div class="rounded-sm overflow-hidden aspect-[4/3] shadow-md md:order-2">
+            <img src="https://images.unsplash.com/photo-1603561591411-07134e71a2a9?auto=format&fit=crop&w=1000&q=80" alt="Diamond setting under microscope" class="w-full h-full object-cover">
+        </div>
+        <div class="space-y-4 md:order-1">
+            <span class="text-xs font-display tracking-[0.2em] text-[#C5A059] uppercase font-bold">Microscopic Precision</span>
+            <h2 class="font-serif text-3xl sm:text-4xl text-neutral-900">D-F Color & VVS1 Clarity Diamonds</h2>
+            <p class="text-xs sm:text-sm text-neutral-600 leading-relaxed font-light">
+                Our gemologists inspect thousands of rough and cut diamonds before admitting a single stone into our collections. Only stones exhibiting triple-excellent symmetry, zero eye-visible inclusions, and blinding fire receive the Luckjary seal of authentication.
+            </p>
+        </div>
+    </div>
+</section>
+{% endblock %}

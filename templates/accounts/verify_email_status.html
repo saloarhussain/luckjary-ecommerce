@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<section class="max-w-md mx-auto px-4 py-16">
+    <div class="bg-white border border-[#E8DFD0] rounded-sm p-8 sm:p-10 shadow-sm text-center space-y-6">
+        {% if success %}
+        <div class="w-16 h-16 bg-emerald-50 border border-emerald-500 rounded-full flex items-center justify-center mx-auto text-2xl text-emerald-600 shadow-sm">
+            ✓
+        </div>
+
+        <div class="space-y-2">
+            <span class="text-xs font-display tracking-[0.25em] text-emerald-700 uppercase font-bold">Email Verified</span>
+            <h1 class="font-serif text-3xl text-neutral-900 font-light">Welcome to Luckjary Privé</h1>
+            <p class="text-xs text-neutral-600">
+                Your email address has been successfully verified. Your client vault is now fully active.
+            </p>
+        </div>
+
+        <div class="pt-4 space-y-3">
+            <a href="{% url 'accounts:profile' %}" class="w-full btn-gold block py-3 text-xs uppercase font-display tracking-widest font-semibold rounded-sm">
+                Enter Client Vault &rarr;
+            </a>
+            <a href="{% url 'catalog:product_list' %}" class="w-full btn-outline-gold block py-3 text-xs uppercase font-display tracking-widest font-semibold rounded-sm">
+                Explore The Collections
+            </a>
+        </div>
+        {% else %}
+        <div class="w-16 h-16 bg-red-50 border border-red-400 rounded-full flex items-center justify-center mx-auto text-2xl text-red-600 shadow-sm">
+            ✕
+        </div>
+
+        <div class="space-y-2">
+            <span class="text-xs font-display tracking-[0.25em] text-red-700 uppercase font-bold">Verification Error</span>
+            <h1 class="font-serif text-3xl text-neutral-900 font-light">Link Invalid or Expired</h1>
+            <p class="text-xs text-neutral-600">
+                The verification token is either invalid or has expired. Please log in or request a new verification link.
+            </p>
+        </div>
+
+        <div class="pt-4">
+            <a href="{% url 'accounts:login' %}" class="btn-gold inline-block px-6 py-2.5 text-xs uppercase font-display tracking-widest font-semibold rounded-sm">
+                Go to Sign In
+            </a>
+        </div>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

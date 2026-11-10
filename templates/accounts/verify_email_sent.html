@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<section class="max-w-md mx-auto px-4 py-16">
+    <div class="bg-white border border-[#E8DFD0] rounded-sm p-8 sm:p-10 shadow-sm text-center space-y-6">
+        <div class="w-16 h-16 bg-[#FAF7F0] border border-[#C5A059] rounded-full flex items-center justify-center mx-auto text-2xl text-gold-600 shadow-sm">
+            ✉
+        </div>
+
+        <div class="space-y-2">
+            <span class="text-xs font-display tracking-[0.25em] text-[#C5A059] uppercase font-bold">Email Verification Sent</span>
+            <h1 class="font-serif text-3xl text-neutral-900 font-light">Verify Your Email Address</h1>
+            <p class="text-xs text-neutral-600">
+                We have dispatched a secure activation link to:
+                <strong class="block text-neutral-900 font-mono mt-1">{{ email }}</strong>
+            </p>
+        </div>
+
+        <p class="text-xs text-neutral-500 leading-relaxed font-light">
+            Please check your inbox and click the verification link to confirm your membership and activate your Luckjary client vault.
+        </p>
+
+        <!-- Development / One-Click Verification Simulation Box -->
+        {% if demo_link %}
+        <div class="p-4 bg-[#FAF7F0] border border-[#E8DFD0] rounded text-left space-y-2 text-xs">
+            <span class="font-semibold text-neutral-900 flex items-center space-x-1">
+                <span class="text-gold-600">✦</span>
+                <span>Immediate Verification Link:</span>
+            </span>
+            <p class="text-[11px] text-neutral-600">Click below to immediately verify your email and sign in:</p>
+            <a href="{{ demo_link }}" class="btn-gold block text-center py-2.5 px-4 text-xs font-semibold uppercase tracking-wider rounded-sm">
+                Verify Email Now &rarr;
+            </a>
+        </div>
+        {% endif %}
+
+        <div class="pt-2">
+            <a href="{% url 'accounts:login' %}" class="text-xs text-neutral-500 hover:text-gold-600 underline">
+                Return to Sign In
+            </a>
+        </div>
+    </div>
+</section>
+{% endblock %}

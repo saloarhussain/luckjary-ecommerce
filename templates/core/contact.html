@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<section class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16 space-y-12">
+    <div class="text-center space-y-2">
+        <span class="text-xs font-display tracking-[0.25em] text-[#C5A059] uppercase font-bold">Private Consultations</span>
+        <h1 class="font-serif text-3xl sm:text-5xl text-neutral-900 font-light">Contact the Concierge</h1>
+        <p class="text-xs text-neutral-500 font-light max-w-md mx-auto">
+            Schedule an appointment at our New York atelier or speak directly with our senior gemologist regarding a bespoke fine jewelry commission.
+        </p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-12 gap-10">
+        <!-- Contact Form (7 Cols) -->
+        <div class="md:col-span-7 bg-white border border-[#E8DFD0] rounded-sm p-6 sm:p-8 shadow-sm space-y-4">
+            <h3 class="font-display text-xs uppercase tracking-widest font-bold text-neutral-900 pb-2 border-b border-neutral-100">
+                Inquire or Commission
+            </h3>
+
+            <form method="POST" action="{% url 'core:contact' %}" class="space-y-4 text-xs">
+                {% csrf_token %}
+                <div>
+                    <label class="block text-neutral-700 font-semibold mb-1">Your Full Name *</label>
+                    <input type="text" name="name" required placeholder="Eleanor Vance" class="w-full p-2.5 border border-neutral-300 rounded focus:outline-none focus:border-gold-500">
+                </div>
+
+                <div>
+                    <label class="block text-neutral-700 font-semibold mb-1">Email Address *</label>
+                    <input type="email" name="email" required placeholder="eleanor.vance@luxury.com" class="w-full p-2.5 border border-neutral-300 rounded focus:outline-none focus:border-gold-500">
+                </div>
+
+                <div>
+                    <label class="block text-neutral-700 font-semibold mb-1">Subject of Consultation</label>
+                    <select name="subject" class="w-full p-2.5 border border-neutral-300 rounded focus:outline-none focus:border-gold-500 bg-[#FAF9F6]">
+                        <option value="Bespoke Engagement Ring Commission">Bespoke Engagement Ring Commission</option>
+                        <option value="Fine Jewelry Inquiry">Fine Jewelry Inquiry</option>
+                        <option value="Atelier Private Appointment">Atelier Private Appointment (New York)</option>
+                        <option value="Order Status & Care Assistance">Order Status & Care Assistance</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-neutral-700 font-semibold mb-1">Your Message or Specifications *</label>
+                    <textarea name="message" rows="4" required placeholder="Tell us about the diamond shape, metal karat, or timing you have in mind..." class="w-full p-2.5 border border-neutral-300 rounded focus:outline-none focus:border-gold-500"></textarea>
+                </div>
+
+                <button type="submit" class="w-full btn-gold py-3 uppercase font-display tracking-widest font-semibold rounded-sm shadow-md">
+                    Submit Inquiry &rarr;
+                </button>
+            </form>
+        </div>
+
+        <!-- Atelier Locations & Details (5 Cols) -->
+        <div class="md:col-span-5 space-y-6">
+            <div class="bg-white border border-[#E8DFD0] rounded-sm p-6 shadow-sm space-y-3 text-xs">
+                <span class="text-xs font-display uppercase tracking-widest text-gold-700 font-bold block">New York Flagship Atelier</span>
+                <p class="font-serif text-lg font-semibold text-neutral-900">740 5th Avenue, Suite 1800</p>
+                <p class="text-neutral-500">New York, NY 10019 • United States</p>
+                <div class="pt-2 border-t border-neutral-100 text-neutral-600 space-y-1">
+                    <p><strong class="text-neutral-900">Concierge Desk:</strong> +1 (212) 555-0199</p>
+                    <p><strong class="text-neutral-900">Email:</strong> concierge@luckjary.com</p>
+                    <p><strong class="text-neutral-900">Hours:</strong> Mon - Sat: 10:00 AM - 6:00 PM EST (By Appointment)</p>
+                </div>
+            </div>
+
+            <div class="bg-[#141414] text-white rounded-sm p-6 space-y-3 text-xs">
+                <span class="text-xs font-display uppercase tracking-widest text-gold-400 font-bold block">White Glove Security</span>
+                <p class="text-neutral-300 leading-relaxed font-light">
+                    All private viewings require advance photo identification and confirmation via our secure client registry.
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

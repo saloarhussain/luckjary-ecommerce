@@ -1,0 +1,166 @@
+/* Luckjary Luxury Fine Jewelry - Core Stylesheet */
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700;800&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap');
+
+:root {
+    --color-gold-primary: #C5A059;
+    --color-gold-hover: #B08B44;
+    --color-gold-light: #F7F3EB;
+    --color-gold-border: #E6D9C5;
+    --color-onyx: #121212;
+    --color-charcoal: #2A2A2A;
+    --color-cream: #FAF9F6;
+    --font-serif: 'Cormorant Garamond', Georgia, serif;
+    --font-display: 'Cinzel', serif;
+    --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+}
+
+body {
+    font-family: var(--font-sans);
+    background-color: var(--color-cream);
+    color: var(--color-charcoal);
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, .font-serif {
+    font-family: var(--font-serif);
+}
+
+.font-display {
+    font-family: var(--font-display);
+    letter-spacing: 0.08em;
+}
+
+/* Luxury Gold Button */
+.btn-gold {
+    background: linear-gradient(135deg, #D4AF37 0%, #C5A059 50%, #B38F46 100%);
+    color: #FFFFFF;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 4px 14px rgba(197, 160, 89, 0.25);
+}
+
+.btn-gold:hover {
+    background: linear-gradient(135deg, #C5A059 0%, #B38F46 50%, #99742E 100%);
+    box-shadow: 0 6px 20px rgba(197, 160, 89, 0.35);
+    transform: translateY(-1px);
+}
+
+.btn-outline-gold {
+    border: 1px solid #C5A059;
+    color: #121212;
+    background: transparent;
+    transition: all 0.25s ease;
+}
+
+.btn-outline-gold:hover {
+    background: #C5A059;
+    color: #FFFFFF;
+}
+
+.gold-text {
+    color: #C5A059;
+}
+
+.gold-gradient-text {
+    background: linear-gradient(135deg, #B38F46 0%, #D4AF37 50%, #A37C33 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* Smooth Image Zoom on PDP */
+.zoom-container {
+    position: relative;
+    overflow: hidden;
+    cursor: crosshair;
+}
+
+.zoom-image {
+    transition: transform 0.2s ease-out;
+}
+
+.zoom-container:hover .zoom-image {
+    transform: scale(1.75);
+}
+
+/* Lightbox Modal */
+.lightbox-modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(18, 18, 18, 0.95);
+    z-index: 100;
+    display: none;
+    align-items: center;
+    justify-content: center;
+}
+
+.lightbox-modal.active {
+    display: flex;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+::-webkit-scrollbar-track {
+    background: #F4F1EA;
+}
+::-webkit-scrollbar-thumb {
+    background: #D8CEBE;
+    border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: #C5A059;
+}
+
+/* Luxury Badge */
+.luxury-badge {
+    background: rgba(197, 160, 89, 0.12);
+    color: #8C6A28;
+    border: 1px solid rgba(197, 160, 89, 0.3);
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 0.25rem 0.65rem;
+    border-radius: 9999px;
+}
+
+/* Card Hover Lift */
+.product-card {
+    transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.product-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 16px 32px rgba(18, 18, 18, 0.06);
+}
+
+.product-card .img-secondary {
+    opacity: 0;
+    transition: opacity 0.4s ease;
+}
+.product-card:hover .img-secondary {
+    opacity: 1;
+}
+
+/* Tracking Step Stepper */
+.step-circle {
+    transition: all 0.3s ease;
+}
+.step-circle.active {
+    background: #C5A059;
+    color: #FFFFFF;
+    box-shadow: 0 0 0 4px rgba(197, 160, 89, 0.2);
+}
+.step-circle.completed {
+    background: #1B4332;
+    color: #FFFFFF;
+}
+
+/* Announcement Bar ticker */
+.announcement-bar {
+    background: #141414;
+    color: #E6D9C5;
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+}

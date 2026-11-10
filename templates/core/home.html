@@ -1,0 +1,248 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="relative bg-[#0F0F0F] text-white min-h-[85vh] flex items-center justify-center overflow-hidden">
+    <div class="absolute inset-0 z-0">
+        <img src="https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?auto=format&fit=crop&w=2000&q=85" 
+             alt="Luckjary High Jewelry Diamond Ring Collection" 
+             class="w-full h-full object-cover opacity-35 transform scale-105 transition-transform duration-1000 ease-out">
+        <div class="absolute inset-0 bg-gradient-to-t from-[#0F0F0F] via-transparent to-black/60"></div>
+    </div>
+
+    <div class="relative z-10 max-w-4xl mx-auto text-center px-4 sm:px-6 py-20 space-y-6">
+        <div class="inline-flex items-center space-x-2 border border-[#C5A059]/40 bg-black/40 backdrop-blur-sm px-4 py-1.5 rounded-full">
+            <span class="w-2 h-2 rounded-full bg-[#C5A059]"></span>
+            <span class="text-xs font-display tracking-[0.25em] text-[#C5A059] uppercase">The 2026 Solstice Haute Joaillerie</span>
+        </div>
+
+        <h1 class="font-serif text-4xl sm:text-6xl md:text-7xl font-light tracking-wide leading-tight text-[#FAF9F6]">
+            Crafted for Eternity.<br>
+            <span class="italic font-normal gold-gradient-text">Worn for a Lifetime.</span>
+        </h1>
+
+        <p class="max-w-2xl mx-auto text-sm sm:text-base text-neutral-300 font-light leading-relaxed">
+            Discover modern heirlooms sculpted from 18K solid gold and conflict-free certified diamonds. Each piece is hand-finished in our private New York atelier.
+        </p>
+
+        <div class="pt-6 flex flex-col sm:flex-row items-center justify-center gap-4">
+            <a href="{% url 'catalog:product_list' %}" class="w-full sm:w-auto btn-gold px-8 py-3.5 text-xs font-display font-semibold tracking-[0.18em] uppercase rounded-sm shadow-xl">
+                Explore The Collection
+            </a>
+            <a href="{% url 'catalog:category_products' 'bridal-high-jewelry' %}" class="w-full sm:w-auto px-8 py-3.5 border border-[#C5A059] text-white hover:bg-[#C5A059]/10 text-xs font-display tracking-[0.18em] uppercase rounded-sm transition">
+                The Bridal Atelier
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- Brand Pillars / Trust Bar -->
+<section class="bg-white border-y border-[#EBE6DF] py-8">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+            <div class="space-y-1">
+                <span class="text-xl text-[#C5A059]">✦</span>
+                <h4 class="text-xs font-display uppercase tracking-widest text-neutral-900 font-bold">18K Solid Gold</h4>
+                <p class="text-[11px] text-neutral-500">Never plated or hollow</p>
+            </div>
+            <div class="space-y-1">
+                <span class="text-xl text-[#C5A059]">✦</span>
+                <h4 class="text-xs font-display uppercase tracking-widest text-neutral-900 font-bold">IGI & GIA Certified</h4>
+                <p class="text-[11px] text-neutral-500">Conflict-free VVS stones</p>
+            </div>
+            <div class="space-y-1">
+                <span class="text-xl text-[#C5A059]">✦</span>
+                <h4 class="text-xs font-display uppercase tracking-widest text-neutral-900 font-bold">White-Glove Courier</h4>
+                <p class="text-[11px] text-neutral-500">Fully insured overnight delivery</p>
+            </div>
+            <div class="space-y-1">
+                <span class="text-xl text-[#C5A059]">✦</span>
+                <h4 class="text-xs font-display uppercase tracking-widest text-neutral-900 font-bold">Lifetime Warranty</h4>
+                <p class="text-[11px] text-neutral-500">Complimentary cleaning & repair</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Categories Grid -->
+<section class="py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center max-w-xl mx-auto mb-14 space-y-2">
+        <span class="text-xs font-display tracking-[0.25em] text-[#C5A059] uppercase font-semibold">Curation</span>
+        <h2 class="font-serif text-3xl sm:text-4xl text-neutral-900">Explore by Category</h2>
+        <div class="w-12 h-0.5 bg-[#C5A059] mx-auto mt-2"></div>
+    </div>
+
+    <div class="grid grid-cols-2 md:grid-cols-5 gap-4 sm:gap-6">
+        {% for cat in categories %}
+        <a href="{% url 'catalog:category_products' cat.slug %}" class="group relative block overflow-hidden rounded-sm bg-neutral-100 aspect-[3/4] shadow-sm">
+            <img src="{{ cat.image_url }}" alt="{{ cat.name }}" class="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110">
+            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+            <div class="absolute bottom-4 left-4 right-4 text-center">
+                <h3 class="font-display text-sm tracking-widest text-white uppercase font-medium group-hover:text-[#C5A059] transition">{{ cat.name }}</h3>
+                <span class="text-[10px] text-neutral-300 uppercase tracking-widest font-sans inline-block mt-0.5">Explore &rarr;</span>
+            </div>
+        </a>
+        {% endfor %}
+    </div>
+</section>
+
+<!-- Featured Bestsellers -->
+<section class="py-16 bg-[#F4F1EA] border-y border-[#EBE6DF]">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex flex-col md:flex-row md:items-end justify-between mb-12">
+            <div>
+                <span class="text-xs font-display tracking-[0.25em] text-[#C5A059] uppercase font-semibold">Iconic Creations</span>
+                <h2 class="font-serif text-3xl sm:text-4xl text-neutral-900 mt-1">Atelier Bestsellers</h2>
+            </div>
+            <a href="{% url 'catalog:product_list' %}" class="mt-4 md:mt-0 text-xs font-display tracking-widest uppercase text-neutral-800 hover:text-gold-600 font-semibold inline-flex items-center gap-1">
+                View Full Catalog &rarr;
+            </a>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
+            {% for prod in featured_products %}
+            <article class="product-card bg-white border border-[#E8DFD0] rounded-sm overflow-hidden flex flex-col justify-between group">
+                <div class="relative aspect-square overflow-hidden bg-neutral-50">
+                    <a href="{{ prod.get_absolute_url }}">
+                        <img src="{{ prod.primary_image }}" alt="{{ prod.title }}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
+                        <img src="{{ prod.secondary_image }}" alt="{{ prod.title }}" class="img-secondary absolute inset-0 w-full h-full object-cover">
+                    </a>
+
+                    <!-- Badges -->
+                    <div class="absolute top-3 left-3 flex flex-col gap-1">
+                        {% if prod.is_bestseller %}
+                        <span class="luxury-badge">Bestseller</span>
+                        {% elif prod.is_new_arrival %}
+                        <span class="luxury-badge bg-neutral-900 text-[#C5A059] border-black">New</span>
+                        {% endif %}
+                    </div>
+
+                    <!-- Quick Wishlist Button -->
+                    <form action="{% url 'core:toggle_wishlist' prod.id %}" method="POST" class="absolute top-3 right-3">
+                        {% csrf_token %}
+                        <button type="submit" class="w-8 h-8 rounded-full bg-white/90 backdrop-blur-sm text-neutral-700 hover:text-red-500 flex items-center justify-center shadow transition" title="Save to Wishlist">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
+                        </button>
+                    </form>
+                </div>
+
+                <div class="p-5 flex flex-col flex-1 justify-between space-y-3">
+                    <div>
+                        <p class="text-[11px] uppercase tracking-wider text-neutral-400">{{ prod.category.name }} • {{ prod.karat_metal }}</p>
+                        <h3 class="font-serif text-lg text-neutral-900 mt-1 line-clamp-1 group-hover:text-gold-600 transition">
+                            <a href="{{ prod.get_absolute_url }}">{{ prod.title }}</a>
+                        </h3>
+                        <div class="flex items-center space-x-1 mt-1 text-gold-500 text-xs">
+                            <span>★★★★★</span>
+                            <span class="text-[11px] text-neutral-400 font-sans ml-1">({{ prod.review_count|default:"1" }})</span>
+                        </div>
+                    </div>
+
+                    <div class="pt-3 border-t border-neutral-100 flex items-center justify-between">
+                        <div>
+                            <span class="font-serif text-lg font-bold text-neutral-900">${{ prod.price }}</span>
+                            {% if prod.compare_at_price %}
+                            <span class="text-xs text-neutral-400 line-through ml-1">${{ prod.compare_at_price }}</span>
+                            {% endif %}
+                        </div>
+
+                        <form action="{% url 'orders:add_to_cart' prod.id %}" method="POST">
+                            {% csrf_token %}
+                            <input type="hidden" name="quantity" value="1">
+                            <button type="submit" class="btn-outline-gold px-3 py-1.5 text-[11px] font-display uppercase tracking-wider font-semibold rounded-sm">
+                                + Bag
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </article>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- Collection Spotlight Editorial -->
+<section class="py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="bg-white border border-[#E8DFD0] rounded-sm overflow-hidden shadow-lg grid grid-cols-1 lg:grid-cols-2">
+        <div class="relative aspect-[4/3] lg:aspect-auto">
+            <img src="https://images.unsplash.com/photo-1599643477877-530eb83abc8e?auto=format&fit=crop&w=1200&q=85" 
+                 alt="The Solstice Fine Jewelry Atelier Collection" 
+                 class="w-full h-full object-cover">
+        </div>
+        <div class="p-8 sm:p-14 flex flex-col justify-center space-y-6 bg-[#FAF9F6]">
+            <span class="text-xs font-display tracking-[0.25em] text-[#C5A059] uppercase font-bold">Atelier Spotlight</span>
+            <h2 class="font-serif text-3xl sm:text-5xl text-neutral-900 leading-tight">
+                The Solstice Heritage<br>Collection
+            </h2>
+            <p class="text-xs sm:text-sm text-neutral-600 font-light leading-relaxed">
+                Sculpted from molten 18K solid yellow and white gold, the Solstice Heritage series celebrates Roman architectural balance and celestial luminosity. Every diamond is handset with microscopic precision to capture and bend light.
+            </p>
+            <div class="space-y-2 text-xs text-neutral-700">
+                <div class="flex items-center space-x-2">
+                    <span class="text-[#C5A059]">✦</span>
+                    <span>Individually hallmarked with the Luckjary Master Seal</span>
+                </div>
+                <div class="flex items-center space-x-2">
+                    <span class="text-[#C5A059]">✦</span>
+                    <span>Accompanied by an IGI Gemological Dossier</span>
+                </div>
+                <div class="flex items-center space-x-2">
+                    <span class="text-[#C5A059]">✦</span>
+                    <span>Delivered in hand-stitched emerald velvet travel case</span>
+                </div>
+            </div>
+            <div class="pt-2">
+                <a href="{% url 'catalog:product_list' %}?collection=solstice-heritage" class="btn-gold inline-block px-8 py-3.5 text-xs font-display tracking-widest uppercase font-semibold rounded-sm">
+                    View The Editorial Pieces
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Client Testimonials -->
+<section class="py-20 bg-[#141414] text-white">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-12">
+        <div class="space-y-2">
+            <span class="text-xs font-display tracking-[0.25em] text-[#C5A059] uppercase font-semibold">Patron Stories</span>
+            <h2 class="font-serif text-3xl sm:text-4xl text-white">Loved by Connoisseurs Worldwide</h2>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-left">
+            <div class="bg-[#1C1C1C] border border-[#2B2B2B] p-6 rounded-sm space-y-4">
+                <div class="text-[#C5A059] text-sm">★★★★★</div>
+                <p class="text-xs text-neutral-300 italic leading-relaxed font-serif text-sm">
+                    "My fiancée was brought to tears when she opened the velvet box. The 1.8ct oval solitaire has extraordinary fire and scintillation. Cartier caliber at a thoughtful price."
+                </p>
+                <div>
+                    <h4 class="text-xs font-display font-semibold text-white">Marcus Sterling</h4>
+                    <p class="text-[10px] text-neutral-400">Verified Client • Manhattan, NY</p>
+                </div>
+            </div>
+
+            <div class="bg-[#1C1C1C] border border-[#2B2B2B] p-6 rounded-sm space-y-4">
+                <div class="text-[#C5A059] text-sm">★★★★★</div>
+                <p class="text-xs text-neutral-300 italic leading-relaxed font-serif text-sm">
+                    "The Sovereign Tennis Bracelet has become my daily staple. The hidden security clasp is genius and it glides across my wrist like silk. Truly sublime craftsmanship."
+                </p>
+                <div>
+                    <h4 class="text-xs font-display font-semibold text-white">Camilla Althaus</h4>
+                    <p class="text-[10px] text-neutral-400">Verified Client • London, UK</p>
+                </div>
+            </div>
+
+            <div class="bg-[#1C1C1C] border border-[#2B2B2B] p-6 rounded-sm space-y-4">
+                <div class="text-[#C5A059] text-sm">★★★★★</div>
+                <p class="text-xs text-neutral-300 italic leading-relaxed font-serif text-sm">
+                    "The real-time tracking portal gave us complete peace of mind. Watching each stage from master setting to insured courier arrival was a wonderful experience."
+                </p>
+                <div>
+                    <h4 class="text-xs font-display font-semibold text-white">David & Elena Chen</h4>
+                    <p class="text-[10px] text-neutral-400">Verified Client • San Francisco, CA</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
