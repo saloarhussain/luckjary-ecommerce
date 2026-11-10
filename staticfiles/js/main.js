@@ -3,7 +3,7 @@
 document.addEventListener('DOMContentLoaded', () => {
     initProductGalleryZoom();
     initCartDrawer();
-    initMobileMenu();
+    initMobileNavDrawer();
 });
 
 // 1. High-Resolution Magnifying Zoom for Product Detail Page
@@ -65,7 +65,6 @@ function initCartDrawer() {
 
     openBtns.forEach(btn => {
         btn.addEventListener('click', (e) => {
-            // If on cart page itself, allow normal navigation
             if (window.location.pathname.includes('/cart/')) return;
             e.preventDefault();
             openDrawer();
@@ -76,15 +75,30 @@ function initCartDrawer() {
     if (overlay) overlay.addEventListener('click', closeDrawer);
 }
 
-// 3. Mobile Navigation Menu
-function initMobileMenu() {
-    const mobileBtn = document.getElementById('mobileMenuBtn');
-    const mobileMenu = document.getElementById('mobileMenu');
-    if (mobileBtn && mobileMenu) {
-        mobileBtn.addEventListener('click', () => {
-            mobileMenu.classList.toggle('hidden');
-        });
+// 3. Mobile Navigation Drawer Controls
+function initMobileNavDrawer() {
+    const drawer = document.getElementById('mobileNavDrawer');
+    const overlay = document.getElementById('mobileDrawerOverlay');
+    const openBtn = document.getElementById('mobileMenuBtn');
+    const closeBtn = document.getElementById('closeMobileDrawerBtn');
+
+    if (!drawer || !overlay || !openBtn) return;
+
+    function openMobileDrawer() {
+        drawer.classList.remove('-translate-x-full');
+        overlay.classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
     }
+
+    function closeMobileDrawer() {
+        drawer.classList.add('-translate-x-full');
+        overlay.classList.add('hidden');
+        document.body.style.overflow = '';
+    }
+
+    openBtn.addEventListener('click', openMobileDrawer);
+    if (closeBtn) closeBtn.addEventListener('click', closeMobileDrawer);
+    if (overlay) overlay.addEventListener('click', closeMobileDrawer);
 }
 
 // 4. Copy to Clipboard Utility
