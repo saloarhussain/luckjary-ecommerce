@@ -4,6 +4,8 @@ document.addEventListener('DOMContentLoaded', () => {
     initProductGalleryZoom();
     initCartDrawer();
     initMobileNavDrawer();
+    initDeliveryPincode();
+    initSearchPlaceholderRotation();
 });
 
 // 1. High-Resolution Magnifying Zoom for Product Detail Page
@@ -115,4 +117,112 @@ function copyToClipboard(text, elementId) {
             }, 2000);
         }
     });
+}
+
+// 5. Where to Deliver? Delivery Pincode Modal & Hydration (GIVA Style)
+function initDeliveryPincode() {
+    const savedPin = localStorage.getItem('luckjary_pincode');
+    const savedCity = localStorage.getItem('luckjary_city');
+    if (savedPin) {
+        updateHeaderPincodeDisplay(savedPin, savedCity);
+    }
+}
+
+function openPincodeModal() {
+    const modal = document.getElementById('pincodeModal');
+    if (modal) {
+        modal.classList.remove('hidden');
+        const input = document.getElementById('modalPincodeInput');
+        if (input) {
+            input.value = localStorage.getItem('luckjary_pincode') || '';
+            input.focus();
+        }
+    }
+}
+
+function closePincodeModal() {
+    const modal = document.getElementById('pincodeModal');
+    if (modal) modal.classList.add('hidden');
+}
+
+function applyPincode(e) {
+    if (e) e.preventDefault();
+    const input = document.getElementById('modalPincodeInput');
+    const code = input ? input.value.trim() : '';
+    if (!code || code.length < 4) {
+        showPincodeFeedback('Please enter a valid 5 or 6 digit pincode', false);
+        return;
+    }
+    savePincode(code);
+}
+
+function setQuickPincode(code, city) {
+    const input = document.getElementById('modalPincodeInput');
+    if (input) input.value = code;
+    savePincode(code, city);
+}
+
+function savePincode(code, city) {
+    localStorage.setItem('luckjary_pincode', code);
+    if (city) localStorage.setItem('luckjary_city', city);
+    updateHeaderPincodeDisplay(code, city);
+    showPincodeFeedback(`✓ Deliverable to ${city || 'your location'} (${code}) — Free Insured Express Delivery in 2-3 Business Days!`, true);
+    setTimeout(() => {
+        closePincodeModal();
+    }, 1200);
+}
+
+function updateHeaderPincodeDisplay(code, city) {
+    const titleEl = document.getElementById('deliveryTitleText');
+    const subEl = document.getElementById('deliverySubtitleText');
+    if (titleEl && subEl) {
+        if (code) {
+            titleEl.textContent = `Deliver to: ${code}`;
+            subEl.textContent = city ? `${city} (Change)` : 'Change Pincode';
+        } else {
+            titleEl.textContent = 'Where to Deliver?';
+            subEl.textContent = 'Update Delivery Pincode';
+        }
+    }
+}
+
+function showPincodeFeedback(msg, isSuccess) {
+    const fb = document.getElementById('pincodeFeedback');
+    if (!fb) return;
+    fb.classList.remove('hidden');
+    if (isSuccess) {
+        fb.className = 'mt-4 p-3 rounded-lg border text-xs bg-emerald-50 text-emerald-800 border-emerald-200 font-medium';
+    } else {
+        fb.className = 'mt-4 p-3 rounded-lg border text-xs bg-rose-50 text-rose-800 border-rose-200 font-medium';
+    }
+    fb.innerHTML = msg;
+}
+
+// 6. Dynamic Rotating Search Placeholder (GIVA style: Search "Pendants")
+const searchPlaceholders = [
+    'Search "Pendants"',
+    'Search "Diamond Rings"',
+    'Search "Gold Mangalsutra"',
+    'Search "Silver Earrings"',
+    'Search "Solitaire Necklaces"',
+    'Search "Tennis Bracelets"',
+    'Search "Evil Eye Jewellery"',
+    'Search "Pearl Chokers"'
+];
+let currentPlaceholderIdx = 0;
+
+function initSearchPlaceholderRotation() {
+    setInterval(() => {
+        const desktopInput = document.getElementById('mainSearchInput');
+        const mobileInput = document.getElementById('mobileSearchInput');
+        currentPlaceholderIdx = (currentPlaceholderIdx + 1) % searchPlaceholders.length;
+        const nextText = searchPlaceholders[currentPlaceholderIdx];
+        
+        if (desktopInput && document.activeElement !== desktopInput) {
+            desktopInput.setAttribute('placeholder', nextText);
+        }
+        if (mobileInput && document.activeElement !== mobileInput) {
+            mobileInput.setAttribute('placeholder', nextText);
+        }
+    }, 2800);
 }
