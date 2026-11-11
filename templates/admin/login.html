@@ -1,14 +1,7 @@
 {% extends "admin/base_site.html" %}
 {% load i18n static %}
 
-{% block branding %}
-<!-- Empty branding on login page to avoid header fast-nav overflow -->
-{% endblock %}
-
-{% block userlinks %}{% endblock %}
-{% block nav-global %}{% endblock %}
-{% block nav-sidebar %}{% endblock %}
-{% block breadcrumbs %}{% endblock %}
+{% block bodyclass %}{{ block.super }} login shopify-login-page{% endblock %}
 
 {% block content %}
 <div class="shopify-login-wrapper">
@@ -16,7 +9,7 @@
         <!-- Brand Header -->
         <div class="shopify-login-header">
             <div class="shopify-login-logo">
-                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#C5A059" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#C5A059" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <polygon points="6 3 18 3 22 9 12 22 2 9 6 3"></polygon>
                     <line x1="11" y1="3" x2="8" y2="9"></line>
                     <line x1="13" y1="3" x2="16" y2="9"></line>
@@ -26,7 +19,7 @@
                 </svg>
             </div>
             <h1 class="shopify-login-title">Luckjary Atelier</h1>
-            <p class="shopify-login-subtitle">Sign in to manage your luxury store & orders</p>
+            <p class="shopify-login-subtitle">Sign in to manage fine jewelry orders & inventory</p>
         </div>
 
         {% if form.errors and not form.non_field_errors %}
@@ -58,7 +51,7 @@
             {% csrf_token %}
             <div class="shopify-field">
                 <label for="id_username">Email Address</label>
-                <input type="text" name="username" autofocus autocapitalize="none" autocomplete="username" maxlength="254" required id="id_username" placeholder="name@luckjary.com">
+                <input type="text" name="username" autofocus autocapitalize="none" autocomplete="username" maxlength="254" required id="id_username" placeholder="admin@luckjary.com">
             </div>
 
             <div class="shopify-field">

@@ -1,0 +1,378 @@
+{% load i18n static tz %}<!DOCTYPE html>
+{% get_current_language as LANGUAGE_CODE %}{% get_current_language_bidi as LANGUAGE_BIDI %}
+<html lang="{{ LANGUAGE_CODE|default:"en-us" }}" dir="{{ LANGUAGE_BIDI|yesno:'rtl,ltr,auto' }}">
+<head>
+<title>{% block title %}{% endblock %} | Luckjary Haute Joaillerie Administration</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="dark">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Cinzel:wght@600;700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="{% static 'admin/css/base.css' %}">
+<link rel="stylesheet" href="{% static 'admin/css/dark_mode.css' %}">
+<link rel="stylesheet" href="{% static 'css/admin_shopify.css' %}">
+
+{% block extrastyle %}{% endblock %}
+{% block extrahead %}{% endblock %}
+{% block blockbots %}<meta name="robots" content="NONE,NOARCHIVE">{% endblock %}
+</head>
+
+<body class="shopify-admin-body {% if is_popup %}popup{% endif %} {% block bodyclass %}{% endblock %}"
+  data-admin-utc-offset="{% now "Z" %}"
+  data-admin-server-timezone="{% get_current_timezone as time_zone %}{{ time_zone }}">
+<a href="#content-start" class="skip-to-content-link">{% translate 'Skip to main content' %}</a>
+
+<div id="container" class="shopify-app-root">
+
+    {% if has_permission and not is_popup %}
+    <!-- ==========================================
+         SHOPIFY POLARIS UNIFIED TOP HEADER BAR
+         ========================================== -->
+    <header id="header" class="shopify-top-bar">
+        <div class="shopify-top-left">
+            <!-- Mobile Menu Toggle Button -->
+            <button type="button" class="shopify-hamburger-btn" onclick="toggleShopifySidebar()" aria-label="Toggle navigation menu">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="3" y1="12" x2="21" y2="12"></line>
+                    <line x1="3" y1="6" x2="21" y2="6"></line>
+                    <line x1="3" y1="18" x2="21" y2="18"></line>
+                </svg>
+            </button>
+
+            <!-- Store Brand Link -->
+            <a href="{% url 'admin:index' %}" class="shopify-brand-badge">
+                <div class="brand-icon-gem">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#C5A059" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polygon points="6 3 18 3 22 9 12 22 2 9 6 3"></polygon>
+                        <line x1="11" y1="3" x2="8" y2="9"></line>
+                        <line x1="13" y1="3" x2="16" y2="9"></line>
+                        <line x1="2" y1="9" x2="22" y2="9"></line>
+                        <line x1="12" y1="22" x2="8" y2="9"></line>
+                        <line x1="12" y1="22" x2="16" y2="9"></line>
+                    </svg>
+                </div>
+                <div class="brand-text-col">
+                    <span class="brand-title">Luckjary</span>
+                    <span class="brand-pill">Atelier</span>
+                </div>
+            </a>
+        </div>
+
+        <!-- Universal Global Search Bar (Polaris Style with ⌘K) -->
+        <div class="shopify-top-search">
+            <div class="search-field-wrapper">
+                <svg class="search-lens-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#71717A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                </svg>
+                <input type="text" id="shopify-global-search" placeholder="Search orders, fine jewelry, VIP patrons... (Ctrl+K)" onkeydown="handleShopifySearch(event)">
+                <span class="search-kbd-pill">⌘K</span>
+            </div>
+        </div>
+
+        <!-- Top Right Actions & Direct User Profile -->
+        <div class="shopify-top-actions">
+            <!-- Customer Storefront Link -->
+            <a href="{% url 'core:home' %}" target="_blank" class="top-action-pill" title="Open customer boutique storefront in new tab">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                    <polyline points="15 3 21 3 21 9"></polyline>
+                    <line x1="10" y1="14" x2="21" y2="3"></line>
+                </svg>
+                <span class="desktop-only-text">Online Store</span>
+            </a>
+
+            <!-- Atelier OMS Real-Time Console -->
+            <a href="{% url 'orders:oms_dashboard' %}" class="top-action-pill oms-live-pill" title="Open real-time OMS atelier fulfillment telemetry">
+                <span class="green-live-dot"></span>
+                <span class="desktop-only-text">Atelier OMS</span>
+            </a>
+
+            <!-- User Avatar & Quick Logout -->
+            <div class="user-chip-wrapper">
+                <div class="user-chip-avatar">
+                    {{ user.first_name|default:user.email|slice:":1"|upper }}
+                </div>
+                <div class="user-chip-meta desktop-only-text">
+                    <span class="user-chip-name">{{ user.first_name|default:"Eleanor" }}</span>
+                    <span class="user-chip-role">Director</span>
+                </div>
+                <form id="top-logout-form" method="post" action="{% url 'admin:logout' %}">
+                    {% csrf_token %}
+                    <button type="submit" class="quick-logout-btn" title="Sign out of Atelier Admin">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                            <polyline points="16 17 21 12 16 7"></polyline>
+                            <line x1="21" y1="12" x2="9" y2="12"></line>
+                        </svg>
+                        <span class="desktop-only-text">Log Out</span>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </header>
+    {% endif %}
+
+    <!-- ==========================================
+         MAIN SHELL: PERSISTENT SIDEBAR + CONTENT
+         ========================================== -->
+    <div id="main" class="shopify-main-shell">
+        {% if has_permission and not is_popup %}
+        <!-- Persistent Shopify Left Sidebar -->
+        <aside id="nav-sidebar" class="shopify-persistent-sidebar">
+            <div class="sidebar-scroll-body">
+                <!-- Main Nav Group -->
+                <div class="sidebar-section-title">Navigation</div>
+                <nav class="sidebar-nav">
+                    <!-- Home Dashboard -->
+                    <a href="{% url 'admin:index' %}" class="sidebar-nav-item {% if request.path == '/admin/' %}active{% endif %}">
+                        <svg class="nav-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                            <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                        </svg>
+                        <span class="nav-label">Home</span>
+                    </a>
+
+                    <!-- Orders -->
+                    <a href="{% url 'admin:orders_order_changelist' %}" class="sidebar-nav-item {% if '/admin/orders/order/' in request.path %}active{% endif %}">
+                        <svg class="nav-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="16.5" y1="9.4" x2="7.5" y2="4.21"></line>
+                            <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+                            <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+                            <line x1="12" y1="22.08" x2="12" y2="12"></line>
+                        </svg>
+                        <span class="nav-label">Orders</span>
+                        <span class="nav-count-badge">4</span>
+                    </a>
+
+                    <!-- Discounts / Coupons -->
+                    <a href="{% url 'admin:orders_coupon_changelist' %}" class="sidebar-nav-item {% if '/admin/orders/coupon/' in request.path %}active{% endif %}">
+                        <svg class="nav-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="19" y1="5" x2="5" y2="19"></line>
+                            <circle cx="6.5" cy="6.5" r="2.5"></circle>
+                            <circle cx="17.5" cy="17.5" r="2.5"></circle>
+                        </svg>
+                        <span class="nav-label">Discounts</span>
+                    </a>
+                </nav>
+
+                <!-- Catalog Section -->
+                <div class="sidebar-section-title">Products & Inventory</div>
+                <nav class="sidebar-nav">
+                    <!-- Products -->
+                    <a href="{% url 'admin:catalog_product_changelist' %}" class="sidebar-nav-item {% if '/admin/catalog/product/' in request.path and '/admin/catalog/productreview/' not in request.path %}active{% endif %}">
+                        <svg class="nav-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polygon points="6 3 18 3 22 9 12 22 2 9 6 3"></polygon>
+                        </svg>
+                        <span class="nav-label">Products</span>
+                    </a>
+
+                    <!-- Collections -->
+                    <a href="{% url 'admin:catalog_collection_changelist' %}" class="sidebar-nav-item {% if '/admin/catalog/collection/' in request.path %}active{% endif %}">
+                        <svg class="nav-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="3" y="3" width="7" height="7"></rect>
+                            <rect x="14" y="3" width="7" height="7"></rect>
+                            <rect x="14" y="14" width="7" height="7"></rect>
+                            <rect x="3" y="14" width="7" height="7"></rect>
+                        </svg>
+                        <span class="nav-label">Collections</span>
+                    </a>
+
+                    <!-- Categories -->
+                    <a href="{% url 'admin:catalog_category_changelist' %}" class="sidebar-nav-item {% if '/admin/catalog/category/' in request.path %}active{% endif %}">
+                        <svg class="nav-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
+                        </svg>
+                        <span class="nav-label">Categories</span>
+                    </a>
+
+                    <!-- Materials -->
+                    <a href="{% url 'admin:catalog_material_changelist' %}" class="sidebar-nav-item {% if '/admin/catalog/material/' in request.path %}active{% endif %}">
+                        <svg class="nav-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                        </svg>
+                        <span class="nav-label">Materials</span>
+                    </a>
+
+                    <!-- Reviews -->
+                    <a href="{% url 'admin:catalog_productreview_changelist' %}" class="sidebar-nav-item {% if '/admin/catalog/productreview/' in request.path %}active{% endif %}">
+                        <svg class="nav-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                        </svg>
+                        <span class="nav-label">Product Reviews</span>
+                    </a>
+                </nav>
+
+                <!-- Patrons & Customers -->
+                <div class="sidebar-section-title">Customers</div>
+                <nav class="sidebar-nav">
+                    <!-- Users -->
+                    <a href="{% url 'admin:accounts_customuser_changelist' %}" class="sidebar-nav-item {% if '/admin/accounts/customuser/' in request.path %}active{% endif %}">
+                        <svg class="nav-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="9" cy="7" r="4"></circle>
+                        </svg>
+                        <span class="nav-label">VIP Patrons</span>
+                    </a>
+
+                    <!-- Addresses -->
+                    <a href="{% url 'admin:accounts_address_changelist' %}" class="sidebar-nav-item {% if '/admin/accounts/address/' in request.path %}active{% endif %}">
+                        <svg class="nav-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                            <circle cx="12" cy="10" r="3"></circle>
+                        </svg>
+                        <span class="nav-label">Addresses</span>
+                    </a>
+                </nav>
+
+                <!-- Communications & Marketing -->
+                <div class="sidebar-section-title">Engagement</div>
+                <nav class="sidebar-nav">
+                    <!-- Inquiries -->
+                    <a href="{% url 'admin:core_contactinquiry_changelist' %}" class="sidebar-nav-item {% if '/admin/core/contactinquiry/' in request.path %}active{% endif %}">
+                        <svg class="nav-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                        </svg>
+                        <span class="nav-label">Client Inquiries</span>
+                    </a>
+
+                    <!-- Newsletter -->
+                    <a href="{% url 'admin:core_newslettersubscriber_changelist' %}" class="sidebar-nav-item {% if '/admin/core/newslettersubscriber/' in request.path %}active{% endif %}">
+                        <svg class="nav-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                            <polyline points="22,6 12,13 2,6"></polyline>
+                        </svg>
+                        <span class="nav-label">Subscribers</span>
+                    </a>
+                </nav>
+
+                <!-- Sales Channels -->
+                <div class="sidebar-section-title">Sales Channels</div>
+                <nav class="sidebar-nav">
+                    <a href="{% url 'orders:oms_dashboard' %}" class="sidebar-nav-item">
+                        <svg class="nav-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polygon points="12 2 2 7 12 12 22 7 12 22 2 9 6 3"></polygon>
+                            <polyline points="2 17 12 22 22 17"></polyline>
+                            <polyline points="2 12 12 17 22 12"></polyline>
+                        </svg>
+                        <span class="nav-label text-emerald">Atelier OMS</span>
+                        <span class="nav-live-dot"></span>
+                    </a>
+
+                    <a href="{% url 'core:home' %}" target="_blank" class="sidebar-nav-item">
+                        <svg class="nav-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <line x1="2" y1="12" x2="22" y2="12"></line>
+                            <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+                        </svg>
+                        <span class="nav-label">Online Store</span>
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#71717A" stroke-width="2" style="margin-left: auto;">
+                            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                            <polyline points="15 3 21 3 21 9"></polyline>
+                            <line x1="10" y1="14" x2="21" y2="3"></line>
+                        </svg>
+                    </a>
+                </nav>
+            </div>
+
+            <!-- Sidebar Footer -->
+            <div class="sidebar-bottom-panel">
+                <div class="sidebar-store-status">
+                    <span class="status-pulse-dot"></span>
+                    <span class="status-text">Luckjary Boutique Online</span>
+                </div>
+                <div class="sidebar-user-row">
+                    <div class="sidebar-avatar">
+                        {{ user.first_name|default:user.email|slice:":1"|upper }}
+                    </div>
+                    <div class="sidebar-user-info">
+                        <span class="sidebar-user-name">{{ user.first_name|default:"Eleanor" }}</span>
+                        <span class="sidebar-user-tag">Director</span>
+                    </div>
+                </div>
+            </div>
+        </aside>
+        {% endif %}
+
+        <!-- Content Canvas Area -->
+        <main id="content-start" class="shopify-content-canvas" tabindex="-1">
+            {% if has_permission and not is_popup %}
+            <!-- Breadcrumbs -->
+            {% block nav-breadcrumbs %}
+            <nav aria-label="{% translate 'Breadcrumbs' %}" class="shopify-breadcrumbs-nav">
+                <ol class="shopify-breadcrumbs-list">
+                    <li><a href="{% url 'admin:index' %}">Home</a></li>
+                    {% if title %}<li aria-current="page">{{ title }}</li>{% endif %}
+                </ol>
+            </nav>
+            {% endblock %}
+            {% endif %}
+
+            <!-- Django Alert Messages -->
+            {% block messages %}
+            {% if messages %}
+            <ul class="shopify-messages-list">
+                {% for message in messages %}
+                <li class="shopify-message-item {{ message.tags }}">
+                    <div class="message-content">{{ message|capfirst }}</div>
+                </li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+            {% endblock messages %}
+
+            <!-- Django Admin Main Content Block -->
+            <div id="content" class="shopify-content-box {% block coltype %}colM{% endblock %}">
+                <div class="titles-and-tools">
+                    <div class="titles">
+                        {% block pretitle %}{% endblock %}
+                        {% block content_title %}{% if title and not is_dashboard %}<h1 class="shopify-standard-title">{{ title }}</h1>{% endif %}{% endblock %}
+                        {% block content_subtitle %}{% if subtitle %}<h2>{{ subtitle }}</h2>{% endif %}{% endblock %}
+                    </div>
+                    {% block object-tools %}{% endblock %}
+                </div>
+
+                {% block content %}
+                    {{ content }}
+                {% endblock %}
+
+                {% block sidebar %}{% endblock %}
+            </div>
+        </main>
+    </div>
+
+    <footer id="footer">{% block footer %}{% endblock %}</footer>
+</div>
+
+<script>
+function toggleShopifySidebar() {
+    var sidebar = document.getElementById('nav-sidebar');
+    if (sidebar) {
+        sidebar.classList.toggle('mobile-open');
+    }
+}
+
+function handleShopifySearch(e) {
+    if (e.key === 'Enter') {
+        var query = e.target.value.trim();
+        if (query) {
+            window.location.href = "{% url 'admin:orders_order_changelist' %}?q=" + encodeURIComponent(query);
+        }
+    }
+}
+
+document.addEventListener('keydown', function(e) {
+    if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
+        e.preventDefault();
+        var searchInput = document.getElementById('shopify-global-search');
+        if (searchInput) {
+            searchInput.focus();
+            searchInput.select();
+        }
+    }
+});
+</script>
+</body>
+</html>

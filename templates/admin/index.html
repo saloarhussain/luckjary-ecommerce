@@ -1,8 +1,18 @@
-{% extends "admin/index.html" %}
+{% extends "admin/base_site.html" %}
 {% load i18n static %}
 
+{% block bodyclass %}{{ block.super }} dashboard shopify-dashboard-page{% endblock %}
+
+{% block nav-breadcrumbs %}
+<nav aria-label="{% translate 'Breadcrumbs' %}" class="shopify-breadcrumbs-nav">
+    <ol class="shopify-breadcrumbs-list">
+        <li aria-current="page">Dashboard</li>
+    </ol>
+</nav>
+{% endblock %}
+
 {% block content %}
-<div class="shopify-dashboard-container">
+<div class="shopify-dashboard-wrapper">
     <!-- Top Greeting & Header Bar -->
     <div class="shopify-page-header">
         <div>
@@ -11,7 +21,7 @@
         </div>
         <div class="shopify-header-cta-group">
             <a href="{% url 'orders:oms_dashboard' %}" class="shopify-btn-secondary">
-                <span class="pulse-indicator"></span>
+                <span class="green-live-dot"></span>
                 <span>Open OMS Console</span>
             </a>
             <a href="{% url 'admin:orders_order_add' %}" class="shopify-btn-primary">
@@ -20,234 +30,336 @@
         </div>
     </div>
 
-    <!-- Shopify Polaris Metrics Cards Grid -->
-    <div class="shopify-metrics-grid">
-        <!-- Total Sales -->
-        <div class="shopify-metric-card">
-            <div class="metric-card-header">
-                <span class="metric-label">Total Sales</span>
-                <span class="metric-trend positive">+14.2%</span>
-            </div>
-            <div class="metric-value">${{ total_revenue|default:"11,165.00" }}</div>
-            <div class="metric-footer text-emerald">
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                <span>Stripe Luxury Payments Captured</span>
-            </div>
-        </div>
-
-        <!-- Total Orders -->
-        <div class="shopify-metric-card">
-            <div class="metric-card-header">
-                <span class="metric-label">Total Orders</span>
-                <span class="metric-tag">All-time</span>
-            </div>
-            <div class="metric-value">{{ total_orders|default:"4" }}</div>
-            <div class="metric-footer">
-                <a href="{% url 'admin:orders_order_changelist' %}">View all orders &rarr;</a>
-            </div>
-        </div>
-
-        <!-- Orders to Fulfill -->
-        <div class="shopify-metric-card alert-card">
-            <div class="metric-card-header">
-                <span class="metric-label">Orders to Fulfill</span>
-                <span class="metric-badge-amber">Needs Action</span>
-            </div>
-            <div class="metric-value text-amber">{{ unfulfilled_count|default:"2" }}</div>
-            <div class="metric-footer">
-                <a href="{% url 'admin:orders_order_changelist' %}?status__exact=PENDING">Open fulfillment queue &rarr;</a>
-            </div>
-        </div>
-
-        <!-- Average Order Value -->
-        <div class="shopify-metric-card">
-            <div class="metric-card-header">
-                <span class="metric-label">Average Order Value</span>
-                <span class="metric-tag">AOV</span>
-            </div>
-            <div class="metric-value">${{ avg_aov|default:"2,791.25" }}</div>
-            <div class="metric-footer">
-                <span>Fine jewelry average</span>
-            </div>
-        </div>
-    </div>
-
-    <!-- Things to Do / Action Feed (Iconic Shopify Card) -->
-    <div class="shopify-card action-feed-card">
-        <div class="card-header">
-            <div class="card-title-row">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#C5A059" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <circle cx="12" cy="12" r="10"></circle>
-                    <polyline points="12 6 12 12 16 14"></polyline>
-                </svg>
-                <h3 class="card-title">Things to do</h3>
-            </div>
-            <span class="card-badge">{{ unfulfilled_count|default:"2" }} tasks remaining</span>
-        </div>
-
-        <div class="action-items-list">
-            <!-- Item 1: Pending Orders -->
-            <div class="action-item">
-                <div class="action-item-icon amber">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <line x1="16.5" y1="9.4" x2="7.5" y2="4.21"></line>
-                        <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
-                    </svg>
+    <!-- 2-Column Shopify Layout Grid -->
+    <div class="shopify-dashboard-layout">
+        <!-- ==============================================
+             MAIN LEFT COLUMN (70%): METRICS, TASKS, ORDERS
+             ============================================== -->
+        <div class="dashboard-main-col">
+            <!-- 4 Shopify Polaris Metrics Cards -->
+            <div class="shopify-metrics-grid">
+                <!-- Total Sales -->
+                <div class="shopify-metric-card">
+                    <div class="metric-card-header">
+                        <span class="metric-label">Total Sales</span>
+                        <span class="metric-trend positive">+14.2%</span>
+                    </div>
+                    <div class="metric-value">${{ total_revenue|default:"11,165.00" }}</div>
+                    <div class="metric-footer text-emerald">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                        <span>Stripe Luxury Payments Captured</span>
+                    </div>
                 </div>
-                <div class="action-item-content">
-                    <div class="action-item-title">{{ unfulfilled_count|default:"2" }} incoming commissions need handcrafting & fulfillment</div>
-                    <div class="action-item-desc">Julian Stewart and Charlotte Dupré have active orders in the atelier awaiting master jeweler QA and armored courier dispatch.</div>
+
+                <!-- Total Orders -->
+                <div class="shopify-metric-card">
+                    <div class="metric-card-header">
+                        <span class="metric-label">Total Orders</span>
+                        <span class="metric-tag">All-time</span>
+                    </div>
+                    <div class="metric-value">{{ total_orders|default:"4" }}</div>
+                    <div class="metric-footer">
+                        <a href="{% url 'admin:orders_order_changelist' %}">View all orders &rarr;</a>
+                    </div>
                 </div>
-                <div class="action-item-actions">
-                    <a href="{% url 'admin:orders_order_changelist' %}" class="shopify-btn-sm primary">Fulfill orders</a>
+
+                <!-- Orders to Fulfill -->
+                <div class="shopify-metric-card alert-card">
+                    <div class="metric-card-header">
+                        <span class="metric-label">Orders to Fulfill</span>
+                        <span class="metric-badge-amber">Needs Action</span>
+                    </div>
+                    <div class="metric-value text-amber">{{ unfulfilled_count|default:"2" }}</div>
+                    <div class="metric-footer">
+                        <a href="{% url 'admin:orders_order_changelist' %}?status__exact=PENDING">Open fulfillment queue &rarr;</a>
+                    </div>
+                </div>
+
+                <!-- Average Order Value -->
+                <div class="shopify-metric-card">
+                    <div class="metric-card-header">
+                        <span class="metric-label">Average Order Value</span>
+                        <span class="metric-tag">AOV</span>
+                    </div>
+                    <div class="metric-value">${{ avg_aov|default:"2,791.25" }}</div>
+                    <div class="metric-footer">
+                        <span>Fine jewelry average</span>
+                    </div>
                 </div>
             </div>
 
-            <!-- Item 2: OMS Telemetry -->
-            <div class="action-item">
-                <div class="action-item-icon blue">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
-                        <polyline points="2 17 12 22 22 17"></polyline>
-                        <polyline points="2 12 12 17 22 12"></polyline>
-                    </svg>
+            <!-- Things to Do / Action Feed (Iconic Shopify Card) -->
+            <div class="shopify-card action-feed-card">
+                <div class="card-header">
+                    <div class="card-title-row">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#C5A059" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <polyline points="12 6 12 12 16 14"></polyline>
+                        </svg>
+                        <h3 class="card-title">Things to do</h3>
+                    </div>
+                    <span class="card-badge">{{ unfulfilled_count|default:"2" }} tasks remaining</span>
                 </div>
-                <div class="action-item-content">
-                    <div class="action-item-title">Atelier OMS Console & Courier Logistics Telemetry</div>
-                    <div class="action-item-desc">Armored transit tracking codes via FedEx Luxury Overnight & Ferrari Logistics are synchronized with customer order portals.</div>
+
+                <div class="action-items-list">
+                    <!-- Task 1: Pending Orders -->
+                    <div class="action-item">
+                        <div class="action-item-icon amber">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <line x1="16.5" y1="9.4" x2="7.5" y2="4.21"></line>
+                                <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+                            </svg>
+                        </div>
+                        <div class="action-item-content">
+                            <div class="action-item-title">{{ unfulfilled_count|default:"2" }} incoming commissions need handcrafting & fulfillment</div>
+                            <div class="action-item-desc">Julian Stewart and Charlotte Dupré have active orders awaiting master jeweler QA and armored courier dispatch.</div>
+                        </div>
+                        <div class="action-item-actions">
+                            <a href="{% url 'admin:orders_order_changelist' %}" class="shopify-btn-sm primary">Fulfill orders</a>
+                        </div>
+                    </div>
+
+                    <!-- Task 2: OMS Telemetry -->
+                    <div class="action-item">
+                        <div class="action-item-icon blue">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polygon points="12 2 2 7 12 12 22 7 12 22 2 9 6 3"></polygon>
+                                <polyline points="2 17 12 22 22 17"></polyline>
+                                <polyline points="2 12 12 17 22 12"></polyline>
+                            </svg>
+                        </div>
+                        <div class="action-item-content">
+                            <div class="action-item-title">Atelier OMS Console & Courier Logistics Telemetry</div>
+                            <div class="action-item-desc">Armored transit tracking codes via FedEx Luxury Overnight & Ferrari Logistics are synchronized with customer order portals.</div>
+                        </div>
+                        <div class="action-item-actions">
+                            <a href="{% url 'orders:oms_dashboard' %}" class="shopify-btn-sm secondary">Launch OMS &rarr;</a>
+                        </div>
+                    </div>
                 </div>
-                <div class="action-item-actions">
-                    <a href="{% url 'orders:oms_dashboard' %}" class="shopify-btn-sm secondary">Launch OMS &rarr;</a>
+            </div>
+
+            <!-- Recent Commissions (Shopify Polaris Table Style) -->
+            <div class="shopify-card">
+                <div class="card-header">
+                    <h3 class="card-title">Recent Commissions</h3>
+                    <a href="{% url 'admin:orders_order_changelist' %}" class="card-link">View all orders &rarr;</a>
+                </div>
+                <div class="shopify-table-responsive">
+                    <table class="shopify-table">
+                        <thead>
+                            <tr>
+                                <th>Order</th>
+                                <th>Date</th>
+                                <th>Customer</th>
+                                <th>Payment</th>
+                                <th>Fulfillment</th>
+                                <th>Total</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for order in recent_orders %}
+                            <tr>
+                                <td>
+                                    <a href="{% url 'admin:orders_order_change' order.id %}" class="order-link">
+                                        #{{ order.order_number }}
+                                    </a>
+                                </td>
+                                <td class="text-muted">{{ order.created_at|date:"M d, Y" }}</td>
+                                <td>
+                                    <div class="customer-cell">
+                                        <span class="customer-name">{{ order.full_name }}</span>
+                                        <span class="customer-email">{{ order.email }}</span>
+                                    </div>
+                                </td>
+                                <td>
+                                    {% if order.payment_status == 'PAID' %}
+                                    <span class="shopify-badge green">● Paid</span>
+                                    {% else %}
+                                    <span class="shopify-badge amber">● {{ order.get_payment_status_display }}</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if order.status == 'DELIVERED' %}
+                                    <span class="shopify-badge green">● Delivered</span>
+                                    {% elif order.status == 'SHIPPED' %}
+                                    <span class="shopify-badge blue">● In Transit</span>
+                                    {% elif order.status == 'PROCESSING' %}
+                                    <span class="shopify-badge indigo">● In Atelier QC</span>
+                                    {% else %}
+                                    <span class="shopify-badge amber">● Unfulfilled</span>
+                                    {% endif %}
+                                </td>
+                                <td class="font-bold">${{ order.total_amount }}</td>
+                                <td>
+                                    <a href="{% url 'admin:orders_order_change' order.id %}" class="table-action-link">Edit</a>
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="7" class="text-center py-6 text-muted">No orders found.</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
-    </div>
 
-    <!-- Recent Orders (Shopify Polaris Table Style) -->
-    <div class="shopify-card">
-        <div class="card-header">
-            <h3 class="card-title">Recent Commissions</h3>
-            <a href="{% url 'admin:orders_order_changelist' %}" class="card-link">View all orders &rarr;</a>
-        </div>
-        <div class="shopify-table-responsive">
-            <table class="shopify-table">
-                <thead>
-                    <tr>
-                        <th>Order</th>
-                        <th>Date</th>
-                        <th>Customer</th>
-                        <th>Payment Status</th>
-                        <th>Fulfillment Status</th>
-                        <th>Total</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for order in recent_orders %}
-                    <tr>
-                        <td>
-                            <a href="{% url 'admin:orders_order_change' order.id %}" class="order-link">
-                                #{{ order.order_number }}
-                            </a>
-                        </td>
-                        <td class="text-muted">{{ order.created_at|date:"M d, Y" }}</td>
-                        <td>
-                            <div class="customer-cell">
-                                <span class="customer-name">{{ order.full_name }}</span>
-                                <span class="customer-email">{{ order.email }}</span>
+        <!-- ==============================================
+             RIGHT SIDEBAR RAIL (30%): TELEMETRY & CHANNELS
+             ============================================== -->
+        <div class="dashboard-side-col">
+            <!-- Atelier Operations Health -->
+            <div class="shopify-card">
+                <div class="card-header">
+                    <h3 class="card-title">Atelier Infrastructure</h3>
+                    <span class="shopify-badge green">● Optimal</span>
+                </div>
+                <div class="status-items-list">
+                    <div class="status-item-row">
+                        <div class="status-item-left">
+                            <span class="green-live-dot"></span>
+                            <div>
+                                <div class="status-title">Stripe Luxury Payments</div>
+                                <div class="status-sub">Webhooks & captured receipts</div>
                             </div>
-                        </td>
-                        <td>
-                            {% if order.payment_status == 'PAID' %}
-                            <span class="shopify-badge green">● Paid</span>
-                            {% else %}
-                            <span class="shopify-badge amber">● {{ order.get_payment_status_display }}</span>
-                            {% endif %}
-                        </td>
-                        <td>
-                            {% if order.status == 'DELIVERED' %}
-                            <span class="shopify-badge green">● Delivered</span>
-                            {% elif order.status == 'SHIPPED' %}
-                            <span class="shopify-badge blue">● In Transit</span>
-                            {% elif order.status == 'PROCESSING' %}
-                            <span class="shopify-badge indigo">● In Atelier QC</span>
-                            {% else %}
-                            <span class="shopify-badge amber">● Unfulfilled</span>
-                            {% endif %}
-                        </td>
-                        <td class="font-bold">${{ order.total_amount }}</td>
-                        <td>
-                            <a href="{% url 'admin:orders_order_change' order.id %}" class="table-action-link">Edit</a>
-                        </td>
-                    </tr>
-                    {% empty %}
-                    <tr>
-                        <td colspan="7" class="text-center py-6 text-muted">No orders found.</td>
-                    </tr>
+                        </div>
+                        <span class="status-tag">Live</span>
+                    </div>
+
+                    <div class="status-item-row">
+                        <div class="status-item-left">
+                            <span class="green-live-dot"></span>
+                            <div>
+                                <div class="status-title">WhiteNoise Edge CDN</div>
+                                <div class="status-sub">Static fonts & stylesheets</div>
+                            </div>
+                        </div>
+                        <span class="status-tag">Active</span>
+                    </div>
+
+                    <div class="status-item-row">
+                        <div class="status-item-left">
+                            <span class="green-live-dot"></span>
+                            <div>
+                                <div class="status-title">30-Day Cookie Sessions</div>
+                                <div class="status-sub">Cryptographically signed</div>
+                            </div>
+                        </div>
+                        <span class="status-tag">Enabled</span>
+                    </div>
+
+                    <div class="status-item-row">
+                        <div class="status-item-left">
+                            <span class="green-live-dot"></span>
+                            <div>
+                                <div class="status-title">Armored Courier Dispatch</div>
+                                <div class="status-sub">FedEx Luxury & Ferrari VIP</div>
+                            </div>
+                        </div>
+                        <span class="status-tag">Active</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Management Channels -->
+            <div class="shopify-card">
+                <div class="card-header">
+                    <h3 class="card-title">Management Quicklinks</h3>
+                </div>
+                <div class="quicklinks-list">
+                    <a href="{% url 'admin:catalog_product_changelist' %}" class="quicklink-row">
+                        <div class="quicklink-left">
+                            <div class="quicklink-icon gold">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polygon points="6 3 18 3 22 9 12 22 2 9 6 3"></polygon>
+                                </svg>
+                            </div>
+                            <div>
+                                <div class="quicklink-name">Jewelry Catalog</div>
+                                <div class="quicklink-meta">{{ total_products|default:"11" }} active creations</div>
+                            </div>
+                        </div>
+                        <span class="quicklink-arrow">&rarr;</span>
+                    </a>
+
+                    <a href="{% url 'admin:accounts_customuser_changelist' %}" class="quicklink-row">
+                        <div class="quicklink-left">
+                            <div class="quicklink-icon green">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                                    <circle cx="9" cy="7" r="4"></circle>
+                                </svg>
+                            </div>
+                            <div>
+                                <div class="quicklink-name">VIP Client Vault</div>
+                                <div class="quicklink-meta">{{ total_customers|default:"2" }} registered patrons</div>
+                            </div>
+                        </div>
+                        <span class="quicklink-arrow">&rarr;</span>
+                    </a>
+
+                    <a href="{% url 'admin:orders_coupon_changelist' %}" class="quicklink-row">
+                        <div class="quicklink-left">
+                            <div class="quicklink-icon amber">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <line x1="19" y1="5" x2="5" y2="19"></line>
+                                    <circle cx="6.5" cy="6.5" r="2.5"></circle>
+                                    <circle cx="17.5" cy="17.5" r="2.5"></circle>
+                                </svg>
+                            </div>
+                            <div>
+                                <div class="quicklink-name">Discounts & Codes</div>
+                                <div class="quicklink-meta">Active promotional campaigns</div>
+                            </div>
+                        </div>
+                        <span class="quicklink-arrow">&rarr;</span>
+                    </a>
+
+                    <a href="{% url 'core:home' %}" target="_blank" class="quicklink-row">
+                        <div class="quicklink-left">
+                            <div class="quicklink-icon purple">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                    <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+                                </svg>
+                            </div>
+                            <div>
+                                <div class="quicklink-name">Live Storefront</div>
+                                <div class="quicklink-meta">Customer shopping experience</div>
+                            </div>
+                        </div>
+                        <span class="quicklink-arrow">&rarr;</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Recent Atelier Admin Audit Log -->
+            {% if log_entries %}
+            <div class="shopify-card">
+                <div class="card-header">
+                    <h3 class="card-title">Recent Activity</h3>
+                </div>
+                <div class="audit-log-list">
+                    {% for entry in log_entries|slice:":5" %}
+                    <div class="audit-log-item">
+                        <span class="audit-dot"></span>
+                        <div class="audit-body">
+                            <div class="audit-msg">
+                                <strong>{{ entry.user.get_short_name|default:"Eleanor" }}</strong>
+                                {% if entry.is_addition %}added{% elif entry.is_change %}modified{% elif entry.is_deletion %}removed{% endif %}
+                                <span class="audit-obj">{{ entry.object_repr }}</span>
+                            </div>
+                            <span class="audit-time">{{ entry.action_time|timesince }} ago</span>
+                        </div>
+                    </div>
                     {% endfor %}
-                </tbody>
-            </table>
+                </div>
+            </div>
+            {% endif %}
         </div>
-    </div>
-
-    <!-- Shopify Core Channels & Vault Grid -->
-    <div class="shopify-channels-grid">
-        <!-- Products Vault -->
-        <a href="{% url 'admin:catalog_product_changelist' %}" class="channel-card">
-            <div class="channel-icon-box">
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#C5A059" stroke-width="1.8">
-                    <polygon points="6 3 18 3 22 9 12 22 2 9 6 3"></polygon>
-                </svg>
-            </div>
-            <div>
-                <h4 class="channel-title">Fine Jewelry Catalog</h4>
-                <p class="channel-desc">{{ total_products|default:"11" }} handcrafted pieces in atelier inventory</p>
-            </div>
-        </a>
-
-        <!-- Customers -->
-        <a href="{% url 'admin:accounts_customuser_changelist' %}" class="channel-card">
-            <div class="channel-icon-box">
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="1.8">
-                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
-                    <circle cx="9" cy="7" r="4"></circle>
-                </svg>
-            </div>
-            <div>
-                <h4 class="channel-title">VIP Client Vault</h4>
-                <p class="channel-desc">{{ total_customers|default:"2" }} registered patrons & order profiles</p>
-            </div>
-        </a>
-
-        <!-- Discounts -->
-        <a href="{% url 'admin:orders_coupon_changelist' %}" class="channel-card">
-            <div class="channel-icon-box">
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#F59E0B" stroke-width="1.8">
-                    <line x1="19" y1="5" x2="5" y2="19"></line>
-                    <circle cx="6.5" cy="6.5" r="2.5"></circle>
-                    <circle cx="17.5" cy="17.5" r="2.5"></circle>
-                </svg>
-            </div>
-            <div>
-                <h4 class="channel-title">Discounts & Codes</h4>
-                <p class="channel-desc">Promotions (LUCKJARY10, VIPLUCK20)</p>
-            </div>
-        </a>
-
-        <!-- Storefront -->
-        <a href="{% url 'core:home' %}" target="_blank" class="channel-card">
-            <div class="channel-icon-box">
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#6366F1" stroke-width="1.8">
-                    <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
-                    <line x1="8" y1="21" x2="16" y2="21"></line>
-                    <line x1="12" y1="17" x2="12" y2="21"></line>
-                </svg>
-            </div>
-            <div>
-                <h4 class="channel-title">Online Storefront</h4>
-                <p class="channel-desc">View customer live boutique & product pages</p>
-            </div>
-        </a>
     </div>
 </div>
 {% endblock %}
