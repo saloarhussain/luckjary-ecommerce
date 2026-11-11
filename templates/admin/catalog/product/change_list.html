@@ -1,0 +1,94 @@
+{% extends "admin/change_list.html" %}
+{% load i18n admin_urls static admin_list %}
+
+{% block content_title %}
+<div class="shopify-product-header">
+    <div class="shopify-product-header-left">
+        <div class="header-badge-row">
+            <h1 class="shopify-standard-title">Fine Jewelry Catalog</h1>
+            <span class="catalog-live-count">{{ catalog_stats.total }} Pieces</span>
+        </div>
+        <p class="shopify-product-header-sub">
+            Manage high jewelry pieces, vault inventory availability, luxury pricing, and merchandising highlights.
+        </p>
+    </div>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="product-dashboard-top">
+    <!-- Luxury Inventory Telemetry Cards -->
+    <div class="product-metrics-grid">
+        <div class="product-metric-card">
+            <div class="metric-card-header">
+                <span>Total Pieces</span>
+                <span class="metric-badge-green">{{ catalog_stats.available }} Active</span>
+            </div>
+            <div class="metric-card-value">{{ catalog_stats.total }}</div>
+            <div class="metric-card-sub">Fine jewelry items across all categories</div>
+        </div>
+
+        <div class="product-metric-card">
+            <div class="metric-card-header">
+                <span>Vault Asset Value</span>
+                <span class="metric-badge-gold">Retail MSRP</span>
+            </div>
+            <div class="metric-card-value text-gold">{{ catalog_stats.vault_value }}</div>
+            <div class="metric-card-sub">Cumulative boutique showcase inventory</div>
+        </div>
+
+        <div class="product-metric-card">
+            <div class="metric-card-header">
+                <span>Stock Telemetry</span>
+                {% if catalog_stats.low_stock or catalog_stats.sold_out %}
+                <span class="metric-badge-amber">{{ catalog_stats.low_stock|add:catalog_stats.sold_out }} Needs Attention</span>
+                {% else %}
+                <span class="metric-badge-green">Optimal</span>
+                {% endif %}
+            </div>
+            <div class="metric-card-value">
+                <span class="text-emerald">{{ catalog_stats.in_stock }}</span>
+                <span class="text-dim">/ {{ catalog_stats.total }}</span>
+            </div>
+            <div class="metric-card-sub">
+                <span class="text-amber">{{ catalog_stats.low_stock }} low stock</span> • 
+                <span class="text-rose">{{ catalog_stats.sold_out }} sold out</span>
+            </div>
+        </div>
+
+        <div class="product-metric-card">
+            <div class="metric-card-header">
+                <span>Merchandising</span>
+                <span class="metric-badge-indigo">Spotlight</span>
+            </div>
+            <div class="metric-card-value">{{ catalog_stats.featured }} <span class="text-dim">Featured</span></div>
+            <div class="metric-card-sub">
+                <span>{{ catalog_stats.bestsellers }} bestsellers in boutique</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Segment Filter Pills (Shopify Style) -->
+    <div class="product-segment-tabs">
+        <a href="?" class="segment-tab-item {% if not request.GET %}active{% endif %}">
+            <span>All Pieces</span>
+            <span class="segment-count-badge">{{ catalog_stats.total }}</span>
+        </a>
+        <a href="?is_available__exact=1" class="segment-tab-item {% if request.GET.is_available__exact == '1' and not request.GET.is_featured__exact and not request.GET.is_bestseller__exact %}active{% endif %}">
+            <span class="badge-dot green"></span>
+            <span>Available ({{ catalog_stats.available }})</span>
+        </a>
+        <a href="?is_featured__exact=1" class="segment-tab-item {% if request.GET.is_featured__exact == '1' %}active{% endif %}">
+            <span>★ Featured ({{ catalog_stats.featured }})</span>
+        </a>
+        <a href="?is_bestseller__exact=1" class="segment-tab-item {% if request.GET.is_bestseller__exact == '1' %}active{% endif %}">
+            <span>👑 Bestsellers ({{ catalog_stats.bestsellers }})</span>
+        </a>
+        <a href="?is_available__exact=0" class="segment-tab-item {% if request.GET.is_available__exact == '0' %}active{% endif %}">
+            <span>Hidden / Draft</span>
+        </a>
+    </div>
+</div>
+
+{{ block.super }}
+{% endblock %}

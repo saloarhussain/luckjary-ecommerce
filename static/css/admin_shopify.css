@@ -1347,7 +1347,7 @@ div.breadcrumbs a:hover {
 }
 
 /* ==========================================================================
-   CHANGELIST (ORDERS, PRODUCTS, USERS) OVERRIDES
+   CHANGELIST (ORDERS, PRODUCTS, USERS) OVERRIDES & ADVANCED POLARIS GRID
    ========================================================================== */
 #changelist {
     display: flex !important;
@@ -1356,38 +1356,65 @@ div.breadcrumbs a:hover {
     align-items: flex-start !important;
 }
 
+#changelist .changelist-form-container {
+    display: flex !important;
+    align-items: flex-start !important;
+    width: 100% !important;
+    gap: 20px !important;
+}
+
+#changelist .changelist-form-container > div {
+    flex: 1 1 auto !important;
+    min-width: 0 !important;
+    width: 100% !important;
+}
+
+#changelist .changelist-form-container:has(#changelist-filter) > div {
+    max-width: calc(100% - 270px) !important;
+}
+
 #changelist-form {
     flex: 1 1 auto !important;
     min-width: 0 !important;
+    width: 100% !important;
 }
 
 #changelist .results {
     background: var(--shopify-card-bg) !important;
     border: 1px solid var(--shopify-card-border) !important;
     border-radius: 10px !important;
-    overflow: hidden !important;
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
     margin-bottom: 1.5rem !important;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25) !important;
+    width: 100% !important;
 }
 
 #result_list {
     width: 100% !important;
     border-collapse: collapse !important;
+    table-layout: auto !important;
 }
 
 #result_list thead th {
-    background: #181A22 !important;
+    background: #151720 !important;
     border-bottom: 1px solid var(--shopify-card-border) !important;
     color: #9CA3AF !important;
     font-size: 0.72rem !important;
     font-weight: 600 !important;
     text-transform: uppercase !important;
-    letter-spacing: 0.05em !important;
-    padding: 0.75rem 1rem !important;
+    letter-spacing: 0.06em !important;
+    padding: 0.85rem 1rem !important;
+    white-space: nowrap !important;
+    vertical-align: middle !important;
 }
 
 #result_list thead th a {
     color: #D1D5DB !important;
     text-decoration: none !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 0.3rem !important;
 }
 
 #result_list thead th a:hover {
@@ -1401,7 +1428,7 @@ div.breadcrumbs a:hover {
 }
 
 #result_list tbody tr:hover {
-    background: #181B24 !important;
+    background: #181B26 !important;
 }
 
 #result_list tbody td, 
@@ -1410,16 +1437,284 @@ div.breadcrumbs a:hover {
     font-size: 0.82rem !important;
     color: #D1D5DB !important;
     border-bottom: 1px solid #1C1F2B !important;
+    vertical-align: middle !important;
 }
 
-#result_list tbody th a {
-    color: #FFFFFF !important;
-    font-weight: 600 !important;
+#result_list tbody th a,
+#result_list tbody td a {
     text-decoration: none !important;
 }
 
-#result_list tbody th a:hover {
-    color: var(--shopify-gold-light) !important;
+/* Explicit Table Column Rules */
+#result_list th.action-checkbox-column,
+#result_list td.action-checkbox {
+    width: 44px !important;
+    min-width: 44px !important;
+    max-width: 44px !important;
+    text-align: center !important;
+    padding: 0.85rem 0.5rem !important;
+}
+
+#result_list th.column-thumb_display,
+#result_list td.field-thumb_display,
+#result_list th.field-thumb_display {
+    width: 68px !important;
+    min-width: 68px !important;
+    max-width: 68px !important;
+    text-align: center !important;
+    padding: 0.65rem !important;
+}
+
+#result_list td.field-title_sku_display,
+#result_list th.column-title_sku_display {
+    min-width: 250px !important;
+}
+
+#result_list td.field-category_badge,
+#result_list th.column-category_badge,
+#result_list td.field-category,
+#result_list th.column-category {
+    min-width: 120px !important;
+    white-space: nowrap !important;
+}
+
+#result_list td.field-price_display,
+#result_list th.column-price_display {
+    min-width: 125px !important;
+    white-space: nowrap !important;
+}
+
+#result_list td.field-stock_badge,
+#result_list th.column-stock_badge {
+    min-width: 145px !important;
+    white-space: nowrap !important;
+}
+
+#result_list td.field-is_available,
+#result_list th.column-is_available {
+    width: 90px !important;
+    text-align: center !important;
+    white-space: nowrap !important;
+}
+
+#result_list td.field-merchandising_display,
+#result_list th.column-merchandising_display {
+    min-width: 165px !important;
+}
+
+/* Product Thumbnail Box & Fallback Image */
+.admin-thumb-wrapper {
+    width: 48px;
+    height: 48px;
+    min-width: 48px;
+    max-width: 48px;
+    min-height: 48px;
+    max-height: 48px;
+    border-radius: 8px;
+    overflow: hidden;
+    background: #14161F;
+    border: 1px solid #282C38;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+    position: relative;
+    transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.admin-thumb-wrapper:hover {
+    transform: scale(1.15);
+    border-color: #DFBE76;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.6);
+    z-index: 10;
+}
+
+.admin-thumb {
+    width: 48px !important;
+    height: 48px !important;
+    min-width: 48px !important;
+    max-width: 48px !important;
+    min-height: 48px !important;
+    max-height: 48px !important;
+    object-fit: cover !important;
+    display: block !important;
+    border: none !important;
+    border-radius: 7px !important;
+}
+
+/* Product Row Typography */
+.admin-product-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    text-align: left;
+}
+
+.admin-product-name {
+    font-weight: 600;
+    color: #FFFFFF;
+    font-size: 0.88rem;
+    line-height: 1.35;
+    transition: color 0.15s ease;
+}
+
+#result_list tbody tr:hover .admin-product-name {
+    color: #34D399;
+}
+
+.admin-product-sub {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.admin-sku-pill {
+    font-family: monospace;
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: #DFBE76;
+    background: rgba(223, 190, 118, 0.12);
+    padding: 0.12rem 0.4rem;
+    border-radius: 4px;
+    border: 1px solid rgba(223, 190, 118, 0.28);
+}
+
+.admin-spec-text {
+    color: #8A8A9C;
+    font-size: 0.72rem;
+}
+
+.admin-category-pill {
+    background: #181A24;
+    color: #D1D5DB;
+    font-size: 0.74rem;
+    font-weight: 500;
+    padding: 0.25rem 0.65rem;
+    border-radius: 6px;
+    border: 1px solid #282C3A;
+    display: inline-block;
+}
+
+.admin-price-cell {
+    display: flex;
+    align-items: baseline;
+    gap: 0.45rem;
+}
+
+.price-gold {
+    font-weight: 700;
+    color: #FFFFFF;
+    font-size: 0.94rem;
+    letter-spacing: -0.01em;
+}
+
+.price-compare {
+    color: #6B7280;
+    text-decoration: line-through;
+    font-size: 0.75rem;
+}
+
+/* Luxury Status & Merchandising Badges */
+.badge-luxury {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    padding: 0.25rem 0.65rem;
+    border-radius: 9999px;
+    white-space: nowrap;
+    line-height: 1.25;
+}
+
+.badge-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    display: inline-block;
+}
+.badge-dot.green { background: #10B981; box-shadow: 0 0 6px rgba(16, 185, 129, 0.6); }
+.badge-dot.amber { background: #F59E0B; box-shadow: 0 0 6px rgba(245, 158, 11, 0.6); }
+.badge-dot.red { background: #EF4444; box-shadow: 0 0 6px rgba(239, 68, 68, 0.6); }
+
+.badge-delivered, .badge-paid {
+    background: rgba(16, 185, 129, 0.12) !important;
+    color: #34D399 !important;
+    border: 1px solid rgba(16, 185, 129, 0.32) !important;
+}
+
+.badge-pending {
+    background: rgba(245, 158, 11, 0.12) !important;
+    color: #FBBF24 !important;
+    border: 1px solid rgba(245, 158, 11, 0.32) !important;
+}
+
+.badge-cancelled {
+    background: rgba(239, 68, 68, 0.12) !important;
+    color: #F87171 !important;
+    border: 1px solid rgba(239, 68, 68, 0.32) !important;
+}
+
+.badge-processing {
+    background: rgba(56, 189, 248, 0.12) !important;
+    color: #38BDF8 !important;
+    border: 1px solid rgba(56, 189, 248, 0.32) !important;
+}
+
+.badge-shipped {
+    background: rgba(129, 140, 248, 0.14) !important;
+    color: #A5B4FC !important;
+    border: 1px solid rgba(129, 140, 248, 0.32) !important;
+}
+
+.badge-featured {
+    background: rgba(197, 160, 89, 0.15) !important;
+    color: #DFBE76 !important;
+    border: 1px solid rgba(197, 160, 89, 0.35) !important;
+}
+
+.badge-bestseller {
+    background: rgba(217, 119, 6, 0.15) !important;
+    color: #FBBF24 !important;
+    border: 1px solid rgba(217, 119, 6, 0.32) !important;
+}
+
+.badge-new {
+    background: rgba(99, 102, 241, 0.15) !important;
+    color: #A5B4FC !important;
+    border: 1px solid rgba(99, 102, 241, 0.32) !important;
+}
+
+.order-pill {
+    font-family: monospace;
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: #DFBE76;
+    background: #181924;
+    padding: 0.2rem 0.55rem;
+    border-radius: 4px;
+    border: 1px solid #2B2C3C;
+}
+
+.carrier-pill {
+    font-size: 0.72rem;
+    color: #C6C6D6;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+}
+
+.tracking-link {
+    font-family: monospace;
+    font-size: 0.7rem;
+    color: #DFBE76 !important;
+    text-decoration: underline !important;
+}
+
+.tracking-link:hover {
+    color: #FFFFFF !important;
 }
 
 /* Toolbar & Search in Changelist */
@@ -1431,13 +1726,39 @@ div.breadcrumbs a:hover {
     margin-bottom: 1rem !important;
 }
 
+#changelist-search {
+    width: 100% !important;
+}
+
+#changelist-search > div {
+    display: flex !important;
+    align-items: center !important;
+    gap: 0.65rem !important;
+    width: 100% !important;
+}
+
+#changelist-search label[for="searchbar"] {
+    display: flex;
+    align-items: center;
+    color: #6B7280;
+}
+
 #changelist-search input[type="text"] {
-    background: #181A22 !important;
+    background: #151720 !important;
     border: 1px solid #282C38 !important;
     color: #FFFFFF !important;
     border-radius: 6px !important;
-    padding: 0.4rem 0.75rem !important;
-    font-size: 0.8rem !important;
+    padding: 0.5rem 0.85rem !important;
+    font-size: 0.82rem !important;
+    flex: 1 1 auto !important;
+    max-width: 480px !important;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease !important;
+}
+
+#changelist-search input[type="text"]:focus {
+    border-color: #10B981 !important;
+    outline: none !important;
+    box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.2) !important;
 }
 
 #changelist-search input[type="submit"] {
@@ -1445,9 +1766,11 @@ div.breadcrumbs a:hover {
     border: 1px solid #383E54 !important;
     color: #FFFFFF !important;
     border-radius: 6px !important;
-    padding: 0.4rem 0.85rem !important;
+    padding: 0.5rem 1.1rem !important;
     font-size: 0.8rem !important;
+    font-weight: 600 !important;
     cursor: pointer !important;
+    transition: background 0.15s ease !important;
 }
 
 #changelist-search input[type="submit"]:hover {
@@ -1463,26 +1786,40 @@ div.breadcrumbs a:hover {
     margin-bottom: 1rem !important;
     display: flex !important;
     align-items: center !important;
-    gap: 0.65rem !important;
+    gap: 0.75rem !important;
+    font-size: 0.78rem !important;
+    color: #9CA3AF !important;
 }
 
 .actions select {
-    background: #181A22 !important;
+    background: #151720 !important;
     border: 1px solid #282C38 !important;
     color: #FFFFFF !important;
     border-radius: 6px !important;
-    padding: 0.35rem 0.65rem !important;
+    padding: 0.4rem 0.75rem !important;
     font-size: 0.78rem !important;
+    cursor: pointer !important;
+}
+
+.actions select:focus {
+    border-color: #10B981 !important;
+    outline: none !important;
 }
 
 .actions button {
-    background: #252838 !important;
-    border: 1px solid #383E54 !important;
+    background: #1F2230 !important;
+    border: 1px solid #363C4E !important;
     color: #FFFFFF !important;
     border-radius: 6px !important;
-    padding: 0.35rem 0.85rem !important;
+    padding: 0.4rem 0.95rem !important;
     font-size: 0.78rem !important;
+    font-weight: 600 !important;
     cursor: pointer !important;
+    transition: background 0.15s ease !important;
+}
+
+.actions button:hover {
+    background: #2A2E40 !important;
 }
 
 /* Changelist Filter Sidebar */
@@ -1498,28 +1835,63 @@ div.breadcrumbs a:hover {
 }
 
 #changelist-filter h2 {
-    font-size: 0.85rem !important;
+    font-size: 0.8rem !important;
     font-weight: 700 !important;
     color: #FFFFFF !important;
     text-transform: uppercase !important;
-    letter-spacing: 0.05em !important;
+    letter-spacing: 0.06em !important;
     border-bottom: 1px solid #232732 !important;
-    padding-bottom: 0.5rem !important;
-    margin-bottom: 1rem !important;
+    padding-bottom: 0.65rem !important;
+    margin-bottom: 0.85rem !important;
     background: transparent !important;
 }
 
-#changelist-filter h3 {
-    font-size: 0.74rem !important;
+#changelist-filter #changelist-filter-extra-actions {
+    margin-bottom: 0.75rem !important;
+    border-bottom: 1px solid #1E212B !important;
+    padding-bottom: 0.5rem !important;
+}
+
+#changelist-filter #changelist-filter-extra-actions a {
+    color: #DFBE76 !important;
+    font-size: 0.75rem !important;
+}
+
+#changelist-filter details {
+    border-bottom: 1px solid #1E212B !important;
+    padding-bottom: 0.5rem !important;
+    margin-bottom: 0.65rem !important;
+}
+
+#changelist-filter details summary {
+    font-size: 0.76rem !important;
     font-weight: 600 !important;
     color: #9CA3AF !important;
-    margin: 1rem 0 0.35rem 0 !important;
+    padding: 0.35rem 0 !important;
+    cursor: pointer !important;
+    list-style: none !important;
+}
+
+#changelist-filter details summary:hover {
+    color: #FFFFFF !important;
+}
+
+#changelist-filter details summary::before {
+    content: "→" !important;
+    font-weight: bold !important;
+    color: #10B981 !important;
+    margin-right: 0.4rem !important;
+}
+
+#changelist-filter details[open] > summary::before {
+    content: "↓" !important;
 }
 
 #changelist-filter ul {
     list-style: none !important;
-    padding: 0 !important;
-    margin: 0 0 0.75rem 0 !important;
+    padding: 0.25rem 0 0.25rem 0.5rem !important;
+    margin: 0 !important;
+    border-bottom: none !important;
 }
 
 #changelist-filter li {
@@ -1531,9 +1903,9 @@ div.breadcrumbs a:hover {
     color: #9497A1 !important;
     text-decoration: none !important;
     display: block !important;
-    padding: 0.25rem 0.45rem !important;
+    padding: 0.25rem 0.5rem !important;
     border-radius: 4px !important;
-    transition: all 0.12s ease;
+    transition: all 0.12s ease !important;
 }
 
 #changelist-filter a:hover {
@@ -1566,8 +1938,271 @@ div.breadcrumbs a:hover {
     font-size: 0.78rem !important;
     font-weight: 600 !important;
     border: 1px solid #059669 !important;
-    box-shadow: var(--shopify-green-glow);
+    box-shadow: var(--shopify-green-glow) !important;
     text-decoration: none !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 0.35rem !important;
+    transition: all 0.15s ease !important;
+}
+
+.object-tools a:hover {
+    background: #059669 !important;
+    transform: translateY(-1px);
+}
+
+.object-tools a.addlink::before {
+    content: "+";
+    font-size: 1.1rem;
+    line-height: 1;
+    font-weight: 700;
+}
+
+/* Paginator & Bottom Save Button */
+.paginator {
+    background: var(--shopify-card-bg) !important;
+    border: 1px solid var(--shopify-card-border) !important;
+    border-radius: 8px !important;
+    padding: 0.75rem 1.25rem !important;
+    color: #9CA3AF !important;
+    font-size: 0.78rem !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    margin-top: 1rem !important;
+}
+
+.paginator a {
+    color: #DFBE76 !important;
+    text-decoration: none !important;
+    padding: 0.25rem 0.5rem !important;
+    border-radius: 4px !important;
+}
+
+.paginator a:hover {
+    background: #232734 !important;
+    color: #FFFFFF !important;
+}
+
+.paginator .this-page {
+    color: #FFFFFF !important;
+    font-weight: 700 !important;
+    padding: 0.25rem 0.5rem !important;
+    background: #1C1F2B !important;
+    border-radius: 4px !important;
+}
+
+.paginator input[type="submit"][name="_save"] {
+    background: #10B981 !important;
+    color: #FFFFFF !important;
+    border: 1px solid #059669 !important;
+    border-radius: 6px !important;
+    padding: 0.4rem 1rem !important;
+    font-size: 0.78rem !important;
+    font-weight: 600 !important;
+    cursor: pointer !important;
+    margin-left: auto !important;
+    box-shadow: var(--shopify-green-glow) !important;
+    transition: background 0.15s ease !important;
+}
+
+.paginator input[type="submit"][name="_save"]:hover {
+    background: #059669 !important;
+}
+
+/* ==========================================================================
+   PRODUCTS CATALOG SPECIFIC TELEMETRY DASHBOARD
+   ========================================================================== */
+.shopify-product-header {
+    margin-bottom: 0.5rem;
+}
+
+.header-badge-row {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 0.35rem;
+}
+
+.catalog-live-count {
+    background: rgba(16, 185, 129, 0.12);
+    color: #34D399;
+    font-size: 0.74rem;
+    font-weight: 700;
+    padding: 0.2rem 0.6rem;
+    border-radius: 9999px;
+    border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.shopify-product-header-sub {
+    font-size: 0.82rem;
+    color: #9CA3AF;
+    margin: 0;
+}
+
+.product-dashboard-top {
+    margin-bottom: 1.5rem;
+    width: 100%;
+}
+
+.product-metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+    margin-bottom: 1.25rem;
+    width: 100%;
+}
+
+@media (max-width: 1200px) {
+    .product-metrics-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 640px) {
+    .product-metrics-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.product-metric-card {
+    background: var(--shopify-card-bg);
+    border: 1px solid var(--shopify-card-border);
+    border-radius: 10px;
+    padding: 1rem 1.15rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    transition: border-color 0.15s ease;
+}
+
+.product-metric-card:hover {
+    border-color: #383E50;
+}
+
+.metric-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: #9CA3AF;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.metric-card-value {
+    font-size: 1.45rem;
+    font-weight: 700;
+    color: #FFFFFF;
+    letter-spacing: -0.02em;
+    display: flex;
+    align-items: baseline;
+    gap: 0.3rem;
+}
+
+.metric-card-sub {
+    font-size: 0.72rem;
+    color: #6B7280;
+}
+
+.metric-badge-green {
+    color: #34D399;
+    background: rgba(16, 185, 129, 0.12);
+    border: 1px solid rgba(16, 185, 129, 0.28);
+    padding: 0.1rem 0.45rem;
+    border-radius: 4px;
+    font-size: 0.68rem;
+    font-weight: 600;
+}
+
+.metric-badge-gold {
+    color: #DFBE76;
+    background: rgba(223, 190, 118, 0.12);
+    border: 1px solid rgba(223, 190, 118, 0.28);
+    padding: 0.1rem 0.45rem;
+    border-radius: 4px;
+    font-size: 0.68rem;
+    font-weight: 600;
+}
+
+.metric-badge-amber {
+    color: #FBBF24;
+    background: rgba(245, 158, 11, 0.12);
+    border: 1px solid rgba(245, 158, 11, 0.28);
+    padding: 0.1rem 0.45rem;
+    border-radius: 4px;
+    font-size: 0.68rem;
+    font-weight: 600;
+}
+
+.metric-badge-indigo {
+    color: #A5B4FC;
+    background: rgba(99, 102, 241, 0.12);
+    border: 1px solid rgba(99, 102, 241, 0.28);
+    padding: 0.1rem 0.45rem;
+    border-radius: 4px;
+    font-size: 0.68rem;
+    font-weight: 600;
+}
+
+.text-gold { color: #DFBE76 !important; }
+.text-emerald { color: #34D399 !important; }
+.text-amber { color: #FBBF24 !important; }
+.text-rose { color: #F87171 !important; }
+.text-dim { color: #6B7280 !important; font-size: 0.85rem !important; font-weight: 500 !important; }
+
+/* Quick Segment Filter Pills (Shopify Style) */
+.product-segment-tabs {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.75rem;
+    overflow-x: auto;
+    padding-bottom: 0.25rem;
+}
+
+.segment-tab-item {
+    font-size: 0.76rem;
+    font-weight: 600;
+    color: #9CA3AF;
+    background: #181A24;
+    border: 1px solid #282C3C;
+    padding: 0.35rem 0.85rem;
+    border-radius: 20px;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: all 0.12s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+.segment-tab-item:hover {
+    color: #FFFFFF;
+    background: #202434;
+    border-color: #383E54;
+}
+
+.segment-tab-item.active {
+    color: #10B981;
+    background: rgba(16, 185, 129, 0.12);
+    border-color: #10B981;
+}
+
+.segment-count-badge {
+    background: #252838;
+    color: #D1D5DB;
+    font-size: 0.68rem;
+    padding: 0.05rem 0.4rem;
+    border-radius: 10px;
+    font-weight: 700;
+}
+
+.segment-tab-item.active .segment-count-badge {
+    background: #10B981;
+    color: #FFFFFF;
+}
     display: inline-flex !important;
     align-items: center !important;
     transition: all 0.15s ease;
