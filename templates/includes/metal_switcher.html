@@ -1,0 +1,68 @@
+<!-- GIVA-Inspired Gold & Silver Jewellery Switcher -->
+<div class="metal-switcher-container w-full bg-[#FAF9F6] border-b border-[#EBE6DF]/70 py-2.5 sm:py-3.5 px-3">
+    <div class="max-w-7xl mx-auto flex items-center justify-center">
+        <!-- Capsule Switcher Frame -->
+        <nav class="relative inline-flex items-center p-1 sm:p-1.5 rounded-full border-[1.5px] border-[#C5A059] bg-white shadow-[0_2px_10px_rgba(197,160,89,0.08)] max-w-full overflow-x-auto" 
+             aria-label="Precious Metal Collection Switcher" 
+             role="tablist">
+            
+            <!-- Silver Jewellery -->
+            <a href="{% if '/shop/' in request.path or '/category/' in request.path %}?{% if request.GET.category %}category={{ request.GET.category }}&{% endif %}metal=silver{% elif request.path == '/' %}/?metal=silver{% else %}{% url 'catalog:product_list' %}?metal=silver{% endif %}"
+               role="tab"
+               aria-selected="{% if active_metal == 'silver' %}true{% else %}false{% endif %}"
+               data-metal="silver"
+               onclick="handleMetalSwitch(event, 'silver')"
+               class="metal-switcher-pill relative z-10 px-4 sm:px-7 md:px-8 py-1.5 sm:py-2 rounded-full text-xs sm:text-[13px] md:text-sm font-medium transition-all duration-300 ease-out whitespace-nowrap select-none {% if active_metal == 'silver' %}bg-[#366E63] text-white shadow-sm font-semibold active-pill{% else %}text-neutral-700 hover:text-neutral-900 hover:bg-[#FAF9F6]{% endif %}">
+                <span>Silver Jewellery</span>
+            </a>
+
+            <!-- Gold Jewellery -->
+            <a href="{% if '/shop/' in request.path or '/category/' in request.path %}?{% if request.GET.category %}category={{ request.GET.category }}&{% endif %}metal=gold{% elif request.path == '/' %}/?metal=gold{% else %}{% url 'catalog:product_list' %}?metal=gold{% endif %}"
+               role="tab"
+               aria-selected="{% if active_metal == 'gold' or not active_metal %}true{% else %}false{% endif %}"
+               data-metal="gold"
+               onclick="handleMetalSwitch(event, 'gold')"
+               class="metal-switcher-pill relative z-10 px-4 sm:px-7 md:px-8 py-1.5 sm:py-2 rounded-full text-xs sm:text-[13px] md:text-sm font-medium transition-all duration-300 ease-out whitespace-nowrap select-none {% if active_metal == 'gold' or not active_metal %}bg-[#366E63] text-white shadow-sm font-semibold active-pill{% else %}text-neutral-700 hover:text-neutral-900 hover:bg-[#FAF9F6]{% endif %}">
+                <span>Gold Jewellery</span>
+            </a>
+
+            <!-- Demifine Jewellery -->
+            <a href="{% if '/shop/' in request.path or '/category/' in request.path %}?{% if request.GET.category %}category={{ request.GET.category }}&{% endif %}metal=demifine{% elif request.path == '/' %}/?metal=demifine{% else %}{% url 'catalog:product_list' %}?metal=demifine{% endif %}"
+               role="tab"
+               aria-selected="{% if active_metal == 'demifine' %}true{% else %}false{% endif %}"
+               data-metal="demifine"
+               onclick="handleMetalSwitch(event, 'demifine')"
+               class="metal-switcher-pill relative z-10 px-4 sm:px-7 md:px-8 py-1.5 sm:py-2 rounded-full text-xs sm:text-[13px] md:text-sm font-medium transition-all duration-300 ease-out whitespace-nowrap select-none {% if active_metal == 'demifine' %}bg-[#366E63] text-white shadow-sm font-semibold active-pill{% else %}text-neutral-700 hover:text-neutral-900 hover:bg-[#FAF9F6]{% endif %}">
+                <span>Demifine Jewellery</span>
+            </a>
+        </nav>
+    </div>
+</div>
+
+<script>
+function handleMetalSwitch(e, metal) {
+    if (e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) {
+        return; // Allow open in new tab
+    }
+    e.preventDefault();
+
+    // Remember in localStorage for quick client-side hydration
+    try {
+        localStorage.setItem('luckjary_selected_metal', metal);
+    } catch (err) {}
+
+    const currentPath = window.location.pathname;
+    const urlParams = new URLSearchParams(window.location.search);
+    urlParams.set('metal', metal);
+    urlParams.delete('page'); // reset to page 1
+
+    if (currentPath.includes('/shop/') || currentPath.includes('/category/')) {
+        window.location.href = currentPath + '?' + urlParams.toString();
+    } else if (currentPath === '/' || currentPath === '') {
+        window.location.href = '/?' + urlParams.toString();
+    } else {
+        // From any other page, navigate directly to catalog with the chosen metal
+        window.location.href = "{% url 'catalog:product_list' %}?metal=" + encodeURIComponent(metal);
+    }
+}
+</script>

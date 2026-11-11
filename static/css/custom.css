@@ -164,3 +164,36 @@ h1, h2, h3, .font-serif {
     font-size: 0.75rem;
     letter-spacing: 0.1em;
 }
+
+/* Metal Collection Switcher (GIVA Inspired) */
+.metal-switcher-container {
+    transition: all 0.3s ease;
+}
+
+.metal-switcher-pill {
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    letter-spacing: 0.02em;
+}
+
+.metal-switcher-pill.active-pill {
+    background-color: #366E63 !important;
+    color: #FFFFFF !important;
+    font-weight: 600;
+    box-shadow: 0 2px 8px rgba(54, 110, 99, 0.25);
+    transform: scale(1.01);
+}
+
+.metal-switcher-pill:hover:not(.active-pill) {
+    background-color: rgba(197, 160, 89, 0.08);
+    color: #121212;
+}
+
+/* Hide scrollbar for clean horizontal overflow on mobile */
+.no-scrollbar::-webkit-scrollbar {
+    display: none;
+}
+.no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+

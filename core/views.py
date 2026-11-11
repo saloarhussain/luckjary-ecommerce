@@ -4,19 +4,46 @@ from django.contrib import messages
 from catalog.models import Product, Category, Collection
 from .models import NewsletterSubscriber, ContactInquiry
 
+from django.db.models import Q
+
 def home(request):
-    featured_products = Product.objects.filter(is_available=True, is_featured=True)[:8]
+    active_metal = request.GET.get('metal') or request.session.get('active_metal', 'gold')
+    if request.GET.get('metal'):
+        request.session['active_metal'] = request.GET.get('metal')
+    active_metal = active_metal.lower()
+
+    all_featured = Product.objects.filter(is_available=True, is_featured=True)
+    if active_metal == 'silver':
+        featured_products = all_featured.filter(
+            Q(karat_metal__icontains='Silver') | Q(materials__name__icontains='Silver') | Q(title__icontains='Silver')
+        )
+        if not featured_products.exists():
+            featured_products = Product.objects.filter(is_available=True, materials__name__icontains='Silver')
+    elif active_metal == 'demifine':
+        featured_products = all_featured.filter(
+            Q(karat_metal__icontains='Demifine') | Q(karat_metal__icontains='Vermeil') | Q(materials__name__icontains='Demifine') | Q(title__icontains='Demifine')
+        )
+        if not featured_products.exists():
+            featured_products = Product.objects.filter(is_available=True, materials__name__icontains='Demifine')
+    else: # gold
+        featured_products = all_featured.filter(
+            Q(karat_metal__icontains='Gold') | Q(karat_metal__icontains='Platinum') | Q(materials__name__icontains='Gold') | Q(title__icontains='Gold')
+        )
+        if not featured_products.exists():
+            featured_products = all_featured
+
     bestsellers = Product.objects.filter(is_available=True, is_bestseller=True)[:4]
     new_arrivals = Product.objects.filter(is_available=True, is_new_arrival=True)[:4]
     categories = Category.objects.filter(is_featured=True)[:5]
     collections = Collection.objects.filter(is_active=True)[:3]
 
     context = {
-        'featured_products': featured_products,
+        'featured_products': featured_products[:8],
         'bestsellers': bestsellers,
         'new_arrivals': new_arrivals,
         'categories': categories,
         'collections': collections,
+        'active_metal': active_metal,
         'meta_title': 'Luckjary | Fine Jewelry, Solid 18K Gold & Certified Diamonds',
         'meta_description': 'Discover exquisite handcrafted luxury jewelry at Luckjary. Explore engagement rings, 18K solid gold necklaces, diamond tennis bracelets, and bespoke bridal heirlooms.',
     }

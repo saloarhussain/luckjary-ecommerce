@@ -9,10 +9,14 @@
         <h1 class="font-serif text-3xl sm:text-4xl md:text-5xl text-white">
             {% if selected_category %}{{ selected_category.name }}
             {% elif selected_material %}{{ selected_material.name }}
-            {% else %}Fine Jewelry Collections{% endif %}
+            {% elif selected_metal == 'silver' %}Solid 925 Sterling Silver
+            {% elif selected_metal == 'demifine' %}18K Gold Vermeil & Demifine
+            {% else %}Solid 18K Gold & Fine Jewelry{% endif %}
         </h1>
         <p class="max-w-xl mx-auto text-xs sm:text-sm text-neutral-400 font-light px-4">
             {% if selected_category %}{{ selected_category.description }}
+            {% elif selected_metal == 'silver' %}Lustrous handcrafted 925 sterling silver jewelry with protective rhodium finish and certified lab diamonds.
+            {% elif selected_metal == 'demifine' %}Everyday elegance in thick 2.5-micron 18K solid gold layered over pure sterling silver.
             {% else %}Meticulously handcrafted in solid 18K gold and platinum with conflict-free certified stones.{% endif %}
         </p>
     </div>
@@ -80,6 +84,7 @@
                 </div>
 
                 <form method="GET" action="{% url 'catalog:product_list' %}" id="filterForm" class="space-y-6">
+                    <input type="hidden" name="metal" value="{{ selected_metal|default:active_metal|default:'gold' }}">
                     {% if search_query %}
                     <input type="hidden" name="q" value="{{ search_query }}">
                     {% endif %}

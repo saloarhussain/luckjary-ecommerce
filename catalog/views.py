@@ -8,6 +8,36 @@ import json
 def product_list(request):
     products = Product.objects.filter(is_available=True)
 
+    # 0. Metal Switcher Filter (Gold, Silver, Demifine)
+    metal = request.GET.get('metal')
+    if not metal and 'metal' not in request.GET:
+        metal = request.session.get('active_metal', 'gold')
+    elif metal:
+        request.session['active_metal'] = metal
+
+    selected_metal = metal.lower() if metal else 'gold'
+    if selected_metal == 'silver':
+        products = products.filter(
+            Q(karat_metal__icontains='Silver') |
+            Q(materials__name__icontains='Silver') |
+            Q(title__icontains='Silver')
+        ).distinct()
+    elif selected_metal == 'demifine':
+        products = products.filter(
+            Q(karat_metal__icontains='Demifine') |
+            Q(karat_metal__icontains='Vermeil') |
+            Q(materials__name__icontains='Demifine') |
+            Q(title__icontains='Demifine')
+        ).distinct()
+    elif selected_metal == 'gold':
+        products = products.filter(
+            Q(karat_metal__icontains='Gold') |
+            Q(karat_metal__icontains='Platinum') |
+            Q(materials__name__icontains='Gold') |
+            Q(materials__name__icontains='Platinum') |
+            Q(title__icontains='Gold')
+        ).distinct()
+
     # 1. Category Filter
     category_slug = request.GET.get('category')
     selected_category = None
@@ -92,6 +122,14 @@ def product_list(request):
     elif selected_collection:
         page_title = f"{selected_collection.name} Collection"
         page_desc = selected_collection.description or page_desc
+    elif selected_metal == 'silver':
+        page_title = "925 Sterling Silver Jewellery"
+        page_desc = "Discover luminous 925 sterling silver necklaces, pavé rings, and heirloom pieces."
+    elif selected_metal == 'demifine':
+        page_title = "18K Gold Vermeil & Demifine Jewellery"
+        page_desc = "Elevate your daily signature with heavy 18K solid gold layered over pure sterling silver."
+    elif selected_metal == 'gold':
+        page_title = "Solid 18K Gold & Haute Joaillerie"
 
     context = {
         'products': page_obj,
@@ -102,6 +140,7 @@ def product_list(request):
         'all_collections': all_collections,
         'selected_category': selected_category,
         'selected_material': selected_material,
+        'selected_metal': selected_metal,
         'selected_style': style,
         'selected_sort': sort_by,
         'min_price': min_price or '',
@@ -115,8 +154,39 @@ def product_list(request):
 
 def category_products(request, category_slug):
     category = get_object_or_404(Category, slug=category_slug)
-    # Redirect to product list with param or render directly
     products = Product.objects.filter(category=category, is_available=True)
+
+    metal = request.GET.get('metal') or request.session.get('active_metal', 'gold')
+    if request.GET.get('metal'):
+        request.session['active_metal'] = request.GET.get('metal')
+    selected_metal = metal.lower() if metal else 'gold'
+
+    if selected_metal == 'silver':
+        matched = products.filter(
+            Q(karat_metal__icontains='Silver') |
+            Q(materials__name__icontains='Silver') |
+            Q(title__icontains='Silver')
+        ).distinct()
+        if matched.exists():
+            products = matched
+    elif selected_metal == 'demifine':
+        matched = products.filter(
+            Q(karat_metal__icontains='Demifine') |
+            Q(karat_metal__icontains='Vermeil') |
+            Q(materials__name__icontains='Demifine') |
+            Q(title__icontains='Demifine')
+        ).distinct()
+        if matched.exists():
+            products = matched
+    elif selected_metal == 'gold':
+        matched = products.filter(
+            Q(karat_metal__icontains='Gold') |
+            Q(karat_metal__icontains='Platinum') |
+            Q(materials__name__icontains='Gold') |
+            Q(title__icontains='Gold')
+        ).distinct()
+        if matched.exists():
+            products = matched
 
     sort_by = request.GET.get('sort', 'featured')
     if sort_by == 'price_asc':
