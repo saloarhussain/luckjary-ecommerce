@@ -2243,6 +2243,68 @@ div.breadcrumbs a:hover {
     border-bottom: none !important;
 }
 
+/* Checkbox Grid for Metal Presets & Admin Options */
+.admin-checkbox-grid {
+    display: grid !important;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)) !important;
+    gap: 0.65rem !important;
+    list-style: none !important;
+    padding: 0.5rem 0 0.85rem 0 !important;
+    margin: 0 !important;
+}
+
+.admin-checkbox-grid li {
+    display: flex !important;
+    align-items: center !important;
+    gap: 0.5rem !important;
+    background: #141620 !important;
+    border: 1px solid #282C3C !important;
+    padding: 0.5rem 0.85rem !important;
+    border-radius: 6px !important;
+    font-size: 0.78rem !important;
+    color: #D1D5DB !important;
+    transition: all 0.15s ease !important;
+}
+
+.admin-checkbox-grid li:hover {
+    border-color: #DFBE76 !important;
+    background: #181B26 !important;
+    color: #FFFFFF !important;
+}
+
+.admin-checkbox-grid li label {
+    display: flex !important;
+    align-items: center !important;
+    gap: 0.5rem !important;
+    cursor: pointer !important;
+    width: 100% !important;
+    margin: 0 !important;
+    font-weight: 500 !important;
+}
+
+.admin-checkbox-grid li input[type="checkbox"] {
+    accent-color: #10B981 !important;
+    width: 15px !important;
+    height: 15px !important;
+    margin: 0 !important;
+    cursor: pointer !important;
+}
+
+fieldset .description {
+    font-size: 0.78rem !important;
+    color: #9CA3AF !important;
+    margin-bottom: 1rem !important;
+    line-height: 1.4 !important;
+}
+
+.form-row .help,
+.form-row .help-tooltip {
+    font-size: 0.73rem !important;
+    color: #8A8A9C !important;
+    margin-top: 0.35rem !important;
+    display: block !important;
+}
+
 .form-row label {
     font-size: 0.8rem !important;
     font-weight: 600 !important;

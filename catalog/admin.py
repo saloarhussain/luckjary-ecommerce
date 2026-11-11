@@ -1,7 +1,81 @@
+from django import forms
 from django.contrib import admin
 from django.utils.html import format_html
 from django.utils.safestring import mark_safe
 from .models import Category, Material, Collection, Product, ProductImage, ProductReview
+
+class ProductAdminForm(forms.ModelForm):
+    STANDARD_METALS = [
+        ('18K Solid Yellow Gold', '18K Solid Yellow Gold'),
+        ('18K Solid White Gold', '18K Solid White Gold'),
+        ('18K Solid Rose Gold', '18K Solid Rose Gold'),
+        ('Platinum 950', 'Platinum 950'),
+        ('14K Solid Yellow Gold', '14K Solid Yellow Gold'),
+        ('14K Solid White Gold', '14K Solid White Gold'),
+        ('14K Solid Rose Gold', '14K Solid Rose Gold'),
+        ('925 Sterling Silver', '925 Sterling Silver'),
+    ]
+
+    metal_presets = forms.MultipleChoiceField(
+        choices=STANDARD_METALS,
+        widget=forms.CheckboxSelectMultiple(attrs={'class': 'admin-checkbox-grid'}),
+        required=False,
+        label="Precious Metal Quick Checkboxes",
+        help_text="Check the precious metals available for clients to select on the product page. Automatically synced with Available Metals below."
+    )
+
+    class Meta:
+        model = Product
+        fields = '__all__'
+        widgets = {
+            'available_metals': forms.TextInput(attrs={
+                'placeholder': 'e.g. 18K Solid Yellow Gold, 18K Solid White Gold, 18K Solid Rose Gold, Platinum 950',
+                'style': 'width: 100%;'
+            }),
+            'available_sizes': forms.Textarea(attrs={
+                'rows': 4,
+                'placeholder': 'Leave blank to use full standard sizing (e.g. US 4 to 13 with half-sizes for rings), or enter custom sizes separated by commas or lines.',
+                'style': 'width: 100%;'
+            }),
+            'chain_length_or_size': forms.TextInput(attrs={'style': 'width: 100%;'}),
+            'craftsmanship_details': forms.Textarea(attrs={'rows': 3, 'style': 'width: 100%;'}),
+            'care_instructions': forms.Textarea(attrs={'rows': 3, 'style': 'width: 100%;'}),
+            'meta_description': forms.Textarea(attrs={'rows': 2, 'style': 'width: 100%;'}),
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        if self.instance and self.instance.pk:
+            current = self.instance.metal_options
+            matched = [c[0] for c in self.STANDARD_METALS if c[0] in current]
+            self.fields['metal_presets'].initial = matched
+        else:
+            self.fields['metal_presets'].initial = [
+                '18K Solid Yellow Gold',
+                '18K Solid White Gold',
+                '18K Solid Rose Gold',
+                'Platinum 950'
+            ]
+
+    def clean(self):
+        cleaned_data = super().clean()
+        presets = cleaned_data.get('metal_presets') or []
+        custom_metals = cleaned_data.get('available_metals') or ''
+        
+        # Combine presets with custom metals entered
+        existing = [m.strip() for m in custom_metals.split(',') if m.strip()]
+        combined = []
+        for p in presets:
+            if p not in combined:
+                combined.append(p)
+        for e in existing:
+            if e not in combined:
+                combined.append(e)
+                
+        if combined:
+            cleaned_data['available_metals'] = ', '.join(combined)
+            
+        return cleaned_data
 
 class ProductImageInline(admin.TabularInline):
     model = ProductImage
@@ -31,6 +105,57 @@ class CollectionAdmin(admin.ModelAdmin):
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
+    form = ProductAdminForm
+    fieldsets = (
+        ('💎 Jewelry Identity', {
+            'fields': (
+                ('title', 'slug'),
+                ('sku', 'category', 'collection'),
+                'subtitle',
+                'description',
+            )
+        }),
+        ('💰 Pricing & Inventory Vault', {
+            'fields': (
+                ('price', 'compare_at_price'),
+                ('inventory', 'is_available'),
+                ('is_featured', 'is_bestseller', 'is_new_arrival'),
+            )
+        }),
+        ('✨ Precious Metal Options', {
+            'description': 'Configure the precious metals offered for this piece. Clients can switch between these metals with live swatches on the boutique product page.',
+            'fields': (
+                'karat_metal',
+                'metal_presets',
+                'available_metals',
+                'materials',
+            )
+        }),
+        ('📏 Sizing Framework & Specifications', {
+            'description': 'Configure available ring sizes (US 4 to 13 with half-sizes), necklace chain lengths, or custom dimensions. Leave Available Sizes blank to automatically provide the complete standard size range for this jewelry piece.',
+            'fields': (
+                ('size_category', 'chain_length_or_size'),
+                'available_sizes',
+                ('gemstone', 'carat_weight'),
+                ('dimensions', 'certification'),
+            )
+        }),
+        ('🏛️ Haute Craftsmanship & Care', {
+            'classes': ('collapse',),
+            'fields': (
+                'craftsmanship_details',
+                'care_instructions',
+            )
+        }),
+        ('🔍 SEO & Meta Optimization', {
+            'classes': ('collapse',),
+            'fields': (
+                'meta_title',
+                'meta_description',
+                'meta_keywords',
+            )
+        }),
+    )
     list_display = (
         'thumb_display', 
         'title_sku_display', 

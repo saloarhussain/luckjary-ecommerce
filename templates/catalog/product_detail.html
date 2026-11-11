@@ -127,34 +127,70 @@
 
                 <!-- Material Selector -->
                 <div>
-                    <label class="block text-xs font-display tracking-wider uppercase font-semibold text-neutral-800 mb-2">
-                        Precious Metal: <span class="font-sans normal-case text-neutral-600 font-normal">{{ product.karat_metal }}</span>
-                    </label>
+                    <div class="flex justify-between items-center mb-2">
+                        <label class="block text-xs font-display tracking-wider uppercase font-semibold text-neutral-800">
+                            Precious Metal: <span id="selected-metal-label" class="font-sans normal-case text-neutral-700 font-semibold">{{ product.karat_metal }}</span>
+                        </label>
+                        <span class="text-[11px] text-[#A37B30] font-sans font-medium">Choice of {{ product.metal_options|length }} Metals</span>
+                    </div>
                     <div class="flex flex-wrap gap-2 text-xs">
-                        <label class="cursor-pointer">
-                            <input type="radio" name="material" value="{{ product.karat_metal }}" checked class="peer sr-only">
-                            <span class="inline-block px-3.5 py-2 border rounded-sm border-gold-500 bg-[#FAF7F0] text-neutral-900 font-medium peer-checked:ring-2 peer-checked:ring-gold-500">
-                                {{ product.karat_metal }}
+                        {% for metal in product.metal_options %}
+                        <label class="cursor-pointer metal-option-pill">
+                            <input type="radio" name="material" value="{{ metal }}" 
+                                   {% if metal == product.karat_metal or forloop.first and not product.karat_metal in product.metal_options %}checked{% endif %} 
+                                   class="peer sr-only" 
+                                   onchange="updateSelectedMetal(this.value)">
+                            <span class="inline-flex items-center gap-2 px-3 py-2 border rounded-sm border-neutral-300 bg-white text-neutral-800 font-medium transition hover:border-[#C5A059] peer-checked:border-[#C5A059] peer-checked:bg-[#FAF7F0] peer-checked:text-neutral-900 peer-checked:ring-1 peer-checked:ring-[#C5A059] shadow-xs">
+                                {% if 'Yellow' in metal %}
+                                <span class="w-3.5 h-3.5 rounded-full bg-gradient-to-br from-[#F5D77F] to-[#C59B27] border border-black/15 inline-block shrink-0 shadow-xs"></span>
+                                {% elif 'White' in metal %}
+                                <span class="w-3.5 h-3.5 rounded-full bg-gradient-to-br from-[#FFFFFF] to-[#D1D5DB] border border-black/20 inline-block shrink-0 shadow-xs"></span>
+                                {% elif 'Rose' in metal %}
+                                <span class="w-3.5 h-3.5 rounded-full bg-gradient-to-br from-[#FAD2C0] to-[#D48B7B] border border-black/15 inline-block shrink-0 shadow-xs"></span>
+                                {% elif 'Platinum' in metal %}
+                                <span class="w-3.5 h-3.5 rounded-full bg-gradient-to-br from-[#F3F4F6] to-[#9CA3AF] border border-black/20 inline-block shrink-0 shadow-xs"></span>
+                                {% elif 'Silver' in metal %}
+                                <span class="w-3.5 h-3.5 rounded-full bg-gradient-to-br from-[#F8FAFC] to-[#CBD5E1] border border-black/20 inline-block shrink-0 shadow-xs"></span>
+                                {% else %}
+                                <span class="w-3.5 h-3.5 rounded-full bg-gradient-to-br from-[#E2B755] to-[#A47E24] border border-black/15 inline-block shrink-0 shadow-xs"></span>
+                                {% endif %}
+                                <span>{{ metal }}</span>
                             </span>
                         </label>
+                        {% endfor %}
                     </div>
                 </div>
 
-                <!-- Size Selector (if Ring or general) -->
+                <!-- Size Selector (Ring, Necklace, Bracelet, or General) -->
                 <div>
                     <div class="flex justify-between items-center mb-2">
                         <label class="text-xs font-display tracking-wider uppercase font-semibold text-neutral-800">
+                            {% if product.size_category == 'ring' or 'ring' in product.category.slug %}
+                            Ring Size
+                            {% elif product.size_category == 'necklace' or 'necklace' in product.category.slug %}
+                            Chain Length
+                            {% elif product.size_category == 'bracelet' or 'bracelet' in product.category.slug %}
+                            Wrist Fit
+                            {% elif product.size_category == 'earring' or 'earring' in product.category.slug %}
+                            Backing Specification
+                            {% else %}
                             Size / Specification
+                            {% endif %}
                         </label>
-                        <a href="{% url 'core:faq' %}" target="_blank" class="text-[11px] text-[#C5A059] hover:underline">Ring Size Guide &rarr;</a>
+                        <a href="{% url 'core:faq' %}" target="_blank" class="text-[11px] text-[#C5A059] hover:underline flex items-center gap-1 font-medium">
+                            {% if product.size_category == 'ring' or 'ring' in product.category.slug %}
+                            <span>Ring Size Guide &rarr;</span>
+                            {% else %}
+                            <span>Sizing Guide &rarr;</span>
+                            {% endif %}
+                        </a>
                     </div>
-                    <select name="size" class="w-full text-xs p-2.5 bg-white border border-neutral-300 rounded focus:outline-none focus:border-gold-500 text-neutral-800">
-                        <option value="US Size 5 (49.3mm)">US Size 5 (49.3mm circumference)</option>
-                        <option value="US Size 6 (51.9mm)">US Size 6 (51.9mm circumference)</option>
-                        <option value="US Size 7 (54.4mm)" selected>US Size 7 (54.4mm - Most Popular)</option>
-                        <option value="US Size 8 (57.0mm)">US Size 8 (57.0mm circumference)</option>
-                        <option value="US Size 9 (59.5mm)">US Size 9 (59.5mm circumference)</option>
-                        <option value="Custom Bespoke Sizing">Custom Atelier Sizing (Concierge will contact you)</option>
+                    <select name="size" class="w-full text-xs p-2.5 bg-white border border-neutral-300 rounded focus:outline-none focus:border-[#C5A059] text-neutral-800 font-medium">
+                        {% for s in product.size_options %}
+                        <option value="{{ s }}" {% if 'Most Popular' in s or forloop.first %}selected{% endif %}>
+                            {{ s }}
+                        </option>
+                        {% endfor %}
                     </select>
                 </div>
 
@@ -192,7 +228,7 @@
                 <dl class="divide-y divide-neutral-100 text-xs">
                     <div class="py-2 flex justify-between">
                         <dt class="text-neutral-500">Precious Metal</dt>
-                        <dd class="font-semibold text-neutral-900 text-right">{{ product.karat_metal }}</dd>
+                        <dd id="details-precious-metal" class="font-semibold text-neutral-900 text-right">{{ product.karat_metal }}</dd>
                     </div>
                     {% if product.gemstone %}
                     <div class="py-2 flex justify-between">
@@ -343,4 +379,13 @@
         </div>
     </section>
 </article>
+
+<script>
+function updateSelectedMetal(val) {
+    var label = document.getElementById('selected-metal-label');
+    if (label) label.textContent = val;
+    var spec = document.getElementById('details-precious-metal');
+    if (spec) spec.textContent = val;
+}
+</script>
 {% endblock %}

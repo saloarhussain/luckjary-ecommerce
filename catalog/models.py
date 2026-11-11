@@ -80,6 +80,15 @@ class Product(models.Model):
         ('celestial', 'Celestial & Statement'),
     ]
 
+    SIZE_CATEGORY_CHOICES = [
+        ('ring', 'Ring Sizes (US 4 to 13 with half-sizes)'),
+        ('necklace', 'Necklace Lengths (14" to 24")'),
+        ('bracelet', 'Bracelet Circumferences (6.0" to 8.0")'),
+        ('earring', 'Earring Fit & Security Backings'),
+        ('universal', 'One Size / Universal Luxury Fit'),
+        ('custom', 'Custom Size / Specification List'),
+    ]
+
     title = models.CharField(max_length=220)
     slug = models.SlugField(max_length=240, unique=True, blank=True)
     subtitle = models.CharField(max_length=255, blank=True, help_text="e.g., Handcrafted in 18K Solid Gold & VVS Diamonds")
@@ -101,11 +110,30 @@ class Product(models.Model):
     is_bestseller = models.BooleanField(default=False)
     is_new_arrival = models.BooleanField(default=False)
     
-    # Luxury Specifications
-    karat_metal = models.CharField(max_length=120, default='18K Solid Yellow Gold')
+    # Luxury Specifications & Precious Metals
+    karat_metal = models.CharField(max_length=120, default='18K Solid Yellow Gold', help_text="Default primary metal for this piece")
+    available_metals = models.CharField(
+        max_length=400, 
+        blank=True, 
+        default='18K Solid Yellow Gold, 18K Solid White Gold, 18K Solid Rose Gold, Platinum 950',
+        help_text="Comma-separated precious metal options available to the client on the product page. e.g. 18K Solid Yellow Gold, 18K Solid White Gold, 18K Solid Rose Gold, Platinum 950"
+    )
     gemstone = models.CharField(max_length=150, blank=True, default='VVS Clarity Lab Diamonds')
     carat_weight = models.CharField(max_length=60, blank=True, default='1.25 ctw')
-    chain_length_or_size = models.CharField(max_length=100, blank=True, default='Adjustable 16" - 18" with Lobster Clasp')
+    
+    # Sizing & Dimensions
+    size_category = models.CharField(
+        max_length=30, 
+        choices=SIZE_CATEGORY_CHOICES, 
+        default='ring', 
+        blank=True,
+        help_text="Select category sizing framework (Rings: US 4-13 with half-sizes, Necklaces: 14\"-24\", etc.)"
+    )
+    available_sizes = models.TextField(
+        blank=True, 
+        help_text="Custom sizes (one per line or comma-separated). Leave blank to automatically generate full standard sizing range for this category (e.g. US 4 through 13 with half-sizes for rings)."
+    )
+    chain_length_or_size = models.CharField(max_length=100, blank=True, default='US Sizes 4 - 13 (Complimentary Resizing)')
     dimensions = models.CharField(max_length=100, blank=True, default='14.5mm x 9.2mm')
     certification = models.CharField(max_length=120, default='Luckjary Seal & IGI Laboratory Certificate')
 
@@ -136,6 +164,93 @@ class Product(models.Model):
 
     def get_absolute_url(self):
         return reverse('catalog:product_detail', kwargs={'slug': self.slug})
+
+    @property
+    def metal_options(self):
+        """Returns list of precious metal options available for this product."""
+        if self.available_metals:
+            options = [m.strip() for m in self.available_metals.split(',') if m.strip()]
+            if options:
+                return options
+        default_metals = []
+        if self.karat_metal:
+            default_metals.append(self.karat_metal)
+        for m in ['18K Solid Yellow Gold', '18K Solid White Gold', '18K Solid Rose Gold', 'Platinum 950']:
+            if m not in default_metals:
+                default_metals.append(m)
+        return default_metals
+
+    @property
+    def size_options(self):
+        """Returns list of size strings for dropdown selection."""
+        if self.available_sizes:
+            custom_list = []
+            for line in self.available_sizes.replace('\n', ',').split(','):
+                val = line.strip()
+                if val:
+                    custom_list.append(val)
+            if custom_list:
+                return custom_list
+
+        cat_slug = self.category.slug.lower() if self.category else ''
+        size_type = self.size_category or ('ring' if 'ring' in cat_slug else 'universal')
+
+        if size_type == 'ring' or 'ring' in cat_slug:
+            return [
+                'US Size 4 (46.8mm circumference)',
+                'US Size 4.5 (48.0mm circumference)',
+                'US Size 5 (49.3mm circumference)',
+                'US Size 5.5 (50.6mm circumference)',
+                'US Size 6 (51.9mm circumference)',
+                'US Size 6.5 (53.1mm circumference)',
+                'US Size 7 (54.4mm - Most Popular)',
+                'US Size 7.5 (55.7mm circumference)',
+                'US Size 8 (57.0mm circumference)',
+                'US Size 8.5 (58.3mm circumference)',
+                'US Size 9 (59.5mm circumference)',
+                'US Size 9.5 (60.8mm circumference)',
+                'US Size 10 (62.1mm circumference)',
+                'US Size 10.5 (63.4mm circumference)',
+                'US Size 11 (64.6mm circumference)',
+                'US Size 11.5 (65.9mm circumference)',
+                'US Size 12 (67.2mm circumference)',
+                'US Size 12.5 (68.5mm circumference)',
+                'US Size 13 (69.7mm circumference)',
+                'Custom Bespoke Sizing (Concierge will contact you)',
+            ]
+        elif size_type == 'necklace' or 'necklace' in cat_slug:
+            return [
+                '14" Choker Length (35.5cm)',
+                '16" Standard Collar (40.6cm)',
+                '18" Princess Length - Most Popular (45.7cm)',
+                '20" Matinee Length (50.8cm)',
+                '22" Opera Length (55.9cm)',
+                '24" Lariat Length (61.0cm)',
+                'Custom Bespoke Sizing (Concierge will contact you)',
+            ]
+        elif size_type == 'bracelet' or 'bracelet' in cat_slug:
+            return [
+                '6.0" (15.2cm - Petite Wrist)',
+                '6.5" (16.5cm - Small Wrist)',
+                '7.0" (17.8cm - Standard / Most Popular)',
+                '7.5" (19.0cm - Medium Wrist)',
+                '8.0" (20.3cm - Large Wrist)',
+                'Custom Bespoke Sizing (Concierge will contact you)',
+            ]
+        elif size_type == 'earring' or 'earring' in cat_slug:
+            return [
+                'Standard Pierced Post & Friction Back',
+                'Screw Back (High Security Locking)',
+                'La Poussette Luxury Locking Back',
+                'Clip-On (Non-Pierced Atelier Fitting)',
+            ]
+        else:
+            if self.chain_length_or_size:
+                return [self.chain_length_or_size, 'Custom Bespoke Sizing (Concierge will contact you)']
+            return [
+                'One Size / Universal Luxury Fit',
+                'Custom Bespoke Sizing (Concierge will contact you)',
+            ]
 
     @property
     def discount_percent(self):
