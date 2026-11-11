@@ -17,41 +17,42 @@
                  data-primary="{{ prod.primary_image }}"
                  data-secondary="{{ prod.secondary_image }}"
                  class="w-full h-full object-cover transition-all duration-500 ease-out group-hover:scale-105"
+                 onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1599643477877-530eb83abc8e?auto=format&fit=crop&w=800&q=80';"
                  loading="lazy">
         </a>
 
         <!-- Top-Left Berry Badge (Mia "BEST SELLER ✦" style) -->
         <div class="absolute top-2.5 left-2.5 z-10 pointer-events-none">
             {% if prod.is_bestseller or forloop.first or prod.is_featured %}
-            <span class="inline-flex items-center gap-1 bg-[#932749] text-white text-[9px] sm:text-[10px] font-bold tracking-wider uppercase px-2.5 py-1 rounded-md shadow-sm">
+            <span class="inline-flex items-center gap-1 bg-[#932749] text-white text-[9px] sm:text-[10px] font-bold tracking-wider uppercase px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-md shadow-sm">
                 <span>BEST SELLER</span>
-                <span class="text-[11px] leading-none">✦</span>
+                <span class="text-[10px] sm:text-[11px] leading-none">✦</span>
             </span>
             {% elif prod.is_new_arrival %}
-            <span class="inline-flex items-center gap-1 bg-neutral-900 text-[#C5A059] text-[9px] sm:text-[10px] font-bold tracking-wider uppercase px-2.5 py-1 rounded-md shadow-sm">
+            <span class="inline-flex items-center gap-1 bg-neutral-900 text-[#C5A059] text-[9px] sm:text-[10px] font-bold tracking-wider uppercase px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-md shadow-sm">
                 <span>NEW ARRIVAL</span>
-                <span class="text-[11px] leading-none">✦</span>
+                <span class="text-[10px] sm:text-[11px] leading-none">✦</span>
             </span>
             {% elif prod.discount_percent > 0 %}
-            <span class="inline-flex items-center gap-1 bg-[#932749] text-white text-[9px] sm:text-[10px] font-bold tracking-wider uppercase px-2.5 py-1 rounded-md shadow-sm">
+            <span class="inline-flex items-center gap-1 bg-[#932749] text-white text-[9px] sm:text-[10px] font-bold tracking-wider uppercase px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-md shadow-sm">
                 <span>{{ prod.discount_percent }}% OFF</span>
             </span>
             {% else %}
-            <span class="inline-flex items-center gap-1 bg-[#932749] text-white text-[9px] sm:text-[10px] font-bold tracking-wider uppercase px-2.5 py-1 rounded-md shadow-sm">
+            <span class="inline-flex items-center gap-1 bg-[#932749] text-white text-[9px] sm:text-[10px] font-bold tracking-wider uppercase px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-md shadow-sm">
                 <span>FEATURED</span>
-                <span class="text-[11px] leading-none">✦</span>
+                <span class="text-[10px] sm:text-[11px] leading-none">✦</span>
             </span>
             {% endif %}
         </div>
 
-        <!-- Carousel Left / Right Arrows (Visible on Card Hover) -->
+        <!-- Carousel Left / Right Arrows (Touch-Visible on Mobile, Hover-Visible on Desktop) -->
         {% if prod.image_list|length > 1 %}
         <!-- Left Arrow Button -->
         <button type="button" 
                 onclick="event.preventDefault(); event.stopPropagation(); swipeCardImage('{{ prod.id }}', -1);"
-                class="absolute left-2 sm:left-2.5 top-1/2 -translate-y-1/2 w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-white/90 hover:bg-white text-neutral-800 hover:text-black shadow-md flex items-center justify-center opacity-0 group-hover:opacity-100 hover:scale-110 active:scale-95 transition-all duration-200 z-20 cursor-pointer focus:outline-none"
+                class="absolute left-1.5 sm:left-2.5 top-1/2 -translate-y-1/2 w-6 h-6 sm:w-8 sm:h-8 rounded-full bg-white/90 hover:bg-white text-neutral-800 shadow-md flex items-center justify-center opacity-70 sm:opacity-0 sm:group-hover:opacity-100 hover:scale-110 active:scale-95 transition-all duration-200 z-20 cursor-pointer focus:outline-none"
                 aria-label="Previous Image">
-            <svg class="w-3.5 h-3.5 sm:w-4 sm:h-4 stroke-[2.5]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg class="w-3 h-3 sm:w-4 sm:h-4 stroke-[2.5]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/>
             </svg>
         </button>
@@ -59,17 +60,17 @@
         <!-- Right Arrow Button -->
         <button type="button" 
                 onclick="event.preventDefault(); event.stopPropagation(); swipeCardImage('{{ prod.id }}', 1);"
-                class="absolute right-2 sm:right-2.5 top-1/2 -translate-y-1/2 w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-white/90 hover:bg-white text-neutral-800 hover:text-black shadow-md flex items-center justify-center opacity-0 group-hover:opacity-100 hover:scale-110 active:scale-95 transition-all duration-200 z-20 cursor-pointer focus:outline-none"
+                class="absolute right-1.5 sm:right-2.5 top-1/2 -translate-y-1/2 w-6 h-6 sm:w-8 sm:h-8 rounded-full bg-white/90 hover:bg-white text-neutral-800 shadow-md flex items-center justify-center opacity-70 sm:opacity-0 sm:group-hover:opacity-100 hover:scale-110 active:scale-95 transition-all duration-200 z-20 cursor-pointer focus:outline-none"
                 aria-label="Next Image">
-            <svg class="w-3.5 h-3.5 sm:w-4 sm:h-4 stroke-[2.5]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg class="w-3 h-3 sm:w-4 sm:h-4 stroke-[2.5]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>
             </svg>
         </button>
 
         <!-- Image Carousel Indicator Dots/Bars -->
-        <div class="absolute bottom-2.5 inset-x-0 flex items-center justify-center gap-1.5 z-10 pointer-events-none" id="dots-container-{{ prod.id }}">
+        <div class="absolute bottom-2 sm:bottom-2.5 inset-x-0 flex items-center justify-center gap-1 sm:gap-1.5 z-10 pointer-events-none" id="dots-container-{{ prod.id }}">
             {% for img in prod.image_list %}
-            <span class="carousel-dot-{{ prod.id }} h-1 rounded-full shadow-sm transition-all duration-300 {% if forloop.first %}w-4 bg-white{% else %}w-1.5 bg-white/60{% endif %}"></span>
+            <span class="carousel-dot-{{ prod.id }} h-1 rounded-full shadow-sm transition-all duration-300 {% if forloop.first %}w-3.5 sm:w-4 bg-white{% else %}w-1.5 bg-white/60{% endif %}"></span>
             {% endfor %}
         </div>
         {% endif %}
@@ -77,9 +78,9 @@
         <!-- Visual Search / Scan Lens Icon Button (Mia Bottom-Right style) -->
         <button type="button" 
                 onclick="event.preventDefault(); event.stopPropagation(); window.location.href='{% url 'catalog:product_list' %}?category={{ prod.category.slug }}'"
-                class="absolute bottom-2.5 right-2.5 w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-white/95 hover:bg-white text-neutral-600 hover:text-[#932749] flex items-center justify-center shadow-md hover:scale-105 transition z-10" 
+                class="absolute bottom-2 right-2 sm:bottom-2.5 sm:right-2.5 w-6 h-6 sm:w-8 sm:h-8 rounded-full bg-white/95 hover:bg-white text-neutral-600 hover:text-[#932749] flex items-center justify-center shadow-md hover:scale-105 transition z-10" 
                 title="Explore similar pieces in {{ prod.category.name }}">
-            <svg class="w-3.5 h-3.5 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg class="w-3 h-3 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
             </svg>
@@ -88,39 +89,39 @@
     </div>
 
     <!-- Product Meta Details (Price above Title, Clean & Highly Readable Sans Font) -->
-    <div class="p-3.5 sm:p-4 flex flex-col flex-1 justify-between space-y-3 font-sans">
+    <div class="p-2.5 sm:p-4 flex flex-col flex-1 justify-between space-y-2 sm:space-y-3 font-sans">
         <div>
             <!-- Prominent Price (Leading line in Mia style) -->
-            <div class="flex items-baseline space-x-2 font-sans">
-                <span class="text-base sm:text-lg font-bold text-neutral-900 tracking-tight font-sans">
+            <div class="flex items-baseline space-x-1.5 sm:space-x-2 font-sans">
+                <span class="text-sm sm:text-base lg:text-lg font-bold text-neutral-900 tracking-tight font-sans">
                     ${{ prod.price }}
                 </span>
                 {% if prod.compare_at_price %}
-                <span class="text-xs text-neutral-400 line-through font-sans">
+                <span class="text-[10px] sm:text-xs text-neutral-400 line-through font-sans">
                     ${{ prod.compare_at_price }}
                 </span>
                 {% endif %}
             </div>
 
             <!-- Product Title (Clean modern sans font, bold and easy to read) -->
-            <h3 class="text-xs sm:text-[13px] text-neutral-900 font-semibold line-clamp-1 mt-1 hover:text-[#932749] transition font-sans tracking-normal leading-snug">
+            <h3 class="text-[11px] sm:text-xs md:text-[13px] text-neutral-900 font-semibold line-clamp-1 mt-0.5 sm:mt-1 hover:text-[#932749] transition font-sans tracking-normal leading-snug">
                 <a href="{{ prod.get_absolute_url }}">{{ prod.title }}</a>
             </h3>
 
             <!-- Subtle Material / Category hint -->
-            <p class="text-[10px] text-neutral-500 font-medium uppercase tracking-wider mt-0.5 truncate font-sans">
+            <p class="text-[9px] sm:text-[10px] text-neutral-500 font-medium uppercase tracking-wider mt-0.5 truncate font-sans">
                 {{ prod.karat_metal }}
             </p>
         </div>
 
         <!-- Action Row: Pill "Add to Bag" Button + Circular Wishlist Heart Button -->
-        <div class="pt-2 flex items-center space-x-2">
+        <div class="pt-1.5 sm:pt-2 flex items-center space-x-1.5 sm:space-x-2">
             <!-- Add to Bag Form & Button -->
-            <form action="{% url 'orders:add_to_cart' prod.id %}" method="POST" class="flex-1">
+            <form action="{% url 'orders:add_to_cart' prod.id %}" method="POST" class="flex-1 min-w-0">
                 {% csrf_token %}
                 <input type="hidden" name="quantity" value="1">
                 <button type="submit" 
-                        class="w-full py-2 sm:py-2.5 px-3 rounded-full border border-neutral-300 hover:border-[#932749] bg-white hover:bg-[#FAF9F6] text-neutral-800 hover:text-[#932749] text-xs sm:text-[13px] font-medium transition shadow-sm text-center block">
+                        class="w-full py-1.5 sm:py-2.5 px-2 sm:px-3 rounded-full border border-neutral-300 hover:border-[#932749] bg-white hover:bg-[#FAF9F6] text-neutral-800 hover:text-[#932749] text-[11px] sm:text-[13px] font-medium transition shadow-sm text-center block truncate">
                     Add to Bag
                 </button>
             </form>
@@ -129,9 +130,9 @@
             <form action="{% url 'core:toggle_wishlist' prod.id %}" method="POST" class="flex-shrink-0">
                 {% csrf_token %}
                 <button type="submit" 
-                        class="w-9 h-9 sm:w-10 sm:h-10 rounded-full border border-neutral-300 hover:border-[#932749] bg-white text-neutral-500 hover:text-[#E11D48] flex items-center justify-center transition shadow-sm"
+                        class="w-7 h-7 sm:w-10 sm:h-10 rounded-full border border-neutral-300 hover:border-[#932749] bg-white text-neutral-500 hover:text-[#E11D48] flex items-center justify-center transition shadow-sm"
                         title="Save to Wishlist">
-                    <svg class="w-4 h-4 sm:w-4.5 sm:h-4.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg class="w-3.5 h-3.5 sm:w-4.5 sm:h-4.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
                     </svg>
                 </button>

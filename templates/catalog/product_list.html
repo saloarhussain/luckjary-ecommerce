@@ -23,18 +23,18 @@
 </section>
 
 <!-- Main Catalog Container -->
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10">
+<div class="max-w-7xl mx-auto px-2.5 sm:px-6 lg:px-8 py-4 sm:py-10">
     
     <!-- Mobile Filter Toggle Bar (Visible on mobile/tablet only) -->
-    <div class="lg:hidden mb-6 flex items-center justify-between gap-3 bg-white p-3.5 border border-[#E8DFD0] rounded-sm shadow-sm">
-        <button type="button" onclick="document.getElementById('mobileFilterDrawer').classList.toggle('hidden')" class="btn-outline-gold flex-1 py-2 px-3 text-xs font-semibold uppercase tracking-wider flex items-center justify-center space-x-2 rounded-sm">
-            <svg class="w-4 h-4 text-gold-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"/></svg>
+    <div class="lg:hidden mb-4 sm:mb-6 flex items-center justify-between gap-2 sm:gap-3 bg-white p-2.5 sm:p-3.5 border border-[#E8DFD0] rounded-xl shadow-sm">
+        <button type="button" onclick="document.getElementById('mobileFilterDrawer').classList.toggle('hidden')" class="btn-outline-gold flex-1 py-2 px-2.5 sm:px-3 text-[11px] sm:text-xs font-semibold uppercase tracking-wider flex items-center justify-center space-x-1.5 sm:space-x-2 rounded-lg">
+            <svg class="w-3.5 h-3.5 sm:w-4 sm:h-4 text-gold-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"/></svg>
             <span>Filters & Refine</span>
         </button>
 
         <div class="flex-1">
             <select onchange="window.location.href = updateUrlParameter(window.location.href, 'sort', this.value)" 
-                    class="w-full bg-[#FAF9F6] border border-neutral-300 rounded px-2.5 py-2 text-xs text-neutral-800 focus:outline-none focus:border-gold-500">
+                    class="w-full bg-[#FAF9F6] border border-neutral-300 rounded-lg px-2 sm:px-2.5 py-2 text-[11px] sm:text-xs text-neutral-800 focus:outline-none focus:border-gold-500">
                 <option value="featured" {% if selected_sort == 'featured' %}selected{% endif %}>Featured</option>
                 <option value="price_asc" {% if selected_sort == 'price_asc' %}selected{% endif %}>Price: Low &uarr;</option>
                 <option value="price_desc" {% if selected_sort == 'price_desc' %}selected{% endif %}>Price: High &darr;</option>
@@ -190,7 +190,7 @@
 
             <!-- Responsive Products Grid (2-col mobile, 2-col tablet, 3-col desktop) -->
             {% if products %}
-            <div class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-6">
+            <div class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-2.5 sm:gap-6">
                 {% for prod in products %}
                     {% include 'includes/product_card.html' %}
                 {% endfor %}

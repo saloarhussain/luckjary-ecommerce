@@ -89,7 +89,7 @@
     </script>
     {% block extra_head %}{% endblock %}
 </head>
-<body class="bg-[#FAF9F6] text-[#222222] min-h-screen flex flex-col antialiased selection:bg-[#C5A059] selection:text-white">
+<body class="bg-[#FAF9F6] text-[#222222] min-h-screen flex flex-col antialiased selection:bg-[#C5A059] selection:text-white overflow-x-hidden">
 
     <!-- Top Announcement Bar (GIVA Festive Style) -->
     <aside class="py-2 px-4 text-center text-xs tracking-wider border-b border-[#E8DFD0] bg-[#F7EFE6] text-[#4A3B22]">
@@ -105,27 +105,27 @@
     <header class="sticky top-0 z-40 bg-[#FAF9F6]/95 backdrop-blur-md border-b border-[#EBE6DF] transition-all">
         
         <!-- TIER 1: Brand Logo, Location Selector, Wide Search & Utilities -->
-        <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 border-b border-[#EFEAE2]">
-            <div class="flex items-center justify-between h-16 sm:h-20 gap-2 sm:gap-4 lg:gap-8">
+        <div class="max-w-7xl mx-auto px-2.5 sm:px-6 lg:px-8 border-b border-[#EFEAE2]">
+            <div class="flex items-center justify-between h-14 sm:h-20 gap-1.5 sm:gap-4 lg:gap-8">
                 
                 <!-- Left: Logo & Where to Deliver? Widget -->
-                <div class="flex items-center space-x-2 sm:space-x-4 flex-shrink-0">
+                <div class="flex items-center space-x-1 sm:space-x-4 flex-shrink-0">
                     <!-- Mobile Hamburger Button -->
-                    <button id="mobileMenuBtn" type="button" class="lg:hidden p-1.5 text-neutral-800 hover:text-[#366E63] focus:outline-none rounded" aria-label="Open Navigation Menu">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+                    <button id="mobileMenuBtn" type="button" class="lg:hidden p-1 sm:p-1.5 text-neutral-800 hover:text-[#366E63] focus:outline-none rounded" aria-label="Open Navigation Menu">
+                        <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
                     </button>
 
                     <!-- Brand Logo (Left-Aligned Elegant & Stylish Luckjary) -->
                     <a href="{% url 'core:home' %}" class="inline-block flex-shrink-0 group py-0.5">
-                        <span class="luckjary-brand-logo text-2xl sm:text-3xl tracking-[0.16em] text-neutral-900 group-hover:text-[#C5A059] transition block">
+                        <span class="luckjary-brand-logo text-lg sm:text-2xl lg:text-3xl tracking-[0.12em] sm:tracking-[0.16em] text-neutral-900 group-hover:text-[#C5A059] transition block">
                             LUCKJARY
                         </span>
-                        <span class="luckjary-brand-sub">
+                        <span class="luckjary-brand-sub text-[6px] sm:text-[7.5px]">
                             HAUTE JOAILLERIE
                         </span>
                     </a>
 
-                    <!-- Where to Deliver? Pincode Location Widget -->
+                    <!-- Where to Deliver? Pincode Location Widget (Desktop / Tablet) -->
                     <button type="button" 
                             id="pincodeHeaderTrigger"
                             onclick="openPincodeModal()" 
@@ -165,17 +165,17 @@
                     </form>
                 </div>
 
-                <!-- Right Utilities: STORES, ACCOUNT, WISHLIST, CART (GIVA Stacked Icon + Label) -->
-                <div class="flex items-center space-x-3 sm:space-x-5 md:space-x-6 lg:space-x-7 flex-shrink-0">
+                <!-- Right Utilities: PINCODE, ACCOUNT, WISHLIST, CART (Responsive Icons) -->
+                <div class="flex items-center space-x-1 sm:space-x-3 md:space-x-5 lg:space-x-6 flex-shrink-0">
                     
                     <!-- Mobile Delivery Trigger Button -->
-                    <button type="button" onclick="openPincodeModal()" class="md:hidden p-1 text-[#E11D48]" title="Delivery Location">
-                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                    <button type="button" onclick="openPincodeModal()" class="md:hidden p-1.5 text-[#E11D48] hover:scale-105 transition" title="Delivery Location">
+                        <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="currentColor" viewBox="0 0 24 24">
                             <path fill-rule="evenodd" d="M11.54 22.351l.07.04.028.016a.76.76 0 00.723 0l.028-.015.071-.041a16.975 16.975 0 001.144-.742 19.58 19.58 0 002.683-2.282c1.944-1.99 3.963-4.98 3.963-8.827a8.25 8.25 0 00-16.5 0c0 3.846 2.02 6.837 3.963 8.827a19.58 19.58 0 002.682 2.282 16.975 16.975 0 001.145.742zM12 13.5a3 3 0 100-6 3 3 0 000 6z" clip-rule="evenodd" />
                         </svg>
                     </button>
 
-                    <!-- STORES -->
+                    <!-- STORES (hidden on mobile, visible on sm:) -->
                     <a href="{% url 'core:about' %}#boutiques" class="hidden sm:flex flex-col items-center justify-center text-neutral-700 hover:text-[#366E63] transition group" title="Our Boutiques">
                         <svg class="w-5 h-5 text-neutral-700 group-hover:scale-105 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
@@ -186,11 +186,11 @@
                     <!-- ACCOUNT -->
                     {% if user.is_authenticated %}
                         <div class="nav-dropdown-trigger relative py-1">
-                            <a href="{% url 'accounts:profile' %}" class="flex flex-col items-center justify-center text-neutral-700 hover:text-[#366E63] transition" title="Client Account">
-                                <svg class="w-5 h-5 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <a href="{% url 'accounts:profile' %}" class="flex flex-col items-center justify-center text-neutral-700 hover:text-[#366E63] transition p-1 sm:p-0" title="Client Account">
+                                <svg class="w-4.5 h-4.5 sm:w-5 sm:h-5 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
                                 </svg>
-                                <span class="text-[9px] font-semibold tracking-wider uppercase mt-1">Account</span>
+                                <span class="hidden sm:inline text-[9px] font-semibold tracking-wider uppercase mt-1">Account</span>
                             </a>
                             <!-- Dropdown -->
                             <div class="nav-dropdown-menu align-right w-52">
@@ -213,36 +213,36 @@
                             </div>
                         </div>
                     {% else %}
-                        <a href="{% url 'accounts:login' %}" class="flex flex-col items-center justify-center text-neutral-700 hover:text-[#366E63] transition group" title="Sign In">
-                            <svg class="w-5 h-5 group-hover:scale-105 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <a href="{% url 'accounts:login' %}" class="flex flex-col items-center justify-center text-neutral-700 hover:text-[#366E63] transition group p-1 sm:p-0" title="Sign In">
+                            <svg class="w-4.5 h-4.5 sm:w-5 sm:h-5 group-hover:scale-105 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
                             </svg>
-                            <span class="text-[9px] font-semibold tracking-wider uppercase mt-1">Account</span>
+                            <span class="hidden sm:inline text-[9px] font-semibold tracking-wider uppercase mt-1">Account</span>
                         </a>
                     {% endif %}
 
                     <!-- WISHLIST -->
-                    <a href="{% url 'core:wishlist' %}" class="relative flex flex-col items-center justify-center text-neutral-700 hover:text-[#366E63] transition group" title="Wishlist">
-                        <svg class="w-5 h-5 group-hover:scale-105 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <a href="{% url 'core:wishlist' %}" class="relative flex flex-col items-center justify-center text-neutral-700 hover:text-[#366E63] transition group p-1 sm:p-0" title="Wishlist">
+                        <svg class="w-4.5 h-4.5 sm:w-5 sm:h-5 group-hover:scale-105 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
                         </svg>
                         {% if wishlist_count > 0 %}
-                        <span class="absolute -top-1.5 -right-1 bg-[#E11D48] text-white text-[8px] w-3.5 h-3.5 rounded-full flex items-center justify-center font-bold">
+                        <span class="absolute -top-1 -right-1 sm:-top-1.5 sm:-right-1 bg-[#E11D48] text-white text-[8px] w-3.5 h-3.5 rounded-full flex items-center justify-center font-bold">
                             {{ wishlist_count }}
                         </span>
                         {% endif %}
-                        <span class="text-[9px] font-semibold tracking-wider uppercase mt-1">Wishlist</span>
+                        <span class="hidden sm:inline text-[9px] font-semibold tracking-wider uppercase mt-1">Wishlist</span>
                     </a>
 
                     <!-- CART -->
-                    <a href="{% url 'orders:cart' %}" class="open-cart-drawer relative flex flex-col items-center justify-center text-neutral-700 hover:text-[#366E63] transition group" title="Shopping Cart">
-                        <svg class="w-5 h-5 group-hover:scale-105 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <a href="{% url 'orders:cart' %}" class="open-cart-drawer relative flex flex-col items-center justify-center text-neutral-700 hover:text-[#366E63] transition group p-1 sm:p-0" title="Shopping Cart">
+                        <svg class="w-4.5 h-4.5 sm:w-5 sm:h-5 group-hover:scale-105 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
                         </svg>
-                        <span id="cartCountBadge" class="absolute -top-1.5 -right-1 bg-[#E11D48] text-white text-[8px] w-3.5 h-3.5 rounded-full flex items-center justify-center font-bold">
+                        <span id="cartCountBadge" class="absolute -top-1 -right-1 sm:-top-1.5 sm:-right-1 bg-[#E11D48] text-white text-[8px] w-3.5 h-3.5 rounded-full flex items-center justify-center font-bold">
                             {{ cart_count|default:"0" }}
                         </span>
-                        <span class="text-[9px] font-semibold tracking-wider uppercase mt-1">Cart</span>
+                        <span class="hidden sm:inline text-[9px] font-semibold tracking-wider uppercase mt-1">Cart</span>
                     </a>
 
                 </div>

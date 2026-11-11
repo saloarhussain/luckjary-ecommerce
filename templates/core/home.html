@@ -3,7 +3,7 @@
 
 {% block content %}
 <!-- Hero Section -->
-<section class="relative bg-[#0F0F0F] text-white min-h-[85vh] flex items-center justify-center overflow-hidden">
+<section class="relative bg-[#0F0F0F] text-white min-h-[75vh] sm:min-h-[85vh] flex items-center justify-center overflow-hidden">
     <div class="absolute inset-0 z-0">
         <img src="https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?auto=format&fit=crop&w=2000&q=85" 
              alt="Luckjary High Jewelry Diamond Ring Collection" 
@@ -11,10 +11,10 @@
         <div class="absolute inset-0 bg-gradient-to-t from-[#0F0F0F] via-transparent to-black/60"></div>
     </div>
 
-    <div class="relative z-10 max-w-4xl mx-auto text-center px-4 sm:px-6 py-20 space-y-6">
-        <div class="inline-flex items-center space-x-2 border border-[#C5A059]/40 bg-black/40 backdrop-blur-sm px-4 py-1.5 rounded-full">
-            <span class="w-2 h-2 rounded-full bg-[#C5A059]"></span>
-            <span class="text-xs font-display tracking-[0.25em] text-[#C5A059] uppercase">
+    <div class="relative z-10 max-w-4xl mx-auto text-center px-3 sm:px-6 py-14 sm:py-20 space-y-4 sm:space-y-6">
+        <div class="inline-flex items-center space-x-2 border border-[#C5A059]/40 bg-black/40 backdrop-blur-sm px-3.5 sm:px-4 py-1 sm:py-1.5 rounded-full">
+            <span class="w-1.5 sm:w-2 h-1.5 sm:h-2 rounded-full bg-[#C5A059]"></span>
+            <span class="text-[10px] sm:text-xs font-display tracking-[0.2em] sm:tracking-[0.25em] text-[#C5A059] uppercase">
                 {% if active_metal == 'silver' %}
                 The 925 Sterling Silver Heirlooms
                 {% elif active_metal == 'demifine' %}
@@ -25,7 +25,7 @@
             </span>
         </div>
 
-        <h1 class="font-sans text-3xl sm:text-5xl md:text-6xl font-bold tracking-tight leading-tight text-[#FAF9F6]">
+        <h1 class="font-sans text-2xl sm:text-5xl md:text-6xl font-bold tracking-tight leading-tight text-[#FAF9F6]">
             {% if active_metal == 'silver' %}
             Lustrous Silver.<br>
             <span class="font-bold gold-gradient-text">Radiant for Every Moment.</span>
@@ -38,7 +38,7 @@
             {% endif %}
         </h1>
 
-        <p class="max-w-2xl mx-auto text-sm sm:text-base text-neutral-300 font-light leading-relaxed">
+        <p class="max-w-2xl mx-auto text-xs sm:text-base text-neutral-300 font-light leading-relaxed px-2">
             {% if active_metal == 'silver' %}
             Discover handcrafted 925 solid sterling silver heirlooms treated with a microscopic rhodium anti-tarnish barrier and certified brilliant stones.
             {% elif active_metal == 'demifine' %}
@@ -48,11 +48,11 @@
             {% endif %}
         </p>
 
-        <div class="pt-6 flex flex-col sm:flex-row items-center justify-center gap-4">
-            <a href="{% url 'catalog:product_list' %}" class="w-full sm:w-auto btn-gold px-8 py-3.5 text-xs font-display font-semibold tracking-[0.18em] uppercase rounded-sm shadow-xl">
+        <div class="pt-4 sm:pt-6 flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4">
+            <a href="{% url 'catalog:product_list' %}" class="w-full sm:w-auto btn-gold px-6 sm:px-8 py-3 sm:py-3.5 text-xs font-display font-semibold tracking-[0.16em] sm:tracking-[0.18em] uppercase rounded-sm shadow-xl">
                 Explore The Collection
             </a>
-            <a href="{% url 'catalog:category_products' 'bridal-high-jewelry' %}" class="w-full sm:w-auto px-8 py-3.5 border border-[#C5A059] text-white hover:bg-[#C5A059]/10 text-xs font-display tracking-[0.18em] uppercase rounded-sm transition">
+            <a href="{% url 'catalog:category_products' 'bridal-high-jewelry' %}" class="w-full sm:w-auto px-6 sm:px-8 py-3 sm:py-3.5 border border-[#C5A059] text-white hover:bg-[#C5A059]/10 text-xs font-display tracking-[0.16em] sm:tracking-[0.18em] uppercase rounded-sm transition">
                 The Bridal Atelier
             </a>
         </div>
@@ -103,7 +103,7 @@
         <div class="w-12 h-0.5 bg-[#C5A059] mx-auto mt-2"></div>
     </div>
 
-    <div class="grid grid-cols-2 md:grid-cols-5 gap-4 sm:gap-6">
+    <div class="grid grid-cols-2 md:grid-cols-5 gap-2.5 sm:gap-6">
         {% for cat in categories %}
         <a href="{% url 'catalog:category_products' cat.slug %}" class="group relative block overflow-hidden rounded-sm bg-neutral-100 aspect-[3/4] shadow-sm">
             <img src="{{ cat.image_url }}" alt="{{ cat.name }}" class="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110">
@@ -138,7 +138,7 @@
             </a>
         </div>
 
-        <div class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+        <div class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-6">
             {% for prod in featured_products %}
                 {% include 'includes/product_card.html' %}
             {% endfor %}

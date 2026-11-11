@@ -1,8 +1,8 @@
 <!-- GIVA-Inspired Gold & Silver Jewellery Switcher -->
-<div class="metal-switcher-container w-full bg-[#FAF9F6] border-b border-[#EBE6DF]/70 py-2.5 sm:py-3.5 px-3">
+<div class="metal-switcher-container w-full bg-[#FAF9F6] border-b border-[#EBE6DF]/70 py-2 sm:py-3.5 px-2 sm:px-3">
     <div class="max-w-7xl mx-auto flex items-center justify-center">
-        <!-- Capsule Switcher Frame -->
-        <nav class="relative inline-flex items-center p-1 sm:p-1.5 rounded-full border-[1.5px] border-[#C5A059] bg-white shadow-[0_2px_10px_rgba(197,160,89,0.08)] max-w-full overflow-x-auto" 
+        <!-- Capsule Switcher Frame (Fully responsive, no overflow clipping or scrollbar) -->
+        <nav class="relative inline-flex items-center p-0.5 sm:p-1.5 rounded-full border border-[#C5A059] sm:border-[1.5px] bg-white shadow-[0_2px_10px_rgba(197,160,89,0.08)] max-w-full select-none" 
              aria-label="Precious Metal Collection Switcher" 
              role="tablist">
             
@@ -12,8 +12,8 @@
                aria-selected="{% if active_metal == 'silver' %}true{% else %}false{% endif %}"
                data-metal="silver"
                onclick="handleMetalSwitch(event, 'silver')"
-               class="metal-switcher-pill relative z-10 px-4 sm:px-7 md:px-8 py-1.5 sm:py-2 rounded-full text-xs sm:text-[13px] md:text-sm font-medium transition-all duration-300 ease-out whitespace-nowrap select-none {% if active_metal == 'silver' %}bg-[#366E63] text-white shadow-sm font-semibold active-pill{% else %}text-neutral-700 hover:text-neutral-900 hover:bg-[#FAF9F6]{% endif %}">
-                <span>Silver Jewellery</span>
+               class="metal-switcher-pill relative z-10 px-2.5 sm:px-6 md:px-8 py-1 sm:py-2 rounded-full text-[11px] sm:text-[13px] md:text-sm font-medium transition-all duration-300 ease-out whitespace-nowrap select-none {% if active_metal == 'silver' %}bg-[#366E63] text-white shadow-sm font-semibold active-pill{% else %}text-neutral-700 hover:text-neutral-900 hover:bg-[#FAF9F6]{% endif %}">
+                <span>Silver<span class="hidden sm:inline"> Jewellery</span></span>
             </a>
 
             <!-- Gold Jewellery -->
@@ -22,8 +22,8 @@
                aria-selected="{% if active_metal == 'gold' or not active_metal %}true{% else %}false{% endif %}"
                data-metal="gold"
                onclick="handleMetalSwitch(event, 'gold')"
-               class="metal-switcher-pill relative z-10 px-4 sm:px-7 md:px-8 py-1.5 sm:py-2 rounded-full text-xs sm:text-[13px] md:text-sm font-medium transition-all duration-300 ease-out whitespace-nowrap select-none {% if active_metal == 'gold' or not active_metal %}bg-[#366E63] text-white shadow-sm font-semibold active-pill{% else %}text-neutral-700 hover:text-neutral-900 hover:bg-[#FAF9F6]{% endif %}">
-                <span>Gold Jewellery</span>
+               class="metal-switcher-pill relative z-10 px-2.5 sm:px-6 md:px-8 py-1 sm:py-2 rounded-full text-[11px] sm:text-[13px] md:text-sm font-medium transition-all duration-300 ease-out whitespace-nowrap select-none {% if active_metal == 'gold' or not active_metal %}bg-[#366E63] text-white shadow-sm font-semibold active-pill{% else %}text-neutral-700 hover:text-neutral-900 hover:bg-[#FAF9F6]{% endif %}">
+                <span>Gold<span class="hidden sm:inline"> Jewellery</span></span>
             </a>
 
             <!-- Demifine Jewellery -->
@@ -32,8 +32,8 @@
                aria-selected="{% if active_metal == 'demifine' %}true{% else %}false{% endif %}"
                data-metal="demifine"
                onclick="handleMetalSwitch(event, 'demifine')"
-               class="metal-switcher-pill relative z-10 px-4 sm:px-7 md:px-8 py-1.5 sm:py-2 rounded-full text-xs sm:text-[13px] md:text-sm font-medium transition-all duration-300 ease-out whitespace-nowrap select-none {% if active_metal == 'demifine' %}bg-[#366E63] text-white shadow-sm font-semibold active-pill{% else %}text-neutral-700 hover:text-neutral-900 hover:bg-[#FAF9F6]{% endif %}">
-                <span>Demifine Jewellery</span>
+               class="metal-switcher-pill relative z-10 px-2.5 sm:px-6 md:px-8 py-1 sm:py-2 rounded-full text-[11px] sm:text-[13px] md:text-sm font-medium transition-all duration-300 ease-out whitespace-nowrap select-none {% if active_metal == 'demifine' %}bg-[#366E63] text-white shadow-sm font-semibold active-pill{% else %}text-neutral-700 hover:text-neutral-900 hover:bg-[#FAF9F6]{% endif %}">
+                <span>Demifine<span class="hidden sm:inline"> Jewellery</span></span>
             </a>
         </nav>
     </div>
