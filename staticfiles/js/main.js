@@ -7,6 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initDeliveryPincode();
     initSearchPlaceholderRotation();
     initCardTouchSwiping();
+    initNavDropdowns();
 });
 
 // 1. High-Resolution Magnifying Zoom for Product Detail Page
@@ -336,5 +337,32 @@ function initCardTouchSwiping() {
                 }
             }
         }, { passive: true });
+    });
+}
+
+// 9. Navigation Dropdown Click & Touch Handlers
+function initNavDropdowns() {
+    const dropdownTriggers = document.querySelectorAll('.nav-dropdown-trigger');
+    dropdownTriggers.forEach(trigger => {
+        const toggleBtn = trigger.querySelector('a, button, span');
+        if (!toggleBtn) return;
+
+        // Toggle on click/tap for touch and tablet devices
+        toggleBtn.addEventListener('click', (e) => {
+            const menu = trigger.querySelector('.nav-dropdown-menu');
+            if (menu) {
+                if (window.innerWidth < 1024 || 'ontouchstart' in window) {
+                    e.preventDefault();
+                    trigger.classList.toggle('open');
+                }
+            }
+        });
+    });
+
+    // Close on click outside
+    document.addEventListener('click', (e) => {
+        if (!e.target.closest('.nav-dropdown-trigger')) {
+            dropdownTriggers.forEach(t => t.classList.remove('open'));
+        }
     });
 }

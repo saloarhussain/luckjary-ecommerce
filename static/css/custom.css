@@ -261,5 +261,46 @@ h1, h2, h3, h4, h5, h6, .font-serif, .font-display {
     box-shadow: 0 12px 28px rgba(0, 0, 0, 0.07);
 }
 
+/* GIVA & High-End Header Navigation Hover Dropdowns */
+.nav-dropdown-trigger {
+    position: relative;
+}
+
+.nav-dropdown-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    padding-top: 4px;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transform: translateY(-4px);
+    transition: opacity 0.2s cubic-bezier(0.16, 1, 0.3, 1), transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.2s;
+    z-index: 100;
+}
+
+.nav-dropdown-menu.align-right {
+    left: auto;
+    right: 0;
+}
+
+.nav-dropdown-trigger:hover .nav-dropdown-menu,
+.nav-dropdown-trigger:focus-within .nav-dropdown-menu,
+.nav-dropdown-trigger.open .nav-dropdown-menu,
+.nav-dropdown-menu:hover {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transform: translateY(0);
+}
+
+.nav-dropdown-card {
+    background: #FFFFFF;
+    border: 1px solid #EBE6DF;
+    border-radius: 0.75rem;
+    box-shadow: 0 18px 40px -4px rgba(0, 0, 0, 0.14), 0 8px 16px -2px rgba(0, 0, 0, 0.06);
+    overflow: hidden;
+}
+
 
 
