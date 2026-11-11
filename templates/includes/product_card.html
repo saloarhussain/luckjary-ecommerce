@@ -2,17 +2,22 @@
 <!-- Mia by Tanishq Inspired Luxury Product Card -->
 <article class="mia-product-card group bg-white rounded-2xl border border-[#EDE8E4] overflow-hidden flex flex-col justify-between hover:shadow-lg transition-all duration-300 relative" data-product-id="{{ prod.id }}">
     
-    <!-- Image & Media Container with Carousel & Badge Overlay -->
-    <div class="relative aspect-square overflow-hidden bg-[#F8F6F4]">
+    <!-- Image & Media Container with Multi-Image Carousel & Badge Overlay -->
+    <div class="relative aspect-square overflow-hidden bg-[#F8F6F4] select-none"
+         id="card-media-{{ prod.id }}"
+         data-card-id="{{ prod.id }}"
+         data-images='{{ prod.images_json|safe }}'
+         data-current="0">
         
-        <!-- Primary & Secondary Product Image -->
-        <a href="{{ prod.get_absolute_url }}" class="block w-full h-full relative">
+        <!-- Primary & Carousel Product Image -->
+        <a href="{{ prod.get_absolute_url }}" class="block w-full h-full relative" tabindex="-1">
             <img src="{{ prod.primary_image }}" 
                  alt="{{ prod.title }}" 
                  id="card-img-{{ prod.id }}" 
                  data-primary="{{ prod.primary_image }}"
                  data-secondary="{{ prod.secondary_image }}"
-                 class="w-full h-full object-cover transition-transform duration-500 ease-out group-hover:scale-105">
+                 class="w-full h-full object-cover transition-all duration-500 ease-out group-hover:scale-105"
+                 loading="lazy">
         </a>
 
         <!-- Top-Left Berry Badge (Mia "BEST SELLER ✦" style) -->
@@ -39,33 +44,39 @@
             {% endif %}
         </div>
 
-        <!-- Carousel Left / Right Arrows (Overlay on Hover) -->
-        {% if prod.secondary_image and prod.secondary_image != prod.primary_image %}
+        <!-- Carousel Left / Right Arrows (Visible on Card Hover) -->
+        {% if prod.image_list|length > 1 %}
+        <!-- Left Arrow Button -->
         <button type="button" 
-                onclick="event.preventDefault(); toggleCardImage('{{ prod.id }}', 'prev')"
-                class="absolute left-2 top-1/2 -translate-y-1/2 w-6 h-6 rounded-full bg-white/80 hover:bg-white text-neutral-800 flex items-center justify-center text-xs opacity-0 group-hover:opacity-100 transition shadow-sm z-10"
+                onclick="event.preventDefault(); event.stopPropagation(); swipeCardImage('{{ prod.id }}', -1);"
+                class="absolute left-2 sm:left-2.5 top-1/2 -translate-y-1/2 w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-white/90 hover:bg-white text-neutral-800 hover:text-black shadow-md flex items-center justify-center opacity-0 group-hover:opacity-100 hover:scale-110 active:scale-95 transition-all duration-200 z-20 cursor-pointer focus:outline-none"
                 aria-label="Previous Image">
-            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"/></svg>
+            <svg class="w-3.5 h-3.5 sm:w-4 sm:h-4 stroke-[2.5]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/>
+            </svg>
         </button>
+
+        <!-- Right Arrow Button -->
         <button type="button" 
-                onclick="event.preventDefault(); toggleCardImage('{{ prod.id }}', 'next')"
-                class="absolute right-2 top-1/2 -translate-y-1/2 w-6 h-6 rounded-full bg-white/80 hover:bg-white text-neutral-800 flex items-center justify-center text-xs opacity-0 group-hover:opacity-100 transition shadow-sm z-10"
+                onclick="event.preventDefault(); event.stopPropagation(); swipeCardImage('{{ prod.id }}', 1);"
+                class="absolute right-2 sm:right-2.5 top-1/2 -translate-y-1/2 w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-white/90 hover:bg-white text-neutral-800 hover:text-black shadow-md flex items-center justify-center opacity-0 group-hover:opacity-100 hover:scale-110 active:scale-95 transition-all duration-200 z-20 cursor-pointer focus:outline-none"
                 aria-label="Next Image">
-            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
+            <svg class="w-3.5 h-3.5 sm:w-4 sm:h-4 stroke-[2.5]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>
+            </svg>
         </button>
-        {% endif %}
 
         <!-- Image Carousel Indicator Dots/Bars -->
-        <div class="absolute bottom-2.5 inset-x-0 flex items-center justify-center gap-1 z-10 pointer-events-none">
-            <span id="dot-1-{{ prod.id }}" class="w-4 h-1 bg-white rounded-full shadow-sm transition-all"></span>
-            <span id="dot-2-{{ prod.id }}" class="w-1.5 h-1 bg-white/60 rounded-full shadow-sm transition-all"></span>
-            <span class="w-1.5 h-1 bg-white/40 rounded-full shadow-sm"></span>
-            <span class="w-1.5 h-1 bg-white/40 rounded-full shadow-sm"></span>
+        <div class="absolute bottom-2.5 inset-x-0 flex items-center justify-center gap-1.5 z-10 pointer-events-none" id="dots-container-{{ prod.id }}">
+            {% for img in prod.image_list %}
+            <span class="carousel-dot-{{ prod.id }} h-1 rounded-full shadow-sm transition-all duration-300 {% if forloop.first %}w-4 bg-white{% else %}w-1.5 bg-white/60{% endif %}"></span>
+            {% endfor %}
         </div>
+        {% endif %}
 
         <!-- Visual Search / Scan Lens Icon Button (Mia Bottom-Right style) -->
         <button type="button" 
-                onclick="event.preventDefault(); window.location.href='{% url 'catalog:product_list' %}?category={{ prod.category.slug }}'"
+                onclick="event.preventDefault(); event.stopPropagation(); window.location.href='{% url 'catalog:product_list' %}?category={{ prod.category.slug }}'"
                 class="absolute bottom-2.5 right-2.5 w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-white/95 hover:bg-white text-neutral-600 hover:text-[#932749] flex items-center justify-center shadow-md hover:scale-105 transition z-10" 
                 title="Explore similar pieces in {{ prod.category.name }}">
             <svg class="w-3.5 h-3.5 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

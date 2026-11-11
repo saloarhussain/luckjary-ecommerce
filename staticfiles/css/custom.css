@@ -1,5 +1,5 @@
 /* Luckjary Luxury Fine Jewelry - Core Stylesheet */
-@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700;800&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..900;1,6..96,400..900&family=Cinzel:wght@400;500;600;700;800;900&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,600&family=Italiana&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap');
 
 :root {
     --color-gold-primary: #C5A059;
@@ -29,6 +29,34 @@ h1, h2, h3, .font-serif {
 .font-display {
     font-family: var(--font-display);
     letter-spacing: 0.08em;
+}
+
+/* Elegant & Stylish Luckjary Brand Logo */
+.luckjary-brand-logo {
+    font-family: 'Bodoni Moda', 'Cinzel', serif;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    color: #121212;
+    text-transform: uppercase;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    display: block;
+    line-height: 1;
+}
+
+.luckjary-brand-logo:hover {
+    color: #C5A059;
+}
+
+.luckjary-brand-sub {
+    font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+    font-size: 7.5px;
+    letter-spacing: 0.34em;
+    font-weight: 700;
+    color: #C5A059;
+    text-transform: uppercase;
+    display: block;
+    margin-top: 3px;
+    line-height: 1;
 }
 
 /* Luxury Gold Button */
@@ -164,3 +192,61 @@ h1, h2, h3, .font-serif {
     font-size: 0.75rem;
     letter-spacing: 0.1em;
 }
+
+/* Metal Collection Switcher (GIVA Inspired) */
+.metal-switcher-container {
+    transition: all 0.3s ease;
+}
+
+.metal-switcher-pill {
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    letter-spacing: 0.02em;
+}
+
+.metal-switcher-pill.active-pill {
+    background-color: #366E63 !important;
+    color: #FFFFFF !important;
+    font-weight: 600;
+    box-shadow: 0 2px 8px rgba(54, 110, 99, 0.25);
+    transform: scale(1.01);
+}
+
+.metal-switcher-pill:hover:not(.active-pill) {
+    background-color: rgba(197, 160, 89, 0.08);
+    color: #121212;
+}
+
+/* Hide scrollbar for clean horizontal overflow on mobile */
+.no-scrollbar::-webkit-scrollbar {
+    display: none;
+}
+.no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+/* GIVA Header Utility Stacking & Search Bar */
+#mainSearchInput:focus {
+    box-shadow: 0 0 0 3px rgba(54, 110, 99, 0.15);
+}
+
+#pincodeHeaderTrigger {
+    transition: all 0.2s ease;
+}
+#pincodeHeaderTrigger:hover svg {
+    transform: scale(1.1);
+}
+
+/* Mia by Tanishq Inspired Product Card */
+.mia-product-card {
+    border-radius: 1rem;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.mia-product-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.07);
+}
+
+
+

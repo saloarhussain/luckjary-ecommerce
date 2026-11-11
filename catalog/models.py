@@ -270,6 +270,23 @@ class Product(models.Model):
         return sec.image_url if sec else self.primary_image
 
     @property
+    def image_list(self):
+        """Returns ordered list of all unique image URLs for this product."""
+        urls = [img.image_url for img in self.images.all() if img.image_url]
+        if not urls:
+            if self.primary_image:
+                urls.append(self.primary_image)
+            if self.secondary_image and self.secondary_image not in urls:
+                urls.append(self.secondary_image)
+        return urls
+
+    @property
+    def images_json(self):
+        """Returns JSON string of image URLs for safe carousel dataset attribute."""
+        import json
+        return json.dumps(self.image_list)
+
+    @property
     def average_rating(self):
         approved = self.reviews.filter(is_approved=True)
         if approved.exists():

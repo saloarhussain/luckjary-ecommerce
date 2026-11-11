@@ -6,6 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initMobileNavDrawer();
     initDeliveryPincode();
     initSearchPlaceholderRotation();
+    initCardTouchSwiping();
 });
 
 // 1. High-Resolution Magnifying Zoom for Product Detail Page
@@ -227,29 +228,113 @@ function initSearchPlaceholderRotation() {
     }, 2800);
 }
 
-// 7. Product Card Image Carousel Toggle (Mia by Tanishq style)
-function toggleCardImage(prodId, direction) {
+// 7. Multi-Image Product Card Swiping & Navigation (Mia by Tanishq / GIVA style)
+function swipeCardImage(prodId, direction) {
+    const mediaContainer = document.getElementById('card-media-' + prodId);
     const img = document.getElementById('card-img-' + prodId);
-    if (!img) return;
-    const primary = img.dataset.primary;
-    const secondary = img.dataset.secondary;
-    const dot1 = document.getElementById('dot-1-' + prodId);
-    const dot2 = document.getElementById('dot-2-' + prodId);
+    if (!mediaContainer || !img) return;
 
-    if (!secondary || secondary === primary) return;
-
-    // Check if showing primary
-    if (img.src === primary || img.src.includes(primary.split('?')[0])) {
-        img.src = secondary;
-        if (dot1 && dot2) {
-            dot1.className = 'w-1.5 h-1 bg-white/60 rounded-full shadow-sm transition-all';
-            dot2.className = 'w-4 h-1 bg-white rounded-full shadow-sm transition-all';
-        }
-    } else {
-        img.src = primary;
-        if (dot1 && dot2) {
-            dot1.className = 'w-4 h-1 bg-white rounded-full shadow-sm transition-all';
-            dot2.className = 'w-1.5 h-1 bg-white/60 rounded-full shadow-sm transition-all';
+    let images = [];
+    try {
+        const raw = mediaContainer.dataset.images;
+        images = typeof raw === 'string' ? JSON.parse(raw) : (raw || []);
+    } catch (e) {
+        images = [];
+    }
+    
+    // Fallback to data attributes if dataset.images isn't present
+    if (!images.length) {
+        if (img.dataset.primary) images.push(img.dataset.primary);
+        if (img.dataset.secondary && img.dataset.secondary !== img.dataset.primary) {
+            images.push(img.dataset.secondary);
         }
     }
+
+    if (images.length <= 1) return;
+
+    let currentIndex = parseInt(mediaContainer.dataset.current || '0', 10);
+    if (isNaN(currentIndex)) currentIndex = 0;
+
+    let nextIndex = (currentIndex + direction + images.length) % images.length;
+    mediaContainer.dataset.current = nextIndex;
+
+    // Smooth subtle cross-fade transition
+    img.style.opacity = '0.7';
+    img.src = images[nextIndex];
+    setTimeout(() => {
+        img.style.opacity = '1';
+    }, 120);
+
+    // Update dynamic dots
+    const dots = mediaContainer.querySelectorAll('.carousel-dot-' + prodId);
+    dots.forEach((dot, idx) => {
+        if (idx === nextIndex) {
+            dot.className = 'carousel-dot-' + prodId + ' h-1 rounded-full shadow-sm transition-all duration-300 w-4 bg-white';
+        } else {
+            dot.className = 'carousel-dot-' + prodId + ' h-1 rounded-full shadow-sm transition-all duration-300 w-1.5 bg-white/60';
+        }
+    });
+}
+
+function goToCardImage(prodId, targetIndex) {
+    const mediaContainer = document.getElementById('card-media-' + prodId);
+    const img = document.getElementById('card-img-' + prodId);
+    if (!mediaContainer || !img) return;
+
+    let images = [];
+    try {
+        const raw = mediaContainer.dataset.images;
+        images = typeof raw === 'string' ? JSON.parse(raw) : (raw || []);
+    } catch (e) {
+        images = [];
+    }
+    if (images.length <= targetIndex || targetIndex < 0) return;
+
+    mediaContainer.dataset.current = targetIndex;
+    img.style.opacity = '0.7';
+    img.src = images[targetIndex];
+    setTimeout(() => {
+        img.style.opacity = '1';
+    }, 120);
+
+    const dots = mediaContainer.querySelectorAll('.carousel-dot-' + prodId);
+    dots.forEach((dot, idx) => {
+        if (idx === targetIndex) {
+            dot.className = 'carousel-dot-' + prodId + ' h-1 rounded-full shadow-sm transition-all duration-300 w-4 bg-white';
+        } else {
+            dot.className = 'carousel-dot-' + prodId + ' h-1 rounded-full shadow-sm transition-all duration-300 w-1.5 bg-white/60';
+        }
+    });
+}
+
+function toggleCardImage(prodId, direction) {
+    swipeCardImage(prodId, direction === 'prev' ? -1 : 1);
+}
+
+// 8. Mobile Touch Swipe Gesture Support for Product Cards
+function initCardTouchSwiping() {
+    const cardMediaList = document.querySelectorAll('[id^="card-media-"]');
+    cardMediaList.forEach(container => {
+        let touchStartX = 0;
+        let touchEndX = 0;
+
+        container.addEventListener('touchstart', (e) => {
+            touchStartX = e.changedTouches[0].screenX;
+        }, { passive: true });
+
+        container.addEventListener('touchend', (e) => {
+            touchEndX = e.changedTouches[0].screenX;
+            const diff = touchEndX - touchStartX;
+            if (Math.abs(diff) > 40) {
+                const prodId = container.dataset.cardId;
+                if (prodId) {
+                    if (diff < 0) {
+                        swipeCardImage(prodId, 1); // Swipe left -> next image
+                    } else {
+                        swipeCardImage(prodId, -1); // Swipe right -> prev image
+                    }
+                }
+            }
+        }, { passive: true });
+    });
 }
