@@ -192,64 +192,7 @@
             {% if products %}
             <div class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-6">
                 {% for prod in products %}
-                <article class="product-card bg-white border border-[#E8DFD0] rounded-sm overflow-hidden flex flex-col justify-between group">
-                    <div class="relative aspect-square overflow-hidden bg-neutral-50">
-                        <a href="{{ prod.get_absolute_url }}">
-                            <img src="{{ prod.primary_image }}" alt="{{ prod.title }}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
-                            <img src="{{ prod.secondary_image }}" alt="{{ prod.title }}" class="img-secondary absolute inset-0 w-full h-full object-cover">
-                        </a>
-
-                        <!-- Badges -->
-                        <div class="absolute top-2 left-2 sm:top-3 sm:left-3 flex flex-col gap-1">
-                            {% if prod.is_bestseller %}
-                            <span class="luxury-badge text-[9px] sm:text-[10px]">Bestseller</span>
-                            {% elif prod.is_new_arrival %}
-                            <span class="luxury-badge bg-neutral-900 text-[#C5A059] border-black text-[9px] sm:text-[10px]">New</span>
-                            {% endif %}
-                            {% if prod.discount_percent > 0 %}
-                            <span class="luxury-badge bg-emerald-50 text-emerald-800 border-emerald-300 text-[9px] sm:text-[10px]">-{{ prod.discount_percent }}%</span>
-                            {% endif %}
-                        </div>
-
-                        <!-- Wishlist Toggle -->
-                        <form action="{% url 'core:toggle_wishlist' prod.id %}" method="POST" class="absolute top-2 right-2 sm:top-3 sm:right-3">
-                            {% csrf_token %}
-                            <button type="submit" class="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-white/90 backdrop-blur-sm text-neutral-700 hover:text-red-500 flex items-center justify-center shadow transition" title="Save to Wishlist">
-                                <svg class="w-3.5 h-3.5 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
-                            </button>
-                        </form>
-                    </div>
-
-                    <div class="p-3.5 sm:p-5 flex flex-col flex-1 justify-between space-y-2 sm:space-y-3">
-                        <div>
-                            <p class="text-[10px] sm:text-[11px] uppercase tracking-wider text-neutral-400 truncate">{{ prod.category.name }} • {{ prod.karat_metal }}</p>
-                            <h3 class="font-serif text-sm sm:text-base md:text-lg text-neutral-900 mt-1 line-clamp-1 group-hover:text-gold-600 transition">
-                                <a href="{{ prod.get_absolute_url }}">{{ prod.title }}</a>
-                            </h3>
-                            <div class="flex items-center space-x-1 mt-0.5 sm:mt-1 text-gold-500 text-xs">
-                                <span>★★★★★</span>
-                                <span class="text-[10px] sm:text-[11px] text-neutral-400 font-sans ml-1">({{ prod.review_count|default:"1" }})</span>
-                            </div>
-                        </div>
-
-                        <div class="pt-2 sm:pt-3 border-t border-neutral-100 flex items-center justify-between gap-1">
-                            <div>
-                                <span class="font-serif text-sm sm:text-base md:text-lg font-bold text-neutral-900">${{ prod.price }}</span>
-                                {% if prod.compare_at_price %}
-                                <span class="hidden sm:inline text-xs text-neutral-400 line-through ml-1">${{ prod.compare_at_price }}</span>
-                                {% endif %}
-                            </div>
-
-                            <form action="{% url 'orders:add_to_cart' prod.id %}" method="POST">
-                                {% csrf_token %}
-                                <input type="hidden" name="quantity" value="1">
-                                <button type="submit" class="btn-outline-gold px-2.5 sm:px-3 py-1 sm:py-1.5 text-[10px] sm:text-[11px] font-display uppercase tracking-wider font-semibold rounded-sm">
-                                    + Bag
-                                </button>
-                            </form>
-                        </div>
-                    </div>
-                </article>
+                    {% include 'includes/product_card.html' %}
                 {% endfor %}
             </div>
 

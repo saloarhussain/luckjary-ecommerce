@@ -226,3 +226,30 @@ function initSearchPlaceholderRotation() {
         }
     }, 2800);
 }
+
+// 7. Product Card Image Carousel Toggle (Mia by Tanishq style)
+function toggleCardImage(prodId, direction) {
+    const img = document.getElementById('card-img-' + prodId);
+    if (!img) return;
+    const primary = img.dataset.primary;
+    const secondary = img.dataset.secondary;
+    const dot1 = document.getElementById('dot-1-' + prodId);
+    const dot2 = document.getElementById('dot-2-' + prodId);
+
+    if (!secondary || secondary === primary) return;
+
+    // Check if showing primary
+    if (img.src === primary || img.src.includes(primary.split('?')[0])) {
+        img.src = secondary;
+        if (dot1 && dot2) {
+            dot1.className = 'w-1.5 h-1 bg-white/60 rounded-full shadow-sm transition-all';
+            dot2.className = 'w-4 h-1 bg-white rounded-full shadow-sm transition-all';
+        }
+    } else {
+        img.src = primary;
+        if (dot1 && dot2) {
+            dot1.className = 'w-4 h-1 bg-white rounded-full shadow-sm transition-all';
+            dot2.className = 'w-1.5 h-1 bg-white/60 rounded-full shadow-sm transition-all';
+        }
+    }
+}
