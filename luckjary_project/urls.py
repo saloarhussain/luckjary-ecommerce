@@ -8,7 +8,7 @@ admin.site.site_header = "Luckjary Haute Joaillerie Administration"
 admin.site.site_title = "Luckjary Atelier Portal"
 admin.site.index_title = "Atelier & Order Operations"
 
-# Inject live atelier metrics into Admin Dashboard Index
+# Inject live Shopify-style metrics into Admin Dashboard Index
 original_admin_index = admin.site.index
 
 def atelier_admin_index(request, extra_context=None):
@@ -16,16 +16,29 @@ def atelier_admin_index(request, extra_context=None):
     try:
         from orders.models import Order
         from catalog.models import Product
+        from accounts.models import CustomUser
         from django.db.models import Sum
         
         rev = Order.objects.aggregate(Sum('total_amount'))['total_amount__sum'] or 0
+        total_orders = Order.objects.count()
+        pending = Order.objects.filter(status='PENDING').count()
+        processing = Order.objects.filter(status='PROCESSING').count()
+        shipped = Order.objects.filter(status='SHIPPED').count()
+        delivered = Order.objects.filter(status='DELIVERED').count()
+        
+        avg_aov = (rev / total_orders) if total_orders > 0 else 0
+        
         extra['total_revenue'] = f"{rev:,.2f}"
-        extra['total_orders'] = Order.objects.count()
-        extra['pending_count'] = Order.objects.filter(status='PENDING').count()
-        extra['processing_count'] = Order.objects.filter(status='PROCESSING').count()
-        extra['shipped_count'] = Order.objects.filter(status='SHIPPED').count()
-        extra['delivered_count'] = Order.objects.filter(status='DELIVERED').count()
+        extra['total_orders'] = total_orders
+        extra['pending_count'] = pending
+        extra['processing_count'] = processing
+        extra['unfulfilled_count'] = pending + processing
+        extra['shipped_count'] = shipped
+        extra['delivered_count'] = delivered
+        extra['avg_aov'] = f"{avg_aov:,.2f}"
         extra['total_products'] = Product.objects.count()
+        extra['total_customers'] = CustomUser.objects.count()
+        extra['recent_orders'] = Order.objects.order_by('-created_at')[:6]
     except Exception:
         pass
     return original_admin_index(request, extra_context=extra)

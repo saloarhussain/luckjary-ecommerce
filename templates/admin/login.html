@@ -1,0 +1,98 @@
+{% extends "admin/base_site.html" %}
+{% load i18n static %}
+
+{% block branding %}
+<!-- Empty branding on login page to avoid header fast-nav overflow -->
+{% endblock %}
+
+{% block userlinks %}{% endblock %}
+{% block nav-global %}{% endblock %}
+{% block nav-sidebar %}{% endblock %}
+{% block breadcrumbs %}{% endblock %}
+
+{% block content %}
+<div class="shopify-login-wrapper">
+    <div class="shopify-login-card">
+        <!-- Brand Header -->
+        <div class="shopify-login-header">
+            <div class="shopify-login-logo">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#C5A059" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                    <polygon points="6 3 18 3 22 9 12 22 2 9 6 3"></polygon>
+                    <line x1="11" y1="3" x2="8" y2="9"></line>
+                    <line x1="13" y1="3" x2="16" y2="9"></line>
+                    <line x1="2" y1="9" x2="22" y2="9"></line>
+                    <line x1="12" y1="22" x2="8" y2="9"></line>
+                    <line x1="12" y1="22" x2="16" y2="9"></line>
+                </svg>
+            </div>
+            <h1 class="shopify-login-title">Luckjary Atelier</h1>
+            <p class="shopify-login-subtitle">Sign in to manage your luxury store & orders</p>
+        </div>
+
+        {% if form.errors and not form.non_field_errors %}
+        <div class="shopify-alert error">
+            {% if form.errors.items|length == 1 %}{% translate "Please correct the error below." %}{% else %}{% translate "Please correct the errors below." %}{% endif %}
+        </div>
+        {% endif %}
+
+        {% if form.non_field_errors %}
+        {% for error in form.non_field_errors %}
+        <div class="shopify-alert error">
+            {{ error }}
+        </div>
+        {% endfor %}
+        {% endif %}
+
+        <!-- Quick 1-Click Autofill Banner -->
+        <div class="shopify-autofill-banner" onclick="autofillDemoCredentials()" title="Click to autofill director credentials">
+            <div class="autofill-badge">⚡ Quick Sign-In</div>
+            <div class="autofill-text">
+                <strong>Eleanor Vanderbilt (Director)</strong><br>
+                <span>admin@luckjary.com &bull; admin12345</span>
+            </div>
+            <button type="button" class="autofill-btn">Autofill</button>
+        </div>
+
+        <!-- Login Form -->
+        <form action="{{ app_path }}" method="post" id="login-form" class="shopify-form">
+            {% csrf_token %}
+            <div class="shopify-field">
+                <label for="id_username">Email Address</label>
+                <input type="text" name="username" autofocus autocapitalize="none" autocomplete="username" maxlength="254" required id="id_username" placeholder="name@luckjary.com">
+            </div>
+
+            <div class="shopify-field">
+                <div class="shopify-field-header">
+                    <label for="id_password">Password</label>
+                </div>
+                <input type="password" name="password" autocomplete="current-password" required id="id_password" placeholder="••••••••">
+            </div>
+
+            <input type="hidden" name="next" value="{{ next }}">
+
+            <button type="submit" class="shopify-submit-btn">
+                <span>Sign In to Admin</span> &rarr;
+            </button>
+        </form>
+
+        <div class="shopify-login-footer">
+            <a href="{% url 'core:home' %}" target="_blank" class="storefront-link">
+                &larr; View Live Boutique Storefront
+            </a>
+        </div>
+    </div>
+</div>
+
+<script>
+function autofillDemoCredentials() {
+    var emailInput = document.getElementById('id_username');
+    var passInput = document.getElementById('id_password');
+    if (emailInput && passInput) {
+        emailInput.value = 'admin@luckjary.com';
+        passInput.value = 'admin12345';
+        emailInput.style.borderColor = '#C5A059';
+        passInput.style.borderColor = '#C5A059';
+    }
+}
+</script>
+{% endblock %}

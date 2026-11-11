@@ -1,0 +1,1191 @@
+/* ==========================================================================
+   LUCKJARY ATELIER — SHOPIFY POLARIS ADMIN THEME
+   An authentic, ultra-clean Shopify Admin Experience for Fine Jewelry
+   ========================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Cinzel:wght@600;700&display=swap');
+
+/* --- SHOPIFY POLARIS DESIGN TOKENS --- */
+:root {
+    --shopify-bg: #0B0C0E;
+    --shopify-card-bg: #14161C;
+    --shopify-card-border: #232732;
+    --shopify-card-hover: #1A1D26;
+    
+    --shopify-header-bg: #0F1015;
+    --shopify-sidebar-bg: #111217;
+    --shopify-sidebar-border: #1E212B;
+    
+    --shopify-text-primary: #FFFFFF;
+    --shopify-text-secondary: #9497A1;
+    --shopify-text-muted: #646875;
+    
+    --shopify-green: #10B981;
+    --shopify-green-hover: #059669;
+    --shopify-green-glow: 0 2px 10px rgba(16, 185, 129, 0.25);
+    
+    --shopify-gold: #C5A059;
+    --shopify-gold-light: #DFBE76;
+    
+    --shopify-amber: #F59E0B;
+    --shopify-blue: #3B82F6;
+    --shopify-indigo: #6366F1;
+    --shopify-rose: #F43F5E;
+    
+    --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    --font-display: 'Cinzel', serif;
+    
+    /* Django Admin Variable Overrides */
+    --primary: #10B981;
+    --primary-fg: #FFFFFF;
+    --secondary: #14161C;
+    --accent: #C5A059;
+    --body-bg: var(--shopify-bg);
+    --body-fg: var(--shopify-text-primary);
+    --body-quiet-color: var(--shopify-text-secondary);
+    --header-bg: var(--shopify-header-bg);
+    --breadcrumbs-bg: #121319;
+    --breadcrumbs-link-fg: var(--shopify-gold-light);
+    --link-fg: #38BDF8;
+    --link-hover-color: #7DD3FC;
+    --hairline-color: var(--shopify-card-border);
+    --border-color: var(--shopify-card-border);
+    --selected-row: rgba(16, 185, 129, 0.08);
+    --button-bg: #10B981;
+    --button-hover-bg: #059669;
+    --button-fg: #FFFFFF;
+}
+
+[data-theme="dark"], :root[data-theme="dark"] {
+    --body-bg: var(--shopify-bg);
+    --header-bg: var(--shopify-header-bg);
+    --breadcrumbs-bg: #121319;
+    --selected-bg: #1A1D26;
+}
+
+/* Base resets */
+body {
+    font-family: var(--font-sans) !important;
+    background-color: var(--shopify-bg) !important;
+    color: var(--shopify-text-primary) !important;
+    -webkit-font-smoothing: antialiased;
+    letter-spacing: -0.01em;
+}
+
+/* --- SHOPIFY GLOBAL TOP BAR --- */
+#header {
+    background: var(--shopify-header-bg) !important;
+    border-bottom: 1px solid var(--shopify-sidebar-border) !important;
+    padding: 0 1.25rem !important;
+    height: 56px !important;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.shopify-top-bar {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+}
+
+.shopify-store-identity {
+    display: flex;
+    align-items: center;
+}
+
+.store-brand-link {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    text-decoration: none !important;
+}
+
+.store-icon-box {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    background: #1C1F29;
+    border: 1px solid #2D3242;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.store-name-col {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+}
+
+.store-title {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #FFFFFF;
+    letter-spacing: -0.01em;
+}
+
+.store-badge {
+    font-size: 0.65rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    background: rgba(197, 160, 89, 0.15);
+    color: var(--shopify-gold-light);
+    border: 1px solid rgba(197, 160, 89, 0.3);
+    padding: 0.15rem 0.45rem;
+    border-radius: 4px;
+}
+
+/* Center Search (Shopify Polaris Universal Search Bar) */
+.shopify-center-search {
+    flex: 1;
+    max-width: 480px;
+}
+
+.search-input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+.search-input-wrapper .search-icon {
+    position: absolute;
+    left: 10px;
+    pointer-events: none;
+}
+
+.search-input-wrapper input {
+    width: 100% !important;
+    background: #181A22 !important;
+    border: 1px solid #282C38 !important;
+    border-radius: 8px !important;
+    padding: 0.45rem 2.5rem 0.45rem 2.1rem !important;
+    color: #FFFFFF !important;
+    font-size: 0.8rem !important;
+    transition: all 0.2s ease;
+}
+
+.search-input-wrapper input:focus {
+    background: #1C1F2A !important;
+    border-color: var(--shopify-green) !important;
+    outline: none !important;
+    box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.2) !important;
+}
+
+.kbd-shortcut {
+    position: absolute;
+    right: 8px;
+    font-size: 0.68rem;
+    font-family: monospace;
+    font-weight: 600;
+    color: #71717A;
+    background: #242734;
+    border: 1px solid #33384A;
+    padding: 0.15rem 0.35rem;
+    border-radius: 4px;
+    pointer-events: none;
+}
+
+/* Right Top Bar Actions */
+.shopify-top-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.shopify-action-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #D1D5DB !important;
+    background: #191B24;
+    border: 1px solid #282C3A;
+    padding: 0.35rem 0.75rem;
+    border-radius: 6px;
+    text-decoration: none !important;
+    transition: all 0.15s ease;
+}
+
+.shopify-action-pill:hover {
+    background: #212430;
+    border-color: #3B4052;
+    color: #FFFFFF !important;
+}
+
+.shopify-action-pill.oms-pill {
+    background: rgba(16, 185, 129, 0.12);
+    border-color: rgba(16, 185, 129, 0.3);
+    color: #34D399 !important;
+}
+
+.shopify-action-pill.oms-pill:hover {
+    background: rgba(16, 185, 129, 0.2);
+    border-color: var(--shopify-green);
+}
+
+.pulse-indicator {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background-color: #10B981;
+    box-shadow: 0 0 6px #10B981;
+    display: inline-block;
+}
+
+/* User chip */
+.shopify-user-chip {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.25rem 0.5rem;
+    border-radius: 6px;
+    background: #161820;
+    border: 1px solid #262936;
+}
+
+.user-avatar-circle {
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: #282C3A;
+    color: var(--shopify-gold-light);
+    font-size: 0.72rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.user-text-col {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.1;
+}
+
+.user-name {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #FFFFFF;
+}
+
+.user-role {
+    font-size: 0.65rem;
+    color: #9CA3AF;
+}
+
+#user-tools {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 0.76rem !important;
+}
+
+#user-tools a {
+    color: #9CA3AF !important;
+    text-decoration: none !important;
+}
+
+#user-tools a:hover {
+    color: #FFFFFF !important;
+}
+
+/* --- SHOPIFY LEFT SIDEBAR (#nav-sidebar) --- */
+#nav-sidebar {
+    background: var(--shopify-sidebar-bg) !important;
+    border-right: 1px solid var(--shopify-sidebar-border) !important;
+    padding-top: 0.5rem !important;
+}
+
+#nav-sidebar .module caption,
+#nav-sidebar .module h2 {
+    font-size: 0.68rem !important;
+    font-weight: 700 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.08em !important;
+    color: #6B7280 !important;
+    background: transparent !important;
+    padding: 0.75rem 1rem 0.35rem 1rem !important;
+    border: none !important;
+}
+
+#nav-sidebar .module th,
+#nav-sidebar .module td {
+    padding: 0.35rem 0.75rem !important;
+    border: none !important;
+}
+
+#nav-sidebar a:link, 
+#nav-sidebar a:visited {
+    color: #D1D5DB !important;
+    font-size: 0.82rem !important;
+    font-weight: 500 !important;
+    padding: 0.4rem 0.65rem !important;
+    border-radius: 6px !important;
+    display: block !important;
+    transition: all 0.15s ease;
+    text-decoration: none !important;
+}
+
+#nav-sidebar tr:hover a {
+    background: #1C1F2B !important;
+    color: #FFFFFF !important;
+}
+
+#nav-sidebar tr.current-model a {
+    background: #242838 !important;
+    color: #FFFFFF !important;
+    font-weight: 600 !important;
+}
+
+#nav-filter {
+    background: #161822 !important;
+    border: 1px solid #2A2E3E !important;
+    color: #FFFFFF !important;
+    border-radius: 6px !important;
+    padding: 0.4rem 0.65rem !important;
+    margin: 0.5rem 0.75rem !important;
+    width: calc(100% - 1.5rem) !important;
+    font-size: 0.76rem !important;
+}
+
+/* --- BREADCRUMBS --- */
+div.breadcrumbs {
+    background: #0E0F14 !important;
+    border-bottom: 1px solid #1E212B !important;
+    padding: 0.65rem 1.75rem !important;
+    font-size: 0.75rem !important;
+    color: #6B7280 !important;
+}
+
+div.breadcrumbs a {
+    color: #9CA3AF !important;
+    text-decoration: none !important;
+}
+
+div.breadcrumbs a:hover {
+    color: #FFFFFF !important;
+}
+
+/* --- SHOPIFY DASHBOARD CONTAINER --- */
+.shopify-dashboard-container {
+    max-width: 1240px;
+    margin: 0 auto;
+    padding-bottom: 2rem;
+}
+
+.shopify-page-header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.shopify-page-title {
+    font-size: 1.55rem !important;
+    font-weight: 700 !important;
+    color: #FFFFFF !important;
+    margin: 0 0 0.25rem 0 !important;
+    letter-spacing: -0.02em !important;
+}
+
+.shopify-page-subtitle {
+    font-size: 0.82rem;
+    color: #9CA3AF;
+    margin: 0;
+}
+
+.shopify-header-cta-group {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+}
+
+.shopify-btn-primary {
+    background: #10B981 !important;
+    color: #FFFFFF !important;
+    font-size: 0.78rem !important;
+    font-weight: 600 !important;
+    padding: 0.5rem 1rem !important;
+    border-radius: 6px !important;
+    text-decoration: none !important;
+    border: 1px solid #059669 !important;
+    box-shadow: var(--shopify-green-glow);
+    transition: all 0.15s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+}
+
+.shopify-btn-primary:hover {
+    background: #059669 !important;
+    transform: translateY(-1px);
+}
+
+.shopify-btn-secondary {
+    background: #1C1F2B !important;
+    color: #D1D5DB !important;
+    font-size: 0.78rem !important;
+    font-weight: 600 !important;
+    padding: 0.5rem 1rem !important;
+    border-radius: 6px !important;
+    text-decoration: none !important;
+    border: 1px solid #2E3345 !important;
+    transition: all 0.15s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+.shopify-btn-secondary:hover {
+    background: #25293A !important;
+    color: #FFFFFF !important;
+}
+
+/* Shopify Metric Cards Grid */
+.shopify-metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.shopify-metric-card {
+    background: var(--shopify-card-bg);
+    border: 1px solid var(--shopify-card-border);
+    border-radius: 10px;
+    padding: 1.15rem;
+    transition: transform 0.15s ease, border-color 0.15s ease;
+}
+
+.shopify-metric-card:hover {
+    border-color: #383E50;
+    transform: translateY(-1px);
+}
+
+.shopify-metric-card.alert-card {
+    border-color: rgba(245, 158, 11, 0.35);
+    background: rgba(245, 158, 11, 0.04);
+}
+
+.metric-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 0.4rem;
+}
+
+.metric-label {
+    font-size: 0.76rem;
+    font-weight: 600;
+    color: #9CA3AF;
+}
+
+.metric-trend.positive {
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: #10B981;
+    background: rgba(16, 185, 129, 0.12);
+    padding: 0.15rem 0.4rem;
+    border-radius: 4px;
+}
+
+.metric-tag {
+    font-size: 0.68rem;
+    color: #6B7280;
+}
+
+.metric-badge-amber {
+    font-size: 0.68rem;
+    font-weight: 700;
+    color: #FBBF24;
+    background: rgba(245, 158, 11, 0.15);
+    padding: 0.15rem 0.45rem;
+    border-radius: 4px;
+}
+
+.metric-value {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: #FFFFFF;
+    letter-spacing: -0.02em;
+}
+
+.metric-value.text-amber {
+    color: #FBBF24;
+}
+
+.metric-footer {
+    margin-top: 0.5rem;
+    font-size: 0.72rem;
+    color: #9CA3AF;
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+}
+
+.metric-footer a {
+    color: #38BDF8;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.metric-footer a:hover {
+    text-decoration: underline;
+}
+
+.text-emerald {
+    color: #10B981 !important;
+}
+
+/* Shopify Card */
+.shopify-card {
+    background: var(--shopify-card-bg);
+    border: 1px solid var(--shopify-card-border);
+    border-radius: 10px;
+    margin-bottom: 1.5rem;
+    overflow: hidden;
+}
+
+.shopify-card .card-header {
+    padding: 1rem 1.25rem;
+    border-bottom: 1px solid var(--shopify-card-border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.card-title-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.shopify-card .card-title {
+    font-size: 0.92rem;
+    font-weight: 700;
+    color: #FFFFFF;
+    margin: 0;
+}
+
+.card-badge {
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: #FBBF24;
+    background: rgba(245, 158, 11, 0.12);
+    padding: 0.2rem 0.55rem;
+    border-radius: 9999px;
+    border: 1px solid rgba(245, 158, 11, 0.3);
+}
+
+.card-link {
+    font-size: 0.76rem;
+    color: #38BDF8;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.card-link:hover {
+    text-decoration: underline;
+}
+
+/* Action Feed Items (Things to Do) */
+.action-items-list {
+    display: flex;
+    flex-direction: column;
+}
+
+.action-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1rem 1.25rem;
+    border-bottom: 1px solid #1C1F2B;
+    transition: background 0.15s ease;
+}
+
+.action-item:last-child {
+    border-bottom: none;
+}
+
+.action-item:hover {
+    background: #171922;
+}
+
+.action-item-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.action-item-icon.amber {
+    background: rgba(245, 158, 11, 0.15);
+    color: #FBBF24;
+}
+
+.action-item-icon.blue {
+    background: rgba(59, 130, 246, 0.15);
+    color: #60A5FA;
+}
+
+.action-item-content {
+    flex: 1;
+}
+
+.action-item-title {
+    font-size: 0.84rem;
+    font-weight: 600;
+    color: #FFFFFF;
+}
+
+.action-item-desc {
+    font-size: 0.74rem;
+    color: #9CA3AF;
+    margin-top: 0.15rem;
+}
+
+.shopify-btn-sm {
+    font-size: 0.74rem;
+    font-weight: 600;
+    padding: 0.35rem 0.75rem;
+    border-radius: 6px;
+    text-decoration: none !important;
+    white-space: nowrap;
+}
+
+.shopify-btn-sm.primary {
+    background: #10B981;
+    color: #FFFFFF !important;
+}
+
+.shopify-btn-sm.primary:hover {
+    background: #059669;
+}
+
+.shopify-btn-sm.secondary {
+    background: #1F222F;
+    color: #D1D5DB !important;
+    border: 1px solid #2E3345;
+}
+
+.shopify-btn-sm.secondary:hover {
+    background: #282C3D;
+    color: #FFFFFF !important;
+}
+
+/* Shopify Polaris Table */
+.shopify-table-responsive {
+    overflow-x: auto;
+}
+
+.shopify-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.8rem;
+}
+
+.shopify-table th {
+    background: #181A22;
+    padding: 0.75rem 1rem;
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: #9CA3AF;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border-bottom: 1px solid var(--shopify-card-border);
+    text-align: left;
+}
+
+.shopify-table td {
+    padding: 0.85rem 1rem;
+    border-bottom: 1px solid #1C1F2B;
+    color: #D1D5DB;
+    vertical-align: middle;
+}
+
+.shopify-table tr:hover td {
+    background: #181B24;
+}
+
+.order-link {
+    font-family: monospace;
+    font-weight: 700;
+    color: #FFFFFF;
+    text-decoration: none;
+    background: #1E212E;
+    padding: 0.2rem 0.45rem;
+    border-radius: 4px;
+    border: 1px solid #2B3042;
+}
+
+.order-link:hover {
+    border-color: var(--shopify-gold);
+    color: var(--shopify-gold-light);
+}
+
+.customer-cell {
+    display: flex;
+    flex-direction: column;
+}
+
+.customer-name {
+    font-weight: 600;
+    color: #FFFFFF;
+}
+
+.customer-email {
+    font-size: 0.72rem;
+    color: #9CA3AF;
+}
+
+/* Shopify Status Badges (Pills) */
+.shopify-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-size: 0.7rem;
+    font-weight: 600;
+    padding: 0.2rem 0.55rem;
+    border-radius: 9999px;
+    white-space: nowrap;
+}
+
+.shopify-badge.green {
+    background: rgba(16, 185, 129, 0.12);
+    color: #34D399;
+    border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.shopify-badge.amber {
+    background: rgba(245, 158, 11, 0.12);
+    color: #FBBF24;
+    border: 1px solid rgba(245, 158, 11, 0.3);
+}
+
+.shopify-badge.blue {
+    background: rgba(59, 130, 246, 0.12);
+    color: #60A5FA;
+    border: 1px solid rgba(59, 130, 246, 0.3);
+}
+
+.shopify-badge.indigo {
+    background: rgba(99, 102, 241, 0.15);
+    color: #A5B4FC;
+    border: 1px solid rgba(99, 102, 241, 0.35);
+}
+
+.table-action-link {
+    font-size: 0.75rem;
+    color: #38BDF8;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.table-action-link:hover {
+    text-decoration: underline;
+}
+
+/* Shopify Channels Grid */
+.shopify-channels-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1rem;
+}
+
+.channel-card {
+    background: var(--shopify-card-bg);
+    border: 1px solid var(--shopify-card-border);
+    border-radius: 10px;
+    padding: 1.15rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    text-decoration: none !important;
+    transition: all 0.15s ease;
+}
+
+.channel-card:hover {
+    background: var(--shopify-card-hover);
+    border-color: #383E50;
+    transform: translateY(-2px);
+}
+
+.channel-icon-box {
+    width: 44px;
+    height: 44px;
+    border-radius: 10px;
+    background: #1A1D27;
+    border: 1px solid #2B3042;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.channel-title {
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: #FFFFFF;
+    margin: 0;
+}
+
+.channel-desc {
+    font-size: 0.73rem;
+    color: #9CA3AF;
+    margin: 0.2rem 0 0 0;
+}
+
+/* --- CHANGELIST (ORDERS & PRODUCTS) TABLE STYLING --- */
+#changelist .results {
+    background: var(--shopify-card-bg) !important;
+    border: 1px solid var(--shopify-card-border) !important;
+    border-radius: 10px !important;
+    overflow: hidden !important;
+}
+
+#result_list thead th {
+    background: #181A22 !important;
+    border-bottom: 1px solid var(--shopify-card-border) !important;
+    color: #9CA3AF !important;
+    font-size: 0.72rem !important;
+    font-weight: 600 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.05em !important;
+    padding: 0.75rem 1rem !important;
+}
+
+#result_list tbody tr {
+    background: var(--shopify-card-bg) !important;
+    border-bottom: 1px solid #1C1F2B !important;
+}
+
+#result_list tbody tr:hover {
+    background: #181B24 !important;
+}
+
+#result_list tbody td, 
+#result_list tbody th {
+    padding: 0.85rem 1rem !important;
+    font-size: 0.82rem !important;
+    color: #D1D5DB !important;
+}
+
+/* Buttons in Changelist */
+.object-tools a {
+    background: #10B981 !important;
+    color: #FFFFFF !important;
+    border-radius: 6px !important;
+    padding: 0.5rem 1rem !important;
+    font-size: 0.78rem !important;
+    font-weight: 600 !important;
+    border: 1px solid #059669 !important;
+    box-shadow: var(--shopify-green-glow);
+}
+
+.object-tools a:hover {
+    background: #059669 !important;
+}
+
+/* --- SHOPIFY LOGIN PAGE STYLES --- */
+.shopify-login-wrapper {
+    min-height: 85vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 1rem;
+}
+
+.shopify-login-card {
+    width: 100%;
+    max-width: 440px;
+    background: #14161C;
+    border: 1px solid #282C38;
+    border-radius: 14px;
+    padding: 2.25rem;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+}
+
+.shopify-login-header {
+    text-align: center;
+    margin-bottom: 1.75rem;
+}
+
+.shopify-login-logo {
+    width: 52px;
+    height: 52px;
+    background: #1B1E28;
+    border: 1px solid #2D3344;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1rem auto;
+}
+
+.shopify-login-title {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: #FFFFFF;
+    margin: 0 0 0.35rem 0;
+    letter-spacing: -0.01em;
+}
+
+.shopify-login-subtitle {
+    font-size: 0.82rem;
+    color: #9CA3AF;
+    margin: 0;
+}
+
+/* Autofill Banner */
+.shopify-autofill-banner {
+    background: rgba(16, 185, 129, 0.08);
+    border: 1px solid rgba(16, 185, 129, 0.3);
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.shopify-autofill-banner:hover {
+    background: rgba(16, 185, 129, 0.15);
+    border-color: #10B981;
+}
+
+.autofill-badge {
+    font-size: 0.68rem;
+    font-weight: 700;
+    color: #10B981;
+    text-transform: uppercase;
+}
+
+.autofill-text {
+    font-size: 0.74rem;
+    color: #D1D5DB;
+    line-height: 1.3;
+}
+
+.autofill-text strong {
+    color: #FFFFFF;
+}
+
+.autofill-btn {
+    background: #10B981;
+    color: #FFFFFF;
+    font-size: 0.72rem;
+    font-weight: 700;
+    border: none;
+    border-radius: 4px;
+    padding: 0.3rem 0.65rem;
+    cursor: pointer;
+}
+
+/* Login Form Inputs */
+.shopify-form .shopify-field {
+    margin-bottom: 1.25rem;
+}
+
+.shopify-form label {
+    display: block;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: #D1D5DB;
+    margin-bottom: 0.4rem;
+}
+
+.shopify-form input[type="text"],
+.shopify-form input[type="password"] {
+    width: 100% !important;
+    background: #181A22 !important;
+    border: 1px solid #2B3040 !important;
+    border-radius: 8px !important;
+    padding: 0.65rem 0.85rem !important;
+    font-size: 0.85rem !important;
+    color: #FFFFFF !important;
+    transition: all 0.15s ease;
+    box-sizing: border-box !important;
+}
+
+.shopify-form input[type="text"]:focus,
+.shopify-form input[type="password"]:focus {
+    background: #1C1F2B !important;
+    border-color: #10B981 !important;
+    outline: none !important;
+    box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.2) !important;
+}
+
+.shopify-submit-btn {
+    width: 100%;
+    background: #10B981 !important;
+    color: #FFFFFF !important;
+    font-size: 0.85rem !important;
+    font-weight: 700 !important;
+    padding: 0.75rem 1rem !important;
+    border-radius: 8px !important;
+    border: 1px solid #059669 !important;
+    cursor: pointer;
+    box-shadow: var(--shopify-green-glow);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-top: 1.5rem;
+    transition: all 0.15s ease;
+}
+
+.shopify-submit-btn:hover {
+    background: #059669 !important;
+    transform: translateY(-1px);
+}
+
+.shopify-login-footer {
+    text-align: center;
+    margin-top: 1.5rem;
+    border-top: 1px solid #1F222E;
+    padding-top: 1.25rem;
+}
+
+.storefront-link {
+    font-size: 0.76rem;
+    color: #9CA3AF;
+    text-decoration: none;
+    transition: color 0.15s;
+}
+
+.storefront-link:hover {
+    color: #38BDF8;
+}
+
+.shopify-alert {
+    padding: 0.65rem 0.85rem;
+    border-radius: 6px;
+    font-size: 0.78rem;
+    margin-bottom: 1.25rem;
+}
+
+.shopify-alert.error {
+    background: rgba(239, 68, 68, 0.12);
+    border: 1px solid rgba(239, 68, 68, 0.35);
+    color: #F87171;
+}
+
+
+/* --- LUXURY & SHOPIFY BADGE HELPERS --- */
+.badge-luxury {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    padding: 0.25rem 0.65rem;
+    border-radius: 9999px;
+    white-space: nowrap;
+    text-transform: uppercase;
+}
+
+.badge-pending {
+    background: rgba(245, 158, 11, 0.12);
+    color: #FBBF24;
+    border: 1px solid rgba(245, 158, 11, 0.35);
+}
+
+.badge-processing {
+    background: rgba(59, 130, 246, 0.12);
+    color: #60A5FA;
+    border: 1px solid rgba(59, 130, 246, 0.35);
+}
+
+.badge-shipped {
+    background: rgba(99, 102, 241, 0.15);
+    color: #A5B4FC;
+    border: 1px solid rgba(99, 102, 241, 0.4);
+}
+
+.badge-delivered {
+    background: rgba(16, 185, 129, 0.14);
+    color: #34D399;
+    border: 1px solid rgba(16, 185, 129, 0.35);
+}
+
+.badge-cancelled {
+    background: rgba(239, 68, 68, 0.12);
+    color: #F87171;
+    border: 1px solid rgba(239, 68, 68, 0.35);
+}
+
+.badge-paid {
+    background: rgba(16, 185, 129, 0.12);
+    color: #34D399;
+    border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.price-gold {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #FFFFFF;
+}
+
+.order-pill {
+    font-family: monospace;
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: #FFFFFF;
+    background: #1C1F2B;
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+    border: 1px solid #2B3042;
+}
+
+.carrier-pill {
+    font-size: 0.72rem;
+    color: #C6C6D6;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+}
+
+.tracking-link {
+    font-family: monospace;
+    font-size: 0.7rem;
+    color: #38BDF8 !important;
+    text-decoration: underline !important;
+}
+
+.tracking-link:hover {
+    color: #FFFFFF !important;
+}
+
+.admin-thumb {
+    width: 44px;
+    height: 44px;
+    border-radius: 6px;
+    object-fit: cover;
+    border: 1px solid #2B3042;
+    transition: transform 0.2s ease;
+}
+
+.admin-thumb:hover {
+    transform: scale(1.6);
+    z-index: 10;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.6);
+}
