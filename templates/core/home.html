@@ -25,16 +25,16 @@
             </span>
         </div>
 
-        <h1 class="font-serif text-4xl sm:text-6xl md:text-7xl font-light tracking-wide leading-tight text-[#FAF9F6]">
+        <h1 class="font-sans text-3xl sm:text-5xl md:text-6xl font-bold tracking-tight leading-tight text-[#FAF9F6]">
             {% if active_metal == 'silver' %}
             Lustrous Silver.<br>
-            <span class="italic font-normal gold-gradient-text">Radiant for Every Moment.</span>
+            <span class="font-bold gold-gradient-text">Radiant for Every Moment.</span>
             {% elif active_metal == 'demifine' %}
             Modern Demifine.<br>
-            <span class="italic font-normal gold-gradient-text">Sublime Everyday Luxury.</span>
+            <span class="font-bold gold-gradient-text">Sublime Everyday Luxury.</span>
             {% else %}
             Crafted for Eternity.<br>
-            <span class="italic font-normal gold-gradient-text">Worn for a Lifetime.</span>
+            <span class="font-bold gold-gradient-text">Worn for a Lifetime.</span>
             {% endif %}
         </h1>
 
@@ -98,8 +98,8 @@
 <!-- Categories Grid -->
 <section class="py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="text-center max-w-xl mx-auto mb-14 space-y-2">
-        <span class="text-xs font-display tracking-[0.25em] text-[#C5A059] uppercase font-semibold">Curation</span>
-        <h2 class="font-serif text-3xl sm:text-4xl text-neutral-900">Explore by Category</h2>
+        <span class="text-[11px] sm:text-xs font-bold tracking-[0.2em] text-[#C5A059] uppercase font-sans">Curation</span>
+        <h2 class="text-2xl sm:text-3xl lg:text-4xl font-bold text-neutral-900 tracking-tight font-sans">Explore by Category</h2>
         <div class="w-12 h-0.5 bg-[#C5A059] mx-auto mt-2"></div>
     </div>
 
@@ -109,7 +109,7 @@
             <img src="{{ cat.image_url }}" alt="{{ cat.name }}" class="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110">
             <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
             <div class="absolute bottom-4 left-4 right-4 text-center">
-                <h3 class="font-display text-sm tracking-widest text-white uppercase font-medium group-hover:text-[#C5A059] transition">{{ cat.name }}</h3>
+                <h3 class="font-sans text-sm tracking-wide text-white uppercase font-bold group-hover:text-[#C5A059] transition">{{ cat.name }}</h3>
                 <span class="text-[10px] text-neutral-300 uppercase tracking-widest font-sans inline-block mt-0.5">Explore &rarr;</span>
             </div>
         </a>
@@ -122,18 +122,18 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex flex-col md:flex-row md:items-end justify-between mb-12">
             <div>
-                <span class="text-xs font-display tracking-[0.25em] text-[#C5A059] uppercase font-semibold">
+                <span class="text-[11px] sm:text-xs font-bold tracking-[0.2em] text-[#C5A059] uppercase block font-sans">
                     {% if active_metal == 'silver' %}Sterling Silver Collection
                     {% elif active_metal == 'demifine' %}Gold Vermeil Collection
                     {% else %}Iconic Creations{% endif %}
                 </span>
-                <h2 class="font-serif text-3xl sm:text-4xl text-neutral-900 mt-1">
+                <h2 class="text-2xl sm:text-3xl lg:text-4xl font-bold text-neutral-900 tracking-tight mt-1 font-sans">
                     {% if active_metal == 'silver' %}Handcrafted Silver Jewellery
                     {% elif active_metal == 'demifine' %}Demifine & Vermeil Jewels
                     {% else %}Atelier Bestsellers{% endif %}
                 </h2>
             </div>
-            <a href="{% url 'catalog:product_list' %}" class="mt-4 md:mt-0 text-xs font-display tracking-widest uppercase text-neutral-800 hover:text-gold-600 font-semibold inline-flex items-center gap-1">
+            <a href="{% url 'catalog:product_list' %}" class="mt-4 md:mt-0 text-xs font-sans tracking-wider uppercase text-neutral-800 hover:text-gold-600 font-bold inline-flex items-center gap-1">
                 View Full Catalog &rarr;
             </a>
         </div>
@@ -155,8 +155,8 @@
                  class="w-full h-full object-cover">
         </div>
         <div class="p-8 sm:p-14 flex flex-col justify-center space-y-6 bg-[#FAF9F6]">
-            <span class="text-xs font-display tracking-[0.25em] text-[#C5A059] uppercase font-bold">Atelier Spotlight</span>
-            <h2 class="font-serif text-3xl sm:text-5xl text-neutral-900 leading-tight">
+            <span class="text-[11px] sm:text-xs font-sans tracking-[0.2em] text-[#C5A059] uppercase font-bold">Atelier Spotlight</span>
+            <h2 class="font-sans text-2xl sm:text-4xl font-bold text-neutral-900 leading-tight tracking-tight">
                 The Solstice Heritage<br>Collection
             </h2>
             <p class="text-xs sm:text-sm text-neutral-600 font-light leading-relaxed">
@@ -189,40 +189,40 @@
 <section class="py-20 bg-[#141414] text-white">
     <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-12">
         <div class="space-y-2">
-            <span class="text-xs font-display tracking-[0.25em] text-[#C5A059] uppercase font-semibold">Patron Stories</span>
-            <h2 class="font-serif text-3xl sm:text-4xl text-white">Loved by Connoisseurs Worldwide</h2>
+            <span class="text-[11px] sm:text-xs font-bold tracking-[0.2em] text-[#C5A059] uppercase font-sans">Patron Stories</span>
+            <h2 class="text-2xl sm:text-3xl lg:text-4xl font-bold text-white tracking-tight font-sans">Loved by Connoisseurs Worldwide</h2>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-left">
             <div class="bg-[#1C1C1C] border border-[#2B2B2B] p-6 rounded-sm space-y-4">
                 <div class="text-[#C5A059] text-sm">★★★★★</div>
-                <p class="text-xs text-neutral-300 italic leading-relaxed font-serif text-sm">
+                <p class="text-xs text-neutral-300 leading-relaxed font-sans">
                     "My fiancée was brought to tears when she opened the velvet box. The 1.8ct oval solitaire has extraordinary fire and scintillation. Cartier caliber at a thoughtful price."
                 </p>
                 <div>
-                    <h4 class="text-xs font-display font-semibold text-white">Marcus Sterling</h4>
-                    <p class="text-[10px] text-neutral-400">Verified Client • Manhattan, NY</p>
+                    <h4 class="text-xs font-bold text-white font-sans">Marcus Sterling</h4>
+                    <p class="text-[10px] text-neutral-400 font-sans">Verified Client • Manhattan, NY</p>
                 </div>
             </div>
 
             <div class="bg-[#1C1C1C] border border-[#2B2B2B] p-6 rounded-sm space-y-4">
                 <div class="text-[#C5A059] text-sm">★★★★★</div>
-                <p class="text-xs text-neutral-300 italic leading-relaxed font-serif text-sm">
+                <p class="text-xs text-neutral-300 leading-relaxed font-sans">
                     "The Sovereign Tennis Bracelet has become my daily staple. The hidden security clasp is genius and it glides across my wrist like silk. Truly sublime craftsmanship."
                 </p>
                 <div>
-                    <h4 class="text-xs font-display font-semibold text-white">Camilla Althaus</h4>
-                    <p class="text-[10px] text-neutral-400">Verified Client • London, UK</p>
+                    <h4 class="text-xs font-bold text-white font-sans">Camilla Althaus</h4>
+                    <p class="text-[10px] text-neutral-400 font-sans">Verified Client • London, UK</p>
                 </div>
             </div>
 
             <div class="bg-[#1C1C1C] border border-[#2B2B2B] p-6 rounded-sm space-y-4">
                 <div class="text-[#C5A059] text-sm">★★★★★</div>
-                <p class="text-xs text-neutral-300 italic leading-relaxed font-serif text-sm">
+                <p class="text-xs text-neutral-300 leading-relaxed font-sans">
                     "The real-time tracking portal gave us complete peace of mind. Watching each stage from master setting to insured courier arrival was a wonderful experience."
                 </p>
                 <div>
-                    <h4 class="text-xs font-display font-semibold text-white">David & Elena Chen</h4>
+                    <h4 class="text-xs font-bold text-white font-sans">David & Elena Chen</h4>
                     <p class="text-[10px] text-neutral-400">Verified Client • San Francisco, CA</p>
                 </div>
             </div>

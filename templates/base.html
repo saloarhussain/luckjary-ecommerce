@@ -25,6 +25,11 @@
     <meta name="twitter:description" content="{% block twitter_description %}{{ meta_description|default:'Fine jewelry crafted with conflict-free gemstones and solid 18k gold.' }}{% endblock %}">
     <meta name="twitter:image" content="{% block twitter_image %}{{ og_image|default:'https://images.unsplash.com/photo-1605100804763-247f67b3557e?auto=format&fit=crop&w=1200&q=85' }}{% endblock %}">
 
+    <!-- Google Fonts Preconnect & High-Legibility Modern Sans Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,600..800;1,6..96,600..800&family=Cinzel:wght@600;700;800&family=Inter:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -48,9 +53,9 @@
                         cream: '#FAF9F6',
                     },
                     fontFamily: {
-                        serif: ['Cormorant Garamond', 'Georgia', 'serif'],
-                        display: ['Cinzel', 'serif'],
-                        sans: ['Plus Jakarta Sans', 'system-ui', 'sans-serif'],
+                        serif: ['"Plus Jakarta Sans"', 'Inter', 'system-ui', 'sans-serif'],
+                        display: ['"Plus Jakarta Sans"', 'Inter', 'system-ui', 'sans-serif'],
+                        sans: ['"Plus Jakarta Sans"', 'Inter', 'system-ui', '-apple-system', 'sans-serif'],
                     }
                 }
             }

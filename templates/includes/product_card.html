@@ -87,28 +87,28 @@
 
     </div>
 
-    <!-- Product Meta Details (Price above Title, Mia style) -->
-    <div class="p-3.5 sm:p-4 flex flex-col flex-1 justify-between space-y-3">
+    <!-- Product Meta Details (Price above Title, Clean & Highly Readable Sans Font) -->
+    <div class="p-3.5 sm:p-4 flex flex-col flex-1 justify-between space-y-3 font-sans">
         <div>
-            <!-- Prominent Price (Leading line in Mia card) -->
-            <div class="flex items-baseline space-x-2">
-                <span class="text-base sm:text-lg font-bold text-neutral-900 tracking-tight">
+            <!-- Prominent Price (Leading line in Mia style) -->
+            <div class="flex items-baseline space-x-2 font-sans">
+                <span class="text-base sm:text-lg font-bold text-neutral-900 tracking-tight font-sans">
                     ${{ prod.price }}
                 </span>
                 {% if prod.compare_at_price %}
-                <span class="text-xs text-neutral-400 line-through">
+                <span class="text-xs text-neutral-400 line-through font-sans">
                     ${{ prod.compare_at_price }}
                 </span>
                 {% endif %}
             </div>
 
-            <!-- Product Title (Clean modern line below price) -->
-            <h3 class="text-xs sm:text-[13px] text-neutral-800 font-medium line-clamp-1 mt-1 hover:text-[#932749] transition">
+            <!-- Product Title (Clean modern sans font, bold and easy to read) -->
+            <h3 class="text-xs sm:text-[13px] text-neutral-900 font-semibold line-clamp-1 mt-1 hover:text-[#932749] transition font-sans tracking-normal leading-snug">
                 <a href="{{ prod.get_absolute_url }}">{{ prod.title }}</a>
             </h3>
 
             <!-- Subtle Material / Category hint -->
-            <p class="text-[10px] text-neutral-400 uppercase tracking-wider mt-0.5 truncate">
+            <p class="text-[10px] text-neutral-500 font-medium uppercase tracking-wider mt-0.5 truncate font-sans">
                 {{ prod.karat_metal }}
             </p>
         </div>

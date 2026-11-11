@@ -5,8 +5,8 @@
 <!-- Catalog Header Banner -->
 <section class="bg-[#141414] text-white py-10 sm:py-14 border-b border-[#2A2A2A]">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-3">
-        <span class="text-[10px] sm:text-xs font-display tracking-[0.25em] text-[#C5A059] uppercase font-semibold">The Fine Jewelry Gallery</span>
-        <h1 class="font-serif text-3xl sm:text-4xl md:text-5xl text-white">
+        <span class="text-[10px] sm:text-xs font-sans tracking-[0.2em] text-[#C5A059] uppercase font-bold">The Fine Jewelry Gallery</span>
+        <h1 class="font-sans text-2xl sm:text-4xl md:text-5xl font-bold tracking-tight text-white">
             {% if selected_category %}{{ selected_category.name }}
             {% elif selected_material %}{{ selected_material.name }}
             {% elif selected_metal == 'silver' %}Solid 925 Sterling Silver
@@ -217,7 +217,7 @@
             <!-- Empty state -->
             <div class="bg-white border border-[#E8DFD0] rounded-sm p-12 text-center space-y-4">
                 <span class="text-3xl text-neutral-300">✦</span>
-                <h3 class="font-serif text-xl sm:text-2xl text-neutral-800">No jewelry creations found</h3>
+                <h3 class="font-sans text-xl sm:text-2xl font-bold text-neutral-800">No jewelry creations found</h3>
                 <p class="text-xs text-neutral-500 max-w-sm mx-auto">Try resetting your filters to discover our full fine jewelry collection.</p>
                 <a href="{% url 'catalog:product_list' %}" class="btn-gold inline-block px-6 py-2.5 text-xs uppercase tracking-widest font-semibold rounded-sm">Clear All Filters</a>
             </div>
