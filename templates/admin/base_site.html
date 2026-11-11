@@ -1,0 +1,48 @@
+{% extends "admin/base.html" %}
+{% load static %}
+
+{% block title %}{{ title }} | {{ site_title|default:"Luckjary Haute Joaillerie Administration" }}{% endblock %}
+
+{% block extrahead %}
+{{ block.super }}
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;800&family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{% static 'css/admin_luxury.css' %}">
+{% endblock %}
+
+{% block branding %}
+<div id="branding">
+    <h1 id="site-name">
+        <a href="{% url 'admin:index' %}">
+            <svg class="diamond-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#C5A059" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block; vertical-align:middle; margin-right:4px;">
+                <polygon points="6 3 18 3 22 9 12 22 2 9 6 3"></polygon>
+                <line x1="11" y1="3" x2="8" y2="9"></line>
+                <line x1="13" y1="3" x2="16" y2="9"></line>
+                <line x1="2" y1="9" x2="22" y2="9"></line>
+                <line x1="12" y1="22" x2="8" y2="9"></line>
+                <line x1="12" y1="22" x2="16" y2="9"></line>
+            </svg>
+            <span style="font-family:'Cinzel', serif; font-size:1.15rem; letter-spacing:0.16em; font-weight:700;">LUCKJARY</span>
+            <span class="brand-badge">Haute Joaillerie Atelier</span>
+        </a>
+    </h1>
+    
+    <!-- Top Fast Access Toolbar -->
+    <div class="header-fast-nav">
+        <a href="{% url 'orders:oms_dashboard' %}" class="header-fast-btn primary-gold" title="Open Full Atelier OMS Console">
+            <span class="header-pulse-dot"></span>
+            <span>⚡ Atelier OMS Console</span>
+        </a>
+        <a href="{% url 'core:home' %}" target="_blank" class="header-fast-btn" title="Open Customer Boutique Storefront">
+            <span>💎 Live Boutique</span>
+        </a>
+        <a href="{% url 'admin:orders_order_changelist' %}" class="header-fast-btn">
+            <span>📦 Orders Queue</span>
+        </a>
+        <a href="{% url 'admin:catalog_product_changelist' %}" class="header-fast-btn">
+            <span>💍 Fine Jewelry</span>
+        </a>
+    </div>
+</div>
+{% endblock %}
