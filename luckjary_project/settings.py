@@ -9,6 +9,29 @@ import shutil
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+# Load local environment variables from .env.local or .env if present
+def _load_env_file(filepath):
+    if filepath and filepath.exists():
+        try:
+            with open(filepath, 'r', encoding='utf-8') as f:
+                for line in f:
+                    line = line.strip()
+                    if line and not line.startswith('#') and '=' in line:
+                        k, v = line.split('=', 1)
+                        k, v = k.strip(), v.strip().strip('"\'')
+                        if k not in os.environ:
+                            os.environ[k] = v
+        except Exception:
+            pass
+
+for _env_candidate in [
+    BASE_DIR / '.env.local',
+    BASE_DIR / '.env',
+    BASE_DIR.parent / '.env.local',
+    BASE_DIR.parent / '.env',
+]:
+    _load_env_file(_env_candidate)
+
 SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'django-insecure-luckjary-luxury-jewelry-secret-key-2026')
 
 DEBUG = os.environ.get('DJANGO_DEBUG', 'True') == 'True'
