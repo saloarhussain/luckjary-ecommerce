@@ -330,6 +330,15 @@
     align-items: center;
     gap: 8px;
 }
+
+/* Hide redundant raw Django checkbox grid & labels in favor of Quick Suites Studio */
+.field-metal_presets > div:not(.lux-studio-container) {
+    display: none !important;
+}
+.field-karat_metal,
+.field-available_metals {
+    display: none !important;
+}
 </style>
 {% endblock %}
 
@@ -365,14 +374,18 @@
     var availableInput = document.getElementById('id_available_metals');
 
     // Hide default awkward vertical Django checkboxes container
-    var defaultCheckboxesContainer = metalPresetsRow.querySelector('.admin-checkbox-grid') || metalPresetsRow.querySelector('ul') || metalPresetsRow.querySelector('div');
+    var defaultCheckboxesContainer = metalPresetsRow.querySelector('.admin-checkbox-grid');
     if (defaultCheckboxesContainer) {
-        defaultCheckboxesContainer.style.display = 'none';
+        defaultCheckboxesContainer.style.setProperty('display', 'none', 'important');
     }
+    var defaultDivs = metalPresetsRow.querySelectorAll('div:not(.lux-studio-container)');
+    defaultDivs.forEach(function(d) {
+        d.style.setProperty('display', 'none', 'important');
+    });
 
     // Hide raw text fields from main view (will sync with UI)
-    karatMetalRow.style.display = 'none';
-    availableMetalsRow.style.display = 'none';
+    karatMetalRow.style.setProperty('display', 'none', 'important');
+    availableMetalsRow.style.setProperty('display', 'none', 'important');
 
     // Defined groups with colors
     var groups = [

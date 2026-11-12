@@ -2260,6 +2260,13 @@ div.breadcrumbs a:hover {
 }
 
 /* Checkbox Grid for Metal Presets & Admin Options */
+.field-metal_presets > div:not(.lux-studio-container) {
+    display: none !important;
+}
+.field-karat_metal,
+.field-available_metals {
+    display: none !important;
+}
 .admin-checkbox-grid {
     display: grid !important;
     grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)) !important;
