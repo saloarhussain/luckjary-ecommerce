@@ -339,6 +339,323 @@
 .field-available_metals {
     display: none !important;
 }
+
+/* ========================================================
+   LUCKJARY CATEGORY-ADAPTIVE SIZING & SPECIFICATIONS STUDIO
+   ======================================================== */
+.lux-sizing-studio {
+    background: #13151D;
+    border: 1px solid #232736;
+    border-radius: 10px;
+    padding: 20px;
+    margin-top: 10px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+}
+
+.lux-mode-tabs-bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 16px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid #202433;
+}
+
+.lux-mode-tab-btn {
+    background: #171A24;
+    color: #94A3B8;
+    border: 1px solid #282C3D;
+    border-radius: 8px;
+    padding: 8px 16px;
+    font-size: 12.5px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    user-select: none;
+}
+
+.lux-mode-tab-btn:hover {
+    background: #1E2230;
+    color: #FFF;
+    border-color: rgba(197, 160, 89, 0.5);
+    transform: translateY(-1px);
+}
+
+.lux-mode-tab-btn.is-active {
+    background: rgba(197, 160, 89, 0.15);
+    color: #FAF9F6;
+    border-color: #C5A059;
+    box-shadow: 0 0 12px rgba(197, 160, 89, 0.25);
+}
+
+.lux-mode-tab-btn.is-active::after {
+    content: "";
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #C5A059;
+    box-shadow: 0 0 6px #C5A059;
+}
+
+.lux-framework-info-banner {
+    background: rgba(197, 160, 89, 0.08);
+    border: 1px solid rgba(197, 160, 89, 0.25);
+    border-left: 3px solid #C5A059;
+    border-radius: 6px;
+    padding: 10px 14px;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.lux-framework-info-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #E2B755;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.lux-framework-sync-badge {
+    background: rgba(16, 185, 129, 0.15);
+    color: #10B981;
+    border: 1px solid rgba(16, 185, 129, 0.35);
+    padding: 3px 10px;
+    border-radius: 9999px;
+    font-size: 10.5px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+
+/* Adaptive Primary Specification Field Card */
+.lux-adaptive-spec-box {
+    background: #161923;
+    border: 1px solid #252A3B;
+    border-radius: 8px;
+    padding: 14px 16px;
+    margin-bottom: 16px;
+}
+
+.lux-spec-box-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 6px;
+}
+
+.lux-spec-box-label {
+    font-size: 12px;
+    font-weight: 700;
+    color: #FAF9F6;
+    letter-spacing: 0.02em;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.lux-spec-box-subtitle {
+    font-size: 11px;
+    color: #94A3B8;
+    margin-bottom: 10px;
+}
+
+.lux-spec-input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.lux-spec-input {
+    width: 100%;
+    padding: 9px 14px;
+    background: #181A22;
+    border: 1px solid #2D3345;
+    border-radius: 6px;
+    color: #FAF9F6;
+    font-size: 13px;
+    transition: all 0.2s ease;
+}
+
+.lux-spec-input:focus {
+    background: #1C1F2A;
+    border-color: #C5A059;
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(197, 160, 89, 0.2);
+}
+
+.lux-spec-badges-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px;
+    margin-top: 10px;
+}
+
+.lux-helper-pill {
+    background: #1A1D29;
+    color: #CBD5E1;
+    border: 1px solid #2E3447;
+    border-radius: 5px;
+    padding: 4px 10px;
+    font-size: 11px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    user-select: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.lux-helper-pill:hover {
+    background: #252B3B;
+    color: #FFF;
+    border-color: #C5A059;
+    transform: translateY(-1px);
+}
+
+.lux-helper-pill.pill-action {
+    color: #C5A059;
+    border-color: rgba(197, 160, 89, 0.4);
+    background: rgba(197, 160, 89, 0.08);
+}
+
+.lux-helper-pill.pill-action:hover {
+    background: rgba(197, 160, 89, 0.2);
+    border-color: #C5A059;
+}
+
+.lux-helper-pill.pill-clear {
+    color: #EF4444;
+    border-color: rgba(239, 68, 68, 0.3);
+    background: rgba(239, 68, 68, 0.08);
+    margin-left: auto;
+}
+
+.lux-helper-pill.pill-clear:hover {
+    background: rgba(239, 68, 68, 0.2);
+    border-color: #EF4444;
+}
+
+/* Sizing Suite Card */
+.lux-sizes-suite-box {
+    background: #161923;
+    border: 1px solid #252A3B;
+    border-radius: 8px;
+    padding: 16px;
+    margin-bottom: 16px;
+}
+
+.lux-sizes-suite-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+}
+
+.lux-suite-quick-presets {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 12px;
+}
+
+.lux-chips-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 12px;
+}
+
+.lux-interactive-chip {
+    background: #1A1D28;
+    color: #CBD5E1;
+    border: 1px solid #2D3346;
+    border-radius: 6px;
+    padding: 7px 12px;
+    font-size: 11.5px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    user-select: none;
+}
+
+.lux-interactive-chip:hover {
+    background: #232838;
+    color: #FFF;
+    border-color: rgba(197, 160, 89, 0.5);
+    transform: translateY(-1px);
+}
+
+.lux-interactive-chip.is-active {
+    background: rgba(197, 160, 89, 0.18);
+    color: #FFF;
+    border-color: #C5A059;
+    font-weight: 700;
+    box-shadow: 0 0 8px rgba(197, 160, 89, 0.25);
+}
+
+.lux-interactive-chip .lux-chip-check {
+    display: none;
+    font-size: 11px;
+    color: #10B981;
+}
+
+.lux-interactive-chip.is-active .lux-chip-check {
+    display: inline;
+}
+
+.lux-auto-default-banner {
+    background: rgba(16, 185, 129, 0.08);
+    border: 1px solid rgba(16, 185, 129, 0.25);
+    border-radius: 6px;
+    padding: 10px 14px;
+    font-size: 11.5px;
+    color: #A7F3D0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.lux-selected-count-badge {
+    background: rgba(197, 160, 89, 0.15);
+    color: #E2B755;
+    border: 1px solid rgba(197, 160, 89, 0.35);
+    padding: 3px 10px;
+    border-radius: 9999px;
+    font-size: 11px;
+    font-weight: 600;
+}
+
+/* Hide raw rows inside sizing fieldset that are replaced by studio */
+.lux-sizing-hide-raw {
+    display: none !important;
+}
+
+/* Inline badges for Dimensions & Certification */
+.lux-field-badges-bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px;
+    margin-top: 8px;
+}
 </style>
 {% endblock %}
 
@@ -671,6 +988,765 @@
 
     // Initial render
     renderUI();
+})();
+
+(function initSizingStudio() {
+    var sizeCatInput = document.getElementById('id_size_category');
+    var chainLengthInput = document.getElementById('id_chain_length_or_size');
+    var availableSizesInput = document.getElementById('id_available_sizes');
+    var dimensionsInput = document.getElementById('id_dimensions');
+    var certInput = document.getElementById('id_certification');
+    var categorySelect = document.getElementById('id_category');
+    var titleInput = document.getElementById('id_title');
+
+    if (!sizeCatInput || !chainLengthInput || !availableSizesInput) return;
+
+    var sizingFieldset = sizeCatInput.closest('fieldset');
+    if (!sizingFieldset) return;
+
+    var sizeRow = sizeCatInput.closest('.form-row');
+    var availRow = availableSizesInput.closest('.form-row');
+    var dimCertRow = dimensionsInput ? dimensionsInput.closest('.form-row') : null;
+
+    // Hide raw rows in favor of interactive studio
+    if (sizeRow) sizeRow.classList.add('lux-sizing-hide-raw');
+    if (availRow) availRow.classList.add('lux-sizing-hide-raw');
+
+    var FRAMEWORKS = {
+        ring: {
+            id: 'ring',
+            name: 'Rings',
+            icon: '💍',
+            title: 'Ring Sizing & Atelier Band Framework',
+            subtitle: 'Standard US sizes 4 through 13 with half-sizes. Band width profile and complimentary resizing terms.',
+            primaryLabel: '💍 Ring Size Range & Band Width Specification',
+            primarySubtitle: 'Specify ring size range (US 4 - 13), band profile (e.g. 2.0mm Comfort Band), and complimentary resizing policy.',
+            primaryPlaceholder: 'e.g. US Sizes 4 - 13 (Complimentary Resizing) & 2.0mm Comfort Band',
+            defaultSpec: 'US Sizes 4 - 13 (Complimentary Resizing) & 2.0mm Comfort Band',
+            primaryPresets: [
+                'US Sizes 4 - 13 (Complimentary Resizing)',
+                '1.8mm Dainty Comfort Band',
+                '2.0mm Classic Comfort Band',
+                '3.0mm Bold Statement Band',
+                'Micro-Pave Diamond Eternity Band',
+                'Complimentary 1x Resizing within 30 Days'
+            ],
+            availableHeader: 'Available Ring Sizes (Click to toggle specific sizes):',
+            autoDefaultBanner: '✨ Intelligent Default: Leaving this blank automatically offers the complete standard US 4 through 13 range with half-sizes on the storefront.',
+            quickSuites: [
+                {
+                    name: "★ Women's Standard (5 - 9)",
+                    sizes: [
+                        'US Size 5 (49.3mm circumference)',
+                        'US Size 5.5 (50.6mm circumference)',
+                        'US Size 6 (51.9mm circumference)',
+                        'US Size 6.5 (53.1mm circumference)',
+                        'US Size 7 (54.4mm - Most Popular)',
+                        'US Size 7.5 (55.7mm circumference)',
+                        'US Size 8 (57.0mm circumference)',
+                        'US Size 8.5 (58.3mm circumference)',
+                        'US Size 9 (59.5mm circumference)',
+                        'Custom Bespoke Sizing (Concierge will contact you)'
+                    ]
+                },
+                {
+                    name: "★ Men's Standard (8 - 12)",
+                    sizes: [
+                        'US Size 8 (57.0mm circumference)',
+                        'US Size 8.5 (58.3mm circumference)',
+                        'US Size 9 (59.5mm circumference)',
+                        'US Size 9.5 (60.8mm circumference)',
+                        'US Size 10 (62.1mm circumference)',
+                        'US Size 10.5 (63.4mm circumference)',
+                        'US Size 11 (64.6mm circumference)',
+                        'US Size 11.5 (65.9mm circumference)',
+                        'US Size 12 (67.2mm circumference)',
+                        'Custom Bespoke Sizing (Concierge will contact you)'
+                    ]
+                },
+                {
+                    name: '★ Full US Range (4 - 13)',
+                    sizes: [
+                        'US Size 4 (46.8mm circumference)',
+                        'US Size 4.5 (48.0mm circumference)',
+                        'US Size 5 (49.3mm circumference)',
+                        'US Size 5.5 (50.6mm circumference)',
+                        'US Size 6 (51.9mm circumference)',
+                        'US Size 6.5 (53.1mm circumference)',
+                        'US Size 7 (54.4mm - Most Popular)',
+                        'US Size 7.5 (55.7mm circumference)',
+                        'US Size 8 (57.0mm circumference)',
+                        'US Size 8.5 (58.3mm circumference)',
+                        'US Size 9 (59.5mm circumference)',
+                        'US Size 9.5 (60.8mm circumference)',
+                        'US Size 10 (62.1mm circumference)',
+                        'US Size 10.5 (63.4mm circumference)',
+                        'US Size 11 (64.6mm circumference)',
+                        'US Size 11.5 (65.9mm circumference)',
+                        'US Size 12 (67.2mm circumference)',
+                        'US Size 12.5 (68.5mm circumference)',
+                        'US Size 13 (69.7mm circumference)',
+                        'Custom Bespoke Sizing (Concierge will contact you)'
+                    ]
+                }
+            ],
+            sizeOptions: [
+                { val: 'US Size 4 (46.8mm circumference)', label: 'US 4 (46.8mm)' },
+                { val: 'US Size 4.5 (48.0mm circumference)', label: 'US 4.5 (48.0mm)' },
+                { val: 'US Size 5 (49.3mm circumference)', label: 'US 5 (49.3mm)' },
+                { val: 'US Size 5.5 (50.6mm circumference)', label: 'US 5.5 (50.6mm)' },
+                { val: 'US Size 6 (51.9mm circumference)', label: 'US 6 (51.9mm)' },
+                { val: 'US Size 6.5 (53.1mm circumference)', label: 'US 6.5 (53.1mm)' },
+                { val: 'US Size 7 (54.4mm - Most Popular)', label: 'US 7 ★ Popular' },
+                { val: 'US Size 7.5 (55.7mm circumference)', label: 'US 7.5 (55.7mm)' },
+                { val: 'US Size 8 (57.0mm circumference)', label: 'US 8 (57.0mm)' },
+                { val: 'US Size 8.5 (58.3mm circumference)', label: 'US 8.5 (58.3mm)' },
+                { val: 'US Size 9 (59.5mm circumference)', label: 'US 9 (59.5mm)' },
+                { val: 'US Size 9.5 (60.8mm circumference)', label: 'US 9.5 (60.8mm)' },
+                { val: 'US Size 10 (62.1mm circumference)', label: 'US 10 (62.1mm)' },
+                { val: 'US Size 10.5 (63.4mm circumference)', label: 'US 10.5 (63.4mm)' },
+                { val: 'US Size 11 (64.6mm circumference)', label: 'US 11 (64.6mm)' },
+                { val: 'US Size 11.5 (65.9mm circumference)', label: 'US 11.5 (65.9mm)' },
+                { val: 'US Size 12 (67.2mm circumference)', label: 'US 12 (67.2mm)' },
+                { val: 'US Size 12.5 (68.5mm circumference)', label: 'US 12.5 (68.5mm)' },
+                { val: 'US Size 13 (69.7mm circumference)', label: 'US 13 (69.7mm)' },
+                { val: 'Custom Bespoke Sizing (Concierge will contact you)', label: 'Bespoke Size' }
+            ],
+            dimensionsLabel: 'Band & Setting Dimensions:',
+            dimensionsPlaceholder: 'e.g. 14.5mm x 9.2mm Setting, 2.0mm Band',
+            dimensionPresets: [
+                '1.8mm Band',
+                '2.0mm Band',
+                '14.5mm x 9.2mm Setting',
+                '7.0mm Solitaire Center'
+            ]
+        },
+        necklace: {
+            id: 'necklace',
+            name: 'Necklaces & Pendants',
+            icon: '📿',
+            title: 'Necklace & Pendant Chain Framework',
+            subtitle: 'Standard chain lengths 14" choker to 24" lariat. Chain link style, clasp type, and pendant motif dimensions.',
+            primaryLabel: '📿 Chain Length, Style & Clasp Specification',
+            primarySubtitle: 'Specify necklace chain length, link profile (Cable, Box, Rope), and clasp mechanism.',
+            primaryPlaceholder: 'e.g. 16" - 18" Adjustable Diamond Cut Cable Chain with Lobster Clasp',
+            defaultSpec: '16" - 18" Adjustable Diamond Cut Cable Chain with Lobster Clasp',
+            primaryPresets: [
+                '16" - 18" Adjustable Cable Chain',
+                '18" Princess Box Chain with Lobster Clasp',
+                '20" Diamond Cut Rope Chain',
+                '14" - 16" Choker with Safety Extender',
+                'Lobster Claw Security Clasp',
+                'Spring Ring Safety Clasp'
+            ],
+            availableHeader: 'Available Chain Lengths (Click to toggle specific lengths):',
+            autoDefaultBanner: '✨ Intelligent Default: Leaving this blank automatically offers 14" through 24" lengths with bespoke concierge on the storefront.',
+            quickSuites: [
+                {
+                    name: '★ Classic Duo (16" + 18")',
+                    sizes: [
+                        '16" Standard Collar (40.6cm)',
+                        '18" Princess Length - Most Popular (45.7cm)',
+                        'Custom Bespoke Sizing (Concierge will contact you)'
+                    ]
+                },
+                {
+                    name: '★ Popular Trio (16", 18", 20")',
+                    sizes: [
+                        '16" Standard Collar (40.6cm)',
+                        '18" Princess Length - Most Popular (45.7cm)',
+                        '20" Matinee Length (50.8cm)',
+                        'Custom Bespoke Sizing (Concierge will contact you)'
+                    ]
+                },
+                {
+                    name: '★ Full Chain Suite (14" - 24")',
+                    sizes: [
+                        '14" Choker Length (35.5cm)',
+                        '16" Standard Collar (40.6cm)',
+                        '18" Princess Length - Most Popular (45.7cm)',
+                        '20" Matinee Length (50.8cm)',
+                        '22" Opera Length (55.9cm)',
+                        '24" Lariat Length (61.0cm)',
+                        'Custom Bespoke Sizing (Concierge will contact you)'
+                    ]
+                }
+            ],
+            sizeOptions: [
+                { val: '14" Choker Length (35.5cm)', label: '14" Choker (35.5cm)' },
+                { val: '16" Standard Collar (40.6cm)', label: '16" Collar (40.6cm)' },
+                { val: '18" Princess Length - Most Popular (45.7cm)', label: '18" Princess ★ Popular' },
+                { val: '20" Matinee Length (50.8cm)', label: '20" Matinee (50.8cm)' },
+                { val: '22" Opera Length (55.9cm)', label: '22" Opera (55.9cm)' },
+                { val: '24" Lariat Length (61.0cm)', label: '24" Lariat (61.0cm)' },
+                { val: '30" Rope Length (76.2cm)', label: '30" Rope (76.2cm)' },
+                { val: 'Custom Bespoke Sizing (Concierge will contact you)', label: 'Bespoke Length' }
+            ],
+            dimensionsLabel: 'Pendant Motif & Chain Dimensions:',
+            dimensionsPlaceholder: 'e.g. 18mm x 12mm Pendant Motif, 1.3mm Cable Link',
+            dimensionPresets: [
+                '18mm x 12mm Pendant',
+                '25mm x 15mm Motif',
+                '1.5mm Cable Link',
+                '45cm Total Drop'
+            ]
+        },
+        bracelet: {
+            id: 'bracelet',
+            name: 'Bangles & Bracelets',
+            icon: '✨',
+            title: 'Bangle & Bracelet Circumference Framework',
+            subtitle: 'Bangle inner diameters (58mm - 68mm) and wrist circumferences (6.0" - 8.0"). Closure locks and safety catches.',
+            primaryLabel: '✨ Bangle Size, Inner Diameter & Clasp Specification',
+            primarySubtitle: 'Specify wrist circumference range, inner diameter (mm), and closure security locks.',
+            primaryPlaceholder: 'e.g. 6.5" - 7.5" Inner Circumference (63mm Diameter) with Dual Safety Clasp',
+            defaultSpec: '6.5" - 7.5" Inner Circumference (63mm Diameter) with Dual Safety Clasp',
+            primaryPresets: [
+                '6.5" - 7.5" Standard Wrist Fit',
+                '58mm Inner Diameter (Petite / Small)',
+                '63mm Inner Diameter (Medium / Standard)',
+                '68mm Inner Diameter (Large)',
+                'Dual Safety Box Clasp',
+                'Hinged Bangle with Push-Button Lock',
+                'Flexible Open Cuff (One-Size)'
+            ],
+            availableHeader: 'Available Bangle & Wrist Sizes (Click to toggle standard fits):',
+            autoDefaultBanner: '✨ Intelligent Default: Leaving this blank automatically offers 6.0" through 8.0" with bespoke wrist concierge on the storefront.',
+            quickSuites: [
+                {
+                    name: '★ Standard Wrist (6.5" - 7.5")',
+                    sizes: [
+                        '6.5" (16.5cm - Small Wrist)',
+                        '7.0" (17.8cm - Standard / Most Popular)',
+                        '7.5" (19.0cm - Medium Wrist)',
+                        'Custom Bespoke Sizing (Concierge will contact you)'
+                    ]
+                },
+                {
+                    name: '★ Full Bangle Suite (6.0" - 8.0")',
+                    sizes: [
+                        '6.0" (15.2cm - Petite Wrist)',
+                        '6.5" (16.5cm - Small Wrist)',
+                        '7.0" (17.8cm - Standard / Most Popular)',
+                        '7.5" (19.0cm - Medium Wrist)',
+                        '8.0" (20.3cm - Large Wrist)',
+                        'Custom Bespoke Sizing (Concierge will contact you)'
+                    ]
+                },
+                {
+                    name: '★ Inner Diameters (58mm - 68mm)',
+                    sizes: [
+                        '58mm Inner Diameter (Small Bangle)',
+                        '63mm Inner Diameter (Medium Bangle)',
+                        '68mm Inner Diameter (Large Bangle)',
+                        'Custom Bespoke Sizing (Concierge will contact you)'
+                    ]
+                }
+            ],
+            sizeOptions: [
+                { val: '6.0" (15.2cm - Petite Wrist)', label: '6.0" Petite (15.2cm)' },
+                { val: '6.5" (16.5cm - Small Wrist)', label: '6.5" Small (16.5cm)' },
+                { val: '7.0" (17.8cm - Standard / Most Popular)', label: '7.0" Standard ★ Popular' },
+                { val: '7.5" (19.0cm - Medium Wrist)', label: '7.5" Medium (19.0cm)' },
+                { val: '8.0" (20.3cm - Large Wrist)', label: '8.0" Large (20.3cm)' },
+                { val: '58mm Inner Diameter (Small Bangle)', label: '58mm Dia (Small)' },
+                { val: '63mm Inner Diameter (Medium Bangle)', label: '63mm Dia (Medium)' },
+                { val: '68mm Inner Diameter (Large Bangle)', label: '68mm Dia (Large)' },
+                { val: 'Custom Bespoke Sizing (Concierge will contact you)', label: 'Bespoke Size' }
+            ],
+            dimensionsLabel: 'Bangle Diameter & Width Dimensions:',
+            dimensionsPlaceholder: 'e.g. 63mm Inner Diameter, 3.5mm Width, 2.0mm Thickness',
+            dimensionPresets: [
+                '60mm Inner Dia',
+                '63mm Inner Dia',
+                '3.0mm Tennis Width',
+                '5.0mm Cuff Width',
+                '17.5cm Length'
+            ]
+        },
+        earring: {
+            id: 'earring',
+            name: 'Earrings',
+            icon: '💎',
+            title: 'Earring Fitting & Security Framework',
+            subtitle: 'Earring piercing posts, security locking backs, and wearable drop lengths.',
+            primaryLabel: '💎 Earring Fitting, Drop Length & Security Backing',
+            primarySubtitle: 'Specify piercing post type, security locking backs, and wearable drop length.',
+            primaryPlaceholder: 'e.g. 25mm Drop Length with Comfort-Fit Push Backs & Silicone Disc',
+            defaultSpec: 'Standard Pierced Posts with Luxury Comfort-Fit Push Backs',
+            primaryPresets: [
+                'Standard Pierced Post & Friction Back',
+                'Threaded Screw Back (High Security)',
+                'La Poussette Luxury Locking Mechanism',
+                'Leverback Safety Closure',
+                'Huggie Click-Latch Fitting',
+                'Clip-On Non-Pierced Atelier Fitting'
+            ],
+            availableHeader: 'Available Earring Fittings & Backings (Click to toggle):',
+            autoDefaultBanner: '✨ Intelligent Default: Leaving this blank automatically offers friction backs, screw locks, and clip-on fittings on the storefront.',
+            quickSuites: [
+                {
+                    name: '★ Pierced Standard (Friction + Screw)',
+                    sizes: [
+                        'Standard Pierced Post & Friction Back',
+                        'Screw Back (High Security Locking)'
+                    ]
+                },
+                {
+                    name: '★ Haute Joaillerie Trio (Friction + Screw + La Poussette)',
+                    sizes: [
+                        'Standard Pierced Post & Friction Back',
+                        'Screw Back (High Security Locking)',
+                        'La Poussette Luxury Locking Back'
+                    ]
+                },
+                {
+                    name: '★ Complete Fitting Suite (All 6 Fittings)',
+                    sizes: [
+                        'Standard Pierced Post & Friction Back',
+                        'Screw Back (High Security Locking)',
+                        'La Poussette Luxury Locking Back',
+                        'Leverback Safety Fitting',
+                        'Huggie Click-Latch Fitting',
+                        'Clip-On (Non-Pierced Atelier Fitting)'
+                    ]
+                }
+            ],
+            sizeOptions: [
+                { val: 'Standard Pierced Post & Friction Back', label: 'Standard Friction Back' },
+                { val: 'Screw Back (High Security Locking)', label: 'Screw Back (High Security)' },
+                { val: 'La Poussette Luxury Locking Back', label: 'La Poussette Lock' },
+                { val: 'Leverback Safety Fitting', label: 'Leverback Safety' },
+                { val: 'Huggie Click-Latch Fitting', label: 'Huggie Click-Latch' },
+                { val: 'Clip-On (Non-Pierced Atelier Fitting)', label: 'Clip-On (Non-Pierced)' }
+            ],
+            dimensionsLabel: 'Earring Drop Length & Motif Dimensions:',
+            dimensionsPlaceholder: 'e.g. 24mm Drop Length, 8.5mm Motif Width',
+            dimensionPresets: [
+                '8mm Stud Diameter',
+                '15mm Huggie Hoop',
+                '25mm Drop Length',
+                '42mm Chandelier Drop'
+            ]
+        },
+        universal: {
+            id: 'universal',
+            name: 'Universal / High Jewelry',
+            icon: '⭐',
+            title: 'Universal Fine Jewelry Fit Framework',
+            subtitle: 'One-size luxury pieces, adjustable chains, brooches, or bespoke high jewelry creations.',
+            primaryLabel: '⭐ Universal Luxury Fit Specification',
+            primarySubtitle: 'Universal luxury one-size fit or custom concierge sizing.',
+            primaryPlaceholder: 'e.g. Universal Fine Jewelry Fit (Fully Adjustable)',
+            defaultSpec: 'Universal Fine Jewelry Fit (Adjustable)',
+            primaryPresets: [
+                'One Size / Universal Luxury Fit',
+                'Fully Adjustable Atelier Sizing',
+                'Complimentary Custom Fitting Concierge'
+            ],
+            availableHeader: 'Available Fit & Sizing Options:',
+            autoDefaultBanner: '✨ Intelligent Default: Standard universal fine jewelry fit with complimentary bespoke concierge.',
+            quickSuites: [
+                {
+                    name: '★ Universal One-Size',
+                    sizes: [
+                        'One Size / Universal Luxury Fit',
+                        'Custom Bespoke Sizing (Concierge will contact you)'
+                    ]
+                },
+                {
+                    name: '★ Adjustable Atelier Fit',
+                    sizes: [
+                        'Adjustable Atelier Sizing',
+                        'Custom Bespoke Sizing (Concierge will contact you)'
+                    ]
+                }
+            ],
+            sizeOptions: [
+                { val: 'One Size / Universal Luxury Fit', label: 'One Size / Universal' },
+                { val: 'Adjustable Atelier Sizing', label: 'Adjustable Sizing' },
+                { val: 'Custom Bespoke Sizing (Concierge will contact you)', label: 'Bespoke Fit' }
+            ],
+            dimensionsLabel: 'Overall Piece Dimensions:',
+            dimensionsPlaceholder: 'e.g. 35mm x 20mm x 5mm',
+            dimensionPresets: [
+                '30mm x 15mm',
+                '25mm x 25mm',
+                'Adjustable Length'
+            ]
+        }
+    };
+
+    // Helper: Detect active category framework
+    function detectFramework() {
+        var current = (sizeCatInput.value || '').trim();
+        if (FRAMEWORKS[current]) return current;
+
+        if (categorySelect && categorySelect.selectedIndex >= 0) {
+            var catText = (categorySelect.options[categorySelect.selectedIndex].text || '').toLowerCase();
+            if (catText.indexOf('ring') !== -1) return 'ring';
+            if (catText.indexOf('necklace') !== -1 || catText.indexOf('pendant') !== -1) return 'necklace';
+            if (catText.indexOf('bracelet') !== -1 || catText.indexOf('bangle') !== -1) return 'bracelet';
+            if (catText.indexOf('earring') !== -1) return 'earring';
+        }
+
+        if (titleInput) {
+            var t = (titleInput.value || '').toLowerCase();
+            if (t.indexOf('ring') !== -1) return 'ring';
+            if (t.indexOf('necklace') !== -1 || t.indexOf('pendant') !== -1 || t.indexOf('choker') !== -1) return 'necklace';
+            if (t.indexOf('bracelet') !== -1 || t.indexOf('bangle') !== -1 || t.indexOf('cuff') !== -1) return 'bracelet';
+            if (t.indexOf('earring') !== -1 || t.indexOf('stud') !== -1 || t.indexOf('hoop') !== -1) return 'earring';
+        }
+
+        return 'ring';
+    }
+
+    var activeMode = detectFramework();
+    sizeCatInput.value = activeMode;
+
+    // Create Studio Container & insert into fieldset
+    var sizingStudio = document.createElement('div');
+    sizingStudio.className = 'lux-sizing-studio';
+    if (sizeRow) {
+        sizingFieldset.insertBefore(sizingStudio, sizeRow);
+    } else {
+        sizingFieldset.appendChild(sizingStudio);
+    }
+
+    // Helper: parse selected sizes
+    function getSelectedSizes() {
+        var raw = (availableSizesInput.value || '').trim();
+        if (!raw) return [];
+        return raw.split(/[\n,]/).map(function(s) { return s.trim(); }).filter(Boolean);
+    }
+
+    // Helper: check if a chip is selected
+    function isChipSelected(chip, selectedList) {
+        var v = chip.val.toLowerCase();
+        var l = chip.label.toLowerCase();
+        for (var i = 0; i < selectedList.length; i++) {
+            var s = selectedList[i].toLowerCase();
+            if (s === v || s === l || v.indexOf(s) !== -1 || s.indexOf(v) !== -1) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    function renderStudio() {
+        var fw = FRAMEWORKS[activeMode] || FRAMEWORKS.ring;
+        var selectedSizes = getSelectedSizes();
+        var specVal = (chainLengthInput.value || '').trim();
+
+        var html = '';
+
+        // 1. Framework Tabs Bar
+        html += '<div class="lux-mode-tabs-bar">';
+        html += '  <span style="font-size:11px; font-weight:700; color:#64748B; text-transform:uppercase; letter-spacing:0.06em; margin-right:4px;">Jewelry Framework:</span>';
+        ['ring', 'necklace', 'bracelet', 'earring', 'universal'].forEach(function(key) {
+            var f = FRAMEWORKS[key];
+            var isActive = (key === activeMode);
+            html += '  <button type="button" class="lux-mode-tab-btn ' + (isActive ? 'is-active' : '') + '" data-fw="' + key + '">';
+            html += '    <span>' + f.icon + '</span> ' + f.name;
+            html += '  </button>';
+        });
+        html += '</div>';
+
+        // 2. Info Banner
+        html += '<div class="lux-framework-info-banner">';
+        html += '  <div class="lux-framework-info-left">';
+        html += '    <span style="font-size:18px;">' + fw.icon + '</span>';
+        html += '    <div>';
+        html += '      <strong style="color:#FAF9F6; display:block;">' + fw.title + '</strong>';
+        html += '      <span style="font-size:11.5px; color:#CBD5E1;">' + fw.subtitle + '</span>';
+        html += '    </div>';
+        html += '  </div>';
+        html += '  <span class="lux-framework-sync-badge">⚡ Live Synced with ' + fw.name + '</span>';
+        html += '</div>';
+
+        // 3. Adaptive Primary Specification Box
+        html += '<div class="lux-adaptive-spec-box">';
+        html += '  <div class="lux-spec-box-header">';
+        html += '    <span class="lux-spec-box-label">' + fw.primaryLabel + '</span>';
+        html += '    <button type="button" class="lux-helper-pill pill-clear" id="btn-clear-spec">✕ Clear</button>';
+        html += '  </div>';
+        html += '  <div class="lux-spec-box-subtitle">' + fw.primarySubtitle + '</div>';
+        html += '  <div class="lux-spec-input-wrapper">';
+        html += '    <input type="text" class="lux-spec-input" id="studio-spec-input" placeholder="' + fw.primaryPlaceholder + '" value="' + specVal.replace(/"/g, '&quot;') + '">';
+        html += '  </div>';
+        html += '  <div class="lux-spec-badges-row">';
+        html += '    <span style="font-size:10.5px; font-weight:700; color:#64748B; text-transform:uppercase; letter-spacing:0.04em;">Quick Presets:</span>';
+        fw.primaryPresets.forEach(function(preset) {
+            html += '    <button type="button" class="lux-helper-pill pill-action btn-spec-preset" data-preset="' + preset.replace(/"/g, '&quot;') + '">✦ ' + preset + '</button>';
+        });
+        html += '  </div>';
+        html += '</div>';
+
+        // 4. Available Sizes Suite Box
+        html += '<div class="lux-sizes-suite-box">';
+        html += '  <div class="lux-sizes-suite-header">';
+        html += '    <span class="lux-spec-box-label">📏 ' + fw.availableHeader + '</span>';
+        if (selectedSizes.length > 0) {
+            html += '    <span class="lux-selected-count-badge">✓ ' + selectedSizes.length + ' Custom Sizes Active</span>';
+        } else {
+            html += '    <span class="lux-selected-count-badge" style="background:rgba(16,185,129,0.15); color:#10B981; border-color:rgba(16,185,129,0.35);">✨ Auto-Generated Standard Suite Active</span>';
+        }
+        html += '  </div>';
+
+        // Quick Suites Bar
+        html += '  <div class="lux-suite-quick-presets">';
+        html += '    <span style="font-size:10.5px; font-weight:700; color:#64748B; text-transform:uppercase; letter-spacing:0.04em;">Quick Suites:</span>';
+        fw.quickSuites.forEach(function(qs, qIdx) {
+            html += '    <button type="button" class="lux-helper-pill pill-action btn-quick-suite" data-suite-idx="' + qIdx + '">' + qs.name + '</button>';
+        });
+        html += '    <button type="button" class="lux-helper-pill pill-clear btn-clear-sizes">✕ Reset to Auto-All</button>';
+        html += '  </div>';
+
+        // Chips Grid
+        html += '  <div class="lux-chips-grid">';
+        fw.sizeOptions.forEach(function(chip, cIdx) {
+            var isActive = isChipSelected(chip, selectedSizes);
+            html += '  <div class="lux-interactive-chip ' + (isActive ? 'is-active' : '') + '" data-chip-idx="' + cIdx + '">';
+            html += '    <span class="lux-chip-check">✓</span>';
+            html += '    <span>' + chip.label + '</span>';
+            html += '  </div>';
+        });
+        html += '  </div>';
+
+        // Auto-Default Notice Banner
+        if (selectedSizes.length === 0) {
+            html += '  <div class="lux-auto-default-banner">';
+            html += '    <span>✨</span> ' + fw.autoDefaultBanner;
+            html += '  </div>';
+        }
+
+        // Raw Textarea Toggle Link
+        html += '  <div style="margin-top:12px; font-size:11px; text-align:right;">';
+        html += '    <a href="#" id="toggle-raw-sizes" style="color:#64748B; text-decoration:underline;">&#x25BC; View / Edit raw custom size text</a>';
+        html += '  </div>';
+
+        html += '</div>'; // end sizes suite box
+
+        sizingStudio.innerHTML = html;
+
+        // Attach events inside sizing studio
+        attachStudioEvents(fw);
+
+        // Enhance Dimensions & Certification rows
+        enhanceDimensionsAndCert(fw);
+    }
+
+    function attachStudioEvents(fw) {
+        // Mode tab buttons
+        sizingStudio.querySelectorAll('.lux-mode-tab-btn').forEach(function(btn) {
+            btn.onclick = function(e) {
+                e.preventDefault();
+                var mode = this.getAttribute('data-fw');
+                if (mode && FRAMEWORKS[mode]) {
+                    activeMode = mode;
+                    sizeCatInput.value = activeMode;
+                    // Auto-fill default spec if empty
+                    if (!chainLengthInput.value.trim()) {
+                        chainLengthInput.value = FRAMEWORKS[activeMode].defaultSpec;
+                    }
+                    renderStudio();
+                }
+            };
+        });
+
+        // Primary Spec input sync
+        var studioSpecInput = document.getElementById('studio-spec-input');
+        if (studioSpecInput) {
+            studioSpecInput.oninput = function() {
+                chainLengthInput.value = this.value;
+            };
+        }
+
+        // Clear Spec button
+        var clearSpecBtn = document.getElementById('btn-clear-spec');
+        if (clearSpecBtn) {
+            clearSpecBtn.onclick = function(e) {
+                e.preventDefault();
+                chainLengthInput.value = '';
+                if (studioSpecInput) studioSpecInput.value = '';
+            };
+        }
+
+        // Spec Preset pills
+        sizingStudio.querySelectorAll('.btn-spec-preset').forEach(function(pill) {
+            pill.onclick = function(e) {
+                e.preventDefault();
+                var preset = this.getAttribute('data-preset');
+                var cur = (chainLengthInput.value || '').trim();
+                if (!cur) {
+                    chainLengthInput.value = preset;
+                } else if (cur.indexOf(preset) === -1) {
+                    chainLengthInput.value = cur + ' & ' + preset;
+                }
+                if (studioSpecInput) studioSpecInput.value = chainLengthInput.value;
+            };
+        });
+
+        // Quick Suite buttons
+        sizingStudio.querySelectorAll('.btn-quick-suite').forEach(function(btn) {
+            btn.onclick = function(e) {
+                e.preventDefault();
+                var qIdx = parseInt(this.getAttribute('data-suite-idx'), 10);
+                if (fw.quickSuites[qIdx]) {
+                    availableSizesInput.value = fw.quickSuites[qIdx].sizes.join(', ');
+                    renderStudio();
+                }
+            };
+        });
+
+        // Clear Sizes button
+        var clearSizesBtn = sizingStudio.querySelector('.btn-clear-sizes');
+        if (clearSizesBtn) {
+            clearSizesBtn.onclick = function(e) {
+                e.preventDefault();
+                availableSizesInput.value = '';
+                renderStudio();
+            };
+        }
+
+        // Individual Size Chip toggle
+        sizingStudio.querySelectorAll('.lux-interactive-chip').forEach(function(chipEl) {
+            chipEl.onclick = function() {
+                var cIdx = parseInt(this.getAttribute('data-chip-idx'), 10);
+                var chip = fw.sizeOptions[cIdx];
+                if (!chip) return;
+
+                var currentList = getSelectedSizes();
+                var foundIdx = -1;
+                var v = chip.val.toLowerCase();
+                var l = chip.label.toLowerCase();
+
+                for (var i = 0; i < currentList.length; i++) {
+                    var s = currentList[i].toLowerCase();
+                    if (s === v || s === l || v.indexOf(s) !== -1 || s.indexOf(v) !== -1) {
+                        foundIdx = i;
+                        break;
+                    }
+                }
+
+                if (foundIdx !== -1) {
+                    currentList.splice(foundIdx, 1);
+                } else {
+                    currentList.push(chip.val);
+                }
+
+                availableSizesInput.value = currentList.join(', ');
+                renderStudio();
+            };
+        });
+
+        // Toggle raw sizes textarea
+        var toggleRawBtn = document.getElementById('toggle-raw-sizes');
+        if (toggleRawBtn && availRow) {
+            toggleRawBtn.onclick = function(e) {
+                e.preventDefault();
+                availRow.classList.toggle('lux-sizing-hide-raw');
+            };
+        }
+    }
+
+    // Helper: Enhance Dimensions & Certification fields
+    function enhanceDimensionsAndCert(fw) {
+        // Update dimensions label dynamically
+        if (dimensionsInput) {
+            var dimDiv = dimensionsInput.closest('div');
+            if (dimDiv) {
+                var dimLabel = dimDiv.querySelector('label');
+                if (dimLabel) {
+                    dimLabel.textContent = fw.dimensionsLabel;
+                }
+                dimensionsInput.placeholder = fw.dimensionsPlaceholder;
+
+                // Inject or update dimension pills bar
+                var existingDimBar = dimDiv.querySelector('.lux-field-badges-bar');
+                if (!existingDimBar) {
+                    existingDimBar = document.createElement('div');
+                    existingDimBar.className = 'lux-field-badges-bar';
+                    dimensionsInput.parentNode.appendChild(existingDimBar);
+                }
+                var dimHtml = '<span style="font-size:10px; font-weight:700; color:#64748B; text-transform:uppercase;">Quick Presets:</span>';
+                fw.dimensionPresets.forEach(function(dp) {
+                    dimHtml += '<button type="button" class="lux-helper-pill pill-action btn-dim-preset" data-preset="' + dp.replace(/"/g, '&quot;') + '">✦ ' + dp + '</button>';
+                });
+                existingDimBar.innerHTML = dimHtml;
+
+                existingDimBar.querySelectorAll('.btn-dim-preset').forEach(function(dpBtn) {
+                    dpBtn.onclick = function(e) {
+                        e.preventDefault();
+                        var p = this.getAttribute('data-preset');
+                        var cur = (dimensionsInput.value || '').trim();
+                        if (!cur) {
+                            dimensionsInput.value = p;
+                        } else if (cur.indexOf(p) === -1) {
+                            dimensionsInput.value = cur + ', ' + p;
+                        }
+                    };
+                });
+            }
+        }
+
+        // Certification Badges
+        if (certInput) {
+            var certDiv = certInput.closest('div');
+            if (certDiv) {
+                var existingCertBar = certDiv.querySelector('.lux-field-badges-bar');
+                if (!existingCertBar) {
+                    existingCertBar = document.createElement('div');
+                    existingCertBar.className = 'lux-field-badges-bar';
+                    certInput.parentNode.appendChild(existingCertBar);
+                }
+                var certBadges = [
+                    'Luckjary Seal & IGI Laboratory Certificate',
+                    'GIA Certified Diamond Appraisal',
+                    'Luckjary Atelier Certificate of Authenticity',
+                    'HRD Antwerp Gemological Verification'
+                ];
+                var certHtml = '<span style="font-size:10px; font-weight:700; color:#64748B; text-transform:uppercase;">Certified Hallmark:</span>';
+                certBadges.forEach(function(cb) {
+                    certHtml += '<button type="button" class="lux-helper-pill pill-action btn-cert-preset" data-preset="' + cb.replace(/"/g, '&quot;') + '">✦ ' + cb + '</button>';
+                });
+                existingCertBar.innerHTML = certHtml;
+
+                existingCertBar.querySelectorAll('.btn-cert-preset').forEach(function(cbBtn) {
+                    cbBtn.onclick = function(e) {
+                        e.preventDefault();
+                        certInput.value = this.getAttribute('data-preset');
+                    };
+                });
+            }
+        }
+    }
+
+    // Listen for Category changes in the top Identity card
+    if (categorySelect) {
+        categorySelect.addEventListener('change', function() {
+            var detected = detectFramework();
+            if (detected !== activeMode) {
+                activeMode = detected;
+                sizeCatInput.value = activeMode;
+                // Auto-fill default spec if empty or matches previous default
+                chainLengthInput.value = FRAMEWORKS[activeMode].defaultSpec;
+                renderStudio();
+            }
+        });
+    }
+
+    // Listen for raw size_category changes
+    sizeCatInput.addEventListener('change', function() {
+        var val = (this.value || '').trim();
+        if (FRAMEWORKS[val] && val !== activeMode) {
+            activeMode = val;
+            renderStudio();
+        }
+    });
+
+    // Initial render
+    renderStudio();
 })();
 </script>
 {% endblock %}

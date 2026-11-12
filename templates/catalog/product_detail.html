@@ -246,6 +246,24 @@
                         <dt class="text-neutral-500">Dimensions</dt>
                         <dd class="font-semibold text-neutral-900 text-right">{{ product.dimensions }}</dd>
                     </div>
+                    {% if product.chain_length_or_size %}
+                    <div class="py-2 flex justify-between">
+                        <dt class="text-neutral-500">
+                            {% if product.size_category == 'ring' or 'ring' in product.category.slug %}
+                            Ring Sizing & Band Spec
+                            {% elif product.size_category == 'necklace' or 'necklace' in product.category.slug %}
+                            Chain & Clasp Spec
+                            {% elif product.size_category == 'bracelet' or 'bracelet' in product.category.slug %}
+                            Bangle / Wrist Fit Spec
+                            {% elif product.size_category == 'earring' or 'earring' in product.category.slug %}
+                            Earring Fitting Spec
+                            {% else %}
+                            Size Specification
+                            {% endif %}
+                        </dt>
+                        <dd class="font-semibold text-neutral-900 text-right">{{ product.chain_length_or_size }}</dd>
+                    </div>
+                    {% endif %}
                     <div class="py-2 flex justify-between">
                         <dt class="text-neutral-500">Hallmark & Certification</dt>
                         <dd class="font-semibold text-neutral-900 text-right">{{ product.certification }}</dd>
