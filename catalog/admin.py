@@ -6,14 +6,21 @@ from .models import Category, Material, Collection, Product, ProductImage, Produ
 
 class ProductAdminForm(forms.ModelForm):
     STANDARD_METALS = [
+        # 18K Solid Gold
         ('18K Solid Yellow Gold', '18K Solid Yellow Gold'),
         ('18K Solid White Gold', '18K Solid White Gold'),
         ('18K Solid Rose Gold', '18K Solid Rose Gold'),
+        # 18K Gold Vermeil & Demi-Fine
+        ('18K Yellow Gold Vermeil', '18K Yellow Gold Vermeil'),
+        ('18K Rose Gold Vermeil', '18K Rose Gold Vermeil'),
+        ('18K White Gold Vermeil', '18K White Gold Vermeil'),
+        # Platinum & Sterling Silver
         ('Platinum 950', 'Platinum 950'),
+        ('925 Sterling Silver', '925 Sterling Silver'),
+        # 14K Solid Gold
         ('14K Solid Yellow Gold', '14K Solid Yellow Gold'),
         ('14K Solid White Gold', '14K Solid White Gold'),
         ('14K Solid Rose Gold', '14K Solid Rose Gold'),
-        ('925 Sterling Silver', '925 Sterling Silver'),
     ]
 
     metal_presets = forms.MultipleChoiceField(
@@ -61,6 +68,7 @@ class ProductAdminForm(forms.ModelForm):
         cleaned_data = super().clean()
         presets = cleaned_data.get('metal_presets') or []
         custom_metals = cleaned_data.get('available_metals') or ''
+        karat = (cleaned_data.get('karat_metal') or '').strip()
         
         # Combine presets with custom metals entered
         existing = [m.strip() for m in custom_metals.split(',') if m.strip()]
@@ -74,6 +82,8 @@ class ProductAdminForm(forms.ModelForm):
                 
         if combined:
             cleaned_data['available_metals'] = ', '.join(combined)
+            if not karat:
+                cleaned_data['karat_metal'] = combined[0]
             
         return cleaned_data
 
@@ -122,12 +132,18 @@ class ProductAdmin(admin.ModelAdmin):
                 ('is_featured', 'is_bestseller', 'is_new_arrival'),
             )
         }),
-        ('✨ Precious Metal Options', {
-            'description': 'Configure the precious metals offered for this piece. Clients can switch between these metals with live swatches on the boutique product page.',
+        ('✨ Precious Metals & Live Swatches', {
+            'description': 'Select which precious metal variants are offered for this piece. Clients can switch between these metals with live swatches on the boutique product page.',
             'fields': (
-                'karat_metal',
                 'metal_presets',
+                'karat_metal',
                 'available_metals',
+            )
+        }),
+        ('💎 Gemstones & Specialty Materials', {
+            'description': 'Specify featured gemstones, pearl varieties, and diamond grades. (Precious metals selected above are automatically mapped to catalog filters on save).',
+            'fields': (
+                ('gemstone', 'carat_weight'),
                 'materials',
             )
         }),
@@ -136,7 +152,6 @@ class ProductAdmin(admin.ModelAdmin):
             'fields': (
                 ('size_category', 'chain_length_or_size'),
                 'available_sizes',
-                ('gemstone', 'carat_weight'),
                 ('dimensions', 'certification'),
             )
         }),
@@ -196,6 +211,40 @@ class ProductAdmin(admin.ModelAdmin):
     def remove_featured(self, request, queryset):
         count = queryset.update(is_featured=False)
         self.message_user(request, f"{count} fine jewelry pieces removed from Featured.")
+
+    def save_related(self, request, form, formsets, change):
+        super().save_related(request, form, formsets, change)
+        product = form.instance
+        metals_text = f"{product.karat_metal} {product.available_metals}".lower()
+        
+        to_add = []
+        if 'vermeil' in metals_text or 'demifine' in metals_text or 'demifne' in metals_text:
+            m = Material.objects.filter(slug='18k-gold-vermeil-demifine').first()
+            if m:
+                to_add.append(m)
+        if '18k solid yellow' in metals_text or ('18k' in metals_text and 'yellow' in metals_text and 'vermeil' not in metals_text):
+            m = Material.objects.filter(slug='18k-solid-yellow-gold').first()
+            if m:
+                to_add.append(m)
+        if 'white gold' in metals_text and 'vermeil' not in metals_text:
+            m = Material.objects.filter(slug='18k-white-gold').first()
+            if m:
+                to_add.append(m)
+        if 'rose gold' in metals_text and 'vermeil' not in metals_text:
+            m = Material.objects.filter(slug='18k-rose-gold').first()
+            if m:
+                to_add.append(m)
+        if 'platinum' in metals_text:
+            m = Material.objects.filter(slug='platinum-950').first()
+            if m:
+                to_add.append(m)
+        if 'sterling silver' in metals_text or ('silver' in metals_text and 'vermeil' not in metals_text):
+            m = Material.objects.filter(slug='925-sterling-silver').first()
+            if m:
+                to_add.append(m)
+                
+        if to_add:
+            product.materials.add(*to_add)
 
     def changelist_view(self, request, extra_context=None):
         extra_context = extra_context or {}

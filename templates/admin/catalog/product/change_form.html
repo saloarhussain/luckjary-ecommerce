@@ -1,0 +1,663 @@
+{% extends "admin/change_form.html" %}
+{% load i18n admin_urls static admin_modify %}
+
+{% block extrahead %}
+{{ block.super }}
+<style>
+/* ========================================================
+   LUCKJARY HAUTE JOAILLERIE - PRODUCT ADMIN STUDIO
+   ======================================================== */
+.lux-admin-banner {
+    background: linear-gradient(135deg, #161822 0%, #0F1017 100%);
+    border: 1px solid rgba(197, 160, 89, 0.3);
+    border-radius: 8px;
+    padding: 14px 18px;
+    margin-bottom: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+.lux-admin-banner-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+.lux-admin-banner-icon {
+    width: 38px;
+    height: 38px;
+    border-radius: 8px;
+    background: rgba(197, 160, 89, 0.15);
+    color: #C5A059;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    border: 1px solid rgba(197, 160, 89, 0.35);
+    flex-shrink: 0;
+}
+.lux-admin-banner h3 {
+    margin: 0;
+    font-size: 14px;
+    font-weight: 700;
+    color: #FAF9F6;
+    letter-spacing: 0.03em;
+}
+.lux-admin-banner p {
+    margin: 3px 0 0 0;
+    font-size: 12px;
+    color: #94A3B8;
+}
+.lux-admin-badge-gold {
+    background: rgba(197, 160, 89, 0.15);
+    color: #E2B755;
+    border: 1px solid rgba(197, 160, 89, 0.3);
+    padding: 4px 12px;
+    border-radius: 9999px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+
+/* Precious Metal Studio Card */
+.lux-studio-container {
+    background: #13151D;
+    border: 1px solid #232736;
+    border-radius: 10px;
+    padding: 20px;
+    margin-top: 8px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+}
+.lux-presets-bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 20px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid #202433;
+}
+.lux-preset-chip {
+    background: #1A1D28;
+    color: #CBD5E1;
+    border: 1px solid #2F3547;
+    border-radius: 6px;
+    padding: 6px 14px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    user-select: none;
+}
+.lux-preset-chip:hover {
+    background: #242938;
+    color: #FFF;
+    border-color: #C5A059;
+    transform: translateY(-1px);
+}
+.lux-preset-chip.btn-clear-chip {
+    margin-left: auto;
+    color: #EF4444;
+    border-color: rgba(239, 68, 68, 0.3);
+    background: rgba(239, 68, 68, 0.08);
+}
+.lux-preset-chip.btn-clear-chip:hover {
+    background: rgba(239, 68, 68, 0.2);
+    border-color: #EF4444;
+}
+
+/* Category Sections */
+.lux-group-wrapper {
+    margin-bottom: 18px;
+}
+.lux-group-header {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #94A3B8;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.lux-pills-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+    gap: 10px;
+}
+.lux-swatch-pill {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 14px;
+    background: #171A24;
+    border: 1px solid #262B3A;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    user-select: none;
+}
+.lux-swatch-pill:hover {
+    background: #1E2230;
+    border-color: rgba(197, 160, 89, 0.4);
+}
+.lux-swatch-pill.is-active {
+    background: rgba(197, 160, 89, 0.12);
+    border-color: #C5A059;
+    box-shadow: 0 0 0 1px rgba(197, 160, 89, 0.5);
+}
+.lux-swatch-circle {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 1px solid rgba(0, 0, 0, 0.4);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.35);
+    flex-shrink: 0;
+}
+.lux-pill-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: #E2E8F0;
+    flex-grow: 1;
+}
+.lux-swatch-pill.is-active .lux-pill-label {
+    color: #FAF9F6;
+    font-weight: 700;
+}
+.lux-pill-check {
+    width: 18px;
+    height: 18px;
+    border-radius: 4px;
+    background: #232736;
+    border: 1px solid #363C4E;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: transparent;
+    font-size: 11px;
+    font-weight: 800;
+    transition: all 0.15s ease;
+    flex-shrink: 0;
+}
+.lux-swatch-pill.is-active .lux-pill-check {
+    background: #C5A059;
+    border-color: #C5A059;
+    color: #121212;
+}
+
+/* Custom Metal Row */
+.lux-custom-metal-box {
+    margin-top: 14px;
+    padding-top: 14px;
+    border-top: 1px dashed #232736;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.lux-custom-input {
+    background: #171A24 !important;
+    border: 1px solid #2D3345 !important;
+    color: #F8FAFC !important;
+    padding: 8px 14px !important;
+    border-radius: 6px !important;
+    font-size: 12px !important;
+    flex-grow: 1;
+    max-width: 320px;
+}
+.lux-custom-btn {
+    background: #1F2433;
+    border: 1px solid #3B435A;
+    color: #CBD5E1;
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+.lux-custom-btn:hover {
+    background: #C5A059;
+    color: #0F1015;
+    border-color: #C5A059;
+}
+
+/* Primary Metal Showcase Selector */
+.lux-primary-panel {
+    background: #171A24;
+    border: 1px solid #2B3042;
+    border-radius: 8px;
+    padding: 16px 18px;
+    margin-top: 18px;
+}
+.lux-primary-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+.lux-primary-header h4 {
+    margin: 0;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: #F8FAFC;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+.lux-primary-options-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 8px;
+}
+.lux-primary-choice-btn {
+    background: #1D212E;
+    border: 1px solid #33394D;
+    color: #94A3B8;
+    padding: 7px 14px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+.lux-primary-choice-btn:hover {
+    background: #252A3B;
+    color: #F1F5F9;
+    border-color: #4B556D;
+}
+.lux-primary-choice-btn.is-active-choice {
+    background: #C5A059;
+    border-color: #C5A059;
+    color: #0F1015;
+    font-weight: 700;
+    box-shadow: 0 2px 10px rgba(197, 160, 89, 0.4);
+}
+
+/* Advanced Fine Tuning Collapsible */
+.lux-fine-tuning-wrap {
+    margin-top: 14px;
+    padding-top: 10px;
+    border-top: 1px dashed #232736;
+}
+.lux-expand-link {
+    font-size: 11px;
+    color: #64748B;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    text-decoration: underline;
+    user-select: none;
+}
+.lux-expand-link:hover {
+    color: #94A3B8;
+}
+.lux-fine-tuning-fields {
+    display: none;
+    margin-top: 10px;
+    padding: 12px;
+    background: #10121A;
+    border: 1px solid #202433;
+    border-radius: 6px;
+}
+.lux-fine-tuning-fields.is-open {
+    display: block;
+}
+
+/* Gemstones Helper Tip */
+.lux-gemstones-notice {
+    background: rgba(16, 185, 129, 0.08);
+    border-left: 3px solid #10B981;
+    border-radius: 4px;
+    padding: 10px 14px;
+    margin-bottom: 14px;
+    color: #A7F3D0;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+</style>
+{% endblock %}
+
+{% block content_title %}
+<div class="lux-admin-banner">
+    <div class="lux-admin-banner-left">
+        <div class="lux-admin-banner-icon">💎</div>
+        <div>
+            <h3>Luckjary Haute Joaillerie Atelier &bull; Piece Management</h3>
+            <p>Unified luxury catalog specifications, live precious metal swatches, and certified gemological details.</p>
+        </div>
+    </div>
+    <span class="lux-admin-badge-gold">Atelier Suite</span>
+</div>
+{{ block.super }}
+{% endblock %}
+
+{% block admin_change_form_document_ready %}
+{{ block.super }}
+<script>
+(function() {
+    // -------------------------------------------------------------
+    // LUCKJARY INTERACTIVE PRECIOUS METAL & SWATCHES STUDIO
+    // -------------------------------------------------------------
+    var metalPresetsRow = document.querySelector('.field-metal_presets');
+    var karatMetalRow = document.querySelector('.field-karat_metal');
+    var availableMetalsRow = document.querySelector('.field-available_metals');
+    var materialsRow = document.querySelector('.field-materials');
+
+    if (!metalPresetsRow || !karatMetalRow || !availableMetalsRow) return;
+
+    var karatInput = document.getElementById('id_karat_metal');
+    var availableInput = document.getElementById('id_available_metals');
+
+    // Hide default awkward vertical Django checkboxes container
+    var defaultCheckboxesContainer = metalPresetsRow.querySelector('.admin-checkbox-grid') || metalPresetsRow.querySelector('ul') || metalPresetsRow.querySelector('div');
+    if (defaultCheckboxesContainer) {
+        defaultCheckboxesContainer.style.display = 'none';
+    }
+
+    // Hide raw text fields from main view (will sync with UI)
+    karatMetalRow.style.display = 'none';
+    availableMetalsRow.style.display = 'none';
+
+    // Defined groups with colors
+    var groups = [
+        {
+            title: "18K Solid Gold Suite",
+            icon: "✨",
+            items: [
+                { name: "18K Solid Yellow Gold", bg: "linear-gradient(135deg, #F5D77F 0%, #C59B27 100%)" },
+                { name: "18K Solid White Gold", bg: "linear-gradient(135deg, #FFFFFF 0%, #D1D5DB 100%)" },
+                { name: "18K Solid Rose Gold", bg: "linear-gradient(135deg, #FAD2C0 0%, #D48B7B 100%)" }
+            ]
+        },
+        {
+            title: "18K Gold Vermeil & Demi-Fine (2.5μ Thick Gold over 925 Silver)",
+            icon: "👑",
+            items: [
+                { name: "18K Yellow Gold Vermeil", bg: "linear-gradient(135deg, #F5D77F 0%, #C59B27 100%)" },
+                { name: "18K Rose Gold Vermeil", bg: "linear-gradient(135deg, #FAD2C0 0%, #D48B7B 100%)" },
+                { name: "18K White Gold Vermeil", bg: "linear-gradient(135deg, #FFFFFF 0%, #D1D5DB 100%)" }
+            ]
+        },
+        {
+            title: "Platinum & Fine Silver",
+            icon: "🛡️",
+            items: [
+                { name: "Platinum 950", bg: "linear-gradient(135deg, #F3F4F6 0%, #9CA3AF 100%)" },
+                { name: "925 Sterling Silver", bg: "linear-gradient(135deg, #F8FAFC 0%, #CBD5E1 100%)" }
+            ]
+        },
+        {
+            title: "14K Solid Gold Suite",
+            icon: "⭐",
+            items: [
+                { name: "14K Solid Yellow Gold", bg: "linear-gradient(135deg, #E5C158 0%, #B38515 100%)" },
+                { name: "14K Solid White Gold", bg: "linear-gradient(135deg, #E5E7EB 0%, #9CA3AF 100%)" },
+                { name: "14K Solid Rose Gold", bg: "linear-gradient(135deg, #ECAE9E 0%, #C66D5B 100%)" }
+            ]
+        }
+    ];
+
+    // Helper: read current active metals
+    function getSelectedMetals() {
+        var raw = (availableInput.value || '').trim();
+        if (!raw) return [];
+        return raw.split(',').map(function(s) { return s.trim(); }).filter(Boolean);
+    }
+
+    // Helper: update underlying fields and UI
+    function setSelectedMetals(metalsList) {
+        // Unique
+        var unique = [];
+        metalsList.forEach(function(m) {
+            if (unique.indexOf(m) === -1) unique.push(m);
+        });
+
+        availableInput.value = unique.join(', ');
+
+        // Sync hidden django checkboxes
+        var allCheckboxes = metalPresetsRow.querySelectorAll('input[type="checkbox"][name="metal_presets"]');
+        allCheckboxes.forEach(function(cb) {
+            cb.checked = (unique.indexOf(cb.value) !== -1);
+        });
+
+        // Ensure karat metal is valid
+        var currentKarat = (karatInput.value || '').trim();
+        if (unique.length > 0 && (unique.indexOf(currentKarat) === -1 || !currentKarat)) {
+            karatInput.value = unique[0];
+        } else if (unique.length === 0) {
+            karatInput.value = '';
+        }
+
+        renderUI();
+    }
+
+    // Create Main Studio Container
+    var studio = document.createElement('div');
+    studio.className = 'lux-studio-container';
+    metalPresetsRow.appendChild(studio);
+
+    function renderUI() {
+        var selected = getSelectedMetals();
+        var currentKarat = (karatInput.value || '').trim() || (selected.length > 0 ? selected[0] : '');
+
+        var html = '';
+
+        // 1. Presets Toolbar
+        html += '<div class="lux-presets-bar">';
+        html += '  <span style="font-size:11px; font-weight:700; color:#64748B; text-transform:uppercase; letter-spacing:0.06em; margin-right:4px;">Quick Suites:</span>';
+        html += '  <button type="button" class="lux-preset-chip" data-preset="18k-solid">✨ 18K Solid Gold Trio + Plat</button>';
+        html += '  <button type="button" class="lux-preset-chip" data-preset="18k-vermeil">👑 18K Vermeil Suite</button>';
+        html += '  <button type="button" class="lux-preset-chip" data-preset="925-silver">🛡️ 925 Sterling Silver</button>';
+        html += '  <button type="button" class="lux-preset-chip" data-preset="14k-solid">⭐ 14K Solid Suite</button>';
+        html += '  <button type="button" class="lux-preset-chip btn-clear-chip" data-preset="clear">✕ Clear All</button>';
+        html += '</div>';
+
+        // 2. Categorized Grid
+        groups.forEach(function(grp) {
+            html += '<div class="lux-group-wrapper">';
+            html += '  <div class="lux-group-header"><span>' + grp.icon + '</span> ' + grp.title + '</div>';
+            html += '  <div class="lux-pills-grid">';
+            grp.items.forEach(function(item) {
+                var isActive = selected.indexOf(item.name) !== -1;
+                html += '<div class="lux-swatch-pill ' + (isActive ? 'is-active' : '') + '" data-metal="' + item.name + '">';
+                html += '  <span class="lux-swatch-circle" style="background:' + item.bg + ';"></span>';
+                html += '  <span class="lux-pill-label">' + item.name + '</span>';
+                html += '  <span class="lux-pill-check">✓</span>';
+                html += '</div>';
+            });
+            html += '  </div>';
+            html += '</div>';
+        });
+
+        // 3. Custom Metals Added (if any)
+        var knownMetals = [];
+        groups.forEach(function(g) { g.items.forEach(function(i) { knownMetals.push(i.name); }); });
+        var customMetals = selected.filter(function(m) { return knownMetals.indexOf(m) === -1; });
+
+        if (customMetals.length > 0) {
+            html += '<div class="lux-group-wrapper">';
+            html += '  <div class="lux-group-header"><span>✨</span> Custom / Bespoke Alloys</div>';
+            html += '  <div class="lux-pills-grid">';
+            customMetals.forEach(function(name) {
+                html += '<div class="lux-swatch-pill is-active" data-metal="' + name + '">';
+                html += '  <span class="lux-swatch-circle" style="background:linear-gradient(135deg, #E2B755, #A47E24);"></span>';
+                html += '  <span class="lux-pill-label">' + name + '</span>';
+                html += '  <span class="lux-pill-check">✓</span>';
+                html += '</div>';
+            });
+            html += '  </div>';
+            html += '</div>';
+        }
+
+        // Custom Metal Input Pill
+        html += '<div class="lux-custom-metal-box">';
+        html += '  <span style="font-size:12px; color:#94A3B8; font-weight:600;">+ Custom Metal:</span>';
+        html += '  <input type="text" id="custom-metal-input" class="lux-custom-input" placeholder="e.g. 22K Solid Gold, Solid 18K Two-Tone...">';
+        html += '  <button type="button" id="btn-add-custom-metal" class="lux-custom-btn">+ Add Metal</button>';
+        html += '</div>';
+
+        // 4. Primary / Default Showcase Metal Picker
+        html += '<div class="lux-primary-panel">';
+        html += '  <div class="lux-primary-header">';
+        html += '    <h4><span>⭐</span> Default Primary Showcase Metal (Karat Metal)</h4>';
+        html += '    <span style="font-size:11px; color:#94A3B8;">Initial metal displayed on product load</span>';
+        html += '  </div>';
+
+        if (selected.length === 0) {
+            html += '  <div style="font-size:12px; color:#EF4444; font-style:italic;">Please select at least one metal above.</div>';
+        } else {
+            html += '  <div class="lux-primary-options-row">';
+            selected.forEach(function(m) {
+                var isPrimary = (m === currentKarat);
+                html += '  <button type="button" class="lux-primary-choice-btn ' + (isPrimary ? 'is-active-choice' : '') + '" data-primary-target="' + m + '">';
+                html += '    ' + (isPrimary ? '★ ' : '○ ') + m;
+                html += '  </button>';
+            });
+            html += '  </div>';
+        }
+
+        // 5. Fine-Tuning Advanced Collapsible
+        html += '  <div class="lux-fine-tuning-wrap">';
+        html += '    <a class="lux-expand-link" id="toggle-fine-tuning">&#x25BC; View auto-synced raw database values</a>';
+        html += '    <div class="lux-fine-tuning-fields" id="fine-tuning-container">';
+        html += '      <div style="margin-bottom:8px;">';
+        html += '        <label style="font-size:11px; color:#94A3B8; display:block; margin-bottom:4px;">Karat Metal (Text):</label>';
+        html += '        <input type="text" id="display-karat-text" value="' + currentKarat + '" style="width:100%; padding:6px 10px; background:#181A22; border:1px solid #2D3345; color:#FFF; border-radius:4px; font-size:12px;">';
+        html += '      </div>';
+        html += '      <div>';
+        html += '        <label style="font-size:11px; color:#94A3B8; display:block; margin-bottom:4px;">Available Metals (Comma-separated Swatches):</label>';
+        html += '        <input type="text" id="display-available-text" value="' + availableInput.value + '" style="width:100%; padding:6px 10px; background:#181A22; border:1px solid #2D3345; color:#FFF; border-radius:4px; font-size:12px;">';
+        html += '      </div>';
+        html += '    </div>';
+        html += '  </div>';
+
+        html += '</div>'; // end primary panel
+
+        studio.innerHTML = html;
+
+        // Attach Event Listeners
+        attachEvents();
+    }
+
+    function attachEvents() {
+        // Preset clicks
+        studio.querySelectorAll('.lux-preset-chip').forEach(function(btn) {
+            btn.onclick = function(e) {
+                e.preventDefault();
+                var p = this.getAttribute('data-preset');
+                if (p === '18k-solid') {
+                    setSelectedMetals(['18K Solid Yellow Gold', '18K Solid White Gold', '18K Solid Rose Gold', 'Platinum 950']);
+                } else if (p === '18k-vermeil') {
+                    setSelectedMetals(['18K Yellow Gold Vermeil', '18K Rose Gold Vermeil']);
+                } else if (p === '925-silver') {
+                    setSelectedMetals(['925 Sterling Silver']);
+                } else if (p === '14k-solid') {
+                    setSelectedMetals(['14K Solid Yellow Gold', '14K Solid White Gold', '14K Solid Rose Gold']);
+                } else if (p === 'clear') {
+                    setSelectedMetals([]);
+                }
+            };
+        });
+
+        // Pill clicks
+        studio.querySelectorAll('.lux-swatch-pill').forEach(function(pill) {
+            pill.onclick = function() {
+                var metal = this.getAttribute('data-metal');
+                var current = getSelectedMetals();
+                var idx = current.indexOf(metal);
+                if (idx !== -1) {
+                    current.splice(idx, 1);
+                } else {
+                    current.push(metal);
+                }
+                setSelectedMetals(current);
+            };
+        });
+
+        // Primary choice clicks
+        studio.querySelectorAll('.lux-primary-choice-btn').forEach(function(btn) {
+            btn.onclick = function(e) {
+                e.preventDefault();
+                var m = this.getAttribute('data-primary-target');
+                karatInput.value = m;
+                renderUI();
+            };
+        });
+
+        // Add custom metal
+        var addBtn = document.getElementById('btn-add-custom-metal');
+        var addInput = document.getElementById('custom-metal-input');
+        if (addBtn && addInput) {
+            var handleAdd = function() {
+                var val = addInput.value.trim();
+                if (val) {
+                    var current = getSelectedMetals();
+                    if (current.indexOf(val) === -1) {
+                        current.push(val);
+                        setSelectedMetals(current);
+                    }
+                }
+            };
+            addBtn.onclick = handleAdd;
+            addInput.onkeypress = function(e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    handleAdd();
+                }
+            };
+        }
+
+        // Toggle fine-tuning
+        var toggleLink = document.getElementById('toggle-fine-tuning');
+        var fineTuningBox = document.getElementById('fine-tuning-container');
+        if (toggleLink && fineTuningBox) {
+            toggleLink.onclick = function() {
+                fineTuningBox.classList.toggle('is-open');
+            };
+        }
+
+        // Manual text sync
+        var displayKarat = document.getElementById('display-karat-text');
+        if (displayKarat) {
+            displayKarat.onchange = function() {
+                karatInput.value = this.value;
+            };
+        }
+        var displayAvail = document.getElementById('display-available-text');
+        if (displayAvail) {
+            displayAvail.onchange = function() {
+                availableInput.value = this.value;
+                setSelectedMetals(getSelectedMetals());
+            };
+        }
+    }
+
+    // Add Gemstone Notice
+    if (materialsRow) {
+        var notice = document.createElement('div');
+        notice.className = 'lux-gemstones-notice';
+        notice.innerHTML = '<span>💎</span> <strong>Atelier Note:</strong> Precious metals selected in the studio above are automatically synced to search & filter tags upon saving. Use this section to select featured gemstones, cultured pearls, and diamond grades.';
+        materialsRow.parentNode.insertBefore(notice, materialsRow);
+    }
+
+    // Initial render
+    renderUI();
+})();
+</script>
+{% endblock %}
