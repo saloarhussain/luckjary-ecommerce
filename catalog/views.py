@@ -25,9 +25,12 @@ def product_list(request):
     elif selected_metal == 'demifine':
         products = products.filter(
             Q(karat_metal__icontains='Demifine') |
+            Q(karat_metal__icontains='Demifne') |
             Q(karat_metal__icontains='Vermeil') |
             Q(materials__name__icontains='Demifine') |
-            Q(title__icontains='Demifine')
+            Q(materials__name__icontains='Demifne') |
+            Q(title__icontains='Demifine') |
+            Q(title__icontains='Demifne')
         ).distinct()
     elif selected_metal == 'gold':
         products = products.filter(

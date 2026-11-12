@@ -129,7 +129,7 @@
                 <div>
                     <div class="flex justify-between items-center mb-2">
                         <label class="block text-xs font-display tracking-wider uppercase font-semibold text-neutral-800">
-                            Precious Metal: <span id="selected-metal-label" class="font-sans normal-case text-neutral-700 font-semibold">{{ product.karat_metal }}</span>
+                            Precious Metal: <span id="selected-metal-label" class="font-sans normal-case text-neutral-700 font-semibold">{% if product.karat_metal in product.metal_options %}{{ product.karat_metal }}{% elif product.metal_options %}{{ product.metal_options.0 }}{% else %}{{ product.karat_metal }}{% endif %}</span>
                         </label>
                         <span class="text-[11px] text-[#A37B30] font-sans font-medium">Choice of {{ product.metal_options|length }} Metals</span>
                     </div>
@@ -228,7 +228,7 @@
                 <dl class="divide-y divide-neutral-100 text-xs">
                     <div class="py-2 flex justify-between">
                         <dt class="text-neutral-500">Precious Metal</dt>
-                        <dd id="details-precious-metal" class="font-semibold text-neutral-900 text-right">{{ product.karat_metal }}</dd>
+                        <dd id="details-precious-metal" class="font-semibold text-neutral-900 text-right">{% if product.karat_metal in product.metal_options %}{{ product.karat_metal }}{% elif product.metal_options %}{{ product.metal_options.0 }}{% else %}{{ product.karat_metal }}{% endif %}</dd>
                     </div>
                     {% if product.gemstone %}
                     <div class="py-2 flex justify-between">
