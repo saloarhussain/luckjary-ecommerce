@@ -111,12 +111,12 @@ class Product(models.Model):
     is_new_arrival = models.BooleanField(default=False)
     
     # Luxury Specifications & Precious Metals
-    karat_metal = models.CharField(max_length=120, default='18K Solid Yellow Gold', help_text="Default primary metal for this piece")
+    karat_metal = models.CharField(max_length=120, default='18K Yellow Gold', help_text="Default primary metal for this piece")
     available_metals = models.CharField(
         max_length=400, 
         blank=True, 
-        default='18K Solid Yellow Gold, 18K Solid White Gold, 18K Solid Rose Gold, Platinum 950',
-        help_text="Comma-separated precious metal options available to the client on the product page. e.g. 18K Solid Yellow Gold, 18K Solid White Gold, 18K Solid Rose Gold, Platinum 950"
+        default='18K Yellow Gold, 18K White Gold, 18K Rose Gold',
+        help_text="Comma-separated precious metal options available to the client on the product page. e.g. 18K Yellow Gold, 18K White Gold, 18K Rose Gold"
     )
     gemstone = models.CharField(max_length=150, blank=True, default='VVS Clarity Lab Diamonds')
     carat_weight = models.CharField(max_length=60, blank=True, default='1.25 ctw')
@@ -175,7 +175,7 @@ class Product(models.Model):
         default_metals = []
         if self.karat_metal:
             default_metals.append(self.karat_metal)
-        for m in ['18K Solid Yellow Gold', '18K Solid White Gold', '18K Solid Rose Gold', 'Platinum 950']:
+        for m in ['18K Yellow Gold', '18K White Gold', '18K Rose Gold']:
             if m not in default_metals:
                 default_metals.append(m)
         return default_metals

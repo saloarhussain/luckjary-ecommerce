@@ -112,6 +112,80 @@
     border-color: #EF4444;
 }
 
+/* 2-Tier Karat & Tone Hierarchy */
+.lux-tier-label {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #94A3B8;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.lux-karat-purity-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 18px;
+}
+.lux-karat-tab-btn {
+    flex: 1;
+    min-width: 170px;
+    background: #171A24;
+    border: 1px solid #2B3042;
+    border-radius: 8px;
+    padding: 12px 16px;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    user-select: none;
+    color: #CBD5E1;
+}
+.lux-karat-tab-btn:hover {
+    background: #1E2230;
+    color: #FFF;
+    border-color: rgba(197, 160, 89, 0.5);
+    transform: translateY(-1px);
+}
+.lux-karat-tab-btn.is-active-karat {
+    background: rgba(197, 160, 89, 0.14);
+    border-color: #C5A059;
+    color: #FAF9F6;
+    box-shadow: 0 0 14px rgba(197, 160, 89, 0.25);
+}
+.lux-karat-title {
+    font-size: 13px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+.lux-karat-badge {
+    background: rgba(197, 160, 89, 0.18);
+    color: #E2B755;
+    font-size: 10.5px;
+    font-weight: 700;
+    padding: 2px 7px;
+    border-radius: 4px;
+    border: 1px solid rgba(197, 160, 89, 0.3);
+    white-space: nowrap;
+}
+.lux-color-tones-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+}
+@media (max-width: 800px) {
+    .lux-color-tones-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
 /* Category Sections */
 .lux-group-wrapper {
     margin-bottom: 18px;
@@ -1216,6 +1290,9 @@
 (function() {
     // -------------------------------------------------------------
     // LUCKJARY INTERACTIVE PRECIOUS METAL & SWATCHES STUDIO
+    // 2-Tier Architecture:
+    //   Tier 1: 18K vs 22K Solid Gold Purity
+    //   Tier 2: Yellow Gold, White Gold, Rose Gold
     // -------------------------------------------------------------
     var metalPresetsRow = document.querySelector('.field-metal_presets');
     var karatMetalRow = document.querySelector('.field-karat_metal');
@@ -1241,55 +1318,82 @@
     karatMetalRow.style.setProperty('display', 'none', 'important');
     availableMetalsRow.style.setProperty('display', 'none', 'important');
 
-    // Defined groups with colors
-    var groups = [
+    var karatDefs = [
         {
-            title: "18K Solid Gold Suite",
-            icon: "✨",
-            items: [
-                { name: "18K Solid Yellow Gold", bg: "linear-gradient(135deg, #F5D77F 0%, #C59B27 100%)" },
-                { name: "18K Solid White Gold", bg: "linear-gradient(135deg, #FFFFFF 0%, #D1D5DB 100%)" },
-                { name: "18K Solid Rose Gold", bg: "linear-gradient(135deg, #FAD2C0 0%, #D48B7B 100%)" }
+            id: '18k',
+            label: '18K Solid Gold',
+            purity: '750 Purity',
+            icon: '👑',
+            colors: [
+                {
+                    name: '18K Yellow Gold',
+                    colorName: 'Yellow Gold',
+                    icon: '🟡',
+                    bg: 'linear-gradient(135deg, #F5D77F 0%, #C59B27 100%)',
+                    desc: 'Classic Royal Warm Glow'
+                },
+                {
+                    name: '18K White Gold',
+                    colorName: 'White Gold',
+                    icon: '⚪',
+                    bg: 'linear-gradient(135deg, #FFFFFF 0%, #D1D5DB 100%)',
+                    desc: 'Luminous Rhodium Mirror'
+                },
+                {
+                    name: '18K Rose Gold',
+                    colorName: 'Rose Gold',
+                    icon: '🌸',
+                    bg: 'linear-gradient(135deg, #FAD2C0 0%, #D48B7B 100%)',
+                    desc: 'Warm Romantic Blush'
+                }
             ]
         },
         {
-            title: "18K Gold Vermeil & Demi-Fine (2.5μ Thick Gold over 925 Silver)",
-            icon: "👑",
-            items: [
-                { name: "18K Yellow Gold Vermeil", bg: "linear-gradient(135deg, #F5D77F 0%, #C59B27 100%)" },
-                { name: "18K Rose Gold Vermeil", bg: "linear-gradient(135deg, #FAD2C0 0%, #D48B7B 100%)" },
-                { name: "18K White Gold Vermeil", bg: "linear-gradient(135deg, #FFFFFF 0%, #D1D5DB 100%)" }
-            ]
-        },
-        {
-            title: "Platinum & Fine Silver",
-            icon: "🛡️",
-            items: [
-                { name: "Platinum 950", bg: "linear-gradient(135deg, #F3F4F6 0%, #9CA3AF 100%)" },
-                { name: "925 Sterling Silver", bg: "linear-gradient(135deg, #F8FAFC 0%, #CBD5E1 100%)" }
-            ]
-        },
-        {
-            title: "14K Solid Gold Suite",
-            icon: "⭐",
-            items: [
-                { name: "14K Solid Yellow Gold", bg: "linear-gradient(135deg, #E5C158 0%, #B38515 100%)" },
-                { name: "14K Solid White Gold", bg: "linear-gradient(135deg, #E5E7EB 0%, #9CA3AF 100%)" },
-                { name: "14K Solid Rose Gold", bg: "linear-gradient(135deg, #ECAE9E 0%, #C66D5B 100%)" }
+            id: '22k',
+            label: '22K Solid Gold',
+            purity: '916 Purity',
+            icon: '✨',
+            colors: [
+                {
+                    name: '22K Yellow Gold',
+                    colorName: 'Yellow Gold',
+                    icon: '🟡',
+                    bg: 'linear-gradient(135deg, #FFDF73 0%, #D49B00 100%)',
+                    desc: 'Ultra-Rich Deep Sovereign 916'
+                },
+                {
+                    name: '22K White Gold',
+                    colorName: 'White Gold',
+                    icon: '⚪',
+                    bg: 'linear-gradient(135deg, #F8FAFC 0%, #CBD5E1 100%)',
+                    desc: 'Fine High-Carat Silver White'
+                },
+                {
+                    name: '22K Rose Gold',
+                    colorName: 'Rose Gold',
+                    icon: '🌸',
+                    bg: 'linear-gradient(135deg, #FBCFE8 0%, #DB2777 100%)',
+                    desc: 'Rich Copper-Rose Luster'
+                }
             ]
         }
     ];
 
-    // Helper: read current active metals
+    // Read current active metals
     function getSelectedMetals() {
         var raw = (availableInput.value || '').trim();
         if (!raw) return [];
         return raw.split(',').map(function(s) { return s.trim(); }).filter(Boolean);
     }
 
-    // Helper: update underlying fields and UI
+    // Determine initial active karat view based on pre-existing selection
+    var initialSelected = getSelectedMetals();
+    var has18 = initialSelected.some(function(m) { return m.indexOf('18K') !== -1; });
+    var has22 = initialSelected.some(function(m) { return m.indexOf('22K') !== -1; });
+    var activeKaratView = (has22 && !has18) ? '22k' : (has22 && has18 ? 'both' : '18k');
+
+    // Update underlying fields and UI
     function setSelectedMetals(metalsList) {
-        // Unique
         var unique = [];
         metalsList.forEach(function(m) {
             if (unique.indexOf(m) === -1) unique.push(m);
@@ -1325,26 +1429,58 @@
 
         var html = '';
 
-        // 1. Presets Toolbar
+        // 1. Quick Suites Toolbar
         html += '<div class="lux-presets-bar">';
         html += '  <span style="font-size:11px; font-weight:700; color:#64748B; text-transform:uppercase; letter-spacing:0.06em; margin-right:4px;">Quick Suites:</span>';
-        html += '  <button type="button" class="lux-preset-chip" data-preset="18k-solid">✨ 18K Solid Gold Trio + Plat</button>';
-        html += '  <button type="button" class="lux-preset-chip" data-preset="18k-vermeil">👑 18K Vermeil Suite</button>';
-        html += '  <button type="button" class="lux-preset-chip" data-preset="925-silver">🛡️ 925 Sterling Silver</button>';
-        html += '  <button type="button" class="lux-preset-chip" data-preset="14k-solid">⭐ 14K Solid Suite</button>';
+        html += '  <button type="button" class="lux-preset-chip" data-preset="18k-trio">👑 18K Gold Trio</button>';
+        html += '  <button type="button" class="lux-preset-chip" data-preset="22k-trio">✨ 22K Gold Trio</button>';
+        html += '  <button type="button" class="lux-preset-chip" data-preset="all-gold">🌟 All 18K & 22K</button>';
+        html += '  <button type="button" class="lux-preset-chip" data-preset="18k-yellow">🟡 18K Yellow Only</button>';
+        html += '  <button type="button" class="lux-preset-chip" data-preset="22k-yellow">🟡 22K Yellow Only</button>';
         html += '  <button type="button" class="lux-preset-chip btn-clear-chip" data-preset="clear">✕ Clear All</button>';
         html += '</div>';
 
-        // 2. Categorized Grid
-        groups.forEach(function(grp) {
+        // 2. Step 1: Karat Selection Tabs (Top)
+        html += '<div class="lux-tier-label">';
+        html += '  <span>① CHOOSE METAL MATERIAL & PURITY (KARAT)</span>';
+        html += '</div>';
+        html += '<div class="lux-karat-purity-row">';
+        html += '  <button type="button" class="lux-karat-tab-btn ' + (activeKaratView === '18k' ? 'is-active-karat' : '') + '" data-karat-tab="18k">';
+        html += '    <span class="lux-karat-title">👑 18K Solid Gold</span>';
+        html += '    <span class="lux-karat-badge">750 Purity (75%)</span>';
+        html += '  </button>';
+        html += '  <button type="button" class="lux-karat-tab-btn ' + (activeKaratView === '22k' ? 'is-active-karat' : '') + '" data-karat-tab="22k">';
+        html += '    <span class="lux-karat-title">✨ 22K Solid Gold</span>';
+        html += '    <span class="lux-karat-badge">916 Purity (91.6%)</span>';
+        html += '  </button>';
+        html += '  <button type="button" class="lux-karat-tab-btn ' + (activeKaratView === 'both' ? 'is-active-karat' : '') + '" data-karat-tab="both">';
+        html += '    <span class="lux-karat-title">🌟 Both 18K & 22K</span>';
+        html += '    <span class="lux-karat-badge">All 6 Variants</span>';
+        html += '  </button>';
+        html += '</div>';
+
+        // 3. Step 2: Gold Colors & Tones (Below)
+        html += '<div class="lux-tier-label">';
+        html += '  <span>② CHOOSE GOLD COLOR TONES (YELLOW, WHITE, ROSE)</span>';
+        html += '</div>';
+
+        var visibleKarats = karatDefs.filter(function(k) {
+            if (activeKaratView === 'both') return true;
+            return k.id === activeKaratView;
+        });
+
+        visibleKarats.forEach(function(kDef) {
             html += '<div class="lux-group-wrapper">';
-            html += '  <div class="lux-group-header"><span>' + grp.icon + '</span> ' + grp.title + '</div>';
-            html += '  <div class="lux-pills-grid">';
-            grp.items.forEach(function(item) {
+            html += '  <div class="lux-group-header"><span>' + kDef.icon + '</span> ' + kDef.label + ' (' + kDef.purity + ') Available Colors</div>';
+            html += '  <div class="lux-color-tones-grid">';
+            kDef.colors.forEach(function(item) {
                 var isActive = selected.indexOf(item.name) !== -1;
                 html += '<div class="lux-swatch-pill ' + (isActive ? 'is-active' : '') + '" data-metal="' + item.name + '">';
                 html += '  <span class="lux-swatch-circle" style="background:' + item.bg + ';"></span>';
-                html += '  <span class="lux-pill-label">' + item.name + '</span>';
+                html += '  <div style="flex-grow:1; display:flex; flex-direction:column;">';
+                html += '    <span class="lux-pill-label">' + item.icon + ' ' + item.colorName + '</span>';
+                html += '    <span style="font-size:10px; color:#94A3B8; font-weight:500;">' + item.name + '</span>';
+                html += '  </div>';
                 html += '  <span class="lux-pill-check">✓</span>';
                 html += '</div>';
             });
@@ -1352,9 +1488,11 @@
             html += '</div>';
         });
 
-        // 3. Custom Metals Added (if any)
-        var knownMetals = [];
-        groups.forEach(function(g) { g.items.forEach(function(i) { knownMetals.push(i.name); }); });
+        // 4. Custom Metals (if any legacy or bespoke alloy is present)
+        var knownMetals = [
+            '18K Yellow Gold', '18K White Gold', '18K Rose Gold',
+            '22K Yellow Gold', '22K White Gold', '22K Rose Gold'
+        ];
         var customMetals = selected.filter(function(m) { return knownMetals.indexOf(m) === -1; });
 
         if (customMetals.length > 0) {
@@ -1375,11 +1513,11 @@
         // Custom Metal Input Pill
         html += '<div class="lux-custom-metal-box">';
         html += '  <span style="font-size:12px; color:#94A3B8; font-weight:600;">+ Custom Metal:</span>';
-        html += '  <input type="text" id="custom-metal-input" class="lux-custom-input" placeholder="e.g. 22K Solid Gold, Solid 18K Two-Tone...">';
+        html += '  <input type="text" id="custom-metal-input" class="lux-custom-input" placeholder="e.g. 24K Pure Gold, Solid Two-Tone 18K...">';
         html += '  <button type="button" id="btn-add-custom-metal" class="lux-custom-btn">+ Add Metal</button>';
         html += '</div>';
 
-        // 4. Primary / Default Showcase Metal Picker
+        // 5. Default Primary Showcase Metal (Karat Metal)
         html += '<div class="lux-primary-panel">';
         html += '  <div class="lux-primary-header">';
         html += '    <h4><span>⭐</span> Default Primary Showcase Metal (Karat Metal)</h4>';
@@ -1399,7 +1537,7 @@
             html += '  </div>';
         }
 
-        // 5. Fine-Tuning Advanced Collapsible
+        // Fine-Tuning Advanced Collapsible
         html += '  <div class="lux-fine-tuning-wrap">';
         html += '    <a class="lux-expand-link" id="toggle-fine-tuning">&#x25BC; View auto-synced raw database values</a>';
         html += '    <div class="lux-fine-tuning-fields" id="fine-tuning-container">';
@@ -1417,8 +1555,6 @@
         html += '</div>'; // end primary panel
 
         studio.innerHTML = html;
-
-        // Attach Event Listeners
         attachEvents();
     }
 
@@ -1428,21 +1564,40 @@
             btn.onclick = function(e) {
                 e.preventDefault();
                 var p = this.getAttribute('data-preset');
-                if (p === '18k-solid') {
-                    setSelectedMetals(['18K Solid Yellow Gold', '18K Solid White Gold', '18K Solid Rose Gold', 'Platinum 950']);
-                } else if (p === '18k-vermeil') {
-                    setSelectedMetals(['18K Yellow Gold Vermeil', '18K Rose Gold Vermeil']);
-                } else if (p === '925-silver') {
-                    setSelectedMetals(['925 Sterling Silver']);
-                } else if (p === '14k-solid') {
-                    setSelectedMetals(['14K Solid Yellow Gold', '14K Solid White Gold', '14K Solid Rose Gold']);
+                if (p === '18k-trio') {
+                    activeKaratView = '18k';
+                    setSelectedMetals(['18K Yellow Gold', '18K White Gold', '18K Rose Gold']);
+                } else if (p === '22k-trio') {
+                    activeKaratView = '22k';
+                    setSelectedMetals(['22K Yellow Gold', '22K White Gold', '22K Rose Gold']);
+                } else if (p === 'all-gold') {
+                    activeKaratView = 'both';
+                    setSelectedMetals([
+                        '18K Yellow Gold', '18K White Gold', '18K Rose Gold',
+                        '22K Yellow Gold', '22K White Gold', '22K Rose Gold'
+                    ]);
+                } else if (p === '18k-yellow') {
+                    activeKaratView = '18k';
+                    setSelectedMetals(['18K Yellow Gold']);
+                } else if (p === '22k-yellow') {
+                    activeKaratView = '22k';
+                    setSelectedMetals(['22K Yellow Gold']);
                 } else if (p === 'clear') {
                     setSelectedMetals([]);
                 }
             };
         });
 
-        // Pill clicks
+        // Karat tab buttons (Step 1)
+        studio.querySelectorAll('.lux-karat-tab-btn').forEach(function(tab) {
+            tab.onclick = function(e) {
+                e.preventDefault();
+                activeKaratView = this.getAttribute('data-karat-tab');
+                renderUI();
+            };
+        });
+
+        // Swatch Pill clicks (Step 2)
         studio.querySelectorAll('.lux-swatch-pill').forEach(function(pill) {
             pill.onclick = function() {
                 var metal = this.getAttribute('data-metal');

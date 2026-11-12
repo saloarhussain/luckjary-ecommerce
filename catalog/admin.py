@@ -6,21 +6,14 @@ from .models import Category, Material, Collection, Product, ProductImage, Produ
 
 class ProductAdminForm(forms.ModelForm):
     STANDARD_METALS = [
-        # 18K Solid Gold
-        ('18K Solid Yellow Gold', '18K Solid Yellow Gold'),
-        ('18K Solid White Gold', '18K Solid White Gold'),
-        ('18K Solid Rose Gold', '18K Solid Rose Gold'),
-        # 18K Gold Vermeil & Demi-Fine
-        ('18K Yellow Gold Vermeil', '18K Yellow Gold Vermeil'),
-        ('18K Rose Gold Vermeil', '18K Rose Gold Vermeil'),
-        ('18K White Gold Vermeil', '18K White Gold Vermeil'),
-        # Platinum & Sterling Silver
-        ('Platinum 950', 'Platinum 950'),
-        ('925 Sterling Silver', '925 Sterling Silver'),
-        # 14K Solid Gold
-        ('14K Solid Yellow Gold', '14K Solid Yellow Gold'),
-        ('14K Solid White Gold', '14K Solid White Gold'),
-        ('14K Solid Rose Gold', '14K Solid Rose Gold'),
+        # 18K Gold (750 Purity)
+        ('18K Yellow Gold', '18K Yellow Gold'),
+        ('18K White Gold', '18K White Gold'),
+        ('18K Rose Gold', '18K Rose Gold'),
+        # 22K Gold (916 Purity)
+        ('22K Yellow Gold', '22K Yellow Gold'),
+        ('22K White Gold', '22K White Gold'),
+        ('22K Rose Gold', '22K Rose Gold'),
     ]
 
     metal_presets = forms.MultipleChoiceField(
@@ -67,7 +60,7 @@ class ProductAdminForm(forms.ModelForm):
                 'style': 'width: 100%; font-family: monospace; font-weight: 600; letter-spacing: 0.05em;'
             }),
             'available_metals': forms.TextInput(attrs={
-                'placeholder': 'e.g. 18K Solid Yellow Gold, 18K Solid White Gold, 18K Solid Rose Gold, Platinum 950',
+                'placeholder': 'e.g. 18K Yellow Gold, 18K White Gold, 18K Rose Gold, 22K Yellow Gold',
                 'style': 'width: 100%;'
             }),
             'available_sizes': forms.Textarea(attrs={
@@ -84,14 +77,23 @@ class ProductAdminForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         if self.instance and self.instance.pk:
             current = self.instance.metal_options
-            matched = [c[0] for c in self.STANDARD_METALS if c[0] in current]
+            matched = []
+            for c in self.STANDARD_METALS:
+                val = c[0]
+                if val in current:
+                    matched.append(val)
+                elif 'Yellow' in val and any('Yellow' in m and '18K' in m for m in current) and '18K' in val:
+                    matched.append(val)
+                elif 'White' in val and any('White' in m and '18K' in m for m in current) and '18K' in val:
+                    matched.append(val)
+                elif 'Rose' in val and any('Rose' in m and '18K' in m for m in current) and '18K' in val:
+                    matched.append(val)
             self.fields['metal_presets'].initial = matched
         else:
             self.fields['metal_presets'].initial = [
-                '18K Solid Yellow Gold',
-                '18K Solid White Gold',
-                '18K Solid Rose Gold',
-                'Platinum 950'
+                '18K Yellow Gold',
+                '18K White Gold',
+                '18K Rose Gold'
             ]
 
     def clean(self):
