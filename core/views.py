@@ -7,28 +7,28 @@ from .models import NewsletterSubscriber, ContactInquiry
 from django.db.models import Q
 
 def home(request):
-    active_metal = request.GET.get('metal') or request.session.get('active_metal', 'gold')
+    active_metal = request.GET.get('metal') or request.session.get('active_metal', 'silver')
     if request.GET.get('metal'):
         request.session['active_metal'] = request.GET.get('metal')
     active_metal = active_metal.lower()
+    if active_metal not in ['silver', 'fashion']:
+        active_metal = 'silver'
+        request.session['active_metal'] = 'silver'
 
     all_featured = Product.objects.filter(is_available=True, is_featured=True)
     if active_metal == 'silver':
         featured_products = all_featured.filter(
             Q(karat_metal__icontains='Silver') | Q(materials__name__icontains='Silver') | Q(title__icontains='Silver')
-        )
+        ).distinct()
         if not featured_products.exists():
             featured_products = Product.objects.filter(is_available=True, materials__name__icontains='Silver')
-    elif active_metal == 'demifine':
+    else: # fashion jewellery
         featured_products = all_featured.filter(
-            Q(karat_metal__icontains='Demifine') | Q(karat_metal__icontains='Vermeil') | Q(materials__name__icontains='Demifine') | Q(title__icontains='Demifine')
-        )
-        if not featured_products.exists():
-            featured_products = Product.objects.filter(is_available=True, materials__name__icontains='Demifine')
-    else: # gold
-        featured_products = all_featured.filter(
-            Q(karat_metal__icontains='Gold') | Q(karat_metal__icontains='Platinum') | Q(materials__name__icontains='Gold') | Q(title__icontains='Gold')
-        )
+            Q(karat_metal__icontains='Demifine') | Q(karat_metal__icontains='Vermeil') |
+            Q(materials__name__icontains='Demifine') | Q(title__icontains='Demifine') |
+            Q(title__icontains='Fashion') | Q(karat_metal__icontains='Gold') |
+            Q(materials__name__icontains='Gold') | ~Q(karat_metal__icontains='Silver')
+        ).distinct()
         if not featured_products.exists():
             featured_products = all_featured
 

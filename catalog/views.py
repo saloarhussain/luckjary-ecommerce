@@ -8,21 +8,25 @@ import json
 def product_list(request):
     products = Product.objects.filter(is_available=True)
 
-    # 0. Metal Switcher Filter (Gold, Silver, Demifine)
+    # 0. Metal Switcher Filter (Silver Jewellery vs Fashion Jewellery)
     metal = request.GET.get('metal')
     if not metal and 'metal' not in request.GET:
-        metal = request.session.get('active_metal', 'gold')
+        metal = request.session.get('active_metal', 'silver')
     elif metal:
         request.session['active_metal'] = metal
 
-    selected_metal = metal.lower() if metal else 'gold'
+    selected_metal = metal.lower() if metal else 'silver'
+    if selected_metal not in ['silver', 'fashion']:
+        selected_metal = 'silver'
+        request.session['active_metal'] = 'silver'
+
     if selected_metal == 'silver':
         products = products.filter(
             Q(karat_metal__icontains='Silver') |
             Q(materials__name__icontains='Silver') |
             Q(title__icontains='Silver')
         ).distinct()
-    elif selected_metal == 'demifine':
+    elif selected_metal == 'fashion':
         products = products.filter(
             Q(karat_metal__icontains='Demifine') |
             Q(karat_metal__icontains='Demifne') |
@@ -30,15 +34,10 @@ def product_list(request):
             Q(materials__name__icontains='Demifine') |
             Q(materials__name__icontains='Demifne') |
             Q(title__icontains='Demifine') |
-            Q(title__icontains='Demifne')
-        ).distinct()
-    elif selected_metal == 'gold':
-        products = products.filter(
+            Q(title__icontains='Fashion') |
             Q(karat_metal__icontains='Gold') |
-            Q(karat_metal__icontains='Platinum') |
             Q(materials__name__icontains='Gold') |
-            Q(materials__name__icontains='Platinum') |
-            Q(title__icontains='Gold')
+            ~Q(karat_metal__icontains='Silver')
         ).distinct()
 
     # 1. Category Filter
@@ -159,10 +158,13 @@ def category_products(request, category_slug):
     category = get_object_or_404(Category, slug=category_slug)
     products = Product.objects.filter(category=category, is_available=True)
 
-    metal = request.GET.get('metal') or request.session.get('active_metal', 'gold')
+    metal = request.GET.get('metal') or request.session.get('active_metal', 'silver')
     if request.GET.get('metal'):
         request.session['active_metal'] = request.GET.get('metal')
-    selected_metal = metal.lower() if metal else 'gold'
+    selected_metal = metal.lower() if metal else 'silver'
+    if selected_metal not in ['silver', 'fashion']:
+        selected_metal = 'silver'
+        request.session['active_metal'] = 'silver'
 
     if selected_metal == 'silver':
         matched = products.filter(
@@ -172,21 +174,16 @@ def category_products(request, category_slug):
         ).distinct()
         if matched.exists():
             products = matched
-    elif selected_metal == 'demifine':
+    elif selected_metal == 'fashion':
         matched = products.filter(
             Q(karat_metal__icontains='Demifine') |
             Q(karat_metal__icontains='Vermeil') |
             Q(materials__name__icontains='Demifine') |
-            Q(title__icontains='Demifine')
-        ).distinct()
-        if matched.exists():
-            products = matched
-    elif selected_metal == 'gold':
-        matched = products.filter(
+            Q(title__icontains='Demifine') |
+            Q(title__icontains='Fashion') |
             Q(karat_metal__icontains='Gold') |
-            Q(karat_metal__icontains='Platinum') |
             Q(materials__name__icontains='Gold') |
-            Q(title__icontains='Gold')
+            ~Q(karat_metal__icontains='Silver')
         ).distinct()
         if matched.exists():
             products = matched

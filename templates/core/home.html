@@ -17,10 +17,8 @@
             <span class="text-[10px] sm:text-xs font-display tracking-[0.2em] sm:tracking-[0.25em] text-[#C5A059] uppercase">
                 {% if active_metal == 'silver' %}
                 The 925 Sterling Silver Heirlooms
-                {% elif active_metal == 'demifine' %}
-                The 18K Gold Vermeil & Demifine Suite
                 {% else %}
-                The 2026 Solstice Haute Joaillerie
+                The Modern Fashion Jewellery Atelier
                 {% endif %}
             </span>
         </div>
@@ -29,22 +27,17 @@
             {% if active_metal == 'silver' %}
             Lustrous Silver.<br>
             <span class="font-bold gold-gradient-text">Radiant for Every Moment.</span>
-            {% elif active_metal == 'demifine' %}
-            Modern Demifine.<br>
-            <span class="font-bold gold-gradient-text">Sublime Everyday Luxury.</span>
             {% else %}
-            Crafted for Eternity.<br>
-            <span class="font-bold gold-gradient-text">Worn for a Lifetime.</span>
+            Exquisite Fashion Jewels.<br>
+            <span class="font-bold gold-gradient-text">Radiant Everyday Statement.</span>
             {% endif %}
         </h1>
 
         <p class="max-w-2xl mx-auto text-xs sm:text-base text-neutral-300 font-light leading-relaxed px-2">
             {% if active_metal == 'silver' %}
             Discover handcrafted 925 solid sterling silver heirlooms treated with a microscopic rhodium anti-tarnish barrier and certified brilliant stones.
-            {% elif active_metal == 'demifine' %}
-            Experience heavy 2.5-micron solid 18K gold expertly layered over certified 925 sterling silver for enduring luster and effortless daily style.
             {% else %}
-            Discover modern heirlooms sculpted from 18K solid gold and conflict-free certified diamonds. Each piece is hand-finished in our private New York atelier.
+            Discover trendsetting luxury fashion jewelry sculpted with enduring luster, high polish vermeil, and conflict-free certified sparkling stones.
             {% endif %}
         </p>
 
@@ -67,13 +60,11 @@
                 <span class="text-xl text-[#C5A059]">✦</span>
                 <h4 class="text-xs font-display uppercase tracking-widest text-neutral-900 font-bold">
                     {% if active_metal == 'silver' %}925 Sterling Silver
-                    {% elif active_metal == 'demifine' %}18K Gold Vermeil
-                    {% else %}18K Solid Gold{% endif %}
+                    {% else %}Fine Fashion Jewels{% endif %}
                 </h4>
                 <p class="text-[11px] text-neutral-500">
                     {% if active_metal == 'silver' %}Rhodium Anti-Tarnish Seal
-                    {% elif active_metal == 'demifine' %}2.5 Micron Layer over Silver
-                    {% else %}Never plated or hollow{% endif %}
+                    {% else %}High Polish & Enduring Luster{% endif %}
                 </p>
             </div>
             <div class="space-y-1">
@@ -124,13 +115,11 @@
             <div>
                 <span class="text-[11px] sm:text-xs font-bold tracking-[0.2em] text-[#C5A059] uppercase block font-sans">
                     {% if active_metal == 'silver' %}Sterling Silver Collection
-                    {% elif active_metal == 'demifine' %}Gold Vermeil Collection
-                    {% else %}Iconic Creations{% endif %}
+                    {% else %}Fashion Jewellery Collection{% endif %}
                 </span>
                 <h2 class="text-2xl sm:text-3xl lg:text-4xl font-bold text-neutral-900 tracking-tight mt-1 font-sans">
                     {% if active_metal == 'silver' %}Handcrafted Silver Jewellery
-                    {% elif active_metal == 'demifine' %}Demifine & Vermeil Jewels
-                    {% else %}Atelier Bestsellers{% endif %}
+                    {% else %}Curated Fashion Jewellery{% endif %}
                 </h2>
             </div>
             <a href="{% url 'catalog:product_list' %}" class="mt-4 md:mt-0 text-xs font-sans tracking-wider uppercase text-neutral-800 hover:text-gold-600 font-bold inline-flex items-center gap-1">

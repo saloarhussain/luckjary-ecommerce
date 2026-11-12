@@ -381,11 +381,10 @@
 
         <!-- Mobile Metal Switcher Row -->
         <div class="px-5 py-3.5 bg-[#FAF7F0] border-b border-[#EBE6DF]">
-            <p class="text-[10px] uppercase tracking-widest text-[#C5A059] font-bold mb-2">Shop By Metal</p>
-            <div class="grid grid-cols-3 gap-1.5 text-center text-xs">
-                <a href="{% url 'catalog:product_list' %}?metal=silver" class="py-1.5 px-2 rounded-full border border-[#C5A059] transition {% if active_metal == 'silver' %}bg-[#366E63] text-white font-semibold{% else %}bg-white text-neutral-700 hover:bg-neutral-50{% endif %}">Silver</a>
-                <a href="{% url 'catalog:product_list' %}?metal=gold" class="py-1.5 px-2 rounded-full border border-[#C5A059] transition {% if active_metal == 'gold' or not active_metal %}bg-[#366E63] text-white font-semibold{% else %}bg-white text-neutral-700 hover:bg-neutral-50{% endif %}">Gold</a>
-                <a href="{% url 'catalog:product_list' %}?metal=demifine" class="py-1.5 px-2 rounded-full border border-[#C5A059] transition {% if active_metal == 'demifine' %}bg-[#366E63] text-white font-semibold{% else %}bg-white text-neutral-700 hover:bg-neutral-50{% endif %}">Demifine</a>
+            <p class="text-[10px] uppercase tracking-widest text-[#C5A059] font-bold mb-2">Shop By Collection</p>
+            <div class="grid grid-cols-2 gap-2 text-center text-xs">
+                <a href="{% url 'catalog:product_list' %}?metal=silver" class="py-1.5 px-3 rounded-full border border-[#C5A059] transition {% if active_metal == 'silver' or not active_metal %}bg-[#366E63] text-white font-semibold{% else %}bg-white text-neutral-700 hover:bg-neutral-50{% endif %}">Silver Jewellery</a>
+                <a href="{% url 'catalog:product_list' %}?metal=fashion" class="py-1.5 px-3 rounded-full border border-[#C5A059] transition {% if active_metal == 'fashion' %}bg-[#366E63] text-white font-semibold{% else %}bg-white text-neutral-700 hover:bg-neutral-50{% endif %}">Fashion Jewellery</a>
             </div>
         </div>
 

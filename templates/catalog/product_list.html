@@ -84,7 +84,7 @@
                 </div>
 
                 <form method="GET" action="{% url 'catalog:product_list' %}" id="filterForm" class="space-y-6">
-                    <input type="hidden" name="metal" value="{{ selected_metal|default:active_metal|default:'gold' }}">
+                    <input type="hidden" name="metal" value="{{ selected_metal|default:active_metal|default:'silver' }}">
                     {% if search_query %}
                     <input type="hidden" name="q" value="{{ search_query }}">
                     {% endif %}
