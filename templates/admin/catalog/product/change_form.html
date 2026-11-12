@@ -656,6 +656,543 @@
     gap: 6px;
     margin-top: 8px;
 }
+
+/* ========================================================
+   SHOPIFY 2-COLUMN RESPONSIVE PRODUCT CANVAS
+   ======================================================== */
+.shopify-product-form-grid {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) 350px !important;
+    gap: 24px !important;
+    align-items: start !important;
+    margin-top: 14px !important;
+    width: 100% !important;
+}
+
+@media (max-width: 1100px) {
+    .shopify-product-form-grid {
+        grid-template-columns: 1fr !important;
+    }
+    .shopify-sidebar-col {
+        position: static !important;
+    }
+}
+
+.shopify-main-col {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 24px !important;
+    min-width: 0 !important;
+}
+
+.shopify-sidebar-col {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 24px !important;
+    position: sticky !important;
+    top: 76px !important;
+}
+
+/* Card Styling for all fieldsets & inlines */
+.shopify-card-title-desc,
+.shopify-card-metals,
+.shopify-card-sizing,
+.shopify-card-gemstones,
+.shopify-card-seo,
+.shopify-card-care,
+.shopify-side-status,
+.shopify-side-pricing,
+.shopify-side-inventory,
+.shopify-side-organization,
+.inline-group {
+    background: #141620 !important;
+    border: 1px solid #232736 !important;
+    border-radius: 10px !important;
+    padding: 20px 24px !important;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25) !important;
+    margin-bottom: 0 !important;
+}
+
+.shopify-card-title-desc h2,
+.shopify-card-metals h2,
+.shopify-card-sizing h2,
+.shopify-card-gemstones h2,
+.shopify-card-seo h2,
+.shopify-card-care h2,
+.shopify-side-status h2,
+.shopify-side-pricing h2,
+.shopify-side-inventory h2,
+.shopify-side-organization h2,
+.inline-group h2 {
+    font-size: 13.5px !important;
+    font-weight: 700 !important;
+    color: #FAF9F6 !important;
+    letter-spacing: 0.02em !important;
+    background: transparent !important;
+    border-bottom: 1px solid #232736 !important;
+    padding-bottom: 12px !important;
+    margin: 0 0 16px 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+}
+
+/* Top Sticky Header Bar */
+.shopify-top-page-header {
+    background: #141620;
+    border: 1px solid #232736;
+    border-radius: 10px;
+    padding: 14px 20px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+}
+
+.shopify-top-header-left {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.shopify-back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: #94A3B8;
+    text-decoration: none;
+    font-size: 12.5px;
+    font-weight: 600;
+    padding: 6px 12px;
+    background: #181B26;
+    border: 1px solid #2A2F40;
+    border-radius: 6px;
+    transition: all 0.15s ease;
+}
+
+.shopify-back-btn:hover {
+    color: #FFF;
+    border-color: #C5A059;
+    background: #202433;
+}
+
+.shopify-page-title-wrap {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.shopify-page-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: #FAF9F6;
+    margin: 0;
+}
+
+.shopify-status-indicator {
+    padding: 3px 10px;
+    border-radius: 9999px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
+.shopify-status-indicator.is-active {
+    background: rgba(16, 185, 129, 0.15);
+    color: #10B981;
+    border: 1px solid rgba(16, 185, 129, 0.35);
+}
+
+.shopify-status-indicator.is-draft {
+    background: rgba(148, 163, 184, 0.15);
+    color: #94A3B8;
+    border: 1px solid rgba(148, 163, 184, 0.35);
+}
+
+.shopify-top-header-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.shopify-btn-discard {
+    background: #181B26;
+    color: #CBD5E1;
+    border: 1px solid #2F3547;
+    border-radius: 6px;
+    padding: 8px 16px;
+    font-size: 12.5px;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.15s ease;
+}
+
+.shopify-btn-discard:hover {
+    background: #242938;
+    color: #FFF;
+}
+
+.shopify-btn-save {
+    background: #10B981;
+    color: #FFF;
+    border: 1px solid #059669;
+    border-radius: 6px;
+    padding: 8px 20px;
+    font-size: 12.5px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    box-shadow: 0 2px 10px rgba(16, 185, 129, 0.3);
+}
+
+.shopify-btn-save:hover {
+    background: #059669;
+    transform: translateY(-1px);
+}
+
+/* ========================================================
+   SEARCH ENGINE LISTING PREVIEW (SEO STUDIO)
+   ======================================================== */
+.lux-seo-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 14px;
+}
+
+.btn-ai-seo-magic {
+    background: linear-gradient(135deg, rgba(197, 160, 89, 0.2) 0%, rgba(16, 185, 129, 0.2) 100%);
+    color: #F5D77F;
+    border: 1px solid rgba(197, 160, 89, 0.4);
+    border-radius: 6px;
+    padding: 6px 14px;
+    font-size: 11.5px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.btn-ai-seo-magic:hover {
+    background: linear-gradient(135deg, rgba(197, 160, 89, 0.35) 0%, rgba(16, 185, 129, 0.35) 100%);
+    border-color: #C5A059;
+    color: #FFF;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 15px rgba(197, 160, 89, 0.25);
+}
+
+/* Google SERP Snippet Simulation Box */
+.lux-google-serp-box {
+    background: #171923;
+    border: 1px solid #282C3D;
+    border-radius: 8px;
+    padding: 16px 18px;
+    margin-bottom: 18px;
+    font-family: Roboto, Arial, sans-serif;
+}
+
+.lux-google-serp-top {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 6px;
+}
+
+.lux-google-fav {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: rgba(197, 160, 89, 0.15);
+    border: 1px solid rgba(197, 160, 89, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+}
+
+.lux-google-url-wrap {
+    display: flex;
+    flex-direction: column;
+}
+
+.lux-google-site-name {
+    font-size: 13px;
+    font-weight: 500;
+    color: #DADCE0;
+    line-height: 1.2;
+}
+
+.lux-google-breadcrumb {
+    font-size: 11.5px;
+    color: #9AA0A6;
+    line-height: 1.2;
+}
+
+.lux-google-title {
+    font-size: 18px !important;
+    font-weight: 400 !important;
+    color: #8AB4F8 !important;
+    margin: 6px 0 8px 0 !important;
+    line-height: 1.3 !important;
+    cursor: pointer;
+    font-family: Roboto, Arial, sans-serif !important;
+    background: transparent !important;
+    border: none !important;
+    padding: 0 !important;
+}
+
+.lux-google-title:hover {
+    text-decoration: underline;
+}
+
+.lux-google-snippet {
+    font-size: 13px;
+    line-height: 1.45;
+    color: #BDC1C6;
+    margin: 0 0 10px 0;
+}
+
+.lux-google-rich-pills {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    margin-top: 8px;
+    padding-top: 8px;
+    border-top: 1px solid #232736;
+}
+
+.lux-google-pill {
+    font-size: 11px;
+    color: #9AA0A6;
+    background: #1E212D;
+    padding: 2px 8px;
+    border-radius: 4px;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.lux-google-pill.pill-green {
+    color: #81C995;
+    background: rgba(129, 201, 149, 0.1);
+}
+
+/* Character Count Gauges */
+.lux-field-header-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 6px;
+}
+
+.lux-field-header-row label {
+    font-size: 12px !important;
+    font-weight: 700 !important;
+    color: #FAF9F6 !important;
+    margin: 0 !important;
+}
+
+.lux-char-meter {
+    font-size: 11px;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 9999px;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.lux-char-meter.meter-good {
+    background: rgba(16, 185, 129, 0.15);
+    color: #10B981;
+    border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.lux-char-meter.meter-warn {
+    background: rgba(245, 158, 11, 0.15);
+    color: #F59E0B;
+    border: 1px solid rgba(245, 158, 11, 0.3);
+}
+
+.lux-char-meter.meter-danger {
+    background: rgba(239, 68, 68, 0.15);
+    color: #EF4444;
+    border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+/* Quick Suggestion Pills */
+.lux-seo-pill-group {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px;
+    margin-top: 8px;
+}
+
+.lux-seo-preset-pill {
+    background: #1A1D29;
+    color: #CBD5E1;
+    border: 1px solid #2E3447;
+    border-radius: 5px;
+    padding: 3px 8px;
+    font-size: 11px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    user-select: none;
+}
+
+.lux-seo-preset-pill:hover {
+    background: #242938;
+    color: #FFF;
+    border-color: #C5A059;
+}
+
+/* URL Handle Prefix */
+.lux-url-prefix-box {
+    display: flex;
+    align-items: center;
+    background: #181A22;
+    border: 1px solid #282C38;
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+.lux-url-prefix-text {
+    padding: 0.45rem 0.75rem;
+    background: #141620;
+    color: #94A3B8;
+    font-size: 11.5px;
+    font-family: monospace;
+    border-right: 1px solid #282C38;
+    white-space: nowrap;
+}
+
+.lux-url-prefix-box input {
+    border: none !important;
+    background: transparent !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    padding: 0.45rem 0.75rem !important;
+}
+
+/* Sidebar Custom Styling */
+.shopify-status-toggle-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-bottom: 14px;
+}
+
+.shopify-status-btn {
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.15s ease;
+    border: 1px solid transparent;
+    user-select: none;
+}
+
+.shopify-status-btn.btn-active {
+    background: rgba(16, 185, 129, 0.15);
+    color: #10B981;
+    border-color: rgba(16, 185, 129, 0.4);
+}
+
+.shopify-status-btn.btn-active.is-selected {
+    background: #10B981;
+    color: #FFF;
+    border-color: #059669;
+    box-shadow: 0 0 10px rgba(16, 185, 129, 0.3);
+}
+
+.shopify-status-btn.btn-draft {
+    background: #181B26;
+    color: #94A3B8;
+    border-color: #2D3345;
+}
+
+.shopify-status-btn.btn-draft.is-selected {
+    background: #2D3345;
+    color: #FFF;
+    border-color: #475569;
+}
+
+/* Live Pricing Profit Badge */
+.shopify-margin-badge {
+    background: rgba(197, 160, 89, 0.12);
+    border: 1px solid rgba(197, 160, 89, 0.3);
+    border-radius: 6px;
+    padding: 8px 12px;
+    margin-top: 10px;
+    font-size: 11.5px;
+    color: #E2B755;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.shopify-stock-badge {
+    margin-top: 8px;
+    padding: 6px 10px;
+    border-radius: 6px;
+    font-size: 11.5px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.shopify-stock-badge.stock-good {
+    background: rgba(16, 185, 129, 0.12);
+    color: #10B981;
+    border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.shopify-stock-badge.stock-low {
+    background: rgba(245, 158, 11, 0.12);
+    color: #F59E0B;
+    border: 1px solid rgba(245, 158, 11, 0.3);
+}
+
+.shopify-stock-badge.stock-out {
+    background: rgba(239, 68, 68, 0.12);
+    color: #EF4444;
+    border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+/* Merchandising Badges Grid */
+.shopify-merch-badges-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 10px;
+}
+
+.shopify-merch-badge-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 10px;
+    background: #181B26;
+    border: 1px solid #282C3D;
+    border-radius: 6px;
+    font-size: 12px;
+    color: #CBD5E1;
+}
+
+.shopify-merch-badge-item input[type="checkbox"] {
+    accent-color: #10B981;
+}
 </style>
 {% endblock %}
 
@@ -1747,6 +2284,546 @@
 
     // Initial render
     renderStudio();
+})();
+
+// -------------------------------------------------------------
+// LUCKJARY SHOPIFY 2-COLUMN CANVAS & SEO PREVIEW STUDIO
+// -------------------------------------------------------------
+(function initShopifyAddProduct() {
+    var form = document.getElementById('product_form');
+    if (!form) return;
+
+    var titleInput = document.getElementById('id_title');
+    var subtitleInput = document.getElementById('id_subtitle');
+    var descInput = document.getElementById('id_description');
+    var slugInput = document.getElementById('id_slug');
+    var metaTitleInput = document.getElementById('id_meta_title');
+    var metaDescInput = document.getElementById('id_meta_description');
+    var metaKeywordsInput = document.getElementById('id_meta_keywords');
+    var priceInput = document.getElementById('id_price');
+    var comparePriceInput = document.getElementById('id_compare_at_price');
+    var isAvailableCb = document.getElementById('id_is_available');
+    var isFeaturedCb = document.getElementById('id_is_featured');
+    var isBestsellerCb = document.getElementById('id_is_bestseller');
+    var isNewArrivalCb = document.getElementById('id_is_new_arrival');
+    var skuInput = document.getElementById('id_sku');
+    var inventoryInput = document.getElementById('id_inventory');
+    var categorySelect = document.getElementById('id_category');
+    var karatInput = document.getElementById('id_karat_metal');
+    var gemstoneInput = document.getElementById('id_gemstone');
+
+    // 1. Move fieldsets into the 2-Column Shopify Grid
+    var titleDescCard = form.querySelector('.shopify-card-title-desc');
+    var mediaCard = form.querySelector('#productimage_set-group');
+    var metalsCard = form.querySelector('.shopify-card-metals');
+    var sizingCard = form.querySelector('.shopify-card-sizing');
+    var gemstonesCard = form.querySelector('.shopify-card-gemstones');
+    var seoCard = form.querySelector('.shopify-card-seo');
+    var careCard = form.querySelector('.shopify-card-care');
+
+    var statusCard = form.querySelector('.shopify-side-status');
+    var pricingCard = form.querySelector('.shopify-side-pricing');
+    var inventoryCard = form.querySelector('.shopify-side-inventory');
+    var orgCard = form.querySelector('.shopify-side-organization');
+    var reviewsCard = form.querySelector('#productreview_set-group');
+
+    // Build Shopify Top Header Bar
+    var isAdd = window.location.pathname.indexOf('/add/') !== -1;
+    var currentTitle = titleInput ? (titleInput.value || '').trim() : '';
+    var pageTitleText = isAdd ? 'Add product' : (currentTitle || 'Change product');
+    var isActiveStatus = isAvailableCb ? isAvailableCb.checked : true;
+
+    var topBar = document.createElement('div');
+    topBar.className = 'shopify-top-page-header';
+    topBar.innerHTML = 
+        '<div class="shopify-top-header-left">' +
+        '  <a href="../" class="shopify-back-btn">← Products</a>' +
+        '  <div class="shopify-page-title-wrap">' +
+        '    <h1 class="shopify-page-title" id="shopify-top-title">' + pageTitleText + '</h1>' +
+        '    <span class="shopify-status-indicator ' + (isActiveStatus ? 'is-active' : 'is-draft') + '" id="shopify-top-status-badge">' + (isActiveStatus ? 'Active' : 'Draft') + '</span>' +
+        '  </div>' +
+        '</div>' +
+        '<div class="shopify-top-header-actions">' +
+        '  <a href="../" class="shopify-btn-discard">Discard</a>' +
+        '  <button type="button" class="shopify-btn-save" id="btn-top-save">Save Product</button>' +
+        '</div>';
+
+    var formInner = form.querySelector('div') || form;
+    formInner.insertBefore(topBar, formInner.firstChild);
+
+    var btnTopSave = document.getElementById('btn-top-save');
+    if (btnTopSave) {
+        btnTopSave.onclick = function() {
+            var defaultSubmit = form.querySelector('input[type="submit"][name="_save"]') || form.querySelector('input[type="submit"]');
+            if (defaultSubmit) defaultSubmit.click();
+            else form.submit();
+        };
+    }
+
+    // Create 2-Column Grid
+    var grid = document.createElement('div');
+    grid.className = 'shopify-product-form-grid';
+
+    var mainCol = document.createElement('div');
+    mainCol.className = 'shopify-main-col';
+
+    var sideCol = document.createElement('div');
+    sideCol.className = 'shopify-sidebar-col';
+
+    grid.appendChild(mainCol);
+    grid.appendChild(sideCol);
+
+    topBar.parentNode.insertBefore(grid, topBar.nextSibling);
+
+    // Place Main Column Cards
+    if (titleDescCard) mainCol.appendChild(titleDescCard);
+    if (mediaCard) mainCol.appendChild(mediaCard);
+    if (metalsCard) mainCol.appendChild(metalsCard);
+    if (sizingCard) mainCol.appendChild(sizingCard);
+    if (gemstonesCard) mainCol.appendChild(gemstonesCard);
+    if (seoCard) mainCol.appendChild(seoCard);
+    if (careCard) mainCol.appendChild(careCard);
+
+    // Place Sidebar Cards
+    if (statusCard) sideCol.appendChild(statusCard);
+    if (pricingCard) sideCol.appendChild(pricingCard);
+    if (inventoryCard) sideCol.appendChild(inventoryCard);
+    if (orgCard) sideCol.appendChild(orgCard);
+    if (reviewsCard) sideCol.appendChild(reviewsCard);
+
+    // -------------------------------------------------------------
+    // ENHANCE MEDIA GALLERY CARD
+    // -------------------------------------------------------------
+    if (mediaCard) {
+        var mediaHeader = mediaCard.querySelector('h2');
+        if (mediaHeader) {
+            mediaHeader.innerHTML = '<span>📸 Product Media & CAD Gallery</span> <span style="font-size:11px; font-weight:600; color:#94A3B8;">High-Res Atelier Photography</span>';
+        }
+    }
+
+    // -------------------------------------------------------------
+    // ENHANCE SEARCH ENGINE LISTING PREVIEW (SEO STUDIO)
+    // -------------------------------------------------------------
+    if (seoCard) {
+        // Ensure not collapsed
+        seoCard.classList.remove('collapse');
+        seoCard.classList.remove('collapsed');
+        var fieldsetDiv = seoCard.querySelector('fieldset') || seoCard;
+
+        var seoHeader = seoCard.querySelector('h2');
+        if (seoHeader) {
+            seoHeader.innerHTML = 
+                '<span>🔍 Search Engine Listing Preview</span>' +
+                '<button type="button" class="btn-ai-seo-magic" id="btn-ai-seo-magic">⚡ Auto-Generate SEO with AI</button>';
+        }
+
+        // Create Google SERP Snippet Box
+        var serpBox = document.createElement('div');
+        serpBox.className = 'lux-google-serp-box';
+        serpBox.innerHTML = 
+            '<div class="lux-google-serp-top">' +
+            '  <div class="lux-google-fav">💎</div>' +
+            '  <div class="lux-google-url-wrap">' +
+            '    <span class="lux-google-site-name">Luckjary Atelier</span>' +
+            '    <span class="lux-google-breadcrumb">https://luckjary-ecommerce.vercel.app › catalog › product › <span id="google-preview-slug"></span></span>' +
+            '  </div>' +
+            '</div>' +
+            '<h4 class="lux-google-title" id="google-preview-title"></h4>' +
+            '<p class="lux-google-snippet" id="google-preview-desc"></p>' +
+            '<div class="lux-google-rich-pills">' +
+            '  <span class="lux-google-pill pill-green">✓ In Stock</span>' +
+            '  <span class="lux-google-pill" id="google-preview-price">$0.00</span>' +
+            '  <span class="lux-google-pill">★★★★★ 4.9 (28 reviews)</span>' +
+            '  <span class="lux-google-pill" id="google-preview-metal">18K Solid Gold</span>' +
+            '</div>';
+
+        var firstRow = seoCard.querySelector('.form-row');
+        if (firstRow) {
+            firstRow.parentNode.insertBefore(serpBox, firstRow);
+        } else {
+            seoCard.appendChild(serpBox);
+        }
+
+        // Add character meter to Meta Title
+        if (metaTitleInput) {
+            var metaTitleRow = metaTitleInput.closest('.form-row');
+            if (metaTitleRow) {
+                var titleHeaderRow = document.createElement('div');
+                titleHeaderRow.className = 'lux-field-header-row';
+                titleHeaderRow.innerHTML = 
+                    '<label for="id_meta_title">Page Title (SERP Headline)</label>' +
+                    '<span class="lux-char-meter meter-good" id="meta-title-meter">0 / 70 characters</span>';
+                metaTitleInput.parentNode.insertBefore(titleHeaderRow, metaTitleInput);
+
+                // Add Title Format Presets
+                var titlePresets = document.createElement('div');
+                titlePresets.className = 'lux-seo-pill-group';
+                titlePresets.innerHTML = 
+                    '<span style="font-size:10px; font-weight:700; color:#64748B; text-transform:uppercase;">Format Templates:</span>' +
+                    '<button type="button" class="lux-seo-preset-pill btn-title-tpl" data-tpl="standard">✦ [Title] | Luckjary Fine Jewelry</button>' +
+                    '<button type="button" class="lux-seo-preset-pill btn-title-tpl" data-tpl="metal">✦ [Title] in [Metal] | Luckjary</button>' +
+                    '<button type="button" class="lux-seo-preset-pill btn-title-tpl" data-tpl="handcrafted">✦ Handcrafted [Title] - Atelier Jewelry</button>';
+                metaTitleInput.parentNode.appendChild(titlePresets);
+
+                titlePresets.querySelectorAll('.btn-title-tpl').forEach(function(btn) {
+                    btn.onclick = function(e) {
+                        e.preventDefault();
+                        var tpl = this.getAttribute('data-tpl');
+                        var t = (titleInput ? titleInput.value : '').trim() || 'Fine Jewelry';
+                        var m = (karatInput ? karatInput.value : '').trim() || '18K Solid Gold';
+                        if (tpl === 'standard') {
+                            metaTitleInput.value = t + ' | Luckjary Fine Jewelry';
+                        } else if (tpl === 'metal') {
+                            metaTitleInput.value = t + ' in ' + m + ' | Luckjary';
+                        } else if (tpl === 'handcrafted') {
+                            metaTitleInput.value = 'Handcrafted ' + t + ' - Atelier Jewelry';
+                        }
+                        updateSeoDisplay();
+                    };
+                });
+            }
+        }
+
+        // Add character meter to Meta Description
+        if (metaDescInput) {
+            var metaDescRow = metaDescInput.closest('.form-row');
+            if (metaDescRow) {
+                var descHeaderRow = document.createElement('div');
+                descHeaderRow.className = 'lux-field-header-row';
+                descHeaderRow.innerHTML = 
+                    '<label for="id_meta_description">Meta Description (Search Snippet)</label>' +
+                    '<span class="lux-char-meter meter-good" id="meta-desc-meter">0 / 160 characters</span>';
+                metaDescInput.parentNode.insertBefore(descHeaderRow, metaDescInput);
+
+                // Add Description Presets
+                var descPresets = document.createElement('div');
+                descPresets.className = 'lux-seo-pill-group';
+                descPresets.innerHTML = 
+                    '<span style="font-size:10px; font-weight:700; color:#64748B; text-transform:uppercase;">Snippet Templates:</span>' +
+                    '<button type="button" class="lux-seo-preset-pill btn-desc-tpl" data-tpl="delivery">✦ Complimentary Delivery Template</button>' +
+                    '<button type="button" class="lux-seo-preset-pill btn-desc-tpl" data-tpl="diamonds">✦ Conflict-Free Diamonds Template</button>' +
+                    '<button type="button" class="lux-seo-preset-pill btn-desc-tpl" data-tpl="bespoke">✦ Bespoke Atelier Template</button>';
+                metaDescInput.parentNode.appendChild(descPresets);
+
+                descPresets.querySelectorAll('.btn-desc-tpl').forEach(function(btn) {
+                    btn.onclick = function(e) {
+                        e.preventDefault();
+                        var tpl = this.getAttribute('data-tpl');
+                        var t = (titleInput ? titleInput.value : '').trim() || 'Fine Jewelry';
+                        var m = (karatInput ? karatInput.value : '').trim() || '18K Solid Gold';
+                        var g = (gemstoneInput ? gemstoneInput.value : '').trim() || 'VVS Lab Diamonds';
+                        if (tpl === 'delivery') {
+                            metaDescInput.value = 'Discover the handcrafted ' + t + ' in ' + m + '. Enjoy complimentary insured delivery, certificate of authenticity & signature packaging.';
+                        } else if (tpl === 'diamonds') {
+                            metaDescInput.value = 'Handcrafted ' + t + ' set in ' + m + ' with certified ' + g + '. Ethical, conflict-free fine jewelry by Luckjary Atelier.';
+                        } else if (tpl === 'bespoke') {
+                            metaDescInput.value = 'Shop the exquisite ' + t + ' forged in ' + m + '. Lifetime craftsmanship warranty & complimentary bespoke sizing by Luckjary.';
+                        }
+                        updateSeoDisplay();
+                    };
+                });
+            }
+        }
+
+        // URL Slug Handle Preview
+        if (slugInput) {
+            var slugRow = slugInput.closest('.form-row');
+            if (slugRow) {
+                var slugHeader = document.createElement('div');
+                slugHeader.className = 'lux-field-header-row';
+                slugHeader.innerHTML = 
+                    '<label for="id_slug">URL and Handle</label>' +
+                    '<button type="button" class="lux-seo-preset-pill" id="btn-auto-slug">✦ Regenerate Slug from Title</button>';
+                slugInput.parentNode.insertBefore(slugHeader, slugInput);
+
+                var btnAutoSlug = document.getElementById('btn-auto-slug');
+                if (btnAutoSlug) {
+                    btnAutoSlug.onclick = function(e) {
+                        e.preventDefault();
+                        var t = (titleInput ? titleInput.value : '').trim();
+                        if (t) {
+                            slugInput.value = t.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+                            updateSeoDisplay();
+                        }
+                    };
+                }
+            }
+        }
+
+        // Keywords Suggestions
+        if (metaKeywordsInput) {
+            var kwRow = metaKeywordsInput.closest('.form-row');
+            if (kwRow) {
+                var kwPresets = document.createElement('div');
+                kwPresets.className = 'lux-seo-pill-group';
+                kwPresets.innerHTML = 
+                    '<span style="font-size:10px; font-weight:700; color:#64748B; text-transform:uppercase;">Quick SEO Keywords:</span>' +
+                    '<button type="button" class="lux-seo-preset-pill btn-kw-add" data-kw="18k solid gold">✦ 18K Solid Gold</button>' +
+                    '<button type="button" class="lux-seo-preset-pill btn-kw-add" data-kw="handcrafted jewelry">✦ Handcrafted Jewelry</button>' +
+                    '<button type="button" class="lux-seo-preset-pill btn-kw-add" data-kw="lab diamonds">✦ Lab Diamonds</button>' +
+                    '<button type="button" class="lux-seo-preset-pill btn-kw-add" data-kw="engagement ring">✦ Engagement Ring</button>' +
+                    '<button type="button" class="lux-seo-preset-pill btn-kw-add" data-kw="haute joaillerie">✦ Haute Joaillerie</button>' +
+                    '<button type="button" class="lux-seo-preset-pill btn-kw-add" data-kw="conflict-free">✦ Conflict-Free</button>' +
+                    '<button type="button" class="lux-seo-preset-pill btn-kw-add" data-kw="complimentary delivery">✦ Complimentary Delivery</button>';
+                metaKeywordsInput.parentNode.appendChild(kwPresets);
+
+                kwPresets.querySelectorAll('.btn-kw-add').forEach(function(btn) {
+                    btn.onclick = function(e) {
+                        e.preventDefault();
+                        var kw = this.getAttribute('data-kw');
+                        var cur = (metaKeywordsInput.value || '').trim();
+                        if (!cur) {
+                            metaKeywordsInput.value = kw;
+                        } else if (cur.indexOf(kw) === -1) {
+                            metaKeywordsInput.value = cur + ', ' + kw;
+                        }
+                    };
+                });
+            }
+        }
+
+        // AI SEO Optimizer Button
+        var btnAiSeo = document.getElementById('btn-ai-seo-magic');
+        if (btnAiSeo) {
+            btnAiSeo.onclick = function(e) {
+                e.preventDefault();
+                var t = (titleInput ? titleInput.value : '').trim() || 'Fine Jewelry Piece';
+                var m = (karatInput ? karatInput.value : '').trim() || '18K Solid Gold';
+                var g = (gemstoneInput ? gemstoneInput.value : '').trim() || 'VVS Clarity Diamonds';
+                var catText = categorySelect && categorySelect.selectedIndex >= 0 ? categorySelect.options[categorySelect.selectedIndex].text : 'Jewelry';
+
+                // Optimized Page Title (50-65 chars)
+                var newTitle = t + ' in ' + m + ' | Luckjary Fine Jewelry';
+                if (newTitle.length > 70) newTitle = t + ' | Luckjary Fine Jewelry';
+                if (metaTitleInput) metaTitleInput.value = newTitle;
+
+                // Optimized Meta Description (135-155 chars)
+                var newDesc = 'Discover the handcrafted ' + t + ' forged in rich ' + m + ' with certified ' + g + '. Complimentary insured worldwide delivery by Luckjary.';
+                if (newDesc.length > 160) {
+                    newDesc = 'Shop the handcrafted ' + t + ' in ' + m + ' with ' + g + '. Complimentary insured delivery & luxury gift packaging from Luckjary.';
+                }
+                if (metaDescInput) metaDescInput.value = newDesc;
+
+                // Optimized Slug
+                if (slugInput) {
+                    slugInput.value = t.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+                }
+
+                // High Intent Keywords
+                var kws = [t.toLowerCase(), m.toLowerCase(), g.toLowerCase(), catText.toLowerCase(), 'luxury jewelry', 'handcrafted jewelry', 'conflict-free diamonds'];
+                if (metaKeywordsInput) metaKeywordsInput.value = kws.join(', ');
+
+                updateSeoDisplay();
+            };
+        }
+    }
+
+    // Function to update live SEO preview and meters
+    function updateSeoDisplay() {
+        var t = (titleInput ? titleInput.value : '').trim() || 'Untitled Fine Jewelry Piece';
+        var mt = (metaTitleInput ? metaTitleInput.value : '').trim() || (t + ' | Luxury Jewelry - Luckjary');
+        var md = (metaDescInput ? metaDescInput.value : '').trim() || ('Discover the ' + t + ' by Luckjary. Handcrafted luxury jewelry with complimentary insured delivery & packaging.');
+        var sl = (slugInput ? slugInput.value : '').trim() || t.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+        var p = (priceInput ? priceInput.value : '').trim();
+        var km = (karatInput ? karatInput.value : '').trim() || '18K Solid Gold';
+
+        var prevTitle = document.getElementById('google-preview-title');
+        var prevDesc = document.getElementById('google-preview-desc');
+        var prevSlug = document.getElementById('google-preview-slug');
+        var prevPrice = document.getElementById('google-preview-price');
+        var prevMetal = document.getElementById('google-preview-metal');
+
+        if (prevTitle) prevTitle.textContent = mt;
+        if (prevDesc) prevDesc.textContent = md;
+        if (prevSlug) prevSlug.textContent = sl;
+        if (prevPrice) prevPrice.textContent = p ? ('$' + parseFloat(p).toFixed(2)) : '$0.00';
+        if (prevMetal) prevMetal.textContent = km;
+
+        // Update Title character meter
+        var titleMeter = document.getElementById('meta-title-meter');
+        if (titleMeter) {
+            var tLen = (metaTitleInput ? metaTitleInput.value : '').length;
+            titleMeter.textContent = tLen + ' / 70 characters';
+            titleMeter.className = 'lux-char-meter ' + (tLen === 0 ? 'meter-warn' : (tLen <= 60 ? 'meter-good' : (tLen <= 70 ? 'meter-warn' : 'meter-danger')));
+        }
+
+        // Update Description character meter
+        var descMeter = document.getElementById('meta-desc-meter');
+        if (descMeter) {
+            var dLen = (metaDescInput ? metaDescInput.value : '').length;
+            descMeter.textContent = dLen + ' / 160 characters';
+            descMeter.className = 'lux-char-meter ' + (dLen === 0 ? 'meter-warn' : (dLen >= 120 && dLen <= 155 ? 'meter-good' : (dLen <= 160 ? 'meter-warn' : 'meter-danger')));
+        }
+
+        // Update top bar title
+        var topTitleEl = document.getElementById('shopify-top-title');
+        if (topTitleEl) {
+            topTitleEl.textContent = t || (isAdd ? 'Add product' : 'Change product');
+        }
+    }
+
+    // Attach listeners for live SEO updates
+    if (metaTitleInput) metaTitleInput.addEventListener('input', updateSeoDisplay);
+    if (metaDescInput) metaDescInput.addEventListener('input', updateSeoDisplay);
+    if (slugInput) slugInput.addEventListener('input', updateSeoDisplay);
+    if (priceInput) priceInput.addEventListener('input', updateSeoDisplay);
+
+    if (titleInput) {
+        titleInput.addEventListener('input', function() {
+            var val = this.value.trim();
+            // Auto update slug if adding or empty
+            if (slugInput && (!slugInput.value || isAdd)) {
+                slugInput.value = val.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+            }
+            // Auto update meta title if empty
+            if (metaTitleInput && !metaTitleInput.value) {
+                metaTitleInput.value = val + ' | Luxury Fine Jewelry - Luckjary';
+            }
+            updateSeoDisplay();
+        });
+    }
+
+    // -------------------------------------------------------------
+    // ENHANCE SIDEBAR: PRODUCT STATUS CARD
+    // -------------------------------------------------------------
+    if (statusCard && isAvailableCb) {
+        var statusHeader = statusCard.querySelector('h2');
+        if (statusHeader) statusHeader.textContent = 'Product Status & Visibility';
+
+        var statusDiv = document.createElement('div');
+        statusDiv.className = 'shopify-status-card-inner';
+        statusDiv.innerHTML = 
+            '<div class="shopify-status-toggle-row">' +
+            '  <button type="button" class="shopify-status-btn btn-active ' + (isAvailableCb.checked ? 'is-selected' : '') + '" id="btn-status-active">✓ Active (Available)</button>' +
+            '  <button type="button" class="shopify-status-btn btn-draft ' + (!isAvailableCb.checked ? 'is-selected' : '') + '" id="btn-status-draft">Draft / Hidden</button>' +
+            '</div>' +
+            '<div style="font-size:11px; color:#94A3B8; margin-bottom:12px;">Active pieces are published instantly to the online boutique storefront and available for client orders.</div>' +
+            '<div style="padding-top:10px; border-top:1px solid #232736;">' +
+            '  <span style="font-size:11px; font-weight:700; color:#64748B; text-transform:uppercase; letter-spacing:0.04em;">Sales Channels:</span>' +
+            '  <div style="display:flex; flex-direction:column; gap:4px; margin-top:6px; font-size:12px; color:#CBD5E1;">' +
+            '    <span>✓ Online Store (Boutique)</span>' +
+            '    <span>✓ Atelier OMS (Order Management)</span>' +
+            '  </div>' +
+            '</div>';
+
+        statusCard.insertBefore(statusDiv, statusCard.querySelector('.form-row') || null);
+
+        var btnActive = document.getElementById('btn-status-active');
+        var btnDraft = document.getElementById('btn-status-draft');
+        var topBadge = document.getElementById('shopify-top-status-badge');
+
+        function updateStatusUI(isActive) {
+            isAvailableCb.checked = isActive;
+            if (btnActive) btnActive.className = 'shopify-status-btn btn-active ' + (isActive ? 'is-selected' : '');
+            if (btnDraft) btnDraft.className = 'shopify-status-btn btn-draft ' + (!isActive ? 'is-selected' : '');
+            if (topBadge) {
+                topBadge.textContent = isActive ? 'Active' : 'Draft';
+                topBadge.className = 'shopify-status-indicator ' + (isActive ? 'is-active' : 'is-draft');
+            }
+        }
+
+        if (btnActive) btnActive.onclick = function() { updateStatusUI(true); };
+        if (btnDraft) btnDraft.onclick = function() { updateStatusUI(false); };
+    }
+
+    // -------------------------------------------------------------
+    // ENHANCE SIDEBAR: PRICING & MARGIN CARD
+    // -------------------------------------------------------------
+    if (pricingCard) {
+        var pricingHeader = pricingCard.querySelector('h2');
+        if (pricingHeader) pricingHeader.textContent = 'Pricing & Valuation';
+
+        var marginBadge = document.createElement('div');
+        marginBadge.className = 'shopify-margin-badge';
+        marginBadge.id = 'shopify-margin-badge';
+        pricingCard.appendChild(marginBadge);
+
+        function updateMargin() {
+            var p = parseFloat(priceInput ? priceInput.value : 0) || 0;
+            var cp = parseFloat(comparePriceInput ? comparePriceInput.value : 0) || 0;
+            if (cp > p && p > 0) {
+                var diff = cp - p;
+                var pct = Math.round((diff / cp) * 100);
+                marginBadge.innerHTML = '<span>🏷️</span> <strong>Client Savings:</strong> $' + diff.toFixed(2) + ' (' + pct + '% OFF Retail)';
+                marginBadge.style.display = 'flex';
+            } else if (p > 0) {
+                marginBadge.innerHTML = '<span>💎</span> <strong>Standard Retail:</strong> $' + p.toFixed(2) + ' USD';
+                marginBadge.style.display = 'flex';
+            } else {
+                marginBadge.style.display = 'none';
+            }
+        }
+
+        if (priceInput) priceInput.addEventListener('input', updateMargin);
+        if (comparePriceInput) comparePriceInput.addEventListener('input', updateMargin);
+        updateMargin();
+    }
+
+    // -------------------------------------------------------------
+    // ENHANCE SIDEBAR: INVENTORY & SKU CARD
+    // -------------------------------------------------------------
+    if (inventoryCard) {
+        var invHeader = inventoryCard.querySelector('h2');
+        if (invHeader) invHeader.textContent = 'Inventory & SKU Vault';
+
+        if (skuInput) {
+            var skuRow = skuInput.closest('.form-row');
+            if (skuRow) {
+                var skuBtn = document.createElement('button');
+                skuBtn.type = 'button';
+                skuBtn.className = 'lux-helper-pill pill-action';
+                skuBtn.style.marginTop = '6px';
+                skuBtn.textContent = '✦ Auto-Generate SKU';
+                skuBtn.onclick = function(e) {
+                    e.preventDefault();
+                    var catCode = 'JW';
+                    if (categorySelect && categorySelect.selectedIndex >= 0) {
+                        var c = categorySelect.options[categorySelect.selectedIndex].text.toLowerCase();
+                        if (c.indexOf('ring') !== -1) catCode = 'RG';
+                        else if (c.indexOf('necklace') !== -1) catCode = 'NL';
+                        else if (c.indexOf('bracelet') !== -1) catCode = 'BR';
+                        else if (c.indexOf('earring') !== -1) catCode = 'ER';
+                    }
+                    var rnd = Math.floor(100 + Math.random() * 900);
+                    skuInput.value = 'LUK-' + catCode + '-' + rnd;
+                };
+                skuInput.parentNode.appendChild(skuBtn);
+            }
+        }
+
+        var stockBadge = document.createElement('div');
+        stockBadge.id = 'shopify-stock-badge';
+        stockBadge.className = 'shopify-stock-badge stock-good';
+        inventoryCard.appendChild(stockBadge);
+
+        function updateStockBadge() {
+            var q = parseInt(inventoryInput ? inventoryInput.value : 0, 10);
+            if (isNaN(q) || q === 0) {
+                stockBadge.className = 'shopify-stock-badge stock-out';
+                stockBadge.innerHTML = '✕ <strong>Out of Stock:</strong> 0 units available';
+            } else if (q <= 5) {
+                stockBadge.className = 'shopify-stock-badge stock-low';
+                stockBadge.innerHTML = '⚠️ <strong>Low Inventory Alert:</strong> ' + q + ' units remaining';
+            } else {
+                stockBadge.className = 'shopify-stock-badge stock-good';
+                stockBadge.innerHTML = '✓ <strong>In Stock:</strong> ' + q + ' units in Atelier Vault';
+            }
+        }
+
+        if (inventoryInput) inventoryInput.addEventListener('input', updateStockBadge);
+        updateStockBadge();
+    }
+
+    // -------------------------------------------------------------
+    // ENHANCE SIDEBAR: PRODUCT ORGANIZATION
+    // -------------------------------------------------------------
+    if (orgCard) {
+        var orgHeader = orgCard.querySelector('h2');
+        if (orgHeader) orgHeader.textContent = 'Product Organization';
+    }
+
+    // Initial SEO display update
+    updateSeoDisplay();
 })();
 </script>
 {% endblock %}

@@ -35,6 +35,37 @@ class ProductAdminForm(forms.ModelForm):
         model = Product
         fields = '__all__'
         widgets = {
+            'title': forms.TextInput(attrs={
+                'placeholder': 'e.g. Aura Textured Dome Ring in 18K Solid Gold',
+                'class': 'shopify-title-input',
+                'style': 'font-size: 1.05rem; font-weight: 600; padding: 0.65rem 0.85rem; width: 100%;'
+            }),
+            'subtitle': forms.TextInput(attrs={
+                'placeholder': 'e.g. Handcrafted in 18K Solid Gold & VVS Diamonds',
+                'style': 'width: 100%;'
+            }),
+            'description': forms.Textarea(attrs={
+                'rows': 5,
+                'placeholder': 'Write a compelling description highlighting handcrafted details, diamond clarity, and styling advice...',
+                'style': 'width: 100%; font-size: 0.85rem; line-height: 1.5;'
+            }),
+            'meta_title': forms.TextInput(attrs={
+                'placeholder': 'e.g. Aura Textured Dome Ring in 18K Solid Gold | Luckjary Fine Jewelry',
+                'style': 'width: 100%;'
+            }),
+            'meta_description': forms.Textarea(attrs={
+                'rows': 3,
+                'placeholder': 'e.g. Discover the handcrafted Aura Textured Dome Ring in 18K solid gold. Complimentary insured delivery & luxury gift packaging from Luckjary.',
+                'style': 'width: 100%;'
+            }),
+            'meta_keywords': forms.TextInput(attrs={
+                'placeholder': 'e.g. luxury ring, 18k solid gold, diamond ring, haute joaillerie, handcrafted',
+                'style': 'width: 100%;'
+            }),
+            'sku': forms.TextInput(attrs={
+                'placeholder': 'e.g. LUK-RING-006',
+                'style': 'width: 100%; font-family: monospace; font-weight: 600; letter-spacing: 0.05em;'
+            }),
             'available_metals': forms.TextInput(attrs={
                 'placeholder': 'e.g. 18K Solid Yellow Gold, 18K Solid White Gold, 18K Solid Rose Gold, Platinum 950',
                 'style': 'width: 100%;'
@@ -47,7 +78,6 @@ class ProductAdminForm(forms.ModelForm):
             'chain_length_or_size': forms.TextInput(attrs={'style': 'width: 100%;'}),
             'craftsmanship_details': forms.Textarea(attrs={'rows': 3, 'style': 'width: 100%;'}),
             'care_instructions': forms.Textarea(attrs={'rows': 3, 'style': 'width: 100%;'}),
-            'meta_description': forms.Textarea(attrs={'rows': 2, 'style': 'width: 100%;'}),
         }
 
     def __init__(self, *args, **kwargs):
@@ -117,22 +147,16 @@ class CollectionAdmin(admin.ModelAdmin):
 class ProductAdmin(admin.ModelAdmin):
     form = ProductAdminForm
     fieldsets = (
-        ('💎 Jewelry Identity', {
+        ('Title & Description', {
+            'classes': ('shopify-card-title-desc',),
             'fields': (
-                ('title', 'slug'),
-                ('sku', 'category', 'collection'),
+                'title',
                 'subtitle',
                 'description',
             )
         }),
-        ('💰 Pricing & Inventory Vault', {
-            'fields': (
-                ('price', 'compare_at_price'),
-                ('inventory', 'is_available'),
-                ('is_featured', 'is_bestseller', 'is_new_arrival'),
-            )
-        }),
         ('✨ Precious Metals & Live Swatches', {
+            'classes': ('shopify-card-metals',),
             'description': 'Select which precious metal variants are offered for this piece. Clients can switch between these metals with live swatches on the boutique product page.',
             'fields': (
                 'metal_presets',
@@ -140,14 +164,8 @@ class ProductAdmin(admin.ModelAdmin):
                 'available_metals',
             )
         }),
-        ('💎 Gemstones & Specialty Materials', {
-            'description': 'Specify featured gemstones, pearl varieties, and diamond grades. (Precious metals selected above are automatically mapped to catalog filters on save).',
-            'fields': (
-                ('gemstone', 'carat_weight'),
-                'materials',
-            )
-        }),
         ('📏 Sizing Framework & Specifications', {
+            'classes': ('shopify-card-sizing',),
             'description': 'Configure available ring sizes (US 4 to 13 with half-sizes), necklace chain lengths, or custom dimensions. Leave Available Sizes blank to automatically provide the complete standard size range for this jewelry piece.',
             'fields': (
                 ('size_category', 'chain_length_or_size'),
@@ -155,19 +173,56 @@ class ProductAdmin(admin.ModelAdmin):
                 ('dimensions', 'certification'),
             )
         }),
+        ('💎 Gemstones & Specialty Materials', {
+            'classes': ('shopify-card-gemstones',),
+            'description': 'Specify featured gemstones, pearl varieties, and diamond grades. (Precious metals selected above are automatically mapped to catalog filters on save).',
+            'fields': (
+                ('gemstone', 'carat_weight'),
+                'materials',
+            )
+        }),
+        ('🔍 Search Engine Listing Preview', {
+            'classes': ('shopify-card-seo',),
+            'description': 'Add a title and description to see how this product might appear in a search engine listing like Google.',
+            'fields': (
+                'meta_title',
+                'meta_description',
+                'slug',
+                'meta_keywords',
+            )
+        }),
         ('🏛️ Haute Craftsmanship & Care', {
-            'classes': ('collapse',),
+            'classes': ('collapse', 'shopify-card-care'),
             'fields': (
                 'craftsmanship_details',
                 'care_instructions',
             )
         }),
-        ('🔍 SEO & Meta Optimization', {
-            'classes': ('collapse',),
+        ('Product Status & Visibility', {
+            'classes': ('shopify-side-status',),
             'fields': (
-                'meta_title',
-                'meta_description',
-                'meta_keywords',
+                'is_available',
+                ('is_featured', 'is_bestseller', 'is_new_arrival'),
+            )
+        }),
+        ('Pricing & Valuation', {
+            'classes': ('shopify-side-pricing',),
+            'fields': (
+                ('price', 'compare_at_price'),
+            )
+        }),
+        ('Inventory & SKU Vault', {
+            'classes': ('shopify-side-inventory',),
+            'fields': (
+                ('sku', 'inventory'),
+            )
+        }),
+        ('Product Organization', {
+            'classes': ('shopify-side-organization',),
+            'fields': (
+                'category',
+                'collection',
+                'style',
             )
         }),
     )
