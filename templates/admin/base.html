@@ -373,6 +373,19 @@ document.addEventListener('keydown', function(e) {
         }
     }
 });
+
+// Smoothly pass wheel scroll to main page when hovering over fixed sidebar
+(function() {
+    var sidebar = document.getElementById('nav-sidebar');
+    if (sidebar) {
+        sidebar.addEventListener('wheel', function(e) {
+            var scrollBody = sidebar.querySelector('.sidebar-scroll-body');
+            if (!scrollBody || scrollBody.scrollHeight <= (scrollBody.clientHeight + 5)) {
+                window.scrollBy({ top: e.deltaY, behavior: 'auto' });
+            }
+        }, { passive: true });
+    }
+})();
 </script>
 </body>
 </html>
