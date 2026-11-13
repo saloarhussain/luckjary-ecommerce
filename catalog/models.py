@@ -21,9 +21,9 @@ class Category(models.Model):
         if not self.slug:
             self.slug = slugify(self.name)
         if not self.meta_title:
-            self.meta_title = f"{self.name} Collection | Fine Fashion Jewelry - Luckjary"
+            self.meta_title = f"{self.name} Collection | 925 Sterling Silver Jewelry - Luckjary"
         if not self.meta_description:
-            self.meta_description = f"Explore handcrafted {self.name.lower()} at Luckjary. Luxury solid gold, sterling silver, and ethically sourced diamond jewelry with complimentary gift packaging."
+            self.meta_description = f"Explore handcrafted {self.name.lower()} at Luckjary. Handcrafted 925 solid sterling silver and ethically sourced stone jewelry with complimentary gift packaging."
         super().save(*args, **kwargs)
 
     def get_absolute_url(self):
@@ -111,12 +111,12 @@ class Product(models.Model):
     is_new_arrival = models.BooleanField(default=False)
     
     # Luxury Specifications & Precious Metals
-    karat_metal = models.CharField(max_length=120, default='18K Yellow Gold', help_text="Default primary metal for this piece")
+    karat_metal = models.CharField(max_length=120, default='925 Sterling Silver', help_text="Default primary metal for this piece")
     available_metals = models.CharField(
         max_length=400, 
         blank=True, 
-        default='18K Yellow Gold, 18K White Gold, 18K Rose Gold',
-        help_text="Comma-separated precious metal options available to the client on the product page. e.g. 18K Yellow Gold, 18K White Gold, 18K Rose Gold"
+        default='925 Sterling Silver, 925 Sterling Silver (Rhodium Finish)',
+        help_text="Comma-separated precious metal options available to the client on the product page. e.g. 925 Sterling Silver, 925 Sterling Silver (Rhodium Finish)"
     )
     gemstone = models.CharField(max_length=150, blank=True, default='VVS Clarity Lab Diamonds')
     carat_weight = models.CharField(max_length=60, blank=True, default='1.25 ctw')
@@ -145,7 +145,7 @@ class Product(models.Model):
     # SEO & Organic Growth
     meta_title = models.CharField(max_length=140, blank=True)
     meta_description = models.CharField(max_length=260, blank=True)
-    meta_keywords = models.CharField(max_length=255, blank=True, default="luxury jewelry, 18k gold, handcrafted necklace, diamond ring, fine jewelry")
+    meta_keywords = models.CharField(max_length=255, blank=True, default="silver jewelry, 925 sterling silver, silver rings, silver necklaces, silver earrings, silver bracelets, fine jewelry")
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -175,7 +175,7 @@ class Product(models.Model):
         default_metals = []
         if self.karat_metal:
             default_metals.append(self.karat_metal)
-        for m in ['18K Yellow Gold', '18K White Gold', '18K Rose Gold']:
+        for m in ['925 Sterling Silver', '925 Sterling Silver (Rhodium Finish)']:
             if m not in default_metals:
                 default_metals.append(m)
         return default_metals

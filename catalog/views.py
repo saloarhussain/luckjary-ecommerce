@@ -8,37 +8,17 @@ import json
 def product_list(request):
     products = Product.objects.filter(is_available=True)
 
-    # 0. Metal Switcher Filter (Silver Jewellery vs Fashion Jewellery)
-    metal = request.GET.get('metal')
-    if not metal and 'metal' not in request.GET:
-        metal = request.session.get('active_metal', 'silver')
-    elif metal:
-        request.session['active_metal'] = metal
+    # Exclusively 925 Sterling Silver Jewellery
+    silver_products = products.filter(
+        Q(karat_metal__icontains='Silver') |
+        Q(materials__name__icontains='Silver') |
+        Q(title__icontains='Silver')
+    ).distinct()
+    if silver_products.exists():
+        products = silver_products
 
-    selected_metal = metal.lower() if metal else 'silver'
-    if selected_metal not in ['silver', 'fashion']:
-        selected_metal = 'silver'
-        request.session['active_metal'] = 'silver'
-
-    if selected_metal == 'silver':
-        products = products.filter(
-            Q(karat_metal__icontains='Silver') |
-            Q(materials__name__icontains='Silver') |
-            Q(title__icontains='Silver')
-        ).distinct()
-    elif selected_metal == 'fashion':
-        products = products.filter(
-            Q(karat_metal__icontains='Demifine') |
-            Q(karat_metal__icontains='Demifne') |
-            Q(karat_metal__icontains='Vermeil') |
-            Q(materials__name__icontains='Demifine') |
-            Q(materials__name__icontains='Demifne') |
-            Q(title__icontains='Demifine') |
-            Q(title__icontains='Fashion') |
-            Q(karat_metal__icontains='Gold') |
-            Q(materials__name__icontains='Gold') |
-            ~Q(karat_metal__icontains='Silver')
-        ).distinct()
+    selected_metal = 'silver'
+    request.session['active_metal'] = 'silver'
 
     # 1. Category Filter
     category_slug = request.GET.get('category')
@@ -124,14 +104,9 @@ def product_list(request):
     elif selected_collection:
         page_title = f"{selected_collection.name} Collection"
         page_desc = selected_collection.description or page_desc
-    elif selected_metal == 'silver':
+    else:
         page_title = "925 Sterling Silver Jewellery"
         page_desc = "Discover luminous 925 sterling silver necklaces, pavé rings, and heirloom pieces."
-    elif selected_metal == 'demifine':
-        page_title = "18K Gold Vermeil & Demifine Jewellery"
-        page_desc = "Elevate your daily signature with heavy 18K solid gold layered over pure sterling silver."
-    elif selected_metal == 'gold':
-        page_title = "Solid 18K Gold & Haute Joaillerie"
 
     context = {
         'products': page_obj,
@@ -158,35 +133,17 @@ def category_products(request, category_slug):
     category = get_object_or_404(Category, slug=category_slug)
     products = Product.objects.filter(category=category, is_available=True)
 
-    metal = request.GET.get('metal') or request.session.get('active_metal', 'silver')
-    if request.GET.get('metal'):
-        request.session['active_metal'] = request.GET.get('metal')
-    selected_metal = metal.lower() if metal else 'silver'
-    if selected_metal not in ['silver', 'fashion']:
-        selected_metal = 'silver'
-        request.session['active_metal'] = 'silver'
+    # Exclusively 925 Sterling Silver Jewellery
+    matched = products.filter(
+        Q(karat_metal__icontains='Silver') |
+        Q(materials__name__icontains='Silver') |
+        Q(title__icontains='Silver')
+    ).distinct()
+    if matched.exists():
+        products = matched
 
-    if selected_metal == 'silver':
-        matched = products.filter(
-            Q(karat_metal__icontains='Silver') |
-            Q(materials__name__icontains='Silver') |
-            Q(title__icontains='Silver')
-        ).distinct()
-        if matched.exists():
-            products = matched
-    elif selected_metal == 'fashion':
-        matched = products.filter(
-            Q(karat_metal__icontains='Demifine') |
-            Q(karat_metal__icontains='Vermeil') |
-            Q(materials__name__icontains='Demifine') |
-            Q(title__icontains='Demifine') |
-            Q(title__icontains='Fashion') |
-            Q(karat_metal__icontains='Gold') |
-            Q(materials__name__icontains='Gold') |
-            ~Q(karat_metal__icontains='Silver')
-        ).distinct()
-        if matched.exists():
-            products = matched
+    selected_metal = 'silver'
+    request.session['active_metal'] = 'silver'
 
     sort_by = request.GET.get('sort', 'featured')
     if sort_by == 'price_asc':
@@ -210,7 +167,7 @@ def category_products(request, category_slug):
         'all_categories': Category.objects.all(),
         'all_materials': Material.objects.all(),
         'meta_title': category.meta_title or f"{category.name} | Luckjary Fine Jewelry",
-        'meta_description': category.meta_description or f"Shop luxury {category.name.lower()} handcrafted in 18K solid gold and platinum.",
+        'meta_description': category.meta_description or f"Shop luxury {category.name.lower()} handcrafted in 925 solid sterling silver with rhodium anti-tarnish finish.",
     }
     return render(request, 'catalog/product_list.html', context)
 

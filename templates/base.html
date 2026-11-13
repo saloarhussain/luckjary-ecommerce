@@ -6,9 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
     <!-- Dynamic SEO Meta Tags -->
-    <title>{% block title %}{{ meta_title|default:"Luckjary | Luxury Fine Jewelry, 18K Solid Gold & Diamonds" }}{% endblock %}</title>
-    <meta name="description" content="{% block meta_description %}{{ meta_description|default:'Discover handcrafted haute joaillerie at Luckjary. Explore engagement rings, 18K solid gold necklaces, diamond tennis bracelets, and bespoke bridal jewelry.' }}{% endblock %}">
-    <meta name="keywords" content="{% block meta_keywords %}luxury jewelry, fine jewelry, 18k solid gold, diamond ring, haute joaillerie, wedding jewelry, engagement rings, tennis bracelet{% endblock %}">
+    <title>{% block title %}{{ meta_title|default:"Luckjary | Handcrafted 925 Sterling Silver Jewellery & Certified Stones" }}{% endblock %}</title>
+    <meta name="description" content="{% block meta_description %}{{ meta_description|default:'Discover handcrafted 925 sterling silver jewelry at Luckjary. Explore sterling silver rings, necklaces, bracelets, and earrings treated with rhodium anti-tarnish finish.' }}{% endblock %}">
+    <meta name="keywords" content="{% block meta_keywords %}silver jewelry, 925 sterling silver, silver rings, silver necklaces, silver earrings, silver bracelets, anti-tarnish silver, Luckjary{% endblock %}">
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="{{ request.build_absolute_uri }}">
 
@@ -344,20 +344,17 @@
                     <a href="{% url 'core:about' %}" class="hover:text-[#366E63] transition py-1">Atelier Heritage</a>
                 </div>
 
-                <!-- Secondary Highlights (Gold Rate Today, Track Order) -->
+                <!-- Secondary Highlights (925 Sterling Silver, Track Order) -->
                 <div class="flex items-center space-x-5 text-neutral-600">
-                    <span class="inline-flex items-center text-[#B08B44] font-bold">
-                        <span class="w-1.5 h-1.5 rounded-full bg-[#B08B44] mr-1.5 animate-pulse"></span>
-                        Gold Rate Today: $86.40/g
+                    <span class="inline-flex items-center text-[#366E63] font-bold">
+                        <span class="w-1.5 h-1.5 rounded-full bg-[#366E63] mr-1.5 animate-pulse"></span>
+                        925 Sterling Silver Certified
                     </span>
                     <a href="{% url 'orders:order_tracking' %}" class="hover:text-[#366E63] transition">Track Order</a>
                 </div>
             </div>
         </nav>
     </header>
-
-    <!-- Precious Metal Collection Switcher (Gold Jewellery, Silver Jewellery, Demifine Jewellery) -->
-    {% include 'includes/metal_switcher.html' %}
 
     <!-- Fully Responsive Mobile Navigation Drawer -->
     <div id="mobileDrawerOverlay" class="fixed inset-0 bg-black/60 z-50 hidden transition-opacity lg:hidden"></div>
@@ -379,14 +376,6 @@
             </form>
         </div>
 
-        <!-- Mobile Metal Switcher Row -->
-        <div class="px-5 py-3.5 bg-[#FAF7F0] border-b border-[#EBE6DF]">
-            <p class="text-[10px] uppercase tracking-widest text-[#C5A059] font-bold mb-2">Shop By Collection</p>
-            <div class="grid grid-cols-2 gap-2 text-center text-xs">
-                <a href="{% url 'catalog:product_list' %}?metal=silver" class="py-1.5 px-3 rounded-full border border-[#C5A059] transition {% if active_metal == 'silver' or not active_metal %}bg-[#366E63] text-white font-semibold{% else %}bg-white text-neutral-700 hover:bg-neutral-50{% endif %}">Silver Jewellery</a>
-                <a href="{% url 'catalog:product_list' %}?metal=fashion" class="py-1.5 px-3 rounded-full border border-[#C5A059] transition {% if active_metal == 'fashion' %}bg-[#366E63] text-white font-semibold{% else %}bg-white text-neutral-700 hover:bg-neutral-50{% endif %}">Fashion Jewellery</a>
-            </div>
-        </div>
 
         <nav class="flex-1 overflow-y-auto p-6 space-y-4 text-xs font-semibold uppercase tracking-wider text-neutral-800">
             <a href="{% url 'catalog:product_list' %}" class="flex items-center justify-between py-2 border-b border-neutral-100 hover:text-gold-600">
@@ -583,7 +572,7 @@
                 <div class="lg:col-span-2 space-y-4">
                     <span class="font-display text-2xl font-bold tracking-[0.25em] text-white">LUCKJARY</span>
                     <p class="text-xs text-neutral-400 leading-relaxed pr-6 max-w-sm">
-                        Crafting modern heirlooms in pure 18K solid gold, certified conflict-free diamonds, and rare natural gemstones. Each piece is hand-forged by master jewelers in our New York ateliers.
+                        Crafting modern heirlooms in pure 925 sterling silver, certified stones, and artisanal craftsmanship. Each piece is treated with microscopic rhodium anti-tarnish finish.
                     </p>
                     <div class="pt-2 text-xs text-[#C5A059] flex items-center space-x-2 flex-wrap gap-y-1">
                         <span>✦ Lifetime Warranty</span>
@@ -602,7 +591,7 @@
                         <li><a href="{% url 'catalog:product_list' %}?category=bridal-high-jewelry" class="hover:text-white transition">Haute Bridal & Rings</a></li>
                         <li><a href="{% url 'catalog:product_list' %}?category=necklaces" class="hover:text-white transition">Diamond Pendants</a></li>
                         <li><a href="{% url 'catalog:product_list' %}?category=bracelets" class="hover:text-white transition">Tennis Bracelets</a></li>
-                        <li><a href="{% url 'catalog:product_list' %}?material=18k-solid-yellow-gold" class="hover:text-white transition">18K Solid Gold</a></li>
+                        <li><a href="{% url 'catalog:product_list' %}?material=925-sterling-silver" class="hover:text-white transition">925 Sterling Silver</a></li>
                     </ul>
                 </div>
 

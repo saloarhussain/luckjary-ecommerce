@@ -1,6 +1,6 @@
 # Luckjary — Luxury Fine Jewelry E-Commerce Platform
 
-A modern, high-converting, and SEO-optimized e-commerce web application tailored specifically for **Luckjary**, an upscale fashion jewelry retail brand. Built with **Python (Django)**, **HTML5/Tailwind CSS**, and **SQLite**.
+A modern, high-converting, and SEO-optimized e-commerce web application tailored specifically for **Luckjary**, an upscale 925 sterling silver jewelry retail brand. Built with **Python (Django)**, **HTML5/Tailwind CSS**, and **SQLite**.
 
 ---
 

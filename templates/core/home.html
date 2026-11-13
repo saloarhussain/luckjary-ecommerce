@@ -15,30 +15,17 @@
         <div class="inline-flex items-center space-x-2 border border-[#C5A059]/40 bg-black/40 backdrop-blur-sm px-3.5 sm:px-4 py-1 sm:py-1.5 rounded-full">
             <span class="w-1.5 sm:w-2 h-1.5 sm:h-2 rounded-full bg-[#C5A059]"></span>
             <span class="text-[10px] sm:text-xs font-display tracking-[0.2em] sm:tracking-[0.25em] text-[#C5A059] uppercase">
-                {% if active_metal == 'silver' %}
                 The 925 Sterling Silver Heirlooms
-                {% else %}
-                The Modern Fashion Jewellery Atelier
-                {% endif %}
             </span>
         </div>
 
         <h1 class="font-sans text-2xl sm:text-5xl md:text-6xl font-bold tracking-tight leading-tight text-[#FAF9F6]">
-            {% if active_metal == 'silver' %}
             Lustrous Silver.<br>
             <span class="font-bold gold-gradient-text">Radiant for Every Moment.</span>
-            {% else %}
-            Exquisite Fashion Jewels.<br>
-            <span class="font-bold gold-gradient-text">Radiant Everyday Statement.</span>
-            {% endif %}
         </h1>
 
         <p class="max-w-2xl mx-auto text-xs sm:text-base text-neutral-300 font-light leading-relaxed px-2">
-            {% if active_metal == 'silver' %}
             Discover handcrafted 925 solid sterling silver heirlooms treated with a microscopic rhodium anti-tarnish barrier and certified brilliant stones.
-            {% else %}
-            Discover trendsetting luxury fashion jewelry sculpted with enduring luster, high polish vermeil, and conflict-free certified sparkling stones.
-            {% endif %}
         </p>
 
         <div class="pt-4 sm:pt-6 flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4">
@@ -59,12 +46,10 @@
             <div class="space-y-1">
                 <span class="text-xl text-[#C5A059]">✦</span>
                 <h4 class="text-xs font-display uppercase tracking-widest text-neutral-900 font-bold">
-                    {% if active_metal == 'silver' %}925 Sterling Silver
-                    {% else %}Fine Fashion Jewels{% endif %}
+                    925 Sterling Silver
                 </h4>
                 <p class="text-[11px] text-neutral-500">
-                    {% if active_metal == 'silver' %}Rhodium Anti-Tarnish Seal
-                    {% else %}High Polish & Enduring Luster{% endif %}
+                    Rhodium Anti-Tarnish Seal
                 </p>
             </div>
             <div class="space-y-1">
@@ -114,12 +99,10 @@
         <div class="flex flex-col md:flex-row md:items-end justify-between mb-12">
             <div>
                 <span class="text-[11px] sm:text-xs font-bold tracking-[0.2em] text-[#C5A059] uppercase block font-sans">
-                    {% if active_metal == 'silver' %}Sterling Silver Collection
-                    {% else %}Fashion Jewellery Collection{% endif %}
+                    Sterling Silver Collection
                 </span>
                 <h2 class="text-2xl sm:text-3xl lg:text-4xl font-bold text-neutral-900 tracking-tight mt-1 font-sans">
-                    {% if active_metal == 'silver' %}Handcrafted Silver Jewellery
-                    {% else %}Curated Fashion Jewellery{% endif %}
+                    Handcrafted Silver Jewellery
                 </h2>
             </div>
             <a href="{% url 'catalog:product_list' %}" class="mt-4 md:mt-0 text-xs font-sans tracking-wider uppercase text-neutral-800 hover:text-gold-600 font-bold inline-flex items-center gap-1">
@@ -149,12 +132,12 @@
                 The Solstice Heritage<br>Collection
             </h2>
             <p class="text-xs sm:text-sm text-neutral-600 font-light leading-relaxed">
-                Sculpted from molten 18K solid yellow and white gold, the Solstice Heritage series celebrates Roman architectural balance and celestial luminosity. Every diamond is handset with microscopic precision to capture and bend light.
+                Sculpted from luminous 925 solid sterling silver with a rhodium anti-tarnish finish, the Solstice Heritage series celebrates balance and celestial luminosity. Every stone is handset with microscopic precision to capture and bend light.
             </p>
             <div class="space-y-2 text-xs text-neutral-700">
                 <div class="flex items-center space-x-2">
                     <span class="text-[#C5A059]">✦</span>
-                    <span>Individually hallmarked with the Luckjary Master Seal</span>
+                    <span>Individually hallmarked with 925 Sterling Silver Authenticity</span>
                 </div>
                 <div class="flex items-center space-x-2">
                     <span class="text-[#C5A059]">✦</span>

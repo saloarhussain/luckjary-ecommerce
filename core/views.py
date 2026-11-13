@@ -7,30 +7,14 @@ from .models import NewsletterSubscriber, ContactInquiry
 from django.db.models import Q
 
 def home(request):
-    active_metal = request.GET.get('metal') or request.session.get('active_metal', 'silver')
-    if request.GET.get('metal'):
-        request.session['active_metal'] = request.GET.get('metal')
-    active_metal = active_metal.lower()
-    if active_metal not in ['silver', 'fashion']:
-        active_metal = 'silver'
-        request.session['active_metal'] = 'silver'
-
     all_featured = Product.objects.filter(is_available=True, is_featured=True)
-    if active_metal == 'silver':
-        featured_products = all_featured.filter(
-            Q(karat_metal__icontains='Silver') | Q(materials__name__icontains='Silver') | Q(title__icontains='Silver')
-        ).distinct()
-        if not featured_products.exists():
-            featured_products = Product.objects.filter(is_available=True, materials__name__icontains='Silver')
-    else: # fashion jewellery
-        featured_products = all_featured.filter(
-            Q(karat_metal__icontains='Demifine') | Q(karat_metal__icontains='Vermeil') |
-            Q(materials__name__icontains='Demifine') | Q(title__icontains='Demifine') |
-            Q(title__icontains='Fashion') | Q(karat_metal__icontains='Gold') |
-            Q(materials__name__icontains='Gold') | ~Q(karat_metal__icontains='Silver')
-        ).distinct()
-        if not featured_products.exists():
-            featured_products = all_featured
+    featured_products = all_featured.filter(
+        Q(karat_metal__icontains='Silver') | Q(materials__name__icontains='Silver') | Q(title__icontains='Silver')
+    ).distinct()
+    if not featured_products.exists():
+        featured_products = Product.objects.filter(is_available=True, materials__name__icontains='Silver')
+    if not featured_products.exists():
+        featured_products = all_featured
 
     bestsellers = Product.objects.filter(is_available=True, is_bestseller=True)[:4]
     new_arrivals = Product.objects.filter(is_available=True, is_new_arrival=True)[:4]
@@ -43,9 +27,9 @@ def home(request):
         'new_arrivals': new_arrivals,
         'categories': categories,
         'collections': collections,
-        'active_metal': active_metal,
-        'meta_title': 'Luckjary | Fine Jewelry, Solid 18K Gold & Certified Diamonds',
-        'meta_description': 'Discover exquisite handcrafted luxury jewelry at Luckjary. Explore engagement rings, 18K solid gold necklaces, diamond tennis bracelets, and bespoke bridal heirlooms.',
+        'active_metal': 'silver',
+        'meta_title': 'Luckjary | Handcrafted 925 Sterling Silver Jewellery',
+        'meta_description': 'Discover exquisite handcrafted 925 sterling silver jewelry at Luckjary. Explore sterling silver rings, necklaces, bracelets, and earrings treated with rhodium anti-tarnish finish.',
     }
     return render(request, 'core/home.html', context)
 

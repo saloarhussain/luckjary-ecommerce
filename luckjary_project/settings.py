@@ -27,8 +27,6 @@ def _load_env_file(filepath):
 for _env_candidate in [
     BASE_DIR / '.env.local',
     BASE_DIR / '.env',
-    BASE_DIR.parent / '.env.local',
-    BASE_DIR.parent / '.env',
 ]:
     _load_env_file(_env_candidate)
 
