@@ -424,56 +424,7 @@
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
 }
 
-.lux-mode-tabs-bar {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 16px;
-    padding-bottom: 14px;
-    border-bottom: 1px solid #202433;
-}
-
-.lux-mode-tab-btn {
-    background: #171A24;
-    color: #94A3B8;
-    border: 1px solid #282C3D;
-    border-radius: 8px;
-    padding: 8px 16px;
-    font-size: 12.5px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    user-select: none;
-}
-
-.lux-mode-tab-btn:hover {
-    background: #1E2230;
-    color: #FFF;
-    border-color: rgba(197, 160, 89, 0.5);
-    transform: translateY(-1px);
-}
-
-.lux-mode-tab-btn.is-active {
-    background: rgba(197, 160, 89, 0.15);
-    color: #FAF9F6;
-    border-color: #C5A059;
-    box-shadow: 0 0 12px rgba(197, 160, 89, 0.25);
-}
-
-.lux-mode-tab-btn.is-active::after {
-    content: "";
-    display: inline-block;
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background: #C5A059;
-    box-shadow: 0 0 6px #C5A059;
-}
-
+/* Framework auto-sync styles */
 .lux-framework-info-banner {
     background: rgba(197, 160, 89, 0.08);
     border: 1px solid rgba(197, 160, 89, 0.25);
@@ -2004,17 +1955,14 @@
         }
     };
 
-    // Helper: Detect active category framework
+    // Helper: Strictly detect active sizing framework from chosen Category
     function detectFramework() {
-        var current = (sizeCatInput.value || '').trim();
-        if (FRAMEWORKS[current]) return current;
-
         if (categorySelect && categorySelect.selectedIndex >= 0) {
             var catText = (categorySelect.options[categorySelect.selectedIndex].text || '').toLowerCase();
             if (catText.indexOf('ring') !== -1) return 'ring';
-            if (catText.indexOf('necklace') !== -1 || catText.indexOf('pendant') !== -1) return 'necklace';
-            if (catText.indexOf('bracelet') !== -1 || catText.indexOf('bangle') !== -1) return 'bracelet';
-            if (catText.indexOf('earring') !== -1) return 'earring';
+            if (catText.indexOf('necklace') !== -1 || catText.indexOf('pendant') !== -1 || catText.indexOf('chain') !== -1 || catText.indexOf('choker') !== -1) return 'necklace';
+            if (catText.indexOf('bracelet') !== -1 || catText.indexOf('bangle') !== -1 || catText.indexOf('cuff') !== -1) return 'bracelet';
+            if (catText.indexOf('earring') !== -1 || catText.indexOf('stud') !== -1 || catText.indexOf('hoop') !== -1) return 'earring';
         }
 
         if (titleInput) {
@@ -2024,6 +1972,9 @@
             if (t.indexOf('bracelet') !== -1 || t.indexOf('bangle') !== -1 || t.indexOf('cuff') !== -1) return 'bracelet';
             if (t.indexOf('earring') !== -1 || t.indexOf('stud') !== -1 || t.indexOf('hoop') !== -1) return 'earring';
         }
+
+        var current = (sizeCatInput.value || '').trim();
+        if (FRAMEWORKS[current]) return current;
 
         return 'ring';
     }
@@ -2065,30 +2016,27 @@
         var selectedSizes = getSelectedSizes();
         var specVal = (chainLengthInput.value || '').trim();
 
+        // Detect friendly category name for display
+        var catDisplay = fw.name;
+        if (categorySelect && categorySelect.selectedIndex >= 0) {
+            var optText = (categorySelect.options[categorySelect.selectedIndex].text || '').trim();
+            if (optText && optText !== '---------') {
+                catDisplay = optText;
+            }
+        }
+
         var html = '';
 
-        // 1. Framework Tabs Bar
-        html += '<div class="lux-mode-tabs-bar">';
-        html += '  <span style="font-size:11px; font-weight:700; color:#64748B; text-transform:uppercase; letter-spacing:0.06em; margin-right:4px;">Jewelry Framework:</span>';
-        ['ring', 'necklace', 'bracelet', 'earring', 'universal'].forEach(function(key) {
-            var f = FRAMEWORKS[key];
-            var isActive = (key === activeMode);
-            html += '  <button type="button" class="lux-mode-tab-btn ' + (isActive ? 'is-active' : '') + '" data-fw="' + key + '">';
-            html += '    <span>' + f.icon + '</span> ' + f.name;
-            html += '  </button>';
-        });
-        html += '</div>';
-
-        // 2. Info Banner
+        // 1. Info Banner with Category Auto-Sync Indicator (Replaces redundant manual framework tabs)
         html += '<div class="lux-framework-info-banner">';
         html += '  <div class="lux-framework-info-left">';
-        html += '    <span style="font-size:18px;">' + fw.icon + '</span>';
+        html += '    <span style="font-size:22px;">' + fw.icon + '</span>';
         html += '    <div>';
-        html += '      <strong style="color:#FAF9F6; display:block;">' + fw.title + '</strong>';
+        html += '      <strong style="color:#FAF9F6; display:block; font-size:13.5px; margin-bottom:2px;">' + fw.title + '</strong>';
         html += '      <span style="font-size:11.5px; color:#CBD5E1;">' + fw.subtitle + '</span>';
         html += '    </div>';
         html += '  </div>';
-        html += '  <span class="lux-framework-sync-badge">⚡ Live Synced with ' + fw.name + '</span>';
+        html += '  <span class="lux-framework-sync-badge">✓ Auto-Linked to Category: <strong style="color:#FAF9F6; margin-left:4px;">' + catDisplay + '</strong></span>';
         html += '</div>';
 
         // 3. Adaptive Primary Specification Box
@@ -2164,23 +2112,6 @@
     }
 
     function attachStudioEvents(fw) {
-        // Mode tab buttons
-        sizingStudio.querySelectorAll('.lux-mode-tab-btn').forEach(function(btn) {
-            btn.onclick = function(e) {
-                e.preventDefault();
-                var mode = this.getAttribute('data-fw');
-                if (mode && FRAMEWORKS[mode]) {
-                    activeMode = mode;
-                    sizeCatInput.value = activeMode;
-                    // Auto-fill default spec if empty
-                    if (!chainLengthInput.value.trim()) {
-                        chainLengthInput.value = FRAMEWORKS[activeMode].defaultSpec;
-                    }
-                    renderStudio();
-                }
-            };
-        });
-
         // Primary Spec input sync
         var studioSpecInput = document.getElementById('studio-spec-input');
         if (studioSpecInput) {
@@ -2349,16 +2280,36 @@
         }
     }
 
-    // Listen for Category changes in the top Identity card
+    // Listen for Category changes to strictly adapt sizing framework in real time
     if (categorySelect) {
         categorySelect.addEventListener('change', function() {
             var detected = detectFramework();
             if (detected !== activeMode) {
                 activeMode = detected;
                 sizeCatInput.value = activeMode;
-                // Auto-fill default spec if empty or matches previous default
+                // Auto-fill default spec for the newly selected category
                 chainLengthInput.value = FRAMEWORKS[activeMode].defaultSpec;
+                // Clear available sizes so the new category's intelligent suite takes over
+                availableSizesInput.value = '';
                 renderStudio();
+            } else {
+                renderStudio();
+            }
+        });
+    }
+
+    // Auto-detect framework if title is typed when category is not yet chosen
+    if (titleInput) {
+        titleInput.addEventListener('blur', function() {
+            if (categorySelect && (!categorySelect.value || categorySelect.value === '')) {
+                var detected = detectFramework();
+                if (detected !== activeMode) {
+                    activeMode = detected;
+                    sizeCatInput.value = activeMode;
+                    chainLengthInput.value = FRAMEWORKS[activeMode].defaultSpec;
+                    availableSizesInput.value = '';
+                    renderStudio();
+                }
             }
         });
     }
