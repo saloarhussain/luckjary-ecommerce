@@ -1597,17 +1597,16 @@
             icon: '💍',
             title: 'Ring Sizing & Atelier Band Framework',
             subtitle: 'Standard US sizes 4 through 13 with half-sizes. Band width profile and complimentary resizing terms.',
-            primaryLabel: '💍 Ring Size Range & Band Width Specification',
-            primarySubtitle: 'Specify ring size range (US 4 - 13), band profile (e.g. 2.0mm Comfort Band), and complimentary resizing policy.',
-            primaryPlaceholder: 'e.g. US Sizes 4 - 13 (Complimentary Resizing) & 2.0mm Comfort Band',
-            defaultSpec: 'US Sizes 4 - 13 (Complimentary Resizing) & 2.0mm Comfort Band',
+            primaryLabel: '💍 Band Profile & Resizing Policy (Optional)',
+            primarySubtitle: 'Optionally specify band width (e.g. 2.0mm Comfort Band) or bespoke sizing terms. Leave blank for standard atelier ring band.',
+            primaryPlaceholder: 'e.g. 2.0mm Classic Comfort Band (Optional)',
+            defaultSpec: '',
             primaryPresets: [
-                'US Sizes 4 - 13 (Complimentary Resizing)',
-                '1.8mm Dainty Comfort Band',
                 '2.0mm Classic Comfort Band',
+                '1.8mm Dainty Comfort Band',
                 '3.0mm Bold Statement Band',
-                'Micro-Pave Diamond Eternity Band',
-                'Complimentary 1x Resizing within 30 Days'
+                'Micro-Pavé Diamond Eternity Band',
+                'Complimentary Resizing Included'
             ],
             availableHeader: 'Available Ring Sizes (Click to toggle specific sizes):',
             autoDefaultBanner: '✨ Intelligent Default: Leaving this blank automatically offers the complete standard US 4 through 13 range with half-sizes on the storefront.',
@@ -1705,10 +1704,10 @@
             icon: '📿',
             title: 'Necklace & Pendant Chain Framework',
             subtitle: 'Standard chain lengths 14" choker to 24" lariat. Chain link style, clasp type, and pendant motif dimensions.',
-            primaryLabel: '📿 Chain Length, Style & Clasp Specification',
-            primarySubtitle: 'Specify necklace chain length, link profile (Cable, Box, Rope), and clasp mechanism.',
-            primaryPlaceholder: 'e.g. 16" - 18" Adjustable Diamond Cut Cable Chain with Lobster Clasp',
-            defaultSpec: '16" - 18" Adjustable Diamond Cut Cable Chain with Lobster Clasp',
+            primaryLabel: '📿 Chain Length, Style & Clasp Specification (Optional)',
+            primarySubtitle: 'Optionally specify necklace chain length, link profile (Cable, Box, Rope), and clasp mechanism. Leave blank for standard suite.',
+            primaryPlaceholder: 'e.g. 16" - 18" Adjustable Cable Chain with Lobster Clasp (Optional)',
+            defaultSpec: '',
             primaryPresets: [
                 '16" - 18" Adjustable Cable Chain',
                 '18" Princess Box Chain with Lobster Clasp',
@@ -1775,10 +1774,10 @@
             icon: '✨',
             title: 'Bangle & Bracelet Circumference Framework',
             subtitle: 'Bangle inner diameters (58mm - 68mm) and wrist circumferences (6.0" - 8.0"). Closure locks and safety catches.',
-            primaryLabel: '✨ Bangle Size, Inner Diameter & Clasp Specification',
-            primarySubtitle: 'Specify wrist circumference range, inner diameter (mm), and closure security locks.',
-            primaryPlaceholder: 'e.g. 6.5" - 7.5" Inner Circumference (63mm Diameter) with Dual Safety Clasp',
-            defaultSpec: '6.5" - 7.5" Inner Circumference (63mm Diameter) with Dual Safety Clasp',
+            primaryLabel: '✨ Bangle Size, Inner Diameter & Clasp Specification (Optional)',
+            primarySubtitle: 'Optionally specify wrist circumference range, inner diameter (mm), and closure security locks. Leave blank for standard suite.',
+            primaryPlaceholder: 'e.g. 6.5" - 7.5" Inner Circumference with Dual Safety Clasp (Optional)',
+            defaultSpec: '',
             primaryPresets: [
                 '6.5" - 7.5" Standard Wrist Fit',
                 '58mm Inner Diameter (Petite / Small)',
@@ -1848,10 +1847,10 @@
             icon: '💎',
             title: 'Earring Fitting & Security Framework',
             subtitle: 'Earring piercing posts, security locking backs, and wearable drop lengths.',
-            primaryLabel: '💎 Earring Fitting, Drop Length & Security Backing',
-            primarySubtitle: 'Specify piercing post type, security locking backs, and wearable drop length.',
-            primaryPlaceholder: 'e.g. 25mm Drop Length with Comfort-Fit Push Backs & Silicone Disc',
-            defaultSpec: 'Standard Pierced Posts with Luxury Comfort-Fit Push Backs',
+            primaryLabel: '💎 Earring Fitting, Drop Length & Security Backing (Optional)',
+            primarySubtitle: 'Optionally specify piercing post type, security locking backs, and wearable drop length. Leave blank for standard suite.',
+            primaryPlaceholder: 'e.g. Standard Pierced Posts with Luxury Comfort-Fit Push Backs (Optional)',
+            defaultSpec: '',
             primaryPresets: [
                 'Standard Pierced Post & Friction Back',
                 'Threaded Screw Back (High Security)',
@@ -1913,10 +1912,10 @@
             icon: '⭐',
             title: 'Universal Fine Jewelry Fit Framework',
             subtitle: 'One-size luxury pieces, adjustable chains, brooches, or bespoke high jewelry creations.',
-            primaryLabel: '⭐ Universal Luxury Fit Specification',
-            primarySubtitle: 'Universal luxury one-size fit or custom concierge sizing.',
-            primaryPlaceholder: 'e.g. Universal Fine Jewelry Fit (Fully Adjustable)',
-            defaultSpec: 'Universal Fine Jewelry Fit (Adjustable)',
+            primaryLabel: '⭐ Universal Luxury Fit Specification (Optional)',
+            primarySubtitle: 'Optionally specify universal luxury one-size fit or custom concierge sizing. Leave blank for standard fit.',
+            primaryPlaceholder: 'e.g. Universal Fine Jewelry Fit (Adjustable) (Optional)',
+            defaultSpec: '',
             primaryPresets: [
                 'One Size / Universal Luxury Fit',
                 'Fully Adjustable Atelier Sizing',
@@ -2287,8 +2286,6 @@
             if (detected !== activeMode) {
                 activeMode = detected;
                 sizeCatInput.value = activeMode;
-                // Auto-fill default spec for the newly selected category
-                chainLengthInput.value = FRAMEWORKS[activeMode].defaultSpec;
                 // Clear available sizes so the new category's intelligent suite takes over
                 availableSizesInput.value = '';
                 renderStudio();
@@ -2306,7 +2303,6 @@
                 if (detected !== activeMode) {
                     activeMode = detected;
                     sizeCatInput.value = activeMode;
-                    chainLengthInput.value = FRAMEWORKS[activeMode].defaultSpec;
                     availableSizesInput.value = '';
                     renderStudio();
                 }

@@ -133,7 +133,7 @@ class Product(models.Model):
         blank=True, 
         help_text="Custom sizes (one per line or comma-separated). Leave blank to automatically generate full standard sizing range for this category (e.g. US 4 through 13 with half-sizes for rings)."
     )
-    chain_length_or_size = models.CharField(max_length=100, blank=True, default='US Sizes 4 - 13 (Complimentary Resizing)')
+    chain_length_or_size = models.CharField(max_length=100, blank=True, default='')
     dimensions = models.CharField(max_length=100, blank=True, default='14.5mm x 9.2mm')
     certification = models.CharField(max_length=120, default='Luckjary Seal & IGI Laboratory Certificate')
 
