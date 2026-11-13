@@ -6,22 +6,17 @@ from .models import Category, Material, Collection, Product, ProductImage, Produ
 
 class ProductAdminForm(forms.ModelForm):
     STANDARD_METALS = [
-        # 18K Gold (750 Purity)
-        ('18K Yellow Gold', '18K Yellow Gold'),
-        ('18K White Gold', '18K White Gold'),
-        ('18K Rose Gold', '18K Rose Gold'),
-        # 22K Gold (916 Purity)
-        ('22K Yellow Gold', '22K Yellow Gold'),
-        ('22K White Gold', '22K White Gold'),
-        ('22K Rose Gold', '22K Rose Gold'),
+        ('925 Sterling Silver', '925 Sterling Silver'),
+        ('925 Sterling Silver (Rhodium Finish)', '925 Sterling Silver (Rhodium Finish)'),
+        ('925 Sterling Silver (High Polish)', '925 Sterling Silver (High Polish)'),
     ]
 
     metal_presets = forms.MultipleChoiceField(
         choices=STANDARD_METALS,
         widget=forms.CheckboxSelectMultiple(attrs={'class': 'admin-checkbox-grid'}),
         required=False,
-        label="Precious Metal Quick Checkboxes",
-        help_text="Check the precious metals available for clients to select on the product page. Automatically synced with Available Metals below."
+        label="925 Sterling Silver Specifications",
+        help_text="Genuine 925 Purity Sterling Silver (100% Silver Tone). Select client-facing finish options."
     )
 
     class Meta:
@@ -29,38 +24,38 @@ class ProductAdminForm(forms.ModelForm):
         fields = '__all__'
         widgets = {
             'title': forms.TextInput(attrs={
-                'placeholder': 'e.g. Aura Textured Dome Ring in 18K Solid Gold',
+                'placeholder': 'e.g. Seraphina Pavé Solitaire Ring in 925 Sterling Silver',
                 'class': 'shopify-title-input',
                 'style': 'font-size: 1.05rem; font-weight: 600; padding: 0.65rem 0.85rem; width: 100%;'
             }),
             'subtitle': forms.TextInput(attrs={
-                'placeholder': 'e.g. Handcrafted in 18K Solid Gold & VVS Diamonds',
+                'placeholder': 'e.g. Handcrafted in 925 Solid Sterling Silver & VVS Brilliant Stones',
                 'style': 'width: 100%;'
             }),
             'description': forms.Textarea(attrs={
                 'rows': 5,
-                'placeholder': 'Write a compelling description highlighting handcrafted details, diamond clarity, and styling advice...',
+                'placeholder': 'Write a compelling description highlighting 925 sterling silver hallmarking, rhodium anti-tarnish finish, and styling advice...',
                 'style': 'width: 100%; font-size: 0.85rem; line-height: 1.5;'
             }),
             'meta_title': forms.TextInput(attrs={
-                'placeholder': 'e.g. Aura Textured Dome Ring in 18K Solid Gold | Luckjary Fine Jewelry',
+                'placeholder': 'e.g. Seraphina Pavé Solitaire Ring in 925 Sterling Silver | Luckjary',
                 'style': 'width: 100%;'
             }),
             'meta_description': forms.Textarea(attrs={
                 'rows': 3,
-                'placeholder': 'e.g. Discover the handcrafted Aura Textured Dome Ring in 18K solid gold. Complimentary insured delivery & luxury gift packaging from Luckjary.',
+                'placeholder': 'e.g. Discover the handcrafted Seraphina Pavé Ring in 925 solid sterling silver with rhodium anti-tarnish finish at Luckjary.',
                 'style': 'width: 100%;'
             }),
             'meta_keywords': forms.TextInput(attrs={
-                'placeholder': 'e.g. luxury ring, 18k solid gold, diamond ring, haute joaillerie, handcrafted',
+                'placeholder': 'e.g. silver jewelry, 925 sterling silver, silver ring, rhodium finish, handcrafted silver',
                 'style': 'width: 100%;'
             }),
             'sku': forms.TextInput(attrs={
-                'placeholder': 'e.g. LUK-RING-006',
+                'placeholder': 'e.g. LCK-SIL-001',
                 'style': 'width: 100%; font-family: monospace; font-weight: 600; letter-spacing: 0.05em;'
             }),
             'available_metals': forms.TextInput(attrs={
-                'placeholder': 'e.g. 18K Yellow Gold, 18K White Gold, 18K Rose Gold, 22K Yellow Gold',
+                'placeholder': 'e.g. 925 Sterling Silver, 925 Sterling Silver (Rhodium Finish)',
                 'style': 'width: 100%;'
             }),
             'available_sizes': forms.Textarea(attrs={
@@ -82,18 +77,13 @@ class ProductAdminForm(forms.ModelForm):
                 val = c[0]
                 if val in current:
                     matched.append(val)
-                elif 'Yellow' in val and any('Yellow' in m and '18K' in m for m in current) and '18K' in val:
+                elif 'Silver' in val and any('Silver' in m for m in current):
                     matched.append(val)
-                elif 'White' in val and any('White' in m and '18K' in m for m in current) and '18K' in val:
-                    matched.append(val)
-                elif 'Rose' in val and any('Rose' in m and '18K' in m for m in current) and '18K' in val:
-                    matched.append(val)
-            self.fields['metal_presets'].initial = matched
+            self.fields['metal_presets'].initial = matched if matched else ['925 Sterling Silver']
         else:
             self.fields['metal_presets'].initial = [
-                '18K Yellow Gold',
-                '18K White Gold',
-                '18K Rose Gold'
+                '925 Sterling Silver',
+                '925 Sterling Silver (Rhodium Finish)'
             ]
 
     def clean(self):
@@ -112,10 +102,12 @@ class ProductAdminForm(forms.ModelForm):
             if e not in combined:
                 combined.append(e)
                 
-        if combined:
-            cleaned_data['available_metals'] = ', '.join(combined)
-            if not karat:
-                cleaned_data['karat_metal'] = combined[0]
+        if not combined:
+            combined = ['925 Sterling Silver']
+            
+        cleaned_data['available_metals'] = ', '.join(combined)
+        if not karat or '18K' in karat or '22K' in karat or 'Gold' in karat:
+            cleaned_data['karat_metal'] = combined[0]
             
         return cleaned_data
 
@@ -272,36 +264,19 @@ class ProductAdmin(admin.ModelAdmin):
     def save_related(self, request, form, formsets, change):
         super().save_related(request, form, formsets, change)
         product = form.instance
-        metals_text = f"{product.karat_metal} {product.available_metals}".lower()
-        
-        to_add = []
-        if 'vermeil' in metals_text or 'demifine' in metals_text or 'demifne' in metals_text:
-            m = Material.objects.filter(slug='18k-gold-vermeil-demifine').first()
-            if m:
-                to_add.append(m)
-        if '18k solid yellow' in metals_text or ('18k' in metals_text and 'yellow' in metals_text and 'vermeil' not in metals_text):
-            m = Material.objects.filter(slug='18k-solid-yellow-gold').first()
-            if m:
-                to_add.append(m)
-        if 'white gold' in metals_text and 'vermeil' not in metals_text:
-            m = Material.objects.filter(slug='18k-white-gold').first()
-            if m:
-                to_add.append(m)
-        if 'rose gold' in metals_text and 'vermeil' not in metals_text:
-            m = Material.objects.filter(slug='18k-rose-gold').first()
-            if m:
-                to_add.append(m)
-        if 'platinum' in metals_text:
-            m = Material.objects.filter(slug='platinum-950').first()
-            if m:
-                to_add.append(m)
-        if 'sterling silver' in metals_text or ('silver' in metals_text and 'vermeil' not in metals_text):
-            m = Material.objects.filter(slug='925-sterling-silver').first()
-            if m:
-                to_add.append(m)
-                
-        if to_add:
-            product.materials.add(*to_add)
+        silver_mat = Material.objects.filter(slug='925-sterling-silver').first()
+        if silver_mat:
+            product.materials.add(silver_mat)
+        # Remove any legacy gold / demifine materials
+        legacy_mats = Material.objects.filter(slug__in=[
+            '18k-gold-vermeil-demifine',
+            '18k-solid-yellow-gold',
+            '18k-white-gold',
+            '18k-rose-gold',
+            'platinum-950'
+        ])
+        if legacy_mats.exists():
+            product.materials.remove(*legacy_mats)
 
     def changelist_view(self, request, extra_context=None):
         extra_context = extra_context or {}

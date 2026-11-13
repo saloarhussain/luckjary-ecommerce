@@ -98,7 +98,7 @@
 .lux-preset-chip:hover {
     background: #242938;
     color: #FFF;
-    border-color: #C5A059;
+    border-color: #CBD5E1;
     transform: translateY(-1px);
 }
 .lux-preset-chip.btn-clear-chip {
@@ -112,7 +112,54 @@
     border-color: #EF4444;
 }
 
-/* 2-Tier Karat & Tone Hierarchy */
+/* 925 Sterling Silver Studio Hierarchy */
+.lux-silver-purity-banner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+    background: linear-gradient(135deg, rgba(248, 250, 252, 0.08) 0%, rgba(203, 213, 225, 0.04) 100%);
+    border: 1px solid rgba(226, 232, 240, 0.22);
+    border-radius: 8px;
+    padding: 14px 18px;
+    margin-bottom: 18px;
+}
+.lux-silver-purity-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+.lux-silver-purity-icon {
+    font-size: 24px;
+    line-height: 1;
+}
+.lux-silver-purity-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: #F8FAFC;
+    letter-spacing: 0.02em;
+}
+.lux-silver-purity-sub {
+    font-size: 11px;
+    color: #94A3B8;
+    margin-top: 2px;
+}
+.lux-silver-badge-single-color {
+    background: rgba(226, 232, 240, 0.14);
+    border: 1px solid rgba(226, 232, 240, 0.35);
+    color: #FFFFFF;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 6px 14px;
+    border-radius: 20px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
 .lux-tier-label {
     font-size: 11px;
     font-weight: 700;
@@ -124,64 +171,14 @@
     align-items: center;
     gap: 8px;
 }
-.lux-karat-purity-row {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    margin-bottom: 18px;
-}
-.lux-karat-tab-btn {
-    flex: 1;
-    min-width: 170px;
-    background: #171A24;
-    border: 1px solid #2B3042;
-    border-radius: 8px;
-    padding: 12px 16px;
-    cursor: pointer;
-    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 8px;
-    user-select: none;
-    color: #CBD5E1;
-}
-.lux-karat-tab-btn:hover {
-    background: #1E2230;
-    color: #FFF;
-    border-color: rgba(197, 160, 89, 0.5);
-    transform: translateY(-1px);
-}
-.lux-karat-tab-btn.is-active-karat {
-    background: rgba(197, 160, 89, 0.14);
-    border-color: #C5A059;
-    color: #FAF9F6;
-    box-shadow: 0 0 14px rgba(197, 160, 89, 0.25);
-}
-.lux-karat-title {
-    font-size: 13px;
-    font-weight: 700;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-}
-.lux-karat-badge {
-    background: rgba(197, 160, 89, 0.18);
-    color: #E2B755;
-    font-size: 10.5px;
-    font-weight: 700;
-    padding: 2px 7px;
-    border-radius: 4px;
-    border: 1px solid rgba(197, 160, 89, 0.3);
-    white-space: nowrap;
-}
-.lux-color-tones-grid {
+.lux-silver-finishes-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 12px;
+    margin-bottom: 18px;
 }
-@media (max-width: 800px) {
-    .lux-color-tones-grid {
+@media (max-width: 900px) {
+    .lux-silver-finishes-grid {
         grid-template-columns: 1fr;
     }
 }
@@ -220,19 +217,19 @@
 }
 .lux-swatch-pill:hover {
     background: #1E2230;
-    border-color: rgba(197, 160, 89, 0.4);
+    border-color: rgba(226, 232, 240, 0.45);
 }
 .lux-swatch-pill.is-active {
-    background: rgba(197, 160, 89, 0.12);
-    border-color: #C5A059;
-    box-shadow: 0 0 0 1px rgba(197, 160, 89, 0.5);
+    background: rgba(226, 232, 240, 0.12);
+    border-color: #CBD5E1;
+    box-shadow: 0 0 14px rgba(226, 232, 240, 0.22);
 }
 .lux-swatch-circle {
-    width: 20px;
-    height: 20px;
+    width: 22px;
+    height: 22px;
     border-radius: 50%;
-    border: 1px solid rgba(0, 0, 0, 0.4);
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.35);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.45);
     flex-shrink: 0;
 }
 .lux-pill-label {
@@ -261,9 +258,9 @@
     flex-shrink: 0;
 }
 .lux-swatch-pill.is-active .lux-pill-check {
-    background: #C5A059;
-    border-color: #C5A059;
-    color: #121212;
+    background: #E2E8F0;
+    border-color: #E2E8F0;
+    color: #0F1015;
 }
 
 /* Custom Metal Row */
@@ -297,9 +294,9 @@
     transition: all 0.2s ease;
 }
 .lux-custom-btn:hover {
-    background: #C5A059;
+    background: #CBD5E1;
     color: #0F1015;
-    border-color: #C5A059;
+    border-color: #CBD5E1;
 }
 
 /* Primary Metal Showcase Selector */
@@ -353,11 +350,11 @@
     border-color: #4B556D;
 }
 .lux-primary-choice-btn.is-active-choice {
-    background: #C5A059;
-    border-color: #C5A059;
+    background: #E2E8F0;
+    border-color: #E2E8F0;
     color: #0F1015;
     font-weight: 700;
-    box-shadow: 0 2px 10px rgba(197, 160, 89, 0.4);
+    box-shadow: 0 2px 10px rgba(226, 232, 240, 0.4);
 }
 
 /* Advanced Fine Tuning Collapsible */
@@ -1289,10 +1286,8 @@
 <script>
 (function() {
     // -------------------------------------------------------------
-    // LUCKJARY INTERACTIVE PRECIOUS METAL & SWATCHES STUDIO
-    // 2-Tier Architecture:
-    //   Tier 1: 18K vs 22K Solid Gold Purity
-    //   Tier 2: Yellow Gold, White Gold, Rose Gold
+    // LUCKJARY 925 STERLING SILVER SPECIFICATION STUDIO
+    // Exclusively 925 Purity Fine Silver (1 Single Silver Colorway)
     // -------------------------------------------------------------
     var metalPresetsRow = document.querySelector('.field-metal_presets');
     var karatMetalRow = document.querySelector('.field-karat_metal');
@@ -1318,79 +1313,45 @@
     karatMetalRow.style.setProperty('display', 'none', 'important');
     availableMetalsRow.style.setProperty('display', 'none', 'important');
 
-    var karatDefs = [
+    var silverFinishes = [
         {
-            id: '18k',
-            label: '18K Solid Gold',
-            purity: '750 Purity',
-            icon: '👑',
-            colors: [
-                {
-                    name: '18K Yellow Gold',
-                    colorName: 'Yellow Gold',
-                    icon: '🟡',
-                    bg: 'linear-gradient(135deg, #F5D77F 0%, #C59B27 100%)',
-                    desc: 'Classic Royal Warm Glow'
-                },
-                {
-                    name: '18K White Gold',
-                    colorName: 'White Gold',
-                    icon: '⚪',
-                    bg: 'linear-gradient(135deg, #FFFFFF 0%, #D1D5DB 100%)',
-                    desc: 'Luminous Rhodium Mirror'
-                },
-                {
-                    name: '18K Rose Gold',
-                    colorName: 'Rose Gold',
-                    icon: '🌸',
-                    bg: 'linear-gradient(135deg, #FAD2C0 0%, #D48B7B 100%)',
-                    desc: 'Warm Romantic Blush'
-                }
-            ]
+            name: '925 Sterling Silver',
+            label: '925 Solid Sterling Silver',
+            purityBadge: '925 Standard',
+            icon: '🛡️',
+            bg: 'linear-gradient(135deg, #FFFFFF 0%, #E2E8F0 50%, #94A3B8 100%)',
+            desc: 'Hallmarked 925 Luminous Classic Silver'
         },
         {
-            id: '22k',
-            label: '22K Solid Gold',
-            purity: '916 Purity',
+            name: '925 Sterling Silver (Rhodium Finish)',
+            label: '925 Silver (Rhodium Anti-Tarnish)',
+            purityBadge: 'Rhodium Sealed',
             icon: '✨',
-            colors: [
-                {
-                    name: '22K Yellow Gold',
-                    colorName: 'Yellow Gold',
-                    icon: '🟡',
-                    bg: 'linear-gradient(135deg, #FFDF73 0%, #D49B00 100%)',
-                    desc: 'Ultra-Rich Deep Sovereign 916'
-                },
-                {
-                    name: '22K White Gold',
-                    colorName: 'White Gold',
-                    icon: '⚪',
-                    bg: 'linear-gradient(135deg, #F8FAFC 0%, #CBD5E1 100%)',
-                    desc: 'Fine High-Carat Silver White'
-                },
-                {
-                    name: '22K Rose Gold',
-                    colorName: 'Rose Gold',
-                    icon: '🌸',
-                    bg: 'linear-gradient(135deg, #FBCFE8 0%, #DB2777 100%)',
-                    desc: 'Rich Copper-Rose Luster'
-                }
-            ]
+            bg: 'linear-gradient(135deg, #F8FAFC 0%, #E2E8F0 45%, #64748B 100%)',
+            desc: 'Protective Microscopic Rhodium Barrier'
+        },
+        {
+            name: '925 Sterling Silver (High Polish)',
+            label: '925 Silver (High-Polish Mirror)',
+            purityBadge: 'Mirror Gloss',
+            icon: '💎',
+            bg: 'linear-gradient(135deg, #FFFFFF 0%, #CBD5E1 50%, #64748B 100%)',
+            desc: 'Brilliant Diamond-Reflective Mirror Reflection'
         }
     ];
 
     // Read current active metals
     function getSelectedMetals() {
         var raw = (availableInput.value || '').trim();
-        if (!raw) return [];
-        return raw.split(',').map(function(s) { return s.trim(); }).filter(Boolean);
+        if (!raw) return ['925 Sterling Silver', '925 Sterling Silver (Rhodium Finish)'];
+        var items = raw.split(',').map(function(s) { return s.trim(); }).filter(Boolean);
+        // Filter out legacy gold / vermeil / platinum metals
+        var cleaned = items.filter(function(m) {
+            var lower = m.toLowerCase();
+            return lower.indexOf('gold') === -1 && lower.indexOf('vermeil') === -1 && lower.indexOf('platinum') === -1 && lower.indexOf('18k') === -1 && lower.indexOf('22k') === -1;
+        });
+        return cleaned.length > 0 ? cleaned : ['925 Sterling Silver', '925 Sterling Silver (Rhodium Finish)'];
     }
-
-    // Determine initial active karat view based on pre-existing selection
-    var initialSelected = getSelectedMetals();
-    var has18 = initialSelected.some(function(m) { return m.indexOf('18K') !== -1; });
-    var has22 = initialSelected.some(function(m) { return m.indexOf('22K') !== -1; });
-    var activeKaratView = (has22 && !has18) ? '22k' : (has22 && has18 ? 'both' : '18k');
 
     // Update underlying fields and UI
     function setSelectedMetals(metalsList) {
@@ -1398,6 +1359,9 @@
         metalsList.forEach(function(m) {
             if (unique.indexOf(m) === -1) unique.push(m);
         });
+        if (unique.length === 0) {
+            unique = ['925 Sterling Silver'];
+        }
 
         availableInput.value = unique.join(', ');
 
@@ -1409,10 +1373,8 @@
 
         // Ensure karat metal is valid
         var currentKarat = (karatInput.value || '').trim();
-        if (unique.length > 0 && (unique.indexOf(currentKarat) === -1 || !currentKarat)) {
+        if (unique.indexOf(currentKarat) === -1 || !currentKarat || currentKarat.toLowerCase().indexOf('gold') !== -1 || currentKarat.toLowerCase().indexOf('vermeil') !== -1 || currentKarat.toLowerCase().indexOf('18k') !== -1 || currentKarat.toLowerCase().indexOf('22k') !== -1) {
             karatInput.value = unique[0];
-        } else if (unique.length === 0) {
-            karatInput.value = '';
         }
 
         renderUI();
@@ -1425,83 +1387,70 @@
 
     function renderUI() {
         var selected = getSelectedMetals();
-        var currentKarat = (karatInput.value || '').trim() || (selected.length > 0 ? selected[0] : '');
+        var currentKarat = (karatInput.value || '').trim();
+        if (!currentKarat || currentKarat.toLowerCase().indexOf('gold') !== -1 || currentKarat.toLowerCase().indexOf('vermeil') !== -1 || selected.indexOf(currentKarat) === -1) {
+            currentKarat = selected[0] || '925 Sterling Silver';
+            karatInput.value = currentKarat;
+        }
 
         var html = '';
 
         // 1. Quick Suites Toolbar
         html += '<div class="lux-presets-bar">';
         html += '  <span style="font-size:11px; font-weight:700; color:#64748B; text-transform:uppercase; letter-spacing:0.06em; margin-right:4px;">Quick Suites:</span>';
-        html += '  <button type="button" class="lux-preset-chip" data-preset="18k-trio">👑 18K Gold Trio</button>';
-        html += '  <button type="button" class="lux-preset-chip" data-preset="22k-trio">✨ 22K Gold Trio</button>';
-        html += '  <button type="button" class="lux-preset-chip" data-preset="all-gold">🌟 All 18K & 22K</button>';
-        html += '  <button type="button" class="lux-preset-chip" data-preset="18k-yellow">🟡 18K Yellow Only</button>';
-        html += '  <button type="button" class="lux-preset-chip" data-preset="22k-yellow">🟡 22K Yellow Only</button>';
-        html += '  <button type="button" class="lux-preset-chip btn-clear-chip" data-preset="clear">✕ Clear All</button>';
+        html += '  <button type="button" class="lux-preset-chip" data-preset="standard">🛡️ 925 Standard Silver</button>';
+        html += '  <button type="button" class="lux-preset-chip" data-preset="rhodium">✨ 925 Silver + Rhodium Seal (Recommended)</button>';
+        html += '  <button type="button" class="lux-preset-chip" data-preset="all">💎 All 3 Silver Finishes</button>';
+        html += '  <button type="button" class="lux-preset-chip btn-clear-chip" data-preset="reset">✕ Reset to Default</button>';
         html += '</div>';
 
-        // 2. Step 1: Karat Selection Tabs (Top)
+        // 2. Verified Purity & Single Colorway Hero Card
+        html += '<div class="lux-silver-purity-banner">';
+        html += '  <div class="lux-silver-purity-left">';
+        html += '    <span class="lux-silver-purity-icon">🛡️</span>';
+        html += '    <div>';
+        html += '      <div class="lux-silver-purity-title">925 Purity Certified Solid Sterling Silver (92.5% Fine Silver)</div>';
+        html += '      <div class="lux-silver-purity-sub">All creations forged exclusively in genuine 925 sterling silver • 100% Nickel-Free & Hypoallergenic</div>';
+        html += '    </div>';
+        html += '  </div>';
+        html += '  <div class="lux-silver-badge-single-color">';
+        html += '    <span>✨</span> 1 Single Colorway: Silver';
+        html += '  </div>';
+        html += '</div>';
+
+        // 3. Step 1: Active 925 Silver Finishes
         html += '<div class="lux-tier-label">';
-        html += '  <span>① CHOOSE METAL MATERIAL & PURITY (KARAT)</span>';
-        html += '</div>';
-        html += '<div class="lux-karat-purity-row">';
-        html += '  <button type="button" class="lux-karat-tab-btn ' + (activeKaratView === '18k' ? 'is-active-karat' : '') + '" data-karat-tab="18k">';
-        html += '    <span class="lux-karat-title">👑 18K Solid Gold</span>';
-        html += '    <span class="lux-karat-badge">750 Purity (75%)</span>';
-        html += '  </button>';
-        html += '  <button type="button" class="lux-karat-tab-btn ' + (activeKaratView === '22k' ? 'is-active-karat' : '') + '" data-karat-tab="22k">';
-        html += '    <span class="lux-karat-title">✨ 22K Solid Gold</span>';
-        html += '    <span class="lux-karat-badge">916 Purity (91.6%)</span>';
-        html += '  </button>';
-        html += '  <button type="button" class="lux-karat-tab-btn ' + (activeKaratView === 'both' ? 'is-active-karat' : '') + '" data-karat-tab="both">';
-        html += '    <span class="lux-karat-title">🌟 Both 18K & 22K</span>';
-        html += '    <span class="lux-karat-badge">All 6 Variants</span>';
-        html += '  </button>';
+        html += '  <span>✦ SELECT ACTIVE 925 SILVER FINISHES FOR BOUTIQUE CLIENTS</span>';
         html += '</div>';
 
-        // 3. Step 2: Gold Colors & Tones (Below)
-        html += '<div class="lux-tier-label">';
-        html += '  <span>② CHOOSE GOLD COLOR TONES (YELLOW, WHITE, ROSE)</span>';
-        html += '</div>';
-
-        var visibleKarats = karatDefs.filter(function(k) {
-            if (activeKaratView === 'both') return true;
-            return k.id === activeKaratView;
-        });
-
-        visibleKarats.forEach(function(kDef) {
-            html += '<div class="lux-group-wrapper">';
-            html += '  <div class="lux-group-header"><span>' + kDef.icon + '</span> ' + kDef.label + ' (' + kDef.purity + ') Available Colors</div>';
-            html += '  <div class="lux-color-tones-grid">';
-            kDef.colors.forEach(function(item) {
-                var isActive = selected.indexOf(item.name) !== -1;
-                html += '<div class="lux-swatch-pill ' + (isActive ? 'is-active' : '') + '" data-metal="' + item.name + '">';
-                html += '  <span class="lux-swatch-circle" style="background:' + item.bg + ';"></span>';
-                html += '  <div style="flex-grow:1; display:flex; flex-direction:column;">';
-                html += '    <span class="lux-pill-label">' + item.icon + ' ' + item.colorName + '</span>';
-                html += '    <span style="font-size:10px; color:#94A3B8; font-weight:500;">' + item.name + '</span>';
-                html += '  </div>';
-                html += '  <span class="lux-pill-check">✓</span>';
-                html += '</div>';
-            });
+        html += '<div class="lux-silver-finishes-grid">';
+        silverFinishes.forEach(function(item) {
+            var isActive = selected.indexOf(item.name) !== -1;
+            html += '<div class="lux-swatch-pill ' + (isActive ? 'is-active' : '') + '" data-metal="' + item.name + '">';
+            html += '  <span class="lux-swatch-circle" style="background:' + item.bg + ';"></span>';
+            html += '  <div style="flex-grow:1; display:flex; flex-direction:column;">';
+            html += '    <div style="display:flex; align-items:center; justify-content:space-between; gap:6px;">';
+            html += '      <span class="lux-pill-label">' + item.icon + ' ' + item.label + '</span>';
+            html += '      <span style="font-size:9.5px; background:rgba(226,232,240,0.1); color:#CBD5E1; padding:1px 6px; border-radius:3px; border:1px solid rgba(226,232,240,0.2); white-space:nowrap;">' + item.purityBadge + '</span>';
+            html += '    </div>';
+            html += '    <span style="font-size:10px; color:#94A3B8; font-weight:500; margin-top:2px;">' + item.desc + '</span>';
             html += '  </div>';
+            html += '  <span class="lux-pill-check">✓</span>';
             html += '</div>';
         });
+        html += '</div>';
 
-        // 4. Custom Metals (if any legacy or bespoke alloy is present)
-        var knownMetals = [
-            '18K Yellow Gold', '18K White Gold', '18K Rose Gold',
-            '22K Yellow Gold', '22K White Gold', '22K Rose Gold'
-        ];
-        var customMetals = selected.filter(function(m) { return knownMetals.indexOf(m) === -1; });
+        // 4. Custom Silver Spec (if any custom silver variant exists)
+        var knownSilver = silverFinishes.map(function(s) { return s.name; });
+        var customMetals = selected.filter(function(m) { return knownSilver.indexOf(m) === -1; });
 
         if (customMetals.length > 0) {
             html += '<div class="lux-group-wrapper">';
-            html += '  <div class="lux-group-header"><span>✨</span> Custom / Bespoke Alloys</div>';
+            html += '  <div class="lux-group-header"><span>✨</span> Custom Silver Finishes / Markings</div>';
             html += '  <div class="lux-pills-grid">';
             customMetals.forEach(function(name) {
                 html += '<div class="lux-swatch-pill is-active" data-metal="' + name + '">';
-                html += '  <span class="lux-swatch-circle" style="background:linear-gradient(135deg, #E2B755, #A47E24);"></span>';
+                html += '  <span class="lux-swatch-circle" style="background:linear-gradient(135deg, #FFFFFF, #94A3B8);"></span>';
                 html += '  <span class="lux-pill-label">' + name + '</span>';
                 html += '  <span class="lux-pill-check">✓</span>';
                 html += '</div>';
@@ -1510,22 +1459,22 @@
             html += '</div>';
         }
 
-        // Custom Metal Input Pill
+        // Custom Silver Finish Input
         html += '<div class="lux-custom-metal-box">';
-        html += '  <span style="font-size:12px; color:#94A3B8; font-weight:600;">+ Custom Metal:</span>';
-        html += '  <input type="text" id="custom-metal-input" class="lux-custom-input" placeholder="e.g. 24K Pure Gold, Solid Two-Tone 18K...">';
-        html += '  <button type="button" id="btn-add-custom-metal" class="lux-custom-btn">+ Add Metal</button>';
+        html += '  <span style="font-size:12px; color:#94A3B8; font-weight:600;">+ Custom Silver Finish:</span>';
+        html += '  <input type="text" id="custom-metal-input" class="lux-custom-input" placeholder="e.g. 925 Sterling Silver (Oxidized Antique Finish)...">';
+        html += '  <button type="button" id="btn-add-custom-metal" class="lux-custom-btn">+ Add Silver Finish</button>';
         html += '</div>';
 
         // 5. Default Primary Showcase Metal (Karat Metal)
         html += '<div class="lux-primary-panel">';
         html += '  <div class="lux-primary-header">';
-        html += '    <h4><span>⭐</span> Default Primary Showcase Metal (Karat Metal)</h4>';
-        html += '    <span style="font-size:11px; color:#94A3B8;">Initial metal displayed on product load</span>';
+        html += '    <h4><span>⭐</span> Default Primary Showcase Metal (Product Specification)</h4>';
+        html += '    <span style="font-size:11px; color:#94A3B8;">Initial metal displayed on product load and customer receipts</span>';
         html += '  </div>';
 
         if (selected.length === 0) {
-            html += '  <div style="font-size:12px; color:#EF4444; font-style:italic;">Please select at least one metal above.</div>';
+            html += '  <div style="font-size:12px; color:#EF4444; font-style:italic;">Please select at least one silver finish above.</div>';
         } else {
             html += '  <div class="lux-primary-options-row">';
             selected.forEach(function(m) {
@@ -1564,47 +1513,32 @@
             btn.onclick = function(e) {
                 e.preventDefault();
                 var p = this.getAttribute('data-preset');
-                if (p === '18k-trio') {
-                    activeKaratView = '18k';
-                    setSelectedMetals(['18K Yellow Gold', '18K White Gold', '18K Rose Gold']);
-                } else if (p === '22k-trio') {
-                    activeKaratView = '22k';
-                    setSelectedMetals(['22K Yellow Gold', '22K White Gold', '22K Rose Gold']);
-                } else if (p === 'all-gold') {
-                    activeKaratView = 'both';
+                if (p === 'standard') {
+                    setSelectedMetals(['925 Sterling Silver']);
+                } else if (p === 'rhodium') {
+                    setSelectedMetals(['925 Sterling Silver', '925 Sterling Silver (Rhodium Finish)']);
+                } else if (p === 'all') {
                     setSelectedMetals([
-                        '18K Yellow Gold', '18K White Gold', '18K Rose Gold',
-                        '22K Yellow Gold', '22K White Gold', '22K Rose Gold'
+                        '925 Sterling Silver',
+                        '925 Sterling Silver (Rhodium Finish)',
+                        '925 Sterling Silver (High Polish)'
                     ]);
-                } else if (p === '18k-yellow') {
-                    activeKaratView = '18k';
-                    setSelectedMetals(['18K Yellow Gold']);
-                } else if (p === '22k-yellow') {
-                    activeKaratView = '22k';
-                    setSelectedMetals(['22K Yellow Gold']);
-                } else if (p === 'clear') {
-                    setSelectedMetals([]);
+                } else if (p === 'reset') {
+                    setSelectedMetals(['925 Sterling Silver', '925 Sterling Silver (Rhodium Finish)']);
                 }
             };
         });
 
-        // Karat tab buttons (Step 1)
-        studio.querySelectorAll('.lux-karat-tab-btn').forEach(function(tab) {
-            tab.onclick = function(e) {
-                e.preventDefault();
-                activeKaratView = this.getAttribute('data-karat-tab');
-                renderUI();
-            };
-        });
-
-        // Swatch Pill clicks (Step 2)
+        // Swatch Pill clicks
         studio.querySelectorAll('.lux-swatch-pill').forEach(function(pill) {
             pill.onclick = function() {
                 var metal = this.getAttribute('data-metal');
                 var current = getSelectedMetals();
                 var idx = current.indexOf(metal);
                 if (idx !== -1) {
-                    current.splice(idx, 1);
+                    if (current.length > 1) {
+                        current.splice(idx, 1);
+                    }
                 } else {
                     current.push(metal);
                 }
@@ -1634,6 +1568,7 @@
                         current.push(val);
                         setSelectedMetals(current);
                     }
+                    addInput.value = '';
                 }
             };
             addBtn.onclick = handleAdd;
@@ -1674,7 +1609,7 @@
     if (materialsRow) {
         var notice = document.createElement('div');
         notice.className = 'lux-gemstones-notice';
-        notice.innerHTML = '<span>💎</span> <strong>Atelier Note:</strong> Precious metals selected in the studio above are automatically synced to search & filter tags upon saving. Use this section to select featured gemstones, cultured pearls, and diamond grades.';
+        notice.innerHTML = '<span>💎</span> <strong>Atelier Note:</strong> All creations are forged in 925 Solid Sterling Silver. Use this section to select featured gemstones, cultured pearls, and diamond grades.';
         materialsRow.parentNode.insertBefore(notice, materialsRow);
     }
 
