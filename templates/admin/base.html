@@ -25,6 +25,10 @@
 
 <div id="container" class="shopify-app-root">
 
+    <!-- Responsive Drawer Overlays -->
+    <div id="shopify-sidebar-backdrop" class="shopify-sidebar-backdrop" onclick="toggleShopifySidebar()" aria-hidden="true"></div>
+    <div id="shopify-filter-backdrop" class="shopify-filter-backdrop" onclick="toggleChangelistFilter()" aria-hidden="true"></div>
+
     {% if has_permission and not is_popup %}
     <!-- ==========================================
          SHOPIFY POLARIS UNIFIED TOP HEADER BAR
@@ -349,8 +353,29 @@
 <script>
 function toggleShopifySidebar() {
     var sidebar = document.getElementById('nav-sidebar');
-    if (sidebar) {
-        sidebar.classList.toggle('mobile-open');
+    var backdrop = document.getElementById('shopify-sidebar-backdrop');
+    if (!sidebar) return;
+    var isOpen = sidebar.classList.toggle('mobile-open');
+    if (backdrop) backdrop.classList.toggle('active', isOpen);
+    document.body.classList.toggle('sidebar-drawer-open', isOpen);
+}
+
+function toggleChangelistFilter() {
+    var filter = document.getElementById('changelist-filter');
+    var backdrop = document.getElementById('shopify-filter-backdrop');
+    var toggleBtn = document.getElementById('filter-toggle-btn');
+    if (!filter) return;
+    
+    if (window.innerWidth >= 1366) {
+        // Desktop full-width toggle
+        var isHidden = filter.classList.toggle('filter-desktop-hidden');
+        if (toggleBtn) toggleBtn.classList.toggle('is-active', !isHidden);
+    } else {
+        // Off-canvas drawer toggle for laptop / tablet / mobile
+        var isOpen = filter.classList.toggle('drawer-open');
+        if (backdrop) backdrop.classList.toggle('active', isOpen);
+        if (toggleBtn) toggleBtn.classList.toggle('is-active', isOpen);
+        document.body.classList.toggle('filter-drawer-open', isOpen);
     }
 }
 
@@ -386,6 +411,126 @@ document.addEventListener('keydown', function(e) {
         }, { passive: true });
     }
 })();
+
+// ========================================================
+// CHANGELIST RESPONSIVE FILTER ENGINE & AUTO-ENHANCEMENT
+// ========================================================
+document.addEventListener('DOMContentLoaded', function() {
+    var filterEl = document.getElementById('changelist-filter');
+    if (!filterEl) return;
+
+    // 1. Inject modern Close Button inside filter drawer header
+    var filterHeader = filterEl.querySelector('h2');
+    var closeBtn = document.createElement('button');
+    closeBtn.type = 'button';
+    closeBtn.className = 'shopify-filter-close-btn';
+    closeBtn.innerHTML = '✕';
+    closeBtn.title = 'Close filter drawer';
+    closeBtn.onclick = toggleChangelistFilter;
+    if (filterHeader) {
+        filterHeader.appendChild(closeBtn);
+    } else {
+        filterEl.insertBefore(closeBtn, filterEl.firstChild);
+    }
+
+    // 2. Scan active filters
+    var activeCount = 0;
+    var activePills = [];
+    filterEl.querySelectorAll('details').forEach(function(details) {
+        var summaryText = details.querySelector('summary') ? details.querySelector('summary').textContent.trim() : '';
+        var title = (details.getAttribute('data-filter-title') || summaryText).replace(/^By\s+/i, '').trim();
+        
+        var selectedLi = details.querySelector('li.selected');
+        if (selectedLi) {
+            var selectedLink = selectedLi.querySelector('a');
+            var selectedText = selectedLink ? selectedLink.textContent.trim() : '';
+            if (selectedText && selectedText.toLowerCase() !== 'all') {
+                activeCount++;
+                var resetLink = details.querySelector('li:first-child a');
+                activePills.push({
+                    title: title,
+                    value: selectedText,
+                    href: resetLink ? resetLink.getAttribute('href') : '?'
+                });
+            }
+        }
+    });
+
+    // 3. Inject Filter Toggle Button into Search Toolbar or Changelist Form
+    var searchDiv = document.querySelector('#changelist-search > div');
+    var toggleBtn = document.createElement('button');
+    toggleBtn.type = 'button';
+    toggleBtn.className = 'shopify-filter-toggle-btn' + (activeCount > 0 ? ' has-active-filters' : '');
+    toggleBtn.id = 'filter-toggle-btn';
+    toggleBtn.onclick = toggleChangelistFilter;
+    
+    var btnHtml = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon></svg>';
+    btnHtml += '<span>Filters</span>';
+    if (activeCount > 0) {
+        btnHtml += '<span class="filter-count-badge">' + activeCount + '</span>';
+    }
+    toggleBtn.innerHTML = btnHtml;
+
+    if (searchDiv) {
+        searchDiv.appendChild(toggleBtn);
+    } else {
+        var changelistForm = document.getElementById('changelist-form');
+        if (changelistForm) {
+            var topBar = document.createElement('div');
+            topBar.className = 'shopify-filter-top-bar';
+            topBar.style.marginBottom = '12px';
+            topBar.appendChild(toggleBtn);
+            changelistForm.insertBefore(topBar, changelistForm.firstChild);
+        }
+    }
+
+    // 4. Inject Active Filter Pills Bar if any filter is active
+    if (activePills.length > 0) {
+        var pillsBar = document.createElement('div');
+        pillsBar.className = 'shopify-active-filters-bar';
+        var pillsHtml = '<span class="active-filters-label">Active Filters:</span>';
+        activePills.forEach(function(pill) {
+            pillsHtml += '<a href="' + pill.href + '" class="active-filter-pill" title="Remove ' + pill.title + ' filter">';
+            pillsHtml += '  <span class="pill-category">' + pill.title + ':</span>';
+            pillsHtml += '  <span class="pill-value">' + pill.value + '</span>';
+            pillsHtml += '  <span class="pill-remove">✕</span>';
+            pillsHtml += '</a>';
+        });
+        pillsHtml += '<a href="?" class="clear-all-filters-btn">Clear all filters</a>';
+        pillsBar.innerHTML = pillsHtml;
+
+        var resultsEl = document.querySelector('#changelist .results');
+        if (resultsEl && resultsEl.parentNode) {
+            resultsEl.parentNode.insertBefore(pillsBar, resultsEl);
+        }
+    }
+
+    // 5. Close drawers on Escape key
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            var filter = document.getElementById('changelist-filter');
+            if (filter && filter.classList.contains('drawer-open')) {
+                toggleChangelistFilter();
+            }
+            var sidebar = document.getElementById('nav-sidebar');
+            if (sidebar && sidebar.classList.contains('mobile-open')) {
+                toggleShopifySidebar();
+            }
+        }
+    });
+
+    // 6. Close sidebar on navigation item click on mobile/tablet
+    document.querySelectorAll('.sidebar-nav-item').forEach(function(link) {
+        link.addEventListener('click', function() {
+            if (window.innerWidth <= 1100) {
+                var sidebar = document.getElementById('nav-sidebar');
+                if (sidebar && sidebar.classList.contains('mobile-open')) {
+                    toggleShopifySidebar();
+                }
+            }
+        });
+    });
+});
 </script>
 </body>
 </html>

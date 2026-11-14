@@ -1367,32 +1367,26 @@ div.breadcrumbs a:hover {
    ========================================================================== */
 #changelist {
     display: flex !important;
-    gap: 20px !important;
+    flex-direction: column !important;
     width: 100% !important;
-    align-items: flex-start !important;
+    max-width: 100% !important;
+    gap: 16px !important;
 }
 
 #changelist .changelist-form-container {
     display: flex !important;
     align-items: flex-start !important;
     width: 100% !important;
+    max-width: 100% !important;
     gap: 20px !important;
-}
-
-#changelist .changelist-form-container > div {
-    flex: 1 1 auto !important;
-    min-width: 0 !important;
-    width: 100% !important;
-}
-
-#changelist .changelist-form-container:has(#changelist-filter) > div {
-    max-width: calc(100% - 270px) !important;
+    position: relative !important;
 }
 
 #changelist-form {
     flex: 1 1 auto !important;
     min-width: 0 !important;
     width: 100% !important;
+    max-width: 100% !important;
 }
 
 #changelist .results {
@@ -1404,6 +1398,28 @@ div.breadcrumbs a:hover {
     margin-bottom: 1.5rem !important;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25) !important;
     width: 100% !important;
+    max-width: 100% !important;
+    -webkit-overflow-scrolling: touch !important;
+    scrollbar-width: thin !important;
+    scrollbar-color: #2D3244 #12141C !important;
+}
+
+#changelist .results::-webkit-scrollbar {
+    height: 6px !important;
+}
+
+#changelist .results::-webkit-scrollbar-track {
+    background: #12141C !important;
+    border-radius: 9999px !important;
+}
+
+#changelist .results::-webkit-scrollbar-thumb {
+    background: #2D3244 !important;
+    border-radius: 9999px !important;
+}
+
+#changelist .results::-webkit-scrollbar-thumb:hover {
+    background: #C5A059 !important;
 }
 
 #result_list {
@@ -1838,19 +1854,65 @@ div.breadcrumbs a:hover {
     background: #2A2E40 !important;
 }
 
-/* Changelist Filter Sidebar */
+/* Changelist Filter Sidebar & Slide-out Drawer */
 #changelist-filter {
-    width: 250px !important;
-    flex: 0 0 250px !important;
     background: var(--shopify-card-bg) !important;
     border: 1px solid var(--shopify-card-border) !important;
     border-radius: 10px !important;
     padding: 1.25rem !important;
-    position: sticky !important;
-    top: 76px !important;
+    transition: transform 0.28s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.2s ease !important;
+}
+
+@media (min-width: 1366px) {
+    #changelist-filter {
+        width: 260px !important;
+        flex: 0 0 260px !important;
+        position: sticky !important;
+        top: 76px !important;
+        display: block !important;
+    }
+    
+    #changelist-filter.filter-desktop-hidden {
+        display: none !important;
+    }
+}
+
+@media (max-width: 1365px) {
+    #changelist .changelist-form-container {
+        display: block !important;
+        width: 100% !important;
+    }
+    
+    #changelist-filter {
+        position: fixed !important;
+        top: 56px !important;
+        right: 0 !important;
+        bottom: 0 !important;
+        width: 320px !important;
+        max-width: 85vw !important;
+        height: calc(100vh - 56px) !important;
+        background: #12141C !important;
+        border-left: 1px solid #232734 !important;
+        border-top: none !important;
+        border-right: none !important;
+        border-bottom: none !important;
+        border-radius: 0 !important;
+        padding: 1.5rem 1.25rem 3rem 1.25rem !important;
+        overflow-y: auto !important;
+        z-index: 1250 !important;
+        transform: translateX(100%) !important;
+        box-shadow: -12px 0 40px rgba(0, 0, 0, 0.85) !important;
+    }
+    
+    #changelist-filter.drawer-open {
+        transform: translateX(0) !important;
+    }
 }
 
 #changelist-filter h2 {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
     font-size: 0.8rem !important;
     font-weight: 700 !important;
     color: #FFFFFF !important;
@@ -1860,6 +1922,142 @@ div.breadcrumbs a:hover {
     padding-bottom: 0.65rem !important;
     margin-bottom: 0.85rem !important;
     background: transparent !important;
+}
+
+.shopify-filter-close-btn {
+    background: #1C1F2B !important;
+    border: 1px solid #2B3040 !important;
+    color: #9CA3AF !important;
+    font-size: 0.95rem !important;
+    cursor: pointer !important;
+    padding: 0.2rem 0.55rem !important;
+    border-radius: 6px !important;
+    line-height: 1 !important;
+    display: none !important;
+    transition: all 0.15s ease !important;
+}
+
+.shopify-filter-close-btn:hover {
+    color: #FFFFFF !important;
+    border-color: #EF4444 !important;
+    background: rgba(239, 68, 68, 0.15) !important;
+}
+
+@media (max-width: 1365px) {
+    .shopify-filter-close-btn {
+        display: inline-flex !important;
+        align-items: center !important;
+    }
+}
+
+/* Filter Toggle Button in Toolbar */
+.shopify-filter-toggle-btn {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+    background: #181A24 !important;
+    border: 1px solid #2B3042 !important;
+    color: #D1D5DB !important;
+    padding: 0.45rem 0.9rem !important;
+    border-radius: 6px !important;
+    font-size: 0.78rem !important;
+    font-weight: 600 !important;
+    cursor: pointer !important;
+    transition: all 0.15s ease !important;
+    white-space: nowrap !important;
+}
+
+.shopify-filter-toggle-btn:hover {
+    background: #222634 !important;
+    border-color: #3E455E !important;
+    color: #FFFFFF !important;
+}
+
+.shopify-filter-toggle-btn.has-active-filters,
+.shopify-filter-toggle-btn.is-active {
+    background: rgba(16, 185, 129, 0.15) !important;
+    border-color: #10B981 !important;
+    color: #34D399 !important;
+}
+
+.filter-count-badge {
+    background: #10B981 !important;
+    color: #FFFFFF !important;
+    font-size: 0.65rem !important;
+    font-weight: 700 !important;
+    padding: 1px 6px !important;
+    border-radius: 9999px !important;
+    display: inline-block !important;
+}
+
+/* Active Filter Pills Bar */
+.shopify-active-filters-bar {
+    display: flex !important;
+    align-items: center !important;
+    flex-wrap: wrap !important;
+    gap: 8px !important;
+    margin-bottom: 12px !important;
+    padding: 8px 12px !important;
+    background: #141620 !important;
+    border: 1px solid #232734 !important;
+    border-radius: 8px !important;
+    width: 100% !important;
+}
+
+.active-filters-label {
+    font-size: 0.72rem !important;
+    font-weight: 700 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.05em !important;
+    color: #9497A1 !important;
+    margin-right: 4px !important;
+}
+
+.active-filter-pill {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+    background: rgba(16, 185, 129, 0.12) !important;
+    border: 1px solid rgba(16, 185, 129, 0.35) !important;
+    color: #34D399 !important;
+    padding: 3px 10px !important;
+    border-radius: 9999px !important;
+    font-size: 0.74rem !important;
+    font-weight: 600 !important;
+    text-decoration: none !important;
+    transition: all 0.15s ease !important;
+}
+
+.active-filter-pill:hover {
+    background: rgba(16, 185, 129, 0.22) !important;
+    border-color: #10B981 !important;
+    color: #FFFFFF !important;
+}
+
+.active-filter-pill .pill-category {
+    color: #9CA3AF !important;
+    font-weight: 500 !important;
+}
+
+.active-filter-pill .pill-remove {
+    font-size: 0.7rem !important;
+    opacity: 0.75 !important;
+}
+
+.active-filter-pill:hover .pill-remove {
+    opacity: 1 !important;
+}
+
+.clear-all-filters-btn {
+    font-size: 0.72rem !important;
+    color: #EF4444 !important;
+    text-decoration: underline !important;
+    margin-left: auto !important;
+    cursor: pointer !important;
+}
+
+.clear-all-filters-btn:hover {
+    color: #F87171 !important;
 }
 
 #changelist-filter #changelist-filter-extra-actions {
@@ -2614,51 +2812,363 @@ ul.messagelist li.error {
 }
 
 /* ==========================================================================
-   MOBILE & RESPONSIVE TWEAKS
+   ADVANCED FULLY RESPONSIVE ENGINE (ALL DISPLAY SIZES)
    ========================================================================== */
-@media (max-width: 900px) {
-    .desktop-only-text {
-        display: none !important;
+
+/* 1. Backdrop Overlays for Mobile/Tablet Drawers */
+.shopify-sidebar-backdrop,
+.shopify-filter-backdrop {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    background: rgba(0, 0, 0, 0.72) !important;
+    backdrop-filter: blur(6px) !important;
+    -webkit-backdrop-filter: blur(6px) !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+    transition: opacity 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+.shopify-sidebar-backdrop {
+    z-index: 1040 !important;
+}
+
+.shopify-filter-backdrop {
+    z-index: 1240 !important;
+}
+
+.shopify-sidebar-backdrop.active,
+.shopify-filter-backdrop.active {
+    opacity: 1 !important;
+    pointer-events: auto !important;
+}
+
+body.sidebar-drawer-open,
+body.filter-drawer-open {
+    overflow: hidden !important;
+}
+
+/* 2. Responsive Table Column Optimization */
+#result_list {
+    min-width: 780px !important;
+}
+
+#result_list th.action-checkbox-column,
+#result_list td.action-checkbox {
+    width: 40px !important;
+    min-width: 40px !important;
+    max-width: 40px !important;
+    text-align: center !important;
+}
+
+#result_list th,
+#result_list td {
+    white-space: normal !important;
+}
+
+#result_list thead th {
+    position: sticky !important;
+    top: 0 !important;
+    z-index: 5 !important;
+}
+
+/* 3. Breakpoint: Laptops & Medium Desktops (<= 1280px) */
+@media (max-width: 1280px) {
+    #content,
+    .dashboard #content,
+    .shopify-content-box {
+        padding: 20px 22px !important;
     }
-    
+
+    .shopify-top-search {
+        max-width: 320px !important;
+    }
+}
+
+/* 4. Breakpoint: Tablets in Landscape & Split Screens (<= 1100px) */
+@media (max-width: 1100px) {
     .shopify-hamburger-btn {
         display: inline-flex !important;
     }
-    
+
     .shopify-persistent-sidebar {
         position: fixed !important;
         top: 56px !important;
         left: 0 !important;
         bottom: 0 !important;
-        transform: translateX(-100%);
-        transition: transform 0.25s ease-in-out;
-        box-shadow: 10px 0 30px rgba(0, 0, 0, 0.7);
+        width: 260px !important;
+        min-width: 260px !important;
+        max-width: 260px !important;
+        transform: translateX(-100%) !important;
+        transition: transform 0.28s cubic-bezier(0.4, 0, 0.2, 1) !important;
+        box-shadow: 12px 0 40px rgba(0, 0, 0, 0.85) !important;
+        z-index: 1100 !important;
     }
-    
+
     .shopify-persistent-sidebar.mobile-open {
-        transform: translateX(0);
+        transform: translateX(0) !important;
     }
-    
+
     .shopify-content-canvas,
     #content-start.shopify-content-canvas {
         margin-left: 0 !important;
         width: 100% !important;
         max-width: 100% !important;
     }
-    
+
+    .shopify-dashboard-layout {
+        grid-template-columns: 1fr !important;
+    }
+
+    .shopify-product-form-grid {
+        grid-template-columns: 1fr !important;
+    }
+
+    .shopify-sidebar-col {
+        position: static !important;
+    }
+}
+
+/* 5. Breakpoint: Tablets in Portrait (<= 900px) */
+@media (max-width: 900px) {
+    .desktop-only-text {
+        display: none !important;
+    }
+
+    .top-action-pill {
+        padding: 0.35rem 0.55rem !important;
+    }
+
+    .shopify-top-search {
+        max-width: 220px !important;
+    }
+
+    .search-kbd-pill {
+        display: none !important;
+    }
+
+    .user-chip-meta {
+        display: none !important;
+    }
+
+    .shopify-metrics-grid,
+    .product-metrics-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+    }
+}
+
+/* 6. Breakpoint: Mobile Phones & Phablets (<= 768px) */
+@media (max-width: 768px) {
+    #header.shopify-top-bar {
+        height: 52px !important;
+        padding: 0 0.65rem !important;
+    }
+
+    .shopify-main-shell {
+        margin-top: 52px !important;
+        min-height: calc(100vh - 52px) !important;
+    }
+
+    .shopify-persistent-sidebar {
+        top: 52px !important;
+        height: calc(100vh - 52px) !important;
+    }
+
     #content,
     .dashboard #content,
     .shopify-content-box {
-        padding: 16px !important;
+        padding: 12px 12px !important;
     }
-    
-    #changelist {
+
+    .shopify-breadcrumbs-nav,
+    div.breadcrumbs {
+        padding: 0.45rem 0.85rem !important;
+        font-size: 0.7rem !important;
+        overflow-x: auto !important;
+        white-space: nowrap !important;
+    }
+
+    .titles-and-tools {
         flex-direction: column !important;
+        align-items: flex-start !important;
+        gap: 0.65rem !important;
+        margin-bottom: 0.85rem !important;
     }
-    
-    #changelist-filter {
+
+    .titles-and-tools .titles {
         width: 100% !important;
-        flex: 1 1 100% !important;
-        position: static !important;
+    }
+
+    .shopify-standard-title {
+        font-size: 1.25rem !important;
+    }
+
+    .object-tools {
+        width: 100% !important;
+    }
+
+    .object-tools li,
+    .object-tools a {
+        width: 100% !important;
+        text-align: center !important;
+        justify-content: center !important;
+        padding: 0.55rem 1rem !important;
+    }
+
+    /* Changelist Toolbar & Actions */
+    #changelist-search > div {
+        display: flex !important;
+        flex-direction: row !important;
+        flex-wrap: wrap !important;
+        gap: 0.5rem !important;
+    }
+
+    #changelist-search input[type="text"] {
+        flex: 1 1 140px !important;
+        min-width: 120px !important;
+        max-width: 100% !important;
+        font-size: 14px !important;
+    }
+
+    .shopify-filter-toggle-btn {
+        flex: 0 0 auto !important;
+    }
+
+    .actions {
+        flex-direction: column !important;
+        align-items: stretch !important;
+        gap: 0.5rem !important;
+        padding: 0.75rem !important;
+    }
+
+    .actions select {
+        width: 100% !important;
+        font-size: 14px !important;
+    }
+
+    .actions button {
+        width: 100% !important;
+        padding: 0.55rem 1rem !important;
+    }
+
+    .actions span.all,
+    .actions span.action-counter,
+    .actions span.question,
+    .actions span.clear {
+        text-align: center !important;
+        display: block !important;
+        font-size: 0.72rem !important;
+    }
+
+    /* Change Form & Fields */
+    .change-form fieldset {
+        padding: 0.85rem !important;
+        border-radius: 8px !important;
+    }
+
+    .form-row {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: stretch !important;
+        gap: 0.35rem !important;
+    }
+
+    .form-row label {
+        width: 100% !important;
+        margin-bottom: 0.15rem !important;
+    }
+
+    .form-row input[type="text"],
+    .form-row input[type="email"],
+    .form-row input[type="number"],
+    .form-row input[type="password"],
+    .form-row textarea,
+    .form-row select {
+        width: 100% !important;
+        max-width: 100% !important;
+        font-size: 15px !important;
+    }
+
+    .submit-row {
+        flex-direction: column !important;
+        align-items: stretch !important;
+        gap: 0.5rem !important;
+        position: sticky !important;
+        bottom: 0 !important;
+        z-index: 100 !important;
+        background: rgba(18, 20, 28, 0.96) !important;
+        backdrop-filter: blur(10px) !important;
+        -webkit-backdrop-filter: blur(10px) !important;
+        border-top: 1px solid #282C3C !important;
+        border-radius: 0 !important;
+        margin: 1.25rem -12px 0 -12px !important;
+        padding: 0.75rem 1rem !important;
+    }
+
+    .submit-row input[type="submit"],
+    .submit-row input.default,
+    .submit-row a.deletelink {
+        width: 100% !important;
+        text-align: center !important;
+        padding: 0.65rem 1rem !important;
+    }
+}
+
+/* 7. Breakpoint: Small Mobile Devices (<= 480px) */
+@media (max-width: 480px) {
+    .brand-title {
+        display: none !important;
+    }
+
+    .brand-pill {
+        display: none !important;
+    }
+
+    .shopify-top-search {
+        max-width: 130px !important;
+        margin: 0 0.35rem !important;
+    }
+
+    .search-field-wrapper input {
+        font-size: 0.72rem !important;
+        padding: 0.35rem 0.5rem 0.35rem 1.7rem !important;
+    }
+
+    .search-field-wrapper .search-lens-icon {
+        left: 6px !important;
+        width: 12px !important;
+        height: 12px !important;
+    }
+
+    .shopify-metrics-grid,
+    .product-metrics-grid {
+        grid-template-columns: 1fr !important;
+    }
+
+    .shopify-page-header {
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        gap: 0.65rem !important;
+    }
+
+    .shopify-header-cta-group {
+        width: 100% !important;
+        flex-direction: column !important;
+        gap: 0.45rem !important;
+    }
+
+    .shopify-header-cta-group a {
+        width: 100% !important;
+        text-align: center !important;
+        justify-content: center !important;
+    }
+
+    .product-segment-tabs {
+        overflow-x: auto !important;
+        white-space: nowrap !important;
+        -webkit-overflow-scrolling: touch !important;
+        padding-bottom: 4px !important;
     }
 }
