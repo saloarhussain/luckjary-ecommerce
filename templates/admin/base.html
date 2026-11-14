@@ -441,12 +441,15 @@ document.addEventListener('DOMContentLoaded', function() {
         var title = (details.getAttribute('data-filter-title') || summaryText).replace(/^By\s+/i, '').trim();
         
         var selectedLi = details.querySelector('li.selected');
-        if (selectedLi) {
+        var firstLi = details.querySelector('li:first-child');
+        
+        if (selectedLi && selectedLi !== firstLi) {
             var selectedLink = selectedLi.querySelector('a');
             var selectedText = selectedLink ? selectedLink.textContent.trim() : '';
-            if (selectedText && selectedText.toLowerCase() !== 'all') {
+            var lower = selectedText.toLowerCase();
+            if (lower && lower !== 'all' && lower !== 'any date' && lower !== 'any' && !lower.startsWith('any ')) {
                 activeCount++;
-                var resetLink = details.querySelector('li:first-child a');
+                var resetLink = firstLi ? firstLi.querySelector('a') : null;
                 activePills.push({
                     title: title,
                     value: selectedText,
