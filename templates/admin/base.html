@@ -508,7 +508,21 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    // 5. Close drawers on Escape key
+    // 5. Search placeholder & mobile table swipe hint
+    var searchInput = document.getElementById('searchbar');
+    if (searchInput && !searchInput.getAttribute('placeholder')) {
+        searchInput.setAttribute('placeholder', 'Search orders, patrons, ref...');
+    }
+
+    var resultsContainer = document.querySelector('#changelist .results');
+    if (resultsContainer && resultsContainer.parentNode && !document.querySelector('.shopify-table-scroll-hint')) {
+        var hint = document.createElement('div');
+        hint.className = 'shopify-table-scroll-hint';
+        hint.innerHTML = '<span class="scroll-arrow">←</span> <span>Swipe horizontally to view full order details & status</span> <span class="scroll-arrow">→</span>';
+        resultsContainer.parentNode.insertBefore(hint, resultsContainer);
+    }
+
+    // 6. Close drawers on Escape key
     document.addEventListener('keydown', function(e) {
         if (e.key === 'Escape') {
             var filter = document.getElementById('changelist-filter');
@@ -522,7 +536,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // 6. Close sidebar on navigation item click on mobile/tablet
+    // 7. Close sidebar on navigation item click on mobile/tablet
     document.querySelectorAll('.sidebar-nav-item').forEach(function(link) {
         link.addEventListener('click', function() {
             if (window.innerWidth <= 1100) {
