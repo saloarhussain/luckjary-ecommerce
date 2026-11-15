@@ -407,7 +407,8 @@
     display: none !important;
 }
 .field-karat_metal,
-.field-available_metals {
+.field-available_metals,
+.field-materials {
     display: none !important;
 }
 
@@ -1796,11 +1797,18 @@
     }
 
     // Add Gemstone Notice
-    if (materialsRow) {
+    var gemstoneRow = document.querySelector('.field-gemstone');
+    var gemstoneFormRow = gemstoneRow ? gemstoneRow.closest('.form-row') : null;
+    var gemstonesCard = document.querySelector('.shopify-card-gemstones');
+    if (!document.querySelector('.lux-gemstones-notice')) {
         var notice = document.createElement('div');
         notice.className = 'lux-gemstones-notice';
-        notice.innerHTML = '<span>💎</span> <strong>Atelier Note:</strong> All creations are forged in 925 Solid Sterling Silver. Use this section to select featured gemstones, cultured pearls, and diamond grades.';
-        materialsRow.parentNode.insertBefore(notice, materialsRow);
+        notice.innerHTML = '<span>💎</span> <strong>Atelier Note:</strong> All creations are forged exclusively in 925 Solid Sterling Silver featuring premium Flawless Cubic Zirconia (CZ) stones.';
+        if (gemstoneFormRow && gemstoneFormRow.parentNode) {
+            gemstoneFormRow.parentNode.insertBefore(notice, gemstoneFormRow.nextSibling);
+        } else if (gemstonesCard) {
+            gemstonesCard.appendChild(notice);
+        }
     }
 
     // Initial render
@@ -2786,12 +2794,12 @@
                         e.preventDefault();
                         var tpl = this.getAttribute('data-tpl');
                         var t = (titleInput ? titleInput.value : '').trim() || 'Fine Jewelry';
-                        var m = (karatInput ? karatInput.value : '').trim() || '18K Solid Gold';
-                        var g = (gemstoneInput ? gemstoneInput.value : '').trim() || 'VVS Lab Diamonds';
+                        var m = (karatInput ? karatInput.value : '').trim() || '925 Solid Sterling Silver';
+                        var g = (gemstoneInput ? gemstoneInput.value : '').trim() || '5A Flawless Cubic Zirconia';
                         if (tpl === 'delivery') {
                             metaDescInput.value = 'Discover the handcrafted ' + t + ' in ' + m + '. Enjoy complimentary insured delivery, certificate of authenticity & signature packaging.';
                         } else if (tpl === 'diamonds') {
-                            metaDescInput.value = 'Handcrafted ' + t + ' set in ' + m + ' with certified ' + g + '. Ethical, conflict-free fine jewelry by Luckjary Atelier.';
+                            metaDescInput.value = 'Handcrafted ' + t + ' set in ' + m + ' with brilliant ' + g + '. Ethical, flawless fine jewelry by Luckjary Atelier.';
                         } else if (tpl === 'bespoke') {
                             metaDescInput.value = 'Shop the exquisite ' + t + ' forged in ' + m + '. Lifetime craftsmanship warranty & complimentary bespoke sizing by Luckjary.';
                         }
@@ -2834,12 +2842,12 @@
                 kwPresets.className = 'lux-seo-pill-group';
                 kwPresets.innerHTML = 
                     '<span style="font-size:10px; font-weight:700; color:#64748B; text-transform:uppercase;">Quick SEO Keywords:</span>' +
-                    '<button type="button" class="lux-seo-preset-pill btn-kw-add" data-kw="18k solid gold">✦ 18K Solid Gold</button>' +
+                    '<button type="button" class="lux-seo-preset-pill btn-kw-add" data-kw="925 sterling silver">✦ 925 Sterling Silver</button>' +
+                    '<button type="button" class="lux-seo-preset-pill btn-kw-add" data-kw="cubic zirconia">✦ Cubic Zirconia</button>' +
+                    '<button type="button" class="lux-seo-preset-pill btn-kw-add" data-kw="cz diamonds">✦ CZ Diamonds</button>' +
                     '<button type="button" class="lux-seo-preset-pill btn-kw-add" data-kw="handcrafted jewelry">✦ Handcrafted Jewelry</button>' +
-                    '<button type="button" class="lux-seo-preset-pill btn-kw-add" data-kw="lab diamonds">✦ Lab Diamonds</button>' +
-                    '<button type="button" class="lux-seo-preset-pill btn-kw-add" data-kw="engagement ring">✦ Engagement Ring</button>' +
-                    '<button type="button" class="lux-seo-preset-pill btn-kw-add" data-kw="haute joaillerie">✦ Haute Joaillerie</button>' +
-                    '<button type="button" class="lux-seo-preset-pill btn-kw-add" data-kw="conflict-free">✦ Conflict-Free</button>' +
+                    '<button type="button" class="lux-seo-preset-pill btn-kw-add" data-kw="silver jewelry">✦ Silver Jewelry</button>' +
+                    '<button type="button" class="lux-seo-preset-pill btn-kw-add" data-kw="flawless stones">✦ Flawless Stones</button>' +
                     '<button type="button" class="lux-seo-preset-pill btn-kw-add" data-kw="complimentary delivery">✦ Complimentary Delivery</button>';
                 metaKeywordsInput.parentNode.appendChild(kwPresets);
 
@@ -2864,8 +2872,8 @@
             btnAiSeo.onclick = function(e) {
                 e.preventDefault();
                 var t = (titleInput ? titleInput.value : '').trim() || 'Fine Jewelry Piece';
-                var m = (karatInput ? karatInput.value : '').trim() || '18K Solid Gold';
-                var g = (gemstoneInput ? gemstoneInput.value : '').trim() || 'VVS Clarity Diamonds';
+                var m = (karatInput ? karatInput.value : '').trim() || '925 Solid Sterling Silver';
+                var g = (gemstoneInput ? gemstoneInput.value : '').trim() || '5A Flawless Cubic Zirconia';
                 var catText = categorySelect && categorySelect.selectedIndex >= 0 ? categorySelect.options[categorySelect.selectedIndex].text : 'Jewelry';
 
                 // Optimized Page Title (50-65 chars)
@@ -2874,7 +2882,7 @@
                 if (metaTitleInput) metaTitleInput.value = newTitle;
 
                 // Optimized Meta Description (135-155 chars)
-                var newDesc = 'Discover the handcrafted ' + t + ' forged in rich ' + m + ' with certified ' + g + '. Complimentary insured worldwide delivery by Luckjary.';
+                var newDesc = 'Discover the handcrafted ' + t + ' forged in ' + m + ' with brilliant ' + g + '. Complimentary insured worldwide delivery by Luckjary.';
                 if (newDesc.length > 160) {
                     newDesc = 'Shop the handcrafted ' + t + ' in ' + m + ' with ' + g + '. Complimentary insured delivery & luxury gift packaging from Luckjary.';
                 }
@@ -2886,7 +2894,7 @@
                 }
 
                 // High Intent Keywords
-                var kws = [t.toLowerCase(), m.toLowerCase(), g.toLowerCase(), catText.toLowerCase(), 'luxury jewelry', 'handcrafted jewelry', 'conflict-free diamonds'];
+                var kws = [t.toLowerCase(), m.toLowerCase(), g.toLowerCase(), catText.toLowerCase(), 'silver jewelry', 'handcrafted jewelry', 'cubic zirconia', 'cz diamonds'];
                 if (metaKeywordsInput) metaKeywordsInput.value = kws.join(', ');
 
                 updateSeoDisplay();

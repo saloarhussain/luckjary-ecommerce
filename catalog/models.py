@@ -118,7 +118,7 @@ class Product(models.Model):
         default='925 Sterling Silver, 925 Sterling Silver (Rhodium Finish)',
         help_text="Comma-separated precious metal options available to the client on the product page. e.g. 925 Sterling Silver, 925 Sterling Silver (Rhodium Finish)"
     )
-    gemstone = models.CharField(max_length=150, blank=True, default='VVS Clarity Lab Diamonds')
+    gemstone = models.CharField(max_length=150, blank=True, default='5A Flawless Cubic Zirconia (CZ)')
     carat_weight = models.CharField(max_length=60, blank=True, default='1.25 ctw')
     
     # Sizing & Dimensions
@@ -135,7 +135,7 @@ class Product(models.Model):
     )
     chain_length_or_size = models.CharField(max_length=100, blank=True, default='')
     dimensions = models.CharField(max_length=100, blank=True, default='14.5mm x 9.2mm')
-    certification = models.CharField(max_length=120, default='Luckjary Seal & IGI Laboratory Certificate')
+    certification = models.CharField(max_length=120, default='Luckjary Seal & Certificate of Authenticity')
 
     # Descriptions
     description = models.TextField()

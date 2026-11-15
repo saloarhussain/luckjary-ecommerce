@@ -29,7 +29,15 @@ class ProductAdminForm(forms.ModelForm):
                 'style': 'font-size: 1.05rem; font-weight: 600; padding: 0.65rem 0.85rem; width: 100%;'
             }),
             'subtitle': forms.TextInput(attrs={
-                'placeholder': 'e.g. Handcrafted in 925 Solid Sterling Silver & VVS Brilliant Stones',
+                'placeholder': 'e.g. Handcrafted in 925 Solid Sterling Silver & Flawless Cubic Zirconia Stones',
+                'style': 'width: 100%;'
+            }),
+            'gemstone': forms.TextInput(attrs={
+                'placeholder': 'e.g. 5A Flawless Cubic Zirconia (CZ)',
+                'style': 'width: 100%;'
+            }),
+            'carat_weight': forms.TextInput(attrs={
+                'placeholder': 'e.g. 1.25 ctw (Diamond Equivalent)',
                 'style': 'width: 100%;'
             }),
             'description': forms.Textarea(attrs={
@@ -85,6 +93,10 @@ class ProductAdminForm(forms.ModelForm):
                 '925 Sterling Silver',
                 '925 Sterling Silver (Rhodium Finish)'
             ]
+            if 'gemstone' in self.fields:
+                self.fields['gemstone'].initial = '5A Flawless Cubic Zirconia (CZ)'
+            if 'carat_weight' in self.fields:
+                self.fields['carat_weight'].initial = '1.25 ctw'
 
     def clean(self):
         cleaned_data = super().clean()
@@ -169,10 +181,9 @@ class ProductAdmin(admin.ModelAdmin):
         }),
         ('💎 Gemstones & Specialty Materials', {
             'classes': ('shopify-card-gemstones',),
-            'description': 'Specify featured gemstones, pearl varieties, and diamond grades. (Precious metals selected above are automatically mapped to catalog filters on save).',
+            'description': 'Specify featured Cubic Zirconia stone grades and diamond-equivalent carat weight. (All creations are crafted exclusively in 925 Solid Sterling Silver).',
             'fields': (
                 ('gemstone', 'carat_weight'),
-                'materials',
             )
         }),
         ('🔍 Search Engine Listing Preview', {
@@ -230,7 +241,7 @@ class ProductAdmin(admin.ModelAdmin):
         'merchandising_display'
     )
     list_display_links = ('thumb_display', 'title_sku_display')
-    list_filter = ('category', 'style', 'is_available', 'is_featured', 'is_bestseller', 'materials')
+    list_filter = ('category', 'style', 'is_available', 'is_featured', 'is_bestseller')
     search_fields = ('title', 'sku', 'description', 'karat_metal', 'gemstone', 'category__name')
     prepopulated_fields = {'slug': ('title',)}
     list_editable = ('is_available',)
@@ -238,7 +249,7 @@ class ProductAdmin(admin.ModelAdmin):
     actions_on_top = True
     actions_on_bottom = False
     inlines = [ProductImageInline, ProductReviewInline]
-    filter_horizontal = ('materials',)
+    filter_horizontal = ()
     actions = ['make_available', 'make_unavailable', 'make_featured', 'remove_featured']
 
     @admin.action(description="✓ Mark selected pieces as Available")
@@ -264,16 +275,26 @@ class ProductAdmin(admin.ModelAdmin):
     def save_related(self, request, form, formsets, change):
         super().save_related(request, form, formsets, change)
         product = form.instance
-        silver_mat = Material.objects.filter(slug='925-sterling-silver').first()
-        if silver_mat:
-            product.materials.add(silver_mat)
-        # Remove any legacy gold / demifine materials
+        silver_mat, _ = Material.objects.get_or_create(
+            slug='925-sterling-silver',
+            defaults={'name': '925 Sterling Silver', 'badge_label': '925 Silver'}
+        )
+        cz_mat, _ = Material.objects.get_or_create(
+            slug='cubic-zirconia',
+            defaults={'name': 'Cubic Zirconia', 'badge_label': '5A CZ'}
+        )
+        product.materials.add(silver_mat, cz_mat)
+        # Remove any legacy gold / demifine / gem materials
         legacy_mats = Material.objects.filter(slug__in=[
             '18k-gold-vermeil-demifine',
             '18k-solid-yellow-gold',
             '18k-white-gold',
             '18k-rose-gold',
-            'platinum-950'
+            'platinum-950',
+            'freshwater-cultured-pearl',
+            'natural-colombian-emerald',
+            'royal-ceylon-sapphire',
+            'vvs1-lab-grown-diamonds'
         ])
         if legacy_mats.exists():
             product.materials.remove(*legacy_mats)
