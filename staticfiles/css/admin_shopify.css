@@ -4569,3 +4569,18 @@ body.filter-drawer-open {
         white-space: nowrap !important;
     }
 }
+
+/* Dashboard: Hide redundant breadcrumbs and legacy titles */
+.dashboard .shopify-breadcrumbs-nav,
+.dashboard div.breadcrumbs,
+.dashboard .titles-and-tools,
+.shopify-dashboard-page .shopify-breadcrumbs-nav,
+.shopify-dashboard-page div.breadcrumbs,
+.shopify-dashboard-page .titles-and-tools {
+    display: none !important;
+}
+
+.shopify-dashboard-page .shopify-page-header {
+    margin-top: 6px !important;
+    margin-bottom: 18px !important;
+}

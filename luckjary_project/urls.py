@@ -39,6 +39,7 @@ def atelier_admin_index(request, extra_context=None):
         extra['total_products'] = Product.objects.count()
         extra['total_customers'] = CustomUser.objects.count()
         extra['recent_orders'] = Order.objects.order_by('-created_at')[:6]
+        extra['is_dashboard'] = True
     except Exception:
         pass
     return original_admin_index(request, extra_context=extra)

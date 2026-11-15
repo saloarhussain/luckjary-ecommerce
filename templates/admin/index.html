@@ -262,19 +262,39 @@
         flex-shrink: 0 !important;
         white-space: nowrap !important;
     }
+    /* Dashboard: Hide redundant breadcrumbs and legacy titles */
+    .dashboard .shopify-breadcrumbs-nav,
+    .dashboard div.breadcrumbs,
+    .dashboard .titles-and-tools,
+    .shopify-dashboard-page .shopify-breadcrumbs-nav,
+    .shopify-dashboard-page div.breadcrumbs,
+    .shopify-dashboard-page .titles-and-tools {
+        display: none !important;
+    }
+
+    .shopify-dashboard-page .shopify-page-header {
+        margin-top: 6px !important;
+        margin-bottom: 18px !important;
+    }
+}
+
+/* Global dashboard override for desktop and mobile */
+.dashboard .shopify-breadcrumbs-nav,
+.dashboard div.breadcrumbs,
+.dashboard .titles-and-tools,
+.shopify-dashboard-page .shopify-breadcrumbs-nav,
+.shopify-dashboard-page div.breadcrumbs,
+.shopify-dashboard-page .titles-and-tools {
+    display: none !important;
 }
 </style>
 {% endblock %}
 
 {% block bodyclass %}{{ block.super }} dashboard shopify-dashboard-page{% endblock %}
 
-{% block nav-breadcrumbs %}
-<nav aria-label="{% translate 'Breadcrumbs' %}" class="shopify-breadcrumbs-nav">
-    <ol class="shopify-breadcrumbs-list">
-        <li aria-current="page">Dashboard</li>
-    </ol>
-</nav>
-{% endblock %}
+{% block nav-breadcrumbs %}{% endblock %}
+
+{% block content_title %}{% endblock %}
 
 {% block content %}
 <div class="shopify-dashboard-wrapper">
