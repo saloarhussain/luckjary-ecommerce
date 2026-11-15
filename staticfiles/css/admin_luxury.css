@@ -717,6 +717,14 @@ select {
     font-size: 0.82rem !important;
 }
 
+select {
+    height: 38px !important;
+    min-height: 38px !important;
+    line-height: 1.4 !important;
+    padding: 0.45rem 2rem 0.45rem 0.75rem !important;
+    box-sizing: border-box !important;
+}
+
 input[type="text"]:focus, 
 input[type="password"]:focus, 
 input[type="email"]:focus, 
