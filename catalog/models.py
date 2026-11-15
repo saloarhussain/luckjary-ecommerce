@@ -175,7 +175,7 @@ class Product(models.Model):
         default_metals = []
         if self.karat_metal:
             default_metals.append(self.karat_metal)
-        for m in ['925 Sterling Silver', '925 Sterling Silver (Rhodium Finish)']:
+        for m in ['925 Sterling Silver']:
             if m not in default_metals:
                 default_metals.append(m)
         return default_metals
@@ -218,39 +218,7 @@ class Product(models.Model):
                 'US Size 13 (69.7mm circumference)',
                 'Custom Bespoke Sizing (Concierge will contact you)',
             ]
-        elif size_type == 'necklace' or 'necklace' in cat_slug:
-            return [
-                '14" Choker Length (35.5cm)',
-                '16" Standard Collar (40.6cm)',
-                '18" Princess Length - Most Popular (45.7cm)',
-                '20" Matinee Length (50.8cm)',
-                '22" Opera Length (55.9cm)',
-                '24" Lariat Length (61.0cm)',
-                'Custom Bespoke Sizing (Concierge will contact you)',
-            ]
-        elif size_type == 'bracelet' or 'bracelet' in cat_slug:
-            return [
-                '6.0" (15.2cm - Petite Wrist)',
-                '6.5" (16.5cm - Small Wrist)',
-                '7.0" (17.8cm - Standard / Most Popular)',
-                '7.5" (19.0cm - Medium Wrist)',
-                '8.0" (20.3cm - Large Wrist)',
-                'Custom Bespoke Sizing (Concierge will contact you)',
-            ]
-        elif size_type == 'earring' or 'earring' in cat_slug:
-            return [
-                'Standard Pierced Post & Friction Back',
-                'Screw Back (High Security Locking)',
-                'La Poussette Luxury Locking Back',
-                'Clip-On (Non-Pierced Atelier Fitting)',
-            ]
-        else:
-            if self.chain_length_or_size:
-                return [self.chain_length_or_size, 'Custom Bespoke Sizing (Concierge will contact you)']
-            return [
-                'One Size / Universal Luxury Fit',
-                'Custom Bespoke Sizing (Concierge will contact you)',
-            ]
+        return []
 
     @property
     def discount_percent(self):
