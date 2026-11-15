@@ -1,6 +1,224 @@
 {% extends "admin/base_site.html" %}
 {% load i18n static %}
 
+{% block extrahead %}
+{{ block.super }}
+<style>
+/* ========================================================
+   RECENT COMMISSIONS: DESKTOP & MOBILE RESPONSIVE VIEWS
+   ======================================================== */
+.shopify-orders-mobile-cards {
+    display: none;
+}
+
+.orders-desktop-table {
+    display: block;
+    width: 100%;
+}
+
+.order-link {
+    font-family: monospace;
+    font-weight: 700;
+    color: #60A5FA;
+    text-decoration: none;
+    background: rgba(59, 130, 246, 0.12);
+    padding: 3px 8px;
+    border-radius: 4px;
+    border: 1px solid rgba(59, 130, 246, 0.3);
+    white-space: nowrap !important;
+    display: inline-block;
+    letter-spacing: 0.02em;
+}
+
+.order-link:hover {
+    border-color: #C5A059;
+    color: #F8FAFC;
+    background: rgba(197, 160, 89, 0.15);
+}
+
+.shopify-table td.text-muted {
+    white-space: nowrap !important;
+}
+
+.shopify-table td.font-bold {
+    font-weight: 700;
+    color: #FAF9F6;
+    white-space: nowrap !important;
+}
+
+.table-action-link {
+    display: inline-flex;
+    align-items: center;
+    padding: 3px 10px;
+    background: #1E212E;
+    border: 1px solid #2B3042;
+    border-radius: 4px;
+    color: #CBD5E1;
+    font-size: 11px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.15s ease;
+}
+
+.table-action-link:hover {
+    background: #282C3D;
+    color: #FFF;
+    border-color: #475569;
+}
+
+/* Mobile Orders List View (<= 768px) */
+@media (max-width: 768px) {
+    .orders-desktop-table {
+        display: none !important;
+    }
+
+    .shopify-orders-mobile-cards {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 10px !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
+    }
+
+    .shopify-order-card {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 8px !important;
+        background: #141722 !important;
+        border: 1px solid #282C3D !important;
+        border-radius: 8px !important;
+        padding: 12px 14px !important;
+        text-decoration: none !important;
+        color: inherit !important;
+        transition: all 0.2s ease !important;
+        box-sizing: border-box !important;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2) !important;
+        width: 100% !important;
+    }
+
+    .shopify-order-card:hover,
+    .shopify-order-card:active {
+        background: #191D2C !important;
+        border-color: rgba(197, 160, 89, 0.45) !important;
+        transform: translateY(-1px) !important;
+    }
+
+    .order-card-header {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: space-between !important;
+        gap: 8px !important;
+        width: 100% !important;
+    }
+
+    .order-card-number {
+        font-family: monospace !important;
+        font-weight: 700 !important;
+        font-size: 12.5px !important;
+        color: #60A5FA !important;
+        background: rgba(59, 130, 246, 0.12) !important;
+        border: 1px solid rgba(59, 130, 246, 0.3) !important;
+        padding: 3px 8px !important;
+        border-radius: 5px !important;
+        white-space: nowrap !important;
+        letter-spacing: 0.02em !important;
+    }
+
+    .order-card-amount {
+        font-size: 15px !important;
+        font-weight: 800 !important;
+        color: #FAF9F6 !important;
+        letter-spacing: -0.01em !important;
+        white-space: nowrap !important;
+    }
+
+    .order-card-body {
+        display: flex !important;
+        align-items: flex-start !important;
+        justify-content: space-between !important;
+        gap: 10px !important;
+        padding: 3px 0 !important;
+        width: 100% !important;
+    }
+
+    .order-card-customer {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 2px !important;
+        min-width: 0 !important;
+        flex: 1 1 auto !important;
+    }
+
+    .order-card-customer-name {
+        font-size: 13px !important;
+        font-weight: 700 !important;
+        color: #F1F5F9 !important;
+        white-space: nowrap !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+    }
+
+    .order-card-customer-email {
+        font-size: 11px !important;
+        color: #94A3B8 !important;
+        white-space: nowrap !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+    }
+
+    .order-card-date {
+        font-size: 11px !important;
+        color: #94A3B8 !important;
+        font-weight: 500 !important;
+        white-space: nowrap !important;
+        flex-shrink: 0 !important;
+        padding-top: 2px !important;
+    }
+
+    .order-card-footer {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: space-between !important;
+        gap: 8px !important;
+        padding-top: 8px !important;
+        border-top: 1px solid #1E2232 !important;
+        margin-top: 2px !important;
+        width: 100% !important;
+    }
+
+    .order-card-badges {
+        display: flex !important;
+        align-items: center !important;
+        gap: 6px !important;
+        flex-wrap: wrap !important;
+    }
+
+    .order-card-badges .shopify-badge {
+        font-size: 10px !important;
+        padding: 2px 7px !important;
+        white-space: nowrap !important;
+    }
+
+    .order-card-arrow {
+        font-size: 11.5px !important;
+        font-weight: 700 !important;
+        color: #C5A059 !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        gap: 3px !important;
+        flex-shrink: 0 !important;
+    }
+
+    .order-card-empty {
+        padding: 20px !important;
+        text-align: center !important;
+        color: #94A3B8 !important;
+        font-size: 13px !important;
+    }
+}
+</style>
+{% endblock %}
+
 {% block bodyclass %}{{ block.super }} dashboard shopify-dashboard-page{% endblock %}
 
 {% block nav-breadcrumbs %}
@@ -145,7 +363,9 @@
                     <h3 class="card-title">Recent Commissions</h3>
                     <a href="{% url 'admin:orders_order_changelist' %}" class="card-link">View all orders &rarr;</a>
                 </div>
-                <div class="shopify-table-responsive">
+                
+                <!-- Desktop Table View (>= 769px) -->
+                <div class="shopify-table-responsive orders-desktop-table">
                     <table class="shopify-table">
                         <thead>
                             <tr>
@@ -203,6 +423,47 @@
                             {% endfor %}
                         </tbody>
                     </table>
+                </div>
+
+                <!-- Luxury Mobile Commissions Stack (<= 768px) -->
+                <div class="shopify-orders-mobile-cards">
+                    {% for order in recent_orders %}
+                    <a href="{% url 'admin:orders_order_change' order.id %}" class="shopify-order-card">
+                        <div class="order-card-header">
+                            <span class="order-card-number">#{{ order.order_number }}</span>
+                            <span class="order-card-amount">${{ order.total_amount }}</span>
+                        </div>
+                        <div class="order-card-body">
+                            <div class="order-card-customer">
+                                <span class="order-card-customer-name">{{ order.full_name|default:"VIP Patron" }}</span>
+                                <span class="order-card-customer-email">{{ order.email }}</span>
+                            </div>
+                            <span class="order-card-date">{{ order.created_at|date:"M d, Y" }}</span>
+                        </div>
+                        <div class="order-card-footer">
+                            <div class="order-card-badges">
+                                {% if order.payment_status == 'PAID' %}
+                                <span class="shopify-badge green">● Paid</span>
+                                {% else %}
+                                <span class="shopify-badge amber">● {{ order.get_payment_status_display }}</span>
+                                {% endif %}
+
+                                {% if order.status == 'DELIVERED' %}
+                                <span class="shopify-badge green">● Delivered</span>
+                                {% elif order.status == 'SHIPPED' %}
+                                <span class="shopify-badge blue">● In Transit</span>
+                                {% elif order.status == 'PROCESSING' %}
+                                <span class="shopify-badge indigo">● In Atelier QC</span>
+                                {% else %}
+                                <span class="shopify-badge amber">● Unfulfilled</span>
+                                {% endif %}
+                            </div>
+                            <span class="order-card-arrow">Manage &rarr;</span>
+                        </div>
+                    </a>
+                    {% empty %}
+                    <div class="order-card-empty">No orders found.</div>
+                    {% endfor %}
                 </div>
             </div>
         </div>
