@@ -3260,10 +3260,14 @@ body.filter-drawer-open {
         gap: 0.75rem !important;
         margin-bottom: 0.85rem !important;
         width: 100% !important;
+        max-width: 100% !important;
+        overflow: hidden !important;
     }
 
     .titles-and-tools .titles {
         width: 100% !important;
+        max-width: 100% !important;
+        overflow: hidden !important;
     }
 
     .shopify-standard-title {
