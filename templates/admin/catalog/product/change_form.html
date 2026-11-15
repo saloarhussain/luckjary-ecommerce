@@ -1,6 +1,8 @@
 {% extends "admin/change_form.html" %}
 {% load i18n admin_urls static admin_modify %}
 
+{% block nav-breadcrumbs %}{% endblock %}
+
 {% block extrahead %}
 {{ block.super }}
 <style>
@@ -440,6 +442,9 @@
     align-items: center;
     justify-content: space-between;
     gap: 12px;
+    flex-wrap: wrap;
+    max-width: 100%;
+    box-sizing: border-box;
 }
 
 .lux-framework-info-left {
@@ -455,13 +460,26 @@
     background: rgba(16, 185, 129, 0.15);
     color: #10B981;
     border: 1px solid rgba(16, 185, 129, 0.35);
-    padding: 3px 10px;
+    padding: 4px 10px;
     border-radius: 9999px;
     font-size: 10.5px;
     font-weight: 700;
-    letter-spacing: 0.04em;
+    letter-spacing: 0.03em;
     text-transform: uppercase;
-    white-space: nowrap;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    white-space: normal !important;
+    word-break: break-word !important;
+    max-width: 100%;
+    box-sizing: border-box;
+    line-height: 1.3;
+}
+
+.lux-framework-sync-badge.badge-pending {
+    background: rgba(197, 160, 89, 0.15) !important;
+    color: #E2B755 !important;
+    border-color: rgba(197, 160, 89, 0.35) !important;
 }
 
 /* Adaptive Primary Specification Field Card */
@@ -1309,21 +1327,75 @@ select option,
     transform: scale(1.1) !important;
 }
 
-/* Hide duplicate standard H1 on change form since shopify-top-page-header has it */
-.titles-and-tools .shopify-standard-title {
+/* Hide duplicate standard H1 and redundant breadcrumbs on change form */
+.titles-and-tools .shopify-standard-title,
+.shopify-breadcrumbs-nav,
+div.breadcrumbs {
     display: none !important;
 }
 
-/* Responsive & Mobile Layout */
+/* ========================================================
+   RESPONSIVE & MOBILE LAYOUT OPTIMIZATIONS (<= 768px)
+   ======================================================== */
 @media (max-width: 768px) {
+    /* Compact Atelier Suite Banner on mobile to save vertical space */
+    .lux-admin-banner {
+        flex-direction: row !important;
+        align-items: center !important;
+        justify-content: space-between !important;
+        gap: 8px !important;
+        padding: 8px 12px !important;
+        margin-bottom: 12px !important;
+        border-radius: 8px !important;
+        box-sizing: border-box !important;
+        width: 100% !important;
+    }
+    .lux-admin-banner-left {
+        display: flex !important;
+        align-items: center !important;
+        gap: 8px !important;
+        width: auto !important;
+        flex: 1 1 auto !important;
+        min-width: 0 !important;
+    }
+    .lux-admin-banner-icon {
+        width: 28px !important;
+        height: 28px !important;
+        font-size: 14px !important;
+        border-radius: 6px !important;
+        flex-shrink: 0 !important;
+    }
+    .lux-admin-banner h3 {
+        font-size: 12px !important;
+        white-space: nowrap !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+        margin: 0 !important;
+    }
+    .lux-admin-banner p {
+        display: none !important;
+    }
+    .lux-admin-badge-gold {
+        font-size: 9px !important;
+        padding: 3px 8px !important;
+        flex-shrink: 0 !important;
+        margin-top: 0 !important;
+        align-self: center !important;
+    }
+
+    /* Top Sticky Page Header Bar */
     .shopify-top-page-header {
+        display: flex !important;
         flex-direction: column !important;
         align-items: stretch !important;
-        gap: 12px !important;
-        padding: 12px 14px !important;
+        gap: 10px !important;
+        padding: 10px 12px !important;
         margin-bottom: 14px !important;
-        width: 100% !important;
+        background: #141620 !important;
+        border: 1px solid #232736 !important;
+        border-radius: 8px !important;
         box-sizing: border-box !important;
+        width: 100% !important;
     }
     .shopify-top-header-left {
         display: flex !important;
@@ -1335,57 +1407,84 @@ select option,
     }
     .shopify-back-btn {
         padding: 6px 10px !important;
-        font-size: 11.5px !important;
+        font-size: 11px !important;
         flex-shrink: 0 !important;
+        border-radius: 5px !important;
     }
     .shopify-page-title-wrap {
         display: flex !important;
-        flex-wrap: wrap !important;
         align-items: center !important;
         gap: 6px !important;
-        min-width: 0 !important;
         flex: 1 1 auto !important;
+        justify-content: flex-end !important;
+        min-width: 0 !important;
     }
     .shopify-page-title {
-        font-size: 1.05rem !important;
-        line-height: 1.3 !important;
-        word-break: break-word !important;
-        white-space: normal !important;
+        font-size: 14.5px !important;
+        font-weight: 700 !important;
+        color: #FAF9F6 !important;
+        margin: 0 !important;
+        white-space: nowrap !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
     }
     .shopify-status-indicator {
-        font-size: 10px !important;
-        padding: 2px 8px !important;
+        font-size: 9.5px !important;
+        padding: 2px 7px !important;
         flex-shrink: 0 !important;
     }
     .shopify-top-header-actions {
-        display: flex !important;
-        flex-direction: row !important;
-        align-items: center !important;
+        display: grid !important;
+        grid-template-columns: 1fr 2fr !important;
         gap: 8px !important;
         width: 100% !important;
     }
     .shopify-btn-discard {
-        flex: 1 1 0 !important;
-        height: 42px !important;
+        width: 100% !important;
+        height: 38px !important;
+        padding: 0 10px !important;
+        font-size: 12px !important;
+        font-weight: 600 !important;
+        border-radius: 6px !important;
         display: inline-flex !important;
         align-items: center !important;
         justify-content: center !important;
         text-align: center !important;
-        padding: 0 12px !important;
         box-sizing: border-box !important;
-        font-size: 13px !important;
     }
     .shopify-btn-save {
-        flex: 2 1 0 !important;
-        height: 42px !important;
+        width: 100% !important;
+        height: 38px !important;
+        padding: 0 14px !important;
+        font-size: 12.5px !important;
+        font-weight: 700 !important;
+        border-radius: 6px !important;
         display: inline-flex !important;
         align-items: center !important;
         justify-content: center !important;
         text-align: center !important;
-        padding: 0 16px !important;
         box-sizing: border-box !important;
-        font-size: 13px !important;
     }
+
+    /* 2-Column Shopify Grid to 1-Column Fluid Stack */
+    .shopify-product-form-grid {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 16px !important;
+        margin-top: 10px !important;
+        width: 100% !important;
+        max-width: 100% !important;
+    }
+    .shopify-main-col,
+    .shopify-sidebar-col {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 16px !important;
+        width: 100% !important;
+        max-width: 100% !important;
+    }
+
+    /* Card Padding & Box Sizing */
     .shopify-card-title-desc,
     .shopify-card-metals,
     .shopify-card-sizing,
@@ -1399,39 +1498,130 @@ select option,
     .inline-group,
     .lux-studio-container,
     .lux-sizing-studio {
-        padding: 12px 14px !important;
+        padding: 14px 14px !important;
+        border-radius: 8px !important;
         width: 100% !important;
+        max-width: 100% !important;
         box-sizing: border-box !important;
     }
-    .lux-admin-banner {
-        flex-direction: column !important;
-        align-items: flex-start !important;
-        gap: 10px !important;
-        padding: 12px 14px !important;
-        width: 100% !important;
-        box-sizing: border-box !important;
+
+    .shopify-card-title-desc h2,
+    .shopify-card-metals h2,
+    .shopify-card-sizing h2,
+    .shopify-card-gemstones h2,
+    .shopify-card-seo h2,
+    .shopify-card-care h2,
+    .shopify-side-status h2,
+    .shopify-side-pricing h2,
+    .shopify-side-inventory h2,
+    .shopify-side-organization h2,
+    .inline-group h2 {
+        font-size: 13px !important;
+        padding-bottom: 10px !important;
+        margin-bottom: 12px !important;
     }
-    .lux-admin-banner-left {
-        width: 100% !important;
-        gap: 10px !important;
-    }
-    .lux-admin-badge-gold {
-        align-self: flex-start !important;
-        margin-top: 2px !important;
-    }
+
+    /* Sizing Framework Info Banner & Badges (Image 2 Fix) */
     .lux-framework-info-banner {
+        display: flex !important;
         flex-direction: column !important;
-        align-items: flex-start !important;
-        gap: 8px !important;
+        align-items: stretch !important;
+        gap: 10px !important;
+        padding: 10px 12px !important;
+        margin-bottom: 14px !important;
+        border-radius: 6px !important;
         width: 100% !important;
+        max-width: 100% !important;
         box-sizing: border-box !important;
+        overflow: hidden !important;
     }
     .lux-framework-info-left {
+        display: flex !important;
+        align-items: center !important;
+        gap: 10px !important;
         width: 100% !important;
     }
     .lux-framework-sync-badge {
+        display: inline-flex !important;
+        align-items: center !important;
         align-self: flex-start !important;
+        gap: 4px !important;
+        padding: 4px 10px !important;
+        font-size: 10.5px !important;
+        font-weight: 700 !important;
+        letter-spacing: 0.03em !important;
+        border-radius: 9999px !important;
+        white-space: normal !important;
+        word-break: break-word !important;
+        max-width: 100% !important;
+        box-sizing: border-box !important;
+        line-height: 1.3 !important;
     }
+
+    /* Band Profile & Quick Presets (Image 2 Fix) */
+    .lux-adaptive-spec-box {
+        padding: 12px 12px !important;
+        margin-bottom: 14px !important;
+        border-radius: 6px !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
+    }
+    .lux-spec-box-header {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: space-between !important;
+        gap: 8px !important;
+        width: 100% !important;
+    }
+    .lux-spec-badges-row {
+        display: flex !important;
+        flex-wrap: wrap !important;
+        gap: 6px !important;
+        width: 100% !important;
+        margin-top: 8px !important;
+    }
+    .btn-spec-preset {
+        padding: 6px 10px !important;
+        font-size: 11px !important;
+        line-height: 1.3 !important;
+        white-space: normal !important;
+        text-align: left !important;
+        max-width: 100% !important;
+        box-sizing: border-box !important;
+    }
+
+    /* Ring Sizes Quick Suites & Chips */
+    .lux-sizes-suite-box {
+        padding: 12px 12px !important;
+        border-radius: 6px !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
+    }
+    .lux-sizes-suite-header {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        gap: 6px !important;
+        width: 100% !important;
+    }
+    .lux-suite-quick-presets {
+        display: flex !important;
+        flex-wrap: wrap !important;
+        gap: 6px !important;
+        width: 100% !important;
+    }
+    .lux-chips-grid {
+        display: flex !important;
+        flex-wrap: wrap !important;
+        gap: 6px !important;
+        width: 100% !important;
+    }
+    .lux-interactive-chip {
+        padding: 6px 10px !important;
+        font-size: 11px !important;
+    }
+
+    /* Form Rows & Full-Width Inputs */
     .aligned .form-row,
     .aligned .form-row > div,
     .form-row,
@@ -1439,7 +1629,7 @@ select option,
         display: flex !important;
         flex-direction: column !important;
         align-items: stretch !important;
-        gap: 6px !important;
+        gap: 5px !important;
         width: 100% !important;
         max-width: 100% !important;
         box-sizing: border-box !important;
@@ -1448,14 +1638,17 @@ select option,
     .form-row label {
         float: none !important;
         width: 100% !important;
-        margin: 0 0 4px 0 !important;
+        margin: 0 0 3px 0 !important;
         padding: 0 !important;
         display: block !important;
+        font-size: 12px !important;
     }
     .aligned .form-row input[type="text"],
+    .aligned .form-row input[type="number"],
     .aligned .form-row textarea,
     .aligned .form-row select,
     .form-row input[type="text"],
+    .form-row input[type="number"],
     .form-row textarea,
     .form-row select,
     .vTextField,
@@ -1466,22 +1659,57 @@ select option,
         max-width: 100% !important;
         margin-left: 0 !important;
         box-sizing: border-box !important;
+        font-size: 13px !important;
     }
-    .lux-pills-grid {
-        grid-template-columns: 1fr !important;
+
+    /* Product Organization on Mobile */
+    .shopify-side-organization {
+        padding: 14px 14px !important;
+        border-radius: 8px !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
     }
+    .shopify-side-organization .form-row {
+        margin-bottom: 12px !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
+    }
+    .shopify-side-organization select,
+    .related-widget-wrapper select {
+        height: 38px !important;
+        min-height: 38px !important;
+        font-size: 13px !important;
+    }
+    .related-widget-wrapper {
+        display: flex !important;
+        align-items: center !important;
+        gap: 6px !important;
+        width: 100% !important;
+        flex-wrap: nowrap !important;
+    }
+    .related-widget-wrapper select {
+        flex: 1 1 auto !important;
+        min-width: 0 !important;
+    }
+    .related-widget-wrapper-link {
+        flex-shrink: 0 !important;
+        width: 26px !important;
+        height: 26px !important;
+    }
+
+    /* Google SERP Preview */
     .lux-google-serp-box {
         padding: 12px 12px !important;
         word-break: break-word !important;
         overflow-wrap: break-word !important;
     }
     .lux-google-title {
-        font-size: 15px !important;
+        font-size: 14px !important;
         white-space: normal !important;
         word-break: break-word !important;
     }
     .lux-google-snippet {
-        font-size: 12px !important;
+        font-size: 11.5px !important;
         white-space: normal !important;
         word-break: break-word !important;
     }
@@ -1489,13 +1717,7 @@ select option,
 
 @media (max-width: 480px) {
     .shopify-top-page-header {
-        padding: 10px 12px !important;
-    }
-    .shopify-top-header-left {
-        flex-wrap: wrap !important;
-    }
-    .shopify-page-title {
-        font-size: 0.98rem !important;
+        padding: 8px 10px !important;
     }
     .shopify-card-title-desc,
     .shopify-card-metals,
@@ -1510,7 +1732,7 @@ select option,
     .inline-group,
     .lux-studio-container,
     .lux-sizing-studio {
-        padding: 10px 10px !important;
+        padding: 12px 10px !important;
     }
     .lux-custom-metal-box {
         flex-direction: column !important;
@@ -1826,11 +2048,13 @@ select option,
         var fw = FRAMEWORKS[activeMode] || FRAMEWORKS.ring;
 
         // Detect friendly category name for display
-        var catDisplay = fw.name;
-        if (categorySelect && categorySelect.selectedIndex >= 0) {
+        var isRealCategory = false;
+        var catDisplay = '';
+        if (categorySelect && categorySelect.selectedIndex >= 0 && categorySelect.value && categorySelect.value !== '') {
             var optText = (categorySelect.options[categorySelect.selectedIndex].text || '').trim();
-            if (optText && optText !== '---------') {
+            if (optText && optText !== '---------' && optText.toLowerCase().indexOf('select') === -1) {
                 catDisplay = optText;
+                isRealCategory = true;
             }
         }
 
@@ -1858,17 +2082,19 @@ select option,
             }
 
             var html = '';
-            html += '<div style="background: rgba(16, 185, 129, 0.08); border-left: 3px solid #10B981; padding: 18px 20px; border-radius: 8px; display:flex; align-items:center; justify-content:space-between; gap:16px; flex-wrap:wrap;">';
-            html += '  <div style="display:flex; align-items:center; gap:14px;">';
-            html += '    <span style="font-size:26px;">' + noticeIcon + '</span>';
-            html += '    <div>';
-            html += '      <strong style="color:#FAF9F6; display:block; font-size:14px; margin-bottom:3px;">' + noticeTitle + '</strong>';
-            html += '      <span style="font-size:12px; color:#A7F3D0; line-height:1.5;">' + noticeSubtitle + '</span>';
+            html += '<div style="background: rgba(16, 185, 129, 0.08); border-left: 3px solid #10B981; padding: 14px 16px; border-radius: 8px; display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; box-sizing:border-box; width:100%;">';
+            html += '  <div style="display:flex; align-items:center; gap:12px; flex:1 1 auto; min-width:0;">';
+            html += '    <span style="font-size:24px; flex-shrink:0;">' + noticeIcon + '</span>';
+            html += '    <div style="min-width:0;">';
+            html += '      <strong style="color:#FAF9F6; display:block; font-size:13.5px; margin-bottom:2px;">' + noticeTitle + '</strong>';
+            html += '      <span style="font-size:11.5px; color:#A7F3D0; line-height:1.4; display:block;">' + noticeSubtitle + '</span>';
             html += '    </div>';
             html += '  </div>';
-            html += '  <span style="display:inline-flex; align-items:center; gap:6px; padding:6px 12px; background:#1C202B; border:1px solid #2E364A; border-radius:6px; color:#CBD5E1; font-size:11px; font-weight:600;">';
-            html += '    ✓ Auto-Linked: ' + catDisplay;
-            html += '  </span>';
+            if (isRealCategory) {
+                html += '  <span class="lux-framework-sync-badge">✓ Linked: <strong style="color:#FAF9F6; margin-left:3px;">' + catDisplay + '</strong></span>';
+            } else {
+                html += '  <span class="lux-framework-sync-badge badge-pending">✦ ' + fw.name + ' Sizing Active</span>';
+            }
             html += '</div>';
 
             sizingStudio.innerHTML = html;
@@ -1883,13 +2109,17 @@ select option,
         // 1. Info Banner with Category Auto-Sync Indicator (Replaces redundant manual framework tabs)
         html += '<div class="lux-framework-info-banner">';
         html += '  <div class="lux-framework-info-left">';
-        html += '    <span style="font-size:22px;">' + fw.icon + '</span>';
-        html += '    <div>';
+        html += '    <span style="font-size:22px; flex-shrink:0;">' + fw.icon + '</span>';
+        html += '    <div style="min-width:0;">';
         html += '      <strong style="color:#FAF9F6; display:block; font-size:13.5px; margin-bottom:2px;">' + fw.title + '</strong>';
-        html += '      <span style="font-size:11.5px; color:#CBD5E1;">' + fw.subtitle + '</span>';
+        html += '      <span style="font-size:11.5px; color:#CBD5E1; display:block; line-height:1.3;">' + fw.subtitle + '</span>';
         html += '    </div>';
         html += '  </div>';
-        html += '  <span class="lux-framework-sync-badge">✓ Auto-Linked to Category: <strong style="color:#FAF9F6; margin-left:4px;">' + catDisplay + '</strong></span>';
+        if (isRealCategory) {
+            html += '  <span class="lux-framework-sync-badge">✓ Linked: <strong style="color:#FAF9F6; margin-left:3px;">' + catDisplay + '</strong></span>';
+        } else {
+            html += '  <span class="lux-framework-sync-badge badge-pending">✦ ' + fw.name + ' Framework Active</span>';
+        }
         html += '</div>';
 
         // 3. Adaptive Primary Specification Box
