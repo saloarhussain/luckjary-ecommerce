@@ -1,5 +1,6 @@
 from django.db import models
 from django.conf import settings
+from decimal import Decimal
 from catalog.models import Product
 import uuid
 import datetime
@@ -127,7 +128,9 @@ class OrderItem(models.Model):
 
     @property
     def line_total(self):
-        return self.unit_price * self.quantity
+        if self.unit_price is None:
+            return Decimal('0.00')
+        return self.unit_price * (self.quantity or 1)
 
     def __str__(self):
         return f"{self.quantity}x {self.product_name} in {self.order.order_number}"

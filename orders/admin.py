@@ -9,6 +9,12 @@ class OrderItemInline(admin.TabularInline):
     extra = 0
     readonly_fields = ('product_name', 'product_sku', 'unit_price', 'quantity', 'line_total')
 
+    @admin.display(description='Line Total')
+    def line_total(self, obj):
+        if obj and obj.unit_price is not None:
+            return f"${(obj.unit_price * (obj.quantity or 1)):,.2f}"
+        return "$0.00"
+
 class OrderStatusUpdateInline(admin.TabularInline):
     model = OrderStatusUpdate
     extra = 1
