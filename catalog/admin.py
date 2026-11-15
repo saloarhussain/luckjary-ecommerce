@@ -6,17 +6,15 @@ from .models import Category, Material, Collection, Product, ProductImage, Produ
 
 class ProductAdminForm(forms.ModelForm):
     STANDARD_METALS = [
-        ('925 Sterling Silver', '925 Sterling Silver'),
-        ('925 Sterling Silver (Rhodium Finish)', '925 Sterling Silver (Rhodium Finish)'),
-        ('925 Sterling Silver (High Polish)', '925 Sterling Silver (High Polish)'),
+        ('925 Sterling Silver', '925 Solid Sterling Silver'),
     ]
 
     metal_presets = forms.MultipleChoiceField(
         choices=STANDARD_METALS,
         widget=forms.CheckboxSelectMultiple(attrs={'class': 'admin-checkbox-grid'}),
         required=False,
-        label="925 Sterling Silver Specifications",
-        help_text="Genuine 925 Purity Sterling Silver (100% Silver Tone). Select client-facing finish options."
+        label="925 Sterling Silver Specification",
+        help_text="Genuine 925 Purity Solid Sterling Silver."
     )
 
     class Meta:
@@ -36,13 +34,9 @@ class ProductAdminForm(forms.ModelForm):
                 'placeholder': 'e.g. 5A Flawless Cubic Zirconia (CZ)',
                 'style': 'width: 100%;'
             }),
-            'carat_weight': forms.TextInput(attrs={
-                'placeholder': 'e.g. 1.25 ctw (Diamond Equivalent)',
-                'style': 'width: 100%;'
-            }),
             'description': forms.Textarea(attrs={
                 'rows': 5,
-                'placeholder': 'Write a compelling description highlighting 925 sterling silver hallmarking, rhodium anti-tarnish finish, and styling advice...',
+                'placeholder': 'Write a compelling description highlighting 925 solid sterling silver hallmarking, brilliant cubic zirconia setting, and styling advice...',
                 'style': 'width: 100%; font-size: 0.85rem; line-height: 1.5;'
             }),
             'meta_title': forms.TextInput(attrs={
@@ -51,11 +45,11 @@ class ProductAdminForm(forms.ModelForm):
             }),
             'meta_description': forms.Textarea(attrs={
                 'rows': 3,
-                'placeholder': 'e.g. Discover the handcrafted Seraphina Pavé Ring in 925 solid sterling silver with rhodium anti-tarnish finish at Luckjary.',
+                'placeholder': 'e.g. Discover the handcrafted Seraphina Pavé Ring in 925 solid sterling silver with flawless cubic zirconia at Luckjary.',
                 'style': 'width: 100%;'
             }),
             'meta_keywords': forms.TextInput(attrs={
-                'placeholder': 'e.g. silver jewelry, 925 sterling silver, silver ring, rhodium finish, handcrafted silver',
+                'placeholder': 'e.g. silver jewelry, 925 sterling silver, silver ring, cubic zirconia, cz diamond, handcrafted silver',
                 'style': 'width: 100%;'
             }),
             'sku': forms.TextInput(attrs={
@@ -63,7 +57,7 @@ class ProductAdminForm(forms.ModelForm):
                 'style': 'width: 100%; font-family: monospace; font-weight: 600; letter-spacing: 0.05em;'
             }),
             'available_metals': forms.TextInput(attrs={
-                'placeholder': 'e.g. 925 Sterling Silver, 925 Sterling Silver (Rhodium Finish)',
+                'placeholder': 'e.g. 925 Sterling Silver',
                 'style': 'width: 100%;'
             }),
             'available_sizes': forms.Textarea(attrs={
@@ -78,49 +72,19 @@ class ProductAdminForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        if self.instance and self.instance.pk:
-            current = self.instance.metal_options
-            matched = []
-            for c in self.STANDARD_METALS:
-                val = c[0]
-                if val in current:
-                    matched.append(val)
-                elif 'Silver' in val and any('Silver' in m for m in current):
-                    matched.append(val)
-            self.fields['metal_presets'].initial = matched if matched else ['925 Sterling Silver']
-        else:
-            self.fields['metal_presets'].initial = [
-                '925 Sterling Silver',
-                '925 Sterling Silver (Rhodium Finish)'
-            ]
-            if 'gemstone' in self.fields:
-                self.fields['gemstone'].initial = '5A Flawless Cubic Zirconia (CZ)'
-            if 'carat_weight' in self.fields:
-                self.fields['carat_weight'].initial = '1.25 ctw'
+        self.fields['metal_presets'].initial = ['925 Sterling Silver']
+        if 'gemstone' in self.fields:
+            self.fields['gemstone'].initial = '5A Flawless Cubic Zirconia (CZ)'
 
     def clean(self):
         cleaned_data = super().clean()
-        presets = cleaned_data.get('metal_presets') or []
-        custom_metals = cleaned_data.get('available_metals') or ''
-        karat = (cleaned_data.get('karat_metal') or '').strip()
-        
-        # Combine presets with custom metals entered
-        existing = [m.strip() for m in custom_metals.split(',') if m.strip()]
-        combined = []
-        for p in presets:
-            if p not in combined:
-                combined.append(p)
-        for e in existing:
-            if e not in combined:
-                combined.append(e)
-                
-        if not combined:
-            combined = ['925 Sterling Silver']
-            
-        cleaned_data['available_metals'] = ', '.join(combined)
-        if not karat or '18K' in karat or '22K' in karat or 'Gold' in karat:
-            cleaned_data['karat_metal'] = combined[0]
-            
+        cleaned_data['metal_presets'] = ['925 Sterling Silver']
+        cleaned_data['available_metals'] = '925 Sterling Silver'
+        cleaned_data['karat_metal'] = '925 Sterling Silver'
+        cleaned_data['carat_weight'] = ''
+        cleaned_data['dimensions'] = ''
+        if not cleaned_data.get('certification'):
+            cleaned_data['certification'] = 'Luckjary 925 Hallmark & Authenticity Guarantee'
         return cleaned_data
 
 class ProductImageInline(admin.TabularInline):
@@ -161,29 +125,28 @@ class ProductAdmin(admin.ModelAdmin):
                 'description',
             )
         }),
-        ('✨ Precious Metals & Live Swatches', {
+        ('✨ Precious Metal Specification', {
             'classes': ('shopify-card-metals',),
-            'description': 'Select which precious metal variants are offered for this piece. Clients can switch between these metals with live swatches on the boutique product page.',
+            'description': 'Exclusively authentic 925 Solid Sterling Silver (100% Genuine 925 Hallmark).',
             'fields': (
                 'metal_presets',
                 'karat_metal',
                 'available_metals',
             )
         }),
-        ('📏 Sizing Framework & Specifications', {
+        ('📏 Sizing Framework & Sizing Range', {
             'classes': ('shopify-card-sizing',),
-            'description': 'Configure available ring sizes (US 4 to 13 with half-sizes), necklace chain lengths, or custom dimensions. Leave Available Sizes blank to automatically provide the complete standard size range for this jewelry piece.',
+            'description': 'Configure available ring sizes (US 4 to 13 with half-sizes), necklace chain lengths, or custom sizes. Leave Available Sizes blank to automatically provide the complete standard size range for this jewelry piece.',
             'fields': (
                 ('size_category', 'chain_length_or_size'),
                 'available_sizes',
-                ('dimensions', 'certification'),
             )
         }),
         ('💎 Gemstones & Specialty Materials', {
             'classes': ('shopify-card-gemstones',),
-            'description': 'Specify featured Cubic Zirconia stone grades and diamond-equivalent carat weight. (All creations are crafted exclusively in 925 Solid Sterling Silver).',
+            'description': 'Specify featured Cubic Zirconia stone details. (All creations are crafted exclusively in 925 Solid Sterling Silver).',
             'fields': (
-                ('gemstone', 'carat_weight'),
+                'gemstone',
             )
         }),
         ('🔍 Search Engine Listing Preview', {

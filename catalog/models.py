@@ -111,17 +111,17 @@ class Product(models.Model):
     is_new_arrival = models.BooleanField(default=False)
     
     # Luxury Specifications & Precious Metals
-    karat_metal = models.CharField(max_length=120, default='925 Sterling Silver', help_text="Default primary metal for this piece")
+    karat_metal = models.CharField(max_length=120, default='925 Sterling Silver', help_text="Exclusively 925 Solid Sterling Silver")
     available_metals = models.CharField(
         max_length=400, 
         blank=True, 
-        default='925 Sterling Silver, 925 Sterling Silver (Rhodium Finish)',
-        help_text="Comma-separated precious metal options available to the client on the product page. e.g. 925 Sterling Silver, 925 Sterling Silver (Rhodium Finish)"
+        default='925 Sterling Silver',
+        help_text="Precious metal options available to the client on the product page."
     )
     gemstone = models.CharField(max_length=150, blank=True, default='5A Flawless Cubic Zirconia (CZ)')
-    carat_weight = models.CharField(max_length=60, blank=True, default='1.25 ctw')
+    carat_weight = models.CharField(max_length=60, blank=True, default='')
     
-    # Sizing & Dimensions
+    # Sizing & Specifications
     size_category = models.CharField(
         max_length=30, 
         choices=SIZE_CATEGORY_CHOICES, 
@@ -134,8 +134,8 @@ class Product(models.Model):
         help_text="Custom sizes (one per line or comma-separated). Leave blank to automatically generate full standard sizing range for this category (e.g. US 4 through 13 with half-sizes for rings)."
     )
     chain_length_or_size = models.CharField(max_length=100, blank=True, default='')
-    dimensions = models.CharField(max_length=100, blank=True, default='14.5mm x 9.2mm')
-    certification = models.CharField(max_length=120, default='Luckjary Seal & Certificate of Authenticity')
+    dimensions = models.CharField(max_length=100, blank=True, default='')
+    certification = models.CharField(max_length=120, default='Luckjary 925 Hallmark & Authenticity Guarantee')
 
     # Descriptions
     description = models.TextField()
