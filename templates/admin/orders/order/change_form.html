@@ -3,729 +3,1492 @@
 
 {% block nav-breadcrumbs %}{% endblock %}
 {% block breadcrumbs %}{% endblock %}
+{% block content_title %}{% endblock %}
 {% block content_subtitle %}{% endblock %}
-
-{% block content_title %}
-<div class="lux-order-console-header">
-    <!-- Top Compact Navigation Strip -->
-    <div class="lux-order-back-bar">
-        <a href="{% url 'admin:orders_order_changelist' %}" class="lux-back-link">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                <polyline points="15 18 9 12 15 6"></polyline>
-            </svg>
-            <span>Orders</span>
-        </a>
-        <span class="lux-back-sep">/</span>
-        <span class="lux-order-ref-code">{{ original.order_number|default:"New Order" }}</span>
-    </div>
-
-    <!-- Main Order Master Card -->
-    {% if original and original.id %}
-    <div class="lux-order-master-banner lux-order-banner-widget">
-        <div class="lux-banner-row-primary">
-            <div class="lux-banner-ref-group">
-                <span class="lux-banner-ordernum">{{ original.order_number }}</span>
-                <div class="lux-banner-status-pills">
-                    {% if original.status == 'PENDING' %}
-                        <span class="badge-luxury badge-pending">⏳ Intake Queue</span>
-                    {% elif original.status == 'PROCESSING' %}
-                        <span class="badge-luxury badge-processing">◆ In Atelier QC</span>
-                    {% elif original.status == 'SHIPPED' %}
-                        <span class="badge-luxury badge-shipped">✈ Armored Transit</span>
-                    {% elif original.status == 'DELIVERED' %}
-                        <span class="badge-luxury badge-delivered">✓ Delivered</span>
-                    {% elif original.status == 'CANCELLED' %}
-                        <span class="badge-luxury badge-cancelled">✕ Cancelled</span>
-                    {% else %}
-                        <span class="badge-luxury badge-pending">{{ original.get_status_display }}</span>
-                    {% endif %}
-
-                    {% if original.payment_status == 'PAID' %}
-                        <span class="badge-luxury badge-paid">🔒 Paid</span>
-                    {% else %}
-                        <span class="badge-luxury badge-pending">{{ original.get_payment_status_display }}</span>
-                    {% endif %}
-                </div>
-            </div>
-
-            <div class="lux-banner-amount-group">
-                <span class="lux-amount-kicker">SETTLED TOTAL</span>
-                <div class="lux-amount-value">${{ original.total_amount|floatformat:2 }}</div>
-            </div>
-        </div>
-
-        <div class="lux-banner-row-secondary">
-            <div class="lux-banner-patron-info">
-                <div class="lux-patron-avatar-sm">{{ original.full_name|slice:":2"|upper|default:"VP" }}</div>
-                <div class="lux-patron-details-col">
-                    <span class="lux-patron-title-name">{{ original.full_name|default:"Valued Patron" }}</span>
-                    <span class="lux-order-meta-date">Placed {{ original.created_at|date:"M d, Y • H:i" }}</span>
-                </div>
-            </div>
-
-            <!-- Compact Inline Action Tools -->
-            <div class="lux-banner-actions">
-                {% if change and not is_popup %}
-                <a href="{% url opts|admin_urlname:'history' original.pk|admin_urlquote %}" class="lux-history-btn">
-                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <circle cx="12" cy="12" r="10"></circle>
-                        <polyline points="12 6 12 12 16 14"></polyline>
-                    </svg>
-                    <span>Audit Log</span>
-                </a>
-                {% endif %}
-
-                {% if original.tracking_number %}
-                <a href="/track/{{ original.order_number }}/" target="_blank" class="lux-track-quick-btn">
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
-                        <polyline points="15 3 21 3 21 9"></polyline>
-                        <line x1="10" y1="14" x2="21" y2="3"></line>
-                    </svg>
-                    <span>Track</span>
-                </a>
-                {% endif %}
-            </div>
-        </div>
-    </div>
-    {% else %}
-    <div class="lux-new-order-title">Create New Order</div>
-    {% endif %}
-</div>
-{% endblock %}
-
 {% block object-tools %}{% endblock %}
 
-{% block extrahead %}
-{{ block.super }}
+{% block content %}
+<div id="content-main" class="lux-atelier-screen">
+  <form {% if has_file_field %}enctype="multipart/form-data" {% endif %}action="{{ form_url }}" method="post" id="{{ opts.model_name }}_form" novalidate>
+    {% csrf_token %}
+    
+    <!-- Inline Management Forms for Django Formset Validation -->
+    {% for inline_admin_formset in inline_admin_formsets %}
+      {{ inline_admin_formset.formset.management_form }}
+      {% for inline_admin_form in inline_admin_formset %}
+        {% if inline_admin_form.original %}
+          {{ inline_admin_form.pk_field.field }}
+          {{ inline_admin_form.fk_field.field }}
+        {% endif %}
+      {% endfor %}
+    {% endfor %}
+
+    <!-- Top Ambient Radial Glow -->
+    <div class="lux-atelier-radial-glow"></div>
+
+    <div class="lux-atelier-content-wrap">
+      
+      <!-- ============================================================
+           1. HERO ORDER & PATRON IDENTITY CARD (MATCHING CODE.HTML)
+           ============================================================ -->
+      <section class="lux-card lux-hero-order-card lux-order-banner-widget" data-purpose="order-identity-card">
+        <!-- Subtle Atelier Watermark -->
+        <div class="lux-watermark-925">925</div>
+
+        <div class="lux-hero-inner">
+          <!-- Top Status Badges Row -->
+          <div class="lux-badges-top-bar">
+            <div class="lux-badge-fulfillment">
+              <span class="lux-pulse-dot"></span>
+              <span>
+                {% if original.status == 'PENDING' %}Fulfillment Queue
+                {% elif original.status == 'PROCESSING' %}Silversmith Bench (QC)
+                {% elif original.status == 'SHIPPED' %}Armored In-Transit
+                {% elif original.status == 'DELIVERED' %}Client Signed &amp; Delivered
+                {% elif original.status == 'CANCELLED' %}Order Cancelled
+                {% else %}{{ original.get_status_display }}
+                {% endif %}
+              </span>
+            </div>
+
+            <div class="lux-badge-settled">
+              <svg width="11" height="11" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" clip-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z"></path>
+              </svg>
+              <span>
+                {% if original.payment_status == 'PAID' %}Pre-Paid • Settled
+                {% elif original.payment_status == 'PENDING' %}Payment Pending
+                {% else %}{{ original.get_payment_status_display }}
+                {% endif %}
+              </span>
+            </div>
+          </div>
+
+          <!-- Order ID Headline -->
+          <h1 class="lux-order-headline-code">
+            {{ original.order_number|default:"NEW ATELIER ORDER" }}
+          </h1>
+
+          <!-- Settled Total Value Display -->
+          <div class="lux-total-split-row">
+            <div>
+              <p class="lux-kicker-mono">Settled Atelier Total</p>
+              <p class="lux-gold-total-price">
+                ${{ original.total_amount|floatformat:0 }}<span class="lux-cents">.{{ original.total_amount|stringformat:".2f"|slice:"-2:" }}</span>
+                <span class="lux-currency-code">USD</span>
+              </p>
+            </div>
+            <div class="lux-vault-escrow-badge">
+              Pre-Paid (Online Vault Escrow)
+            </div>
+          </div>
+
+          <!-- Patron Dossier -->
+          <div class="lux-patron-dossier-box lux-patron-summary-card">
+            <div class="lux-patron-header-row">
+              <div class="lux-patron-avatar-wrap">
+                <div class="lux-patron-avatar-disc">
+                  {{ original.full_name|slice:":2"|upper|default:"VP" }}
+                </div>
+                <div class="lux-patron-id-col">
+                  <div class="lux-patron-name-tier">
+                    <span class="lux-patron-name-txt">{{ original.full_name|default:"Valued Client" }}</span>
+                    {% if original.user %}
+                      <span class="lux-vip-tier-badge">VIP Patron #{{ original.user.id }}</span>
+                    {% else %}
+                      <span class="lux-vip-tier-badge">VIP Tier</span>
+                    {% endif %}
+                  </div>
+                  <p class="lux-placed-stamp">
+                    Placed {{ original.created_at|date:"M d, Y • H:i" }} UTC
+                  </p>
+                </div>
+              </div>
+
+              {% if change and not is_popup %}
+              <a href="{% url opts|admin_urlname:'history' original.pk|admin_urlquote %}" class="lux-audit-log-btn" title="View immutable ledger audit trail">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="9"></circle>
+                  <path d="M12 7v5l3 3" stroke-linecap="round"></path>
+                </svg>
+                <span>Audit Log</span>
+              </a>
+              {% endif %}
+            </div>
+
+            <!-- Patron Contact Actions (Tap to Email & Call) -->
+            <div class="lux-patron-contact-pills">
+              {% if original.email %}
+              <a href="mailto:{{ original.email }}" class="lux-contact-action-btn" title="Email {{ original.full_name }}">
+                <div class="lux-contact-btn-left">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                  </svg>
+                  <span class="lux-contact-val">{{ original.email }}</span>
+                </div>
+                <span class="lux-action-tag">Mail</span>
+              </a>
+              {% endif %}
+
+              {% if original.phone %}
+              <a href="tel:{{ original.phone }}" class="lux-contact-action-btn" title="Call {{ original.phone }}">
+                <div class="lux-contact-btn-left">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path>
+                  </svg>
+                  <span class="lux-contact-val">{{ original.phone }}</span>
+                </div>
+                <span class="lux-action-tag">Call</span>
+              </a>
+              {% endif %}
+            </div>
+
+            <!-- Immutable Security Notice -->
+            <div class="lux-patron-lock-tag">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#C5A059" stroke-width="2">
+                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+              </svg>
+              <span>Protected Patron Record: Identity non-editable for compliance &amp; ledger integrity.</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================================================
+           2. COMMISSIONED PIECE PREVIEW (MATCHING CODE.HTML)
+           ============================================================ -->
+      {% for item in original.items.all %}
+      <section class="lux-card lux-piece-preview-card" data-purpose="commissioned-piece-summary">
+        <div class="lux-piece-flex">
+          <!-- Piece Spec / Miniature Box -->
+          <div class="lux-piece-spec-box">
+            {% if item.product_image %}
+              <img src="{{ item.product_image }}" alt="{{ item.product_name }}" class="lux-piece-img-cover">
+            {% else %}
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#C5A059" stroke-width="1.5">
+                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" stroke-linecap="round" stroke-linejoin="round"></path>
+              </svg>
+              <span class="lux-spec-metal-tag">925 SILVER</span>
+            {% endif %}
+          </div>
+
+          <div class="lux-piece-details-col">
+            <div class="lux-piece-meta-row">
+              <span class="lux-piece-kicker">Jewellery Specification</span>
+              <span class="lux-piece-sku">SKU: {{ item.product_sku|default:"LCK-ATELIER-PIECE" }}</span>
+            </div>
+            <h2 class="lux-piece-title">{{ item.product_name }}</h2>
+            <div class="lux-piece-specs-line">
+              <span>Material: <strong class="lux-bold-spec">{{ item.selected_material|default:"Solid 925 Silver" }}</strong></span>
+              <span>•</span>
+              <span>Size: <strong class="lux-bold-spec">{{ item.selected_size|default:"Standard Atelier" }}</strong></span>
+              <span>•</span>
+              <span>Qty: <strong class="lux-bold-spec">{{ item.quantity }}</strong></span>
+              <span>•</span>
+              <span class="lux-gold-line-price">${{ item.line_total }}</span>
+            </div>
+          </div>
+        </div>
+      </section>
+      {% empty %}
+      <section class="lux-card lux-piece-preview-card">
+        <div class="lux-piece-flex">
+          <div class="lux-piece-spec-box">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#C5A059" stroke-width="1.5">
+              <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" stroke-linecap="round" stroke-linejoin="round"></path>
+            </svg>
+            <span class="lux-spec-metal-tag">925 SILVER</span>
+          </div>
+          <div class="lux-piece-details-col">
+            <div class="lux-piece-meta-row">
+              <span class="lux-piece-kicker">Custom Commission</span>
+              <span class="lux-piece-sku">SKU: LCK-SR-925</span>
+            </div>
+            <h2 class="lux-piece-title">Haute Joaillerie Atelier Commission</h2>
+            <div class="lux-piece-specs-line">
+              <span>Weight: 26.8g Ag • Inlay: Natural Obsidian • Size: UK T / US 9.5</span>
+            </div>
+          </div>
+        </div>
+      </section>
+      {% endfor %}
+
+      <!-- ============================================================
+           3. STAGE PROGRESSION PIPELINE (MATCHING CODE.HTML)
+           ============================================================ -->
+      <section class="lux-card lux-pipeline-card" data-purpose="production-pipeline-stepper">
+        <div class="lux-pipeline-header">
+          <h2 class="lux-pipeline-title">
+            <span class="lux-pipeline-dot"></span>
+            <span>Stage Progression Pipeline</span>
+          </h2>
+          <span class="lux-step-counter">
+            {% if original.status == 'PENDING' %}Step 1 of 4
+            {% elif original.status == 'PROCESSING' %}Step 2 of 4
+            {% elif original.status == 'SHIPPED' %}Step 3 of 4
+            {% elif original.status == 'DELIVERED' %}Step 4 of 4
+            {% else %}Intake Stage
+            {% endif %}
+          </span>
+        </div>
+
+        <!-- 4-Step Horizontal Pipeline Stepper -->
+        <div class="lux-stepper-wrap">
+          <!-- Background Inactive Track -->
+          <div class="lux-stepper-track-bg"></div>
+
+          <!-- Active Progress Highlight Bar -->
+          <div class="lux-stepper-track-active 
+            {% if original.status == 'PENDING' %}w-step-1
+            {% elif original.status == 'PROCESSING' %}w-step-2
+            {% elif original.status == 'SHIPPED' %}w-step-3
+            {% elif original.status == 'DELIVERED' %}w-step-4
+            {% else %}w-step-1
+            {% endif %}"></div>
+
+          <div class="lux-stepper-nodes">
+            <!-- Step 1: Intake -->
+            <div class="lux-node {% if original.status in 'PENDING,PROCESSING,SHIPPED,DELIVERED' %}node-active{% endif %}">
+              <div class="lux-node-circle">
+                <svg width="11" height="11" viewBox="0 0 20 20" fill="currentColor">
+                  <path fill-rule="evenodd" clip-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"></path>
+                </svg>
+              </div>
+              <span class="lux-node-label">Intake</span>
+            </div>
+
+            <!-- Step 2: Production -->
+            <div class="lux-node {% if original.status in 'PROCESSING,SHIPPED,DELIVERED' %}node-active{% else %}node-dim{% endif %}">
+              <div class="lux-node-circle">
+                {% if original.status in 'PROCESSING,SHIPPED,DELIVERED' %}
+                  <svg width="11" height="11" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" clip-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"></path>
+                  </svg>
+                {% else %}
+                  2
+                {% endif %}
+              </div>
+              <span class="lux-node-label">Production</span>
+            </div>
+
+            <!-- Step 3: Dispatch -->
+            <div class="lux-node {% if original.status in 'SHIPPED,DELIVERED' %}node-active{% else %}node-dim{% endif %}">
+              <div class="lux-node-circle">
+                {% if original.status in 'SHIPPED,DELIVERED' %}
+                  <svg width="11" height="11" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" clip-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"></path>
+                  </svg>
+                {% else %}
+                  3
+                {% endif %}
+              </div>
+              <span class="lux-node-label">Dispatch</span>
+            </div>
+
+            <!-- Step 4: Delivered -->
+            <div class="lux-node {% if original.status == 'DELIVERED' %}node-active{% else %}node-dim{% endif %}">
+              <div class="lux-node-circle">
+                {% if original.status == 'DELIVERED' %}
+                  <svg width="11" height="11" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" clip-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"></path>
+                  </svg>
+                {% else %}
+                  4
+                {% endif %}
+              </div>
+              <span class="lux-node-label">Delivered</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================================================
+           4. ORDER TELEMETRY & STAGE CONTROL FORM (MATCHING CODE.HTML)
+           ============================================================ -->
+      <section class="lux-card lux-telemetry-form-card" data-purpose="telemetry-management-form">
+        <div class="lux-telemetry-form-head">
+          <h2 class="lux-telemetry-title">ORDER TELEMETRY &amp; STAGE CONTROL</h2>
+          <span class="lux-live-sync-badge">
+            <span class="lux-live-dot"></span> Live Synced
+          </span>
+        </div>
+
+        <div class="lux-telemetry-fields">
+          <!-- Field 1: Production / Workflow Status -->
+          <div class="lux-field-group">
+            <label class="lux-field-label" for="id_status">Workflow Status</label>
+            <div class="lux-select-wrapper">
+              <select name="status" id="id_status" class="lux-control-select">
+                <option value="PENDING" {% if original.status == 'PENDING' %}selected{% endif %}>Pending Confirmation (Review Completed)</option>
+                <option value="PROCESSING" {% if original.status == 'PROCESSING' %}selected{% endif %}>Commenced at Silversmith Bench (QC)</option>
+                <option value="SHIPPED" {% if original.status == 'SHIPPED' %}selected{% endif %}>Armored Transit In Progress (Dispatched)</option>
+                <option value="DELIVERED" {% if original.status == 'DELIVERED' %}selected{% endif %}>Delivered &amp; Handed Over to Client</option>
+                <option value="CANCELLED" {% if original.status == 'CANCELLED' %}selected{% endif %}>Payment Reversal / Cancelled</option>
+              </select>
+              <div class="lux-select-chevron">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round"></path>
+                </svg>
+              </div>
+            </div>
+          </div>
+
+          <!-- Field 2: Payment Telemetry & Method -->
+          <div class="lux-field-group">
+            <label class="lux-field-label" for="id_payment_status">Payment Telemetry &amp; Method</label>
+            <div class="lux-select-wrapper">
+              <select name="payment_status" id="id_payment_status" class="lux-control-select">
+                <option value="PAID" {% if original.payment_status == 'PAID' %}selected{% endif %}>Pre-Payment (Card / Net Banking / Wire - Settled)</option>
+                <option value="PENDING" {% if original.payment_status == 'PENDING' %}selected{% endif %}>Pre-Payment (Hold Authorized - Settlement Pending)</option>
+                <option value="REFUNDED" {% if original.payment_status == 'REFUNDED' %}selected{% endif %}>Payment Reversal / Discharged</option>
+              </select>
+              <div class="lux-select-chevron">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round"></path>
+                </svg>
+              </div>
+            </div>
+            <input type="hidden" name="payment_method" value="{{ original.payment_method|default:'Secure Card Payment (Stripe Luxury)' }}">
+          </div>
+
+          <!-- Field 3: Designated Courier Service -->
+          <div class="lux-field-group">
+            <label class="lux-field-label" for="id_carrier">Designated Courier Service</label>
+            <div class="lux-select-wrapper">
+              <select name="carrier" id="id_carrier" class="lux-control-select">
+                <option value="FedEx Luxury Priority Overnight" {% if 'FedEx' in original.carrier %}selected{% endif %}>FedEx Luxury Priority Overnight (Air Signature)</option>
+                <option value="Malca-Amit Ultra-Secure Armored Transport" {% if 'Malca' in original.carrier %}selected{% endif %}>Malca-Amit Ultra-Secure Armored Transport</option>
+                <option value="Brink's Global Precious Metals Logistics" {% if 'Brink' in original.carrier %}selected{% endif %}>Brink's Global Precious Metals Logistics</option>
+                <option value="Ferrari Armored Logistics / White Glove" {% if 'Ferrari' in original.carrier %}selected{% endif %}>Ferrari Armored Logistics / White Glove</option>
+                <option value="DHL VIP Jet Express" {% if 'DHL' in original.carrier %}selected{% endif %}>DHL VIP Jet Express (International DDP)</option>
+              </select>
+              <div class="lux-select-chevron">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round"></path>
+                </svg>
+              </div>
+            </div>
+          </div>
+
+          <!-- Field 4: Courier Tracking Code -->
+          <div class="lux-field-group">
+            <div class="lux-field-label-split">
+              <label class="lux-field-label" for="id_tracking_number">Courier Tracking Code</label>
+              <span class="lux-dispatch-status-kicker">
+                {% if original.tracking_number %}Live Telemetry Active{% else %}Awaiting Dispatch Scan{% endif %}
+              </span>
+            </div>
+            <div class="lux-input-action-wrapper">
+              <input type="text" name="tracking_number" id="id_tracking_number" class="lux-control-input lux-mono-input" value="{{ original.tracking_number|default:'' }}" placeholder="Assign or paste tracking code...">
+              <button type="button" onclick="copyTrackingCode()" class="lux-btn-inline-copy" title="Copy tracking code">
+                Copy
+              </button>
+            </div>
+          </div>
+
+          <!-- Field 5: Real-Time Vault Tracking URL -->
+          <div class="lux-field-group">
+            <label class="lux-field-label" for="id_tracking_url">Real-time Vault Tracking URL</label>
+            <div class="lux-input-action-wrapper">
+              <input type="url" name="tracking_url" id="id_tracking_url" class="lux-control-input lux-mono-input" value="{{ original.tracking_url|default:'' }}" placeholder="https://...">
+              {% if original.tracking_url or original.tracking_number %}
+              <a href="{{ original.tracking_url|default:'#' }}" id="tracking-link-target" target="_blank" class="lux-btn-inline-icon" title="Open live tracking endpoint">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" stroke-linecap="round" stroke-linejoin="round"></path>
+                </svg>
+              </a>
+              {% endif %}
+            </div>
+          </div>
+
+          <!-- Field 6: Estimated Vault Delivery Date -->
+          <div class="lux-field-group">
+            <label class="lux-field-label" for="id_estimated_delivery">Estimated Vault Delivery Date</label>
+            <input type="date" name="estimated_delivery" id="id_estimated_delivery" class="lux-control-input" value="{{ original.estimated_delivery|date:'Y-m-d'|default:'' }}">
+          </div>
+
+          <!-- Internal Atelier Dispatch Quality Note -->
+          <div class="lux-qc-callout">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#C5A059" stroke-width="1.8" class="lux-qc-icon">
+              <path d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round"></path>
+            </svg>
+            <p class="lux-qc-p">
+              Each creation is inspected under 20x magnification for gemstone security and stamped 925 sterling silver purity before dispatch with a sealed Luckjary Certificate of Authenticity.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================================================
+           5. DELIVERY & DESTINATION DISPATCH ADDRESS (LUXURY CARD)
+           ============================================================ -->
+      <section class="lux-card lux-destination-card">
+        <div class="lux-telemetry-form-head">
+          <h2 class="lux-telemetry-title">DELIVERY &amp; DISPATCH DESTINATION</h2>
+          <span class="lux-dispatch-status-kicker">Insured White-Glove Transit</span>
+        </div>
+
+        <div class="lux-telemetry-fields">
+          <div class="lux-address-grid-2">
+            <div class="lux-field-group">
+              <label class="lux-field-label" for="id_shipping_street">Street Address</label>
+              <input type="text" name="shipping_street" id="id_shipping_street" class="lux-control-input" value="{{ original.shipping_street|default:'' }}" required>
+            </div>
+            <div class="lux-field-group">
+              <label class="lux-field-label" for="id_shipping_apartment">Apartment / Suite</label>
+              <input type="text" name="shipping_apartment" id="id_shipping_apartment" class="lux-control-input" value="{{ original.shipping_apartment|default:'' }}">
+            </div>
+          </div>
+
+          <div class="lux-address-grid-3">
+            <div class="lux-field-group">
+              <label class="lux-field-label" for="id_shipping_city">City</label>
+              <input type="text" name="shipping_city" id="id_shipping_city" class="lux-control-input" value="{{ original.shipping_city|default:'' }}" required>
+            </div>
+            <div class="lux-field-group">
+              <label class="lux-field-label" for="id_shipping_state">State / Region</label>
+              <input type="text" name="shipping_state" id="id_shipping_state" class="lux-control-input" value="{{ original.shipping_state|default:'' }}" required>
+            </div>
+            <div class="lux-field-group">
+              <label class="lux-field-label" for="id_shipping_zip">Postal Code</label>
+              <input type="text" name="shipping_zip" id="id_shipping_zip" class="lux-control-input lux-mono-input" value="{{ original.shipping_zip|default:'' }}" required>
+            </div>
+          </div>
+
+          <div class="lux-field-group">
+            <label class="lux-field-label" for="id_shipping_country">Destination Country</label>
+            <input type="text" name="shipping_country" id="id_shipping_country" class="lux-control-input" value="{{ original.shipping_country|default:'United States' }}" required>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================================================
+           6. ATELIER PRESENTATION & NOTES (LUXURY CARD)
+           ============================================================ -->
+      <section class="lux-card lux-notes-card">
+        <div class="lux-telemetry-form-head">
+          <h2 class="lux-telemetry-title">ATELIER DIRECTIVES &amp; NOTES</h2>
+          <span class="lux-dispatch-status-kicker">Vault Confidential</span>
+        </div>
+
+        <div class="lux-telemetry-fields">
+          <div class="lux-checkbox-wrap">
+            <input type="checkbox" name="gift_wrapping" id="id_gift_wrapping" class="lux-checkbox-input" {% if original.gift_wrapping %}checked{% endif %}>
+            <label class="lux-checkbox-label" for="id_gift_wrapping">
+              Complimentary Signature Gold Gift Box &amp; Wax-Sealed Certificate
+            </label>
+          </div>
+
+          <div class="lux-field-group">
+            <label class="lux-field-label" for="id_gift_message">Handwritten Gift Card Message</label>
+            <textarea name="gift_message" id="id_gift_message" rows="2" class="lux-control-textarea" placeholder="Gift card calligraphy inscription...">{{ original.gift_message|default:'' }}</textarea>
+          </div>
+
+          <div class="lux-field-group">
+            <label class="lux-field-label" for="id_internal_admin_notes">Internal Silversmith &amp; Fulfillment Directives</label>
+            <textarea name="internal_admin_notes" id="id_internal_admin_notes" rows="2" class="lux-control-textarea" placeholder="Private notes for jeweler atelier...">{{ original.internal_admin_notes|default:'' }}</textarea>
+          </div>
+
+          {% if original.customer_notes %}
+          <div class="lux-field-group">
+            <label class="lux-field-label">Customer Checkout Instructions</label>
+            <div class="lux-static-note-box">{{ original.customer_notes }}</div>
+          </div>
+          {% endif %}
+        </div>
+      </section>
+
+    </div><!-- /.lux-atelier-content-wrap -->
+
+    <!-- ============================================================
+         7. FIXED ACTION FOOTER (EXACT MATCHING CODE.HTML)
+         ============================================================ -->
+    <footer class="lux-fixed-action-footer">
+      <div class="lux-footer-inner">
+        <!-- Primary Action Button: Emerald Luxury Glow -->
+        <button type="submit" name="_save" class="lux-btn-emerald-primary" id="btn-save-telemetry">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path>
+          </svg>
+          <span>UPDATE ORDER TELEMETRY</span>
+        </button>
+
+        <!-- Secondary Action Button: Dark Champagne Subtle Outline -->
+        <button type="button" onclick="window.print()" class="lux-btn-champagne-secondary">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <path d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" stroke-linecap="round" stroke-linejoin="round"></path>
+          </svg>
+          <span>Print Certificate of Authenticity &amp; Packing Slip</span>
+        </button>
+      </div>
+    </footer>
+  </form>
+</div>
+
+<!-- Copy tracking code helper -->
+<script>
+function copyTrackingCode() {
+  var input = document.getElementById('id_tracking_number');
+  if (input && input.value) {
+    navigator.clipboard.writeText(input.value).then(function() {
+      var btn = document.querySelector('.lux-btn-inline-copy');
+      if (btn) {
+        var old = btn.textContent;
+        btn.textContent = 'Copied!';
+        btn.style.color = '#10B981';
+        setTimeout(function() {
+          btn.textContent = old;
+          btn.style.color = '';
+        }, 1500);
+      }
+    });
+  }
+}
+</script>
+
 <style>
 /* ====================================================================
-   LUCKJARY HAUTE JOAILLERIE - REFINED MOBILE ORDER CONSOLE
-   Engineered for 280px - 390px mobile screens without clutter or clipping
+   LUCKJARY HAUTE JOAILLERIE - ATELIER ORDER TELEMETRY STUDIO STYLES
+   Exact reproduction of stitch_luxury_atelier_admin_dashboard/code.html
    ==================================================================== */
 
-/* Hide redundant base titles and breadcrumbs */
-.titles-and-tools .shopify-standard-title,
-.titles-and-tools h1,
-.titles-and-tools h2,
-.shopify-breadcrumbs-nav,
-div.breadcrumbs {
-    display: none !important;
+/* Global container reset & setup */
+.lux-atelier-screen {
+  background-color: #07080A !important;
+  color: #E3E6EB !important;
+  font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif !important;
+  min-height: 100vh;
+  margin: -16px -16px 0 -16px !important;
+  padding: 0 0 130px 0 !important;
+  position: relative;
+  -webkit-font-smoothing: antialiased;
 }
 
-.titles-and-tools {
-    display: block !important;
-    margin: 0 0 12px 0 !important;
-    padding: 0 !important;
-    border: none !important;
-    width: 100% !important;
+@media (max-width: 640px) {
+  .lux-atelier-screen {
+    margin: -12px -8px 0 -8px !important;
+  }
 }
 
-/* 1. Top Navigation Bar */
-.lux-order-console-header {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    width: 100%;
-    box-sizing: border-box;
+.lux-atelier-radial-glow {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 220px;
+  background: radial-gradient(circle at 50% 0%, rgba(197, 160, 89, 0.10) 0%, rgba(11, 13, 16, 0) 70%);
+  pointer-events: none;
+  z-index: 1;
 }
 
-.lux-order-back-bar {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 6px 4px;
-    font-size: 0.75rem;
+.lux-atelier-content-wrap {
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 14px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  position: relative;
+  z-index: 2;
+  box-sizing: border-box;
 }
 
-.lux-back-link {
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
-    color: #C5A059;
-    text-decoration: none;
-    font-weight: 600;
-    font-size: 0.78rem;
-    transition: color 0.15s ease;
+/* Base Card Style matching code.html */
+.lux-card {
+  background: linear-gradient(180deg, #111317 0%, #0B0D10 100%) !important;
+  border: 1px solid #222836 !important;
+  border-radius: 16px !important;
+  padding: 16px !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45) !important;
+  box-sizing: border-box !important;
+  width: 100% !important;
+  position: relative;
+  overflow: hidden;
 }
 
-.lux-back-link:hover {
-    color: #DFBE76;
+/* -------------------------------------------------------------
+   1. HERO ORDER CARD
+   ------------------------------------------------------------- */
+.lux-hero-order-card {
+  padding: 16px 16px !important;
 }
 
-.lux-back-sep {
-    color: #475569;
-    font-size: 0.7rem;
+.lux-watermark-925 {
+  position: absolute;
+  right: -15px;
+  bottom: -20px;
+  color: #161920;
+  opacity: 0.35;
+  font-family: 'Cinzel', serif;
+  font-size: 8rem;
+  font-weight: 900;
+  line-height: 1;
+  pointer-events: none;
+  user-select: none;
+  z-index: 1;
 }
 
-.lux-order-ref-code {
-    color: #94A3B8;
-    font-family: monospace;
-    font-size: 0.75rem;
-    font-weight: 500;
+.lux-hero-inner {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
 
-/* 2. Unified Master Order Banner Card */
-.lux-order-master-banner {
-    background: linear-gradient(135deg, #141724 0%, #0F111C 100%);
-    border: 1px solid rgba(197, 160, 89, 0.35);
-    border-radius: 10px;
-    padding: 14px 16px;
-    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.4);
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    width: 100%;
-    box-sizing: border-box;
+.lux-badges-top-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  flex-wrap: wrap;
 }
 
-.lux-banner-row-primary {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    gap: 10px;
-    flex-wrap: wrap;
+.lux-badge-fulfillment {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 24px;
+  padding: 0 10px;
+  border-radius: 9999px;
+  font-size: 10px;
+  font-weight: 600;
+  background: rgba(245, 158, 11, 0.12);
+  color: #FCD34D;
+  border: 1px solid rgba(245, 158, 11, 0.35);
+  white-space: nowrap;
 }
 
-.lux-banner-ref-group {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    min-width: 0;
-    flex: 1 1 auto;
+.lux-pulse-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: #FBBF24;
+  box-shadow: 0 0 6px rgba(251, 191, 36, 0.8);
+  animation: luxPulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
 
-.lux-banner-ordernum {
-    font-family: monospace;
-    font-size: 1.12rem;
-    font-weight: 800;
-    color: #F8FAFC;
-    letter-spacing: 0.02em;
-    word-break: break-all;
-    line-height: 1.2;
+@keyframes luxPulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.4; transform: scale(0.85); }
 }
 
-.lux-banner-status-pills {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    flex-wrap: wrap;
+.lux-badge-settled {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  height: 24px;
+  padding: 0 10px;
+  border-radius: 9999px;
+  font-size: 10px;
+  font-weight: 600;
+  background: rgba(16, 185, 129, 0.12);
+  color: #34D399;
+  border: 1px solid rgba(16, 185, 129, 0.35);
+  white-space: nowrap;
 }
 
-.lux-banner-amount-group {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    gap: 2px;
-    flex-shrink: 0;
+.lux-order-headline-code {
+  font-family: 'Cinzel', serif !important;
+  font-size: 1.35rem !important;
+  font-weight: 700 !important;
+  color: #FFFFFF !important;
+  letter-spacing: 0.03em !important;
+  margin: 0 !important;
+  line-height: 1.2 !important;
+  word-break: break-all;
 }
 
-.lux-amount-kicker {
-    font-size: 0.62rem;
-    font-weight: 700;
-    color: #C5A059;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
+.lux-total-split-row {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 10px;
+  padding-top: 10px;
+  border-top: 1px solid #1F2432;
+  flex-wrap: wrap;
 }
 
-.lux-amount-value {
-    font-size: 1.25rem;
-    font-weight: 800;
-    color: #DFBE76;
-    letter-spacing: -0.01em;
-    line-height: 1.1;
+.lux-kicker-mono {
+  font-family: monospace;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #9CA3AF;
+  margin: 0 0 2px 0;
 }
 
-.lux-banner-row-secondary {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 10px;
-    flex-wrap: wrap;
-    padding-top: 10px;
-    border-top: 1px solid rgba(255, 255, 255, 0.08);
+.lux-gold-total-price {
+  font-family: 'Cinzel', serif;
+  font-size: 1.65rem;
+  font-weight: 700;
+  color: #C5A059;
+  margin: 0;
+  line-height: 1;
+  letter-spacing: -0.01em;
 }
 
-.lux-banner-patron-info {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    min-width: 0;
-    flex: 1 1 auto;
+.lux-cents {
+  font-size: 1.1rem;
+  color: rgba(197, 160, 89, 0.85);
 }
 
-.lux-patron-avatar-sm {
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    background: rgba(197, 160, 89, 0.18);
-    border: 1px solid #C5A059;
-    color: #DFBE76;
-    font-size: 0.78rem;
-    font-weight: 800;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
+.lux-currency-code {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 10px;
+  font-weight: 500;
+  color: #9CA3AF;
+  letter-spacing: 0.1em;
+  margin-left: 4px;
 }
 
-.lux-patron-details-col {
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-    min-width: 0;
+.lux-vault-escrow-badge {
+  font-family: monospace;
+  font-size: 10px;
+  color: #34D399;
+  background: rgba(6, 78, 59, 0.5);
+  border: 1px solid rgba(5, 150, 105, 0.4);
+  padding: 4px 8px;
+  border-radius: 6px;
+  white-space: nowrap;
 }
 
-.lux-patron-title-name {
-    font-size: 0.88rem;
-    font-weight: 700;
-    color: #F8FAFC;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+/* Patron Dossier Card */
+.lux-patron-dossier-box {
+  background: rgba(7, 8, 10, 0.7);
+  border: 1px solid #222736;
+  border-radius: 12px;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
-.lux-order-meta-date {
-    font-size: 0.68rem;
-    color: #94A3B8;
-    white-space: nowrap;
+.lux-patron-header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
 }
 
-.lux-banner-actions {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    flex-shrink: 0;
+.lux-patron-avatar-wrap {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+  flex: 1 1 auto;
 }
 
-.lux-history-btn,
-.lux-track-quick-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
-    background: #181B28;
-    border: 1px solid #2B3045;
-    color: #C5A059;
-    font-size: 0.72rem;
-    font-weight: 600;
-    padding: 5px 10px;
-    border-radius: 6px;
-    text-decoration: none;
-    transition: all 0.15s ease;
-    height: 28px;
-    box-sizing: border-box;
-    white-space: nowrap;
+.lux-patron-avatar-disc {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #161920 0%, #1E232E 100%);
+  border: 1px solid rgba(197, 160, 89, 0.35);
+  color: #C5A059;
+  font-family: 'Cinzel', serif;
+  font-size: 11px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
 }
 
-.lux-history-btn:hover,
-.lux-track-quick-btn:hover {
-    background: #202436;
-    border-color: rgba(197, 160, 89, 0.45);
-    color: #FAF9F6;
+.lux-patron-id-col {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
 }
 
-.lux-track-quick-btn {
-    background: rgba(197, 160, 89, 0.12);
-    border-color: rgba(197, 160, 89, 0.35);
-    color: #DFBE76;
+.lux-patron-name-tier {
+  display: flex;
+  align-items: center;
+  gap: 6px;
 }
 
-/* 3. Patron Summary Card (Read-Only) */
-.lux-patron-summary-card {
-    background: #111420;
-    border: 1px solid #262B3F;
-    border-radius: 10px;
-    padding: 14px 16px;
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    box-sizing: border-box;
-    width: 100%;
+.lux-patron-name-txt {
+  font-size: 12px;
+  font-weight: 700;
+  color: #FFFFFF;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-.lux-patron-main-row {
-    display: flex;
-    align-items: center;
-    gap: 12px;
+.lux-vip-tier-badge {
+  font-family: monospace;
+  font-size: 9px;
+  text-transform: uppercase;
+  background: rgba(58, 46, 22, 0.7);
+  color: #EBD29E;
+  border: 1px solid rgba(156, 122, 55, 0.45);
+  padding: 1px 5px;
+  border-radius: 4px;
+  white-space: nowrap;
 }
 
-.lux-patron-badge-avatar {
-    width: 44px;
-    height: 44px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, rgba(197, 160, 89, 0.25) 0%, rgba(30, 35, 52, 0.8) 100%);
-    border: 1.5px solid #C5A059;
-    color: #DFBE76;
-    font-weight: 800;
-    font-size: 0.95rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-    letter-spacing: 0.04em;
+.lux-placed-stamp {
+  font-family: monospace;
+  font-size: 10px;
+  color: #9CA3AF;
+  margin: 0;
 }
 
-.lux-patron-info-col {
-    display: flex;
-    flex-direction: column;
-    gap: 3px;
-    min-width: 0;
-    flex: 1 1 auto;
+.lux-audit-log-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #C5A059;
+  text-decoration: none;
+  padding: 3px 6px;
+  border-radius: 6px;
+  background: transparent;
+  transition: all 0.15s ease;
+  white-space: nowrap;
 }
 
-.lux-patron-fullname {
-    font-size: 1rem;
-    font-weight: 700;
-    color: #F8FAFC;
-    line-height: 1.25;
-    word-break: break-word;
+.lux-audit-log-btn:hover {
+  color: #EBD29E;
+  background: #161920;
 }
 
-.lux-patron-status-tag {
-    font-size: 0.72rem;
+.lux-patron-contact-pills {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 6px;
+  padding-top: 8px;
+  border-top: 1px solid #1F2432;
 }
 
-.lux-client-user-tag {
-    color: #60A5FA;
-    text-decoration: none;
-    font-weight: 600;
-}
-
-.lux-client-user-tag:hover {
-    text-decoration: underline;
-}
-
-.lux-client-guest-tag {
-    color: #94A3B8;
-    background: rgba(148, 163, 184, 0.12);
-    border: 1px solid rgba(148, 163, 184, 0.25);
-    padding: 2px 7px;
-    border-radius: 4px;
-    font-weight: 500;
-}
-
-.lux-patron-contact-grid {
-    display: grid;
+@media (min-width: 400px) {
+  .lux-patron-contact-pills {
     grid-template-columns: 1fr 1fr;
-    gap: 10px;
-    padding-top: 10px;
-    border-top: 1px solid #1F2436;
+  }
 }
 
-.lux-contact-cell {
-    display: flex;
-    flex-direction: column;
-    gap: 3px;
-    min-width: 0;
+.lux-contact-action-btn {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  padding: 6px 8px;
+  border-radius: 8px;
+  background: rgba(11, 13, 16, 0.9);
+  border: 1px solid #262B37;
+  color: #CBD0D8;
+  text-decoration: none;
+  transition: all 0.15s ease;
+  min-width: 0;
 }
 
-.lux-cell-label {
-    font-size: 0.65rem;
-    font-weight: 700;
-    color: #64748B;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
+.lux-contact-action-btn:hover {
+  border-color: rgba(197, 160, 89, 0.45);
+  color: #C5A059;
 }
 
-.lux-client-link {
-    color: #DFBE76;
-    text-decoration: none;
-    font-size: 0.8rem;
-    font-weight: 600;
-    word-break: break-all;
-    transition: color 0.15s ease;
+.lux-contact-btn-left {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  overflow: hidden;
 }
 
-.lux-client-link:hover {
-    color: #FFFFFF;
-    text-decoration: underline;
+.lux-contact-btn-left svg {
+  color: #C5A059;
+  flex-shrink: 0;
 }
 
-.lux-client-dim {
-    color: #64748B;
-    font-size: 0.78rem;
-    font-style: italic;
+.lux-contact-val {
+  font-family: monospace;
+  font-size: 10.5px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: #E3E6EB;
 }
 
-.lux-patron-security-notice {
-    display: flex;
-    align-items: flex-start;
-    gap: 8px;
-    background: rgba(197, 160, 89, 0.08);
-    border: 1px solid rgba(197, 160, 89, 0.22);
-    border-radius: 6px;
-    padding: 8px 10px;
-    font-size: 0.7rem;
-    color: #CBD5E1;
-    line-height: 1.35;
+.lux-action-tag {
+  font-family: monospace;
+  font-size: 9px;
+  text-transform: uppercase;
+  color: rgba(197, 160, 89, 0.85);
+  flex-shrink: 0;
 }
 
-.lux-security-icon {
-    font-size: 0.85rem;
-    line-height: 1;
-    flex-shrink: 0;
+.lux-patron-lock-tag {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(197, 160, 89, 0.08);
+  border: 1px solid rgba(197, 160, 89, 0.22);
+  border-radius: 6px;
+  padding: 5px 8px;
+  font-size: 9.5px;
+  color: #CBD0D8;
+  line-height: 1.3;
 }
 
-.lux-security-text strong {
-    color: #DFBE76;
+/* -------------------------------------------------------------
+   2. COMMISSIONED PIECE PREVIEW (MATCHING CODE.HTML)
+   ------------------------------------------------------------- */
+.lux-piece-preview-card {
+  padding: 14px !important;
 }
 
-.field-customer_profile_card label {
-    display: none !important;
+.lux-piece-flex {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
 }
 
-.field-customer_profile_card .readonly {
-    background: transparent !important;
-    border: none !important;
-    padding: 0 !important;
-    width: 100% !important;
-    box-shadow: none !important;
-    min-height: auto !important;
+.lux-piece-spec-box {
+  width: 56px;
+  height: 56px;
+  border-radius: 8px;
+  background: #07080A;
+  border: 1px solid rgba(197, 160, 89, 0.25);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 4px;
+  flex-shrink: 0;
+  overflow: hidden;
 }
 
-.field-customer_profile_card .flex-container {
-    display: block !important;
-    width: 100% !important;
+.lux-piece-img-cover {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 6px;
 }
 
-/* 4. Luxury Fieldset Modules */
-fieldset.module.lux-fieldset {
-    background: #131622 !important;
-    border: 1px solid #24293D !important;
-    border-radius: 10px !important;
-    padding: 16px 16px !important;
-    margin-bottom: 16px !important;
-    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25) !important;
-    box-sizing: border-box !important;
-    width: 100% !important;
+.lux-spec-metal-tag {
+  font-family: monospace;
+  font-size: 8px;
+  text-transform: uppercase;
+  color: #9CA3AF;
+  margin-top: 2px;
 }
 
-fieldset.module.lux-fieldset h2 {
-    display: block !important;
-    background: transparent !important;
-    padding: 0 0 10px 0 !important;
-    margin: 0 0 12px 0 !important;
-    border-bottom: 1px solid #1F2436 !important;
-    font-family: 'Cinzel', serif !important;
-    font-size: 0.88rem !important;
-    font-weight: 700 !important;
-    color: #DFBE76 !important;
-    letter-spacing: 0.04em !important;
-    text-transform: uppercase !important;
+.lux-piece-details-col {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
 }
 
-fieldset.module.lux-fieldset .description {
-    font-size: 0.73rem !important;
-    color: #94A3B8 !important;
-    line-height: 1.4 !important;
-    margin-bottom: 12px !important;
-    padding-bottom: 6px !important;
+.lux-piece-meta-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
 }
 
-/* Readonly fields */
-fieldset.module.lux-fieldset .readonly {
-    background: #0E1018 !important;
-    border: 1px solid #23273A !important;
-    border-radius: 6px !important;
-    padding: 8px 12px !important;
-    color: #F1F5F9 !important;
-    font-size: 0.82rem !important;
-    min-height: 38px !important;
-    display: flex !important;
-    align-items: center !important;
-    box-sizing: border-box !important;
-    word-break: break-word !important;
+.lux-piece-kicker {
+  font-family: monospace;
+  font-size: 10px;
+  text-transform: uppercase;
+  color: #C5A059;
+  letter-spacing: 0.05em;
 }
 
-/* DateTime Shortcuts */
-.datetimeshortcuts {
-    display: inline-flex !important;
-    align-items: center !important;
-    gap: 8px !important;
-    font-size: 0.72rem !important;
-    color: #94A3B8 !important;
-    margin-top: 4px !important;
+.lux-piece-sku {
+  font-family: monospace;
+  font-size: 10px;
+  color: #9CA3AF;
 }
 
-.datetimeshortcuts a {
-    color: #C5A059 !important;
-    font-weight: 600 !important;
-    text-decoration: none !important;
+.lux-piece-title {
+  font-family: 'Cinzel', serif !important;
+  font-size: 12.5px !important;
+  font-weight: 600 !important;
+  color: #FFFFFF !important;
+  margin: 0 !important;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-/* 5. Tabular inlines converted to mobile cards */
-#items-group .column-item_preview img {
-    border-radius: 6px;
-    border: 1px solid rgba(197, 160, 89, 0.35);
+.lux-piece-specs-line {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  color: #9CA3AF;
 }
 
-@media (max-width: 768px) {
-    .form-multiline,
-    .form-row.form-multiline {
-        display: flex !important;
-        flex-direction: column !important;
-        gap: 12px !important;
-        width: 100% !important;
-    }
-
-    .form-multiline .fieldBox,
-    .form-row.form-multiline .fieldBox {
-        width: 100% !important;
-        max-width: 100% !important;
-        margin: 0 !important;
-        padding: 0 !important;
-        display: flex !important;
-        flex-direction: column !important;
-    }
-
-    .lux-patron-contact-grid {
-        grid-template-columns: 1fr !important;
-        gap: 8px !important;
-    }
-
-    #items-group .tabular table,
-    #items-group .tabular thead,
-    #items-group .tabular tbody,
-    #items-group .tabular tr,
-    #items-group .tabular td,
-    #items-group .tabular th,
-    #status_updates-group .tabular table,
-    #status_updates-group .tabular thead,
-    #status_updates-group .tabular tbody,
-    #status_updates-group .tabular tr,
-    #status_updates-group .tabular td,
-    #status_updates-group .tabular th {
-        display: block !important;
-        width: 100% !important;
-        box-sizing: border-box !important;
-    }
-
-    #items-group .tabular thead,
-    #status_updates-group .tabular thead {
-        display: none !important;
-    }
-
-    #items-group .tabular tbody,
-    #status_updates-group .tabular tbody {
-        display: flex !important;
-        flex-direction: column !important;
-        gap: 10px !important;
-        width: 100% !important;
-    }
-
-    #items-group .tabular tr.form-row,
-    #status_updates-group .tabular tr.form-row {
-        background: #151825 !important;
-        border: 1px solid #272C3F !important;
-        border-radius: 8px !important;
-        padding: 12px 14px !important;
-        margin-bottom: 6px !important;
-        display: flex !important;
-        flex-direction: column !important;
-        gap: 8px !important;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25) !important;
-        box-sizing: border-box !important;
-    }
-
-    #items-group .tabular td.original,
-    #status_updates-group .tabular td.original {
-        display: none !important;
-    }
-
-    #items-group .tabular td,
-    #status_updates-group .tabular td {
-        padding: 2px 0 !important;
-        border: none !important;
-        background: transparent !important;
-        display: flex !important;
-        flex-direction: column !important;
-        gap: 3px !important;
-        width: 100% !important;
-        font-size: 0.8rem !important;
-    }
-
-    #items-group td.column-line_total p,
-    #items-group td.column-line_total {
-        color: #DFBE76 !important;
-        font-size: 0.95rem !important;
-        font-weight: 800 !important;
-    }
-
-    #status_updates-group .tabular td input,
-    #status_updates-group .tabular td textarea,
-    #status_updates-group .tabular td select {
-        width: 100% !important;
-        box-sizing: border-box !important;
-    }
+.lux-bold-spec {
+  color: #E3E6EB;
+  font-weight: 500;
 }
 
-/* 6. Ultra-Mobile (< 360px & 295px) Refinement */
-@media (max-width: 360px) {
-    #content,
-    .shopify-content-box {
-        padding: 6px 4px !important;
-    }
+.lux-gold-line-price {
+  color: #DEBF7D;
+  font-weight: 700;
+  font-family: 'Cinzel', serif;
+}
 
-    .lux-order-master-banner {
-        padding: 12px 10px !important;
-        gap: 10px !important;
-    }
+/* -------------------------------------------------------------
+   3. STAGE PROGRESSION PIPELINE (MATCHING CODE.HTML)
+   ------------------------------------------------------------- */
+.lux-pipeline-card {
+  padding: 16px !important;
+}
 
-    .lux-banner-row-primary {
-        flex-direction: column !important;
-        align-items: flex-start !important;
-        gap: 8px !important;
-    }
+.lux-pipeline-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 12px;
+}
 
-    .lux-banner-amount-group {
-        align-items: flex-start !important;
-    }
+.lux-pipeline-title {
+  font-family: 'Cinzel', serif !important;
+  font-size: 11.5px !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.08em !important;
+  color: #C5A059 !important;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0 !important;
+}
 
-    .lux-banner-ordernum {
-        font-size: 1rem !important;
-    }
+.lux-pipeline-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: #C5A059;
+}
 
-    .lux-amount-value {
-        font-size: 1.15rem !important;
-    }
+.lux-step-counter {
+  font-family: monospace;
+  font-size: 10px;
+  color: #9CA3AF;
+}
 
-    .lux-banner-row-secondary {
-        flex-direction: column !important;
-        align-items: flex-start !important;
-        gap: 8px !important;
-    }
+.lux-stepper-wrap {
+  position: relative;
+  padding: 8px 0;
+}
 
-    .lux-banner-actions {
-        width: 100% !important;
-        justify-content: flex-start !important;
-    }
+.lux-stepper-track-bg {
+  position: absolute;
+  top: 18px;
+  left: 12px;
+  right: 12px;
+  height: 2px;
+  background-color: #1E232E;
+  z-index: 1;
+}
 
-    fieldset.module.lux-fieldset {
-        padding: 12px 10px !important;
-    }
+.lux-stepper-track-active {
+  position: absolute;
+  top: 18px;
+  left: 12px;
+  height: 2px;
+  background-color: #C5A059;
+  z-index: 2;
+  transition: width 0.3s ease;
+}
 
-    .lux-patron-summary-card {
-        padding: 12px 10px !important;
-    }
+.w-step-1 { width: 12%; }
+.w-step-2 { width: 40%; }
+.w-step-3 { width: 70%; }
+.w-step-4 { width: calc(100% - 24px); }
 
-    .lux-patron-main-row {
-        gap: 8px !important;
-    }
+.lux-stepper-nodes {
+  display: flex;
+  justify-content: space-between;
+  position: relative;
+  z-index: 3;
+}
 
-    .lux-patron-badge-avatar {
-        width: 36px !important;
-        height: 36px !important;
-        font-size: 0.82rem !important;
-    }
+.lux-node {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
 
-    .lux-patron-fullname {
-        font-size: 0.9rem !important;
-    }
+.lux-node-circle {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  font-weight: 700;
+  transition: all 0.2s ease;
+}
 
-    .submit-row {
-        padding: 8px 6px !important;
-        gap: 6px !important;
-    }
+.node-active .lux-node-circle {
+  background-color: #C5A059;
+  color: #07080A;
+  box-shadow: 0 0 0 4px rgba(197, 160, 89, 0.25);
+}
+
+.node-dim .lux-node-circle {
+  background-color: #161920;
+  border: 1px solid #2D3342;
+  color: #9CA3AF;
+}
+
+.lux-node-label {
+  font-size: 9.5px;
+  font-weight: 600;
+  line-height: 1;
+}
+
+.node-active .lux-node-label {
+  color: #C5A059;
+}
+
+.node-dim .lux-node-label {
+  color: #9CA3AF;
+}
+
+/* -------------------------------------------------------------
+   4. TELEMETRY & STAGE CONTROL FORM (MATCHING CODE.HTML)
+   ------------------------------------------------------------- */
+.lux-telemetry-form-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #1E232E;
+  margin-bottom: 12px;
+}
+
+.lux-telemetry-title {
+  font-family: 'Cinzel', serif !important;
+  font-size: 12px !important;
+  font-weight: 700 !important;
+  color: #C5A059 !important;
+  letter-spacing: 0.06em !important;
+  text-transform: uppercase !important;
+  margin: 0 !important;
+}
+
+.lux-live-sync-badge {
+  font-family: monospace;
+  font-size: 10px;
+  text-transform: uppercase;
+  color: #34D399;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.lux-live-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: #34D399;
+  box-shadow: 0 0 6px rgba(52, 211, 153, 0.8);
+}
+
+.lux-telemetry-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.lux-field-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  width: 100%;
+}
+
+.lux-field-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: #CBD0D8;
+  margin: 0;
+}
+
+.lux-field-label-split {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+}
+
+.lux-dispatch-status-kicker {
+  font-family: monospace;
+  font-size: 10px;
+  color: #C5A059;
+  letter-spacing: 0.04em;
+}
+
+/* Custom Select Dropdowns */
+.lux-select-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.lux-control-select,
+.lux-control-input,
+.lux-control-textarea {
+  width: 100% !important;
+  appearance: none !important;
+  -webkit-appearance: none !important;
+  background-color: #07080A !important;
+  border: 1px solid #2B313F !important;
+  border-radius: 12px !important;
+  color: #F4F5F7 !important;
+  font-size: 12px !important;
+  padding: 10px 14px !important;
+  box-sizing: border-box !important;
+  transition: all 0.15s ease !important;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.4) !important;
+}
+
+.lux-control-select {
+  padding-right: 36px !important;
+}
+
+.lux-select-chevron {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  color: #C5A059;
+}
+
+.lux-control-select:focus,
+.lux-control-input:focus,
+.lux-control-textarea:focus {
+  border-color: #C5A059 !important;
+  outline: none !important;
+  box-shadow: 0 0 0 1px #C5A059, inset 0 2px 4px rgba(0, 0, 0, 0.4) !important;
+}
+
+.lux-mono-input {
+  font-family: monospace !important;
+  letter-spacing: 0.04em !important;
+}
+
+.lux-input-action-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.lux-input-action-wrapper .lux-control-input {
+  padding-right: 64px !important;
+}
+
+.lux-btn-inline-copy {
+  position: absolute;
+  right: 6px;
+  padding: 4px 10px;
+  border-radius: 6px;
+  background: #111317;
+  border: 1px solid #2F3545;
+  color: #C5A059;
+  font-family: monospace;
+  font-size: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.lux-btn-inline-copy:hover {
+  background: #161920;
+  color: #FFFFFF;
+}
+
+.lux-btn-inline-icon {
+  position: absolute;
+  right: 10px;
+  color: #C5A059;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.lux-btn-inline-icon:hover {
+  color: #FFFFFF;
+}
+
+/* QC Callout Box */
+.lux-qc-callout {
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: rgba(7, 8, 10, 0.85);
+  border: 1px dashed #2B313F;
+  font-size: 11px;
+  color: #9CA3AF;
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  line-height: 1.45;
+}
+
+.lux-qc-icon {
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.lux-qc-p {
+  margin: 0;
+}
+
+/* Address Grids */
+.lux-address-grid-2 {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+}
+
+@media (min-width: 420px) {
+  .lux-address-grid-2 {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.lux-address-grid-3 {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+}
+
+@media (min-width: 420px) {
+  .lux-address-grid-3 {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+}
+
+/* Checkbox & Notes */
+.lux-checkbox-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 0;
+}
+
+.lux-checkbox-input {
+  width: 16px !important;
+  height: 16px !important;
+  accent-color: #C5A059 !important;
+  border-radius: 4px !important;
+  background-color: #07080A !important;
+  border: 1px solid #2B313F !important;
+}
+
+.lux-checkbox-label {
+  font-size: 11.5px;
+  color: #CBD0D8;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.lux-static-note-box {
+  padding: 8px 12px;
+  background: #07080A;
+  border: 1px solid #222836;
+  border-radius: 8px;
+  font-size: 11px;
+  color: #CBD0D8;
+  line-height: 1.4;
+}
+
+/* -------------------------------------------------------------
+   7. FIXED ACTION FOOTER (MATCHING CODE.HTML)
+   ------------------------------------------------------------- */
+.lux-fixed-action-footer {
+  position: fixed !important;
+  bottom: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  z-index: 1000 !important;
+  background: rgba(11, 13, 16, 0.96) !important;
+  backdrop-filter: blur(16px) !important;
+  -webkit-backdrop-filter: blur(16px) !important;
+  border-top: 1px solid #222736 !important;
+  padding: 12px 14px !important;
+  box-shadow: 0 -4px 25px rgba(0, 0, 0, 0.6) !important;
+}
+
+.lux-footer-inner {
+  max-width: 480px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* Primary Emerald Button */
+.lux-btn-emerald-primary {
+  width: 100% !important;
+  padding: 13px 16px !important;
+  border-radius: 12px !important;
+  background-color: #10B981 !important;
+  color: #07080A !important;
+  font-family: 'Plus Jakarta Sans', sans-serif !important;
+  font-weight: 700 !important;
+  font-size: 12px !important;
+  letter-spacing: 0.06em !important;
+  text-transform: uppercase !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px !important;
+  border: none !important;
+  cursor: pointer !important;
+  box-shadow: 0 0 20px rgba(16, 185, 129, 0.35) !important;
+  transition: all 0.15s ease !important;
+}
+
+.lux-btn-emerald-primary:hover,
+.lux-btn-emerald-primary:active {
+  background-color: #34D399 !important;
+  box-shadow: 0 0 25px rgba(16, 185, 129, 0.5) !important;
+  transform: translateY(-1px);
+}
+
+/* Secondary Dark Champagne Outline Button */
+.lux-btn-champagne-secondary {
+  width: 100% !important;
+  padding: 9px 14px !important;
+  border-radius: 12px !important;
+  background-color: #111317 !important;
+  color: #DEBF7D !important;
+  border: 1px solid rgba(197, 160, 89, 0.35) !important;
+  font-family: 'Plus Jakarta Sans', sans-serif !important;
+  font-size: 11px !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.02em !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 6px !important;
+  cursor: pointer !important;
+  transition: all 0.15s ease !important;
+}
+
+.lux-btn-champagne-secondary:hover {
+  background-color: #161920 !important;
+  border-color: #C5A059 !important;
+  color: #F4F5F7 !important;
 }
 </style>
 {% endblock %}

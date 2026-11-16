@@ -35,9 +35,13 @@ class OrderItemInline(admin.TabularInline):
 
 class OrderStatusUpdateInline(admin.TabularInline):
     model = OrderStatusUpdate
-    extra = 1
+    extra = 0
+    can_delete = False
     fields = ('status', 'title', 'location', 'description', 'timestamp_display')
-    readonly_fields = ('timestamp_display',)
+    readonly_fields = ('status', 'title', 'location', 'description', 'timestamp_display')
+
+    def has_add_permission(self, request, obj=None):
+        return False
 
     @admin.display(description='Logged At')
     def timestamp_display(self, obj):
@@ -379,3 +383,19 @@ class OrderAdmin(admin.ModelAdmin):
                 description='Shipment successfully delivered and signed.',
                 location=f"{order.shipping_city}, {order.shipping_state}"
             )
+
+    def save_model(self, request, obj, form, change):
+        if change and 'status' in form.changed_data:
+            try:
+                old_order = Order.objects.get(pk=obj.pk)
+                if old_order.status != obj.status:
+                    OrderStatusUpdate.objects.create(
+                        order=obj,
+                        status=obj.status,
+                        title=f"Status updated to {obj.get_status_display()}",
+                        description=f"Fulfillment state updated via Atelier Console to {obj.get_status_display()}.",
+                        location="Luckjary New York Atelier" if obj.status in ['PENDING', 'PROCESSING'] else f"{obj.shipping_city}, {obj.shipping_state}"
+                    )
+            except Order.DoesNotExist:
+                pass
+        super().save_model(request, obj, form, change)
