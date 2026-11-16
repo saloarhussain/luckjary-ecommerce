@@ -115,6 +115,7 @@ class CollectionAdmin(admin.ModelAdmin):
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
+    change_list_template = 'admin/catalog/product/change_list.html'
     form = ProductAdminForm
     fieldsets = (
         ('Title & Description', {

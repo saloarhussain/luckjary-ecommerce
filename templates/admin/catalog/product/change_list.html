@@ -1,19 +1,147 @@
 <!DOCTYPE html><html class="dark" lang="en"><head><meta charset="utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"><meta content="mobile_tab" name="shell-type"><link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..900;1,6..96,400..900&amp;family=Plus+Jakarta+Sans:ital,wght@0,300..800;1,300..800&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700;800&amp;family=JetBrains+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { "colors": { "on-primary": "#003824", "border-strong": "#2D3240", "primary-container": "#10b981", "text-muted": "#9CA3AF", "surface-container": "#1f2022", "surface-dim": "#121315", "on-background": "#e3e2e5", "border-subtle": "#232732", "on-tertiary-container": "#4c3500", "primary": "#4edea3", "surface-card": "#14161C", "outline": "#86948a", "surface-variant": "#343537", "secondary-fixed": "#ffdea5", "tertiary": "#e7c17a", "surface-bright": "#38393b", "inverse-primary": "#006c49", "on-error": "#690005", "on-secondary-fixed-variant": "#5d4201", "surface-container-lowest": "#0d0e10", "error-container": "#93000a", "secondary": "#e9c176", "primary-fixed-dim": "#4edea3", "text-platinum": "#E5E7EB", "background": "#121315", "tertiary-fixed": "#ffdea3", "outline-variant": "#3c4a42", "on-secondary": "#412d00", "on-primary-fixed-variant": "#005236", "on-surface-variant": "#bbcabf", "surface-card-elevated": "#181A22", "surface-container-highest": "#343537", "on-primary-fixed": "#002113", "surface": "#121315", "surface-container-low": "#1b1c1e", "on-tertiary-fixed-variant": "#5c4304", "on-tertiary": "#402d00", "tertiary-fixed-dim": "#e7c17a", "on-secondary-fixed": "#261900", "inverse-surface": "#e3e2e5", "on-error-container": "#ffdad6", "on-primary-container": "#00422b", "secondary-container": "#604403", "inverse-on-surface": "#303033", "on-secondary-container": "#dab36a", "tertiary-container": "#c19e5a", "error": "#ffb4ab", "on-tertiary-fixed": "#261900", "on-surface": "#e3e2e5", "primary-fixed": "#6ffbbe", "surface-container-high": "#292a2c", "surface-tint": "#4edea3", "secondary-fixed-dim": "#e9c176" }, "borderRadius": { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" }, "spacing": { "margin": "2rem", "margin-mobile": "1rem", "space-lg": "1.5rem", "space-sm": "0.5rem", "gutter": "1.5rem", "gutter-sm": "1rem", "space-md": "1rem", "space-xs": "0.25rem", "space-xl": "2.5rem" }, "fontFamily": {
-        "serif-luxury": ["Plus Jakarta Sans", "sans-serif"],
-        "kicker-luxury": ["Plus Jakarta Sans", "sans-serif"],
-        "mono-luxury": ["Plus Jakarta Sans", "sans-serif"], "body-sm": ["Plus Jakarta Sans"], "body-lg": ["Plus Jakarta Sans"], "body-md": ["Plus Jakarta Sans"], "headline-lg-mobile": ["Plus Jakarta Sans"], "label-md": ["Plus Jakarta Sans"], "display-lg": ["Plus Jakarta Sans"], "caption": ["Plus Jakarta Sans"], "headline-md": ["Plus Jakarta Sans"], "label-sm": ["Plus Jakarta Sans"], "headline-sm": ["Plus Jakarta Sans"], "display-lg-mobile": ["Plus Jakarta Sans"], "headline-lg": ["Plus Jakarta Sans"] }, "fontSize": { "body-sm": ["12px", {"lineHeight": "18px", "fontWeight": "400"}], "body-lg": ["16px", {"lineHeight": "26px", "fontWeight": "400"}], "body-md": ["14px", {"lineHeight": "22px", "fontWeight": "400"}], "headline-lg-mobile": ["26px", {"lineHeight": "34px", "fontWeight": "500"}], "label-md": ["13px", {"lineHeight": "18px", "letterSpacing": "0.04em", "fontWeight": "600"}], "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "600"}], "caption": ["10px", {"lineHeight": "14px", "letterSpacing": "0.1em", "fontWeight": "500"}], "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "500"}], "label-sm": ["11px", {"lineHeight": "16px", "letterSpacing": "0.08em", "fontWeight": "700"}], "headline-sm": ["20px", {"lineHeight": "28px", "fontWeight": "600"}], "display-lg-mobile": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600"}], "headline-lg": ["36px", {"lineHeight": "44px", "fontWeight": "500"}] } } } }</script><style>@layer base{html,body{width:100%;margin:0;padding:0;min-height:100%;}body{overscroll-behavior-y:none;}.pb-safe{padding-bottom:env(safe-area-inset-bottom,0px);}.pt-safe{padding-top:env(safe-area-inset-top,0px);}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}/* Uniform Luxury Typography matching reference */
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { "colors": { "on-primary": "#003824", "border-strong": "#2D3240", "primary-container": "#10b981", "text-muted": "#9CA3AF", "surface-container": "#1f2022", "surface-dim": "#121315", "on-background": "#e3e2e5", "border-subtle": "#232732", "on-tertiary-container": "#4c3500", "primary": "#4edea3", "surface-card": "#14161C", "outline": "#86948a", "surface-variant": "#343537", "secondary-fixed": "#ffdea5", "tertiary": "#e7c17a", "surface-bright": "#38393b", "inverse-primary": "#006c49", "on-error": "#690005", "on-secondary-fixed-variant": "#5d4201", "surface-container-lowest": "#0d0e10", "error-container": "#93000a", "secondary": "#e9c176", "primary-fixed-dim": "#4edea3", "text-platinum": "#E5E7EB", "background": "#121315", "tertiary-fixed": "#ffdea3", "outline-variant": "#3c4a42", "on-secondary": "#412d00", "on-primary-fixed-variant": "#005236", "on-surface-variant": "#bbcabf", "surface-card-elevated": "#181A22", "surface-container-highest": "#343537", "on-primary-fixed": "#002113", "surface": "#121315", "surface-container-low": "#1b1c1e", "on-tertiary-fixed-variant": "#5c4304", "on-tertiary": "#402d00", "tertiary-fixed-dim": "#e7c17a", "on-secondary-fixed": "#261900", "inverse-surface": "#e3e2e5", "on-error-container": "#ffdad6", "on-primary-container": "#00422b", "secondary-container": "#604403", "inverse-on-surface": "#303033", "on-secondary-container": "#dab36a", "tertiary-container": "#c19e5a", "error": "#ffb4ab", "on-tertiary-fixed": "#261900", "on-surface": "#e3e2e5", "primary-fixed": "#6ffbbe", "surface-container-high": "#292a2c", "surface-tint": "#4edea3", "secondary-fixed-dim": "#e9c176" }, "borderRadius": { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" }, "spacing": { "margin": "2rem", "margin-mobile": "1rem", "space-lg": "1.5rem", "space-sm": "0.5rem", "gutter": "1.5rem", "gutter-sm": "1rem", "space-md": "1rem", "space-xs": "0.25rem", "space-xl": "2.5rem" }, "fontFamily": { "body-sm": ["Plus Jakarta Sans"], "body-lg": ["Plus Jakarta Sans"], "body-md": ["Plus Jakarta Sans"], "headline-lg-mobile": ["Bodoni Moda"], "label-md": ["Plus Jakarta Sans"], "display-lg": ["Bodoni Moda"], "caption": ["Plus Jakarta Sans"], "headline-md": ["Bodoni Moda"], "label-sm": ["Plus Jakarta Sans"], "headline-sm": ["Bodoni Moda"], "display-lg-mobile": ["Bodoni Moda"], "headline-lg": ["Bodoni Moda"] }, "fontSize": { "body-sm": ["12px", {"lineHeight": "18px", "fontWeight": "400"}], "body-lg": ["16px", {"lineHeight": "26px", "fontWeight": "400"}], "body-md": ["14px", {"lineHeight": "22px", "fontWeight": "400"}], "headline-lg-mobile": ["26px", {"lineHeight": "34px", "fontWeight": "500"}], "label-md": ["13px", {"lineHeight": "18px", "letterSpacing": "0.04em", "fontWeight": "600"}], "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "600"}], "caption": ["10px", {"lineHeight": "14px", "letterSpacing": "0.1em", "fontWeight": "500"}], "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "500"}], "label-sm": ["11px", {"lineHeight": "16px", "letterSpacing": "0.08em", "fontWeight": "700"}], "headline-sm": ["20px", {"lineHeight": "28px", "fontWeight": "600"}], "display-lg-mobile": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600"}], "headline-lg": ["36px", {"lineHeight": "44px", "fontWeight": "500"}] } } } }</script><style>@layer base{html,body{width:100%;margin:0;padding:0;min-height:100%;}body{overscroll-behavior-y:none;}.pb-safe{padding-bottom:env(safe-area-inset-bottom,0px);}.pt-safe{padding-top:env(safe-area-inset-top,0px);}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}
+/* Explicit bulletproof styles for 1:1 match with user screenshot */
 body, html, main, div, span, h1, h2, h3, h4, h5, h6, p, a, button, input, label, select,
-.font-serif-luxury,
-.font-kicker-luxury,
-.font-mono-luxury {
+.font-serif-luxury, .font-kicker-luxury, .font-mono-luxury {
   font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
 }
 .material-symbols-outlined {
   font-family: 'Material Symbols Outlined' !important;
 }
 a { text-decoration: none !important; color: inherit !important; }
-</style></head><body class="bg-surface text-on-surface font-body-md text-body-md min-h-screen flex flex-col antialiased selection:bg-primary selection:text-on-primary"><header class="fixed top-0 w-full z-50 pt-safe bg-surface-card-elevated/85 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.4)]"><div class="h-16 px-space-md flex items-center justify-between"><a href="/admin/" class="flex items-center gap-space-xs no-underline cursor-pointer"><span class="w-1.5 h-1.5 rounded-full bg-primary inline-block"></span><span class="font-headline-sm text-headline-sm tracking-wider text-text-platinum">LUCKJARY</span><span class="font-caption text-caption text-secondary uppercase tracking-[0.2em] ml-1 pt-0.5">ATELIER</span></a><div class="flex items-center gap-space-xs"><button aria-label="Search" class="w-11 h-11 flex items-center justify-center text-text-muted hover:text-text-platinum transition-colors" type="button"><span class="material-symbols-outlined text-[22px]">search</span></button><button aria-label="Notifications" class="w-11 h-11 flex items-center justify-center text-text-muted hover:text-text-platinum relative transition-colors" type="button"><span class="material-symbols-outlined text-[22px]">notifications</span><span class="absolute top-2.5 right-2.5 w-1.5 h-1.5 rounded-full bg-primary"></span></button><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center ml-space-xs"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></div></header><main class="flex-1 flex flex-col relative w-full pt-16 bg-surface px-margin-mobile max-w-md mx-auto sm:max-w-xl"><div class="flex flex-col w-full pb-10 space-y-4">
+
+/* Product Card Styling */
+.product-item {
+  background-color: #14161C !important;
+  border-radius: 1rem !important; /* 16px */
+  padding: 0.875rem !important; /* 14px */
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.4) !important;
+  border: 1px solid rgba(35, 39, 50, 0.5) !important;
+  margin-bottom: 0.875rem !important;
+  display: flex !important;
+  flex-direction: column !important;
+  position: relative !important;
+}
+
+/* Card Kicker Category Pill */
+.product-item .kicker-pill,
+.product-item .font-kicker-luxury {
+  font-family: 'Plus Jakarta Sans', sans-serif !important;
+  font-size: 10px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.08em !important;
+  color: #e9c176 !important;
+  background-color: #181A22 !important;
+  padding: 2px 8px !important;
+  border-radius: 9999px !important;
+  text-transform: uppercase !important;
+  display: inline-block !important;
+  line-height: 1.4 !important;
+}
+
+/* Card Title */
+.product-item h2,
+.product-item .product-title {
+  font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif !important;
+  font-size: 15px !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.025em !important;
+  line-height: 1.3 !important;
+  color: #E5E7EB !important;
+  text-transform: uppercase !important;
+  text-decoration: none !important;
+  margin-top: 4px !important;
+  margin-bottom: 0 !important;
+}
+
+/* SKU Pill */
+.product-item .sku-btn,
+.product-item .font-mono-luxury.sku-copy {
+  font-family: 'Plus Jakarta Sans', monospace, sans-serif !important;
+  font-size: 11px !important;
+  font-weight: 500 !important;
+  color: #9CA3AF !important;
+  background-color: #1b1c1e !important;
+  border: 1px solid #232732 !important;
+  border-radius: 4px !important;
+  padding: 2px 6px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 4px !important;
+}
+
+/* Main Price */
+.product-item .price-main,
+.product-item .font-serif-luxury.price-gold {
+  font-family: 'Plus Jakarta Sans', sans-serif !important;
+  font-size: 20px !important;
+  font-weight: 800 !important;
+  letter-spacing: -0.02em !important;
+  color: #e9c176 !important;
+  line-height: 1.2 !important;
+}
+
+/* Compare Price */
+.product-item .price-compare {
+  font-family: 'Plus Jakarta Sans', sans-serif !important;
+  font-size: 12px !important;
+  font-weight: 500 !important;
+  color: #9CA3AF !important;
+  text-decoration: line-through !important;
+}
+
+/* Discount Badge */
+.product-item .discount-badge {
+  font-family: 'Plus Jakarta Sans', sans-serif !important;
+  font-size: 10px !important;
+  font-weight: 700 !important;
+  color: #4edea3 !important;
+  background-color: rgba(78, 222, 163, 0.1) !important;
+  padding: 2px 6px !important;
+  border-radius: 4px !important;
+}
+
+/* Hallmark & Specs Row */
+.product-item .specs-row {
+  background-color: #181A22 !important;
+  border-radius: 12px !important;
+  padding: 10px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+}
+
+/* Action Buttons */
+.product-item .action-btn {
+  font-family: 'Plus Jakarta Sans', sans-serif !important;
+  font-size: 11px !important;
+  font-weight: 600 !important;
+  background-color: #181A22 !important;
+  color: #E5E7EB !important;
+  padding: 6px 10px !important;
+  border-radius: 8px !important;
+  border: 1px solid rgba(45, 50, 64, 0.6) !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 4px !important;
+  cursor: pointer !important;
+}
+
+/* Left slide-out navigation drawer */
+#leftNavDrawer {
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.25s ease;
+}
+#leftNavDrawerBackdrop {
+  transition: opacity 0.25s ease;
+}
+
+</style></head><body class="bg-surface text-on-surface font-body-md text-body-md min-h-screen flex flex-col antialiased selection:bg-primary selection:text-on-primary"><header class="fixed top-0 w-full z-50 pt-safe bg-surface-card-elevated/85 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.4)]">
+<div class="h-16 px-space-md flex items-center justify-between">
+<div class="flex items-center gap-2">
+<button id="openNavDrawerBtn" aria-label="Open Navigation Menu" class="w-10 h-10 -ml-1 flex items-center justify-center text-text-muted hover:text-text-platinum active:scale-95 transition-all cursor-pointer" type="button">
+<span class="material-symbols-outlined text-[24px]">menu</span>
+</button>
+<a href="/admin/" class="flex items-center gap-space-xs no-underline cursor-pointer"><span class="w-1.5 h-1.5 rounded-full bg-primary inline-block"></span><span class="font-headline-sm text-headline-sm tracking-wider text-text-platinum">LUCKJARY</span><span class="font-caption text-caption text-secondary uppercase tracking-[0.2em] ml-1 pt-0.5">ATELIER</span></a></div><div class="flex items-center gap-space-xs"><button aria-label="Search" class="w-11 h-11 flex items-center justify-center text-text-muted hover:text-text-platinum transition-colors" type="button"><span class="material-symbols-outlined text-[22px]">search</span></button><button aria-label="Notifications" class="w-11 h-11 flex items-center justify-center text-text-muted hover:text-text-platinum relative transition-colors" type="button"><span class="material-symbols-outlined text-[22px]">notifications</span><span class="absolute top-2.5 right-2.5 w-1.5 h-1.5 rounded-full bg-primary"></span></button><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center ml-space-xs"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></div></header><main class="flex-1 flex flex-col relative w-full pt-16 bg-surface px-margin-mobile"><div class="flex flex-col w-full pb-10 space-y-4">
 <!-- Top Catalog Overview Banner -->
 <div class="flex items-center justify-between pt-1">
 <div class="flex flex-col">
@@ -510,15 +638,227 @@ a { text-decoration: none !important; color: inherit !important; }
         });
       });
     }
+  
+    // Navigation Drawer Logic
+    const openDrawerBtn = document.getElementById('openNavDrawerBtn');
+    const closeDrawerBtn = document.getElementById('closeNavDrawerBtn');
+    const drawerContainer = document.getElementById('leftNavDrawerContainer');
+    const drawerBackdrop = document.getElementById('leftNavDrawerBackdrop');
+    const drawerPanel = document.getElementById('leftNavDrawer');
+
+    function openNavDrawer() {
+      if (!drawerContainer || !drawerBackdrop || !drawerPanel) return;
+      drawerContainer.classList.remove('pointer-events-none');
+      drawerBackdrop.classList.remove('opacity-0', 'pointer-events-none');
+      drawerBackdrop.classList.add('opacity-100', 'pointer-events-auto');
+      drawerPanel.classList.remove('-translate-x-full');
+      drawerPanel.classList.add('translate-x-0');
+    }
+
+    function closeNavDrawer() {
+      if (!drawerContainer || !drawerBackdrop || !drawerPanel) return;
+      drawerPanel.classList.remove('translate-x-0');
+      drawerPanel.classList.add('-translate-x-full');
+      drawerBackdrop.classList.remove('opacity-100', 'pointer-events-auto');
+      drawerBackdrop.classList.add('opacity-0', 'pointer-events-none');
+      setTimeout(() => {
+        drawerContainer.classList.add('pointer-events-none');
+      }, 300);
+    }
+
+    if (openDrawerBtn) openDrawerBtn.addEventListener('click', openNavDrawer);
+    if (closeDrawerBtn) closeDrawerBtn.addEventListener('click', closeNavDrawer);
+    if (drawerBackdrop) drawerBackdrop.addEventListener('click', closeNavDrawer);
+
+    // Currency Switcher Logic
+    const currencyButtons = document.querySelectorAll('.currency-pick-btn');
+    const currencySymbols = {
+      'INR': '₹',
+      'USD': '$',
+      'EUR': '€',
+      'GBP': '£',
+      'AED': 'AED '
+    };
+
+    // Check stored currency cookie or localStorage
+    const savedCurrency = localStorage.getItem('luckjary_currency') || 'INR';
+    setActiveCurrencyUI(savedCurrency);
+
+    function setActiveCurrencyUI(curr) {
+      currencyButtons.forEach(btn => {
+        if (btn.getAttribute('data-currency') === curr) {
+          btn.className = 'currency-pick-btn active py-1.5 px-2 rounded-lg text-[11px] font-bold border flex items-center justify-center gap-1.5 bg-primary/10 text-primary border-primary';
+        } else {
+          btn.className = 'currency-pick-btn py-1.5 px-2 rounded-lg text-[11px] font-medium border flex items-center justify-center gap-1.5 bg-surface-dim text-text-muted border-border-subtle hover:text-text-platinum';
+        }
+      });
+      // Update currency symbols across prices on page
+      const sym = currencySymbols[curr] || '₹';
+      document.querySelectorAll('.product-item').forEach(card => {
+        const priceMain = card.querySelector('span[class*="text-secondary"]') || card.querySelector('.price-main');
+        if (priceMain && (priceMain.textContent.includes('₹') || priceMain.textContent.includes('$') || priceMain.textContent.includes('€') || priceMain.textContent.includes('£') || priceMain.textContent.includes('AED'))) {
+          priceMain.textContent = priceMain.textContent.replace(/^[₹$€£]|AED\s*/g, sym);
+        }
+        const priceComp = card.querySelector('.line-through') || card.querySelector('.price-compare');
+        if (priceComp) {
+          priceComp.textContent = priceComp.textContent.replace(/^[₹$€£]|AED\s*/g, sym);
+        }
+      });
+    }
+
+    currencyButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const curr = btn.getAttribute('data-currency');
+        localStorage.setItem('luckjary_currency', curr);
+        document.cookie = `admin_currency=${curr};path=/;max-age=31536000`;
+        setActiveCurrencyUI(curr);
+        // Inform backend if endpoint exists
+        fetch('/set-currency/', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/x-www-form-urlencoded', 'X-Requested-With': 'XMLHttpRequest'},
+          body: `currency=${curr}`
+        }).catch(() => {});
+      });
+    });
+
   })();
-</script></main>
+</script>
+<!-- Left Navigation Drawer Modal -->
+<div id="leftNavDrawerContainer" class="fixed inset-0 z-50 pointer-events-none transition-all duration-300">
+  <!-- Backdrop -->
+  <div id="leftNavDrawerBackdrop" class="absolute inset-0 bg-black/60 opacity-0 pointer-events-none transition-opacity duration-300"></div>
+  
+  <!-- Slide-out Drawer Panel -->
+  <aside id="leftNavDrawer" class="absolute top-0 bottom-0 left-0 w-[280px] max-w-[85vw] bg-[#121315] border-r border-[#232732] shadow-2xl flex flex-col -translate-x-full transition-transform duration-300 z-10 pointer-events-auto overflow-y-auto">
+    <!-- Drawer Header -->
+    <div class="p-4 border-b border-[#232732] flex items-center justify-between">
+      <div class="flex items-center gap-2">
+        <span class="w-2 h-2 rounded-full bg-primary inline-block"></span>
+        <span class="font-bold text-[15px] tracking-wider text-text-platinum">LUCKJARY</span>
+        <span class="text-[10px] text-secondary uppercase tracking-[0.2em] font-semibold">ATELIER</span>
+      </div>
+      <button id="closeNavDrawerBtn" class="w-8 h-8 rounded-lg flex items-center justify-center text-text-muted hover:text-text-platinum active:scale-95 transition-colors cursor-pointer" type="button">
+        <span class="material-symbols-outlined text-[20px]">close</span>
+      </button>
+    </div>
+
+    <!-- Navigation List -->
+    <div class="p-3 space-y-5 flex-1 text-[13px]">
+      <!-- Section: Navigation -->
+      <div>
+        <div class="text-[10px] font-bold tracking-[0.1em] text-text-muted uppercase px-2 mb-1.5">Navigation</div>
+        <div class="space-y-0.5">
+          <a href="/admin/" class="flex items-center gap-3 px-3 py-2 rounded-xl text-text-muted hover:text-text-platinum hover:bg-surface-card transition-colors">
+            <span class="material-symbols-outlined text-[19px]">home</span>
+            <span>Home</span>
+          </a>
+          <a href="/admin/orders/order/" class="flex items-center justify-between px-3 py-2 rounded-xl text-text-muted hover:text-text-platinum hover:bg-surface-card transition-colors">
+            <div class="flex items-center gap-3">
+              <span class="material-symbols-outlined text-[19px]">package_2</span>
+              <span>Orders</span>
+            </div>
+            <span class="px-2 py-0.5 rounded-full bg-surface-card-elevated text-text-platinum text-[11px] font-mono">4</span>
+          </a>
+          <a href="/admin/catalog/product/" class="flex items-center gap-3 px-3 py-2 rounded-xl text-text-muted hover:text-text-platinum hover:bg-surface-card transition-colors">
+            <span class="material-symbols-outlined text-[19px]">percent</span>
+            <span>Discounts</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Section: Products & Inventory -->
+      <div>
+        <div class="text-[10px] font-bold tracking-[0.1em] text-text-muted uppercase px-2 mb-1.5">Products & Inventory</div>
+        <div class="space-y-0.5">
+          <a href="/admin/catalog/product/" class="flex items-center gap-3 px-3 py-2 rounded-xl bg-surface-card-elevated text-primary font-medium border-l-2 border-primary shadow-sm">
+            <span class="material-symbols-outlined text-[19px] text-primary">diamond</span>
+            <span class="text-text-platinum font-semibold">Products</span>
+          </a>
+          <a href="/admin/catalog/collection/" class="flex items-center gap-3 px-3 py-2 rounded-xl text-text-muted hover:text-text-platinum hover:bg-surface-card transition-colors">
+            <span class="material-symbols-outlined text-[19px]">grid_view</span>
+            <span>Collections</span>
+          </a>
+          <a href="/admin/catalog/category/" class="flex items-center gap-3 px-3 py-2 rounded-xl text-text-muted hover:text-text-platinum hover:bg-surface-card transition-colors">
+            <span class="material-symbols-outlined text-[19px]">folder</span>
+            <span>Categories</span>
+          </a>
+          <a href="/admin/catalog/material/" class="flex items-center gap-3 px-3 py-2 rounded-xl text-text-muted hover:text-text-platinum hover:bg-surface-card transition-colors">
+            <span class="material-symbols-outlined text-[19px]">stars</span>
+            <span>Materials</span>
+          </a>
+          <a href="/admin/catalog/productreview/" class="flex items-center gap-3 px-3 py-2 rounded-xl text-text-muted hover:text-text-platinum hover:bg-surface-card transition-colors">
+            <span class="material-symbols-outlined text-[19px]">star</span>
+            <span>Product Reviews</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Section: Customers -->
+      <div>
+        <div class="text-[10px] font-bold tracking-[0.1em] text-text-muted uppercase px-2 mb-1.5">Customers</div>
+        <div class="space-y-0.5">
+          <a href="/admin/accounts/customerprofile/" class="flex items-center gap-3 px-3 py-2 rounded-xl text-text-muted hover:text-text-platinum hover:bg-surface-card transition-colors">
+            <span class="material-symbols-outlined text-[19px]">person</span>
+            <span>VIP Patrons</span>
+          </a>
+          <a href="/admin/accounts/address/" class="flex items-center gap-3 px-3 py-2 rounded-xl text-text-muted hover:text-text-platinum hover:bg-surface-card transition-colors">
+            <span class="material-symbols-outlined text-[19px]">location_on</span>
+            <span>Addresses</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Section: Store Currency Preference -->
+      <div class="pt-2 border-t border-[#232732]">
+        <div class="flex items-center justify-between px-2 mb-2">
+          <span class="text-[10px] font-bold tracking-[0.1em] text-secondary uppercase">Store Currency</span>
+          <span class="material-symbols-outlined text-[15px] text-secondary">payments</span>
+        </div>
+        <div class="bg-surface-card rounded-xl p-2.5 border border-border-subtle">
+          <label class="text-[11px] text-text-muted block mb-1.5 font-medium">Select Active Currency:</label>
+          <div class="grid grid-cols-2 gap-1.5" id="currencySelectorGrid">
+            <button type="button" data-currency="INR" class="currency-pick-btn active py-1.5 px-2 rounded-lg text-[11px] font-bold border flex items-center justify-center gap-1.5 bg-primary/10 text-primary border-primary">
+              <span>🇮🇳</span><span>₹ INR</span>
+            </button>
+            <button type="button" data-currency="USD" class="currency-pick-btn py-1.5 px-2 rounded-lg text-[11px] font-medium border flex items-center justify-center gap-1.5 bg-surface-dim text-text-muted border-border-subtle hover:text-text-platinum">
+              <span>🇺🇸</span><span>$ USD</span>
+            </button>
+            <button type="button" data-currency="EUR" class="currency-pick-btn py-1.5 px-2 rounded-lg text-[11px] font-medium border flex items-center justify-center gap-1.5 bg-surface-dim text-text-muted border-border-subtle hover:text-text-platinum">
+              <span>🇪🇺</span><span>€ EUR</span>
+            </button>
+            <button type="button" data-currency="GBP" class="currency-pick-btn py-1.5 px-2 rounded-lg text-[11px] font-medium border flex items-center justify-center gap-1.5 bg-surface-dim text-text-muted border-border-subtle hover:text-text-platinum">
+              <span>🇬🇧</span><span>£ GBP</span>
+            </button>
+            <button type="button" data-currency="AED" class="currency-pick-btn col-span-2 py-1.5 px-2 rounded-lg text-[11px] font-medium border flex items-center justify-center gap-1.5 bg-surface-dim text-text-muted border-border-subtle hover:text-text-platinum">
+              <span>🇦🇪</span><span>AED Dirham</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- User Profile Footer -->
+    <div class="p-3 border-t border-[#232732] bg-[#14161C]">
+      <div class="flex items-center gap-2 mb-2">
+        <span class="w-2 h-2 rounded-full bg-primary inline-block"></span>
+        <span class="text-[11px] text-text-muted">Luckjary Boutique Online</span>
+      </div>
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-2.5">
+          <div class="w-8 h-8 rounded-full bg-surface-card-elevated border border-border-strong flex items-center justify-center font-bold text-secondary text-[12px]">E</div>
+          <div>
+            <div class="text-[12px] font-bold text-text-platinum">Eleanor</div>
+            <div class="text-[10px] text-text-muted">Director</div>
+          </div>
+        </div>
+        <a href="/admin/logout/" class="text-text-muted hover:text-error transition-colors p-1" title="Sign out">
+          <span class="material-symbols-outlined text-[18px]">logout</span>
+        </a>
+      </div>
+    </div>
+  </aside>
+</div>
+
+</main>
 
 </body></html>
-</USER_REQUEST>
-<ADDITIONAL_METADATA>
-The current local time is: 2026-11-16T15:40:02+05:30.
-
-The user has uploaded 1 image(s):
-- C:/Users/Asusr/.gemini/antigravity/brain/7d895b1a-ea84-44aa-a32a-ba52ed6c8de9/.user_uploaded/media_1794823585994_439c07e1.jpg
-You can embed this image in an artifact if you need the USER to review it.
-</ADDITIONAL_METADATA>

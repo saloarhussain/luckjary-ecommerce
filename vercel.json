@@ -6,6 +6,7 @@
       "use": "@vercel/python",
       "config": {
         "includeFiles": [
+          "templates/**",
           "staticfiles/**",
           "db.sqlite3"
         ]
