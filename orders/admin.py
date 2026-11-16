@@ -65,6 +65,7 @@ class CouponAdmin(admin.ModelAdmin):
 
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
+    change_list_template = 'admin/orders/order/change_list.html'
     list_display = (
         'order_badge', 
         'customer_badge', 

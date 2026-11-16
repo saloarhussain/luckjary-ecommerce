@@ -1,0 +1,798 @@
+<!DOCTYPE html><html class="dark" lang="en"><head><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin=""><link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..700;1,6..96,400..700&amp;family=Plus+Jakarta+Sans:ital,wght@0,300..800;1,300..800&amp;family=JetBrains+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport">
+<title>Luckjary Atelier • Order Management</title>
+<!-- Tailwind CSS v3 with forms and container queries -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            obsidian: '#0d0e10',
+            surface: {
+              card: '#121315',
+              subtle: '#18191c',
+              elevated: '#1e2024'
+            },
+            champagne: {
+              300: '#f9e8b7',
+              400: '#ebd38d',
+              500: '#d4af37',
+              600: '#aa8b2c'
+            },
+            emerald: {
+              400: '#34d399',
+              500: '#10b981',
+              600: '#059669',
+              900: 'rgba(16, 185, 129, 0.15)'
+            },
+            amber: {
+              400: '#fbbf24',
+              500: '#f59e0b',
+              900: 'rgba(245, 158, 11, 0.15)'
+            }
+          },
+          fontFamily: {
+            serif: ['Bodoni Moda', 'Cinzel', 'Playfair Display', 'Georgia', 'serif'],
+            sans: ['Plus Jakarta Sans', 'Inter', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'sans-serif'],
+            mono: ['JetBrains Mono', 'SFMono-Regular', 'Menlo', 'monospace']
+          }
+        }
+      }
+    }
+  </script>
+<!-- BEGIN: Custom Typography and Base Styling -->
+<style data-purpose="custom-styling">
+    @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+    body {
+      background-color: #0d0e10;
+      color: #e2e8f0;
+      -webkit-font-smoothing: antialiased;
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+    }
+
+    /* Hide scrollbars for pill carousel while allowing smooth horizontal swipe */
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+  
+/* Explicit luxury typography & styling */
+body, html, input, button, select, textarea {
+  font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: transparent;
+}
+.font-serif, .font-serif-luxury {
+  font-family: 'Bodoni Moda', 'Cinzel', Georgia, serif !important;
+}
+.font-sans {
+  font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+}
+.font-mono, .font-mono-luxury, [class*="font-mono"], .font-mono *, .font-mono-luxury * {
+  font-family: 'JetBrains Mono', 'SFMono-Regular', Menlo, monospace !important;
+}
+.material-symbols-outlined {
+  font-family: 'Material Symbols Outlined' !important;
+}
+a { text-decoration: none !important; }
+
+/* Ensure card content has adequate breathing room and is never cut off at bottom */
+article[data-purpose="order-item"] {
+  background-color: #121315 !important;
+  border-color: #26282c !important;
+  overflow: visible !important;
+}
+
+/* Left slide-out navigation drawer */
+#leftNavDrawer {
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.25s ease;
+}
+#leftNavDrawerBackdrop {
+  transition: opacity 0.25s ease;
+}
+
+</style>
+<!-- END: Custom Typography and Base Styling -->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&amp;family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&amp;family=JetBrains+Mono:wght@400;500;600&amp;display=swap" data-snapdom="injected-import"></head>
+<body class="bg-obsidian min-h-screen pb-16 flex flex-col antialiased selection:bg-emerald-500/20 selection:text-emerald-300">
+
+<!-- Left Navigation Drawer Modal -->
+<div id="leftNavDrawerContainer" class="fixed inset-0 z-50 pointer-events-none transition-all duration-300">
+  <!-- Backdrop -->
+  <div id="leftNavDrawerBackdrop" class="absolute inset-0 bg-black/60 opacity-0 pointer-events-none transition-opacity duration-300"></div>
+  
+  <!-- Slide-out Drawer Panel -->
+  <aside id="leftNavDrawer" class="absolute top-0 bottom-0 left-0 w-[280px] max-w-[85vw] bg-[#121315] border-r border-[#232732] shadow-2xl flex flex-col -translate-x-full transition-transform duration-300 z-10 pointer-events-auto overflow-y-auto">
+    <!-- Drawer Header -->
+    <div class="p-4 border-b border-[#232732] flex items-center justify-between">
+      <div class="flex items-center gap-2">
+        <span class="w-2 h-2 rounded-full bg-emerald-400 inline-block"></span>
+        <span class="font-bold text-[15px] tracking-wider text-zinc-100">LUCKJARY</span>
+        <span class="text-[10px] text-amber-300 uppercase tracking-[0.2em] font-semibold">ATELIER</span>
+      </div>
+      <button id="closeNavDrawerBtn" class="w-8 h-8 rounded-lg flex items-center justify-center text-zinc-400 hover:text-zinc-100 active:scale-95 transition-colors cursor-pointer" type="button">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+      </button>
+    </div>
+
+    <!-- Navigation List -->
+    <div class="p-3 space-y-5 flex-1 text-[13px]">
+      <!-- Section: Navigation -->
+      <div>
+        <div class="text-[10px] font-bold tracking-[0.1em] text-zinc-400 uppercase px-2 mb-1.5 font-mono">Navigation</div>
+        <div class="space-y-0.5">
+          <a href="/admin/" class="flex items-center gap-3 px-3 py-2 rounded-xl text-zinc-400 hover:text-zinc-100 hover:bg-[#18191c] transition-colors">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg>
+            <span>Home</span>
+          </a>
+          <a href="/admin/orders/order/" class="flex items-center justify-between px-3 py-2 rounded-xl bg-[#1e2024] text-emerald-400 font-medium border-l-2 border-emerald-400 shadow-sm">
+            <div class="flex items-center gap-3">
+              <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="1" y="3" width="15" height="13"></rect><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon><circle cx="5.5" cy="18.5" r="2.5"></circle><circle cx="18.5" cy="18.5" r="2.5"></circle></svg>
+              <span class="text-zinc-100 font-semibold">Orders</span>
+            </div>
+            <span class="px-2 py-0.5 rounded-full bg-[#26282c] text-emerald-400 text-[11px] font-mono font-bold">4</span>
+          </a>
+          <a href="/admin/catalog/product/" class="flex items-center gap-3 px-3 py-2 rounded-xl text-zinc-400 hover:text-zinc-100 hover:bg-[#18191c] transition-colors">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="19" y1="5" x2="5" y2="19"></line><circle cx="6.5" cy="6.5" r="2.5"></circle><circle cx="17.5" cy="17.5" r="2.5"></circle></svg>
+            <span>Discounts</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Section: Products & Inventory -->
+      <div>
+        <div class="text-[10px] font-bold tracking-[0.1em] text-zinc-400 uppercase px-2 mb-1.5 font-mono">Products & Inventory</div>
+        <div class="space-y-0.5">
+          <a href="/admin/catalog/product/" class="flex items-center gap-3 px-3 py-2 rounded-xl text-zinc-400 hover:text-zinc-100 hover:bg-[#18191c] transition-colors">
+            <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polygon points="6 3 18 3 22 9 12 22 2 9"></polygon></svg>
+            <span>Products</span>
+          </a>
+          <a href="/admin/catalog/category/" class="flex items-center gap-3 px-3 py-2 rounded-xl text-zinc-400 hover:text-zinc-100 hover:bg-[#18191c] transition-colors">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+            <span>Collections</span>
+          </a>
+          <a href="/admin/catalog/category/" class="flex items-center gap-3 px-3 py-2 rounded-xl text-zinc-400 hover:text-zinc-100 hover:bg-[#18191c] transition-colors">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>
+            <span>Categories</span>
+          </a>
+          <a href="/admin/catalog/material/" class="flex items-center gap-3 px-3 py-2 rounded-xl text-zinc-400 hover:text-zinc-100 hover:bg-[#18191c] transition-colors">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+            <span>Materials</span>
+          </a>
+          <a href="/admin/catalog/review/" class="flex items-center gap-3 px-3 py-2 rounded-xl text-zinc-400 hover:text-zinc-100 hover:bg-[#18191c] transition-colors">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+            <span>Product Reviews</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Section: Customers -->
+      <div>
+        <div class="text-[10px] font-bold tracking-[0.1em] text-zinc-400 uppercase px-2 mb-1.5 font-mono">Customers</div>
+        <div class="space-y-0.5">
+          <a href="/admin/accounts/customuser/" class="flex items-center gap-3 px-3 py-2 rounded-xl text-zinc-400 hover:text-zinc-100 hover:bg-[#18191c] transition-colors">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+            <span>VIP Patrons</span>
+          </a>
+          <a href="/admin/accounts/address/" class="flex items-center gap-3 px-3 py-2 rounded-xl text-zinc-400 hover:text-zinc-100 hover:bg-[#18191c] transition-colors">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+            <span>Addresses</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Section: Store Currency Preference -->
+      <div class="pt-2 border-t border-[#232732]">
+        <div class="flex items-center justify-between px-2 mb-2">
+          <span class="text-[10px] font-bold tracking-[0.1em] text-amber-300 uppercase font-mono">Store Currency</span>
+          <span class="text-xs text-amber-300 font-bold">💳</span>
+        </div>
+        <div class="bg-[#121315] rounded-xl p-2.5 border border-[#26282c]">
+          <label class="text-[11px] text-zinc-400 block mb-1.5 font-medium">Select Active Currency:</label>
+          <div class="grid grid-cols-2 gap-1.5" id="currencySelectorGrid">
+            <button type="button" data-currency="INR" class="currency-pick-btn active py-1.5 px-2 rounded-lg text-[11px] font-bold border flex items-center justify-center gap-1.5 bg-emerald-500/10 text-emerald-400 border-emerald-500/50">
+              <span>₹ INR</span>
+            </button>
+            <button type="button" data-currency="USD" class="currency-pick-btn py-1.5 px-2 rounded-lg text-[11px] font-medium border flex items-center justify-center gap-1.5 bg-[#0d0e10] text-zinc-400 border-[#26282c] hover:text-zinc-100">
+              <span>$ USD</span>
+            </button>
+            <button type="button" data-currency="EUR" class="currency-pick-btn py-1.5 px-2 rounded-lg text-[11px] font-medium border flex items-center justify-center gap-1.5 bg-[#0d0e10] text-zinc-400 border-[#26282c] hover:text-zinc-100">
+              <span>€ EUR</span>
+            </button>
+            <button type="button" data-currency="GBP" class="currency-pick-btn py-1.5 px-2 rounded-lg text-[11px] font-medium border flex items-center justify-center gap-1.5 bg-[#0d0e10] text-zinc-400 border-[#26282c] hover:text-zinc-100">
+              <span>£ GBP</span>
+            </button>
+            <button type="button" data-currency="AED" class="currency-pick-btn col-span-2 py-1.5 px-2 rounded-lg text-[11px] font-medium border flex items-center justify-center gap-1.5 bg-[#0d0e10] text-zinc-400 border-[#26282c] hover:text-zinc-100">
+              <span>AED (Dirham)</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Drawer Footer -->
+    <div class="p-3 border-t border-[#232732] bg-[#0d0e10]">
+      <div class="flex items-center gap-2 mb-2">
+        <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+        <a href="/" target="_blank" class="text-[11px] text-zinc-400 hover:text-emerald-400 transition-colors">Luckjary Boutique Online ↗</a>
+      </div>
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-2">
+          <div class="w-7 h-7 rounded-full bg-[#1e2024] border border-[#2a2d33] flex items-center justify-center text-xs font-bold text-amber-300">E</div>
+          <div>
+            <div class="text-xs font-bold text-zinc-200 leading-none">Eleanor</div>
+            <div class="text-[10px] text-zinc-400">Director</div>
+          </div>
+        </div>
+        <a href="/admin/logout/" class="text-zinc-400 hover:text-red-400 p-1.5 rounded-lg hover:bg-[#1e2024] transition-colors" title="Sign Out">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+        </a>
+      </div>
+    </div>
+  </aside>
+</div>
+
+<!-- BEGIN: Top Atelier Header -->
+<header class="sticky top-0 z-40 bg-obsidian/90 backdrop-blur-md border-b border-[#26282c] px-4 py-3 flex items-center justify-between" data-purpose="app-header">
+<div class="flex items-center gap-3">
+<!-- Hamburger Menu Button -->
+<button id="openNavDrawerBtn" aria-label="Open Navigation Drawer" class="p-2 rounded-xl bg-surface-subtle/80 text-zinc-300 hover:text-white border border-[#26282c] active:scale-95 transition-all cursor-pointer" type="button">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+<line x1="4" x2="20" y1="7" y2="7"></line>
+<line x1="4" x2="20" y1="12" y2="12"></line>
+<line x1="4" x2="20" y1="17" y2="17"></line>
+</svg>
+</button>
+<!-- Brand Diamond Emblem & Logo -->
+<a href="/admin/" class="flex items-center gap-2 no-underline cursor-pointer">
+<div class="w-9 h-9 rounded-xl bg-gradient-to-br from-[#2a2d33] to-[#141517] p-[1px] shadow-inner border border-[#d4af37]/30 flex items-center justify-center">
+<svg class="w-4 h-4 text-champagne-400 drop-shadow-[0_0_6px_rgba(212,175,55,0.4)]" fill="currentColor" viewBox="0 0 24 24">
+<path d="M12 2L4 9l8 13 8-13-8-7zm0 2.24L17.7 9H6.3L12 4.24zM6.55 10.5h10.9L12 18.5 6.55 10.5z"></path>
+</svg>
+</div>
+<div>
+<span class="text-xs uppercase font-serif tracking-[0.2em] font-semibold text-zinc-100 block leading-tight">Luckjary</span>
+<span class="text-[9px] uppercase tracking-widest text-[#d4af37] block font-mono">Haute Atelier</span>
+</div>
+</a>
+</div>
+<!-- Header Quick Actions (Live Boutique & Director Chip) -->
+<div class="flex items-center gap-2">
+<a class="p-2 rounded-xl bg-surface-subtle/70 text-zinc-400 hover:text-zinc-200 border border-[#26282c] active:scale-95 transition-all" href="#" title="View Live Online Boutique">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+<path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+<polyline points="15 3 21 3 21 9"></polyline>
+<line x1="10" x2="21" y1="14" y2="3"></line>
+</svg>
+</a>
+<!-- Director Profile Indicator -->
+<div class="flex items-center gap-1.5 pl-1.5 pr-2.5 py-1 bg-[#1a1b1e] border border-[#2c2f35] rounded-full">
+<div class="w-6 h-6 rounded-full bg-gradient-to-tr from-amber-600 to-champagne-400 text-obsidian flex items-center justify-center text-[10px] font-bold font-mono shadow-sm">
+          E
+        </div>
+<span class="text-[11px] font-medium tracking-wide text-zinc-300">Admin</span>
+</div>
+</div>
+</header>
+<!-- END: Top Atelier Header -->
+<!-- BEGIN: Breadcrumbs & Page Header -->
+<main class="flex-1 px-4 pt-4 pb-8 max-w-lg mx-auto w-full" data-purpose="order-changelist-container">
+<!-- Breadcrumbs -->
+<nav aria-label="Breadcrumb" class="flex items-center gap-1.5 text-xs text-zinc-400 font-mono tracking-wide mb-2">
+<a href="/admin/" class="text-zinc-400 hover:text-zinc-300 transition-colors cursor-pointer">Home</a>
+<span class="text-zinc-600">›</span>
+<span class="text-zinc-200 font-medium">Orders &amp; Changelist</span>
+</nav>
+<!-- Kicker and Display Title -->
+<div class="flex flex-col gap-1 mb-4"><div class="flex items-center justify-between"><div class="flex items-center gap-2"><span class="font-kicker-luxury text-[11px] text-amber-400 font-semibold">Order Management</span><span class="w-1 h-1 rounded-full bg-amber-400/50"></span><span class="font-mono-luxury text-[11px] text-zinc-400 font-medium uppercase tracking-wider">Spring 2026</span></div><span class="inline-flex items-center gap-1.5 text-[10px] font-mono font-medium tracking-wider px-2 py-0.5 rounded-full bg-emerald-950/60 text-emerald-400 border border-emerald-500/30"><span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>LIVE DATABASE</span></div><div class="flex items-baseline justify-between mt-1"><h1 class="font-serif-luxury text-[24px] text-zinc-100 font-semibold tracking-wide">Atelier Orders</h1><span class="bg-surface-elevated border border-[#30333a] text-amber-300 font-mono-luxury text-[11px] px-2 py-0.5 rounded-full font-medium">4 ORDERS</span></div></div>
+<!-- Primary Action Button: Add Order -->
+<div class="mb-5"><a href="/admin/orders/order/add/" class="w-full bg-emerald-500 hover:bg-emerald-400 active:scale-[0.985] text-obsidian font-sans font-semibold text-[13px] tracking-[0.04em] py-3 px-4 rounded-xl shadow-[0_4px_20px_rgba(16,185,129,0.35)] flex items-center justify-center gap-1.5 transition-all no-underline cursor-pointer"><svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="16"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg><span>Add Order</span></a></div>
+<!-- BEGIN: Search & Filter Toolbar -->
+<section class="space-y-3 mb-4" data-purpose="search-and-filters"><div class="relative flex items-center"><div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-zinc-400"><svg class="w-4 h-4 text-zinc-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg></div><input class="w-full pl-10 pr-24 py-2.5 bg-surface-card border border-[#26282c] rounded-xl text-xs font-sans text-zinc-100 placeholder-zinc-500 focus:outline-none focus:border-emerald-500/60 focus:ring-1 focus:ring-emerald-500/50 transition-colors" placeholder="Search orders, patrons, ref..." type="text"><div class="absolute inset-y-0 right-1.5 flex items-center gap-1"><button aria-label="Barcode Search" class="p-1.5 rounded-lg text-zinc-400 hover:text-amber-400 transition-colors" type="button"><svg class="w-4 h-4 text-zinc-400 hover:text-amber-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 5v14M7 5v14M11 5v14M15 5v14M17 5v14M21 5v14"></path></svg></button><button class="px-2.5 py-1 text-[11px] font-semibold uppercase font-mono tracking-wider bg-surface-elevated hover:bg-zinc-700/60 text-zinc-300 rounded-lg border border-[#2c2e33]" type="button">Search</button></div></div><div class="flex items-center gap-2"><button class="flex-1 py-2 px-3 bg-surface-card hover:bg-surface-subtle border border-[#26282c] rounded-xl text-xs font-semibold text-zinc-300 flex items-center justify-center gap-1.5 transition-all" type="button"><svg class="w-3.5 h-3.5 text-amber-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="4" y1="21" x2="4" y2="14"></line><line x1="4" y1="10" x2="4" y2="3"></line><line x1="12" y1="21" x2="12" y2="12"></line><line x1="12" y1="8" x2="12" y2="3"></line><line x1="20" y1="21" x2="20" y2="16"></line><line x1="20" y1="12" x2="20" y2="3"></line><line x1="1" y1="14" x2="7" y2="14"></line><line x1="9" y1="8" x2="15" y2="8"></line><line x1="17" y1="16" x2="23" y2="16"></line></svg><span>Filters</span><span class="ml-0.5 w-4 h-4 rounded-full bg-amber-400/20 text-amber-300 text-[10px] font-mono font-bold flex items-center justify-center">2</span></button><button class="py-2 px-3 bg-surface-card hover:bg-surface-subtle border border-[#26282c] rounded-xl text-xs font-medium text-zinc-400 flex items-center gap-1.5 transition-all" type="button"><svg class="w-3.5 h-3.5 text-zinc-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg><span>Export</span></button></div><div class="flex items-center gap-2 overflow-x-auto no-scrollbar pt-1 pb-1 text-xs"><button class="whitespace-nowrap px-3.5 py-1.5 rounded-full font-semibold bg-emerald-500 text-obsidian shadow-sm flex items-center gap-1" type="button"><span>All Orders</span><span class="opacity-80 font-mono text-[10px]">4</span></button><button class="whitespace-nowrap px-3.5 py-1.5 rounded-full font-medium bg-surface-card border border-[#26282c] text-zinc-400 hover:text-zinc-200 flex items-center gap-1" type="button"><span>Unfulfilled</span><span class="text-amber-400 font-mono text-[10px]">1</span></button><button class="whitespace-nowrap px-3.5 py-1.5 rounded-full font-medium bg-surface-card border border-[#26282c] text-zinc-400 hover:text-zinc-200 flex items-center gap-1" type="button"><span>QC Review</span><span class="text-indigo-400 font-mono text-[10px]">1</span></button><button class="whitespace-nowrap px-3.5 py-1.5 rounded-full font-medium bg-surface-card border border-[#26282c] text-zinc-400 hover:text-zinc-200 flex items-center gap-1" type="button"><span>In Transit</span><span class="text-cyan-400 font-mono text-[10px]">1</span></button><button class="whitespace-nowrap px-3.5 py-1.5 rounded-full font-medium bg-surface-card border border-[#26282c] text-zinc-400 hover:text-zinc-200 flex items-center gap-1" type="button"><span>Delivered</span><span class="text-emerald-400 font-mono text-[10px]">1</span></button></div></section>
+<!-- END: Search & Filter Toolbar -->
+<!-- BEGIN: Batch Action Controls -->
+<div class="bg-surface-card border border-[#26282c] rounded-xl p-3 mb-4 shadow-sm" data-purpose="batch-actions-bar">
+<div class="flex items-center justify-between text-xs font-mono uppercase tracking-wider text-zinc-400 mb-2">
+<div class="flex items-center gap-2">
+<input class="rounded border-zinc-700 bg-surface-subtle text-emerald-500 focus:ring-emerald-500 focus:ring-offset-obsidian" id="selectAll" type="checkbox">
+<label class="cursor-pointer text-[11px] font-semibold text-zinc-300" for="selectAll">Select All</label>
+</div>
+<span class="text-[11px] font-medium text-emerald-400 font-mono bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">
+          0 of 4 selected
+        </span>
+</div>
+<div class="grid grid-cols-12 gap-2">
+<div class="col-span-8 relative">
+<select class="w-full bg-surface-subtle border border-[#2a2d33] text-zinc-300 text-xs rounded-lg py-2 pl-3 pr-8 focus:ring-emerald-500 focus:border-emerald-500 tracking-wide font-sans appearance-none">
+<option disabled="" selected="" value="">— Batch Action: Select Option —</option>
+<option value="mark_fulfilled">Mark as In Transit</option>
+<option value="mark_qc">Pass Atelier QC Review</option>
+<option value="export_invoices">Export Consignment Invoices</option>
+<option value="delete_selected">Cancel / Archive Orders</option>
+</select>
+<div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2.5 text-zinc-500">
+<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</div>
+</div>
+<button class="col-span-4 bg-surface-elevated hover:bg-zinc-700 active:scale-95 border border-[#373940] text-zinc-100 text-xs font-medium rounded-lg py-2 px-3 text-center transition-all" type="button">
+          Run
+        </button>
+</div>
+</div>
+<!-- END: Batch Action Controls -->
+<!-- BEGIN: Luxury Order Cards List -->
+<div class="space-y-3.5" data-purpose="orders-feed"><!-- Card 1: Julian Stewart -->
+<article class="bg-surface-card border border-[#26282c] rounded-2xl p-4 transition-all hover:border-[#383a42] relative overflow-hidden" data-purpose="order-item">
+  <div class="flex items-start justify-between gap-2 pb-3 border-b border-[#1f2024]">
+    <div class="flex items-center gap-2.5">
+      <input class="w-4 h-4 rounded border-[#383b42] bg-[#1a1b1e] text-emerald-500 focus:ring-emerald-500 focus:ring-offset-obsidian cursor-pointer" type="checkbox">
+      <div>
+        <button class="text-[11px] font-mono text-zinc-300 bg-surface-subtle border border-[#2a2d33] px-2 py-0.5 rounded inline-flex items-center gap-1.5 hover:text-emerald-400 transition-colors" title="Copy Ref ID" type="button">
+          <span class="font-mono font-medium tracking-wider">LCK-202611-304918</span>
+          <svg class="w-3 h-3 text-zinc-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+        </button>
+        <span class="block text-[10px] text-zinc-500 font-mono mt-0.5">Apr 24, 2026 • 14:32</span>
+      </div>
+    </div>
+    <div class="text-right flex flex-col items-end">
+      <div class="flex items-baseline gap-1.5">
+        <span class="text-[11px] text-zinc-500 font-mono line-through">₹4,200</span>
+        <span class="text-[20px] font-bold text-amber-300 font-sans tracking-tight leading-tight">₹3,450</span>
+      </div>
+      <div class="flex items-center gap-1 mt-0.5">
+        <span class="text-[10px] font-semibold text-emerald-400 bg-emerald-500/10 px-1.5 py-0.2 rounded font-mono border border-emerald-500/20">-18%</span>
+        <span class="text-[10px] text-zinc-400 font-mono tracking-wider uppercase">INR Total</span>
+      </div>
+    </div>
+  </div>
+  <div class="py-3 space-y-2.5">
+    <div class="flex items-center justify-between">
+      <div class="flex items-center gap-2">
+        <div class="w-7 h-7 rounded-full bg-surface-subtle border border-[#2a2d33] flex items-center justify-center text-xs font-semibold text-zinc-200 font-mono">JS</div>
+        <div>
+          <h2 class="text-sm font-bold text-zinc-100 leading-snug font-sans tracking-wide">Julian Stewart</h2>
+          <div class="text-[11px] text-zinc-400 font-mono">julian.stewart@icloud.com</div>
+        </div>
+      </div>
+      <a class="p-1.5 rounded-lg bg-surface-subtle text-pink-400 hover:text-pink-300 border border-pink-500/20 inline-flex items-center justify-center" href="tel:+13109024819" title="Contact Patron">
+        <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M6.62 10.79a15.053 15.053 0 006.59 6.59l2.2-2.2a1 1 0 011.02-.24c1.12.37 2.33.57 3.57.57a1 1 0 011 1V20a1 1 0 01-1 1A17 17 0 013 4a1 1 0 011-1h3.5a1 1 0 011 1c0 1.25.2 2.45.57 3.57a1 1 0 01-.24 1.02l-2.21 2.2z"></path></svg>
+      </a>
+    </div>
+    <div class="bg-surface-subtle/80 rounded-xl p-2.5 border border-[#222327] flex items-start gap-2.5">
+      <div class="w-9 h-9 rounded-lg bg-[#212328] border border-[#2c2e35] flex items-center justify-center shrink-0">
+        <svg class="w-4 h-4 text-champagne-400" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"></circle><circle cx="12" cy="12" r="4"></circle></svg>
+      </div>
+      <div class="flex-1 min-w-0">
+        <span class="text-[10px] font-semibold uppercase tracking-wider text-amber-300 block font-mono">Fine Rings</span>
+        <p class="text-sm text-zinc-100 font-bold font-sans tracking-wide uppercase truncate">Aura Textured Dome Ring</p>
+        <p class="text-xs text-zinc-400 font-sans truncate">18K Demifine Vermeil • Size 7 (US)</p>
+      </div>
+    </div>
+    <div class="flex flex-wrap items-center gap-1.5 pt-0.5">
+      <span class="inline-flex items-center gap-1.5 text-xs font-sans px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-medium"><span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>Pre-Payment (Paid)</span>
+      <span class="inline-flex items-center gap-1.5 text-xs font-sans px-2.5 py-0.5 rounded-full bg-amber-500/10 text-amber-300 border border-amber-500/25 font-medium"><span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span>Unfulfilled / Production</span>
+    </div>
+  </div>
+  <div class="pt-2.5 border-t border-[#1f2024] flex items-center justify-between">
+    <button class="text-xs text-zinc-400 hover:text-zinc-200 font-sans inline-flex items-center gap-1.5" type="button">
+      <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
+      <span>Invoice PDF</span>
+    </button>
+    <a class="inline-flex items-center gap-1.5 text-xs font-semibold text-emerald-400 hover:text-emerald-300 bg-emerald-500/10 border border-emerald-500/20 px-3 py-1.5 rounded-lg transition-colors font-sans" href="/admin/orders/order/4/change/">
+      <span>Manage Order</span>
+      <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+    </a>
+  </div>
+</article>
+
+<!-- Card 2: Charlotte Dupré -->
+<article class="bg-surface-card border border-[#26282c] rounded-2xl p-4 transition-all hover:border-[#383a42] relative overflow-hidden" data-purpose="order-item">
+  <div class="flex items-start justify-between gap-2 pb-3 border-b border-[#1f2024]">
+    <div class="flex items-center gap-2.5">
+      <input class="w-4 h-4 rounded border-[#383b42] bg-[#1a1b1e] text-emerald-500 focus:ring-emerald-500 focus:ring-offset-obsidian cursor-pointer" type="checkbox">
+      <div>
+        <button class="text-[11px] font-mono text-zinc-300 bg-surface-subtle border border-[#2a2d33] px-2 py-0.5 rounded inline-flex items-center gap-1.5 hover:text-emerald-400 transition-colors" title="Copy Ref ID" type="button">
+          <span class="font-mono font-medium tracking-wider">LCK-202611-194056</span>
+          <svg class="w-3 h-3 text-zinc-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+        </button>
+        <span class="block text-[10px] text-zinc-500 font-mono mt-0.5">Apr 24, 2026 • 12:15</span>
+      </div>
+    </div>
+    <div class="text-right flex flex-col items-end">
+      <div class="flex items-baseline gap-1.5">
+        <span class="text-[11px] text-zinc-500 font-mono line-through">₹1,850</span>
+        <span class="text-[20px] font-bold text-amber-300 font-sans tracking-tight leading-tight">₹1,485</span>
+      </div>
+      <div class="flex items-center gap-1 mt-0.5">
+        <span class="text-[10px] font-semibold text-emerald-400 bg-emerald-500/10 px-1.5 py-0.2 rounded font-mono border border-emerald-500/20">-20%</span>
+        <span class="text-[10px] text-zinc-400 font-mono tracking-wider uppercase">INR Total</span>
+      </div>
+    </div>
+  </div>
+  <div class="py-3 space-y-2.5">
+    <div class="flex items-center justify-between">
+      <div class="flex items-center gap-2">
+        <div class="w-7 h-7 rounded-full bg-surface-subtle border border-[#2a2d33] flex items-center justify-center text-xs font-semibold text-zinc-200 font-mono">CD</div>
+        <div>
+          <h2 class="text-sm font-bold text-zinc-100 leading-snug font-sans tracking-wide">Charlotte Dupré</h2>
+          <div class="text-[11px] text-zinc-400 font-mono">charlotte.dupre@gmail.com</div>
+        </div>
+      </div>
+      <a class="p-1.5 rounded-lg bg-surface-subtle text-pink-400 hover:text-pink-300 border border-pink-500/20 inline-flex items-center justify-center" href="tel:+14158829104" title="Contact Patron">
+        <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M6.62 10.79a15.053 15.053 0 006.59 6.59l2.2-2.2a1 1 0 011.02-.24c1.12.37 2.33.57 3.57.57a1 1 0 011 1V20a1 1 0 01-1 1A17 17 0 013 4a1 1 0 011-1h3.5a1 1 0 011 1c0 1.25.2 2.45.57 3.57a1 1 0 01-.24 1.02l-2.21 2.2z"></path></svg>
+      </a>
+    </div>
+    <div class="bg-surface-subtle/80 rounded-xl p-2.5 border border-[#222327] flex items-start gap-2.5">
+      <div class="w-9 h-9 rounded-lg bg-[#212328] border border-[#2c2e35] flex items-center justify-center shrink-0">
+        <svg class="w-4 h-4 text-champagne-400" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M4 10a8 8 0 1 0 16 0 8 8 0 1 0-16 0"></path><path d="M12 2v4"></path><path d="M12 18v4"></path></svg>
+      </div>
+      <div class="flex-1 min-w-0">
+        <span class="text-[10px] font-semibold uppercase tracking-wider text-amber-300 block font-mono">Necklaces</span>
+        <p class="text-sm text-zinc-100 font-bold font-sans tracking-wide uppercase truncate">Celeste Herringbone Chain</p>
+        <p class="text-xs text-zinc-400 font-sans truncate">18K Gold Vermeil • 18-inch Choker</p>
+      </div>
+    </div>
+    <div class="flex flex-wrap items-center gap-1.5 pt-0.5">
+      <span class="inline-flex items-center gap-1.5 text-xs font-sans px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-medium"><span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>Pre-Payment</span>
+      <span class="inline-flex items-center gap-1.5 text-xs font-sans px-2.5 py-0.5 rounded-full bg-indigo-500/15 text-indigo-300 border border-indigo-500/30 font-medium"><span class="w-1.5 h-1.5 rounded-full bg-indigo-400"></span>In Atelier QC</span>
+    </div>
+  </div>
+  <div class="pt-2.5 border-t border-[#1f2024] flex items-center justify-between">
+    <button class="text-xs text-zinc-400 hover:text-zinc-200 font-sans inline-flex items-center gap-1.5" type="button">
+      <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
+      <span>Invoice PDF</span>
+    </button>
+    <a class="inline-flex items-center gap-1.5 text-xs font-semibold text-emerald-400 hover:text-emerald-300 bg-emerald-500/10 border border-emerald-500/20 px-3 py-1.5 rounded-lg transition-colors font-sans" href="/admin/orders/order/3/change/">
+      <span>Manage Order</span>
+      <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+    </a>
+  </div>
+</article>
+
+<!-- Card 3: Isabella Vance (Delivered) -->
+<article class="bg-surface-card border border-[#26282c] rounded-2xl p-4 transition-all hover:border-[#383a42] relative overflow-hidden" data-purpose="order-item">
+  <div class="flex items-start justify-between gap-2 pb-3 border-b border-[#1f2024]">
+    <div class="flex items-center gap-2.5">
+      <input class="w-4 h-4 rounded border-[#383b42] bg-[#1a1b1e] text-emerald-500 focus:ring-emerald-500 focus:ring-offset-obsidian cursor-pointer" type="checkbox">
+      <div>
+        <button class="text-[11px] font-mono text-zinc-300 bg-surface-subtle border border-[#2a2d33] px-2 py-0.5 rounded inline-flex items-center gap-1.5 hover:text-emerald-400 transition-colors" title="Copy Ref ID" type="button">
+          <span class="font-mono font-medium tracking-wider">LCK-202611-739201</span>
+          <svg class="w-3 h-3 text-zinc-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+        </button>
+        <span class="block text-[10px] text-zinc-500 font-mono mt-0.5">Apr 23, 2026 • 18:40</span>
+      </div>
+    </div>
+    <div class="text-right flex flex-col items-end">
+      <div class="flex items-baseline gap-1.5">
+        <span class="text-[11px] text-zinc-500 font-mono line-through">₹3,100</span>
+        <span class="text-[20px] font-bold text-amber-300 font-sans tracking-tight leading-tight">₹2,450</span>
+      </div>
+      <div class="flex items-center gap-1 mt-0.5">
+        <span class="text-[10px] font-semibold text-emerald-400 bg-emerald-500/10 px-1.5 py-0.2 rounded font-mono border border-emerald-500/20">-21%</span>
+        <span class="text-[10px] text-zinc-400 font-mono tracking-wider uppercase">INR Total</span>
+      </div>
+    </div>
+  </div>
+  <div class="py-3 space-y-2.5">
+    <div class="flex items-center justify-between">
+      <div class="flex items-center gap-2">
+        <div class="w-7 h-7 rounded-full bg-surface-subtle border border-[#2a2d33] flex items-center justify-center text-xs font-semibold text-zinc-200 font-mono">IV</div>
+        <div>
+          <h2 class="text-sm font-bold text-zinc-100 leading-snug font-sans tracking-wide">Isabella Vance</h2>
+          <div class="text-[11px] text-zinc-400 font-mono">isabella.vance@example.com</div>
+        </div>
+      </div>
+      <a class="p-1.5 rounded-lg bg-surface-subtle text-pink-400 hover:text-pink-300 border border-pink-500/20 inline-flex items-center justify-center" href="tel:+12125550143" title="Contact Patron">
+        <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M6.62 10.79a15.053 15.053 0 006.59 6.59l2.2-2.2a1 1 0 011.02-.24c1.12.37 2.33.57 3.57.57a1 1 0 011 1V20a1 1 0 01-1 1A17 17 0 013 4a1 1 0 011-1h3.5a1 1 0 011 1c0 1.25.2 2.45.57 3.57a1 1 0 01-.24 1.02l-2.21 2.2z"></path></svg>
+      </a>
+    </div>
+    <div class="bg-surface-subtle/80 rounded-xl p-2.5 border border-[#222327] flex items-start gap-2.5">
+      <div class="w-9 h-9 rounded-lg bg-[#212328] border border-[#2c2e35] flex items-center justify-center shrink-0">
+        <svg class="w-4 h-4 text-champagne-400" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="12" r="3"></circle><line x1="9" y1="12" x2="15" y2="12"></line></svg>
+      </div>
+      <div class="flex-1 min-w-0">
+        <span class="text-[10px] font-semibold uppercase tracking-wider text-amber-300 block font-mono">Bracelets</span>
+        <p class="text-sm text-zinc-100 font-bold font-sans tracking-wide uppercase truncate">Elysian Radiant Tennis Bracelet</p>
+        <p class="text-xs text-zinc-400 font-sans truncate">925 Sterling Silver • 6.5 in</p>
+      </div>
+    </div>
+    <div class="flex flex-wrap items-center gap-1.5 pt-0.5">
+      <span class="inline-flex items-center gap-1.5 text-xs font-sans px-2.5 py-0.5 rounded-full bg-zinc-800 text-zinc-300 border border-zinc-700 font-medium"><span class="w-1.5 h-1.5 rounded-full bg-zinc-400"></span>COD (Cash on Delivery)</span>
+      <span class="inline-flex items-center gap-1.5 text-xs font-sans px-2.5 py-0.5 rounded-full bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 font-medium"><span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>Delivered</span>
+    </div>
+  </div>
+  <div class="pt-2.5 border-t border-[#1f2024] flex items-center justify-between">
+    <button class="text-xs text-zinc-400 hover:text-zinc-200 font-sans inline-flex items-center gap-1.5" type="button">
+      <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
+      <span>Receipt PDF</span>
+    </button>
+    <a class="inline-flex items-center gap-1.5 text-xs font-semibold text-emerald-400 hover:text-emerald-300 bg-emerald-500/10 border border-emerald-500/20 px-3 py-1.5 rounded-lg transition-colors font-sans" href="/admin/orders/order/2/change/">
+      <span>Manage Order</span>
+      <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+    </a>
+  </div>
+</article>
+
+<!-- Card 4: Isabella Vance (In Transit) -->
+<article class="bg-surface-card border border-[#26282c] rounded-2xl p-4 transition-all hover:border-[#383a42] relative overflow-hidden" data-purpose="order-item">
+  <div class="flex items-start justify-between gap-2 pb-3 border-b border-[#1f2024]">
+    <div class="flex items-center gap-2.5">
+      <input class="w-4 h-4 rounded border-[#383b42] bg-[#1a1b1e] text-emerald-500 focus:ring-emerald-500 focus:ring-offset-obsidian cursor-pointer" type="checkbox">
+      <div>
+        <button class="text-[11px] font-mono text-zinc-300 bg-surface-subtle border border-[#2a2d33] px-2 py-0.5 rounded inline-flex items-center gap-1.5 hover:text-emerald-400 transition-colors" title="Copy Ref ID" type="button">
+          <span class="font-mono font-medium tracking-wider">LCK-202611-884102</span>
+          <svg class="w-3 h-3 text-zinc-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+        </button>
+        <span class="block text-[10px] text-zinc-500 font-mono mt-0.5">Apr 22, 2026 • 09:12</span>
+      </div>
+    </div>
+    <div class="text-right flex flex-col items-end">
+      <div class="flex items-baseline gap-1.5">
+        <span class="text-[11px] text-zinc-500 font-mono line-through">₹4,500</span>
+        <span class="text-[20px] font-bold text-amber-300 font-sans tracking-tight leading-tight">₹3,780</span>
+      </div>
+      <div class="flex items-center gap-1 mt-0.5">
+        <span class="text-[10px] font-semibold text-emerald-400 bg-emerald-500/10 px-1.5 py-0.2 rounded font-mono border border-emerald-500/20">-16%</span>
+        <span class="text-[10px] text-zinc-400 font-mono tracking-wider uppercase">INR Total</span>
+      </div>
+    </div>
+  </div>
+  <div class="py-3 space-y-2.5">
+    <div class="flex items-center justify-between">
+      <div class="flex items-center gap-2">
+        <div class="w-7 h-7 rounded-full bg-surface-subtle border border-[#2a2d33] flex items-center justify-center text-xs font-semibold text-zinc-200 font-mono">IV</div>
+        <div>
+          <h2 class="text-sm font-bold text-zinc-100 leading-snug font-sans tracking-wide">Isabella Vance</h2>
+          <div class="text-[11px] text-zinc-400 font-mono">isabella.vance@example.com</div>
+        </div>
+      </div>
+      <a class="p-1.5 rounded-lg bg-surface-subtle text-pink-400 hover:text-pink-300 border border-pink-500/20 inline-flex items-center justify-center" href="tel:+12125550143" title="Contact Patron">
+        <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M6.62 10.79a15.053 15.053 0 006.59 6.59l2.2-2.2a1 1 0 011.02-.24c1.12.37 2.33.57 3.57.57a1 1 0 011 1V20a1 1 0 01-1 1A17 17 0 013 4a1 1 0 011-1h3.5a1 1 0 011 1c0 1.25.2 2.45.57 3.57a1 1 0 01-.24 1.02l-2.21 2.2z"></path></svg>
+      </a>
+    </div>
+    <div class="bg-surface-subtle/80 rounded-xl p-2.5 border border-[#222327] flex items-start gap-2.5">
+      <div class="w-9 h-9 rounded-lg bg-[#212328] border border-[#2c2e35] flex items-center justify-center shrink-0">
+        <svg class="w-4 h-4 text-champagne-400" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+      </div>
+      <div class="flex-1 min-w-0">
+        <span class="text-[10px] font-semibold uppercase tracking-wider text-amber-300 block font-mono">Atelier Sets</span>
+        <p class="text-sm text-zinc-100 font-bold font-sans tracking-wide uppercase truncate">Solitaire Cabochon Signet &amp; Luna Huggies</p>
+        <p class="text-xs text-zinc-400 font-sans truncate">925 Sterling Silver • 2 Items Set</p>
+      </div>
+    </div>
+    <div class="flex flex-wrap items-center gap-1.5 pt-0.5">
+      <span class="inline-flex items-center gap-1.5 text-xs font-sans px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-medium"><span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>Pre-Payment</span>
+      <span class="inline-flex items-center gap-1.5 text-xs font-sans px-2.5 py-0.5 rounded-full bg-cyan-500/15 text-cyan-300 border border-cyan-500/30 font-medium">
+        <svg class="w-3.5 h-3.5 mr-0.5 text-cyan-300" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="1" y="3" width="15" height="13"></rect><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon><circle cx="5.5" cy="18.5" r="2.5"></circle><circle cx="18.5" cy="18.5" r="2.5"></circle></svg>
+        In Transit (FedEx Luxury)
+      </span>
+    </div>
+  </div>
+  <div class="pt-2.5 border-t border-[#1f2024] flex items-center justify-between">
+    <button class="text-xs text-zinc-400 hover:text-zinc-200 font-sans inline-flex items-center gap-1.5" type="button">
+      <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="1" y="3" width="15" height="13"></rect><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon><circle cx="5.5" cy="18.5" r="2.5"></circle><circle cx="18.5" cy="18.5" r="2.5"></circle></svg>
+      <span>Track Airway Bill</span>
+    </button>
+    <a class="inline-flex items-center gap-1.5 text-xs font-semibold text-emerald-400 hover:text-emerald-300 bg-emerald-500/10 border border-emerald-500/20 px-3 py-1.5 rounded-lg transition-colors font-sans" href="/admin/orders/order/1/change/">
+      <span>Manage Order</span>
+      <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+    </a>
+  </div>
+</article></div>
+<!-- END: Luxury Order Cards List -->
+<!-- BEGIN: Luxury Pagination Controls -->
+<footer class="mt-6 pt-4 border-t border-[#26282c] flex items-center justify-between text-xs" data-purpose="pagination-footer">
+<span class="text-zinc-400 font-mono text-[11px]">
+        Showing <span class="text-zinc-200 font-medium">1 - 4</span> of 4 orders
+      </span>
+<div class="flex items-center gap-1">
+<button class="p-2 rounded-lg bg-surface-subtle text-zinc-600 border border-[#222428] cursor-not-allowed" disabled="" type="button">
+<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg>
+</button>
+<span class="px-2.5 py-1 rounded-lg bg-surface-elevated text-champagne-400 font-mono font-medium border border-[#30333a]">
+          1
+        </span>
+<button class="p-2 rounded-lg bg-surface-subtle text-zinc-600 border border-[#222428] cursor-not-allowed" disabled="" type="button">
+<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg>
+</button>
+</div>
+</footer>
+<!-- END: Luxury Pagination Controls -->
+</main>
+<!-- BEGIN: Interactive Batch Actions Script -->
+<script data-purpose="mobile-interaction-logic">
+    document.addEventListener('DOMContentLoaded', () => {
+      const selectAllCheckbox = document.getElementById('selectAll');
+      const orderCheckboxes = document.querySelectorAll('article input[type="checkbox"]');
+      const selectionCountBadge = document.querySelector('[data-purpose="batch-actions-bar"] span.font-mono');
+
+      function updateCount() {
+        const checkedCount = document.querySelectorAll('article input[type="checkbox"]:checked').length;
+        if (selectionCountBadge) {
+          selectionCountBadge.textContent = `${checkedCount} of ${orderCheckboxes.length} selected`;
+          if (checkedCount > 0) {
+            selectionCountBadge.classList.remove('text-emerald-400', 'bg-emerald-500/10', 'border-emerald-500/20');
+            selectionCountBadge.classList.add('text-champagne-400', 'bg-champagne-500/20', 'border-[#d4af37]/40');
+          } else {
+            selectionCountBadge.classList.remove('text-champagne-400', 'bg-champagne-500/20', 'border-[#d4af37]/40');
+            selectionCountBadge.classList.add('text-emerald-400', 'bg-emerald-500/10', 'border-emerald-500/20');
+          }
+        }
+      }
+
+      if (selectAllCheckbox) {
+        selectAllCheckbox.addEventListener('change', (e) => {
+          orderCheckboxes.forEach((cb) => {
+            cb.checked = e.target.checked;
+          });
+          updateCount();
+        });
+      }
+
+      orderCheckboxes.forEach((cb) => {
+        cb.addEventListener('change', () => {
+          const allChecked = Array.from(orderCheckboxes).every((item) => item.checked);
+          if (selectAllCheckbox) {
+            selectAllCheckbox.checked = allChecked;
+          }
+          updateCount();
+        });
+      });
+    });
+
+    // Drawer Interaction Logic
+    const openDrawerBtn = document.getElementById('openNavDrawerBtn');
+    const closeDrawerBtn = document.getElementById('closeNavDrawerBtn');
+    const drawerContainer = document.getElementById('leftNavDrawerContainer');
+    const drawerBackdrop = document.getElementById('leftNavDrawerBackdrop');
+    const drawerPanel = document.getElementById('leftNavDrawer');
+
+    function openNavDrawer() {
+      if (!drawerContainer || !drawerBackdrop || !drawerPanel) return;
+      drawerContainer.classList.remove('pointer-events-none');
+      drawerBackdrop.classList.remove('opacity-0', 'pointer-events-none');
+      drawerBackdrop.classList.add('opacity-100', 'pointer-events-auto');
+      drawerPanel.classList.remove('-translate-x-full');
+      drawerPanel.classList.add('translate-x-0');
+    }
+
+    function closeNavDrawer() {
+      if (!drawerContainer || !drawerBackdrop || !drawerPanel) return;
+      drawerPanel.classList.remove('translate-x-0');
+      drawerPanel.classList.add('-translate-x-full');
+      drawerBackdrop.classList.remove('opacity-100', 'pointer-events-auto');
+      drawerBackdrop.classList.add('opacity-0', 'pointer-events-none');
+      setTimeout(() => {
+        drawerContainer.classList.add('pointer-events-none');
+      }, 300);
+    }
+
+    if (openDrawerBtn) openDrawerBtn.addEventListener('click', openNavDrawer);
+    if (closeDrawerBtn) closeDrawerBtn.addEventListener('click', closeNavDrawer);
+    if (drawerBackdrop) drawerBackdrop.addEventListener('click', closeNavDrawer);
+
+    // Filter Chips Interactive Logic
+    const statusChips = document.querySelectorAll('section[data-purpose="search-and-filters"] .overflow-x-auto button');
+    const orderArticles = document.querySelectorAll('article[data-purpose="order-item"]');
+
+    statusChips.forEach((chip) => {
+      chip.addEventListener('click', () => {
+        statusChips.forEach((c) => {
+          c.className = 'whitespace-nowrap px-3.5 py-1.5 rounded-full font-medium bg-surface-card border border-[#26282c] text-zinc-400 hover:text-zinc-200 flex items-center gap-1';
+        });
+        chip.className = 'whitespace-nowrap px-3.5 py-1.5 rounded-full font-semibold bg-emerald-500 text-obsidian shadow-sm flex items-center gap-1';
+        const filterText = chip.textContent.trim().toLowerCase();
+        
+        orderArticles.forEach((article) => {
+          if (filterText.includes('all orders')) {
+            article.style.display = '';
+          } else if (filterText.includes('unfulfilled')) {
+            article.style.display = article.textContent.toLowerCase().includes('unfulfilled') ? '' : 'none';
+          } else if (filterText.includes('qc review')) {
+            article.style.display = article.textContent.toLowerCase().includes('in atelier qc') ? '' : 'none';
+          } else if (filterText.includes('in transit')) {
+            article.style.display = article.textContent.toLowerCase().includes('in transit') ? '' : 'none';
+          } else if (filterText.includes('delivered')) {
+            article.style.display = article.textContent.toLowerCase().includes('delivered') ? '' : 'none';
+          }
+        });
+      });
+    });
+
+    // Real-Time Search Filtering
+    const searchInput = document.querySelector('section[data-purpose="search-and-filters"] input[type="text"]');
+    if (searchInput) {
+      searchInput.addEventListener('input', (e) => {
+        const query = e.target.value.toLowerCase().trim();
+        orderArticles.forEach((article) => {
+          const text = article.textContent.toLowerCase();
+          article.style.display = text.includes(query) ? '' : 'none';
+        });
+      });
+    }
+
+    // Copy Ref ID button feedback
+    document.querySelectorAll('button[title="Copy Ref ID"]').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const refSpan = btn.querySelector('span');
+        if (refSpan) {
+          const text = refSpan.textContent.trim();
+          navigator.clipboard.writeText(text).then(() => {
+            const originalColor = refSpan.style.color;
+            refSpan.style.color = '#34d399';
+            setTimeout(() => { refSpan.style.color = originalColor; }, 1200);
+          });
+        }
+      });
+    });
+
+    // Currency Switcher Logic
+    const currencyButtons = document.querySelectorAll('.currency-pick-btn');
+    const currencySymbols = {
+      'INR': '₹',
+      'USD': '$',
+      'EUR': '€',
+      'GBP': '£',
+      'AED': 'AED '
+    };
+
+    const savedCurrency = localStorage.getItem('luckjary_currency') || 'INR';
+    setActiveCurrencyUI(savedCurrency);
+
+    function setActiveCurrencyUI(curr) {
+      currencyButtons.forEach(btn => {
+        if (btn.getAttribute('data-currency') === curr) {
+          btn.className = 'currency-pick-btn active py-1.5 px-2 rounded-lg text-[11px] font-bold border flex items-center justify-center gap-1.5 bg-emerald-500/10 text-emerald-400 border-emerald-500/50';
+        } else {
+          btn.className = 'currency-pick-btn py-1.5 px-2 rounded-lg text-[11px] font-medium border flex items-center justify-center gap-1.5 bg-[#0d0e10] text-zinc-400 border-[#26282c] hover:text-zinc-100';
+        }
+      });
+
+      const sym = currencySymbols[curr] || '₹';
+      orderArticles.forEach(card => {
+        const priceMain = card.querySelector('span.text-amber-300');
+        if (priceMain) {
+          priceMain.textContent = priceMain.textContent.replace(/^[₹$€£]|AED\s*/g, sym);
+        }
+        const priceComp = card.querySelector('span.line-through');
+        if (priceComp) {
+          priceComp.textContent = priceComp.textContent.replace(/^[₹$€£]|AED\s*/g, sym);
+        }
+        const currBadge = card.querySelector('span.tracking-wider.uppercase');
+        if (currBadge && currBadge.textContent.toUpperCase().includes('TOTAL')) {
+          currBadge.textContent = curr + ' TOTAL';
+        }
+      });
+    }
+
+    currencyButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const curr = btn.getAttribute('data-currency');
+        localStorage.setItem('luckjary_currency', curr);
+        document.cookie = `admin_currency=${curr};path=/;max-age=31536000`;
+        setActiveCurrencyUI(curr);
+        fetch('/set-currency/', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/x-www-form-urlencoded', 'X-Requested-With': 'XMLHttpRequest'},
+          body: `currency=${curr}`
+        }).catch(() => {});
+      });
+    });
+
+  </script>
+<!-- END: Interactive Batch Actions Script -->
+
+
+
+
+
+
+</body></html>
