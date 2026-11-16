@@ -3,10 +3,11 @@
 
 {% block extrahead %}
 {{ block.super }}
-<!-- Fonts: Bodoni Moda, Plus Jakarta Sans, Material Symbols Outlined -->
+<!-- Luxury Fonts: Bodoni Moda, Plus Jakarta Sans, Cinzel, JetBrains Mono, Material Symbols Outlined -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..900;1,6..96,400..900&family=Plus+Jakarta+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
 
 <!-- Tailwind CSS v3 -->
@@ -90,6 +91,9 @@ tailwind.config = {
         "space-xl": "2.5rem"
       },
       "fontFamily": {
+        "serif-luxury": ["Bodoni Moda", "serif"],
+        "kicker-luxury": ["Cinzel", "serif"],
+        "mono-luxury": ["JetBrains Mono", "monospace"],
         "body-sm": ["Plus Jakarta Sans"],
         "body-lg": ["Plus Jakarta Sans"],
         "body-md": ["Plus Jakarta Sans"],
@@ -128,6 +132,16 @@ tailwind.config = {
     font-family: 'Plus Jakarta Sans', sans-serif !important;
     -webkit-font-smoothing: antialiased;
     overflow-x: hidden;
+  }
+  .font-serif-luxury {
+    font-family: 'Bodoni Moda', Georgia, serif !important;
+  }
+  .font-kicker-luxury {
+    font-family: 'Cinzel', 'Bodoni Moda', serif !important;
+    letter-spacing: 0.05em;
+  }
+  .font-mono-luxury {
+    font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace !important;
   }
   #container.shopify-app-root {
     background: #121315 !important;
@@ -201,14 +215,14 @@ tailwind.config = {
         <div class="flex items-center justify-between pt-1">
           <div class="flex flex-col">
             <div class="flex items-center gap-2">
-              <span class="font-caption text-caption text-secondary uppercase tracking-[0.2em] font-semibold">Inventory Hub</span>
-              <span class="w-1 h-1 rounded-full bg-border-strong"></span>
-              <span class="font-caption text-caption text-text-muted">Spring 2025</span>
+              <span class="font-kicker-luxury text-[11px] text-secondary font-semibold">Inventory Hub</span>
+              <span class="w-1 h-1 rounded-full bg-secondary/40"></span>
+              <span class="font-mono-luxury text-[11px] text-text-muted font-medium uppercase tracking-wider">Spring 2025</span>
             </div>
             <div class="flex items-baseline gap-2 mt-0.5">
-              <h1 class="font-headline-sm text-headline-sm text-text-platinum font-semibold tracking-tight">Atelier Vault</h1>
-              <span class="bg-surface-card-elevated text-secondary font-label-sm text-label-sm px-2 py-0.5 rounded-full shadow-sm">
-                {{ cl.result_count }} Pieces
+              <h1 class="font-serif-luxury text-[24px] text-text-platinum font-semibold tracking-wide">Atelier Vault</h1>
+              <span class="bg-surface-card-elevated border border-border-strong text-secondary font-mono-luxury text-[11px] px-2 py-0.5 rounded-full font-medium">
+                {{ cl.result_count }} PIECES
               </span>
             </div>
           </div>
@@ -220,19 +234,19 @@ tailwind.config = {
 
         <!-- Search & Fast Controls Bar -->
         <div class="flex items-center gap-2">
-          <div class="relative flex-1 bg-surface-card rounded-xl shadow-sm flex items-center px-3 py-2.5 border border-border-subtle/40">
+          <div class="relative flex-1 bg-surface-card rounded-xl shadow-sm flex items-center px-3 py-2.5">
             <span class="material-symbols-outlined text-[20px] text-text-muted mr-2">search</span>
-            <input class="bg-transparent text-body-sm font-body-sm text-on-surface placeholder:text-text-muted focus:outline-none w-full min-w-0" id="productSearchInput" name="q" value="{{ cl.query|default:'' }}" placeholder="Search SKU, hallmark, stones..." type="text"/>
+            <input class="bg-transparent text-body-sm font-body-sm text-on-surface placeholder:text-text-muted focus:outline-none w-full min-w-0" id="productSearchInput" name="q" value="{{ cl.query|default:'' }}" placeholder="Search SKU, hallmark, stones..." type="text">
             <button aria-label="Scan SKU Barcode" class="text-text-muted hover:text-secondary transition-colors pl-2 flex items-center cursor-pointer" type="button" onclick="document.getElementById('productSearchInput').focus()">
               <span class="material-symbols-outlined text-[20px]">barcode_scanner</span>
             </button>
           </div>
-          <button class="relative bg-surface-card hover:bg-surface-card-elevated text-text-platinum px-3 py-2.5 rounded-xl shadow-sm flex items-center gap-1.5 transition-all active:scale-95 cursor-pointer border border-border-subtle/40" id="filterModalToggle" type="button">
+          <button class="relative bg-surface-card hover:bg-surface-card-elevated text-text-platinum px-3 py-2.5 rounded-xl shadow-sm flex items-center gap-1.5 transition-all active:scale-95 cursor-pointer" id="filterModalToggle" type="button">
             <span class="material-symbols-outlined text-[19px] text-secondary">tune</span>
             <span class="font-label-sm text-label-sm">Filters</span>
             <span class="w-4 h-4 rounded-full bg-secondary text-on-secondary font-caption text-caption flex items-center justify-center font-bold">2</span>
           </button>
-          <div class="flex bg-surface-card p-1 rounded-xl shadow-sm border border-border-subtle/40">
+          <div class="flex bg-surface-card p-1 rounded-xl shadow-sm">
             <button aria-label="List View" class="w-8 h-8 rounded-lg bg-surface-card-elevated text-primary flex items-center justify-center shadow-inner cursor-pointer" id="viewListBtn" type="button">
               <span class="material-symbols-outlined text-[18px]">view_agenda</span>
             </button>
@@ -244,17 +258,17 @@ tailwind.config = {
 
         <!-- Categories Horizontal Scroll -->
         <div class="flex items-center gap-2 overflow-x-auto py-1 -mx-margin-mobile px-margin-mobile scrollbar-none" id="categoryChips">
-          <a href="?" class="category-chip {% if not request.GET.category__id__exact and not request.GET.inventory__lte %}active bg-surface-card-elevated text-primary{% else %}bg-surface-card text-text-muted hover:text-text-platinum{% endif %} whitespace-nowrap px-3.5 py-1.5 rounded-full font-label-sm text-label-sm shadow-sm flex items-center gap-1.5 transition-colors border border-border-subtle/40">
+          <a href="?" class="category-chip {% if not request.GET.category__id__exact and not request.GET.inventory__lte %}active bg-surface-card-elevated text-primary{% else %}bg-surface-card text-text-muted hover:text-text-platinum{% endif %} whitespace-nowrap px-3.5 py-1.5 rounded-full font-label-sm text-label-sm shadow-sm flex items-center gap-1.5 transition-colors">
             <span>All Vault</span>
             <span class="text-caption font-mono text-primary/80">{{ catalog_stats.total|default:cl.result_count }}</span>
           </a>
           {% for cat in categories_list %}
-          <a href="?category__id__exact={{ cat.id }}" class="category-chip {% if request.GET.category__id__exact == cat.id|stringformat:'s' %}active bg-surface-card-elevated text-primary{% else %}bg-surface-card text-text-muted hover:text-text-platinum{% endif %} whitespace-nowrap px-3.5 py-1.5 rounded-full font-label-sm text-label-sm shadow-sm flex items-center gap-1.5 transition-colors border border-border-subtle/40">
+          <a href="?category__id__exact={{ cat.id }}" class="category-chip {% if request.GET.category__id__exact == cat.id|stringformat:'s' %}active bg-surface-card-elevated text-primary{% else %}bg-surface-card text-text-muted hover:text-text-platinum{% endif %} whitespace-nowrap px-3.5 py-1.5 rounded-full font-label-sm text-label-sm shadow-sm flex items-center gap-1.5 transition-colors">
             <span>{{ cat.name }}</span>
             <span class="text-caption font-mono text-text-muted">{{ cat.products.count }}</span>
           </a>
           {% endfor %}
-          <a href="?inventory__lte=5" class="category-chip {% if request.GET.inventory__lte %}active bg-surface-card-elevated text-secondary{% else %}bg-surface-card text-secondary/90 hover:text-secondary{% endif %} whitespace-nowrap px-3.5 py-1.5 rounded-full font-label-sm text-label-sm shadow-sm flex items-center gap-1.5 transition-colors border border-border-subtle/40">
+          <a href="?inventory__lte=5" class="category-chip {% if request.GET.inventory__lte %}active bg-surface-card-elevated text-secondary{% else %}bg-surface-card text-secondary/90 hover:text-secondary{% endif %} whitespace-nowrap px-3.5 py-1.5 rounded-full font-label-sm text-label-sm shadow-sm flex items-center gap-1.5 transition-colors">
             <span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>
             <span>Low Stock</span>
             <span class="text-caption font-mono">{{ catalog_stats.low_stock|default:0 }}</span>
@@ -262,17 +276,17 @@ tailwind.config = {
         </div>
 
         <!-- Bulk Action Bar -->
-        <div class="flex items-center justify-between bg-surface-card-elevated px-3.5 py-2.5 rounded-xl shadow-md border border-border-subtle/40">
+        <div class="flex items-center justify-between bg-surface-card-elevated px-3.5 py-2.5 rounded-xl shadow-md">
           <label class="flex items-center gap-2.5 cursor-pointer">
             <input class="w-4 h-4 rounded bg-surface-dim accent-primary cursor-pointer border border-border-strong" id="selectAllCheckbox" type="checkbox"/>
             <span class="font-label-sm text-label-sm text-text-platinum tracking-wide"><span id="selectedCount">0</span> of {{ cl.result_list|length }} Selected</span>
           </label>
           <div class="flex items-center gap-2">
-            <button class="font-label-sm text-label-sm bg-surface-card text-text-muted hover:text-text-platinum px-2.5 py-1 rounded-lg flex items-center gap-1 shadow-sm transition-colors cursor-pointer border border-border-subtle/40" id="batchActionBtn" type="button" onclick="openBatchModal()">
+            <button class="font-label-sm text-label-sm bg-surface-card text-text-muted hover:text-text-platinum px-2.5 py-1 rounded-lg flex items-center gap-1 shadow-sm transition-colors cursor-pointer" id="batchActionBtn" type="button" onclick="openBatchModal()">
               <span class="material-symbols-outlined text-[15px]">edit_note</span>
               <span>Batch</span>
             </button>
-            <button class="font-label-sm text-label-sm bg-surface-card text-text-muted hover:text-text-platinum px-2.5 py-1 rounded-lg flex items-center gap-1 shadow-sm transition-colors cursor-pointer border border-border-subtle/40" type="button" onclick="exportCsv()">
+            <button class="font-label-sm text-label-sm bg-surface-card text-text-muted hover:text-text-platinum px-2.5 py-1 rounded-lg flex items-center gap-1 shadow-sm transition-colors cursor-pointer" type="button" onclick="exportCsv()">
               <span class="material-symbols-outlined text-[15px]">file_download</span>
               <span>Export</span>
             </button>
@@ -282,15 +296,15 @@ tailwind.config = {
         <!-- Catalog Items Container -->
         <div class="flex flex-col space-y-3.5" id="catalogContainer">
           {% for product in cl.result_list %}
-          <div class="product-item bg-surface-card rounded-2xl p-3.5 shadow-md flex flex-col space-y-3 relative group border border-border-subtle/40" data-id="{{ product.pk }}" data-title="{{ product.title|lower }}" data-sku="{{ product.sku|lower }}" data-metal="{{ product.karat_metal|lower }}" data-price="{{ product.price }}" data-stock="{{ product.inventory }}">
+          <div class="product-item bg-surface-card rounded-2xl p-3.5 shadow-md flex flex-col space-y-3 relative group" data-id="{{ product.pk }}" data-title="{{ product.title|lower }}" data-sku="{{ product.sku|lower }}" data-metal="{{ product.karat_metal|lower }}" data-price="{{ product.price }}" data-stock="{{ product.inventory }}">
             <div class="flex items-start gap-3">
               <!-- Thumbnail with preview badge -->
               <div class="relative w-20 h-24 rounded-xl overflow-hidden bg-surface-dim shrink-0 shadow-inner">
-                <img class="w-full h-full object-cover" src="{{ product.primary_image }}" alt="{{ product.title }}" loading="lazy"/>
+                <img class="w-full h-full object-cover" src="{{ product.primary_image }}" alt="{{ product.title }}" loading="lazy">
                 <a href="{{ product.primary_image }}" target="_blank" aria-label="Quick zoom view" class="absolute bottom-1 right-1 w-6 h-6 rounded-md bg-surface-card/80 backdrop-blur-md flex items-center justify-center text-text-platinum active:scale-90 transition-transform">
                   <span class="material-symbols-outlined text-[13px]">zoom_in</span>
                 </a>
-                <span class="absolute top-1 left-1 bg-surface-dim/80 backdrop-blur-xs text-secondary font-caption text-caption px-1 rounded font-mono font-bold">
+                <span class="absolute top-1 left-1 bg-surface-dim/80 backdrop-blur-xs text-secondary font-caption text-caption px-1 rounded font-mono">
                   {% if '18k' in product.karat_metal|lower or 'vermeil' in product.karat_metal|lower or 'gold' in product.karat_metal|lower %}18K{% else %}925{% endif %}
                 </span>
               </div>
@@ -299,16 +313,22 @@ tailwind.config = {
               <div class="flex-1 min-w-0 flex flex-col justify-between h-24">
                 <div>
                   <div class="flex items-center justify-between gap-1">
-                    <span class="text-secondary font-caption text-caption tracking-wider uppercase font-semibold">
-                      {{ product.category.name|default:"Atelier Piece" }}
+                    <span class="bg-surface-card-elevated text-secondary font-kicker-luxury text-[10px] font-semibold px-2 py-0.5 rounded-full uppercase">
+                      {{ product.category.name|default:"RINGS" }}
                     </span>
-                    <input name="_selected_action" value="{{ product.pk }}" class="product-checkbox w-4 h-4 rounded bg-surface-dim accent-primary cursor-pointer border border-border-strong" type="checkbox"/>
+                    <div class="flex items-center gap-1">
+                      <input class="product-checkbox w-4 h-4 rounded bg-surface-dim accent-primary cursor-pointer border border-border-strong" type="checkbox" name="_selected_action" value="{{ product.pk }}">
+                    </div>
                   </div>
-                  <a href="{% url 'admin:catalog_product_change' product.pk %}" class="font-headline-sm text-body-lg text-text-platinum font-medium line-clamp-1 mt-1 leading-snug hover:text-primary transition-colors block">
-                    {{ product.title }}
-                  </a>
+
+                  <h2 class="font-serif-luxury text-[15px] text-text-platinum font-medium line-clamp-1 mt-1 leading-snug tracking-wide uppercase">
+                    <a href="{% url 'admin:catalog_product_change' product.pk %}" class="hover:text-primary transition-colors">
+                      {{ product.title }}
+                    </a>
+                  </h2>
+
                   <div class="flex items-center gap-1.5 mt-0.5">
-                    <button class="font-caption text-caption font-mono text-text-muted hover:text-primary transition-colors flex items-center gap-1 bg-surface-container-low px-1.5 py-0.5 rounded cursor-pointer" onclick="copySkuText('{{ product.sku }}', this)" title="Click to copy SKU" type="button">
+                    <button class="font-mono-luxury text-[11px] text-text-muted hover:text-primary transition-colors flex items-center gap-1 bg-surface-container-low px-1.5 py-0.5 rounded border border-border-subtle cursor-pointer" onclick="copySkuText('{{ product.sku }}', this)" title="Click to copy SKU" type="button">
                       <span>{{ product.sku }}</span>
                       <span class="material-symbols-outlined text-[11px]">content_copy</span>
                     </button>
@@ -316,10 +336,20 @@ tailwind.config = {
                 </div>
 
                 <div class="flex items-baseline gap-2">
-                  <span class="font-headline-sm text-headline-sm text-text-platinum font-semibold">{{ currency_symbol|default:"₹" }}{{ product.price|floatformat:0 }}</span>
+                  <span class="font-serif-luxury text-[20px] text-secondary font-bold tracking-tight">
+                    {{ currency_symbol|default:"₹" }}{{ product.price|floatformat:0 }}
+                  </span>
                   {% if product.compare_at_price and product.compare_at_price > product.price %}
-                  <span class="font-body-sm text-body-sm text-text-muted line-through">{{ currency_symbol|default:"₹" }}{{ product.compare_at_price|floatformat:0 }}</span>
-                  <span class="font-caption text-caption text-primary font-semibold bg-primary/10 px-1.5 py-0.5 rounded">-{{ product.discount_percent }}%</span>
+                  <span class="font-mono-luxury text-[12px] text-text-muted line-through">
+                    {{ currency_symbol|default:"₹" }}{{ product.compare_at_price|floatformat:0 }}
+                  </span>
+                  <span class="font-mono-luxury text-[10px] text-primary font-semibold bg-primary/10 px-1.5 py-0.5 rounded">
+                    -{{ product.discount_percent }}%
+                  </span>
+                  {% elif product.is_bestseller or product.is_featured %}
+                  <span class="font-kicker-luxury text-[10px] text-secondary font-semibold bg-secondary/10 px-2 py-0.5 rounded">
+                    SIGNATURE
+                  </span>
                   {% endif %}
                 </div>
               </div>
@@ -342,11 +372,11 @@ tailwind.config = {
             <!-- Quick Action Drawer -->
             <div class="flex items-center justify-between pt-0.5">
               <div class="flex items-center gap-2">
-                <button onclick="openStockModal('{{ product.pk }}', '{{ product.title|escapejs }}', {{ product.inventory }})" class="flex items-center gap-1 bg-surface-card-elevated hover:bg-surface-variant text-text-platinum font-label-sm text-label-sm px-2.5 py-1.5 rounded-lg shadow-sm transition-all cursor-pointer" type="button">
+                <button class="flex items-center gap-1 bg-surface-card-elevated hover:bg-surface-variant text-text-platinum font-label-sm text-label-sm px-2.5 py-1.5 rounded-lg shadow-sm transition-all cursor-pointer" type="button" onclick="openStockModal('{{ product.pk }}', '{{ product.title|escapejs }}', {{ product.inventory }})">
                   <span class="material-symbols-outlined text-[15px] text-primary">edit</span>
                   <span>{% if product.inventory <= 5 %}Restock{% else %}Edit Stock{% endif %}</span>
                 </button>
-                <button onclick="openPriceModal('{{ product.pk }}', '{{ product.title|escapejs }}', {{ product.price }}, {{ product.compare_at_price|default:0 }})" class="flex items-center gap-1 bg-surface-card-elevated hover:bg-surface-variant text-text-platinum font-label-sm text-label-sm px-2.5 py-1.5 rounded-lg shadow-sm transition-all cursor-pointer" type="button">
+                <button class="flex items-center gap-1 bg-surface-card-elevated hover:bg-surface-variant text-text-platinum font-label-sm text-label-sm px-2.5 py-1.5 rounded-lg shadow-sm transition-all cursor-pointer" type="button" onclick="openPriceModal('{{ product.pk }}', '{{ product.title|escapejs }}', {{ product.price }}, {{ product.compare_at_price|default:0 }})">
                   <span class="material-symbols-outlined text-[15px] text-secondary">sell</span>
                   <span>Reprice</span>
                 </button>
@@ -364,17 +394,31 @@ tailwind.config = {
           {% empty %}
           <div class="p-8 text-center text-text-muted bg-surface-card rounded-2xl border border-border-subtle/40">
             <span class="material-symbols-outlined text-[40px] text-text-muted mb-2">inventory_2</span>
-            <p class="font-headline-sm text-headline-sm text-text-platinum">No jewelry pieces found</p>
+            <p class="font-serif-luxury text-headline-sm text-text-platinum">No jewelry pieces found</p>
             <p class="text-body-sm text-text-muted mt-1">Try adjusting your filters or search keywords</p>
           </div>
           {% endfor %}
         </div>
 
+        <!-- Pagination / Quick Jump Footer -->
+        <div class="flex items-center justify-between pt-2 pb-6 px-1">
+          <span class="font-caption text-caption text-text-muted">Showing {{ cl.result_list|length }} of {{ cl.result_count }} pieces</span>
+          <div class="flex items-center gap-1.5">
+            <button class="w-8 h-8 rounded-lg bg-surface-card text-text-muted opacity-40 flex items-center justify-center" disabled type="button">
+              <span class="material-symbols-outlined text-[18px]">chevron_left</span>
+            </button>
+            <span class="font-label-sm text-label-sm bg-surface-card-elevated text-primary w-8 h-8 rounded-lg flex items-center justify-center shadow-sm">1</span>
+            <button class="w-8 h-8 rounded-lg bg-surface-card text-text-muted hover:text-text-platinum flex items-center justify-center cursor-pointer" type="button">
+              <span class="material-symbols-outlined text-[18px]">chevron_right</span>
+            </button>
+          </div>
+        </div>
+
       </div>
     </main>
 
-    <!-- Floating Bulk Toolbar when items selected -->
-    <div class="fixed bottom-24 left-4 right-4 max-w-md mx-auto bg-surface-card-elevated/95 backdrop-blur-xl border border-primary/20 shadow-[0_4px_24px_rgba(0,0,0,0.6)] rounded-2xl p-3 transition-all duration-300 translate-y-28 opacity-0 pointer-events-none flex items-center justify-between z-40" id="bulkFloatingToolbar">
+    <!-- Floating Bulk Action Drawer (Visible on multi-select) -->
+    <div class="fixed left-4 right-4 bg-surface-card-elevated/95 backdrop-blur-xl rounded-2xl p-3 shadow-xl transition-all duration-300 translate-y-28 opacity-0 pointer-events-none flex items-center justify-between z-40 bottom-6 max-w-md mx-auto border border-border-strong" id="bulkFloatingToolbar">
       <div class="flex items-center gap-2 pl-1">
         <span class="w-2 h-2 rounded-full bg-primary animate-ping"></span>
         <span class="font-label-sm text-label-sm text-text-platinum font-semibold" id="bulkBadgeText">0 Selected</span>
@@ -397,7 +441,7 @@ tailwind.config = {
         <div class="flex items-center justify-between pb-1 border-b border-border-subtle/60">
           <div class="flex items-center gap-2">
             <span class="material-symbols-outlined text-[20px] text-secondary">tune</span>
-            <h3 class="font-headline-sm text-headline-sm text-text-platinum font-semibold">Filter Vault</h3>
+            <h3 class="font-serif-luxury text-headline-sm text-text-platinum font-semibold">Filter Vault</h3>
           </div>
           <button class="w-8 h-8 rounded-full bg-surface-card text-text-muted hover:text-text-platinum flex items-center justify-center cursor-pointer" id="closeFilterSheet" type="button">
             <span class="material-symbols-outlined text-[20px]">close</span>
@@ -453,17 +497,17 @@ tailwind.config = {
         <div class="flex items-center justify-between pb-2 border-b border-border-subtle">
           <div class="flex items-center gap-2">
             <span class="material-symbols-outlined text-[20px] text-primary">edit</span>
-            <h4 class="font-headline-sm text-body-lg text-text-platinum font-semibold">Adjust Vault Stock</h4>
+            <h4 class="font-serif-luxury text-body-lg text-text-platinum font-semibold">Adjust Vault Stock</h4>
           </div>
           <button class="w-7 h-7 rounded-full bg-surface-card text-text-muted hover:text-text-platinum flex items-center justify-center" type="button" onclick="closeStockModal()">
             <span class="material-symbols-outlined text-[18px]">close</span>
           </button>
         </div>
         <div>
-          <p class="font-body-sm text-text-muted text-caption" id="stockModalTitle">Product Name</p>
+          <p class="font-mono-luxury text-text-muted text-[12px]" id="stockModalTitle">Product Name</p>
           <div class="flex items-center justify-center gap-4 mt-4">
             <button class="w-10 h-10 rounded-xl bg-surface-card hover:bg-surface-variant text-text-platinum flex items-center justify-center text-xl font-bold cursor-pointer" type="button" onclick="adjustStockValue(-1)">-</button>
-            <input type="number" id="stockModalInput" class="w-24 text-center bg-surface-dim border border-border-strong rounded-xl py-2 text-xl font-semibold text-text-platinum focus:outline-none focus:border-primary" value="25"/>
+            <input type="number" id="stockModalInput" class="w-24 text-center bg-surface-dim border border-border-strong rounded-xl py-2 text-xl font-semibold text-text-platinum focus:outline-none focus:border-primary font-mono-luxury" value="25"/>
             <button class="w-10 h-10 rounded-xl bg-surface-card hover:bg-surface-variant text-text-platinum flex items-center justify-center text-xl font-bold cursor-pointer" type="button" onclick="adjustStockValue(1)">+</button>
           </div>
         </div>
@@ -480,17 +524,17 @@ tailwind.config = {
         <div class="flex items-center justify-between pb-2 border-b border-border-subtle">
           <div class="flex items-center gap-2">
             <span class="material-symbols-outlined text-[20px] text-secondary">sell</span>
-            <h4 class="font-headline-sm text-body-lg text-text-platinum font-semibold">Reprice Piece</h4>
+            <h4 class="font-serif-luxury text-body-lg text-text-platinum font-semibold">Reprice Piece</h4>
           </div>
           <button class="w-7 h-7 rounded-full bg-surface-card text-text-muted hover:text-text-platinum flex items-center justify-center" type="button" onclick="closePriceModal()">
             <span class="material-symbols-outlined text-[18px]">close</span>
           </button>
         </div>
         <div class="space-y-3">
-          <p class="font-body-sm text-text-muted text-caption" id="priceModalTitle">Product Name</p>
+          <p class="font-mono-luxury text-text-muted text-[12px]" id="priceModalTitle">Product Name</p>
           <div>
-            <label class="font-caption text-caption text-text-muted block mb-1">New Price ({{ currency_symbol|default:"₹" }} {{ currency_code|default:"INR" }})</label>
-            <input type="number" id="priceModalInput" class="w-full bg-surface-dim border border-border-strong rounded-xl px-3 py-2 text-lg font-semibold text-text-platinum focus:outline-none focus:border-secondary"/>
+            <label class="font-mono-luxury text-caption text-text-muted block mb-1">New Price ({{ currency_symbol|default:"₹" }} {{ currency_code|default:"INR" }})</label>
+            <input type="number" id="priceModalInput" class="w-full bg-surface-dim border border-border-strong rounded-xl px-3 py-2 text-lg font-semibold text-text-platinum focus:outline-none focus:border-secondary font-mono-luxury"/>
           </div>
         </div>
         <div class="pt-2 flex items-center gap-2">
@@ -506,7 +550,7 @@ tailwind.config = {
         <div class="flex items-center justify-between pb-2 border-b border-border-subtle">
           <div class="flex items-center gap-2">
             <span class="material-symbols-outlined text-[20px] text-secondary">edit_note</span>
-            <h4 class="font-headline-sm text-body-lg text-text-platinum font-semibold">Batch Actions</h4>
+            <h4 class="font-serif-luxury text-body-lg text-text-platinum font-semibold">Batch Actions</h4>
           </div>
           <button class="w-7 h-7 rounded-full bg-surface-card text-text-muted hover:text-text-platinum flex items-center justify-center" type="button" onclick="closeBatchModal()">
             <span class="material-symbols-outlined text-[18px]">close</span>
@@ -535,28 +579,6 @@ tailwind.config = {
 
   </form>
 </div>
-
-<!-- Mobile Bottom Navigation Bar -->
-<nav class="fixed bottom-0 w-full z-50 pb-safe bg-surface-card-elevated/90 backdrop-blur-xl shadow-[0_-1px_12px_rgba(0,0,0,0.5)] border-t border-border-strong/50">
-  <div class="h-16 max-w-md mx-auto px-space-xs grid grid-cols-4 items-center">
-    <a aria-current="page" class="flex flex-col items-center justify-center gap-1 min-h-[44px] transition-colors text-primary font-semibold" href="{% url 'admin:catalog_product_changelist' %}">
-      <span class="material-symbols-outlined text-[22px]">diamond</span>
-      <span class="font-caption text-caption tracking-wider uppercase">Products</span>
-    </a>
-    <a class="flex flex-col items-center justify-center gap-1 min-h-[44px] text-text-muted hover:text-text-platinum transition-colors" href="{% url 'admin:orders_order_changelist' %}">
-      <span class="material-symbols-outlined text-[22px]">receipt_long</span>
-      <span class="font-caption text-caption tracking-wider uppercase">Orders</span>
-    </a>
-    <a class="flex flex-col items-center justify-center gap-1 min-h-[44px] text-text-muted hover:text-text-platinum transition-colors" href="{% url 'admin:catalog_category_changelist' %}">
-      <span class="material-symbols-outlined text-[22px]">lock</span>
-      <span class="font-caption text-caption tracking-wider uppercase">Vault</span>
-    </a>
-    <a class="flex flex-col items-center justify-center gap-1 min-h-[44px] text-text-muted hover:text-text-platinum transition-colors" href="{% url 'admin:index' %}">
-      <span class="material-symbols-outlined text-[22px]">tune</span>
-      <span class="font-caption text-caption tracking-wider uppercase">Settings</span>
-    </a>
-  </div>
-</nav>
 
 <script>
   (function initProductCatalog() {
@@ -596,6 +618,19 @@ tailwind.config = {
 
     checkboxes.forEach(cb => {
       cb.addEventListener('change', updateSelectionState);
+    });
+
+    // Category chips click behavior
+    const chips = document.querySelectorAll('#categoryChips .category-chip');
+    chips.forEach(chip => {
+      chip.addEventListener('click', () => {
+        chips.forEach(c => {
+          c.classList.remove('bg-surface-card-elevated', 'text-primary');
+          c.classList.add('bg-surface-card', 'text-text-muted');
+        });
+        chip.classList.remove('bg-surface-card', 'text-text-muted');
+        chip.classList.add('bg-surface-card-elevated', 'text-primary');
+      });
     });
 
     // Grid vs List view toggle
@@ -695,8 +730,6 @@ tailwind.config = {
   }
 
   function saveStockValue() {
-    const val = document.getElementById('stockModalInput').value;
-    // Redirect to change form with message or inform user
     window.location.href = `/admin/catalog/product/${activeProductId}/change/`;
   }
 
