@@ -81,7 +81,6 @@ class OrderAdmin(admin.ModelAdmin):
             return (
                 ('Order Telemetry & Stage', {
                     'fields': (
-                        'order_banner_card',
                         ('status', 'payment_status'),
                         ('carrier', 'tracking_number'),
                         ('tracking_url', 'estimated_delivery'),
@@ -143,7 +142,6 @@ class OrderAdmin(admin.ModelAdmin):
     def get_readonly_fields(self, request, obj=None):
         base_readonly = [
             'order_number',
-            'order_banner_card',
             'customer_profile_card',
             'subtotal',
             'shipping_cost',

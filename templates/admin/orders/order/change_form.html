@@ -1,223 +1,336 @@
 {% extends "admin/change_form.html" %}
 {% load i18n admin_urls static admin_modify %}
 
-{% block breadcrumbs %}
-<div class="lux-order-mobile-breadcrumbs">
-    <a href="{% url 'admin:orders_order_changelist' %}" class="lux-back-nav-btn">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-            <polyline points="15 18 9 12 15 6"></polyline>
-        </svg>
-        <span>All Orders</span>
-    </a>
-    <span class="lux-bread-sep">/</span>
-    <span class="lux-bread-active">{{ original.order_number|default:"New Order" }}</span>
+{% block nav-breadcrumbs %}{% endblock %}
+{% block breadcrumbs %}{% endblock %}
+{% block content_subtitle %}{% endblock %}
+
+{% block content_title %}
+<div class="lux-order-console-header">
+    <!-- Top Compact Navigation Strip -->
+    <div class="lux-order-back-bar">
+        <a href="{% url 'admin:orders_order_changelist' %}" class="lux-back-link">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="15 18 9 12 15 6"></polyline>
+            </svg>
+            <span>Orders</span>
+        </a>
+        <span class="lux-back-sep">/</span>
+        <span class="lux-order-ref-code">{{ original.order_number|default:"New Order" }}</span>
+    </div>
+
+    <!-- Main Order Master Card -->
+    {% if original and original.id %}
+    <div class="lux-order-master-banner lux-order-banner-widget">
+        <div class="lux-banner-row-primary">
+            <div class="lux-banner-ref-group">
+                <span class="lux-banner-ordernum">{{ original.order_number }}</span>
+                <div class="lux-banner-status-pills">
+                    {% if original.status == 'PENDING' %}
+                        <span class="badge-luxury badge-pending">⏳ Intake Queue</span>
+                    {% elif original.status == 'PROCESSING' %}
+                        <span class="badge-luxury badge-processing">◆ In Atelier QC</span>
+                    {% elif original.status == 'SHIPPED' %}
+                        <span class="badge-luxury badge-shipped">✈ Armored Transit</span>
+                    {% elif original.status == 'DELIVERED' %}
+                        <span class="badge-luxury badge-delivered">✓ Delivered</span>
+                    {% elif original.status == 'CANCELLED' %}
+                        <span class="badge-luxury badge-cancelled">✕ Cancelled</span>
+                    {% else %}
+                        <span class="badge-luxury badge-pending">{{ original.get_status_display }}</span>
+                    {% endif %}
+
+                    {% if original.payment_status == 'PAID' %}
+                        <span class="badge-luxury badge-paid">🔒 Paid</span>
+                    {% else %}
+                        <span class="badge-luxury badge-pending">{{ original.get_payment_status_display }}</span>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="lux-banner-amount-group">
+                <span class="lux-amount-kicker">SETTLED TOTAL</span>
+                <div class="lux-amount-value">${{ original.total_amount|floatformat:2 }}</div>
+            </div>
+        </div>
+
+        <div class="lux-banner-row-secondary">
+            <div class="lux-banner-patron-info">
+                <div class="lux-patron-avatar-sm">{{ original.full_name|slice:":2"|upper|default:"VP" }}</div>
+                <div class="lux-patron-details-col">
+                    <span class="lux-patron-title-name">{{ original.full_name|default:"Valued Patron" }}</span>
+                    <span class="lux-order-meta-date">Placed {{ original.created_at|date:"M d, Y • H:i" }}</span>
+                </div>
+            </div>
+
+            <!-- Compact Inline Action Tools -->
+            <div class="lux-banner-actions">
+                {% if change and not is_popup %}
+                <a href="{% url opts|admin_urlname:'history' original.pk|admin_urlquote %}" class="lux-history-btn">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <polyline points="12 6 12 12 16 14"></polyline>
+                    </svg>
+                    <span>Audit Log</span>
+                </a>
+                {% endif %}
+
+                {% if original.tracking_number %}
+                <a href="/track/{{ original.order_number }}/" target="_blank" class="lux-track-quick-btn">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                        <polyline points="15 3 21 3 21 9"></polyline>
+                        <line x1="10" y1="14" x2="21" y2="3"></line>
+                    </svg>
+                    <span>Track</span>
+                </a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <div class="lux-new-order-title">Create New Order</div>
+    {% endif %}
 </div>
 {% endblock %}
 
-{% block object-tools %}
-{% if change %}{% if not is_popup %}
-  <ul class="object-tools lux-order-tools-strip">
-    {% block object-tools-items %}
-    <li>
-        <a href="{% url opts|admin_urlname:'history' original.pk|admin_urlquote %}" class="historylink lux-history-btn">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="12" cy="12" r="10"></circle>
-                <polyline points="12 6 12 12 16 14"></polyline>
-            </svg>
-            <span>Audit History</span>
-        </a>
-    </li>
-    {% endblock %}
-  </ul>
-{% endif %}{% endif %}
-{% endblock %}
+{% block object-tools %}{% endblock %}
 
 {% block extrahead %}
 {{ block.super }}
 <style>
 /* ====================================================================
-   LUCKJARY HAUTE JOAILLERIE - ORDER ADMIN & MOBILE CONSOLE STYLES
-   Engineered for seamless responsive UX down to 280px mobile viewports
+   LUCKJARY HAUTE JOAILLERIE - REFINED MOBILE ORDER CONSOLE
+   Engineered for 280px - 390px mobile screens without clutter or clipping
    ==================================================================== */
 
-/* Breadcrumbs Bar */
-.lux-order-mobile-breadcrumbs {
+/* Hide redundant base titles and breadcrumbs */
+.titles-and-tools .shopify-standard-title,
+.titles-and-tools h1,
+.titles-and-tools h2,
+.shopify-breadcrumbs-nav,
+div.breadcrumbs {
+    display: none !important;
+}
+
+.titles-and-tools {
+    display: block !important;
+    margin: 0 0 12px 0 !important;
+    padding: 0 !important;
+    border: none !important;
+    width: 100% !important;
+}
+
+/* 1. Top Navigation Bar */
+.lux-order-console-header {
     display: flex;
-    align-items: center;
+    flex-direction: column;
     gap: 8px;
-    padding: 8px 14px;
-    background: #0E1018;
-    border-bottom: 1px solid #1E2232;
-    font-size: 0.75rem;
-    overflow-x: auto;
-    white-space: nowrap;
-    -webkit-overflow-scrolling: touch;
     width: 100%;
     box-sizing: border-box;
 }
-.lux-back-nav-btn {
+
+.lux-order-back-bar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 4px;
+    font-size: 0.75rem;
+}
+
+.lux-back-link {
     display: inline-flex;
     align-items: center;
     gap: 5px;
     color: #C5A059;
     text-decoration: none;
     font-weight: 600;
+    font-size: 0.78rem;
     transition: color 0.15s ease;
 }
-.lux-back-nav-btn:hover {
+
+.lux-back-link:hover {
     color: #DFBE76;
 }
-.lux-bread-sep {
-    color: #4B5563;
+
+.lux-back-sep {
+    color: #475569;
     font-size: 0.7rem;
 }
-.lux-bread-active {
+
+.lux-order-ref-code {
     color: #94A3B8;
     font-family: monospace;
+    font-size: 0.75rem;
     font-weight: 500;
 }
 
-/* History Button (Replacing the awkward full-width green slab) */
-.lux-order-tools-strip {
-    display: flex !important;
-    flex-direction: row !important;
-    justify-content: flex-start !important;
-    align-items: center !important;
-    gap: 8px !important;
-    margin: 4px 0 12px 0 !important;
-    padding: 0 !important;
-    list-style: none !important;
-    width: auto !important;
-}
-.lux-order-tools-strip li {
-    margin: 0 !important;
-    padding: 0 !important;
-    width: auto !important;
-}
-.lux-history-btn,
-.object-tools a.lux-history-btn {
-    display: inline-flex !important;
-    align-items: center !important;
-    gap: 6px !important;
-    background: #181B28 !important;
-    border: 1px solid #2B3045 !important;
-    color: #C5A059 !important;
-    font-size: 0.75rem !important;
-    font-weight: 600 !important;
-    letter-spacing: 0.02em !important;
-    text-transform: none !important;
-    padding: 6px 12px !important;
-    height: 32px !important;
-    min-height: 32px !important;
-    border-radius: 6px !important;
-    box-shadow: none !important;
-    text-decoration: none !important;
-    transition: all 0.15s ease !important;
-    width: auto !important;
-}
-.lux-history-btn:hover {
-    background: #202436 !important;
-    border-color: rgba(197, 160, 89, 0.45) !important;
-    color: #F8FAFC !important;
-}
-
-/* ---------------------------------------------------------
-   1. ORDER HEADER TELEMETRY WIDGET
-   --------------------------------------------------------- */
-.lux-order-banner-widget {
-    background: linear-gradient(135deg, #141724 0%, #0F111B 100%);
+/* 2. Unified Master Order Banner Card */
+.lux-order-master-banner {
+    background: linear-gradient(135deg, #141724 0%, #0F111C 100%);
     border: 1px solid rgba(197, 160, 89, 0.35);
     border-radius: 10px;
     padding: 14px 16px;
-    margin-bottom: 4px;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.4);
     display: flex;
     flex-direction: column;
     gap: 12px;
-    box-sizing: border-box;
     width: 100%;
+    box-sizing: border-box;
 }
-.lux-banner-top {
+
+.lux-banner-row-primary {
     display: flex;
     align-items: flex-start;
     justify-content: space-between;
     gap: 10px;
     flex-wrap: wrap;
 }
-.lux-banner-ref-wrap,
-.lux-banner-amount-wrap {
+
+.lux-banner-ref-group {
     display: flex;
     flex-direction: column;
-    gap: 2px;
+    gap: 6px;
+    min-width: 0;
+    flex: 1 1 auto;
 }
-.lux-banner-amount-wrap {
-    text-align: right;
-}
-.lux-banner-tag {
-    font-size: 0.65rem;
-    font-weight: 700;
-    color: #C5A059;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-}
+
 .lux-banner-ordernum {
     font-family: monospace;
-    font-size: 1.05rem;
+    font-size: 1.12rem;
     font-weight: 800;
     color: #F8FAFC;
     letter-spacing: 0.02em;
     word-break: break-all;
+    line-height: 1.2;
 }
-.lux-banner-amount {
-    font-size: 1.15rem;
+
+.lux-banner-status-pills {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+
+.lux-banner-amount-group {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 2px;
+    flex-shrink: 0;
+}
+
+.lux-amount-kicker {
+    font-size: 0.62rem;
+    font-weight: 700;
+    color: #C5A059;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.lux-amount-value {
+    font-size: 1.25rem;
     font-weight: 800;
     color: #DFBE76;
     letter-spacing: -0.01em;
+    line-height: 1.1;
 }
-.lux-banner-meta {
+
+.lux-banner-row-secondary {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 8px;
+    gap: 10px;
     flex-wrap: wrap;
-    padding-top: 8px;
-    border-top: 1px solid rgba(255, 255, 255, 0.07);
+    padding-top: 10px;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
 }
-.lux-banner-pills {
+
+.lux-banner-patron-info {
     display: flex;
     align-items: center;
-    gap: 6px;
-    flex-wrap: wrap;
+    gap: 10px;
+    min-width: 0;
+    flex: 1 1 auto;
 }
-.lux-banner-date {
-    font-size: 0.72rem;
+
+.lux-patron-avatar-sm {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: rgba(197, 160, 89, 0.18);
+    border: 1px solid #C5A059;
+    color: #DFBE76;
+    font-size: 0.78rem;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.lux-patron-details-col {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+}
+
+.lux-patron-title-name {
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: #F8FAFC;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.lux-order-meta-date {
+    font-size: 0.68rem;
     color: #94A3B8;
     white-space: nowrap;
 }
-.lux-track-live-btn {
+
+.lux-banner-actions {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-shrink: 0;
+}
+
+.lux-history-btn,
+.lux-track-quick-btn {
     display: inline-flex;
     align-items: center;
-    justify-content: center;
-    gap: 6px;
-    background: rgba(197, 160, 89, 0.12);
-    border: 1px solid rgba(197, 160, 89, 0.35);
-    color: #DFBE76;
-    font-size: 0.75rem;
+    gap: 5px;
+    background: #181B28;
+    border: 1px solid #2B3045;
+    color: #C5A059;
+    font-size: 0.72rem;
     font-weight: 600;
-    padding: 7px 12px;
+    padding: 5px 10px;
     border-radius: 6px;
     text-decoration: none;
     transition: all 0.15s ease;
-    align-self: flex-start;
-}
-.lux-track-live-btn:hover {
-    background: rgba(197, 160, 89, 0.22);
-    color: #FFFFFF;
+    height: 28px;
+    box-sizing: border-box;
+    white-space: nowrap;
 }
 
-/* ---------------------------------------------------------
-   2. PATRON & CLIENT PROFILE CARD (LOCKED RECORD)
-   --------------------------------------------------------- */
+.lux-history-btn:hover,
+.lux-track-quick-btn:hover {
+    background: #202436;
+    border-color: rgba(197, 160, 89, 0.45);
+    color: #FAF9F6;
+}
+
+.lux-track-quick-btn {
+    background: rgba(197, 160, 89, 0.12);
+    border-color: rgba(197, 160, 89, 0.35);
+    color: #DFBE76;
+}
+
+/* 3. Patron Summary Card (Read-Only) */
 .lux-patron-summary-card {
     background: #111420;
     border: 1px solid #262B3F;
@@ -229,11 +342,13 @@
     box-sizing: border-box;
     width: 100%;
 }
+
 .lux-patron-main-row {
     display: flex;
     align-items: center;
     gap: 12px;
 }
+
 .lux-patron-badge-avatar {
     width: 44px;
     height: 44px;
@@ -249,6 +364,7 @@
     flex-shrink: 0;
     letter-spacing: 0.04em;
 }
+
 .lux-patron-info-col {
     display: flex;
     flex-direction: column;
@@ -256,6 +372,7 @@
     min-width: 0;
     flex: 1 1 auto;
 }
+
 .lux-patron-fullname {
     font-size: 1rem;
     font-weight: 700;
@@ -263,17 +380,21 @@
     line-height: 1.25;
     word-break: break-word;
 }
+
 .lux-patron-status-tag {
     font-size: 0.72rem;
 }
+
 .lux-client-user-tag {
     color: #60A5FA;
     text-decoration: none;
     font-weight: 600;
 }
+
 .lux-client-user-tag:hover {
     text-decoration: underline;
 }
+
 .lux-client-guest-tag {
     color: #94A3B8;
     background: rgba(148, 163, 184, 0.12);
@@ -282,6 +403,7 @@
     border-radius: 4px;
     font-weight: 500;
 }
+
 .lux-patron-contact-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -289,12 +411,14 @@
     padding-top: 10px;
     border-top: 1px solid #1F2436;
 }
+
 .lux-contact-cell {
     display: flex;
     flex-direction: column;
     gap: 3px;
     min-width: 0;
 }
+
 .lux-cell-label {
     font-size: 0.65rem;
     font-weight: 700;
@@ -302,6 +426,7 @@
     text-transform: uppercase;
     letter-spacing: 0.05em;
 }
+
 .lux-client-link {
     color: #DFBE76;
     text-decoration: none;
@@ -310,15 +435,18 @@
     word-break: break-all;
     transition: color 0.15s ease;
 }
+
 .lux-client-link:hover {
     color: #FFFFFF;
     text-decoration: underline;
 }
+
 .lux-client-dim {
     color: #64748B;
     font-size: 0.78rem;
     font-style: italic;
 }
+
 .lux-patron-security-notice {
     display: flex;
     align-items: flex-start;
@@ -331,21 +459,21 @@
     color: #CBD5E1;
     line-height: 1.35;
 }
+
 .lux-security-icon {
     font-size: 0.85rem;
     line-height: 1;
     flex-shrink: 0;
 }
+
 .lux-security-text strong {
     color: #DFBE76;
 }
 
-/* Clean Custom Field Wrapper Reset */
-.field-order_banner_card label,
 .field-customer_profile_card label {
     display: none !important;
 }
-.field-order_banner_card .readonly,
+
 .field-customer_profile_card .readonly {
     background: transparent !important;
     border: none !important;
@@ -354,15 +482,13 @@
     box-shadow: none !important;
     min-height: auto !important;
 }
-.field-order_banner_card .flex-container,
+
 .field-customer_profile_card .flex-container {
     display: block !important;
     width: 100% !important;
 }
 
-/* ---------------------------------------------------------
-   3. FIELDSET MODULE REFINEMENT (LUXURY CARDS)
-   --------------------------------------------------------- */
+/* 4. Luxury Fieldset Modules */
 fieldset.module.lux-fieldset {
     background: #131622 !important;
     border: 1px solid #24293D !important;
@@ -373,7 +499,9 @@ fieldset.module.lux-fieldset {
     box-sizing: border-box !important;
     width: 100% !important;
 }
+
 fieldset.module.lux-fieldset h2 {
+    display: block !important;
     background: transparent !important;
     padding: 0 0 10px 0 !important;
     margin: 0 0 12px 0 !important;
@@ -384,10 +512,8 @@ fieldset.module.lux-fieldset h2 {
     color: #DFBE76 !important;
     letter-spacing: 0.04em !important;
     text-transform: uppercase !important;
-    display: flex !important;
-    align-items: center !important;
-    gap: 6px !important;
 }
+
 fieldset.module.lux-fieldset .description {
     font-size: 0.73rem !important;
     color: #94A3B8 !important;
@@ -396,7 +522,7 @@ fieldset.module.lux-fieldset .description {
     padding-bottom: 6px !important;
 }
 
-/* Standard Readonly Fields */
+/* Readonly fields */
 fieldset.module.lux-fieldset .readonly {
     background: #0E1018 !important;
     border: 1px solid #23273A !important;
@@ -411,7 +537,7 @@ fieldset.module.lux-fieldset .readonly {
     word-break: break-word !important;
 }
 
-/* DateTime Shortcuts & Helper Text */
+/* DateTime Shortcuts */
 .datetimeshortcuts {
     display: inline-flex !important;
     align-items: center !important;
@@ -420,22 +546,20 @@ fieldset.module.lux-fieldset .readonly {
     color: #94A3B8 !important;
     margin-top: 4px !important;
 }
+
 .datetimeshortcuts a {
     color: #C5A059 !important;
     font-weight: 600 !important;
     text-decoration: none !important;
 }
 
-/* ---------------------------------------------------------
-   4. INLINE TABULAR MODULES ON MOBILE (PIECES & LOGS)
-   --------------------------------------------------------- */
+/* 5. Tabular inlines converted to mobile cards */
 #items-group .column-item_preview img {
     border-radius: 6px;
     border: 1px solid rgba(197, 160, 89, 0.35);
 }
 
 @media (max-width: 768px) {
-    /* Stack Multi-Column Fieldsets to 1 Column */
     .form-multiline,
     .form-row.form-multiline {
         display: flex !important;
@@ -443,6 +567,7 @@ fieldset.module.lux-fieldset .readonly {
         gap: 12px !important;
         width: 100% !important;
     }
+
     .form-multiline .fieldBox,
     .form-row.form-multiline .fieldBox {
         width: 100% !important;
@@ -453,13 +578,11 @@ fieldset.module.lux-fieldset .readonly {
         flex-direction: column !important;
     }
 
-    /* Stack contact grid to 1 column on narrow screens */
     .lux-patron-contact-grid {
         grid-template-columns: 1fr !important;
         gap: 8px !important;
     }
 
-    /* Convert Tabular Inlines into Mobile Cards */
     #items-group .tabular table,
     #items-group .tabular thead,
     #items-group .tabular tbody,
@@ -536,37 +659,51 @@ fieldset.module.lux-fieldset .readonly {
     }
 }
 
-/* ---------------------------------------------------------
-   5. ULTRA-MOBILE HARDENING (< 360px & 295px VIEWPORTS)
-   --------------------------------------------------------- */
+/* 6. Ultra-Mobile (< 360px & 295px) Refinement */
 @media (max-width: 360px) {
     #content,
     .shopify-content-box {
-        padding: 8px 6px !important;
+        padding: 6px 4px !important;
     }
-    
-    .titles-and-tools .titles h1 {
-        font-size: 1.1rem !important;
+
+    .lux-order-master-banner {
+        padding: 12px 10px !important;
+        gap: 10px !important;
     }
-    
-    .titles-and-tools .titles h2 {
-        font-size: 0.8rem !important;
-        word-break: break-all !important;
+
+    .lux-banner-row-primary {
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        gap: 8px !important;
     }
-    
+
+    .lux-banner-amount-group {
+        align-items: flex-start !important;
+    }
+
+    .lux-banner-ordernum {
+        font-size: 1rem !important;
+    }
+
+    .lux-amount-value {
+        font-size: 1.15rem !important;
+    }
+
+    .lux-banner-row-secondary {
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        gap: 8px !important;
+    }
+
+    .lux-banner-actions {
+        width: 100% !important;
+        justify-content: flex-start !important;
+    }
+
     fieldset.module.lux-fieldset {
         padding: 12px 10px !important;
     }
-    
-    .lux-banner-top {
-        flex-direction: column !important;
-        align-items: flex-start !important;
-    }
-    
-    .lux-banner-amount-wrap {
-        text-align: left !important;
-    }
-    
+
     .lux-patron-summary-card {
         padding: 12px 10px !important;
     }
@@ -576,24 +713,18 @@ fieldset.module.lux-fieldset .readonly {
     }
 
     .lux-patron-badge-avatar {
-        width: 38px !important;
-        height: 38px !important;
-        font-size: 0.85rem !important;
+        width: 36px !important;
+        height: 36px !important;
+        font-size: 0.82rem !important;
     }
 
     .lux-patron-fullname {
-        font-size: 0.92rem !important;
-    }
-    
-    .submit-row {
-        padding: 10px 8px !important;
-        gap: 8px !important;
+        font-size: 0.9rem !important;
     }
 
-    .submit-row input[type="submit"],
-    .submit-row input.default {
-        font-size: 0.82rem !important;
-        height: 40px !important;
+    .submit-row {
+        padding: 8px 6px !important;
+        gap: 6px !important;
     }
 }
 </style>
