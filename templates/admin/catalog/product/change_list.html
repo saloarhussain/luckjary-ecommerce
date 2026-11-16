@@ -1,21 +1,16 @@
-{% extends "admin/base_site.html" %}
-{% load i18n admin_urls static %}
-
-{% block title %}Atelier Vault | Luckjary Haute Joaillerie Atelier{% endblock %}
-
-{% block extrahead %}
-{{ block.super }}
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..900;1,6..96,400..900&family=Plus+Jakarta+Sans:ital,wght@0,300..800;1,300..800&family=Cinzel:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+{% load i18n static tz %}<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport">
+<title>Atelier Vault | LUCKJARY</title>
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..900;1,6..96,400..900&amp;family=Plus+Jakarta+Sans:ital,wght@0,300..800;1,300..800&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700;800&amp;family=JetBrains+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-<script>
+<script id="tailwind-config">
 tailwind.config = {
   darkMode: "class",
-  corePlugins: {
-    preflight: false,
-  },
   theme: {
     extend: {
       colors: {
@@ -75,35 +70,323 @@ tailwind.config = {
         "body-sm": ["Plus Jakarta Sans", "sans-serif"],
         "label-md": ["Plus Jakarta Sans", "sans-serif"],
         "label-sm": ["Plus Jakarta Sans", "sans-serif"],
-        "caption": ["Plus Jakarta Sans", "sans-serif"],
-        "mono-luxury": ["JetBrains Mono", "monospace"],
-        "serif-luxury": ["Cinzel", "Bodoni Moda", "serif"]
+        "serif-luxury": ["Bodoni Moda", "serif"],
+        "mono-luxury": ["JetBrains Mono", "monospace"]
       }
     }
   }
 };
 </script>
 <style>
-  .no-scrollbar::-webkit-scrollbar {
-    display: none;
+@layer base {
+  html, body {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    min-height: 100%;
+    background-color: #0d0e10;
   }
-  .no-scrollbar {
-    -ms-overflow-style: none;
-    scrollbar-width: none;
+  body {
+    overscroll-behavior-y: none;
   }
-  .vault-content-wrapper a {
-    text-decoration: none;
+}
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #121315;
+}
+::-webkit-scrollbar-thumb {
+  background: #2D3240;
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #3c4a42;
+}
+
+/* Sidebar transition on mobile */
+#leftNavDrawer {
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Catalog Grid Mode responsive transformation */
+#catalogContainer.catalog-grid-mode {
+  display: grid !important;
+  grid-template-columns: repeat(1, minmax(0, 1fr)) !important;
+  gap: 1.25rem !important;
+}
+@media (min-width: 640px) {
+  #catalogContainer.catalog-grid-mode {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
   }
+}
+@media (min-width: 1280px) {
+  #catalogContainer.catalog-grid-mode {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  }
+}
+#catalogContainer.catalog-grid-mode .product-item {
+  flex-direction: column !important;
+  align-items: stretch !important;
+}
+#catalogContainer.catalog-grid-mode .product-item .product-info-block {
+  flex-direction: column !important;
+  align-items: stretch !important;
+  width: 100% !important;
+}
+#catalogContainer.catalog-grid-mode .product-item .product-thumb-container {
+  width: 100% !important;
+  height: 220px !important;
+}
+#catalogContainer.catalog-grid-mode .product-item .pricing-stock-row {
+  width: 100% !important;
+  padding-top: 0.75rem !important;
+  border-top: 1px solid rgba(35, 39, 50, 0.7) !important;
+}
+#catalogContainer.catalog-grid-mode .product-item .action-footer-row {
+  width: 100% !important;
+  padding-top: 0.75rem !important;
+  border-top: 1px solid rgba(35, 39, 50, 0.7) !important;
+}
 </style>
-{% endblock %}
+</head>
 
-{% block content_title %}{% endblock %}
-{% block nav-breadcrumbs %}{% endblock %}
-{% block object-tools %}{% endblock %}
+<body class="bg-[#0d0e10] text-[#e3e2e5] font-sans antialiased min-h-screen selection:bg-emerald-500/20 selection:text-emerald-300 flex flex-col">
 
-{% block content %}
-<div class="vault-page-wrapper w-full font-sans text-on-surface">
-<div class="vault-content-wrapper w-full max-w-7xl mx-auto flex flex-col gap-6 pb-12">
+<!-- Main App Root with Persistent Left Side Panel + Right Content Area -->
+<div class="flex flex-1 w-full relative min-h-screen">
+
+  <!-- Mobile Backdrop for Left Side Panel -->
+  <div id="leftNavDrawerBackdrop" class="fixed inset-0 bg-black/80 z-40 opacity-0 pointer-events-none transition-opacity duration-300 backdrop-blur-sm lg:hidden"></div>
+
+  <!-- ==========================================
+       PRESERVED UNIFIED LEFT SIDE PANEL & DRAWER
+       (Persistent Docked Sidebar on Desktop lg:+, Off-Canvas Slide-out Drawer on Mobile)
+       ========================================== -->
+  <aside id="leftNavDrawer" class="fixed inset-y-0 left-0 z-50 w-72 max-w-[85vw] bg-[#0d0e12] border-r border-[#232732] shadow-2xl flex flex-col -translate-x-full lg:translate-x-0 lg:static lg:sticky lg:top-0 lg:h-screen lg:shadow-none lg:z-30 lg:shrink-0 overflow-y-auto">
+    <!-- Panel Header -->
+    <div class="p-4 border-b border-[#232732] flex items-center justify-between">
+      <a href="/admin/" class="flex items-center gap-2.5 group focus:outline-none">
+        <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 inline-block group-hover:scale-125 transition-transform duration-300 shadow-[0_0_8px_rgba(16,185,129,0.5)]"></span>
+        <div class="flex flex-col">
+          <span class="font-bold text-[14px] tracking-[0.16em] text-zinc-100 font-serif-luxury">LUCKJARY</span>
+          <span class="text-[9px] text-[#ebd38d] uppercase tracking-[0.25em] font-mono-luxury font-semibold">HAUTE ATELIER</span>
+        </div>
+      </a>
+      <button id="closeNavDrawerBtn" aria-label="Close navigation" class="lg:hidden w-8 h-8 rounded-lg flex items-center justify-center text-zinc-400 hover:text-zinc-100 active:scale-95 transition-colors cursor-pointer" type="button">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+      </button>
+    </div>
+
+    <!-- Navigation Groups -->
+    <div class="p-3 space-y-4 flex-1 text-[13px] font-sans">
+      <!-- Section: Navigation -->
+      <div>
+        <div class="text-[10px] font-bold tracking-[0.12em] text-zinc-400 uppercase px-2 mb-1.5 font-mono-luxury">Navigation</div>
+        <div class="space-y-0.5">
+          <a href="/admin/" class="flex items-center gap-3 px-3 py-2 rounded-xl text-zinc-400 hover:text-zinc-100 hover:bg-[#18191c] transition-colors">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg>
+            <span>Home</span>
+          </a>
+          <a href="/admin/orders/order/" class="flex items-center justify-between px-3 py-2 rounded-xl text-zinc-400 hover:text-zinc-100 hover:bg-[#18191c] transition-colors">
+            <div class="flex items-center gap-3">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="16.5" y1="9.4" x2="7.5" y2="4.21"></line><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
+              <span>Orders</span>
+            </div>
+            <span class="px-2 py-0.5 rounded-full bg-[#181a22] text-[#ebd38d] border border-[#2d3240] text-[11px] font-mono-luxury font-bold">4</span>
+          </a>
+          <a href="/admin/orders/coupon/" class="flex items-center gap-3 px-3 py-2 rounded-xl text-zinc-400 hover:text-zinc-100 hover:bg-[#18191c] transition-colors">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="19" y1="5" x2="5" y2="19"></line><circle cx="6.5" cy="6.5" r="2.5"></circle><circle cx="17.5" cy="17.5" r="2.5"></circle></svg>
+            <span>Discounts</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Section: Products & Inventory (ACTIVE) -->
+      <div>
+        <div class="text-[10px] font-bold tracking-[0.12em] text-zinc-400 uppercase px-2 mb-1.5 font-mono-luxury">Products &amp; Inventory</div>
+        <div class="space-y-0.5">
+          <a href="/admin/catalog/product/" class="flex items-center justify-between px-3 py-2 rounded-xl bg-emerald-500/10 text-emerald-400 font-medium border-l-2 border-emerald-400 shadow-sm">
+            <div class="flex items-center gap-3">
+              <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polygon points="6 3 18 3 22 9 12 22 2 9 6 3"></polygon></svg>
+              <span class="text-zinc-100 font-semibold">Vault Products</span>
+            </div>
+            <span class="px-2 py-0.5 rounded-full bg-[#181a22] text-emerald-400 text-[11px] font-mono-luxury font-bold">17</span>
+          </a>
+          <a href="/admin/catalog/collection/" class="flex items-center gap-3 px-3 py-2 rounded-xl text-zinc-400 hover:text-zinc-100 hover:bg-[#18191c] transition-colors">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect height="7" width="7" x="3" y="3"></rect><rect height="7" width="7" x="14" y="3"></rect><rect height="7" width="7" x="14" y="14"></rect><rect height="7" width="7" x="3" y="14"></rect></svg>
+            <span>Collections</span>
+          </a>
+          <a href="/admin/catalog/category/" class="flex items-center gap-3 px-3 py-2 rounded-xl text-zinc-400 hover:text-zinc-100 hover:bg-[#18191c] transition-colors">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>
+            <span>Categories</span>
+          </a>
+          <a href="/admin/catalog/material/" class="flex items-center gap-3 px-3 py-2 rounded-xl text-zinc-400 hover:text-zinc-100 hover:bg-[#18191c] transition-colors">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+            <span>Materials</span>
+          </a>
+          <a href="/admin/catalog/productreview/" class="flex items-center gap-3 px-3 py-2 rounded-xl text-zinc-400 hover:text-zinc-100 hover:bg-[#18191c] transition-colors">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+            <span>Product Reviews</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Section: Customers -->
+      <div>
+        <div class="text-[10px] font-bold tracking-[0.12em] text-zinc-400 uppercase px-2 mb-1.5 font-mono-luxury">Customers &amp; VIPs</div>
+        <div class="space-y-0.5">
+          <a href="/admin/accounts/customuser/" class="flex items-center gap-3 px-3 py-2 rounded-xl text-zinc-400 hover:text-zinc-100 hover:bg-[#18191c] transition-colors">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle></svg>
+            <span>VIP Patrons</span>
+          </a>
+          <a href="/admin/accounts/address/" class="flex items-center gap-3 px-3 py-2 rounded-xl text-zinc-400 hover:text-zinc-100 hover:bg-[#18191c] transition-colors">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+            <span>Addresses</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Section: Engagement -->
+      <div>
+        <div class="text-[10px] font-bold tracking-[0.12em] text-zinc-400 uppercase px-2 mb-1.5 font-mono-luxury">Engagement</div>
+        <div class="space-y-0.5">
+          <a href="/admin/core/contactinquiry/" class="flex items-center gap-3 px-3 py-2 rounded-xl text-zinc-400 hover:text-zinc-100 hover:bg-[#18191c] transition-colors">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+            <span>Client Inquiries</span>
+          </a>
+          <a href="/admin/core/newslettersubscriber/" class="flex items-center gap-3 px-3 py-2 rounded-xl text-zinc-400 hover:text-zinc-100 hover:bg-[#18191c] transition-colors">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+            <span>Subscribers</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Section: Sales Channels -->
+      <div>
+        <div class="text-[10px] font-bold tracking-[0.12em] text-zinc-400 uppercase px-2 mb-1.5 font-mono-luxury">Sales Channels</div>
+        <div class="space-y-0.5">
+          <a href="/orders/oms/" class="flex items-center justify-between px-3 py-2 rounded-xl text-emerald-400 hover:bg-[#18191c] transition-colors">
+            <div class="flex items-center gap-3">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polygon points="12 2 2 7 12 12 22 7 12 22 2 9 6 3"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
+              <span>Atelier OMS</span>
+            </div>
+            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+          </a>
+          <a href="/" target="_blank" class="flex items-center justify-between px-3 py-2 rounded-xl text-zinc-400 hover:text-zinc-100 hover:bg-[#18191c] transition-colors">
+            <div class="flex items-center gap-3">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+              <span>Online Store</span>
+            </div>
+            <svg class="w-3.5 h-3.5 text-zinc-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+          </a>
+        </div>
+      </div>
+
+      <!-- Section: Settings & Preferences -->
+      <div class="pt-2 border-t border-[#232732]">
+        <div class="text-[10px] font-bold tracking-[0.12em] text-zinc-400 uppercase px-2 mb-1.5 font-mono-luxury">Settings &amp; Preferences</div>
+        <div class="space-y-0.5">
+          <a href="/admin/orders/order/#settings" class="sidebar-settings-btn flex items-center justify-between px-3 py-2 rounded-xl text-zinc-400 hover:text-zinc-100 hover:bg-[#18191c] transition-colors cursor-pointer group">
+            <div class="flex items-center gap-3">
+              <svg class="w-4 h-4 text-zinc-400 group-hover:text-[#ebd38d] transition-colors" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+              <span>Settings</span>
+            </div>
+            <span class="active-sidebar-curr-pill px-2 py-0.5 rounded-full bg-[#181a22] text-[#ebd38d] border border-[#2d3240] text-[10px] font-mono-luxury font-semibold">₹ INR</span>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Panel Footer -->
+    <div class="p-3 border-t border-[#232732] bg-[#0d0e10]">
+      <div class="flex items-center gap-2 mb-2">
+        <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 inline-block"></span>
+        <a href="/" target="_blank" class="text-[11px] text-zinc-400 hover:text-emerald-400 transition-colors">Luckjary Boutique Online ↗</a>
+      </div>
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-2">
+          <div class="w-7 h-7 rounded-full bg-gradient-to-tr from-amber-600 to-[#ebd38d] text-[#0d0e10] flex items-center justify-center text-xs font-bold font-mono-luxury">E</div>
+          <div>
+            <div class="text-xs font-bold text-zinc-100 leading-none">Eleanor</div>
+            <div class="text-[10px] text-zinc-400 font-mono-luxury">Director</div>
+          </div>
+        </div>
+        <a href="/admin/logout/" class="text-zinc-400 hover:text-red-400 p-1.5 rounded-lg hover:bg-[#1e2024] transition-colors" title="Sign Out">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+        </a>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ==========================================
+       RIGHT MAIN CONTENT AREA
+       ========================================== -->
+  <div class="flex-1 min-w-0 flex flex-col min-h-screen overflow-x-hidden">
+
+    <!-- Top Universal Header Bar (Matching media_1794855689310_852309b9.png) -->
+    <header class="sticky top-0 z-30 w-full bg-[#14161C]/95 backdrop-blur-xl border-b border-[#232732] shadow-sm">
+      <div class="px-3.5 sm:px-6 lg:px-8 h-14 sm:h-16 flex items-center justify-between gap-3">
+        <!-- Left: Hamburger Menu (Mobile & Desktop) + Brand Logo Button -->
+        <div class="flex items-center gap-2 sm:gap-3">
+          <button id="openNavDrawerBtn" aria-label="Toggle Navigation Panel" class="w-9 h-9 rounded-xl bg-[#181a22] hover:bg-[#21242e] text-zinc-300 hover:text-white border border-[#232732] flex items-center justify-center active:scale-95 transition-all cursor-pointer shrink-0" type="button">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <line x1="3" y1="12" x2="21" y2="12"></line>
+              <line x1="3" y1="6" x2="21" y2="6"></line>
+              <line x1="3" y1="18" x2="21" y2="18"></line>
+            </svg>
+          </button>
+
+          <a href="/admin/" class="w-9 h-9 rounded-xl bg-[#181a22] hover:bg-[#21242e] border border-[#232732] hover:border-[#ebd38d]/50 flex items-center justify-center text-[#ebd38d] transition-colors shrink-0" title="Luckjary Haute Atelier">
+            <svg class="w-4 h-4" fill="none" stroke="#E9C176" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+              <polygon points="6 3 18 3 22 9 12 22 2 9 6 3"></polygon>
+            </svg>
+          </a>
+
+          <a href="/admin/" class="hidden sm:flex flex-col ml-1 group focus:outline-none">
+            <span class="text-xs uppercase font-serif-luxury tracking-[0.22em] font-semibold text-zinc-100 leading-tight">Luckjary</span>
+            <span class="text-[9px] uppercase tracking-widest text-[#ebd38d] font-mono-luxury leading-tight">Haute Atelier</span>
+          </a>
+        </div>
+
+        <!-- Center: Jump to patron / SKU on lg+ screens -->
+        <div class="hidden lg:flex items-center gap-2 bg-[#14161c] border border-[#232732] rounded-lg px-3 py-1.5 text-xs text-text-muted focus-within:border-primary/60">
+          <svg class="w-3.5 h-3.5 text-zinc-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="16.65" x2="16.65" y2="16.65"></line>
+          </svg>
+          <input id="topSearchInput" class="bg-transparent text-xs text-text-platinum placeholder-zinc-500 focus:outline-none w-44 font-body-sm" placeholder="Jump to patron, SKU..." type="text">
+          <kbd class="ml-1 font-mono-luxury text-[9px] bg-[#1e222d] px-1.5 py-0.5 rounded text-text-muted border border-[#2d3240]">⌘K</kbd>
+        </div>
+
+        <!-- Right: Storefront Link + Avatar + Sign Out (Matching Screenshot) -->
+        <div class="flex items-center gap-2 sm:gap-2.5 shrink-0">
+          <a href="/" target="_blank" class="w-9 h-9 rounded-xl bg-[#181a22] text-zinc-400 hover:text-zinc-200 border border-[#232732] hover:border-zinc-700 flex items-center justify-center active:scale-95 transition-all" title="View Live Online Boutique">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+              <polyline points="15 3 21 3 21 9"></polyline>
+              <line x1="10" y1="14" x2="21" y2="3"></line>
+            </svg>
+          </a>
+
+          <div class="w-9 h-9 rounded-full bg-gradient-to-tr from-amber-600 to-[#ebd38d] text-[#0d0e10] flex items-center justify-center text-xs font-bold font-mono-luxury shadow-sm shrink-0" title="Eleanor (Director)">
+            E
+          </div>
+
+          <a href="/admin/logout/" class="w-9 h-9 rounded-xl bg-[#181a22] text-zinc-400 hover:text-red-400 border border-[#232732] hover:border-red-500/30 flex items-center justify-center active:scale-95 transition-all" title="Sign Out">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+              <polyline points="16 17 21 12 16 7"></polyline>
+              <line x1="21" y1="12" x2="9" y2="12"></line>
+            </svg>
+          </a>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Vault Content Container -->
+    <main class="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 flex flex-col gap-6">
 
       <!-- Top Catalog Overview Banner / Page Header -->
       <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 pb-2 border-b border-border-subtle/50">
@@ -729,9 +1012,15 @@ tailwind.config = {
         <span id="toastMessage">Action completed</span>
       </div>
 
-    </div>
+    </main>
+
+  </div>
+
 </div>
 
+<!-- ==========================================
+     INTEGRATED JAVASCRIPT LOGIC
+     ========================================== -->
 <script>
   (function initAtelierVaultApp() {
     // --- Currency Switcher Logic ---
@@ -1074,4 +1363,7 @@ tailwind.config = {
 
   })();
 </script>
-{% endblock %}
+
+
+</body>
+</html>
