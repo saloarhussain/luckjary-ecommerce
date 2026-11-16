@@ -1943,11 +1943,17 @@ div.breadcrumbs a:hover {
         overflow-y: auto !important;
         z-index: 1250 !important;
         transform: translateX(100%) !important;
-        box-shadow: -12px 0 40px rgba(0, 0, 0, 0.85) !important;
+        box-shadow: none !important;
+        visibility: hidden !important;
+        pointer-events: none !important;
+        transition: transform 0.28s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.28s !important;
     }
     
     #changelist-filter.drawer-open {
         transform: translateX(0) !important;
+        box-shadow: -12px 0 40px rgba(0, 0, 0, 0.85) !important;
+        visibility: visible !important;
+        pointer-events: auto !important;
     }
 }
 
@@ -3086,13 +3092,18 @@ body.filter-drawer-open {
         min-width: 260px !important;
         max-width: 260px !important;
         transform: translateX(-100%) !important;
-        transition: transform 0.28s cubic-bezier(0.4, 0, 0.2, 1) !important;
-        box-shadow: 12px 0 40px rgba(0, 0, 0, 0.85) !important;
+        transition: transform 0.28s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.28s !important;
+        box-shadow: none !important;
+        visibility: hidden !important;
+        pointer-events: none !important;
         z-index: 1100 !important;
     }
 
     .shopify-persistent-sidebar.mobile-open {
         transform: translateX(0) !important;
+        box-shadow: 12px 0 40px rgba(0, 0, 0, 0.85) !important;
+        visibility: visible !important;
+        pointer-events: auto !important;
     }
 
     .shopify-content-canvas,
