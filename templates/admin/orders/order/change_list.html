@@ -34,16 +34,18 @@
           fontFamily: {
             serif: ["Bodoni Moda", "Georgia", "serif"],
             sans: ["Plus Jakarta Sans", "-apple-system", "BlinkMacSystemFont", "Segoe UI", "sans-serif"],
-            mono: ["JetBrains Mono", "SFMono-Regular", "Menlo", "monospace"],
-            "serif-luxury": ["Bodoni Moda", "Georgia", "serif"],
-            "mono-luxury": ["JetBrains Mono", "monospace"]
+            mono: ["JetBrains Mono", "SFMono-Regular", "Menlo", "monospace"]
           }
         }
       }
     };
   </script>
 <style>
-    body {
+    html, body {
+      width: 100%;
+      min-height: 100%;
+      margin: 0;
+      padding: 0;
       background-color: #0d0e10;
       color: #e3e2e5;
       -webkit-font-smoothing: antialiased;
@@ -69,31 +71,23 @@
     ::-webkit-scrollbar-thumb:hover {
       background: #3c4a42;
     }
-    /* Left slide-out navigation drawer transition */
-    #leftNavDrawer {
-      transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-    #leftNavDrawerBackdrop {
-      transition: opacity 0.25s ease;
-    }
     a {
       text-decoration: none;
     }
   </style>
 </head>
-<body class="bg-[#0d0e10] min-h-screen text-[#e3e2e5] font-sans antialiased selection:bg-emerald-500/20 selection:text-emerald-300 flex flex-col">
+<body class="bg-[#0d0e10] min-h-screen text-[#e3e2e5] font-sans antialiased selection:bg-emerald-500/20 selection:text-emerald-300 flex flex-col overflow-x-hidden">
 
-<!-- Main App Root with Persistent Left Side Panel + Right Content Area -->
-<div class="flex flex-1 w-full relative min-h-screen">
+<!-- ==========================================
+     MOBILE OFF-CANVAS DRAWER (lg:hidden)
+     Decoupled from layout flow so it never shifts mobile screen
+     ========================================== -->
+<div id="mobileDrawerModal" class="fixed inset-0 z-50 pointer-events-none lg:hidden">
+  <!-- Dark Backdrop -->
+  <div id="mobileDrawerBackdrop" class="fixed inset-0 bg-black/80 backdrop-blur-xs opacity-0 pointer-events-none transition-opacity duration-300 ease-in-out"></div>
 
-  <!-- Mobile Backdrop for Left Side Panel -->
-  <div id="leftNavDrawerBackdrop" class="fixed inset-0 bg-black/75 z-40 opacity-0 pointer-events-none transition-opacity duration-300 backdrop-blur-xs lg:hidden"></div>
-
-  <!-- ==========================================
-       PRESERVED LEFT SIDE PANEL
-       (Docked / Persistent on Desktop lg:+, Off-Canvas Drawer on Mobile)
-       ========================================== -->
-  <aside id="leftNavDrawer" class="fixed inset-y-0 left-0 z-50 w-72 max-w-[85vw] bg-[#121315] border-r border-[#232732] shadow-2xl flex flex-col -translate-x-full lg:translate-x-0 lg:static lg:shadow-none lg:z-30 shrink-0 h-screen sticky top-0 overflow-y-auto">
+  <!-- Slide-out Drawer Panel -->
+  <aside id="mobileDrawerPanel" class="fixed inset-y-0 left-0 z-50 w-72 max-w-[85vw] bg-[#121315] border-r border-[#232732] shadow-2xl flex flex-col -translate-x-full transition-transform duration-300 ease-out overflow-y-auto pointer-events-auto">
     <!-- Panel Header -->
     <div class="p-4 border-b border-[#232732] flex items-center justify-between">
       <a href="/admin/" class="flex items-center gap-2.5 group focus:outline-none">
@@ -103,7 +97,7 @@
           <span class="text-[9px] text-[#ebd38d] uppercase tracking-[0.25em] font-mono font-semibold">HAUTE ATELIER</span>
         </div>
       </a>
-      <button id="closeNavDrawerBtn" aria-label="Close navigation" class="lg:hidden w-8 h-8 rounded-lg flex items-center justify-center text-zinc-400 hover:text-zinc-100 active:scale-95 transition-colors cursor-pointer" type="button">
+      <button id="closeMobileDrawerBtn" aria-label="Close navigation" class="w-8 h-8 rounded-lg flex items-center justify-center text-zinc-400 hover:text-zinc-100 active:scale-95 transition-colors cursor-pointer" type="button">
         <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
       </button>
     </div>
@@ -185,7 +179,150 @@
         </div>
         <div class="bg-[#14161C] rounded-xl p-2.5 border border-[#232732]">
           <label class="text-[11px] text-zinc-400 block mb-1.5 font-medium">Select Active Currency:</label>
-          <div class="grid grid-cols-2 gap-1.5" id="currencySelectorGrid">
+          <div class="grid grid-cols-2 gap-1.5">
+            <button type="button" data-currency="INR" class="currency-pick-btn active py-1.5 px-2 rounded-lg text-[11px] font-bold border flex items-center justify-center gap-1.5 bg-emerald-500/10 text-emerald-400 border-emerald-500/50 cursor-pointer transition-all">
+              <span>₹ INR</span>
+            </button>
+            <button type="button" data-currency="USD" class="currency-pick-btn py-1.5 px-2 rounded-lg text-[11px] font-medium border flex items-center justify-center gap-1.5 bg-[#0d0e10] text-zinc-400 border-[#232732] hover:text-zinc-100 cursor-pointer transition-all">
+              <span>$ USD</span>
+            </button>
+            <button type="button" data-currency="EUR" class="currency-pick-btn py-1.5 px-2 rounded-lg text-[11px] font-medium border flex items-center justify-center gap-1.5 bg-[#0d0e10] text-zinc-400 border-[#232732] hover:text-zinc-100 cursor-pointer transition-all">
+              <span>€ EUR</span>
+            </button>
+            <button type="button" data-currency="GBP" class="currency-pick-btn py-1.5 px-2 rounded-lg text-[11px] font-medium border flex items-center justify-center gap-1.5 bg-[#0d0e10] text-zinc-400 border-[#232732] hover:text-zinc-100 cursor-pointer transition-all">
+              <span>£ GBP</span>
+            </button>
+            <button type="button" data-currency="AED" class="currency-pick-btn col-span-2 py-1.5 px-2 rounded-lg text-[11px] font-medium border flex items-center justify-center gap-1.5 bg-[#0d0e10] text-zinc-400 border-[#232732] hover:text-zinc-100 cursor-pointer transition-all">
+              <span>AED (Dirham)</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Panel Footer -->
+    <div class="p-3 border-t border-[#232732] bg-[#0d0e10]">
+      <div class="flex items-center gap-2 mb-2">
+        <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 inline-block"></span>
+        <a href="/" target="_blank" class="text-[11px] text-zinc-400 hover:text-emerald-400 transition-colors">Luckjary Boutique Online ↗</a>
+      </div>
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-2">
+          <div class="w-7 h-7 rounded-full bg-[#1e2024] border border-[#2a2d33] flex items-center justify-center text-xs font-bold text-[#ebd38d] font-mono">E</div>
+          <div>
+            <div class="text-xs font-bold text-zinc-200 leading-none">Eleanor</div>
+            <div class="text-[10px] text-zinc-400 font-mono">Director</div>
+          </div>
+        </div>
+        <a href="/admin/logout/" class="text-zinc-400 hover:text-red-400 p-1.5 rounded-lg hover:bg-[#1e2024] transition-colors" title="Sign Out">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+        </a>
+      </div>
+    </div>
+  </aside>
+</div>
+
+<!-- ==========================================
+     APP ROOT LAYOUT
+     Desktop has persistent docked left sidebar + right content
+     Mobile has 100% full-width right content (drawer is overlay)
+     ========================================== -->
+<div class="flex flex-1 w-full min-h-screen">
+
+  <!-- ==========================================
+       PERSISTENT DESKTOP SIDEBAR (hidden lg:flex)
+       Docked and sticky on desktop, display:none on mobile
+       ========================================== -->
+  <aside id="desktopSidebar" class="hidden lg:flex w-72 shrink-0 flex-col h-screen sticky top-0 bg-[#121315] border-r border-[#232732] shadow-sm z-30 overflow-y-auto">
+    <!-- Panel Header -->
+    <div class="p-4 border-b border-[#232732] flex items-center justify-between">
+      <a href="/admin/" class="flex items-center gap-2.5 group focus:outline-none">
+        <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 inline-block group-hover:scale-125 transition-transform duration-300 shadow-[0_0_8px_rgba(16,185,129,0.5)]"></span>
+        <div class="flex flex-col">
+          <span class="font-bold text-[15px] tracking-[0.16em] text-zinc-100 font-serif">LUCKJARY</span>
+          <span class="text-[9px] text-[#ebd38d] uppercase tracking-[0.25em] font-mono font-semibold">HAUTE ATELIER</span>
+        </div>
+      </a>
+    </div>
+
+    <!-- Navigation Groups -->
+    <div class="p-3 space-y-4 flex-1 text-[13px]">
+      <!-- Section: Navigation -->
+      <div>
+        <div class="text-[10px] font-bold tracking-[0.12em] text-zinc-400 uppercase px-2 mb-1.5 font-mono">Navigation</div>
+        <div class="space-y-0.5">
+          <a href="/admin/" class="flex items-center gap-3 px-3 py-2 rounded-xl text-zinc-400 hover:text-zinc-100 hover:bg-[#18191c] transition-colors">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg>
+            <span>Home</span>
+          </a>
+          <a href="/admin/orders/order/" class="flex items-center justify-between px-3 py-2 rounded-xl bg-emerald-500/10 text-emerald-400 font-medium border-l-2 border-emerald-400 shadow-sm">
+            <div class="flex items-center gap-3">
+              <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect height="13" rx="2" ry="2" width="15" x="1" y="3"></rect><polygon points="16 8 20 8 23 11 23 16 16 16 8"></polygon><circle cx="5.5" cy="18.5" r="2.5"></circle><circle cx="18.5" cy="18.5" r="2.5"></circle></svg>
+              <span class="text-zinc-100 font-semibold">Orders</span>
+            </div>
+            <span class="px-2 py-0.5 rounded-full bg-[#181a22] text-[#ebd38d] border border-[#2d3240] text-[11px] font-mono font-bold">4</span>
+          </a>
+          <a href="/admin/orders/coupon/" class="flex items-center gap-3 px-3 py-2 rounded-xl text-zinc-400 hover:text-zinc-100 hover:bg-[#18191c] transition-colors">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="19" x2="5" y1="5" y2="19"></line><circle cx="6.5" cy="6.5" r="2.5"></circle><circle cx="17.5" cy="17.5" r="2.5"></circle></svg>
+            <span>Discounts</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Section: Products & Inventory -->
+      <div>
+        <div class="text-[10px] font-bold tracking-[0.12em] text-zinc-400 uppercase px-2 mb-1.5 font-mono">Products &amp; Inventory</div>
+        <div class="space-y-0.5">
+          <a href="/admin/catalog/product/" class="flex items-center justify-between px-3 py-2 rounded-xl text-zinc-400 hover:text-zinc-100 hover:bg-[#18191c] transition-colors">
+            <div class="flex items-center gap-3">
+              <svg class="w-4 h-4 text-amber-300" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+              <span>Vault Products</span>
+            </div>
+            <span class="px-2 py-0.5 rounded-full bg-[#181a22] text-zinc-300 text-[11px] font-mono font-semibold">17</span>
+          </a>
+          <a href="/admin/catalog/collection/" class="flex items-center gap-3 px-3 py-2 rounded-xl text-zinc-400 hover:text-zinc-100 hover:bg-[#18191c] transition-colors">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect height="7" width="7" x="3" y="3"></rect><rect height="7" width="7" x="14" y="3"></rect><rect height="7" width="7" x="14" y="14"></rect><rect height="7" width="7" x="3" y="14"></rect></svg>
+            <span>Collections</span>
+          </a>
+          <a href="/admin/catalog/category/" class="flex items-center gap-3 px-3 py-2 rounded-xl text-zinc-400 hover:text-zinc-100 hover:bg-[#18191c] transition-colors">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><line x1="2" x2="22" y1="12" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+            <span>Categories</span>
+          </a>
+          <a href="/admin/catalog/material/" class="flex items-center gap-3 px-3 py-2 rounded-xl text-zinc-400 hover:text-zinc-100 hover:bg-[#18191c] transition-colors">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
+            <span>Materials</span>
+          </a>
+          <a href="/admin/catalog/review/" class="flex items-center gap-3 px-3 py-2 rounded-xl text-zinc-400 hover:text-zinc-100 hover:bg-[#18191c] transition-colors">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+            <span>Product Reviews</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Section: Customers & Patrons -->
+      <div>
+        <div class="text-[10px] font-bold tracking-[0.12em] text-zinc-400 uppercase px-2 mb-1.5 font-mono">Customers &amp; VIPs</div>
+        <div class="space-y-0.5">
+          <a href="/admin/accounts/customerprofile/" class="flex items-center gap-3 px-3 py-2 rounded-xl text-zinc-400 hover:text-zinc-100 hover:bg-[#18191c] transition-colors">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+            <span>VIP Patrons</span>
+          </a>
+          <a href="/admin/accounts/address/" class="flex items-center gap-3 px-3 py-2 rounded-xl text-zinc-400 hover:text-zinc-100 hover:bg-[#18191c] transition-colors">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+            <span>Addresses</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Section: Store Currency Preference -->
+      <div class="pt-2 border-t border-[#232732]">
+        <div class="flex items-center justify-between px-2 mb-2">
+          <span class="text-[10px] font-bold tracking-[0.1em] text-[#ebd38d] uppercase font-mono">Store Currency</span>
+          <span class="text-xs text-[#ebd38d] font-bold font-mono">VALUATION</span>
+        </div>
+        <div class="bg-[#14161C] rounded-xl p-2.5 border border-[#232732]">
+          <label class="text-[11px] text-zinc-400 block mb-1.5 font-medium">Select Active Currency:</label>
+          <div class="grid grid-cols-2 gap-1.5">
             <button type="button" data-currency="INR" class="currency-pick-btn active py-1.5 px-2 rounded-lg text-[11px] font-bold border flex items-center justify-center gap-1.5 bg-emerald-500/10 text-emerald-400 border-emerald-500/50 cursor-pointer transition-all">
               <span>₹ INR</span>
             </button>
@@ -228,17 +365,17 @@
   </aside>
 
   <!-- ==========================================
-       RIGHT MAIN CONTENT AREA
+       RIGHT MAIN CONTENT CONTAINER (100% width on mobile)
        ========================================== -->
-  <div class="flex-1 min-w-0 flex flex-col min-h-screen overflow-x-hidden">
+  <div class="flex-1 min-w-0 w-full flex flex-col min-h-screen">
 
-    <!-- BEGIN: Top Luxury Desktop Shell & Header -->
-    <header class="sticky top-0 z-30 bg-[#0d0e10]/95 backdrop-blur-md border-b border-[#232732] px-4 sm:px-6 lg:px-8 py-3.5 transition-all">
-      <div class="max-w-7xl mx-auto flex items-center justify-between gap-4">
+    <!-- BEGIN: Top Luxury Shell & Header -->
+    <header class="sticky top-0 z-30 w-full bg-[#0d0e10]/95 backdrop-blur-md border-b border-[#232732] px-4 sm:px-6 lg:px-8 py-3.5 transition-all">
+      <div class="w-full max-w-7xl mx-auto flex items-center justify-between gap-3 sm:gap-4">
         <!-- Brand & Left Navigation Links -->
-        <div class="flex items-center gap-3 sm:gap-6">
-          <!-- Hamburger Menu Button (Opens Left Navigation Drawer on mobile / toggles on desktop) -->
-          <button id="openNavDrawerBtn" aria-label="Toggle Navigation Drawer" class="p-2 rounded-xl bg-[#181a22] hover:bg-[#21242e] text-zinc-300 hover:text-white border border-[#232732] active:scale-95 transition-all cursor-pointer" type="button">
+        <div class="flex items-center gap-3 sm:gap-6 min-w-0">
+          <!-- Hamburger Menu Button (Opens Mobile Drawer on mobile / toggles on desktop) -->
+          <button id="openMobileDrawerBtn" aria-label="Open Navigation Drawer" class="p-2 rounded-xl bg-[#181a22] hover:bg-[#21242e] text-zinc-300 hover:text-white border border-[#232732] active:scale-95 transition-all cursor-pointer shrink-0" type="button">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
               <line x1="4" x2="20" y1="6" y2="6"></line>
               <line x1="4" x2="20" y1="12" y2="12"></line>
@@ -246,7 +383,7 @@
             </svg>
           </button>
 
-          <a class="flex items-center gap-3 group focus:outline-none" href="/admin/">
+          <a class="flex items-center gap-2.5 sm:gap-3 group focus:outline-none shrink-0" href="/admin/">
             <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-[#2a2d33] to-[#141517] p-[1px] shadow-inner border border-[#d4af37]/35 flex items-center justify-center group-hover:border-[#d4af37] transition-colors">
               <svg class="w-4 h-4 text-[#ebd38d] drop-shadow-[0_0_6px_rgba(212,175,55,0.4)]" fill="currentColor" viewBox="0 0 24 24">
                 <path d="M12 2L4 9l8 13 8-13-8-7zm0 2.24L17.7 9H6.3L12 4.24zM6.55 10.5h10.9L12 18.5 6.55 10.5z"></path>
@@ -269,7 +406,7 @@
         </div>
 
         <!-- Header Search Shortcut & Director Profile Chip -->
-        <div class="flex items-center gap-3">
+        <div class="flex items-center gap-2 sm:gap-3 shrink-0">
           <!-- Quick Global Search Input Pill -->
           <div class="hidden lg:flex items-center gap-2 bg-[#14161c] border border-[#232732] rounded-lg px-3 py-1.5 text-xs text-zinc-400 focus-within:border-emerald-500/50">
             <svg class="w-3.5 h-3.5 text-zinc-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
@@ -298,10 +435,10 @@
         </div>
       </div>
     </header>
-    <!-- END: Top Luxury Desktop Shell & Header -->
+    <!-- END: Top Luxury Shell & Header -->
 
     <!-- BEGIN: Main Orders & Changelist Section -->
-    <main class="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-16">
+    <main class="flex-1 w-full max-w-7xl mx-auto px-3.5 sm:px-6 lg:px-8 pt-5 sm:pt-6 pb-16">
       <!-- Breadcrumbs -->
       <nav aria-label="Breadcrumb" class="flex items-center gap-2 text-xs font-mono text-zinc-400 mb-4 tracking-wide">
         <a href="/admin/" class="text-zinc-500 hover:text-zinc-300 cursor-pointer">Home</a>
@@ -321,7 +458,7 @@
             </span>
           </div>
           <div class="flex items-center gap-3 pt-1">
-            <h1 class="font-serif text-3xl md:text-4xl text-zinc-100 font-semibold tracking-wide">Atelier Orders</h1>
+            <h1 class="font-serif text-2xl sm:text-3xl md:text-4xl text-zinc-100 font-semibold tracking-wide">Atelier Orders</h1>
             <span class="bg-[#181a22] border border-[#2d3240] text-amber-300 font-mono text-xs px-3 py-1 rounded-full font-semibold" id="ordersTotalBadge">4 ORDERS</span>
           </div>
         </div>
@@ -329,8 +466,8 @@
           <a href="/admin/orders/order/add/" class="w-full sm:w-auto bg-emerald-500 hover:bg-emerald-400 active:scale-[0.985] text-[#0d0e10] font-sans font-semibold text-sm tracking-wide py-2.5 px-6 rounded-xl shadow-[0_4px_24px_rgba(16,185,129,0.35)] flex items-center justify-center gap-2 transition-all cursor-pointer">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
               <circle cx="12" cy="12" r="10"></circle>
-              <line x1="12" x2="12" y1="8" y2="16"></line>
-              <line x1="8" x2="16" y1="12" y2="12"></line>
+              <line x1="12" y1="8" x2="12" y2="16"></line>
+              <line x1="8" y1="12" x2="16" y2="12"></line>
             </svg>
             <span>Add Order</span>
           </a>
@@ -338,7 +475,7 @@
       </div>
 
       <!-- BEGIN: Search & Filter Toolbar -->
-      <section class="mt-6 mb-5 space-y-3" data-purpose="search-and-filters">
+      <section class="mt-5 sm:mt-6 mb-5 space-y-3" data-purpose="search-and-filters">
         <div class="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3">
           <!-- Search Field -->
           <div class="relative flex-1 max-w-2xl">
@@ -348,14 +485,14 @@
                 <line x1="21" x2="16.65" y1="21" y2="16.65"></line>
               </svg>
             </div>
-            <input id="ordersSearchInput" class="w-full pl-10 pr-28 py-2.5 bg-[#14161c] border border-[#232732] rounded-xl text-xs sm:text-sm font-sans text-zinc-100 placeholder-zinc-500 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500/40 transition-colors" placeholder="Search orders, patrons, ref, or SKU..." type="text">
+            <input id="ordersSearchInput" class="w-full pl-10 pr-24 sm:pr-28 py-2.5 bg-[#14161c] border border-[#232732] rounded-xl text-xs sm:text-sm font-sans text-zinc-100 placeholder-zinc-500 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500/40 transition-colors" placeholder="Search orders, patrons, ref..." type="text">
             <div class="absolute inset-y-0 right-1.5 flex items-center gap-1.5">
               <button aria-label="Barcode Search" class="p-1.5 rounded-lg text-zinc-400 hover:text-amber-300 transition-colors" title="Scan Barcode / SKU" type="button">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                   <path d="M3 5v14M7 5v14M11 5v14M15 5v14M17 5v14M21 5v14"></path>
                 </svg>
               </button>
-              <button id="searchSubmitBtn" class="px-3 py-1.5 text-xs font-semibold uppercase font-mono tracking-wider bg-[#1e222d] hover:bg-[#282d3b] text-zinc-300 rounded-lg border border-[#2d3240] transition-colors" type="button">
+              <button id="searchSubmitBtn" class="px-2.5 sm:px-3 py-1.5 text-xs font-semibold uppercase font-mono tracking-wider bg-[#1e222d] hover:bg-[#282d3b] text-zinc-300 rounded-lg border border-[#2d3240] transition-colors" type="button">
                 Search
               </button>
             </div>
@@ -363,7 +500,7 @@
 
           <!-- Filter & Export Action Buttons -->
           <div class="flex items-center gap-2.5 shrink-0">
-            <button class="py-2.5 px-4 bg-[#14161c] hover:bg-[#181a22] border border-[#232732] rounded-xl text-xs font-semibold text-zinc-200 flex items-center justify-center gap-2 transition-all shadow-sm" type="button">
+            <button class="flex-1 sm:flex-initial py-2.5 px-4 bg-[#14161c] hover:bg-[#181a22] border border-[#232732] rounded-xl text-xs font-semibold text-zinc-200 flex items-center justify-center gap-2 transition-all shadow-sm" type="button">
               <svg class="w-3.5 h-3.5 text-amber-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                 <line x1="4" x2="4" y1="21" y2="14"></line><line x1="4" x2="4" y1="10" y2="3"></line>
                 <line x1="12" x2="12" y1="21" y2="12"></line><line x1="12" x2="12" y1="8" y2="3"></line>
@@ -373,7 +510,7 @@
               <span>Filters</span>
               <span class="w-4 h-4 rounded-full bg-amber-400/20 text-amber-300 text-[10px] font-mono font-bold flex items-center justify-center">2</span>
             </button>
-            <button id="exportOrdersBtn" class="py-2.5 px-4 bg-[#14161c] hover:bg-[#181a22] border border-[#232732] rounded-xl text-xs font-medium text-zinc-300 flex items-center gap-2 transition-all shadow-sm" type="button">
+            <button id="exportOrdersBtn" class="flex-1 sm:flex-initial py-2.5 px-4 bg-[#14161c] hover:bg-[#181a22] border border-[#232732] rounded-xl text-xs font-medium text-zinc-300 flex items-center justify-center gap-2 transition-all shadow-sm" type="button">
               <svg class="w-3.5 h-3.5 text-zinc-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                 <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
                 <polyline points="7 10 12 15 17 10"></polyline>
@@ -520,9 +657,9 @@
             </div>
           </div>
 
-          <!-- Mobile View (Small Display Layout - Completely Organized & Legible) -->
+          <!-- Mobile View (Small Display Layout - Completely Clean, Prominent & Uncut) -->
           <div class="flex md:hidden flex-col gap-3">
-            <!-- Header: Ref Badge & Date/Time on Right (Price removed from top to prevent cutoff!) -->
+            <!-- Header: Ref Badge & Date/Time on Right -->
             <div class="flex items-center justify-between pb-2.5 border-b border-[#232732]">
               <div class="flex items-center gap-2">
                 <input class="order-checkbox w-4 h-4 rounded border-[#383b42] bg-[#1a1b1e] text-emerald-500 focus:ring-emerald-500 cursor-pointer" type="checkbox">
@@ -573,7 +710,7 @@
               </span>
             </div>
 
-            <!-- DEDICATED TOTAL SETTLEMENT & ACTIONS FOOTER ROW (PROMINENT & UN-TRUNCATED) -->
+            <!-- DEDICATED TOTAL SETTLEMENT & ACTIONS FOOTER ROW -->
             <div class="pt-3 border-t border-[#232732] flex items-end justify-between gap-3">
               <!-- Settlement Amount -->
               <div class="flex flex-col">
@@ -673,7 +810,7 @@
             </div>
           </div>
 
-          <!-- Mobile View (Small Display Layout - Completely Organized & Legible) -->
+          <!-- Mobile View -->
           <div class="flex md:hidden flex-col gap-3">
             <!-- Header: Ref Badge & Date/Time on Right -->
             <div class="flex items-center justify-between pb-2.5 border-b border-[#232732]">
@@ -826,7 +963,7 @@
             </div>
           </div>
 
-          <!-- Mobile View (Small Display Layout - Completely Organized & Legible) -->
+          <!-- Mobile View -->
           <div class="flex md:hidden flex-col gap-3">
             <!-- Header: Ref Badge & Date/Time on Right -->
             <div class="flex items-center justify-between pb-2.5 border-b border-[#232732]">
@@ -979,7 +1116,7 @@
             </div>
           </div>
 
-          <!-- Mobile View (Small Display Layout - Completely Organized & Legible) -->
+          <!-- Mobile View -->
           <div class="flex md:hidden flex-col gap-3">
             <!-- Header: Ref Badge & Date/Time on Right -->
             <div class="flex items-center justify-between pb-2.5 border-b border-[#232732]">
@@ -1096,10 +1233,10 @@
     </main>
 
   </div>
-  <!-- END: RIGHT MAIN CONTENT AREA -->
+  <!-- END: RIGHT MAIN CONTENT CONTAINER -->
 
 </div>
-<!-- END: Main App Root -->
+<!-- END: APP ROOT LAYOUT -->
 
 <!-- Toast Notification Popup -->
 <div id="atelierToast" class="fixed bottom-6 right-6 z-50 transform translate-y-20 opacity-0 transition-all duration-300 pointer-events-none bg-[#181a22] border border-[#2d3240] text-zinc-100 px-4 py-2.5 rounded-xl shadow-2xl flex items-center gap-2.5 text-xs font-medium font-sans">
@@ -1126,56 +1263,57 @@ document.addEventListener('DOMContentLoaded', () => {
     }, 2400);
   }
 
-  // 1. Mobile & Desktop Navigation Drawer Toggle
-  const openDrawerBtn = document.getElementById('openNavDrawerBtn');
-  const closeDrawerBtn = document.getElementById('closeNavDrawerBtn');
-  const navDrawer = document.getElementById('leftNavDrawer');
-  const drawerBackdrop = document.getElementById('leftNavDrawerBackdrop');
+  // 1. Mobile Drawer Toggle (Decoupled overlay)
+  const openMobileBtn = document.getElementById('openMobileDrawerBtn');
+  const closeMobileBtn = document.getElementById('closeMobileDrawerBtn');
+  const mobileModal = document.getElementById('mobileDrawerModal');
+  const mobileBackdrop = document.getElementById('mobileDrawerBackdrop');
+  const mobilePanel = document.getElementById('mobileDrawerPanel');
+  const desktopSidebar = document.getElementById('desktopSidebar');
 
-  function openDrawer() {
-    if (!navDrawer || !drawerBackdrop) return;
-    navDrawer.classList.remove('-translate-x-full');
-    drawerBackdrop.classList.remove('opacity-0', 'pointer-events-none');
-    drawerBackdrop.classList.add('opacity-100');
+  function openMobileDrawer() {
+    if (!mobileModal || !mobilePanel || !mobileBackdrop) return;
+    mobileModal.classList.remove('pointer-events-none');
+    mobileBackdrop.classList.remove('opacity-0', 'pointer-events-none');
+    mobileBackdrop.classList.add('opacity-100');
+    mobilePanel.classList.remove('-translate-x-full');
     document.body.style.overflow = 'hidden';
   }
 
-  function closeDrawer() {
-    if (!navDrawer || !drawerBackdrop) return;
-    navDrawer.classList.add('-translate-x-full');
-    drawerBackdrop.classList.remove('opacity-100');
-    drawerBackdrop.classList.add('opacity-0', 'pointer-events-none');
+  function closeMobileDrawer() {
+    if (!mobileModal || !mobilePanel || !mobileBackdrop) return;
+    mobilePanel.classList.add('-translate-x-full');
+    mobileBackdrop.classList.remove('opacity-100');
+    mobileBackdrop.classList.add('opacity-0', 'pointer-events-none');
+    setTimeout(() => {
+      mobileModal.classList.add('pointer-events-none');
+    }, 300);
     document.body.style.overflow = '';
   }
 
-  if (openDrawerBtn) {
-    openDrawerBtn.addEventListener('click', (e) => {
+  if (openMobileBtn) {
+    openMobileBtn.addEventListener('click', (e) => {
       e.stopPropagation();
-      // On mobile or tablet toggle drawer
       if (window.innerWidth < 1024) {
-        if (navDrawer.classList.contains('-translate-x-full')) {
-          openDrawer();
-        } else {
-          closeDrawer();
-        }
-      } else {
-        // Desktop collapse / expand option
-        navDrawer.classList.toggle('lg:hidden');
+        openMobileDrawer();
+      } else if (desktopSidebar) {
+        desktopSidebar.classList.toggle('lg:flex');
+        desktopSidebar.classList.toggle('hidden');
       }
     });
   }
 
-  if (closeDrawerBtn) {
-    closeDrawerBtn.addEventListener('click', closeDrawer);
+  if (closeMobileBtn) {
+    closeMobileBtn.addEventListener('click', closeMobileDrawer);
   }
-  if (drawerBackdrop) {
-    drawerBackdrop.addEventListener('click', closeDrawer);
+  if (mobileBackdrop) {
+    mobileBackdrop.addEventListener('click', closeMobileDrawer);
   }
 
   // Close drawer on escape key
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape' && window.innerWidth < 1024) {
-      closeDrawer();
+      closeMobileDrawer();
     }
   });
 
