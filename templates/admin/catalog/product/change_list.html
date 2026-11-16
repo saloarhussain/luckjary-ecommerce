@@ -26,64 +26,20 @@ a { text-decoration: none !important; color: inherit !important; }
 
 /* Card Thumbnail */
 .product-item .product-thumb {
-  width: 68px !important;
-  height: 82px !important;
+  width: 72px !important;
+  height: 94px !important;
   border-radius: 10px !important;
   overflow: hidden !important;
   flex-shrink: 0 !important;
   position: relative !important;
 }
 
-/* Card Kicker Category Pill */
-.product-item .kicker-pill,
-.product-item .font-kicker-luxury {
-  font-family: 'Plus Jakarta Sans', sans-serif !important;
-  font-size: 9.5px !important;
-  font-weight: 700 !important;
-  letter-spacing: 0.06em !important;
-  color: #e9c176 !important;
-  background-color: #181A22 !important;
-  padding: 1.5px 6px !important;
-  border-radius: 9999px !important;
-  text-transform: uppercase !important;
-  display: inline-block !important;
-  line-height: 1.3 !important;
-}
-
-/* Card Title - Compact, Elegant, Title Case */
-.product-item h2,
-.product-item .product-title {
-  font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif !important;
-  font-size: 13.5px !important;
-  font-weight: 600 !important;
-  letter-spacing: 0.01em !important;
-  line-height: 1.25 !important;
-  color: #E5E7EB !important;
-  text-transform: none !important;
-  text-decoration: none !important;
-  margin-top: 2px !important;
-  margin-bottom: 0 !important;
-  display: -webkit-box !important;
-  -webkit-line-clamp: 1 !important;
-  -webkit-box-orient: vertical !important;
-  overflow: hidden !important;
-}
-
-/* SKU Pill */
-.product-item .sku-btn,
-.product-item .font-mono-luxury.sku-copy {
-  font-family: 'Plus Jakarta Sans', monospace, sans-serif !important;
-  font-size: 10px !important;
-  font-weight: 500 !important;
-  color: #9CA3AF !important;
-  background-color: #1b1c1e !important;
-  border: 1px solid #232732 !important;
-  border-radius: 4px !important;
-  padding: 1.5px 5px !important;
-  display: inline-flex !important;
-  align-items: center !important;
-  gap: 3px !important;
-  line-height: 1.2 !important;
+/* Card Middle Info Container */
+.product-item .card-middle-info {
+  min-height: 94px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: space-between !important;
 }
 
 /* Main Price */
@@ -94,7 +50,9 @@ a { text-decoration: none !important; color: inherit !important; }
   font-weight: 700 !important;
   letter-spacing: -0.01em !important;
   color: #e9c176 !important;
-  line-height: 1.2 !important;
+  line-height: 1.25 !important;
+  display: inline-block !important;
+  padding-bottom: 2px !important;
 }
 
 /* Compare Price */
@@ -122,10 +80,11 @@ a { text-decoration: none !important; color: inherit !important; }
 .product-item .specs-row {
   background-color: #181A22 !important;
   border-radius: 9px !important;
-  padding: 6px 8px !important;
+  padding: 6.5px 9px !important;
   display: flex !important;
   align-items: center !important;
   justify-content: space-between !important;
+  margin-top: 3px !important;
 }
 
 .product-item .specs-text {
@@ -276,14 +235,14 @@ a { text-decoration: none !important; color: inherit !important; }
 <!-- Card 1: Aura Textured Dome Ring -->
 <div class="product-item bg-surface-card rounded-xl p-2.5 shadow-sm flex flex-col gap-2 relative">
   <div class="flex items-start gap-2.5">
-    <div class="relative w-[68px] h-[82px] rounded-lg overflow-hidden bg-surface-dim shrink-0 shadow-inner">
+    <div class="relative w-[72px] h-[94px] rounded-lg overflow-hidden bg-surface-dim shrink-0 shadow-inner">
       <img class="w-full h-full object-cover" data-alt="High luxury editorial close-up of Aura Textured Dome Ring crafted in 18K yellow gold demifine vermeil resting on black slate reflective background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA51QwOI7lVeyt-8Ww6SL4m9T4yeOVo8y6XI6rZfmYsifjMx-Ju6Ne_qkGKrkCZR9CYu6YUNVDDFphAzUFekyOX8ky4u1mBVeykyEMark3eStZlcewyKOn4w2R84IGnCbXkxhecZM_pLAfFLK_xYdR4U5rmX5E_8jByhCdvjMqE9QkVx8rnkjnnx-u61qgoB_KfI6CnhSlj8KTSb1KjQ-ix__mWVk2SqHwP9IWHjj8">
       <button aria-label="Quick zoom view" class="absolute bottom-1 right-1 w-5 h-5 rounded bg-surface-card/80 backdrop-blur-md flex items-center justify-center text-text-platinum active:scale-90 transition-transform" type="button">
         <span class="material-symbols-outlined text-[11px]">zoom_in</span>
       </button>
       <span class="absolute top-1 left-1 bg-surface-dim/80 backdrop-blur-xs text-secondary text-[9px] px-1 rounded font-mono font-semibold">18K</span>
     </div>
-    <div class="flex-1 min-w-0 flex flex-col justify-between h-[82px]">
+    <div class="card-middle-info flex-1 min-w-0 flex flex-col justify-between min-h-[94px]">
       <div>
         <div class="flex items-center justify-between gap-1">
           <span class="bg-surface-card-elevated text-secondary text-[9.5px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider">RINGS</span>
@@ -297,14 +256,14 @@ a { text-decoration: none !important; color: inherit !important; }
           </button>
         </div>
       </div>
-      <div class="flex items-baseline gap-1.5">
+      <div class="flex items-baseline gap-1.5 pb-0.5">
         <span class="text-[16.5px] text-secondary font-bold tracking-tight">₹18,200</span>
         <span class="text-[11px] text-text-muted line-through">₹23,200</span>
         <span class="text-[9.5px] text-primary font-bold bg-primary/10 px-1 py-0.2 rounded">-21%</span>
       </div>
     </div>
   </div>
-  <div class="bg-surface-card-elevated rounded-lg p-2 flex items-center justify-between shadow-sm">
+  <div class="specs-row bg-surface-card-elevated rounded-lg p-2 flex items-center justify-between shadow-sm">
     <div class="flex items-center gap-1 text-text-muted text-[10px] min-w-0 pr-1.5">
       <span class="material-symbols-outlined text-[13px] text-secondary shrink-0">verified</span>
       <span class="truncate">18K Demifine Vermeil • High Polish Gold Accent</span>
@@ -339,14 +298,14 @@ a { text-decoration: none !important; color: inherit !important; }
 <!-- Card 2: Celeste Herringbone Demifine Chain -->
 <div class="product-item bg-surface-card rounded-xl p-2.5 shadow-sm flex flex-col gap-2 relative">
   <div class="flex items-start gap-2.5">
-    <div class="relative w-[68px] h-[82px] rounded-lg overflow-hidden bg-surface-dim shrink-0 shadow-inner">
-      <img class="w-full h-full object-cover" data-alt="Bespoke Celeste 18K yellow gold vermeil herringbone demifine flat link chain arranged artfully over dark moody velvet" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBCgW-6w_n-p37nE72qT52973-7xUe27T8V1Bq6n9m-Vd-V0T2-v48N50qGk6bLq7Z5w8G8n0X1T3pG5V8p3Q-6vN8qX5jL5m2V7fB3n6L8k0M4v9j-2Q0N-9L8k0M4v9j-2Q0N-9L8k0M4v9j-2Q0N-9L8k0M4v9j-2Q0N-9L8k0M4v9j-2Q0N">
+    <div class="relative w-[72px] h-[94px] rounded-lg overflow-hidden bg-surface-dim shrink-0 shadow-inner">
+      <img class="w-full h-full object-cover" data-alt="Bespoke Celeste 18K yellow gold vermeil herringbone demifine flat link chain arranged artfully over dark moody velvet" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCC_K-ur7CfKcxqxshw3crpMRkqn4FsmKBVM1prXB9FTJ7l_E8TP_2AbUv0DrP4HNx-nQ1SRmOPLEyUm_0wOfTcA0QZ1axw_QNdtO9H1gR3PwlUVQmtZP9n_xQY3WlsIunQFpjTswT2VleXVkeg0NxI209Bp2OKbrfJ0A08uIJ-0HduGn0jZac6C-XtyNEaH4zk1vH1QwjrnW3OivNHUHAppoHGw_M2jGInSZxyZtA">
       <button aria-label="Quick zoom view" class="absolute bottom-1 right-1 w-5 h-5 rounded bg-surface-card/80 backdrop-blur-md flex items-center justify-center text-text-platinum active:scale-90 transition-transform" type="button">
         <span class="material-symbols-outlined text-[11px]">zoom_in</span>
       </button>
       <span class="absolute top-1 left-1 bg-surface-dim/80 backdrop-blur-xs text-secondary text-[9px] px-1 rounded font-mono font-semibold">18K</span>
     </div>
-    <div class="flex-1 min-w-0 flex flex-col justify-between h-[82px]">
+    <div class="card-middle-info flex-1 min-w-0 flex flex-col justify-between min-h-[94px]">
       <div>
         <div class="flex items-center justify-between gap-1">
           <span class="bg-surface-card-elevated text-secondary text-[9.5px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider">NECKLACES</span>
@@ -360,14 +319,14 @@ a { text-decoration: none !important; color: inherit !important; }
           </button>
         </div>
       </div>
-      <div class="flex items-baseline gap-1.5">
+      <div class="flex items-baseline gap-1.5 pb-0.5">
         <span class="text-[16.5px] text-secondary font-bold tracking-tight">₹26,500</span>
         <span class="text-[11px] text-text-muted line-through">₹32,300</span>
         <span class="text-[9.5px] text-primary font-bold bg-primary/10 px-1 py-0.2 rounded">-18%</span>
       </div>
     </div>
   </div>
-  <div class="bg-surface-card-elevated rounded-lg p-2 flex items-center justify-between shadow-sm">
+  <div class="specs-row bg-surface-card-elevated rounded-lg p-2 flex items-center justify-between shadow-sm">
     <div class="flex items-center gap-1 text-text-muted text-[10px] min-w-0 pr-1.5">
       <span class="material-symbols-outlined text-[13px] text-secondary shrink-0">verified</span>
       <span class="truncate">18K Yellow Gold Vermeil • Mirror Link Spec</span>
@@ -402,14 +361,14 @@ a { text-decoration: none !important; color: inherit !important; }
 <!-- Card 3: Elysian Tennis Bracelet -->
 <div class="product-item bg-surface-card rounded-xl p-2.5 shadow-sm flex flex-col gap-2 relative">
   <div class="flex items-start gap-2.5">
-    <div class="relative w-[68px] h-[82px] rounded-lg overflow-hidden bg-surface-dim shrink-0 shadow-inner">
+    <div class="relative w-[72px] h-[94px] rounded-lg overflow-hidden bg-surface-dim shrink-0 shadow-inner">
       <img class="w-full h-full object-cover" data-alt="Elysian Radiant Tennis Bracelet in 925 sterling silver set with micro pavé VVS clarity stones" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDawfllVhr46H9FUl7JtsD44sesdQxzpIB_PnFYYmtCwjRhka7U8p_BZn1KjaxPYzhDS_xBrhUHIxr2QjJc9rB-Zz-I5kJ6D7hbL945f17jDk4KpmHFTDq7fuUGj-fCAGH6TILhv5BVWHu4uOmTjIFy-ALWFI8vJtzUB91lKPT2SXlxW79Z1szC6CJ9t67Ah0cYR-ZZDfvYwC0SxO148yTIxObIhIojenaOBUxec2E">
       <button aria-label="Quick zoom view" class="absolute bottom-1 right-1 w-5 h-5 rounded bg-surface-card/80 backdrop-blur-md flex items-center justify-center text-text-platinum active:scale-90 transition-transform" type="button">
         <span class="material-symbols-outlined text-[11px]">zoom_in</span>
       </button>
       <span class="absolute top-1 left-1 bg-surface-dim/80 backdrop-blur-xs text-text-platinum text-[9px] px-1 rounded font-mono font-semibold">925</span>
     </div>
-    <div class="flex-1 min-w-0 flex flex-col justify-between h-[82px]">
+    <div class="card-middle-info flex-1 min-w-0 flex flex-col justify-between min-h-[94px]">
       <div>
         <div class="flex items-center justify-between gap-1">
           <span class="bg-surface-card-elevated text-secondary text-[9.5px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider">BRACELETS</span>
@@ -423,14 +382,14 @@ a { text-decoration: none !important; color: inherit !important; }
           </button>
         </div>
       </div>
-      <div class="flex items-baseline gap-1.5">
+      <div class="flex items-baseline gap-1.5 pb-0.5">
         <span class="text-[16.5px] text-secondary font-bold tracking-tight">₹28,900</span>
         <span class="text-[11px] text-text-muted line-through">₹34,800</span>
         <span class="text-[9.5px] text-primary font-bold bg-primary/10 px-1 py-0.2 rounded">-17%</span>
       </div>
     </div>
   </div>
-  <div class="bg-surface-card-elevated rounded-lg p-2 flex items-center justify-between shadow-sm">
+  <div class="specs-row bg-surface-card-elevated rounded-lg p-2 flex items-center justify-between shadow-sm">
     <div class="flex items-center gap-1 text-text-muted text-[10px] min-w-0 pr-1.5">
       <span class="material-symbols-outlined text-[13px] text-primary shrink-0">diamond</span>
       <span class="truncate">925 Sterling Silver • Dual Safety Clasp • VVS</span>
@@ -465,14 +424,14 @@ a { text-decoration: none !important; color: inherit !important; }
 <!-- Card 4: Luna Crescent Huggies -->
 <div class="product-item bg-surface-card rounded-xl p-2.5 shadow-sm flex flex-col gap-2 relative">
   <div class="flex items-start gap-2.5">
-    <div class="relative w-[68px] h-[82px] rounded-lg overflow-hidden bg-surface-dim shrink-0 shadow-inner">
-      <img class="w-full h-full object-cover" data-alt="Pair of Luna Crescent Huggies in polished 925 sterling silver with pavé cubic zirconia" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBCgW-6w_n-p37nE72qT52973-7xUe27T8V1Bq6n9m-Vd-V0T2-v48N50qGk6bLq7Z5w8G8n0X1T3pG5V8p3Q-6vN8qX5jL5m2V7fB3n6L8k0M4v9j-2Q0N-9L8k0M4v9j-2Q0N-9L8k0M4v9j-2Q0N-9L8k0M4v9j-2Q0N-9L8k0M4v9j-2Q0N">
+    <div class="relative w-[72px] h-[94px] rounded-lg overflow-hidden bg-surface-dim shrink-0 shadow-inner">
+      <img class="w-full h-full object-cover" data-alt="Pair of Luna Crescent Huggies in polished 925 sterling silver with pavé cubic zirconia" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCC_K-ur7CfKcxqxshw3crpMRkqn4FsmKBVM1prXB9FTJ7l_E8TP_2AbUv0DrP4HNx-nQ1SRmOPLEyUm_0wOfTcA0QZ1axw_QNdtO9H1gR3PwlUVQmtZP9n_xQY3WlsIunQFpjTswT2VleXVkeg0NxI209Bp2OKbrfJ0A08uIJ-0HduGn0jZac6C-XtyNEaH4zk1vH1QwjrnW3OivNHUHAppoHGw_M2jGInSZxyZtA">
       <button aria-label="Quick zoom view" class="absolute bottom-1 right-1 w-5 h-5 rounded bg-surface-card/80 backdrop-blur-md flex items-center justify-center text-text-platinum active:scale-90 transition-transform" type="button">
         <span class="material-symbols-outlined text-[11px]">zoom_in</span>
       </button>
       <span class="absolute top-1 left-1 bg-surface-dim/80 backdrop-blur-xs text-text-platinum text-[9px] px-1 rounded font-mono font-semibold">925</span>
     </div>
-    <div class="flex-1 min-w-0 flex flex-col justify-between h-[82px]">
+    <div class="card-middle-info flex-1 min-w-0 flex flex-col justify-between min-h-[94px]">
       <div>
         <div class="flex items-center justify-between gap-1">
           <span class="bg-surface-card-elevated text-secondary text-[9.5px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider">EARRINGS</span>
@@ -486,14 +445,14 @@ a { text-decoration: none !important; color: inherit !important; }
           </button>
         </div>
       </div>
-      <div class="flex items-baseline gap-1.5">
+      <div class="flex items-baseline gap-1.5 pb-0.5">
         <span class="text-[16.5px] text-secondary font-bold tracking-tight">₹16,100</span>
         <span class="text-[11px] text-text-muted line-through">₹20,700</span>
         <span class="text-[9.5px] text-primary font-bold bg-primary/10 px-1 py-0.2 rounded">-22%</span>
       </div>
     </div>
   </div>
-  <div class="bg-surface-card-elevated rounded-lg p-2 flex items-center justify-between shadow-sm">
+  <div class="specs-row bg-surface-card-elevated rounded-lg p-2 flex items-center justify-between shadow-sm">
     <div class="flex items-center gap-1 text-text-muted text-[10px] min-w-0 pr-1.5">
       <span class="material-symbols-outlined text-[13px] text-secondary shrink-0">verified</span>
       <span class="truncate">925 Sterling Silver • Pavé Micro Settings</span>
@@ -528,14 +487,14 @@ a { text-decoration: none !important; color: inherit !important; }
 <!-- Card 5: Solitaire Cabochon Signet -->
 <div class="product-item bg-surface-card rounded-xl p-2.5 shadow-sm flex flex-col gap-2 relative">
   <div class="flex items-start gap-2.5">
-    <div class="relative w-[68px] h-[82px] rounded-lg overflow-hidden bg-surface-dim shrink-0 shadow-inner">
-      <img class="w-full h-full object-cover" data-alt="Solitaire Cabochon Signet in solid 925 sterling silver with natural obsidian stone" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA51QwOI7lVeyt-8Ww6SL4m9T4yeOVo8y6XI6rZfmYsifjMx-Ju6Ne_qkGKrkCZR9CYu6YUNVDDFphAzUFekyOX8ky4u1mBVeykyEMark3eStZlcewyKOn4w2R84IGnCbXkxhecZM_pLAfFLK_xYdR4U5rmX5E_8jByhCdvjMqE9QkVx8rnkjnnx-u61qgoB_KfI6CnhSlj8KTSb1KjQ-ix__mWVk2SqHwP9IWHjj8">
+    <div class="relative w-[72px] h-[94px] rounded-lg overflow-hidden bg-surface-dim shrink-0 shadow-inner">
+      <img class="w-full h-full object-cover" data-alt="Solitaire Cabochon Signet in solid 925 sterling silver with natural obsidian stone" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD2JxHrOQPHqynSG2PTQyC3XcsmUF-kPOYcPu2wHV7SWBG3c7BWfilS3g1rdwZz3bA9KmOyfQ0AY-XdQOJ0KQIsIMWpxjRMc7yIyTtguExTtDJDKb3NSs4-xooozSuIbj34yWFXIIctMSZZYcnCEJh_thuU9_XD98hHcldDgYawGk6go0Rcosl1UYdo-sht9BhItiHgwjCKfk8TaKJhUkHd0G9y0gd_nBLzPe4dwEc">
       <button aria-label="Quick zoom view" class="absolute bottom-1 right-1 w-5 h-5 rounded bg-surface-card/80 backdrop-blur-md flex items-center justify-center text-text-platinum active:scale-90 transition-transform" type="button">
         <span class="material-symbols-outlined text-[11px]">zoom_in</span>
       </button>
       <span class="absolute top-1 left-1 bg-surface-dim/80 backdrop-blur-xs text-text-platinum text-[9px] px-1 rounded font-mono font-semibold">925</span>
     </div>
-    <div class="flex-1 min-w-0 flex flex-col justify-between h-[82px]">
+    <div class="card-middle-info flex-1 min-w-0 flex flex-col justify-between min-h-[94px]">
       <div>
         <div class="flex items-center justify-between gap-1">
           <span class="bg-surface-card-elevated text-secondary text-[9.5px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider">RINGS</span>
@@ -549,13 +508,13 @@ a { text-decoration: none !important; color: inherit !important; }
           </button>
         </div>
       </div>
-      <div class="flex items-baseline gap-1.5">
+      <div class="flex items-baseline gap-1.5 pb-0.5">
         <span class="text-[16.5px] text-secondary font-bold tracking-tight">₹19,800</span>
         <span class="text-[9.5px] text-secondary font-bold bg-secondary/15 px-1 py-0.2 rounded uppercase">SIGNATURE</span>
       </div>
     </div>
   </div>
-  <div class="bg-surface-card-elevated rounded-lg p-2 flex items-center justify-between shadow-sm">
+  <div class="specs-row bg-surface-card-elevated rounded-lg p-2 flex items-center justify-between shadow-sm">
     <div class="flex items-center gap-1 text-text-muted text-[10px] min-w-0 pr-1.5">
       <span class="material-symbols-outlined text-[13px] text-secondary shrink-0">verified</span>
       <span class="truncate">925 Sterling Silver • Satin Brushed Finish</span>
