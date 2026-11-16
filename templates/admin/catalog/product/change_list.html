@@ -1,16 +1,21 @@
-{% load i18n static tz %}<!DOCTYPE html>
-<html class="dark" lang="en">
-<head>
-<meta charset="utf-8">
-<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport">
-<title>Atelier Vault | LUCKJARY</title>
-<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..900;1,6..96,400..900&amp;family=Plus+Jakarta+Sans:ital,wght@0,300..800;1,300..800&amp;display=swap" rel="stylesheet">
-<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700;800&amp;family=JetBrains+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet">
+{% extends "admin/base_site.html" %}
+{% load i18n admin_urls static %}
+
+{% block title %}Atelier Vault | Luckjary Haute Joaillerie Atelier{% endblock %}
+
+{% block extrahead %}
+{{ block.super }}
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..900;1,6..96,400..900&family=Plus+Jakarta+Sans:ital,wght@0,300..800;1,300..800&family=Cinzel:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-<script id="tailwind-config">
+<script>
 tailwind.config = {
   darkMode: "class",
+  corePlugins: {
+    preflight: false,
+  },
   theme: {
     extend: {
       colors: {
@@ -70,272 +75,35 @@ tailwind.config = {
         "body-sm": ["Plus Jakarta Sans", "sans-serif"],
         "label-md": ["Plus Jakarta Sans", "sans-serif"],
         "label-sm": ["Plus Jakarta Sans", "sans-serif"],
-        "serif-luxury": ["Bodoni Moda", "serif"],
-        "mono-luxury": ["JetBrains Mono", "monospace"]
+        "caption": ["Plus Jakarta Sans", "sans-serif"],
+        "mono-luxury": ["JetBrains Mono", "monospace"],
+        "serif-luxury": ["Cinzel", "Bodoni Moda", "serif"]
       }
     }
   }
 };
 </script>
 <style>
-@layer base {
-  html, body {
-    width: 100%;
-    margin: 0;
-    padding: 0;
-    min-height: 100%;
-    background-color: #0d0e10;
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
   }
-  body {
-    overscroll-behavior-y: none;
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
   }
-}
-::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
-}
-::-webkit-scrollbar-track {
-  background: #121315;
-}
-::-webkit-scrollbar-thumb {
-  background: #2D3240;
-  border-radius: 9999px;
-}
-::-webkit-scrollbar-thumb:hover {
-  background: #3c4a42;
-}
-
-/* Sidebar transition on mobile */
-#leftNavDrawer {
-  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-/* Catalog Grid Mode responsive transformation */
-#catalogContainer.catalog-grid-mode {
-  display: grid !important;
-  grid-template-columns: repeat(1, minmax(0, 1fr)) !important;
-  gap: 1.25rem !important;
-}
-@media (min-width: 640px) {
-  #catalogContainer.catalog-grid-mode {
-    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  .vault-content-wrapper a {
+    text-decoration: none;
   }
-}
-@media (min-width: 1280px) {
-  #catalogContainer.catalog-grid-mode {
-    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
-  }
-}
-#catalogContainer.catalog-grid-mode .product-item {
-  flex-direction: column !important;
-  align-items: stretch !important;
-}
-#catalogContainer.catalog-grid-mode .product-item .product-info-block {
-  flex-direction: column !important;
-  align-items: stretch !important;
-  width: 100% !important;
-}
-#catalogContainer.catalog-grid-mode .product-item .product-thumb-container {
-  width: 100% !important;
-  height: 220px !important;
-}
-#catalogContainer.catalog-grid-mode .product-item .pricing-stock-row {
-  width: 100% !important;
-  padding-top: 0.75rem !important;
-  border-top: 1px solid rgba(35, 39, 50, 0.7) !important;
-}
-#catalogContainer.catalog-grid-mode .product-item .action-footer-row {
-  width: 100% !important;
-  padding-top: 0.75rem !important;
-  border-top: 1px solid rgba(35, 39, 50, 0.7) !important;
-}
 </style>
-</head>
+{% endblock %}
 
-<body class="bg-[#0d0e10] text-[#e3e2e5] font-sans antialiased min-h-screen selection:bg-emerald-500/20 selection:text-emerald-300 flex flex-col">
+{% block content_title %}{% endblock %}
+{% block nav-breadcrumbs %}{% endblock %}
+{% block object-tools %}{% endblock %}
 
-<!-- Main App Root with Persistent Left Side Panel + Right Content Area -->
-<div class="flex flex-1 w-full relative min-h-screen">
-
-  <!-- Mobile Backdrop for Left Side Panel -->
-  <div id="leftNavDrawerBackdrop" class="fixed inset-0 bg-black/75 z-40 opacity-0 pointer-events-none transition-opacity duration-300 backdrop-blur-xs lg:hidden"></div>
-
-  <!-- ==========================================
-       PRESERVED LEFT SIDE PANEL
-       (Docked / Persistent on Desktop lg:+, Off-Canvas Drawer on Mobile)
-       ========================================== -->
-  <aside id="leftNavDrawer" class="fixed inset-y-0 left-0 z-50 w-72 max-w-[85vw] bg-[#121315] border-r border-[#232732] shadow-2xl flex flex-col -translate-x-full lg:translate-x-0 lg:static lg:sticky lg:top-0 lg:h-screen lg:shadow-none lg:z-30 lg:shrink-0 overflow-y-auto">
-    <!-- Panel Header -->
-    <div class="p-4 border-b border-[#232732] flex items-center justify-between">
-      <a href="/admin/" class="flex items-center gap-2.5 group focus:outline-none">
-        <span class="w-2.5 h-2.5 rounded-full bg-primary inline-block group-hover:scale-125 transition-transform duration-300"></span>
-        <div class="flex flex-col">
-          <span class="font-bold text-[15px] tracking-[0.16em] text-text-platinum font-serif-luxury">LUCKJARY</span>
-          <span class="text-[9px] text-secondary uppercase tracking-[0.25em] font-mono-luxury font-semibold">HAUTE ATELIER</span>
-        </div>
-      </a>
-      <button id="closeNavDrawerBtn" aria-label="Close navigation" class="lg:hidden w-8 h-8 rounded-lg flex items-center justify-center text-text-muted hover:text-text-platinum active:scale-95 transition-colors cursor-pointer" type="button">
-        <span class="material-symbols-outlined text-[20px]">close</span>
-      </button>
-    </div>
-
-    <!-- Navigation Groups -->
-    <div class="p-3 space-y-4 flex-1 text-[13px]">
-      <!-- Section: Navigation -->
-      <div>
-        <div class="text-[10px] font-bold tracking-[0.12em] text-text-muted uppercase px-2 mb-1.5 font-mono-luxury">Navigation</div>
-        <div class="space-y-0.5">
-          <a href="/admin/" class="flex items-center gap-3 px-3 py-2 rounded-xl text-text-muted hover:text-text-platinum hover:bg-[#18191c] transition-colors">
-            <span class="material-symbols-outlined text-[18px]">home</span>
-            <span>Home</span>
-          </a>
-          <a href="/admin/orders/order/" class="flex items-center justify-between px-3 py-2 rounded-xl text-text-muted hover:text-text-platinum hover:bg-[#18191c] transition-colors">
-            <div class="flex items-center gap-3">
-              <span class="material-symbols-outlined text-[18px]">shopping_bag</span>
-              <span>Orders</span>
-            </div>
-            <span class="px-2 py-0.5 rounded-full bg-surface-card text-secondary text-[11px] font-mono-luxury font-bold">4</span>
-          </a>
-          <a href="/admin/orders/coupon/" class="flex items-center gap-3 px-3 py-2 rounded-xl text-text-muted hover:text-text-platinum hover:bg-[#18191c] transition-colors">
-            <span class="material-symbols-outlined text-[18px]">percent</span>
-            <span>Discounts</span>
-          </a>
-        </div>
-      </div>
-
-      <!-- Section: Products & Inventory (ACTIVE) -->
-      <div>
-        <div class="text-[10px] font-bold tracking-[0.12em] text-text-muted uppercase px-2 mb-1.5 font-mono-luxury">Products & Inventory</div>
-        <div class="space-y-0.5">
-          <a href="/admin/catalog/product/" class="flex items-center justify-between px-3 py-2 rounded-xl bg-primary/10 text-primary font-medium border-l-2 border-primary shadow-sm">
-            <div class="flex items-center gap-3">
-              <span class="material-symbols-outlined text-[18px] text-primary">diamond</span>
-              <span class="text-text-platinum font-semibold">Vault Products</span>
-            </div>
-            <span class="px-2 py-0.5 rounded-full bg-surface-card text-primary text-[11px] font-mono-luxury font-bold">17</span>
-          </a>
-          <a href="/admin/catalog/collection/" class="flex items-center gap-3 px-3 py-2 rounded-xl text-text-muted hover:text-text-platinum hover:bg-[#18191c] transition-colors">
-            <span class="material-symbols-outlined text-[18px]">grid_view</span>
-            <span>Collections</span>
-          </a>
-          <a href="/admin/catalog/category/" class="flex items-center gap-3 px-3 py-2 rounded-xl text-text-muted hover:text-text-platinum hover:bg-[#18191c] transition-colors">
-            <span class="material-symbols-outlined text-[18px]">category</span>
-            <span>Categories</span>
-          </a>
-          <a href="/admin/catalog/material/" class="flex items-center gap-3 px-3 py-2 rounded-xl text-text-muted hover:text-text-platinum hover:bg-[#18191c] transition-colors">
-            <span class="material-symbols-outlined text-[18px]">stars</span>
-            <span>Materials</span>
-          </a>
-          <a href="/admin/catalog/review/" class="flex items-center gap-3 px-3 py-2 rounded-xl text-text-muted hover:text-text-platinum hover:bg-[#18191c] transition-colors">
-            <span class="material-symbols-outlined text-[18px]">grade</span>
-            <span>Product Reviews</span>
-          </a>
-        </div>
-      </div>
-
-      <!-- Section: Customers & Patrons -->
-      <div>
-        <div class="text-[10px] font-bold tracking-[0.12em] text-text-muted uppercase px-2 mb-1.5 font-mono-luxury">Customers & VIPs</div>
-        <div class="space-y-0.5">
-          <a href="/admin/accounts/customerprofile/" class="flex items-center gap-3 px-3 py-2 rounded-xl text-text-muted hover:text-text-platinum hover:bg-[#18191c] transition-colors">
-            <span class="material-symbols-outlined text-[18px]">groups</span>
-            <span>VIP Patrons</span>
-          </a>
-          <a href="/admin/accounts/address/" class="flex items-center gap-3 px-3 py-2 rounded-xl text-text-muted hover:text-text-platinum hover:bg-[#18191c] transition-colors">
-            <span class="material-symbols-outlined text-[18px]">location_on</span>
-            <span>Addresses</span>
-          </a>
-        </div>
-      </div>
-
-                  <!-- Section: Preferences / Settings (Shopify Style) -->
-      <div class="pt-2 border-t border-[#232732]">
-        <div class="text-[10px] font-bold tracking-[0.12em] text-zinc-400 uppercase px-2 mb-1.5 font-mono">Preferences</div>
-        <div class="space-y-0.5">
-          <a href="/admin/orders/order/#settings" class="flex items-center justify-between px-3 py-2 rounded-xl text-zinc-400 hover:text-zinc-100 hover:bg-[#18191c] transition-colors cursor-pointer group">
-            <div class="flex items-center gap-3">
-              <svg class="w-4 h-4 text-zinc-400 group-hover:text-[#ebd38d] transition-colors" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
-              <span>Settings</span>
-            </div>
-            <span class="px-2 py-0.5 rounded-full bg-[#181a22] text-[#ebd38d] border border-[#2d3240] text-[10px] font-mono font-semibold">₹ INR</span>
-          </a>
-        </div>
-      </div>
-
-    </div>
-
-    <!-- Panel Footer -->
-    <div class="p-3 border-t border-[#232732] bg-[#0d0e10]">
-      <div class="flex items-center gap-2 mb-2">
-        <span class="w-1.5 h-1.5 rounded-full bg-primary inline-block"></span>
-        <a href="/" target="_blank" class="text-[11px] text-text-muted hover:text-primary transition-colors">Luckjary Boutique Online ↗</a>
-      </div>
-      <div class="flex items-center justify-between">
-        <div class="flex items-center gap-2">
-          <div class="w-7 h-7 rounded-full bg-[#1e2024] border border-[#2a2d33] flex items-center justify-center text-xs font-bold text-secondary font-mono">E</div>
-          <div>
-            <div class="text-xs font-bold text-text-platinum leading-none">Eleanor</div>
-            <div class="text-[10px] text-text-muted font-mono">Director</div>
-          </div>
-        </div>
-        <a href="/admin/logout/" class="text-text-muted hover:text-red-400 p-1.5 rounded-lg hover:bg-[#1e2024] transition-colors" title="Sign Out">
-          <span class="material-symbols-outlined text-[18px]">logout</span>
-        </a>
-      </div>
-    </div>
-  </aside>
-
-  <!-- ==========================================
-       RIGHT MAIN CONTENT AREA
-       ========================================== -->
-  <div class="flex-1 min-w-0 flex flex-col min-h-screen overflow-x-hidden">
-
-    <!-- Top Universal Header Bar -->
-    <header class="sticky top-0 z-30 w-full bg-[#14161C]/90 backdrop-blur-xl border-b border-[#232732] shadow-[0_2px_12px_rgba(0,0,0,0.5)]">
-      <div class="px-4 sm:px-6 lg:px-8 h-16 sm:h-20 flex items-center justify-between gap-4">
-        <!-- Left: Hamburger Menu (Visible on mobile/tablet, and toggles on desktop) + Brand Header -->
-        <div class="flex items-center gap-3 sm:gap-4">
-          <button id="openNavDrawerBtn" aria-label="Toggle Navigation Panel" class="p-2 rounded-xl bg-surface-card hover:bg-surface-card-elevated text-text-muted hover:text-text-platinum border border-border-strong active:scale-95 transition-all cursor-pointer" type="button">
-            <span class="material-symbols-outlined text-[20px]">menu</span>
-          </button>
-          <a class="flex items-center gap-2.5 group focus:outline-none" href="/admin/">
-            <span class="w-2 h-2 rounded-full bg-primary group-hover:scale-125 transition-transform duration-300"></span>
-            <div class="flex flex-col sm:flex-row sm:items-baseline sm:gap-2">
-              <span class="font-headline-sm sm:text-2xl tracking-[0.18em] text-text-platinum font-semibold font-serif-luxury">LUCKJARY</span>
-              <span class="font-caption text-[10px] sm:text-[11px] text-secondary uppercase tracking-[0.25em] font-medium">ATELIER</span>
-            </div>
-          </a>
-        </div>
-
-        <!-- Right: Global Quick Search & User Profile Actions -->
-        <div class="flex items-center gap-2 sm:gap-3">
-          <!-- Desktop Global Quick Search Bar -->
-          <div class="hidden lg:flex items-center relative w-64 xl:w-80 bg-surface-card border border-border-strong rounded-xl px-3 py-1.5 text-xs text-text-muted focus-within:border-primary/60 transition-colors">
-            <span class="material-symbols-outlined text-[18px] mr-2">search</span>
-            <input id="topSearchInput" class="bg-transparent text-text-platinum text-xs placeholder:text-text-muted/70 focus:outline-none w-full font-body-sm" placeholder="Search SKU, hallmark, collection..." type="text">
-            <kbd class="hidden xl:inline-block px-1.5 py-0.5 text-[10px] font-mono-luxury bg-surface-dim border border-border-strong rounded text-text-muted ml-1">⌘K</kbd>
-          </div>
-          <!-- Notifications -->
-          <button aria-label="Notifications" class="w-10 h-10 rounded-xl flex items-center justify-center text-text-muted hover:text-text-platinum hover:bg-surface-card relative transition-colors" type="button">
-            <span class="material-symbols-outlined text-[20px]">notifications</span>
-            <span class="absolute top-2.5 right-2.5 w-2 h-2 rounded-full bg-primary ring-2 ring-surface-card-elevated"></span>
-          </button>
-          <!-- Master Jeweler Profile Chip -->
-          <div class="flex items-center gap-2.5 pl-1 sm:pl-2 border-l border-border-strong/60">
-            <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-primary/30 to-surface-card border border-primary/40 flex items-center justify-center text-primary shadow-sm">
-              <span class="material-symbols-outlined text-[20px]">person</span>
-            </div>
-            <div class="hidden sm:flex flex-col text-left">
-              <span class="text-xs font-semibold text-text-platinum leading-tight">Master Jeweler</span>
-              <span class="text-[10px] font-mono-luxury text-secondary tracking-wider">ADMIN • VAULT 01</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </header>
-
-    <!-- Main Vault Content Container -->
-    <main class="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 flex flex-col gap-6">
+{% block content %}
+<div class="vault-page-wrapper w-full font-sans text-on-surface">
+<div class="vault-content-wrapper w-full max-w-7xl mx-auto flex flex-col gap-6 pb-12">
 
       <!-- Top Catalog Overview Banner / Page Header -->
       <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 pb-2 border-b border-border-subtle/50">
@@ -961,15 +729,9 @@ tailwind.config = {
         <span id="toastMessage">Action completed</span>
       </div>
 
-    </main>
-
-  </div>
-
+    </div>
 </div>
 
-<!-- ==========================================
-     INTEGRATED JAVASCRIPT LOGIC
-     ========================================== -->
 <script>
   (function initAtelierVaultApp() {
     // --- Currency Switcher Logic ---
@@ -1312,7 +1074,4 @@ tailwind.config = {
 
   })();
 </script>
-
-
-</body>
-</html>
+{% endblock %}
