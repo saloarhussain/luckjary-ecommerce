@@ -316,9 +316,9 @@ tailwind.config = {
                 </div>
 
                 <div class="flex items-baseline gap-2">
-                  <span class="font-headline-sm text-headline-sm text-text-platinum font-semibold">₹{{ product.price|floatformat:0 }}</span>
+                  <span class="font-headline-sm text-headline-sm text-text-platinum font-semibold">{{ currency_symbol|default:"₹" }}{{ product.price|floatformat:0 }}</span>
                   {% if product.compare_at_price and product.compare_at_price > product.price %}
-                  <span class="font-body-sm text-body-sm text-text-muted line-through">₹{{ product.compare_at_price|floatformat:0 }}</span>
+                  <span class="font-body-sm text-body-sm text-text-muted line-through">{{ currency_symbol|default:"₹" }}{{ product.compare_at_price|floatformat:0 }}</span>
                   <span class="font-caption text-caption text-primary font-semibold bg-primary/10 px-1.5 py-0.5 rounded">-{{ product.discount_percent }}%</span>
                   {% endif %}
                 </div>
@@ -426,16 +426,16 @@ tailwind.config = {
             </div>
           </div>
           <div>
-            <span class="font-label-sm text-label-sm text-text-muted uppercase tracking-wider block mb-2 font-semibold">Price Tier (₹ INR)</span>
+            <span class="font-label-sm text-label-sm text-text-muted uppercase tracking-wider block mb-2 font-semibold">Price Tier ({{ currency_code|default:"INR" }})</span>
             <div class="flex items-center gap-2">
               <div class="flex-1 bg-surface-card rounded-xl p-2.5 border border-border-subtle">
                 <span class="font-caption text-caption text-text-muted block">Min</span>
-                <span class="font-body-sm text-body-sm text-text-platinum font-semibold">₹14,000</span>
+                <span class="font-body-sm text-body-sm text-text-platinum font-semibold">{{ currency_symbol|default:"₹" }}14,000</span>
               </div>
               <span class="text-text-muted">—</span>
               <div class="flex-1 bg-surface-card rounded-xl p-2.5 border border-border-subtle">
                 <span class="font-caption text-caption text-text-muted block">Max</span>
-                <span class="font-body-sm text-body-sm text-text-platinum font-semibold">₹50,000+</span>
+                <span class="font-body-sm text-body-sm text-text-platinum font-semibold">{{ currency_symbol|default:"₹" }}50,000+</span>
               </div>
             </div>
           </div>
@@ -489,7 +489,7 @@ tailwind.config = {
         <div class="space-y-3">
           <p class="font-body-sm text-text-muted text-caption" id="priceModalTitle">Product Name</p>
           <div>
-            <label class="font-caption text-caption text-text-muted block mb-1">New Price (₹ INR)</label>
+            <label class="font-caption text-caption text-text-muted block mb-1">New Price ({{ currency_symbol|default:"₹" }} {{ currency_code|default:"INR" }})</label>
             <input type="number" id="priceModalInput" class="w-full bg-surface-dim border border-border-strong rounded-xl px-3 py-2 text-lg font-semibold text-text-platinum focus:outline-none focus:border-secondary"/>
           </div>
         </div>

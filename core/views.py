@@ -122,3 +122,33 @@ def sitemap_xml(request):
         'collections': collections,
     })
     return HttpResponse(xml_content, content_type="application/xml")
+
+
+def set_currency(request):
+    """
+    Set active store and admin currency in session and persistent cookie.
+    Accepts GET /set-currency/?currency=USD or POST /set-currency/ with currency=USD
+    """
+    currency = request.POST.get('currency') or request.GET.get('currency') or 'INR'
+    currency = currency.upper().strip()
+    valid_currencies = ['INR', 'USD', 'EUR', 'GBP', 'AED']
+    if currency not in valid_currencies:
+        currency = 'INR'
+
+    if hasattr(request, 'session') and request.session is not None:
+        request.session['currency'] = currency
+        request.session.modified = True
+
+    redirect_url = request.META.get('HTTP_REFERER') or '/admin/'
+
+    is_ajax = request.headers.get('x-requested-with') == 'XMLHttpRequest' or 'application/json' in request.headers.get('Accept', '')
+    if is_ajax:
+        from django.http import JsonResponse
+        response = JsonResponse({'status': 'ok', 'currency': currency})
+    else:
+        from django.http import HttpResponseRedirect
+        response = HttpResponseRedirect(redirect_url)
+
+    response.set_cookie('admin_currency', currency, max_age=365*24*60*60, samesite='Lax')
+    return response
+

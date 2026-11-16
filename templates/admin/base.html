@@ -279,6 +279,42 @@
                         </svg>
                     </a>
                 </nav>
+
+                <!-- Settings & Currency Configuration -->
+                <div class="sidebar-section-title">Settings & Preferences</div>
+                <nav class="sidebar-nav">
+                    <div class="sidebar-currency-widget" style="margin: 0.35rem 0.5rem; padding: 0.65rem 0.75rem; background: #181A22; border: 1px solid #2D3240; border-radius: 8px;">
+                        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.45rem;">
+                            <span style="font-size: 0.65rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: #9497A1; display: flex; align-items: center; gap: 4px;">
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#E9C176" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                    <line x1="12" y1="8" x2="12" y2="12"></line>
+                                    <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                                </svg>
+                                Currency
+                            </span>
+                            <span id="activeCurrencyPill" style="font-size: 0.65rem; font-weight: 700; color: #4EDEA3; background: rgba(78, 222, 163, 0.12); padding: 0.1rem 0.45rem; border-radius: 4px; font-family: monospace;">
+                                {{ currency_code|default:"INR" }} ({{ currency_symbol|default:"₹" }})
+                            </span>
+                        </div>
+                        <div style="position: relative;">
+                            <select id="sidebarCurrencySelector" onchange="switchAdminCurrency(this.value)" style="width: 100%; background: #121315; color: #E5E7EB; border: 1px solid #3C4A42; border-radius: 6px; padding: 0.45rem 1.8rem 0.45rem 0.6rem; font-size: 0.78rem; font-weight: 600; cursor: pointer; outline: none; appearance: none; -webkit-appearance: none;">
+                                <option value="INR" {% if currency_code == 'INR' %}selected{% endif %}>🇮🇳 ₹ INR — Indian Rupee</option>
+                                <option value="USD" {% if currency_code == 'USD' %}selected{% endif %}>🇺🇸 $ USD — US Dollar</option>
+                                <option value="EUR" {% if currency_code == 'EUR' %}selected{% endif %}>🇪🇺 € EUR — Euro</option>
+                                <option value="GBP" {% if currency_code == 'GBP' %}selected{% endif %}>🇬🇧 £ GBP — British Pound</option>
+                                <option value="AED" {% if currency_code == 'AED' %}selected{% endif %}>🇦🇪 AED — UAE Dirham</option>
+                            </select>
+                            <svg style="position: absolute; right: 8px; top: 50%; transform: translateY(-50%); pointer-events: none;" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="6 9 12 15 18 9"></polyline>
+                            </svg>
+                        </div>
+                        <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 0.45rem; padding-top: 0.35rem; border-top: 1px solid #232732;">
+                            <span style="font-size: 0.62rem; color: #71717A;">Vault & OMS Display</span>
+                            <span style="font-size: 0.62rem; color: #E9C176; font-weight: 600;">Active Live</span>
+                        </div>
+                    </div>
+                </nav>
             </div>
 
             <!-- Sidebar Footer -->
@@ -548,6 +584,26 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 });
+
+function switchAdminCurrency(curr) {
+    if (!curr) return;
+    var pill = document.getElementById('activeCurrencyPill');
+    if (pill) {
+        pill.textContent = curr + ' ...';
+    }
+    // Set client cookie
+    document.cookie = "admin_currency=" + curr + "; path=/; max-age=31536000; SameSite=Lax";
+    
+    // Notify server to persist in session
+    fetch('/set-currency/?currency=' + encodeURIComponent(curr), {
+        method: 'GET',
+        headers: {
+            'X-Requested-With': 'XMLHttpRequest'
+        }
+    }).finally(function() {
+        window.location.reload();
+    });
+}
 </script>
 </body>
 </html>
