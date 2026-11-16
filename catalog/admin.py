@@ -284,6 +284,7 @@ class ProductAdmin(admin.ModelAdmin):
             'bestsellers': bestseller_count,
             'vault_value': f"${vault_val:,.2f}",
         }
+        extra_context['categories_list'] = Category.objects.all()
         return super().changelist_view(request, extra_context=extra_context)
 
     @admin.display(description='Preview')
