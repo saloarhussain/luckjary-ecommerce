@@ -12,6 +12,7 @@
 <!-- Tailwind Configuration -->
 <script data-purpose="tailwind-config">
     tailwind.config = {
+      important: true,
       theme: {
         extend: {
           colors: {
@@ -33,7 +34,9 @@
               400: '#34D399',
               500: '#10B981',
               600: '#059669',
+              800: '#065F46',
               900: '#064E3B',
+              950: '#022C22',
             },
             platinum: {
               100: '#F4F5F7',
@@ -51,17 +54,40 @@
     }
 </script>
 <style data-purpose="custom-styling">
+    /* =====================================================================
+       EXACT COLOR SYSTEM & COMPONENT OVERRIDES MATCHING ATTACHED SCREENSHOT
+       ===================================================================== */
+    :root {
+      --obsidian-950: #07080A;
+      --obsidian-900: #0B0D10;
+      --obsidian-850: #111317;
+      --obsidian-800: #161920;
+      --obsidian-700: #1E232E;
+      --champagne: #C5A059;
+      --champagne-300: #EBD29E;
+      --emerald-500: #10B981;
+      --emerald-400: #34D399;
+      --platinum-100: #F4F5F7;
+      --platinum-200: #E3E6EB;
+      --platinum-400: #9CA3AF;
+    }
+
+    /* 1. Global Page and Body Reset to Pitch Obsidian */
     body, body.shopify-admin-body {
-      background-color: #08090C !important;
+      background-color: #07080A !important;
       color: #E3E6EB !important;
       font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif !important;
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
     }
 
+    #container.shopify-app-root {
+      background: #07080A !important;
+    }
+
     /* Container resets so atelier console fits mobile edge-to-edge */
     #content-start.shopify-content-canvas {
-      background-color: #08090C !important;
+      background-color: #07080A !important;
       margin-left: 0 !important;
       width: 100% !important;
       padding: 0 !important;
@@ -70,7 +96,7 @@
     #content,
     .shopify-content-box {
       padding: 0 !important;
-      background: #08090C !important;
+      background: #07080A !important;
       max-width: 100% !important;
       margin: 0 !important;
     }
@@ -80,16 +106,124 @@
       margin: 0 !important;
       width: 100% !important;
       max-width: 100% !important;
+      background: #07080A !important;
     }
 
-    /* Soft metallic radial glow */
+    /* 2. Soft metallic radial glow at top */
     .bg-atelier-radial {
-      background: radial-gradient(circle at 50% 0%, rgba(197, 160, 89, 0.08) 0%, rgba(11, 13, 16, 0) 70%);
+      background: radial-gradient(circle at 50% 0%, rgba(197, 160, 89, 0.08) 0%, rgba(11, 13, 16, 0) 70%) !important;
     }
 
-    /* Fine border glow effect */
-    .border-champagne-subtle {
-      border: 1px solid rgba(197, 160, 89, 0.22);
+    /* 3. Explicit exact color classes with !important */
+    .bg-obsidian-950 { background-color: #07080A !important; }
+    .bg-obsidian-900 { background-color: #0B0D10 !important; }
+    .bg-obsidian-850 { background-color: #111317 !important; }
+    .bg-obsidian-800 { background-color: #161920 !important; }
+    .bg-obsidian-700 { background-color: #1E232E !important; }
+
+    .text-champagne { color: #C5A059 !important; }
+    .text-champagne-300 { color: #EBD29E !important; }
+    .text-champagne-400 { color: #DEBF7D !important; }
+    .bg-champagne { background-color: #C5A059 !important; }
+    .border-champagne { border-color: #C5A059 !important; }
+
+    .text-emerald-400 { color: #34D399 !important; }
+    .text-emerald-500 { color: #10B981 !important; }
+    .bg-emerald-500 { background-color: #10B981 !important; }
+
+    .text-platinum-100 { color: #F4F5F7 !important; }
+    .text-platinum-200 { color: #E3E6EB !important; }
+    .text-platinum-300 { color: #CBD0D8 !important; }
+    .text-platinum-400 { color: #9CA3AF !important; }
+
+    .font-serif { font-family: 'Cinzel', Playfair Display, Georgia, serif !important; }
+    .font-sans { font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif !important; }
+    .font-mono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace !important; }
+
+    /* Gradients */
+    .bg-gradient-to-b.from-obsidian-850.to-obsidian-900 {
+      background: linear-gradient(180deg, #111317 0%, #0B0D10 100%) !important;
+    }
+    .bg-gradient-to-tr.from-obsidian-800.to-obsidian-700 {
+      background: linear-gradient(to top right, #161920, #1E232E) !important;
+    }
+
+    /* Borders */
+    .border-\[\#222836\] { border-color: #222836 !important; }
+    .border-\[\#2B313F\] { border-color: #2B313F !important; }
+    .border-\[\#1E232E\] { border-color: #1E232E !important; }
+    .border-\[\#262B37\] { border-color: #262B37 !important; }
+    .border-\[\#2F3545\] { border-color: #2F3545 !important; }
+    .border-\[\#1a1e28\] { border-color: #1a1e28 !important; }
+    .border-\[\#2D3342\] { border-color: #2D3342 !important; }
+
+    /* Badges */
+    .bg-amber-500\/10 { background-color: rgba(245, 158, 11, 0.1) !important; }
+    .text-amber-300 { color: #FCD34D !important; }
+    .border-amber-500\/30 { border-color: rgba(245, 158, 11, 0.3) !important; }
+    .bg-amber-400 { background-color: #FBBF24 !important; }
+
+    .bg-emerald-500\/10 { background-color: rgba(16, 185, 129, 0.1) !important; }
+    .border-emerald-500\/30 { border-color: rgba(16, 185, 129, 0.3) !important; }
+
+    .bg-emerald-950\/60 { background-color: rgba(6, 78, 59, 0.6) !important; }
+    .border-emerald-800\/40 { border-color: rgba(6, 78, 59, 0.4) !important; }
+
+    .bg-champagne-900\/60 { background-color: rgba(58, 46, 22, 0.6) !important; }
+    .border-champagne-600\/40 { border-color: rgba(156, 122, 55, 0.4) !important; }
+
+    .border-champagne\/20 { border-color: rgba(197, 160, 89, 0.2) !important; }
+    .border-champagne\/30 { border-color: rgba(197, 160, 89, 0.3) !important; }
+    .border-champagne\/40 { border-color: rgba(197, 160, 89, 0.4) !important; }
+
+    .text-obsidian-800\/40 { color: rgba(22, 25, 32, 0.4) !important; }
+
+    /* 4. Form Controls Override - Beat admin_shopify.css !important */
+    #content-main select,
+    #content-main input[type="text"],
+    #content-main input[type="url"],
+    #content-main input[type="date"],
+    #content-main textarea {
+      background-color: #07080A !important;
+      border: 1px solid #2B313F !important;
+      color: #F4F5F7 !important;
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif !important;
+      border-radius: 12px !important;
+      box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.4) !important;
+    }
+
+    #content-main select:focus,
+    #content-main input[type="text"]:focus,
+    #content-main input[type="url"]:focus,
+    #content-main input[type="date"]:focus,
+    #content-main textarea:focus {
+      border-color: #C5A059 !important;
+      outline: none !important;
+      box-shadow: 0 0 0 1px #C5A059, inset 0 2px 4px rgba(0, 0, 0, 0.4) !important;
+    }
+
+    /* 5. Primary Action Button (Emerald Glowing Pill) */
+    #btn-save-telemetry {
+      background-color: #10B981 !important;
+      color: #07080A !important;
+      box-shadow: 0 0 20px rgba(16, 185, 129, 0.25) !important;
+      border: none !important;
+    }
+    #btn-save-telemetry:hover {
+      background-color: #34D399 !important;
+      box-shadow: 0 0 25px rgba(16, 185, 129, 0.4) !important;
+    }
+
+    /* 6. Secondary Action Button (Dark Champagne Outline) */
+    .btn-secondary-champagne {
+      background-color: #111317 !important;
+      color: #EBD29E !important;
+      border: 1px solid rgba(197, 160, 89, 0.3) !important;
+    }
+    .btn-secondary-champagne:hover {
+      background-color: #161920 !important;
+      border-color: #C5A059 !important;
+      color: #FFFFFF !important;
     }
 </style>
 {% endblock %}
@@ -611,7 +745,7 @@
             <span>Update Order Telemetry</span>
           </button>
           <!-- Secondary Action Button: Dark Champagne Subtle Outline -->
-          <button class="w-full py-2.5 px-4 rounded-xl bg-obsidian-850 hover:bg-obsidian-800 text-champagne-300 border border-champagne/30 text-[11px] font-medium tracking-wide flex items-center justify-center gap-1.5 transition-colors cursor-pointer" type="button" onclick="window.print()">
+          <button class="w-full py-2.5 px-4 rounded-xl bg-obsidian-850 hover:bg-obsidian-800 text-champagne-300 border border-champagne/30 text-[11px] font-medium tracking-wide flex items-center justify-center gap-1.5 transition-colors cursor-pointer btn-secondary-champagne" type="button" onclick="window.print()">
             <svg class="w-3.5 h-3.5 text-champagne" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"></path>
             </svg>
