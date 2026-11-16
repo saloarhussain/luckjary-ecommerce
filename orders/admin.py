@@ -7,7 +7,21 @@ from .models import Order, OrderItem, OrderStatusUpdate, Coupon
 class OrderItemInline(admin.TabularInline):
     model = OrderItem
     extra = 0
-    readonly_fields = ('product_name', 'product_sku', 'unit_price', 'quantity', 'line_total')
+    can_delete = False
+    readonly_fields = ('item_preview', 'product_name', 'product_sku', 'selected_material', 'selected_size', 'unit_price', 'quantity', 'line_total')
+    fields = ('item_preview', 'product_name', 'product_sku', 'selected_material', 'selected_size', 'unit_price', 'quantity', 'line_total')
+
+    @admin.display(description='Piece Preview')
+    def item_preview(self, obj):
+        if obj and obj.product_image:
+            return format_html(
+                '<div class="order-item-inline-preview">'
+                '<img src="{}" alt="{}" style="width:42px; height:42px; object-fit:cover; border-radius:6px; border:1px solid rgba(197,160,89,0.35); flex-shrink:0;" />'
+                '</div>',
+                obj.product_image,
+                obj.product_name
+            )
+        return mark_safe('<span class="order-item-inline-empty" style="font-size:1.4rem;">💎</span>')
 
     @admin.display(description='Line Total')
     def line_total(self, obj):
@@ -15,9 +29,22 @@ class OrderItemInline(admin.TabularInline):
             return f"${(obj.unit_price * (obj.quantity or 1)):,.2f}"
         return "$0.00"
 
+    def has_add_permission(self, request, obj=None):
+        return False
+
+
 class OrderStatusUpdateInline(admin.TabularInline):
     model = OrderStatusUpdate
     extra = 1
+    fields = ('status', 'title', 'location', 'description', 'timestamp_display')
+    readonly_fields = ('timestamp_display',)
+
+    @admin.display(description='Logged At')
+    def timestamp_display(self, obj):
+        if obj and obj.timestamp:
+            return obj.timestamp.strftime('%b %d, %Y • %H:%M')
+        return "Automatic on Save"
+
 
 @admin.register(Coupon)
 class CouponAdmin(admin.ModelAdmin):
@@ -30,6 +57,7 @@ class CouponAdmin(admin.ModelAdmin):
         if obj.is_percent:
             return format_html('<span class="badge-luxury badge-delivered">{}% OFF</span>', obj.discount_percent)
         return format_html('<span class="badge-luxury badge-delivered">${} OFF</span>', obj.discount_amount)
+
 
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
@@ -45,9 +73,191 @@ class OrderAdmin(admin.ModelAdmin):
     )
     list_filter = ('status', 'payment_status', 'carrier', 'gift_wrapping', 'created_at')
     search_fields = ('order_number', 'full_name', 'email', 'tracking_number', 'shipping_street', 'shipping_city')
-    readonly_fields = ('order_number', 'subtotal', 'shipping_cost', 'discount_amount', 'total_amount', 'created_at', 'updated_at')
     inlines = [OrderItemInline, OrderStatusUpdateInline]
     actions = ['mark_as_processing', 'mark_as_shipped', 'mark_as_delivered']
+
+    def get_fieldsets(self, request, obj=None):
+        if obj:
+            return (
+                ('Order Telemetry & Stage', {
+                    'fields': (
+                        'order_banner_card',
+                        ('status', 'payment_status'),
+                        ('carrier', 'tracking_number'),
+                        ('tracking_url', 'estimated_delivery'),
+                    ),
+                    'classes': ('lux-fieldset', 'lux-logistics-card'),
+                }),
+                ('Patron & Client Identification (Protected)', {
+                    'description': 'Customer identity and contact credentials are non-editable to preserve transaction integrity, legal audit compliance, and prevent accidental modifications.',
+                    'fields': (
+                        'customer_profile_card',
+                    ),
+                    'classes': ('lux-fieldset', 'lux-patron-card'),
+                }),
+                ('Delivery & Shipping Destination', {
+                    'description': 'Shipping address may be amended by fulfillment staff prior to dispatch upon verified patron request.',
+                    'fields': (
+                        ('shipping_street', 'shipping_apartment'),
+                        ('shipping_city', 'shipping_state'),
+                        ('shipping_zip', 'shipping_country'),
+                    ),
+                    'classes': ('lux-fieldset', 'lux-shipping-card'),
+                }),
+                ('Financial Summary & Settlement', {
+                    'fields': (
+                        ('subtotal', 'shipping_cost'),
+                        ('discount_amount', 'coupon'),
+                        'total_amount',
+                        'payment_method',
+                    ),
+                    'classes': ('lux-fieldset', 'lux-financial-card'),
+                }),
+                ('Atelier Presentation & Directives', {
+                    'fields': (
+                        'gift_wrapping',
+                        'gift_message',
+                        'customer_notes',
+                        'internal_admin_notes',
+                    ),
+                    'classes': ('lux-fieldset', 'lux-notes-card'),
+                }),
+            )
+        return (
+            ('New Order Setup', {
+                'fields': (
+                    ('status', 'payment_status'),
+                    ('user', 'full_name'),
+                    ('email', 'phone'),
+                    ('shipping_street', 'shipping_apartment'),
+                    ('shipping_city', 'shipping_state'),
+                    ('shipping_zip', 'shipping_country'),
+                    ('carrier', 'payment_method'),
+                    'gift_wrapping',
+                    'internal_admin_notes',
+                ),
+                'classes': ('lux-fieldset',),
+            }),
+        )
+
+    def get_readonly_fields(self, request, obj=None):
+        base_readonly = [
+            'order_number',
+            'order_banner_card',
+            'customer_profile_card',
+            'subtotal',
+            'shipping_cost',
+            'discount_amount',
+            'total_amount',
+            'created_at',
+            'updated_at',
+        ]
+        if obj:
+            return base_readonly + ['user', 'full_name', 'email', 'phone']
+        return base_readonly
+
+    @admin.display(description='Order Status Telemetry')
+    def order_banner_card(self, obj):
+        if not obj or not obj.id:
+            return "Order telemetry will be initialized upon saving."
+            
+        status_badges = {
+            'PENDING': ('badge-pending', '⏳ Intake Queue'),
+            'PROCESSING': ('badge-processing', '◆ In Atelier QC'),
+            'SHIPPED': ('badge-shipped', '✈ In Armored Transit'),
+            'DELIVERED': ('badge-delivered', '✓ Delivered'),
+            'CANCELLED': ('badge-cancelled', '✕ Cancelled'),
+        }
+        badge_cls, status_label = status_badges.get(obj.status, ('badge-pending', obj.get_status_display()))
+        
+        pay_html = '<span class="badge-luxury badge-paid">🔒 Payment Captured</span>' if obj.payment_status == 'PAID' else f'<span class="badge-luxury badge-pending">{obj.get_payment_status_display()}</span>'
+        
+        tracking_html = ""
+        if obj.tracking_number:
+            tracking_html = format_html(
+                '<a href="/track/{}/" target="_blank" class="lux-track-live-btn">'
+                '<span>Courier Telemetry</span> <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>'
+                '</a>',
+                obj.order_number
+            )
+
+        return format_html(
+            '<div class="lux-order-banner-widget">'
+                '<div class="lux-banner-top">'
+                    '<div class="lux-banner-ref-wrap">'
+                        '<span class="lux-banner-tag">HAUTE JOAILLERIE ORDER</span>'
+                        '<div class="lux-banner-ordernum">{}</div>'
+                    '</div>'
+                    '<div class="lux-banner-amount-wrap">'
+                        '<span class="lux-banner-tag">SETTLED AMOUNT</span>'
+                        '<div class="lux-banner-amount">${:,.2f}</div>'
+                    '</div>'
+                '</div>'
+                '<div class="lux-banner-meta">'
+                    '<div class="lux-banner-pills">'
+                        '<span class="badge-luxury {}">{}</span>'
+                        '{}'
+                    '</div>'
+                    '<div class="lux-banner-date">📅 Placed {}</div>'
+                '</div>'
+                '{}'
+            '</div>',
+            obj.order_number,
+            obj.total_amount,
+            badge_cls,
+            status_label,
+            mark_safe(pay_html),
+            obj.created_at.strftime('%b %d, %Y • %H:%M') if obj.created_at else 'Just now',
+            mark_safe(tracking_html)
+        )
+
+    @admin.display(description='Patron & Client Verification')
+    def customer_profile_card(self, obj):
+        if not obj or not obj.id:
+            return "Customer details recorded at checkout."
+            
+        if obj.user:
+            user_url = reverse('admin:accounts_customuser_change', args=[obj.user.id])
+            user_markup = f'<a href="{user_url}" class="lux-client-user-tag" target="_blank">VIP Patron #{obj.user.id} &bull; @{obj.user.username} &rarr;</a>'
+        else:
+            user_markup = '<span class="lux-client-guest-tag">Verified Guest Patron</span>'
+            
+        initials = (obj.full_name[:2] if obj.full_name else "VP").upper()
+        email_val = obj.email or "No email on record"
+        phone_val = obj.phone or "No phone on record"
+        phone_markup = f'<a href="tel:{obj.phone}" class="lux-client-link">📞 {obj.phone}</a>' if obj.phone else '<span class="lux-client-dim">📞 No phone registered</span>'
+
+        return format_html(
+            '<div class="lux-patron-summary-card">'
+                '<div class="lux-patron-main-row">'
+                    '<div class="lux-patron-badge-avatar">{}</div>'
+                    '<div class="lux-patron-info-col">'
+                        '<div class="lux-patron-fullname">{}</div>'
+                        '<div class="lux-patron-status-tag">{}</div>'
+                    '</div>'
+                '</div>'
+                '<div class="lux-patron-contact-grid">'
+                    '<div class="lux-contact-cell">'
+                        '<span class="lux-cell-label">Email Notification</span>'
+                        '<a href="mailto:{}" class="lux-client-link" title="Send direct email to patron">✉ {}</a>'
+                    '</div>'
+                    '<div class="lux-contact-cell">'
+                        '<span class="lux-cell-label">Contact Telephone</span>'
+                        '{}'
+                    '</div>'
+                '</div>'
+                '<div class="lux-patron-security-notice">'
+                    '<span class="lux-security-icon">🔒</span>'
+                    '<span class="lux-security-text"><strong>Protected Patron Record:</strong> Client identity and credentials are non-editable to preserve transaction integrity, legal audit compliance, and prevent accidental modifications.</span>'
+                '</div>'
+            '</div>',
+            initials,
+            obj.full_name or "Anonymous Client",
+            mark_safe(user_markup),
+            email_val,
+            email_val,
+            mark_safe(phone_markup)
+        )
 
     @admin.display(description='Order Ref', ordering='order_number')
     def order_badge(self, obj):

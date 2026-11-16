@@ -1,0 +1,600 @@
+{% extends "admin/change_form.html" %}
+{% load i18n admin_urls static admin_modify %}
+
+{% block breadcrumbs %}
+<div class="lux-order-mobile-breadcrumbs">
+    <a href="{% url 'admin:orders_order_changelist' %}" class="lux-back-nav-btn">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="15 18 9 12 15 6"></polyline>
+        </svg>
+        <span>All Orders</span>
+    </a>
+    <span class="lux-bread-sep">/</span>
+    <span class="lux-bread-active">{{ original.order_number|default:"New Order" }}</span>
+</div>
+{% endblock %}
+
+{% block object-tools %}
+{% if change %}{% if not is_popup %}
+  <ul class="object-tools lux-order-tools-strip">
+    {% block object-tools-items %}
+    <li>
+        <a href="{% url opts|admin_urlname:'history' original.pk|admin_urlquote %}" class="historylink lux-history-btn">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <polyline points="12 6 12 12 16 14"></polyline>
+            </svg>
+            <span>Audit History</span>
+        </a>
+    </li>
+    {% endblock %}
+  </ul>
+{% endif %}{% endif %}
+{% endblock %}
+
+{% block extrahead %}
+{{ block.super }}
+<style>
+/* ====================================================================
+   LUCKJARY HAUTE JOAILLERIE - ORDER ADMIN & MOBILE CONSOLE STYLES
+   Engineered for seamless responsive UX down to 280px mobile viewports
+   ==================================================================== */
+
+/* Breadcrumbs Bar */
+.lux-order-mobile-breadcrumbs {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 14px;
+    background: #0E1018;
+    border-bottom: 1px solid #1E2232;
+    font-size: 0.75rem;
+    overflow-x: auto;
+    white-space: nowrap;
+    -webkit-overflow-scrolling: touch;
+    width: 100%;
+    box-sizing: border-box;
+}
+.lux-back-nav-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    color: #C5A059;
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.15s ease;
+}
+.lux-back-nav-btn:hover {
+    color: #DFBE76;
+}
+.lux-bread-sep {
+    color: #4B5563;
+    font-size: 0.7rem;
+}
+.lux-bread-active {
+    color: #94A3B8;
+    font-family: monospace;
+    font-weight: 500;
+}
+
+/* History Button (Replacing the awkward full-width green slab) */
+.lux-order-tools-strip {
+    display: flex !important;
+    flex-direction: row !important;
+    justify-content: flex-start !important;
+    align-items: center !important;
+    gap: 8px !important;
+    margin: 4px 0 12px 0 !important;
+    padding: 0 !important;
+    list-style: none !important;
+    width: auto !important;
+}
+.lux-order-tools-strip li {
+    margin: 0 !important;
+    padding: 0 !important;
+    width: auto !important;
+}
+.lux-history-btn,
+.object-tools a.lux-history-btn {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+    background: #181B28 !important;
+    border: 1px solid #2B3045 !important;
+    color: #C5A059 !important;
+    font-size: 0.75rem !important;
+    font-weight: 600 !important;
+    letter-spacing: 0.02em !important;
+    text-transform: none !important;
+    padding: 6px 12px !important;
+    height: 32px !important;
+    min-height: 32px !important;
+    border-radius: 6px !important;
+    box-shadow: none !important;
+    text-decoration: none !important;
+    transition: all 0.15s ease !important;
+    width: auto !important;
+}
+.lux-history-btn:hover {
+    background: #202436 !important;
+    border-color: rgba(197, 160, 89, 0.45) !important;
+    color: #F8FAFC !important;
+}
+
+/* ---------------------------------------------------------
+   1. ORDER HEADER TELEMETRY WIDGET
+   --------------------------------------------------------- */
+.lux-order-banner-widget {
+    background: linear-gradient(135deg, #141724 0%, #0F111B 100%);
+    border: 1px solid rgba(197, 160, 89, 0.35);
+    border-radius: 10px;
+    padding: 14px 16px;
+    margin-bottom: 4px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    box-sizing: border-box;
+    width: 100%;
+}
+.lux-banner-top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+.lux-banner-ref-wrap,
+.lux-banner-amount-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+.lux-banner-amount-wrap {
+    text-align: right;
+}
+.lux-banner-tag {
+    font-size: 0.65rem;
+    font-weight: 700;
+    color: #C5A059;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+}
+.lux-banner-ordernum {
+    font-family: monospace;
+    font-size: 1.05rem;
+    font-weight: 800;
+    color: #F8FAFC;
+    letter-spacing: 0.02em;
+    word-break: break-all;
+}
+.lux-banner-amount {
+    font-size: 1.15rem;
+    font-weight: 800;
+    color: #DFBE76;
+    letter-spacing: -0.01em;
+}
+.lux-banner-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    flex-wrap: wrap;
+    padding-top: 8px;
+    border-top: 1px solid rgba(255, 255, 255, 0.07);
+}
+.lux-banner-pills {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+.lux-banner-date {
+    font-size: 0.72rem;
+    color: #94A3B8;
+    white-space: nowrap;
+}
+.lux-track-live-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    background: rgba(197, 160, 89, 0.12);
+    border: 1px solid rgba(197, 160, 89, 0.35);
+    color: #DFBE76;
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 7px 12px;
+    border-radius: 6px;
+    text-decoration: none;
+    transition: all 0.15s ease;
+    align-self: flex-start;
+}
+.lux-track-live-btn:hover {
+    background: rgba(197, 160, 89, 0.22);
+    color: #FFFFFF;
+}
+
+/* ---------------------------------------------------------
+   2. PATRON & CLIENT PROFILE CARD (LOCKED RECORD)
+   --------------------------------------------------------- */
+.lux-patron-summary-card {
+    background: #111420;
+    border: 1px solid #262B3F;
+    border-radius: 10px;
+    padding: 14px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    box-sizing: border-box;
+    width: 100%;
+}
+.lux-patron-main-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+.lux-patron-badge-avatar {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, rgba(197, 160, 89, 0.25) 0%, rgba(30, 35, 52, 0.8) 100%);
+    border: 1.5px solid #C5A059;
+    color: #DFBE76;
+    font-weight: 800;
+    font-size: 0.95rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    letter-spacing: 0.04em;
+}
+.lux-patron-info-col {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    min-width: 0;
+    flex: 1 1 auto;
+}
+.lux-patron-fullname {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #F8FAFC;
+    line-height: 1.25;
+    word-break: break-word;
+}
+.lux-patron-status-tag {
+    font-size: 0.72rem;
+}
+.lux-client-user-tag {
+    color: #60A5FA;
+    text-decoration: none;
+    font-weight: 600;
+}
+.lux-client-user-tag:hover {
+    text-decoration: underline;
+}
+.lux-client-guest-tag {
+    color: #94A3B8;
+    background: rgba(148, 163, 184, 0.12);
+    border: 1px solid rgba(148, 163, 184, 0.25);
+    padding: 2px 7px;
+    border-radius: 4px;
+    font-weight: 500;
+}
+.lux-patron-contact-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    padding-top: 10px;
+    border-top: 1px solid #1F2436;
+}
+.lux-contact-cell {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    min-width: 0;
+}
+.lux-cell-label {
+    font-size: 0.65rem;
+    font-weight: 700;
+    color: #64748B;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+.lux-client-link {
+    color: #DFBE76;
+    text-decoration: none;
+    font-size: 0.8rem;
+    font-weight: 600;
+    word-break: break-all;
+    transition: color 0.15s ease;
+}
+.lux-client-link:hover {
+    color: #FFFFFF;
+    text-decoration: underline;
+}
+.lux-client-dim {
+    color: #64748B;
+    font-size: 0.78rem;
+    font-style: italic;
+}
+.lux-patron-security-notice {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    background: rgba(197, 160, 89, 0.08);
+    border: 1px solid rgba(197, 160, 89, 0.22);
+    border-radius: 6px;
+    padding: 8px 10px;
+    font-size: 0.7rem;
+    color: #CBD5E1;
+    line-height: 1.35;
+}
+.lux-security-icon {
+    font-size: 0.85rem;
+    line-height: 1;
+    flex-shrink: 0;
+}
+.lux-security-text strong {
+    color: #DFBE76;
+}
+
+/* Clean Custom Field Wrapper Reset */
+.field-order_banner_card label,
+.field-customer_profile_card label {
+    display: none !important;
+}
+.field-order_banner_card .readonly,
+.field-customer_profile_card .readonly {
+    background: transparent !important;
+    border: none !important;
+    padding: 0 !important;
+    width: 100% !important;
+    box-shadow: none !important;
+    min-height: auto !important;
+}
+.field-order_banner_card .flex-container,
+.field-customer_profile_card .flex-container {
+    display: block !important;
+    width: 100% !important;
+}
+
+/* ---------------------------------------------------------
+   3. FIELDSET MODULE REFINEMENT (LUXURY CARDS)
+   --------------------------------------------------------- */
+fieldset.module.lux-fieldset {
+    background: #131622 !important;
+    border: 1px solid #24293D !important;
+    border-radius: 10px !important;
+    padding: 16px 16px !important;
+    margin-bottom: 16px !important;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25) !important;
+    box-sizing: border-box !important;
+    width: 100% !important;
+}
+fieldset.module.lux-fieldset h2 {
+    background: transparent !important;
+    padding: 0 0 10px 0 !important;
+    margin: 0 0 12px 0 !important;
+    border-bottom: 1px solid #1F2436 !important;
+    font-family: 'Cinzel', serif !important;
+    font-size: 0.88rem !important;
+    font-weight: 700 !important;
+    color: #DFBE76 !important;
+    letter-spacing: 0.04em !important;
+    text-transform: uppercase !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+}
+fieldset.module.lux-fieldset .description {
+    font-size: 0.73rem !important;
+    color: #94A3B8 !important;
+    line-height: 1.4 !important;
+    margin-bottom: 12px !important;
+    padding-bottom: 6px !important;
+}
+
+/* Standard Readonly Fields */
+fieldset.module.lux-fieldset .readonly {
+    background: #0E1018 !important;
+    border: 1px solid #23273A !important;
+    border-radius: 6px !important;
+    padding: 8px 12px !important;
+    color: #F1F5F9 !important;
+    font-size: 0.82rem !important;
+    min-height: 38px !important;
+    display: flex !important;
+    align-items: center !important;
+    box-sizing: border-box !important;
+    word-break: break-word !important;
+}
+
+/* DateTime Shortcuts & Helper Text */
+.datetimeshortcuts {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    font-size: 0.72rem !important;
+    color: #94A3B8 !important;
+    margin-top: 4px !important;
+}
+.datetimeshortcuts a {
+    color: #C5A059 !important;
+    font-weight: 600 !important;
+    text-decoration: none !important;
+}
+
+/* ---------------------------------------------------------
+   4. INLINE TABULAR MODULES ON MOBILE (PIECES & LOGS)
+   --------------------------------------------------------- */
+#items-group .column-item_preview img {
+    border-radius: 6px;
+    border: 1px solid rgba(197, 160, 89, 0.35);
+}
+
+@media (max-width: 768px) {
+    /* Stack Multi-Column Fieldsets to 1 Column */
+    .form-multiline,
+    .form-row.form-multiline {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 12px !important;
+        width: 100% !important;
+    }
+    .form-multiline .fieldBox,
+    .form-row.form-multiline .fieldBox {
+        width: 100% !important;
+        max-width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        display: flex !important;
+        flex-direction: column !important;
+    }
+
+    /* Stack contact grid to 1 column on narrow screens */
+    .lux-patron-contact-grid {
+        grid-template-columns: 1fr !important;
+        gap: 8px !important;
+    }
+
+    /* Convert Tabular Inlines into Mobile Cards */
+    #items-group .tabular table,
+    #items-group .tabular thead,
+    #items-group .tabular tbody,
+    #items-group .tabular tr,
+    #items-group .tabular td,
+    #items-group .tabular th,
+    #status_updates-group .tabular table,
+    #status_updates-group .tabular thead,
+    #status_updates-group .tabular tbody,
+    #status_updates-group .tabular tr,
+    #status_updates-group .tabular td,
+    #status_updates-group .tabular th {
+        display: block !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
+    }
+
+    #items-group .tabular thead,
+    #status_updates-group .tabular thead {
+        display: none !important;
+    }
+
+    #items-group .tabular tbody,
+    #status_updates-group .tabular tbody {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 10px !important;
+        width: 100% !important;
+    }
+
+    #items-group .tabular tr.form-row,
+    #status_updates-group .tabular tr.form-row {
+        background: #151825 !important;
+        border: 1px solid #272C3F !important;
+        border-radius: 8px !important;
+        padding: 12px 14px !important;
+        margin-bottom: 6px !important;
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 8px !important;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25) !important;
+        box-sizing: border-box !important;
+    }
+
+    #items-group .tabular td.original,
+    #status_updates-group .tabular td.original {
+        display: none !important;
+    }
+
+    #items-group .tabular td,
+    #status_updates-group .tabular td {
+        padding: 2px 0 !important;
+        border: none !important;
+        background: transparent !important;
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 3px !important;
+        width: 100% !important;
+        font-size: 0.8rem !important;
+    }
+
+    #items-group td.column-line_total p,
+    #items-group td.column-line_total {
+        color: #DFBE76 !important;
+        font-size: 0.95rem !important;
+        font-weight: 800 !important;
+    }
+
+    #status_updates-group .tabular td input,
+    #status_updates-group .tabular td textarea,
+    #status_updates-group .tabular td select {
+        width: 100% !important;
+        box-sizing: border-box !important;
+    }
+}
+
+/* ---------------------------------------------------------
+   5. ULTRA-MOBILE HARDENING (< 360px & 295px VIEWPORTS)
+   --------------------------------------------------------- */
+@media (max-width: 360px) {
+    #content,
+    .shopify-content-box {
+        padding: 8px 6px !important;
+    }
+    
+    .titles-and-tools .titles h1 {
+        font-size: 1.1rem !important;
+    }
+    
+    .titles-and-tools .titles h2 {
+        font-size: 0.8rem !important;
+        word-break: break-all !important;
+    }
+    
+    fieldset.module.lux-fieldset {
+        padding: 12px 10px !important;
+    }
+    
+    .lux-banner-top {
+        flex-direction: column !important;
+        align-items: flex-start !important;
+    }
+    
+    .lux-banner-amount-wrap {
+        text-align: left !important;
+    }
+    
+    .lux-patron-summary-card {
+        padding: 12px 10px !important;
+    }
+
+    .lux-patron-main-row {
+        gap: 8px !important;
+    }
+
+    .lux-patron-badge-avatar {
+        width: 38px !important;
+        height: 38px !important;
+        font-size: 0.85rem !important;
+    }
+
+    .lux-patron-fullname {
+        font-size: 0.92rem !important;
+    }
+    
+    .submit-row {
+        padding: 10px 8px !important;
+        gap: 8px !important;
+    }
+
+    .submit-row input[type="submit"],
+    .submit-row input.default {
+        font-size: 0.82rem !important;
+        height: 40px !important;
+    }
+}
+</style>
+{% endblock %}

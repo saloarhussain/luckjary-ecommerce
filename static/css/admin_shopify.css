@@ -2228,6 +2228,26 @@ div.breadcrumbs a:hover {
     transform: translateY(-1px);
 }
 
+.object-tools a.historylink {
+    background: #181B28 !important;
+    border: 1px solid #2B3045 !important;
+    color: #C5A059 !important;
+    box-shadow: none !important;
+    font-size: 0.75rem !important;
+    font-weight: 600 !important;
+    letter-spacing: 0.02em !important;
+    text-transform: none !important;
+    padding: 0.45rem 0.95rem !important;
+}
+
+.object-tools a.historylink:hover,
+.object-tools a.historylink:focus {
+    background: #202436 !important;
+    border-color: rgba(197, 160, 89, 0.45) !important;
+    color: #F8FAFC !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3) !important;
+}
+
 .object-tools a.addlink::before {
     content: "+" !important;
     font-size: 1.15rem !important;
@@ -3337,6 +3357,29 @@ body.filter-drawer-open {
         color: #FFFFFF !important;
     }
 
+    .object-tools a.historylink {
+        background: #181B28 !important;
+        border: 1px solid #2B3045 !important;
+        color: #C5A059 !important;
+        box-shadow: none !important;
+        font-size: 0.75rem !important;
+        font-weight: 600 !important;
+        letter-spacing: 0.02em !important;
+        text-transform: none !important;
+        padding: 6px 14px !important;
+        height: 34px !important;
+        min-height: 34px !important;
+        width: auto !important;
+        border-radius: 6px !important;
+    }
+
+    .object-tools a.historylink:hover,
+    .object-tools a.historylink:focus {
+        background: #202436 !important;
+        border-color: rgba(197, 160, 89, 0.45) !important;
+        color: #F8FAFC !important;
+    }
+
     .object-tools a.addlink::before {
         content: "+" !important;
         font-size: 1.2rem !important;
@@ -3603,6 +3646,24 @@ body.filter-drawer-open {
         max-width: 100% !important;
         box-sizing: border-box !important;
         clear: both !important;
+    }
+
+    .form-multiline,
+    .form-row.form-multiline {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 0.65rem !important;
+        width: 100% !important;
+    }
+
+    .form-multiline .fieldBox,
+    .form-row.form-multiline .fieldBox {
+        width: 100% !important;
+        max-width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        display: flex !important;
+        flex-direction: column !important;
     }
 
     .form-row > div,

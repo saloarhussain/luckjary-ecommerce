@@ -123,3 +123,47 @@ class OrderManagementSystemTests(TestCase):
         self.assertEqual(order.carrier, 'Ferrari Armored Logistics')
         self.assertEqual(order.tracking_number, 'FAR-998877')
         self.assertEqual(order.status_updates.count(), 1)
+
+    def test_order_admin_customer_details_locked_and_responsive(self):
+        # Create a superuser to access Django Admin
+        superuser = CustomUser.objects.create_superuser(
+            username='atelier_admin',
+            email='atelier_admin@luckjary.com',
+            password='AdminPassword123!'
+        )
+        order = Order.objects.create(
+            order_number='LCK-202611-ADMINTEST',
+            email='immutable.client@luxury.com',
+            full_name='Sophia Alverez',
+            phone='+1 (555) 019-2834',
+            shipping_street='100 Rodeo Dr',
+            shipping_city='Beverly Hills',
+            shipping_state='CA',
+            shipping_zip='90210',
+            status='PENDING',
+            subtotal=3450.00,
+            total_amount=3450.00
+        )
+
+        self.client.force_login(superuser)
+        admin_url = reverse('admin:orders_order_change', args=[order.id])
+        resp = self.client.get(admin_url)
+        self.assertEqual(resp.status_code, 200)
+
+        # Verify customer details are presented as locked read-only VIP credentials
+        content = resp.content.decode('utf-8')
+        self.assertIn('lux-patron-summary-card', content)
+        self.assertIn('Sophia Alverez', content)
+        self.assertIn('immutable.client@luxury.com', content)
+        self.assertIn('+1 (555) 019-2834', content)
+        self.assertIn('Protected Patron Record', content)
+
+        # Assert no editable form inputs exist for customer identity
+        self.assertNotIn('name="full_name"', content)
+        self.assertNotIn('name="email"', content)
+        self.assertNotIn('name="phone"', content)
+        self.assertNotIn('name="user"', content)
+
+        # Verify order banner telemetry exists
+        self.assertIn('lux-order-banner-widget', content)
+        self.assertIn('LCK-202611-ADMINTEST', content)
