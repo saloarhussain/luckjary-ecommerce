@@ -1,11 +1,12 @@
-<!DOCTYPE html><html class="dark" lang="en"><head>
+{% load i18n static tz %}<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
 <meta charset="utf-8">
 <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport">
 <title>Atelier Vault | LUCKJARY</title>
 <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..900;1,6..96,400..900&amp;family=Plus+Jakarta+Sans:ital,wght@0,300..800;1,300..800&amp;display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700;800&amp;family=JetBrains+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <script id="tailwind-config">
 tailwind.config = {
@@ -69,23 +70,21 @@ tailwind.config = {
         "body-sm": ["Plus Jakarta Sans", "sans-serif"],
         "label-md": ["Plus Jakarta Sans", "sans-serif"],
         "label-sm": ["Plus Jakarta Sans", "sans-serif"],
-        "caption": ["Plus Jakarta Sans", "sans-serif"],
-        "mono-luxury": ["JetBrains Mono", "monospace"],
-        "serif-luxury": ["Cinzel", "Bodoni Moda", "serif"]
+        "serif-luxury": ["Bodoni Moda", "serif"],
+        "mono-luxury": ["JetBrains Mono", "monospace"]
       }
     }
   }
-}
+};
 </script>
 <style>
-
 @layer base {
   html, body {
     width: 100%;
     margin: 0;
     padding: 0;
     min-height: 100%;
-    background-color: #121315;
+    background-color: #0d0e10;
   }
   body {
     overscroll-behavior-y: none;
@@ -105,6 +104,12 @@ tailwind.config = {
 ::-webkit-scrollbar-thumb:hover {
   background: #3c4a42;
 }
+
+/* Sidebar transition on mobile */
+#leftNavDrawer {
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
 /* Catalog Grid Mode responsive transformation */
 #catalogContainer.catalog-grid-mode {
   display: grid !important;
@@ -116,7 +121,7 @@ tailwind.config = {
     grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
   }
 }
-@media (min-width: 1024px) {
+@media (min-width: 1280px) {
   #catalogContainer.catalog-grid-mode {
     grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
   }
@@ -144,730 +149,840 @@ tailwind.config = {
   padding-top: 0.75rem !important;
   border-top: 1px solid rgba(35, 39, 50, 0.7) !important;
 }
-
 </style>
 </head>
-<body class="bg-surface text-on-surface font-body-md min-h-screen flex flex-col antialiased selection:bg-primary selection:text-on-primary">
-<!-- Luxury Desktop & Mobile Header Navigation -->
-<header class="sticky top-0 w-full z-50 bg-surface-card-elevated/90 backdrop-blur-xl border-b border-border-subtle shadow-[0_2px_12px_rgba(0,0,0,0.5)]">
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 sm:h-20 flex items-center justify-between gap-4">
-<!-- Brand Identity & Navigation Tabs -->
-<div class="flex items-center gap-3 sm:gap-6 lg:gap-10">
-<!-- Mobile Hamburger Menu Button -->
-<button id="openNavDrawerBtn" aria-label="Open Navigation Drawer" class="md:hidden p-2 rounded-xl bg-surface-card hover:bg-surface-variant text-text-muted hover:text-text-platinum border border-border-strong active:scale-95 transition-all cursor-pointer" type="button">
-  <span class="material-symbols-outlined text-[20px]">menu</span>
-</button>
-<a class="flex items-center gap-2.5 group focus:outline-none" href="/admin/">
-<span class="w-2 h-2 rounded-full bg-primary group-hover:scale-125 transition-transform duration-300"></span>
-<div class="flex flex-col sm:flex-row sm:items-baseline sm:gap-2">
-<span class="font-headline-sm sm:text-2xl tracking-[0.18em] text-text-platinum font-semibold font-serif-luxury">LUCKJARY</span>
-<span class="font-caption text-[10px] sm:text-[11px] text-secondary uppercase tracking-[0.25em] font-medium">ATELIER</span>
-</div>
-</a>
-<!-- Desktop Navigation Links -->
-<nav class="hidden md:flex items-center gap-1 lg:gap-2 text-[13px] font-label-md">
-<a class="px-3 py-1.5 rounded-lg text-primary bg-primary/10 font-semibold border border-primary/20 flex items-center gap-1.5 transition-colors" href="/admin/catalog/product/">
-<span class="material-symbols-outlined text-[17px]">diamond</span>
-<span>Vault Inventory</span>
-</a>
-<a class="px-3 py-1.5 rounded-lg text-text-muted hover:text-text-platinum hover:bg-surface-card transition-colors" href="/admin/orders/order/">Orders</a>
-<a class="px-3 py-1.5 rounded-lg text-text-muted hover:text-text-platinum hover:bg-surface-card transition-colors" href="/admin/catalog/category/">Creations</a>
-<a class="px-3 py-1.5 rounded-lg text-text-muted hover:text-text-platinum hover:bg-surface-card transition-colors" href="/admin/accounts/customuser/">Patrons</a>
-<a class="px-3 py-1.5 rounded-lg text-text-muted hover:text-text-platinum hover:bg-surface-card transition-colors flex items-center gap-1" href="/admin/catalog/review/">
-<span>Atelier QC</span>
-<span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>
-</a>
-</nav>
-</div>
-<!-- Global Search & User Profile Actions -->
-<div class="flex items-center gap-2 sm:gap-3">
-<!-- Desktop Global Quick Search Bar -->
-<div class="hidden lg:flex items-center relative w-64 xl:w-80 bg-surface-card border border-border-strong rounded-xl px-3 py-1.5 text-xs text-text-muted focus-within:border-primary/60 transition-colors">
-<span class="material-symbols-outlined text-[18px] mr-2">search</span>
-<input class="bg-transparent text-text-platinum text-xs placeholder:text-text-muted/70 focus:outline-none w-full" placeholder="Search SKU, hallmark, collection..." type="text">
-<kbd class="hidden xl:inline-block px-1.5 py-0.5 text-[10px] font-mono-luxury bg-surface-dim border border-border-strong rounded text-text-muted ml-1">⌘K</kbd>
-</div>
-<!-- Quick Action Icons -->
-<button aria-label="Search" class="lg:hidden w-10 h-10 rounded-xl flex items-center justify-center text-text-muted hover:text-text-platinum hover:bg-surface-card transition-colors" type="button">
-<span class="material-symbols-outlined text-[20px]">search</span>
-</button>
-<button aria-label="Notifications" class="w-10 h-10 rounded-xl flex items-center justify-center text-text-muted hover:text-text-platinum hover:bg-surface-card relative transition-colors" type="button">
-<span class="material-symbols-outlined text-[20px]">notifications</span>
-<span class="absolute top-2.5 right-2.5 w-2 h-2 rounded-full bg-primary ring-2 ring-surface-card-elevated"></span>
-</button>
-<!-- Admin / Master Jeweler Profile Chip -->
-<div class="flex items-center gap-2.5 pl-1 sm:pl-2 border-l border-border-strong/60">
-<div class="w-9 h-9 rounded-xl bg-gradient-to-br from-primary/30 to-surface-card border border-primary/40 flex items-center justify-center text-primary shadow-sm">
-<span class="material-symbols-outlined text-[20px]">person</span>
-</div>
-<div class="hidden sm:flex flex-col text-left">
-<span class="text-xs font-semibold text-text-platinum leading-tight">Master Jeweler</span>
-<span class="text-[10px] font-mono-luxury text-secondary tracking-wider">ADMIN • VAULT 01</span>
-</div>
-</div>
-</div>
-</div>
-</header>
-<!-- Main Vault Content Container -->
-<main class="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 flex flex-col gap-6">
-<!-- Top Catalog Overview Banner / Page Header -->
-<div class="flex flex-col md:flex-row md:items-end justify-between gap-4 pb-2 border-b border-border-subtle/50">
-<div class="flex flex-col">
-<div class="flex items-center gap-2 mb-1">
-<a href="/admin/" class="font-label-sm text-[11px] text-secondary hover:text-primary font-semibold uppercase tracking-wider transition-colors">Inventory Hub</a>
-<span class="w-1 h-1 rounded-full bg-secondary/40"></span>
-<span class="font-mono-luxury text-[11px] text-text-muted font-medium uppercase tracking-wider">Spring 2025</span>
-<span class="hidden sm:inline-flex items-center gap-1 ml-2 px-2 py-0.5 rounded-full bg-primary/10 text-primary text-[10px] font-medium border border-primary/20">
-<span class="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span>
-          Live Sync
-        </span>
-</div>
-<div class="flex items-baseline gap-3">
-<h1 class="font-serif-luxury text-2xl sm:text-3xl lg:text-4xl text-text-platinum font-semibold tracking-wide">Atelier Vault</h1>
-<span class="bg-surface-card-elevated border border-border-strong text-secondary font-mono-luxury text-[11px] sm:text-xs px-2.5 py-1 rounded-full font-medium shadow-sm">
-          17 PIECES
-        </span>
-</div>
-</div>
-<!-- Top Actions -->
-<div class="flex items-center gap-2.5 self-start md:self-auto">
-<button class="hidden sm:flex items-center gap-1.5 bg-surface-card hover:bg-surface-card-elevated border border-border-strong text-text-platinum font-label-md text-xs sm:text-[13px] px-3.5 py-2.5 rounded-xl transition-all shadow-sm active:scale-95" type="button">
-<span class="material-symbols-outlined text-[18px] text-text-muted">import_export</span>
-<span>Reorder Manifest</span>
-</button>
-<a href="/admin/catalog/product/add/" class="flex items-center gap-2 bg-primary hover:bg-primary/90 text-on-primary font-label-md text-xs sm:text-[13px] px-4 py-2.5 rounded-xl shadow-lg shadow-primary/20 active:scale-95 transition-all font-semibold cursor-pointer">
-<span class="material-symbols-outlined text-[19px]">add_circle</span>
-<span>+ Add Piece</span>
-</a>
-</div>
-</div>
-<!-- Search, Fast Controls & View Bar -->
-<div class="flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-3">
-<!-- Search Bar with SKU / Hallmark & Barcode -->
-<div class="flex-1 flex items-center gap-2 justify-between">
 
-<!-- Filter Modal Trigger -->
-<div class="flex-1 flex items-center relative h-10 bg-surface-card border border-border-strong rounded-xl px-3 text-xs text-text-muted focus-within:border-primary/60 shadow-sm transition-all"><span class="material-symbols-outlined text-[18px] mr-2.5 text-text-muted shrink-0">search</span><input class="bg-transparent text-text-platinum text-xs placeholder:text-text-muted/70 focus:outline-none w-full min-w-0 font-body-sm" id="productSearchInput" placeholder="Search SKU, hallmark, piece or patron..." type="text"><div class="flex items-center gap-1.5 ml-2 shrink-0"><span class="material-symbols-outlined text-[17px] text-text-muted cursor-pointer hover:text-text-platinum transition-colors" title="Scan Barcode">barcode_scanner</span><kbd class="hidden sm:inline-block px-1.5 py-0.5 text-[10px] font-mono-luxury bg-surface-dim border border-border-strong rounded text-text-muted">⌘K</kbd></div></div><button class="relative h-10 bg-surface-card hover:bg-surface-card-elevated border border-border-strong text-text-platinum px-3.5 rounded-xl shadow-sm flex items-center justify-center gap-2 transition-all active:scale-95 shrink-0" id="filterModalToggle" type="button"><span class="material-symbols-outlined text-[19px] text-secondary shrink-0">tune</span><span class="font-label-sm text-xs sm:text-[13px] font-medium leading-none">Filters</span><span class="w-5 h-5 rounded-full bg-secondary text-on-secondary font-caption text-[11px] flex items-center justify-center font-bold shrink-0">2</span></button>
-<!-- View Switcher (Desktop & Mobile) -->
-<div class="flex h-10 items-center bg-surface-card border border-border-strong p-1 rounded-xl shadow-sm shrink-0"><button aria-label="Grid View" class="w-8 h-8 rounded-lg text-text-muted hover:text-text-platinum flex items-center justify-center transition-colors" id="viewGridBtn" title="Grid View" type="button"><span class="material-symbols-outlined text-[19px]">grid_view</span></button><button aria-label="List View" class="w-8 h-8 rounded-lg bg-surface-card-elevated text-primary flex items-center justify-center transition-colors shadow-sm" id="viewListBtn" title="Compact List View" type="button"><span class="material-symbols-outlined text-[19px]">view_agenda</span></button></div>
-</div>
-</div>
-<!-- Categories Horizontal Filter Chips -->
-<div class="flex items-center gap-2 sm:gap-2.5 overflow-x-auto pb-1 -mx-4 px-4 sm:mx-0 sm:px-0 scrollbar-none" id="categoryChips">
-<button class="category-chip active whitespace-nowrap px-4 py-2 rounded-xl font-label-sm text-xs bg-surface-card-elevated text-primary border border-primary/30 shadow-sm flex items-center gap-2 transition-all" type="button">
-<span>All Vault</span>
-<span class="text-[11px] font-mono-luxury px-1.5 py-0.2 rounded bg-primary/10 text-primary">17</span>
-</button>
-<button class="category-chip whitespace-nowrap px-4 py-2 rounded-xl font-label-sm text-xs bg-surface-card text-text-muted hover:text-text-platinum border border-border-strong/70 hover:border-border-strong shadow-sm flex items-center gap-2 transition-all" type="button">
-<span>Rings</span>
-<span class="text-[11px] font-mono-luxury text-text-muted">5</span>
-</button>
-<button class="category-chip whitespace-nowrap px-4 py-2 rounded-xl font-label-sm text-xs bg-surface-card text-text-muted hover:text-text-platinum border border-border-strong/70 hover:border-border-strong shadow-sm flex items-center gap-2 transition-all" type="button">
-<span>Necklaces</span>
-<span class="text-[11px] font-mono-luxury text-text-muted">4</span>
-</button>
-<button class="category-chip whitespace-nowrap px-4 py-2 rounded-xl font-label-sm text-xs bg-surface-card text-text-muted hover:text-text-platinum border border-border-strong/70 hover:border-border-strong shadow-sm flex items-center gap-2 transition-all" type="button">
-<span>Bracelets</span>
-<span class="text-[11px] font-mono-luxury text-text-muted">3</span>
-</button>
-<button class="category-chip whitespace-nowrap px-4 py-2 rounded-xl font-label-sm text-xs bg-surface-card text-text-muted hover:text-text-platinum border border-border-strong/70 hover:border-border-strong shadow-sm flex items-center gap-2 transition-all" type="button">
-<span>Earrings</span>
-<span class="text-[11px] font-mono-luxury text-text-muted">3</span>
-</button>
-<button class="category-chip whitespace-nowrap px-4 py-2 rounded-xl font-label-sm text-xs bg-surface-card text-text-muted hover:text-text-platinum border border-border-strong/70 hover:border-border-strong shadow-sm flex items-center gap-2 transition-all" type="button">
-<span>High Jewelry</span>
-<span class="text-[11px] font-mono-luxury text-text-muted">2</span>
-</button>
-<button class="category-chip whitespace-nowrap px-4 py-2 rounded-xl font-label-sm text-xs bg-surface-card text-secondary/90 hover:text-secondary border border-secondary/20 shadow-sm flex items-center gap-2 transition-all ml-auto" type="button">
-<span class="w-1.5 h-1.5 rounded-full bg-secondary animate-pulse"></span>
-<span>Low Stock Alert</span>
-<span class="text-[11px] font-mono-luxury px-1.5 py-0.2 rounded bg-secondary/15 text-secondary">2</span>
-</button>
-</div>
-<!-- Bulk Action Bar -->
-<div class="flex flex-wrap items-center justify-between bg-surface-card border border-border-strong px-4 py-2.5 rounded-xl shadow-md gap-3">
-<label class="flex items-center gap-3 cursor-pointer select-none">
-<input class="w-4 h-4 rounded bg-surface-dim border-border-strong accent-primary cursor-pointer transition-colors" id="selectAllCheckbox" type="checkbox">
-<span class="font-label-sm text-xs sm:text-[13px] text-text-platinum tracking-wide"><span class="font-semibold text-primary" id="selectedCount">0</span> of 17 Selected</span>
-</label>
-<div class="flex items-center gap-2 sm:gap-3">
-<!-- Batch dropdown button -->
-<div class="relative">
-<button class="font-label-sm text-xs sm:text-[13px] bg-surface-card-elevated hover:bg-surface-variant text-text-platinum border border-border-strong px-3 py-1.5 rounded-lg flex items-center gap-1.5 shadow-sm transition-all" type="button">
-<span class="material-symbols-outlined text-[17px] text-secondary">edit_note</span>
-<span>Batch Actions</span>
-<span class="material-symbols-outlined text-[16px] text-text-muted">expand_more</span>
-</button>
-</div>
-<button class="font-label-sm text-xs sm:text-[13px] bg-surface-card-elevated hover:bg-surface-variant text-text-platinum border border-border-strong px-3 py-1.5 rounded-lg flex items-center gap-1.5 shadow-sm transition-all" type="button">
-<span class="material-symbols-outlined text-[17px] text-text-muted">file_download</span>
-<span>Export Vault Manifest</span>
-</button>
-</div>
-</div>
-<!-- Responsive Product Catalog Grid (Desktop 3-col/4-col, Tablet 2-col, Mobile 1-col) -->
-<div class="flex flex-col gap-4" id="catalogContainer"><!-- Card 1: Aura Textured Dome Ring -->
-<div data-id="17" data-category="rings" data-price-inr="18200" data-compare-inr="23200" class="product-item bg-surface-card border border-border-strong hover:border-primary/40 transition-all duration-300 rounded-2xl p-4 sm:p-5 shadow-md flex flex-col md:flex-row md:items-center justify-between gap-4 sm:gap-6 relative group"><!-- Mobile Top Kicker Row (md:hidden) -->
-<div class="flex md:hidden items-center justify-between w-full pb-2.5 border-b border-border-subtle/40">
-  <div class="flex items-center gap-2">
-    <span class="text-secondary font-mono-luxury text-[10px] font-semibold tracking-wider uppercase bg-surface-card-elevated border border-border-subtle px-2 py-0.5 rounded-full">RINGS</span>
-    <span class="bg-surface-dim/90 text-secondary font-mono-luxury text-[10px] px-2 py-0.5 rounded font-bold border border-secondary/20">18K</span>
-  </div>
-  <label class="flex items-center cursor-pointer p-0.5">
-    <input class="product-checkbox w-4 h-4 rounded bg-surface-dim border-border-strong accent-primary cursor-pointer shrink-0" type="checkbox">
-  </label>
-</div>
+<body class="bg-[#0d0e10] text-[#e3e2e5] font-sans antialiased min-h-screen selection:bg-emerald-500/20 selection:text-emerald-300 flex flex-col">
 
-<!-- Main Info Block (Desktop Left Block & Mobile Core Content) -->
-<div class="product-info-block flex items-start md:items-center gap-3.5 sm:gap-4 flex-1 min-w-0 w-full md:w-auto">
-  <div class="hidden md:flex items-center shrink-0">
-    <input class="product-checkbox w-4 h-4 rounded bg-surface-dim border-border-strong accent-primary cursor-pointer shrink-0" type="checkbox">
-  </div>
-  <div class="product-thumb-container relative w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 rounded-xl overflow-hidden bg-surface-dim shrink-0 border border-border-subtle group-hover:shadow-lg transition-all">
-    <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="High luxury editorial close-up of Aura Textured Dome Ring" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA51QwOI7lVeyt-8Ww6SL4m9T4yeOVo8y6XI6rZfmYsifjMx-Ju6Ne_qkGKrkCZR9CYu6YUNVDDFphAzUFekyOX8ky4u1mBVeykyEMark3eStZlcewyKOn4w2R84IGnCbXkxhecZM_pLAfFLK_xYdR4U5rmX5E_8jByhCdvjMqE9QkVx8rnkjnnx-u61qgoB_KfI6CnhSlj8KTSb1KjQ-ix__mWVk2SqHwP9IWHjj8">
-    <button aria-label="Quick zoom view" class="absolute bottom-1 right-1 sm:bottom-1.5 sm:right-1.5 w-6 h-6 rounded-lg bg-surface-card/80 backdrop-blur-md flex items-center justify-center text-text-platinum active:scale-90 hover:bg-surface-card transition-all" type="button">
-      <span class="material-symbols-outlined text-[13px] sm:text-[14px]">zoom_in</span>
-    </button>
-    <span class="hidden md:block absolute top-1 left-1 sm:top-1.5 sm:left-1.5 bg-surface-dim/90 backdrop-blur-xs text-secondary font-mono-luxury text-[9px] sm:text-[10px] px-1.5 py-0.5 rounded font-bold border border-secondary/20">18K</span>
-  </div>
-  <div class="flex-1 min-w-0 flex flex-col justify-center">
-    <div class="hidden md:flex items-center justify-between md:justify-start gap-2 mb-1">
-      <div class="flex items-center gap-1.5 flex-wrap">
-        <span class="text-secondary font-mono-luxury text-[10px] font-semibold tracking-wider uppercase bg-surface-card-elevated border border-border-subtle px-2 py-0.5 rounded-full">RINGS</span>
-        <button class="font-mono-luxury text-[11px] text-text-muted hover:text-primary transition-colors flex items-center gap-1 bg-surface-container-low px-2 py-0.5 rounded border border-border-subtle" onclick="navigator.clipboard.writeText('LUK-DEMI-RG-006')" title="Click to copy SKU" type="button">
-          <span>LUK-DEMI-RG-006</span>
-          <span class="material-symbols-outlined text-[12px]">content_copy</span>
-        </button>
-      </div>
-    </div>
-    <h2 class="font-serif-luxury text-sm sm:text-base md:text-lg lg:text-xl text-text-platinum font-semibold tracking-wide truncate mt-0.5"><a href="/admin/catalog/product/17/change/" class="hover:text-primary transition-colors">AURA TEXTURED DOME RING</a></h2>
-    <div class="flex md:hidden items-center gap-1.5 my-1.5">
-      <button class="font-mono-luxury text-[11px] text-text-muted hover:text-primary transition-colors flex items-center gap-1 bg-surface-container-low px-2 py-0.5 rounded border border-border-subtle" onclick="navigator.clipboard.writeText('LUK-DEMI-RG-006')" title="Click to copy SKU" type="button">
-        <span>LUK-DEMI-RG-006</span>
-        <span class="material-symbols-outlined text-[12px]">content_copy</span>
-      </button>
-    </div>
-    <div class="flex items-center gap-1.5 text-text-muted text-[11px] sm:text-xs mt-0.5 md:mt-1 truncate">
-      <span class="material-symbols-outlined text-[14px] text-secondary shrink-0">verified</span>
-      <span class="truncate">18K Demifine Vermeil • High Polish</span>
-      <span class="text-border-strong hidden sm:inline">•</span>
-      <span class="text-text-muted/70 hidden sm:inline">Vault Partition A</span>
-    </div>
-  </div>
-</div>
+<!-- Main App Root with Persistent Left Side Panel + Right Content Area -->
+<div class="flex flex-1 w-full relative min-h-screen">
 
-<!-- Pricing & Stock Row -->
-<div class="pricing-stock-row flex items-center justify-between md:gap-6 shrink-0 pt-2.5 md:pt-0 border-t border-border-subtle/50 md:border-t-0 w-full md:w-auto">
-  <div class="flex flex-col items-start md:items-center justify-center gap-1">
-    <div class="flex items-center gap-1.5 bg-primary/10 border border-primary/20 px-2.5 py-0.5 sm:px-3 sm:py-1 rounded-full">
-      <span class="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span>
-      <span class="font-label-sm text-[11px] sm:text-xs text-primary font-medium">25 in stock</span>
-    </div>
-    <span class="font-caption text-[10px] sm:text-[11px] text-text-muted/70 hidden md:block">Optimal Reserve</span>
-  </div>
-  <div class="flex flex-col items-end justify-center gap-0.5 sm:gap-1 min-w-[100px] sm:min-w-[120px]">
-    <div class="product-card-price font-serif-luxury text-lg sm:text-xl md:text-2xl text-secondary font-bold tracking-tight">₹18,200</div>
-    <div class="flex items-center gap-1.5 sm:gap-2">
-      <span class="font-mono-luxury text-[11px] sm:text-xs text-text-muted line-through">₹23,200</span>
-      <span class="font-mono-luxury text-[9px] sm:text-[10px] text-primary font-semibold bg-primary/10 border border-primary/20 px-1.5 py-0.2 rounded">-21%</span>
-    </div>
-  </div>
-</div>
+  <!-- Mobile Backdrop for Left Side Panel -->
+  <div id="leftNavDrawerBackdrop" class="fixed inset-0 bg-black/75 z-40 opacity-0 pointer-events-none transition-opacity duration-300 backdrop-blur-xs lg:hidden"></div>
 
-<!-- Action Footer Row -->
-<div class="action-footer-row flex items-center justify-between md:justify-end gap-2 pt-2.5 md:pt-0 border-t border-border-subtle/50 md:border-t-0 shrink-0 w-full md:w-auto">
-  <button class="flex-1 md:flex-initial flex items-center justify-center gap-1.5 bg-surface-card-elevated hover:bg-surface-variant border border-border-strong text-text-platinum font-label-sm text-xs px-3 py-2 rounded-xl shadow-sm transition-all active:scale-95" type="button">
-    <span class="material-symbols-outlined text-[15px] text-primary">edit</span>
-    <span>Edit Stock</span>
-  </button>
-  <button class="flex-1 md:flex-initial flex items-center justify-center gap-1.5 bg-surface-card-elevated hover:bg-surface-variant border border-border-strong text-text-platinum font-label-sm text-xs px-3 py-2 rounded-xl shadow-sm transition-all active:scale-95" type="button">
-    <span class="material-symbols-outlined text-[15px] text-secondary">sell</span>
-    <span>Reprice</span>
-  </button>
-  <button aria-label="Analytics" class="w-8 h-8 rounded-xl bg-surface-card-elevated hover:bg-surface-variant text-text-muted hover:text-text-platinum flex items-center justify-center transition-colors border border-border-subtle shrink-0 hidden md:flex" type="button">
-    <span class="material-symbols-outlined text-[17px]">insights</span>
-  </button>
-  <button aria-label="More actions" class="w-8 h-8 rounded-xl bg-surface-card-elevated hover:bg-surface-variant text-text-muted hover:text-text-platinum flex items-center justify-center transition-colors border border-border-subtle shrink-0" type="button">
-    <span class="material-symbols-outlined text-[17px]">more_vert</span>
-  </button>
-</div></div>
-
-<!-- Card 2: Celeste Herringbone Chain -->
-<div data-id="16" data-category="necklaces" data-price-inr="26500" data-compare-inr="32300" class="product-item bg-surface-card border border-border-strong hover:border-primary/40 transition-all duration-300 rounded-2xl p-4 sm:p-5 shadow-md flex flex-col md:flex-row md:items-center justify-between gap-4 sm:gap-6 relative group"><!-- Mobile Top Kicker Row (md:hidden) -->
-<div class="flex md:hidden items-center justify-between w-full pb-2.5 border-b border-border-subtle/40">
-  <div class="flex items-center gap-2">
-    <span class="text-secondary font-mono-luxury text-[10px] font-semibold tracking-wider uppercase bg-surface-card-elevated border border-border-subtle px-2 py-0.5 rounded-full">NECKLACES</span>
-    <span class="bg-surface-dim/90 text-secondary font-mono-luxury text-[10px] px-2 py-0.5 rounded font-bold border border-secondary/20">18K</span>
-  </div>
-  <label class="flex items-center cursor-pointer p-0.5">
-    <input class="product-checkbox w-4 h-4 rounded bg-surface-dim border-border-strong accent-primary cursor-pointer shrink-0" type="checkbox">
-  </label>
-</div>
-
-<!-- Main Info Block (Desktop Left Block & Mobile Core Content) -->
-<div class="product-info-block flex items-start md:items-center gap-3.5 sm:gap-4 flex-1 min-w-0 w-full md:w-auto">
-  <div class="hidden md:flex items-center shrink-0">
-    <input class="product-checkbox w-4 h-4 rounded bg-surface-dim border-border-strong accent-primary cursor-pointer shrink-0" type="checkbox">
-  </div>
-  <div class="product-thumb-container relative w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 rounded-xl overflow-hidden bg-surface-dim shrink-0 border border-border-subtle group-hover:shadow-lg transition-all">
-    <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="Bespoke Celeste 18K yellow gold vermeil herringbone demifine flat link chain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCC_K-ur7CfKcxqxshw3crpMRkqn4FsmKBVM1prXB9FTJ7l_E8TP_2AbUv0DrP4HNx-nQ1SRmOPLEyUm_0wOfTcA0QZ1axw_QNdtO9H1gR3PwlUVQmtZP9n_xQY3WlsIunQFpjTswT2VleXVkeg0NxI209Bp2OKbrfJ0A08uIJ-0HduGn0jZac6C-XtyNEaH4zk1vH1QwjrnW3OivNHUHAppoHGw_M2jGInSZxyZtA">
-    <button aria-label="Quick zoom view" class="absolute bottom-1 right-1 sm:bottom-1.5 sm:right-1.5 w-6 h-6 rounded-lg bg-surface-card/80 backdrop-blur-md flex items-center justify-center text-text-platinum active:scale-90 hover:bg-surface-card transition-all" type="button">
-      <span class="material-symbols-outlined text-[13px] sm:text-[14px]">zoom_in</span>
-    </button>
-    <span class="hidden md:block absolute top-1 left-1 sm:top-1.5 sm:left-1.5 bg-surface-dim/90 backdrop-blur-xs text-secondary font-mono-luxury text-[9px] sm:text-[10px] px-1.5 py-0.5 rounded font-bold border border-secondary/20">18K</span>
-  </div>
-  <div class="flex-1 min-w-0 flex flex-col justify-center">
-    <div class="hidden md:flex items-center justify-between md:justify-start gap-2 mb-1">
-      <div class="flex items-center gap-1.5 flex-wrap">
-        <span class="text-secondary font-mono-luxury text-[10px] font-semibold tracking-wider uppercase bg-surface-card-elevated border border-border-subtle px-2 py-0.5 rounded-full">NECKLACES</span>
-        <button class="font-mono-luxury text-[11px] text-text-muted hover:text-primary transition-colors flex items-center gap-1 bg-surface-container-low px-2 py-0.5 rounded border border-border-subtle" onclick="navigator.clipboard.writeText('LUK-DEMI-NK-005')" type="button">
-          <span>LUK-DEMI-NK-005</span>
-          <span class="material-symbols-outlined text-[12px]">content_copy</span>
-        </button>
-      </div>
-    </div>
-    <h2 class="font-serif-luxury text-sm sm:text-base md:text-lg lg:text-xl text-text-platinum font-semibold tracking-wide truncate mt-0.5"><a href="/admin/catalog/product/16/change/" class="hover:text-primary transition-colors">CELESTE HERRINGBONE CHAIN</a></h2>
-    <div class="flex md:hidden items-center gap-1.5 my-1.5">
-      <button class="font-mono-luxury text-[11px] text-text-muted hover:text-primary transition-colors flex items-center gap-1 bg-surface-container-low px-2 py-0.5 rounded border border-border-subtle" onclick="navigator.clipboard.writeText('LUK-DEMI-NK-005')" type="button">
-        <span>LUK-DEMI-NK-005</span>
-        <span class="material-symbols-outlined text-[12px]">content_copy</span>
-      </button>
-    </div>
-    <div class="flex items-center gap-1.5 text-text-muted text-[11px] sm:text-xs mt-0.5 md:mt-1 truncate">
-      <span class="material-symbols-outlined text-[14px] text-secondary shrink-0">verified</span>
-      <span class="truncate">18K Yellow Gold Vermeil • Mirror Finish</span>
-      <span class="text-border-strong hidden sm:inline">•</span>
-      <span class="text-text-muted/70 hidden sm:inline">Vault Partition A</span>
-    </div>
-  </div>
-</div>
-
-<!-- Pricing & Stock Row -->
-<div class="pricing-stock-row flex items-center justify-between md:gap-6 shrink-0 pt-2.5 md:pt-0 border-t border-border-subtle/50 md:border-t-0 w-full md:w-auto">
-  <div class="flex flex-col items-start md:items-center justify-center gap-1">
-    <div class="flex items-center gap-1.5 bg-primary/10 border border-primary/20 px-2.5 py-0.5 sm:px-3 sm:py-1 rounded-full">
-      <span class="w-1.5 h-1.5 rounded-full bg-primary"></span>
-      <span class="font-label-sm text-[11px] sm:text-xs text-primary font-medium">25 in stock</span>
-    </div>
-    <span class="font-caption text-[10px] sm:text-[11px] text-text-muted/70 hidden md:block">Optimal Reserve</span>
-  </div>
-  <div class="flex flex-col items-end justify-center gap-0.5 sm:gap-1 min-w-[100px] sm:min-w-[120px]">
-    <div class="product-card-price font-serif-luxury text-lg sm:text-xl md:text-2xl text-secondary font-bold tracking-tight">₹26,500</div>
-    <div class="flex items-center gap-1.5 sm:gap-2">
-      <span class="font-mono-luxury text-[11px] sm:text-xs text-text-muted line-through">₹32,300</span>
-      <span class="font-mono-luxury text-[9px] sm:text-[10px] text-primary font-semibold bg-primary/10 border border-primary/20 px-1.5 py-0.2 rounded">-18%</span>
-    </div>
-  </div>
-</div>
-
-<!-- Action Footer Row -->
-<div class="action-footer-row flex items-center justify-between md:justify-end gap-2 pt-2.5 md:pt-0 border-t border-border-subtle/50 md:border-t-0 shrink-0 w-full md:w-auto">
-  <button class="flex-1 md:flex-initial flex items-center justify-center gap-1.5 bg-surface-card-elevated hover:bg-surface-variant border border-border-strong text-text-platinum font-label-sm text-xs px-3 py-2 rounded-xl shadow-sm transition-all active:scale-95" type="button">
-    <span class="material-symbols-outlined text-[15px] text-primary">edit</span>
-    <span>Edit Stock</span>
-  </button>
-  <button class="flex-1 md:flex-initial flex items-center justify-center gap-1.5 bg-surface-card-elevated hover:bg-surface-variant border border-border-strong text-text-platinum font-label-sm text-xs px-3 py-2 rounded-xl shadow-sm transition-all active:scale-95" type="button">
-    <span class="material-symbols-outlined text-[15px] text-secondary">sell</span>
-    <span>Reprice</span>
-  </button>
-  <button aria-label="Analytics" class="w-8 h-8 rounded-xl bg-surface-card-elevated hover:bg-surface-variant text-text-muted hover:text-text-platinum flex items-center justify-center transition-colors border border-border-subtle shrink-0 hidden md:flex" type="button">
-    <span class="material-symbols-outlined text-[17px]">insights</span>
-  </button>
-  <button aria-label="More actions" class="w-8 h-8 rounded-xl bg-surface-card-elevated hover:bg-surface-variant text-text-muted hover:text-text-platinum flex items-center justify-center transition-colors border border-border-subtle shrink-0" type="button">
-    <span class="material-symbols-outlined text-[17px]">more_vert</span>
-  </button>
-</div></div>
-
-<!-- Card 3: Elysian Tennis Bracelet (Low Stock Alert) -->
-<div data-id="15" data-category="bracelets" data-low-stock="true" data-price-inr="28900" data-compare-inr="34800" class="product-item bg-surface-card border border-secondary/30 hover:border-secondary transition-all duration-300 rounded-2xl p-4 sm:p-5 shadow-md flex flex-col md:flex-row md:items-center justify-between gap-4 sm:gap-6 relative group"><!-- Mobile Top Kicker Row (md:hidden) -->
-<div class="flex md:hidden items-center justify-between w-full pb-2.5 border-b border-border-subtle/40">
-  <div class="flex items-center gap-2">
-    <span class="text-secondary font-mono-luxury text-[10px] font-semibold tracking-wider uppercase bg-surface-card-elevated border border-border-subtle px-2 py-0.5 rounded-full">BRACELETS</span>
-    <span class="bg-surface-dim/90 text-text-platinum font-mono-luxury text-[10px] px-2 py-0.5 rounded font-bold border border-text-muted/30">925</span>
-  </div>
-  <label class="flex items-center cursor-pointer p-0.5">
-    <input class="product-checkbox w-4 h-4 rounded bg-surface-dim border-border-strong accent-primary cursor-pointer shrink-0" type="checkbox">
-  </label>
-</div>
-
-<!-- Main Info Block (Desktop Left Block & Mobile Core Content) -->
-<div class="product-info-block flex items-start md:items-center gap-3.5 sm:gap-4 flex-1 min-w-0 w-full md:w-auto">
-  <div class="hidden md:flex items-center shrink-0">
-    <input class="product-checkbox w-4 h-4 rounded bg-surface-dim border-border-strong accent-primary cursor-pointer shrink-0" type="checkbox">
-  </div>
-  <div class="product-thumb-container relative w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 rounded-xl overflow-hidden bg-surface-dim shrink-0 border border-border-subtle group-hover:shadow-lg transition-all">
-    <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="Elysian Radiant Tennis Bracelet in 925 sterling silver" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDawfllVhr46H9FUl7JtsD44sesdQxzpIB_PnFYYmtCwjRhka7U8p_BZn1KjaxPYzhDS_xBrhUHIxr2QjJc9rB-Zz-I5kJ6D7hbL945f17jDk4KpmHFTDq7fuUGj-fCAGH6TILhv5BVWHu4uOmTjIFy-ALWFI8vJtzUB91lKPT2SXlxW79Z1szC6CJ9t67Ah0cYR-ZZDfvYwC0SxO148yTIxObIhIojenaOBUxec2E">
-    <button aria-label="Quick zoom view" class="absolute bottom-1 right-1 sm:bottom-1.5 sm:right-1.5 w-6 h-6 rounded-lg bg-surface-card/80 backdrop-blur-md flex items-center justify-center text-text-platinum active:scale-90 hover:bg-surface-card transition-all" type="button">
-      <span class="material-symbols-outlined text-[13px] sm:text-[14px]">zoom_in</span>
-    </button>
-    <span class="hidden md:block absolute top-1 left-1 sm:top-1.5 sm:left-1.5 bg-surface-dim/90 backdrop-blur-xs text-text-platinum font-mono-luxury text-[9px] sm:text-[10px] px-1.5 py-0.5 rounded font-bold border border-text-muted/30">925</span>
-  </div>
-  <div class="flex-1 min-w-0 flex flex-col justify-center">
-    <div class="hidden md:flex items-center justify-between md:justify-start gap-2 mb-1">
-      <div class="flex items-center gap-1.5 flex-wrap">
-        <span class="text-secondary font-mono-luxury text-[10px] font-semibold tracking-wider uppercase bg-surface-card-elevated border border-border-subtle px-2 py-0.5 rounded-full">BRACELETS</span>
-        <button class="font-mono-luxury text-[11px] text-text-muted hover:text-primary transition-colors flex items-center gap-1 bg-surface-container-low px-2 py-0.5 rounded border border-border-subtle" onclick="navigator.clipboard.writeText('LUK-SIL-BR-004')" type="button">
-          <span>LUK-SIL-BR-004</span>
-          <span class="material-symbols-outlined text-[12px]">content_copy</span>
-        </button>
-      </div>
-    </div>
-    <h2 class="font-serif-luxury text-sm sm:text-base md:text-lg lg:text-xl text-text-platinum font-semibold tracking-wide truncate mt-0.5"><a href="/admin/catalog/product/15/change/" class="hover:text-primary transition-colors">ELYSIAN TENNIS BRACELET</a></h2>
-    <div class="flex md:hidden items-center gap-1.5 my-1.5">
-      <button class="font-mono-luxury text-[11px] text-text-muted hover:text-primary transition-colors flex items-center gap-1 bg-surface-container-low px-2 py-0.5 rounded border border-border-subtle" onclick="navigator.clipboard.writeText('LUK-SIL-BR-004')" type="button">
-        <span>LUK-SIL-BR-004</span>
-        <span class="material-symbols-outlined text-[12px]">content_copy</span>
-      </button>
-    </div>
-    <div class="flex items-center gap-1.5 text-text-muted text-[11px] sm:text-xs mt-0.5 md:mt-1 truncate">
-      <span class="material-symbols-outlined text-[14px] text-primary shrink-0">diamond</span>
-      <span class="truncate">925 Sterling Silver • Dual Clasp</span>
-      <span class="text-border-strong hidden sm:inline">•</span>
-      <span class="text-text-muted/70 hidden sm:inline">Vault Partition A</span>
-    </div>
-  </div>
-</div>
-
-<!-- Pricing & Stock Row -->
-<div class="pricing-stock-row flex items-center justify-between md:gap-6 shrink-0 pt-2.5 md:pt-0 border-t border-border-subtle/50 md:border-t-0 w-full md:w-auto">
-  <div class="flex flex-col items-start md:items-center justify-center gap-1">
-    <div class="flex items-center gap-1.5 bg-secondary/15 border border-secondary/30 px-2.5 py-0.5 sm:px-3 sm:py-1 rounded-full">
-      <span class="w-1.5 h-1.5 rounded-full bg-secondary animate-pulse"></span>
-      <span class="font-label-sm text-[11px] sm:text-xs text-secondary font-medium">Low Stock: 3</span>
-    </div>
-    <span class="font-caption text-[10px] sm:text-[11px] text-secondary/80 hidden md:block">Reorder Suggested</span>
-  </div>
-  <div class="flex flex-col items-end justify-center gap-0.5 sm:gap-1 min-w-[100px] sm:min-w-[120px]">
-    <div class="product-card-price font-serif-luxury text-lg sm:text-xl md:text-2xl text-secondary font-bold tracking-tight">₹28,900</div>
-    <div class="flex items-center gap-1.5 sm:gap-2">
-      <span class="font-mono-luxury text-[11px] sm:text-xs text-text-muted line-through">₹34,800</span>
-      <span class="font-mono-luxury text-[9px] sm:text-[10px] text-primary font-semibold bg-primary/10 border border-primary/20 px-1.5 py-0.2 rounded">-17%</span>
-    </div>
-  </div>
-</div>
-
-<!-- Action Footer Row -->
-<div class="action-footer-row flex items-center justify-between md:justify-end gap-2 pt-2.5 md:pt-0 border-t border-border-subtle/50 md:border-t-0 shrink-0 w-full md:w-auto">
-  <button class="flex-1 md:flex-initial flex items-center justify-center gap-1.5 bg-surface-card-elevated hover:bg-surface-variant border border-border-strong text-text-platinum font-label-sm text-xs px-3 py-2 rounded-xl shadow-sm transition-all active:scale-95" type="button">
-    <span class="material-symbols-outlined text-[15px] text-primary">add_shopping_cart</span>
-    <span>Restock</span>
-  </button>
-  <button class="flex-1 md:flex-initial flex items-center justify-center gap-1.5 bg-surface-card-elevated hover:bg-surface-variant border border-border-strong text-text-platinum font-label-sm text-xs px-3 py-2 rounded-xl shadow-sm transition-all active:scale-95" type="button">
-    <span class="material-symbols-outlined text-[15px] text-secondary">sell</span>
-    <span>Reprice</span>
-  </button>
-  <button aria-label="Analytics" class="w-8 h-8 rounded-xl bg-surface-card-elevated hover:bg-surface-variant text-text-muted hover:text-text-platinum flex items-center justify-center transition-colors border border-border-subtle shrink-0 hidden md:flex" type="button">
-    <span class="material-symbols-outlined text-[17px]">insights</span>
-  </button>
-  <button aria-label="More actions" class="w-8 h-8 rounded-xl bg-surface-card-elevated hover:bg-surface-variant text-text-muted hover:text-text-platinum flex items-center justify-center transition-colors border border-border-subtle shrink-0" type="button">
-    <span class="material-symbols-outlined text-[17px]">more_vert</span>
-  </button>
-</div></div>
-
-<!-- Card 4: Luna Crescent Huggies -->
-<div data-id="14" data-category="earrings" data-price-inr="16100" data-compare-inr="20700" class="product-item bg-surface-card border border-border-strong hover:border-primary/40 transition-all duration-300 rounded-2xl p-4 sm:p-5 shadow-md flex flex-col md:flex-row md:items-center justify-between gap-4 sm:gap-6 relative group"><!-- Mobile Top Kicker Row (md:hidden) -->
-<div class="flex md:hidden items-center justify-between w-full pb-2.5 border-b border-border-subtle/40">
-  <div class="flex items-center gap-2">
-    <span class="text-secondary font-mono-luxury text-[10px] font-semibold tracking-wider uppercase bg-surface-card-elevated border border-border-subtle px-2 py-0.5 rounded-full">EARRINGS</span>
-    <span class="bg-surface-dim/90 text-text-platinum font-mono-luxury text-[10px] px-2 py-0.5 rounded font-bold border border-text-muted/30">925</span>
-  </div>
-  <label class="flex items-center cursor-pointer p-0.5">
-    <input class="product-checkbox w-4 h-4 rounded bg-surface-dim border-border-strong accent-primary cursor-pointer shrink-0" type="checkbox">
-  </label>
-</div>
-
-<!-- Main Info Block (Desktop Left Block & Mobile Core Content) -->
-<div class="product-info-block flex items-start md:items-center gap-3.5 sm:gap-4 flex-1 min-w-0 w-full md:w-auto">
-  <div class="hidden md:flex items-center shrink-0">
-    <input class="product-checkbox w-4 h-4 rounded bg-surface-dim border-border-strong accent-primary cursor-pointer shrink-0" type="checkbox">
-  </div>
-  <div class="product-thumb-container relative w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 rounded-xl overflow-hidden bg-surface-dim shrink-0 border border-border-subtle group-hover:shadow-lg transition-all">
-    <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="Luna Crescent Diamond Huggies earrings in rhodium-finished 925 sterling silver" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCTCd_RoU6Xi2kChGRTgh-odoPdLhhmWAZtbe3NOmKJxXD2QYMgN_LAOtglvLqsaveej3d0s6v0lspg0zq5sMbVWyn-cf0wS8mXQ8O4mFD06VkwMsQCi6u73xSAHTRDhriLU_VCJ2l6x22kVbVvpTOq6ac9lz637N56WCd526s1rsL1OX-liTOWc1PlEq6-MWfvN7DGOAtRGyYfDZu_VnqhheFcNIUfZPVbRcWBu2o">
-    <button aria-label="Quick zoom view" class="absolute bottom-1 right-1 sm:bottom-1.5 sm:right-1.5 w-6 h-6 rounded-lg bg-surface-card/80 backdrop-blur-md flex items-center justify-center text-text-platinum active:scale-90 hover:bg-surface-card transition-all" type="button">
-      <span class="material-symbols-outlined text-[13px] sm:text-[14px]">zoom_in</span>
-    </button>
-    <span class="hidden md:block absolute top-1 left-1 sm:top-1.5 sm:left-1.5 bg-surface-dim/90 backdrop-blur-xs text-text-platinum font-mono-luxury text-[9px] sm:text-[10px] px-1.5 py-0.5 rounded font-bold border border-text-muted/30">925</span>
-  </div>
-  <div class="flex-1 min-w-0 flex flex-col justify-center">
-    <div class="hidden md:flex items-center justify-between md:justify-start gap-2 mb-1">
-      <div class="flex items-center gap-1.5 flex-wrap">
-        <span class="text-secondary font-mono-luxury text-[10px] font-semibold tracking-wider uppercase bg-surface-card-elevated border border-border-subtle px-2 py-0.5 rounded-full">EARRINGS</span>
-        <button class="font-mono-luxury text-[11px] text-text-muted hover:text-primary transition-colors flex items-center gap-1 bg-surface-container-low px-2 py-0.5 rounded border border-border-subtle" onclick="navigator.clipboard.writeText('LUK-SIL-ER-003')" type="button">
-          <span>LUK-SIL-ER-003</span>
-          <span class="material-symbols-outlined text-[12px]">content_copy</span>
-        </button>
-      </div>
-    </div>
-    <h2 class="font-serif-luxury text-sm sm:text-base md:text-lg lg:text-xl text-text-platinum font-semibold tracking-wide truncate mt-0.5"><a href="/admin/catalog/product/14/change/" class="hover:text-primary transition-colors">LUNA CRESCENT HUGGIES</a></h2>
-    <div class="flex md:hidden items-center gap-1.5 my-1.5">
-      <button class="font-mono-luxury text-[11px] text-text-muted hover:text-primary transition-colors flex items-center gap-1 bg-surface-container-low px-2 py-0.5 rounded border border-border-subtle" onclick="navigator.clipboard.writeText('LUK-SIL-ER-003')" type="button">
-        <span>LUK-SIL-ER-003</span>
-        <span class="material-symbols-outlined text-[12px]">content_copy</span>
-      </button>
-    </div>
-    <div class="flex items-center gap-1.5 text-text-muted text-[11px] sm:text-xs mt-0.5 md:mt-1 truncate">
-      <span class="material-symbols-outlined text-[14px] text-text-platinum shrink-0">verified</span>
-      <span class="truncate">925 Sterling • Pavé Micro-setting</span>
-      <span class="text-border-strong hidden sm:inline">•</span>
-      <span class="text-text-muted/70 hidden sm:inline">Vault Partition A</span>
-    </div>
-  </div>
-</div>
-
-<!-- Pricing & Stock Row -->
-<div class="pricing-stock-row flex items-center justify-between md:gap-6 shrink-0 pt-2.5 md:pt-0 border-t border-border-subtle/50 md:border-t-0 w-full md:w-auto">
-  <div class="flex flex-col items-start md:items-center justify-center gap-1">
-    <div class="flex items-center gap-1.5 bg-primary/10 border border-primary/20 px-2.5 py-0.5 sm:px-3 sm:py-1 rounded-full">
-      <span class="w-1.5 h-1.5 rounded-full bg-primary"></span>
-      <span class="font-label-sm text-[11px] sm:text-xs text-primary font-medium">25 in stock</span>
-    </div>
-    <span class="font-caption text-[10px] sm:text-[11px] text-text-muted/70 hidden md:block">Optimal Reserve</span>
-  </div>
-  <div class="flex flex-col items-end justify-center gap-0.5 sm:gap-1 min-w-[100px] sm:min-w-[120px]">
-    <div class="product-card-price font-serif-luxury text-lg sm:text-xl md:text-2xl text-secondary font-bold tracking-tight">₹16,100</div>
-    <div class="flex items-center gap-1.5 sm:gap-2">
-      <span class="font-mono-luxury text-[11px] sm:text-xs text-text-muted line-through">₹20,700</span>
-      <span class="font-mono-luxury text-[9px] sm:text-[10px] text-primary font-semibold bg-primary/10 border border-primary/20 px-1.5 py-0.2 rounded">-22%</span>
-    </div>
-  </div>
-</div>
-
-<!-- Action Footer Row -->
-<div class="action-footer-row flex items-center justify-between md:justify-end gap-2 pt-2.5 md:pt-0 border-t border-border-subtle/50 md:border-t-0 shrink-0 w-full md:w-auto">
-  <button class="flex-1 md:flex-initial flex items-center justify-center gap-1.5 bg-surface-card-elevated hover:bg-surface-variant border border-border-strong text-text-platinum font-label-sm text-xs px-3 py-2 rounded-xl shadow-sm transition-all active:scale-95" type="button">
-    <span class="material-symbols-outlined text-[15px] text-primary">edit</span>
-    <span>Edit Stock</span>
-  </button>
-  <button class="flex-1 md:flex-initial flex items-center justify-center gap-1.5 bg-surface-card-elevated hover:bg-surface-variant border border-border-strong text-text-platinum font-label-sm text-xs px-3 py-2 rounded-xl shadow-sm transition-all active:scale-95" type="button">
-    <span class="material-symbols-outlined text-[15px] text-secondary">sell</span>
-    <span>Reprice</span>
-  </button>
-  <button aria-label="Analytics" class="w-8 h-8 rounded-xl bg-surface-card-elevated hover:bg-surface-variant text-text-muted hover:text-text-platinum flex items-center justify-center transition-colors border border-border-subtle shrink-0 hidden md:flex" type="button">
-    <span class="material-symbols-outlined text-[17px]">insights</span>
-  </button>
-  <button aria-label="More actions" class="w-8 h-8 rounded-xl bg-surface-card-elevated hover:bg-surface-variant text-text-muted hover:text-text-platinum flex items-center justify-center transition-colors border border-border-subtle shrink-0" type="button">
-    <span class="material-symbols-outlined text-[17px]">more_vert</span>
-  </button>
-</div></div>
-
-<!-- Card 5: Solitaire Cabochon Signet -->
-<div data-id="13" data-category="rings" data-high-jewelry="true" data-price-inr="19800" data-compare-inr="0" class="product-item bg-surface-card border border-border-strong hover:border-primary/40 transition-all duration-300 rounded-2xl p-4 sm:p-5 shadow-md flex flex-col md:flex-row md:items-center justify-between gap-4 sm:gap-6 relative group"><!-- Mobile Top Kicker Row (md:hidden) -->
-<div class="flex md:hidden items-center justify-between w-full pb-2.5 border-b border-border-subtle/40">
-  <div class="flex items-center gap-2">
-    <span class="text-secondary font-mono-luxury text-[10px] font-semibold tracking-wider uppercase bg-surface-card-elevated border border-border-subtle px-2 py-0.5 rounded-full">RINGS</span>
-    <span class="bg-surface-dim/90 text-text-platinum font-mono-luxury text-[10px] px-2 py-0.5 rounded font-bold border border-text-muted/30">925</span>
-  </div>
-  <label class="flex items-center cursor-pointer p-0.5">
-    <input class="product-checkbox w-4 h-4 rounded bg-surface-dim border-border-strong accent-primary cursor-pointer shrink-0" type="checkbox">
-  </label>
-</div>
-
-<!-- Main Info Block (Desktop Left Block & Mobile Core Content) -->
-<div class="product-info-block flex items-start md:items-center gap-3.5 sm:gap-4 flex-1 min-w-0 w-full md:w-auto">
-  <div class="hidden md:flex items-center shrink-0">
-    <input class="product-checkbox w-4 h-4 rounded bg-surface-dim border-border-strong accent-primary cursor-pointer shrink-0" type="checkbox">
-  </div>
-  <div class="product-thumb-container relative w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 rounded-xl overflow-hidden bg-surface-dim shrink-0 border border-border-subtle group-hover:shadow-lg transition-all">
-    <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="Solitaire Cabochon Signet ring in solid 925 sterling silver" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD2JxHrOQPHqynSG2PTQyC3XcsmUF-kPOYcPu2wHV7SWBG3c7BWfilS3g1rdwZz3bA9KmOyfQ0AY-XdQOJ0KQIsIMWpxjRMc7yIyTtguExTtDJDKb3NSs4-xooozSuIbj34yWFXIIctMSZZYcnCEJh_thuU9_XD98hHcldDgYawGk6go0Rcosl1UYdo-sht9BhItiHgwjCKfk8TaKJhUkHd0G9y0gd_nBLzPe4dwEc">
-    <button aria-label="Quick zoom view" class="absolute bottom-1 right-1 sm:bottom-1.5 sm:right-1.5 w-6 h-6 rounded-lg bg-surface-card/80 backdrop-blur-md flex items-center justify-center text-text-platinum active:scale-90 hover:bg-surface-card transition-all" type="button">
-      <span class="material-symbols-outlined text-[13px] sm:text-[14px]">zoom_in</span>
-    </button>
-    <span class="hidden md:block absolute top-1 left-1 sm:top-1.5 sm:left-1.5 bg-surface-dim/90 backdrop-blur-xs text-text-platinum font-mono-luxury text-[9px] sm:text-[10px] px-1.5 py-0.5 rounded font-bold border border-text-muted/30">925</span>
-  </div>
-  <div class="flex-1 min-w-0 flex flex-col justify-center">
-    <div class="hidden md:flex items-center justify-between md:justify-start gap-2 mb-1">
-      <div class="flex items-center gap-1.5 flex-wrap">
-        <span class="text-secondary font-mono-luxury text-[10px] font-semibold tracking-wider uppercase bg-surface-card-elevated border border-border-subtle px-2 py-0.5 rounded-full">RINGS</span>
-        <button class="font-mono-luxury text-[11px] text-text-muted hover:text-primary transition-colors flex items-center gap-1 bg-surface-container-low px-2 py-0.5 rounded border border-border-subtle" onclick="navigator.clipboard.writeText('LUK-SIL-RG-001')" type="button">
-          <span>LUK-SIL-RG-001</span>
-          <span class="material-symbols-outlined text-[12px]">content_copy</span>
-        </button>
-      </div>
-    </div>
-    <h2 class="font-serif-luxury text-sm sm:text-base md:text-lg lg:text-xl text-text-platinum font-semibold tracking-wide truncate mt-0.5"><a href="/admin/catalog/product/13/change/" class="hover:text-primary transition-colors">SOLITAIRE CABOCHON SIGNET</a></h2>
-    <div class="flex md:hidden items-center gap-1.5 my-1.5">
-      <button class="font-mono-luxury text-[11px] text-text-muted hover:text-primary transition-colors flex items-center gap-1 bg-surface-container-low px-2 py-0.5 rounded border border-border-subtle" onclick="navigator.clipboard.writeText('LUK-SIL-RG-001')" type="button">
-        <span>LUK-SIL-RG-001</span>
-        <span class="material-symbols-outlined text-[12px]">content_copy</span>
-      </button>
-    </div>
-    <div class="flex items-center gap-1.5 text-text-muted text-[11px] sm:text-xs mt-0.5 md:mt-1 truncate">
-      <span class="material-symbols-outlined text-[14px] text-secondary shrink-0">verified</span>
-      <span class="truncate">925 Sterling Silver • Satin Brushed</span>
-      <span class="text-border-strong hidden sm:inline">•</span>
-      <span class="text-text-muted/70 hidden sm:inline">Vault Partition A</span>
-    </div>
-  </div>
-</div>
-
-<!-- Pricing & Stock Row -->
-<div class="pricing-stock-row flex items-center justify-between md:gap-6 shrink-0 pt-2.5 md:pt-0 border-t border-border-subtle/50 md:border-t-0 w-full md:w-auto">
-  <div class="flex flex-col items-start md:items-center justify-center gap-1">
-    <div class="flex items-center gap-1.5 bg-primary/10 border border-primary/20 px-2.5 py-0.5 sm:px-3 sm:py-1 rounded-full">
-      <span class="w-1.5 h-1.5 rounded-full bg-primary"></span>
-      <span class="font-label-sm text-[11px] sm:text-xs text-primary font-medium">18 in stock</span>
-    </div>
-    <span class="font-caption text-[10px] sm:text-[11px] text-text-muted/70 hidden md:block">Optimal Reserve</span>
-  </div>
-  <div class="flex flex-col items-end justify-center gap-0.5 sm:gap-1 min-w-[100px] sm:min-w-[120px]">
-    <div class="product-card-price font-serif-luxury text-lg sm:text-xl md:text-2xl text-secondary font-bold tracking-tight">₹19,800</div>
-    <div class="flex items-center gap-1.5 sm:gap-2">
-      <span class="font-mono-luxury text-[9px] sm:text-[10px] text-secondary font-semibold bg-secondary/15 border border-secondary/30 px-2 py-0.5 rounded">SIGNATURE</span>
-    </div>
-  </div>
-</div>
-
-<!-- Action Footer Row -->
-<div class="action-footer-row flex items-center justify-between md:justify-end gap-2 pt-2.5 md:pt-0 border-t border-border-subtle/50 md:border-t-0 shrink-0 w-full md:w-auto">
-  <button class="flex-1 md:flex-initial flex items-center justify-center gap-1.5 bg-surface-card-elevated hover:bg-surface-variant border border-border-strong text-text-platinum font-label-sm text-xs px-3 py-2 rounded-xl shadow-sm transition-all active:scale-95" type="button">
-    <span class="material-symbols-outlined text-[15px] text-primary">edit</span>
-    <span>Edit Stock</span>
-  </button>
-  <button class="flex-1 md:flex-initial flex items-center justify-center gap-1.5 bg-surface-card-elevated hover:bg-surface-variant border border-border-strong text-text-platinum font-label-sm text-xs px-3 py-2 rounded-xl shadow-sm transition-all active:scale-95" type="button">
-    <span class="material-symbols-outlined text-[15px] text-secondary">sell</span>
-    <span>Reprice</span>
-  </button>
-  <button aria-label="Analytics" class="w-8 h-8 rounded-xl bg-surface-card-elevated hover:bg-surface-variant text-text-muted hover:text-text-platinum flex items-center justify-center transition-colors border border-border-subtle shrink-0 hidden md:flex" type="button">
-    <span class="material-symbols-outlined text-[17px]">insights</span>
-  </button>
-  <button aria-label="More actions" class="w-8 h-8 rounded-xl bg-surface-card-elevated hover:bg-surface-variant text-text-muted hover:text-text-platinum flex items-center justify-center transition-colors border border-border-subtle shrink-0" type="button">
-    <span class="material-symbols-outlined text-[17px]">more_vert</span>
-  </button>
-</div></div></div>
-<!-- Pagination & Vault Count Footer -->
-<div class="flex flex-col sm:flex-row items-center justify-between pt-4 pb-10 border-t border-border-subtle/60 gap-4">
-<div class="flex items-center gap-2 text-text-muted text-xs">
-<span class="font-mono-luxury">Showing <strong class="text-text-platinum font-bold">1–5</strong> of 17 pieces</span>
-<span class="w-1 h-1 rounded-full bg-text-muted/40"></span>
-<span class="text-text-muted/70">Atelier Vault Partition A</span>
-</div>
-<!-- Page Number Navigation Buttons -->
-<div class="flex items-center gap-1.5">
-<button aria-label="Previous page" class="w-9 h-9 rounded-xl bg-surface-card border border-border-strong text-text-muted opacity-40 flex items-center justify-center cursor-not-allowed" disabled="" type="button">
-<span class="material-symbols-outlined text-[18px]">chevron_left</span>
-</button>
-<button class="w-9 h-9 rounded-xl bg-primary text-on-primary font-mono-luxury text-xs font-bold flex items-center justify-center shadow-md shadow-primary/20" type="button">
-        1
-      </button>
-<button class="w-9 h-9 rounded-xl bg-surface-card border border-border-strong text-text-muted hover:text-text-platinum hover:border-primary/40 font-mono-luxury text-xs flex items-center justify-center transition-colors" type="button">
-        2
-      </button>
-<button class="w-9 h-9 rounded-xl bg-surface-card border border-border-strong text-text-muted hover:text-text-platinum hover:border-primary/40 font-mono-luxury text-xs flex items-center justify-center transition-colors" type="button">
-        3
-      </button>
-<button class="w-9 h-9 rounded-xl bg-surface-card border border-border-strong text-text-muted hover:text-text-platinum hover:border-primary/40 font-mono-luxury text-xs flex items-center justify-center transition-colors" type="button">
-        4
-      </button>
-<button aria-label="Next page" class="w-9 h-9 rounded-xl bg-surface-card border border-border-strong text-text-muted hover:text-text-platinum hover:border-primary/40 flex items-center justify-center transition-colors" type="button">
-<span class="material-symbols-outlined text-[18px]">chevron_right</span>
-</button>
-</div>
-</div>
-<!-- Floating Bulk Action Drawer (Visible when items selected) -->
-<div class="fixed left-4 right-4 sm:left-auto sm:right-8 sm:w-96 bg-surface-card-elevated/95 backdrop-blur-xl border border-primary/30 rounded-2xl p-3.5 shadow-2xl transition-all duration-300 translate-y-28 opacity-0 pointer-events-none flex items-center justify-between z-40 bottom-6" id="bulkFloatingToolbar">
-<div class="flex items-center gap-2.5 pl-1">
-<span class="w-2.5 h-2.5 rounded-full bg-primary animate-ping"></span>
-<span class="font-label-sm text-xs sm:text-[13px] text-text-platinum font-semibold" id="bulkBadgeText">2 Selected</span>
-</div>
-<div class="flex items-center gap-2">
-<button class="bg-surface-card hover:bg-surface-variant border border-border-strong text-text-platinum font-label-sm text-xs px-3 py-1.5 rounded-xl shadow-sm flex items-center gap-1 transition-all" type="button">
-<span class="material-symbols-outlined text-[16px] text-secondary">percent</span>
-<span>Discount</span>
-</button>
-<button class="bg-primary hover:bg-primary/90 text-on-primary font-label-sm text-xs px-3.5 py-1.5 rounded-xl shadow-sm flex items-center gap-1 font-semibold active:scale-95 transition-transform" type="button">
-<span class="material-symbols-outlined text-[16px]">tune</span>
-<span>Update</span>
-</button>
-</div>
-</div>
-<!-- Filter Slide-over Sheet / Modal (Responsive Desktop Dialog & Mobile Drawer) -->
-<div class="fixed inset-0 z-50 bg-black/75 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-300 flex items-end sm:items-center justify-center" id="filterSheet">
-<div class="bg-surface-card-elevated border border-border-strong rounded-t-3xl sm:rounded-2xl w-full sm:max-w-md p-6 flex flex-col space-y-5 transform translate-y-full sm:translate-y-0 transition-transform duration-300 shadow-2xl max-h-[85vh] overflow-y-auto" id="filterSheetContent">
-<div class="flex items-center justify-between pb-2 border-b border-border-subtle">
-<div class="flex items-center gap-2">
-<span class="material-symbols-outlined text-[20px] text-secondary">tune</span>
-<h3 class="font-serif-luxury text-lg text-text-platinum font-semibold">Filter Atelier Vault</h3>
-</div>
-<button class="w-8 h-8 rounded-full bg-surface-card text-text-muted hover:text-text-platinum flex items-center justify-center transition-colors" id="closeFilterSheet" type="button">
-<span class="material-symbols-outlined text-[20px]">close</span>
-</button>
-</div>
-<div class="space-y-4">
-<div>
-<span class="font-label-sm text-[11px] text-text-muted uppercase tracking-wider block mb-2 font-semibold">Precious Material</span>
-<div class="grid grid-cols-2 gap-2">
-<button class="filter-material-btn p-3 rounded-xl bg-surface-card border border-primary/40 text-left flex items-center justify-between text-text-platinum active:scale-95 transition-all" type="button">
-<span class="font-body-sm text-xs">925 Sterling Silver</span>
-<span class="material-symbols-outlined text-[16px] text-primary">check_circle</span>
-</button>
-<button class="filter-material-btn p-3 rounded-xl bg-surface-card border border-border-strong text-left flex items-center justify-between text-text-muted hover:text-text-platinum active:scale-95 transition-all" type="button">
-<span class="font-body-sm text-xs">18K Vermeil</span>
-<span class="material-symbols-outlined text-[16px] opacity-0">check_circle</span>
-</button>
-</div>
-</div>
-<div>
-<span class="font-label-sm text-[11px] text-text-muted uppercase tracking-wider block mb-2 font-semibold">Stock Availability</span>
-<div class="grid grid-cols-3 gap-2">
-<button class="p-2.5 rounded-xl bg-primary/10 border border-primary/30 text-primary font-label-sm text-xs text-center font-medium" type="button">In-Vault</button>
-<button class="p-2.5 rounded-xl bg-surface-card border border-border-strong text-text-muted font-label-sm text-xs text-center hover:text-text-platinum" type="button">Low Stock</button>
-<button class="p-2.5 rounded-xl bg-surface-card border border-border-strong text-text-muted font-label-sm text-xs text-center hover:text-text-platinum" type="button">Bespoke</button>
-</div>
-</div>
-<div>
-<span class="font-label-sm text-[11px] text-text-muted uppercase tracking-wider block mb-2 font-semibold">Price Range (₹ INR)</span>
-<div class="flex items-center gap-2">
-<div class="flex-1 bg-surface-card border border-border-strong rounded-xl p-2.5">
-<span class="font-caption text-[10px] text-text-muted block">Min</span>
-<span class="font-mono-luxury text-xs text-text-platinum font-semibold">₹15,000</span>
-</div>
-<span class="text-text-muted">—</span>
-<div class="flex-1 bg-surface-card border border-border-strong rounded-xl p-2.5">
-<span class="font-caption text-[10px] text-text-muted block">Max</span>
-<span class="font-mono-luxury text-xs text-text-platinum font-semibold">₹50,000+</span>
-</div>
-</div>
-</div>
-</div>
-<div class="pt-3 flex items-center gap-3">
-<button class="flex-1 py-2.5 rounded-xl bg-surface-card border border-border-strong text-text-muted hover:text-text-platinum font-label-md text-xs transition-colors" id="resetFilters" type="button">Reset</button>
-<button class="flex-2 w-full py-2.5 rounded-xl bg-primary hover:bg-primary/90 text-on-primary font-label-md text-xs font-semibold active:scale-95 shadow-md shadow-primary/20 transition-all" id="applyFilters" type="button">Show 17 Results</button>
-</div>
-</div>
-</div>
-</main>
-
-<!-- BEGIN: Image Lightbox / Zoom Modal -->
-<div id="zoomModal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-md opacity-0 pointer-events-none transition-opacity duration-300 flex items-center justify-center p-4">
-  <div class="relative bg-surface-card border border-border-strong rounded-2xl max-w-lg w-full p-4 sm:p-6 shadow-2xl flex flex-col items-center gap-4">
-    <button id="closeZoomModalBtn" aria-label="Close zoom preview" class="absolute top-3 right-3 w-8 h-8 rounded-full bg-surface-card-elevated text-text-muted hover:text-text-platinum flex items-center justify-center transition-colors cursor-pointer" type="button">
-      <span class="material-symbols-outlined text-[20px]">close</span>
-    </button>
-    <div class="w-full h-72 sm:h-80 rounded-xl overflow-hidden bg-surface-dim border border-border-subtle flex items-center justify-center">
-      <img id="zoomModalImg" class="w-full h-full object-cover" src="" alt="Jewelry Zoom Preview">
-    </div>
-    <div class="w-full flex items-center justify-between pt-1">
-      <div>
-        <h4 id="zoomModalTitle" class="font-serif-luxury text-base sm:text-lg text-text-platinum font-semibold"></h4>
-        <span id="zoomModalSku" class="font-mono-luxury text-xs text-secondary"></span>
-      </div>
-      <a id="zoomModalEditLink" href="#" class="px-3 py-1.5 rounded-xl bg-primary text-on-primary text-xs font-semibold flex items-center gap-1 shadow-sm cursor-pointer">
-        <span>Edit Piece</span>
-        <span class="material-symbols-outlined text-[15px]">arrow_forward</span>
+  <!-- ==========================================
+       PRESERVED LEFT SIDE PANEL
+       (Docked / Persistent on Desktop lg:+, Off-Canvas Drawer on Mobile)
+       ========================================== -->
+  <aside id="leftNavDrawer" class="fixed inset-y-0 left-0 z-50 w-72 max-w-[85vw] bg-[#121315] border-r border-[#232732] shadow-2xl flex flex-col -translate-x-full lg:translate-x-0 lg:static lg:shadow-none lg:z-30 shrink-0 h-screen sticky top-0 overflow-y-auto">
+    <!-- Panel Header -->
+    <div class="p-4 border-b border-[#232732] flex items-center justify-between">
+      <a href="/admin/" class="flex items-center gap-2.5 group focus:outline-none">
+        <span class="w-2.5 h-2.5 rounded-full bg-primary inline-block group-hover:scale-125 transition-transform duration-300"></span>
+        <div class="flex flex-col">
+          <span class="font-bold text-[15px] tracking-[0.16em] text-text-platinum font-serif-luxury">LUCKJARY</span>
+          <span class="text-[9px] text-secondary uppercase tracking-[0.25em] font-mono-luxury font-semibold">HAUTE ATELIER</span>
+        </div>
       </a>
+      <button id="closeNavDrawerBtn" aria-label="Close navigation" class="lg:hidden w-8 h-8 rounded-lg flex items-center justify-center text-text-muted hover:text-text-platinum active:scale-95 transition-colors cursor-pointer" type="button">
+        <span class="material-symbols-outlined text-[20px]">close</span>
+      </button>
     </div>
+
+    <!-- Navigation Groups -->
+    <div class="p-3 space-y-4 flex-1 text-[13px]">
+      <!-- Section: Navigation -->
+      <div>
+        <div class="text-[10px] font-bold tracking-[0.12em] text-text-muted uppercase px-2 mb-1.5 font-mono-luxury">Navigation</div>
+        <div class="space-y-0.5">
+          <a href="/admin/" class="flex items-center gap-3 px-3 py-2 rounded-xl text-text-muted hover:text-text-platinum hover:bg-[#18191c] transition-colors">
+            <span class="material-symbols-outlined text-[18px]">home</span>
+            <span>Home</span>
+          </a>
+          <a href="/admin/orders/order/" class="flex items-center justify-between px-3 py-2 rounded-xl text-text-muted hover:text-text-platinum hover:bg-[#18191c] transition-colors">
+            <div class="flex items-center gap-3">
+              <span class="material-symbols-outlined text-[18px]">shopping_bag</span>
+              <span>Orders</span>
+            </div>
+            <span class="px-2 py-0.5 rounded-full bg-surface-card text-secondary text-[11px] font-mono-luxury font-bold">4</span>
+          </a>
+          <a href="/admin/orders/coupon/" class="flex items-center gap-3 px-3 py-2 rounded-xl text-text-muted hover:text-text-platinum hover:bg-[#18191c] transition-colors">
+            <span class="material-symbols-outlined text-[18px]">percent</span>
+            <span>Discounts</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Section: Products & Inventory (ACTIVE) -->
+      <div>
+        <div class="text-[10px] font-bold tracking-[0.12em] text-text-muted uppercase px-2 mb-1.5 font-mono-luxury">Products & Inventory</div>
+        <div class="space-y-0.5">
+          <a href="/admin/catalog/product/" class="flex items-center justify-between px-3 py-2 rounded-xl bg-primary/10 text-primary font-medium border-l-2 border-primary shadow-sm">
+            <div class="flex items-center gap-3">
+              <span class="material-symbols-outlined text-[18px] text-primary">diamond</span>
+              <span class="text-text-platinum font-semibold">Vault Products</span>
+            </div>
+            <span class="px-2 py-0.5 rounded-full bg-surface-card text-primary text-[11px] font-mono-luxury font-bold">17</span>
+          </a>
+          <a href="/admin/catalog/collection/" class="flex items-center gap-3 px-3 py-2 rounded-xl text-text-muted hover:text-text-platinum hover:bg-[#18191c] transition-colors">
+            <span class="material-symbols-outlined text-[18px]">grid_view</span>
+            <span>Collections</span>
+          </a>
+          <a href="/admin/catalog/category/" class="flex items-center gap-3 px-3 py-2 rounded-xl text-text-muted hover:text-text-platinum hover:bg-[#18191c] transition-colors">
+            <span class="material-symbols-outlined text-[18px]">category</span>
+            <span>Categories</span>
+          </a>
+          <a href="/admin/catalog/material/" class="flex items-center gap-3 px-3 py-2 rounded-xl text-text-muted hover:text-text-platinum hover:bg-[#18191c] transition-colors">
+            <span class="material-symbols-outlined text-[18px]">stars</span>
+            <span>Materials</span>
+          </a>
+          <a href="/admin/catalog/review/" class="flex items-center gap-3 px-3 py-2 rounded-xl text-text-muted hover:text-text-platinum hover:bg-[#18191c] transition-colors">
+            <span class="material-symbols-outlined text-[18px]">grade</span>
+            <span>Product Reviews</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Section: Customers & Patrons -->
+      <div>
+        <div class="text-[10px] font-bold tracking-[0.12em] text-text-muted uppercase px-2 mb-1.5 font-mono-luxury">Customers & VIPs</div>
+        <div class="space-y-0.5">
+          <a href="/admin/accounts/customerprofile/" class="flex items-center gap-3 px-3 py-2 rounded-xl text-text-muted hover:text-text-platinum hover:bg-[#18191c] transition-colors">
+            <span class="material-symbols-outlined text-[18px]">groups</span>
+            <span>VIP Patrons</span>
+          </a>
+          <a href="/admin/accounts/address/" class="flex items-center gap-3 px-3 py-2 rounded-xl text-text-muted hover:text-text-platinum hover:bg-[#18191c] transition-colors">
+            <span class="material-symbols-outlined text-[18px]">location_on</span>
+            <span>Addresses</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Section: Store Currency Preference -->
+      <div class="pt-2 border-t border-[#232732]">
+        <div class="flex items-center justify-between px-2 mb-2">
+          <span class="text-[10px] font-bold tracking-[0.1em] text-secondary uppercase font-mono-luxury">Store Currency</span>
+          <span class="text-xs text-secondary font-bold">💳</span>
+        </div>
+        <div class="bg-[#14161C] rounded-xl p-2.5 border border-[#232732]">
+          <label class="text-[11px] text-text-muted block mb-1.5 font-medium">Select Active Currency:</label>
+          <div class="grid grid-cols-2 gap-1.5" id="currencySelectorGrid">
+            <button type="button" data-currency="INR" class="currency-pick-btn active py-1.5 px-2 rounded-lg text-[11px] font-bold border flex items-center justify-center gap-1.5 bg-primary/10 text-primary border-primary/50 cursor-pointer">
+              <span>🇮🇳</span><span>₹ INR</span>
+            </button>
+            <button type="button" data-currency="USD" class="currency-pick-btn py-1.5 px-2 rounded-lg text-[11px] font-medium border flex items-center justify-center gap-1.5 bg-[#0d0e10] text-text-muted border-[#232732] hover:text-text-platinum cursor-pointer">
+              <span>🇺🇸</span><span>$ USD</span>
+            </button>
+            <button type="button" data-currency="EUR" class="currency-pick-btn py-1.5 px-2 rounded-lg text-[11px] font-medium border flex items-center justify-center gap-1.5 bg-[#0d0e10] text-text-muted border-[#232732] hover:text-text-platinum cursor-pointer">
+              <span>🇪🇺</span><span>€ EUR</span>
+            </button>
+            <button type="button" data-currency="GBP" class="currency-pick-btn py-1.5 px-2 rounded-lg text-[11px] font-medium border flex items-center justify-center gap-1.5 bg-[#0d0e10] text-text-muted border-[#232732] hover:text-text-platinum cursor-pointer">
+              <span>🇬🇧</span><span>£ GBP</span>
+            </button>
+            <button type="button" data-currency="AED" class="currency-pick-btn col-span-2 py-1.5 px-2 rounded-lg text-[11px] font-medium border flex items-center justify-center gap-1.5 bg-[#0d0e10] text-text-muted border-[#232732] hover:text-text-platinum cursor-pointer">
+              <span>🇦🇪</span><span>AED Dirham</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Panel Footer -->
+    <div class="p-3 border-t border-[#232732] bg-[#0d0e10]">
+      <div class="flex items-center gap-2 mb-2">
+        <span class="w-1.5 h-1.5 rounded-full bg-primary inline-block"></span>
+        <a href="/" target="_blank" class="text-[11px] text-text-muted hover:text-primary transition-colors">Luckjary Boutique Online ↗</a>
+      </div>
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-2">
+          <div class="w-7 h-7 rounded-full bg-[#1e2024] border border-[#2a2d33] flex items-center justify-center text-xs font-bold text-secondary font-mono">E</div>
+          <div>
+            <div class="text-xs font-bold text-text-platinum leading-none">Eleanor</div>
+            <div class="text-[10px] text-text-muted font-mono">Director</div>
+          </div>
+        </div>
+        <a href="/admin/logout/" class="text-text-muted hover:text-red-400 p-1.5 rounded-lg hover:bg-[#1e2024] transition-colors" title="Sign Out">
+          <span class="material-symbols-outlined text-[18px]">logout</span>
+        </a>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ==========================================
+       RIGHT MAIN CONTENT AREA
+       ========================================== -->
+  <div class="flex-1 min-w-0 flex flex-col min-h-screen overflow-x-hidden">
+
+    <!-- Top Universal Header Bar -->
+    <header class="sticky top-0 z-30 w-full bg-[#14161C]/90 backdrop-blur-xl border-b border-[#232732] shadow-[0_2px_12px_rgba(0,0,0,0.5)]">
+      <div class="px-4 sm:px-6 lg:px-8 h-16 sm:h-20 flex items-center justify-between gap-4">
+        <!-- Left: Hamburger Menu (Visible on mobile/tablet, and toggles on desktop) + Brand Header -->
+        <div class="flex items-center gap-3 sm:gap-4">
+          <button id="openNavDrawerBtn" aria-label="Toggle Navigation Panel" class="p-2 rounded-xl bg-surface-card hover:bg-surface-card-elevated text-text-muted hover:text-text-platinum border border-border-strong active:scale-95 transition-all cursor-pointer" type="button">
+            <span class="material-symbols-outlined text-[20px]">menu</span>
+          </button>
+          <a class="flex items-center gap-2.5 group focus:outline-none" href="/admin/">
+            <span class="w-2 h-2 rounded-full bg-primary group-hover:scale-125 transition-transform duration-300"></span>
+            <div class="flex flex-col sm:flex-row sm:items-baseline sm:gap-2">
+              <span class="font-headline-sm sm:text-2xl tracking-[0.18em] text-text-platinum font-semibold font-serif-luxury">LUCKJARY</span>
+              <span class="font-caption text-[10px] sm:text-[11px] text-secondary uppercase tracking-[0.25em] font-medium">ATELIER</span>
+            </div>
+          </a>
+        </div>
+
+        <!-- Right: Global Quick Search & User Profile Actions -->
+        <div class="flex items-center gap-2 sm:gap-3">
+          <!-- Desktop Global Quick Search Bar -->
+          <div class="hidden lg:flex items-center relative w-64 xl:w-80 bg-surface-card border border-border-strong rounded-xl px-3 py-1.5 text-xs text-text-muted focus-within:border-primary/60 transition-colors">
+            <span class="material-symbols-outlined text-[18px] mr-2">search</span>
+            <input id="topSearchInput" class="bg-transparent text-text-platinum text-xs placeholder:text-text-muted/70 focus:outline-none w-full font-body-sm" placeholder="Search SKU, hallmark, collection..." type="text">
+            <kbd class="hidden xl:inline-block px-1.5 py-0.5 text-[10px] font-mono-luxury bg-surface-dim border border-border-strong rounded text-text-muted ml-1">⌘K</kbd>
+          </div>
+          <!-- Notifications -->
+          <button aria-label="Notifications" class="w-10 h-10 rounded-xl flex items-center justify-center text-text-muted hover:text-text-platinum hover:bg-surface-card relative transition-colors" type="button">
+            <span class="material-symbols-outlined text-[20px]">notifications</span>
+            <span class="absolute top-2.5 right-2.5 w-2 h-2 rounded-full bg-primary ring-2 ring-surface-card-elevated"></span>
+          </button>
+          <!-- Master Jeweler Profile Chip -->
+          <div class="flex items-center gap-2.5 pl-1 sm:pl-2 border-l border-border-strong/60">
+            <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-primary/30 to-surface-card border border-primary/40 flex items-center justify-center text-primary shadow-sm">
+              <span class="material-symbols-outlined text-[20px]">person</span>
+            </div>
+            <div class="hidden sm:flex flex-col text-left">
+              <span class="text-xs font-semibold text-text-platinum leading-tight">Master Jeweler</span>
+              <span class="text-[10px] font-mono-luxury text-secondary tracking-wider">ADMIN • VAULT 01</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Vault Content Container -->
+    <main class="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 flex flex-col gap-6">
+
+      <!-- Top Catalog Overview Banner / Page Header -->
+      <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 pb-2 border-b border-border-subtle/50">
+        <div class="flex flex-col">
+          <div class="flex items-center gap-2 mb-1">
+            <a href="/admin/" class="font-label-sm text-[11px] text-secondary hover:text-primary font-semibold uppercase tracking-wider transition-colors">Inventory Hub</a>
+            <span class="w-1 h-1 rounded-full bg-secondary/40"></span>
+            <span class="font-mono-luxury text-[11px] text-text-muted font-medium uppercase tracking-wider">Spring 2025</span>
+            <span class="hidden sm:inline-flex items-center gap-1 ml-2 px-2 py-0.5 rounded-full bg-primary/10 text-primary text-[10px] font-medium border border-primary/20">
+              <span class="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span>
+              Live Sync
+            </span>
+          </div>
+          <div class="flex items-baseline gap-3">
+            <h1 class="font-serif-luxury text-2xl sm:text-3xl lg:text-4xl text-text-platinum font-semibold tracking-wide">Atelier Vault</h1>
+            <span class="bg-surface-card-elevated border border-border-strong text-secondary font-mono-luxury text-[11px] sm:text-xs px-2.5 py-1 rounded-full font-medium shadow-sm">
+              17 PIECES
+            </span>
+          </div>
+        </div>
+        <!-- Top Actions -->
+        <div class="flex items-center gap-2.5 self-start md:self-auto">
+          <a href="/admin/catalog/product/add/" class="flex items-center gap-2 bg-primary hover:bg-primary/90 text-on-primary font-label-md text-xs sm:text-[13px] px-4 py-2.5 rounded-xl shadow-lg shadow-primary/20 active:scale-95 transition-all font-semibold cursor-pointer">
+            <span class="material-symbols-outlined text-[19px]">add_circle</span>
+            <span>+ Add Piece</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Search, Fast Controls & View Bar -->
+      <div class="flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-3">
+        <!-- Search Bar with SKU / Hallmark & Barcode -->
+        <div class="flex-1 flex items-center gap-2 justify-between">
+          <div class="flex-1 flex items-center relative h-10 bg-surface-card border border-border-strong rounded-xl px-3 text-xs text-text-muted focus-within:border-primary/60 shadow-sm transition-all">
+            <span class="material-symbols-outlined text-[18px] mr-2.5 text-text-muted shrink-0">search</span>
+            <input class="bg-transparent text-text-platinum text-xs placeholder:text-text-muted/70 focus:outline-none w-full min-w-0 font-body-sm" id="productSearchInput" placeholder="Search SKU, hallmark, piece or patron..." type="text">
+            <div class="flex items-center gap-1.5 ml-2 shrink-0">
+              <span class="material-symbols-outlined text-[17px] text-text-muted cursor-pointer hover:text-text-platinum transition-colors" title="Scan Barcode">barcode_scanner</span>
+              <kbd class="hidden sm:inline-block px-1.5 py-0.5 text-[10px] font-mono-luxury bg-surface-dim border border-border-strong rounded text-text-muted">⌘K</kbd>
+            </div>
+          </div>
+        </div>
+
+        <!-- Filter & View Switcher Controls -->
+        <div class="flex items-center gap-2 self-end lg:self-auto shrink-0">
+          <button class="h-10 px-3.5 rounded-xl bg-surface-card hover:bg-surface-card-elevated border border-border-strong text-text-platinum text-xs font-label-md flex items-center gap-2 transition-all shadow-sm active:scale-95 cursor-pointer" id="filterModalToggle" type="button">
+            <span class="material-symbols-outlined text-[18px] text-secondary">tune</span>
+            <span>Filters</span>
+            <span class="w-5 h-5 rounded-full bg-surface-card-elevated text-secondary text-[10px] font-mono-luxury flex items-center justify-center font-bold border border-secondary/20">2</span>
+          </button>
+          <!-- Grid vs List View Switcher Buttons -->
+          <div class="flex items-center gap-1 bg-surface-card border border-border-strong/70 rounded-xl p-1">
+            <button aria-label="Grid View" class="w-8 h-8 rounded-lg flex items-center justify-center transition-all text-text-muted hover:text-text-platinum cursor-pointer" id="viewGridBtn" title="Gallery Grid View" type="button">
+              <span class="material-symbols-outlined text-[19px]">grid_view</span>
+            </button>
+            <button aria-label="List View" class="w-8 h-8 rounded-lg bg-surface-card-elevated text-primary flex items-center justify-center transition-colors shadow-sm cursor-pointer" id="viewListBtn" title="Compact List View" type="button">
+              <span class="material-symbols-outlined text-[19px]">view_agenda</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Categories Horizontal Filter Chips -->
+      <div class="flex items-center gap-2 sm:gap-2.5 overflow-x-auto pb-1 -mx-4 px-4 sm:mx-0 sm:px-0 scrollbar-none" id="categoryChips">
+        <button class="category-chip active whitespace-nowrap px-4 py-2 rounded-xl font-label-sm text-xs bg-surface-card-elevated text-primary border border-primary/30 shadow-sm flex items-center gap-2 transition-all cursor-pointer" type="button">
+          <span>All Vault</span>
+          <span class="text-[11px] font-mono-luxury px-1.5 py-0.2 rounded bg-primary/10 text-primary">17</span>
+        </button>
+        <button class="category-chip whitespace-nowrap px-4 py-2 rounded-xl font-label-sm text-xs bg-surface-card text-text-muted hover:text-text-platinum border border-border-strong/70 hover:border-border-strong shadow-sm flex items-center gap-2 transition-all cursor-pointer" type="button">
+          <span>Rings</span>
+          <span class="text-[11px] font-mono-luxury text-text-muted">5</span>
+        </button>
+        <button class="category-chip whitespace-nowrap px-4 py-2 rounded-xl font-label-sm text-xs bg-surface-card text-text-muted hover:text-text-platinum border border-border-strong/70 hover:border-border-strong shadow-sm flex items-center gap-2 transition-all cursor-pointer" type="button">
+          <span>Necklaces</span>
+          <span class="text-[11px] font-mono-luxury text-text-muted">4</span>
+        </button>
+        <button class="category-chip whitespace-nowrap px-4 py-2 rounded-xl font-label-sm text-xs bg-surface-card text-text-muted hover:text-text-platinum border border-border-strong/70 hover:border-border-strong shadow-sm flex items-center gap-2 transition-all cursor-pointer" type="button">
+          <span>Bracelets</span>
+          <span class="text-[11px] font-mono-luxury text-text-muted">3</span>
+        </button>
+        <button class="category-chip whitespace-nowrap px-4 py-2 rounded-xl font-label-sm text-xs bg-surface-card text-text-muted hover:text-text-platinum border border-border-strong/70 hover:border-border-strong shadow-sm flex items-center gap-2 transition-all cursor-pointer" type="button">
+          <span>Earrings</span>
+          <span class="text-[11px] font-mono-luxury text-text-muted">5</span>
+        </button>
+        <button class="category-chip whitespace-nowrap px-4 py-2 rounded-xl font-label-sm text-xs bg-surface-card text-text-muted hover:text-text-platinum border border-border-strong/70 hover:border-border-strong shadow-sm flex items-center gap-2 transition-all cursor-pointer" type="button">
+          <span>High Jewelry</span>
+          <span class="text-[11px] font-mono-luxury text-text-muted">2</span>
+        </button>
+        <button class="category-chip whitespace-nowrap px-4 py-2 rounded-xl font-label-sm text-xs bg-surface-card text-secondary/90 hover:text-secondary border border-secondary/20 shadow-sm flex items-center gap-2 transition-all ml-auto cursor-pointer" type="button">
+          <span class="w-1.5 h-1.5 rounded-full bg-secondary animate-pulse"></span>
+          <span>Low Stock Alert</span>
+          <span class="text-[11px] font-mono-luxury px-1.5 py-0.2 rounded bg-secondary/15 text-secondary">2</span>
+        </button>
+      </div>
+
+      <!-- Bulk Selection Header Bar -->
+      <div class="flex flex-wrap items-center justify-between bg-surface-card border border-border-strong px-4 py-2.5 rounded-xl shadow-md gap-3">
+        <label class="flex items-center gap-3 cursor-pointer select-none">
+          <input class="w-4 h-4 rounded bg-surface-dim border-border-strong accent-primary cursor-pointer transition-colors" id="selectAllCheckbox" type="checkbox">
+          <span class="font-label-sm text-xs sm:text-[13px] text-text-platinum tracking-wide"><span class="font-semibold text-primary" id="selectedCount">0</span> of 17 Selected</span>
+        </label>
+        <div class="flex items-center gap-2 sm:gap-3">
+          <button class="font-label-sm text-xs sm:text-[13px] bg-surface-card-elevated hover:bg-surface-variant text-text-platinum border border-border-strong px-3 py-1.5 rounded-lg flex items-center gap-1.5 shadow-sm transition-all cursor-pointer" type="button">
+            <span class="material-symbols-outlined text-[17px] text-secondary">edit_note</span>
+            <span>Batch Actions</span>
+          </button>
+          <button class="font-label-sm text-xs sm:text-[13px] bg-surface-card-elevated hover:bg-surface-variant text-text-platinum border border-border-strong px-3 py-1.5 rounded-lg flex items-center gap-1.5 shadow-sm transition-all cursor-pointer" type="button" onclick="showToast('Exporting vault manifest...', 'file_download')">
+            <span class="material-symbols-outlined text-[17px] text-text-muted">file_download</span>
+            <span>Export Manifest</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Responsive Product Catalog Grid (Desktop 3-col / List 1-col, Tablet 2-col, Mobile 1-col) -->
+      <div class="flex flex-col gap-4" id="catalogContainer">
+
+        <!-- Card 1: Aura Textured Dome Ring -->
+        <div data-id="17" data-category="rings" data-price-inr="18200" data-compare-inr="23200" class="product-item bg-surface-card border border-border-strong hover:border-primary/40 transition-all duration-300 rounded-2xl p-4 sm:p-5 shadow-md flex flex-col md:flex-row md:items-center justify-between gap-4 sm:gap-6 relative group">
+          <!-- Mobile Top Kicker Row (md:hidden) -->
+          <div class="flex md:hidden items-center justify-between w-full pb-2.5 border-b border-border-subtle/40">
+            <div class="flex items-center gap-2">
+              <span class="text-secondary font-mono-luxury text-[10px] font-semibold tracking-wider uppercase bg-surface-card-elevated border border-border-subtle px-2 py-0.5 rounded-full">RINGS</span>
+              <span class="bg-surface-dim/90 text-secondary font-mono-luxury text-[10px] px-2 py-0.5 rounded font-bold border border-secondary/20">18K</span>
+            </div>
+            <label class="flex items-center cursor-pointer p-0.5">
+              <input class="product-checkbox w-4 h-4 rounded bg-surface-dim border-border-strong accent-primary cursor-pointer shrink-0" type="checkbox">
+            </label>
+          </div>
+
+          <!-- Main Info Block -->
+          <div class="product-info-block flex items-start md:items-center gap-3.5 sm:gap-4 flex-1 min-w-0 w-full md:w-auto">
+            <div class="hidden md:flex items-center shrink-0">
+              <input class="product-checkbox w-4 h-4 rounded bg-surface-dim border-border-strong accent-primary cursor-pointer shrink-0" type="checkbox">
+            </div>
+            <div class="product-thumb-container relative w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 rounded-xl overflow-hidden bg-surface-dim shrink-0 border border-border-subtle group-hover:shadow-lg transition-all">
+              <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" alt="Aura Textured Dome Ring" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA51QwOI7lVeyt-8Ww6SL4m9T4yeOVo8y6XI6rZfmYsifjMx-Ju6Ne_qkGKrkCZR9CYu6YUNVDDFphAzUFekyOX8ky4u1mBVeykyEMark3eStZlcewyKOn4w2R84IGnCbXkxhecZM_pLAfFLK_xYdR4U5rmX5E_8jByhCdvjMqE9QkVx8rnkjnnx-u61qgoB_KfI6CnhSlj8KTSb1KjQ-ix__mWVk2SqHwP9IWHjj8">
+              <button aria-label="Quick zoom view" class="absolute bottom-1 right-1 sm:bottom-1.5 sm:right-1.5 w-6 h-6 rounded-lg bg-surface-card/80 backdrop-blur-md flex items-center justify-center text-text-platinum active:scale-90 hover:bg-surface-card transition-all cursor-pointer" type="button">
+                <span class="material-symbols-outlined text-[13px] sm:text-[14px]">zoom_in</span>
+              </button>
+              <span class="hidden md:block absolute top-1 left-1 sm:top-1.5 sm:left-1.5 bg-surface-dim/90 backdrop-blur-xs text-secondary font-mono-luxury text-[9px] sm:text-[10px] px-1.5 py-0.5 rounded font-bold border border-secondary/20">18K</span>
+            </div>
+            <div class="flex-1 min-w-0 flex flex-col justify-center">
+              <div class="hidden md:flex items-center justify-between md:justify-start gap-2 mb-1">
+                <div class="flex items-center gap-1.5 flex-wrap">
+                  <span class="text-secondary font-mono-luxury text-[10px] font-semibold tracking-wider uppercase bg-surface-card-elevated border border-border-subtle px-2 py-0.5 rounded-full">RINGS</span>
+                  <button class="font-mono-luxury text-[11px] text-text-muted hover:text-primary transition-colors flex items-center gap-1 bg-surface-container-low px-2 py-0.5 rounded border border-border-subtle cursor-pointer" onclick="copySku('LUK-DEMI-RG-006')" title="Click to copy SKU" type="button">
+                    <span>LUK-DEMI-RG-006</span>
+                    <span class="material-symbols-outlined text-[12px]">content_copy</span>
+                  </button>
+                </div>
+              </div>
+              <h2 class="font-serif-luxury text-sm sm:text-base md:text-lg lg:text-xl text-text-platinum font-semibold tracking-wide truncate mt-0.5">
+                <a href="/admin/catalog/product/17/change/" class="hover:text-primary transition-colors">AURA TEXTURED DOME RING</a>
+              </h2>
+              <div class="flex md:hidden items-center gap-1.5 my-1.5">
+                <button class="font-mono-luxury text-[11px] text-text-muted hover:text-primary transition-colors flex items-center gap-1 bg-surface-container-low px-2 py-0.5 rounded border border-border-subtle cursor-pointer" onclick="copySku('LUK-DEMI-RG-006')" title="Click to copy SKU" type="button">
+                  <span>LUK-DEMI-RG-006</span>
+                  <span class="material-symbols-outlined text-[12px]">content_copy</span>
+                </button>
+              </div>
+              <div class="flex items-center gap-1.5 text-text-muted text-[11px] sm:text-xs mt-0.5 md:mt-1 truncate">
+                <span class="material-symbols-outlined text-[14px] text-secondary shrink-0">verified</span>
+                <span class="truncate">18K Demifine Vermeil • High Polish</span>
+                <span class="text-border-strong hidden sm:inline">•</span>
+                <span class="text-text-muted/70 hidden sm:inline">Vault Partition A</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Pricing & Stock Row -->
+          <div class="pricing-stock-row flex items-center justify-between md:gap-6 shrink-0 pt-2.5 md:pt-0 border-t border-border-subtle/50 md:border-t-0 w-full md:w-auto">
+            <div class="flex flex-col items-start md:items-center justify-center gap-1">
+              <div class="flex items-center gap-1.5 bg-primary/10 border border-primary/20 px-2.5 py-0.5 sm:px-3 sm:py-1 rounded-full">
+                <span class="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span>
+                <span class="font-label-sm text-[11px] sm:text-xs text-primary font-medium">25 in stock</span>
+              </div>
+              <span class="font-caption text-[10px] sm:text-[11px] text-text-muted/70 hidden md:block">Optimal Reserve</span>
+            </div>
+            <div class="flex flex-col items-end justify-center gap-0.5 sm:gap-1 min-w-[100px] sm:min-w-[120px]">
+              <div class="product-card-price font-serif-luxury text-lg sm:text-xl md:text-2xl text-secondary font-bold tracking-tight">₹18,200</div>
+              <div class="flex items-center gap-1.5 sm:gap-2">
+                <span class="product-compare-price font-mono-luxury text-[11px] sm:text-xs text-text-muted line-through">₹23,200</span>
+                <span class="font-mono-luxury text-[9px] sm:text-[10px] text-primary font-semibold bg-primary/10 border border-primary/20 px-1.5 py-0.2 rounded">-21%</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Action Footer Row -->
+          <div class="action-footer-row flex items-center justify-between md:justify-end gap-2 pt-2.5 md:pt-0 border-t border-border-subtle/50 md:border-t-0 shrink-0 w-full md:w-auto">
+            <a href="/admin/catalog/product/17/change/" class="flex-1 md:flex-initial flex items-center justify-center gap-1.5 bg-surface-card-elevated hover:bg-surface-variant border border-border-strong text-text-platinum font-label-sm text-xs px-3 py-2 rounded-xl shadow-sm transition-all active:scale-95 cursor-pointer">
+              <span class="material-symbols-outlined text-[15px] text-primary">edit</span>
+              <span>Edit Stock</span>
+            </a>
+            <a href="/admin/catalog/product/17/change/" class="flex-1 md:flex-initial flex items-center justify-center gap-1.5 bg-surface-card-elevated hover:bg-surface-variant border border-border-strong text-text-platinum font-label-sm text-xs px-3 py-2 rounded-xl shadow-sm transition-all active:scale-95 cursor-pointer">
+              <span class="material-symbols-outlined text-[15px] text-secondary">sell</span>
+              <span>Reprice</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- Card 2: Celeste Herringbone Chain -->
+        <div data-id="16" data-category="necklaces" data-price-inr="26500" data-compare-inr="32300" class="product-item bg-surface-card border border-border-strong hover:border-primary/40 transition-all duration-300 rounded-2xl p-4 sm:p-5 shadow-md flex flex-col md:flex-row md:items-center justify-between gap-4 sm:gap-6 relative group">
+          <!-- Mobile Top Kicker Row (md:hidden) -->
+          <div class="flex md:hidden items-center justify-between w-full pb-2.5 border-b border-border-subtle/40">
+            <div class="flex items-center gap-2">
+              <span class="text-secondary font-mono-luxury text-[10px] font-semibold tracking-wider uppercase bg-surface-card-elevated border border-border-subtle px-2 py-0.5 rounded-full">NECKLACES</span>
+              <span class="bg-surface-dim/90 text-secondary font-mono-luxury text-[10px] px-2 py-0.5 rounded font-bold border border-secondary/20">18K</span>
+            </div>
+            <label class="flex items-center cursor-pointer p-0.5">
+              <input class="product-checkbox w-4 h-4 rounded bg-surface-dim border-border-strong accent-primary cursor-pointer shrink-0" type="checkbox">
+            </label>
+          </div>
+
+          <!-- Main Info Block -->
+          <div class="product-info-block flex items-start md:items-center gap-3.5 sm:gap-4 flex-1 min-w-0 w-full md:w-auto">
+            <div class="hidden md:flex items-center shrink-0">
+              <input class="product-checkbox w-4 h-4 rounded bg-surface-dim border-border-strong accent-primary cursor-pointer shrink-0" type="checkbox">
+            </div>
+            <div class="product-thumb-container relative w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 rounded-xl overflow-hidden bg-surface-dim shrink-0 border border-border-subtle group-hover:shadow-lg transition-all">
+              <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" alt="Celeste Herringbone Chain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCH131zF5YhB98m7Q97n2798e_w86o6fN1s0d7q1aG3i8m8e8m_w7o8a6d7q1aG3i8m8e8m_w7o8a6d7q1aG3i8m8e8m_w7o8a6d7q1aG3i8m8e8m_w7o8a6d7q1aG3i8m8e8m">
+              <button aria-label="Quick zoom view" class="absolute bottom-1 right-1 sm:bottom-1.5 sm:right-1.5 w-6 h-6 rounded-lg bg-surface-card/80 backdrop-blur-md flex items-center justify-center text-text-platinum active:scale-90 hover:bg-surface-card transition-all cursor-pointer" type="button">
+                <span class="material-symbols-outlined text-[13px] sm:text-[14px]">zoom_in</span>
+              </button>
+              <span class="hidden md:block absolute top-1 left-1 sm:top-1.5 sm:left-1.5 bg-surface-dim/90 backdrop-blur-xs text-secondary font-mono-luxury text-[9px] sm:text-[10px] px-1.5 py-0.5 rounded font-bold border border-secondary/20">18K</span>
+            </div>
+            <div class="flex-1 min-w-0 flex flex-col justify-center">
+              <div class="hidden md:flex items-center justify-between md:justify-start gap-2 mb-1">
+                <div class="flex items-center gap-1.5 flex-wrap">
+                  <span class="text-secondary font-mono-luxury text-[10px] font-semibold tracking-wider uppercase bg-surface-card-elevated border border-border-subtle px-2 py-0.5 rounded-full">NECKLACES</span>
+                  <button class="font-mono-luxury text-[11px] text-text-muted hover:text-primary transition-colors flex items-center gap-1 bg-surface-container-low px-2 py-0.5 rounded border border-border-subtle cursor-pointer" onclick="copySku('LUK-DEMI-NK-005')" title="Click to copy SKU" type="button">
+                    <span>LUK-DEMI-NK-005</span>
+                    <span class="material-symbols-outlined text-[12px]">content_copy</span>
+                  </button>
+                </div>
+              </div>
+              <h2 class="font-serif-luxury text-sm sm:text-base md:text-lg lg:text-xl text-text-platinum font-semibold tracking-wide truncate mt-0.5">
+                <a href="/admin/catalog/product/16/change/" class="hover:text-primary transition-colors">CELESTE HERRINGBONE CHAIN</a>
+              </h2>
+              <div class="flex md:hidden items-center gap-1.5 my-1.5">
+                <button class="font-mono-luxury text-[11px] text-text-muted hover:text-primary transition-colors flex items-center gap-1 bg-surface-container-low px-2 py-0.5 rounded border border-border-subtle cursor-pointer" onclick="copySku('LUK-DEMI-NK-005')" title="Click to copy SKU" type="button">
+                  <span>LUK-DEMI-NK-005</span>
+                  <span class="material-symbols-outlined text-[12px]">content_copy</span>
+                </button>
+              </div>
+              <div class="flex items-center gap-1.5 text-text-muted text-[11px] sm:text-xs mt-0.5 md:mt-1 truncate">
+                <span class="material-symbols-outlined text-[14px] text-secondary shrink-0">verified</span>
+                <span class="truncate">18K Yellow Gold Vermeil • Mirror Link Spec</span>
+                <span class="text-border-strong hidden sm:inline">•</span>
+                <span class="text-text-muted/70 hidden sm:inline">Vault Partition B</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Pricing & Stock Row -->
+          <div class="pricing-stock-row flex items-center justify-between md:gap-6 shrink-0 pt-2.5 md:pt-0 border-t border-border-subtle/50 md:border-t-0 w-full md:w-auto">
+            <div class="flex flex-col items-start md:items-center justify-center gap-1">
+              <div class="flex items-center gap-1.5 bg-primary/10 border border-primary/20 px-2.5 py-0.5 sm:px-3 sm:py-1 rounded-full">
+                <span class="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span>
+                <span class="font-label-sm text-[11px] sm:text-xs text-primary font-medium">25 in stock</span>
+              </div>
+              <span class="font-caption text-[10px] sm:text-[11px] text-text-muted/70 hidden md:block">Optimal Reserve</span>
+            </div>
+            <div class="flex flex-col items-end justify-center gap-0.5 sm:gap-1 min-w-[100px] sm:min-w-[120px]">
+              <div class="product-card-price font-serif-luxury text-lg sm:text-xl md:text-2xl text-secondary font-bold tracking-tight">₹26,500</div>
+              <div class="flex items-center gap-1.5 sm:gap-2">
+                <span class="product-compare-price font-mono-luxury text-[11px] sm:text-xs text-text-muted line-through">₹32,300</span>
+                <span class="font-mono-luxury text-[9px] sm:text-[10px] text-primary font-semibold bg-primary/10 border border-primary/20 px-1.5 py-0.2 rounded">-18%</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Action Footer Row -->
+          <div class="action-footer-row flex items-center justify-between md:justify-end gap-2 pt-2.5 md:pt-0 border-t border-border-subtle/50 md:border-t-0 shrink-0 w-full md:w-auto">
+            <a href="/admin/catalog/product/16/change/" class="flex-1 md:flex-initial flex items-center justify-center gap-1.5 bg-surface-card-elevated hover:bg-surface-variant border border-border-strong text-text-platinum font-label-sm text-xs px-3 py-2 rounded-xl shadow-sm transition-all active:scale-95 cursor-pointer">
+              <span class="material-symbols-outlined text-[15px] text-primary">edit</span>
+              <span>Edit Stock</span>
+            </a>
+            <a href="/admin/catalog/product/16/change/" class="flex-1 md:flex-initial flex items-center justify-center gap-1.5 bg-surface-card-elevated hover:bg-surface-variant border border-border-strong text-text-platinum font-label-sm text-xs px-3 py-2 rounded-xl shadow-sm transition-all active:scale-95 cursor-pointer">
+              <span class="material-symbols-outlined text-[15px] text-secondary">sell</span>
+              <span>Reprice</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- Card 3: Elysian Tennis Bracelet (Low Stock Alert) -->
+        <div data-id="15" data-category="bracelets" data-low-stock="true" data-price-inr="28900" data-compare-inr="34800" class="product-item bg-surface-card border border-secondary/30 hover:border-secondary transition-all duration-300 rounded-2xl p-4 sm:p-5 shadow-md flex flex-col md:flex-row md:items-center justify-between gap-4 sm:gap-6 relative group">
+          <!-- Mobile Top Kicker Row (md:hidden) -->
+          <div class="flex md:hidden items-center justify-between w-full pb-2.5 border-b border-border-subtle/40">
+            <div class="flex items-center gap-2">
+              <span class="text-secondary font-mono-luxury text-[10px] font-semibold tracking-wider uppercase bg-surface-card-elevated border border-border-subtle px-2 py-0.5 rounded-full">BRACELETS</span>
+              <span class="bg-surface-dim/90 text-text-platinum font-mono-luxury text-[10px] px-2 py-0.5 rounded font-bold border border-text-muted/30">925</span>
+            </div>
+            <label class="flex items-center cursor-pointer p-0.5">
+              <input class="product-checkbox w-4 h-4 rounded bg-surface-dim border-border-strong accent-primary cursor-pointer shrink-0" type="checkbox">
+            </label>
+          </div>
+
+          <!-- Main Info Block -->
+          <div class="product-info-block flex items-start md:items-center gap-3.5 sm:gap-4 flex-1 min-w-0 w-full md:w-auto">
+            <div class="hidden md:flex items-center shrink-0">
+              <input class="product-checkbox w-4 h-4 rounded bg-surface-dim border-border-strong accent-primary cursor-pointer shrink-0" type="checkbox">
+            </div>
+            <div class="product-thumb-container relative w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 rounded-xl overflow-hidden bg-surface-dim shrink-0 border border-border-subtle group-hover:shadow-lg transition-all">
+              <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" alt="Elysian Radiant Tennis Bracelet" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDawfllVhr46H9FUl7JtsD44sesdQxzpIB_PnFYYmtCwjRhka7U8p_BZn1KjaxPYzhDS_xBrhUHIxr2QjJc9rB-Zz-I5kJ6D7hbL945f17jDk4KpmHFTDq7fuUGj-fCAGH6TILhv5BVWHu4uOmTjIFy-ALWFI8vJtzUB91lKPT2SXlxW79Z1szC6CJ9t67Ah0cYR-ZZDfvYwC0SxO148yTIxObIhIojenaOBUxec2E">
+              <button aria-label="Quick zoom view" class="absolute bottom-1 right-1 sm:bottom-1.5 sm:right-1.5 w-6 h-6 rounded-lg bg-surface-card/80 backdrop-blur-md flex items-center justify-center text-text-platinum active:scale-90 hover:bg-surface-card transition-all cursor-pointer" type="button">
+                <span class="material-symbols-outlined text-[13px] sm:text-[14px]">zoom_in</span>
+              </button>
+              <span class="hidden md:block absolute top-1 left-1 sm:top-1.5 sm:left-1.5 bg-surface-dim/90 backdrop-blur-xs text-text-platinum font-mono-luxury text-[9px] sm:text-[10px] px-1.5 py-0.5 rounded font-bold border border-text-muted/30">925</span>
+            </div>
+            <div class="flex-1 min-w-0 flex flex-col justify-center">
+              <div class="hidden md:flex items-center justify-between md:justify-start gap-2 mb-1">
+                <div class="flex items-center gap-1.5 flex-wrap">
+                  <span class="text-secondary font-mono-luxury text-[10px] font-semibold tracking-wider uppercase bg-surface-card-elevated border border-border-subtle px-2 py-0.5 rounded-full">BRACELETS</span>
+                  <button class="font-mono-luxury text-[11px] text-text-muted hover:text-primary transition-colors flex items-center gap-1 bg-surface-container-low px-2 py-0.5 rounded border border-border-subtle cursor-pointer" onclick="copySku('LUK-SIL-BR-004')" title="Click to copy SKU" type="button">
+                    <span>LUK-SIL-BR-004</span>
+                    <span class="material-symbols-outlined text-[12px]">content_copy</span>
+                  </button>
+                </div>
+              </div>
+              <h2 class="font-serif-luxury text-sm sm:text-base md:text-lg lg:text-xl text-text-platinum font-semibold tracking-wide truncate mt-0.5">
+                <a href="/admin/catalog/product/15/change/" class="hover:text-primary transition-colors">ELYSIAN TENNIS BRACELET</a>
+              </h2>
+              <div class="flex md:hidden items-center gap-1.5 my-1.5">
+                <button class="font-mono-luxury text-[11px] text-text-muted hover:text-primary transition-colors flex items-center gap-1 bg-surface-container-low px-2 py-0.5 rounded border border-border-subtle cursor-pointer" onclick="copySku('LUK-SIL-BR-004')" title="Click to copy SKU" type="button">
+                  <span>LUK-SIL-BR-004</span>
+                  <span class="material-symbols-outlined text-[12px]">content_copy</span>
+                </button>
+              </div>
+              <div class="flex items-center gap-1.5 text-text-muted text-[11px] sm:text-xs mt-0.5 md:mt-1 truncate">
+                <span class="material-symbols-outlined text-[14px] text-primary shrink-0">diamond</span>
+                <span class="truncate">925 Sterling Silver • Dual Clasp</span>
+                <span class="text-border-strong hidden sm:inline">•</span>
+                <span class="text-text-muted/70 hidden sm:inline">Vault Partition A</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Pricing & Stock Row -->
+          <div class="pricing-stock-row flex items-center justify-between md:gap-6 shrink-0 pt-2.5 md:pt-0 border-t border-border-subtle/50 md:border-t-0 w-full md:w-auto">
+            <div class="flex flex-col items-start md:items-center justify-center gap-1">
+              <div class="flex items-center gap-1.5 bg-secondary/15 border border-secondary/30 px-2.5 py-0.5 sm:px-3 sm:py-1 rounded-full">
+                <span class="w-1.5 h-1.5 rounded-full bg-secondary animate-ping"></span>
+                <span class="font-label-sm text-[11px] sm:text-xs text-secondary font-medium">3 left in vault</span>
+              </div>
+              <span class="font-caption text-[10px] sm:text-[11px] text-secondary/80 hidden md:block">Critical Reserve</span>
+            </div>
+            <div class="flex flex-col items-end justify-center gap-0.5 sm:gap-1 min-w-[100px] sm:min-w-[120px]">
+              <div class="product-card-price font-serif-luxury text-lg sm:text-xl md:text-2xl text-secondary font-bold tracking-tight">₹28,900</div>
+              <div class="flex items-center gap-1.5 sm:gap-2">
+                <span class="product-compare-price font-mono-luxury text-[11px] sm:text-xs text-text-muted line-through">₹34,800</span>
+                <span class="font-mono-luxury text-[9px] sm:text-[10px] text-primary font-semibold bg-primary/10 border border-primary/20 px-1.5 py-0.2 rounded">-17%</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Action Footer Row -->
+          <div class="action-footer-row flex items-center justify-between md:justify-end gap-2 pt-2.5 md:pt-0 border-t border-border-subtle/50 md:border-t-0 shrink-0 w-full md:w-auto">
+            <a href="/admin/catalog/product/15/change/" class="flex-1 md:flex-initial flex items-center justify-center gap-1.5 bg-surface-card-elevated hover:bg-surface-variant border border-border-strong text-text-platinum font-label-sm text-xs px-3 py-2 rounded-xl shadow-sm transition-all active:scale-95 cursor-pointer">
+              <span class="material-symbols-outlined text-[15px] text-primary">edit</span>
+              <span>Edit Stock</span>
+            </a>
+            <a href="/admin/catalog/product/15/change/" class="flex-1 md:flex-initial flex items-center justify-center gap-1.5 bg-surface-card-elevated hover:bg-surface-variant border border-border-strong text-text-platinum font-label-sm text-xs px-3 py-2 rounded-xl shadow-sm transition-all active:scale-95 cursor-pointer">
+              <span class="material-symbols-outlined text-[15px] text-secondary">sell</span>
+              <span>Reprice</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- Card 4: Luna Crescent Huggies -->
+        <div data-id="14" data-category="earrings" data-price-inr="16100" data-compare-inr="20700" class="product-item bg-surface-card border border-border-strong hover:border-primary/40 transition-all duration-300 rounded-2xl p-4 sm:p-5 shadow-md flex flex-col md:flex-row md:items-center justify-between gap-4 sm:gap-6 relative group">
+          <!-- Mobile Top Kicker Row (md:hidden) -->
+          <div class="flex md:hidden items-center justify-between w-full pb-2.5 border-b border-border-subtle/40">
+            <div class="flex items-center gap-2">
+              <span class="text-secondary font-mono-luxury text-[10px] font-semibold tracking-wider uppercase bg-surface-card-elevated border border-border-subtle px-2 py-0.5 rounded-full">EARRINGS</span>
+              <span class="bg-surface-dim/90 text-text-platinum font-mono-luxury text-[10px] px-2 py-0.5 rounded font-bold border border-text-muted/30">925</span>
+            </div>
+            <label class="flex items-center cursor-pointer p-0.5">
+              <input class="product-checkbox w-4 h-4 rounded bg-surface-dim border-border-strong accent-primary cursor-pointer shrink-0" type="checkbox">
+            </label>
+          </div>
+
+          <!-- Main Info Block -->
+          <div class="product-info-block flex items-start md:items-center gap-3.5 sm:gap-4 flex-1 min-w-0 w-full md:w-auto">
+            <div class="hidden md:flex items-center shrink-0">
+              <input class="product-checkbox w-4 h-4 rounded bg-surface-dim border-border-strong accent-primary cursor-pointer shrink-0" type="checkbox">
+            </div>
+            <div class="product-thumb-container relative w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 rounded-xl overflow-hidden bg-surface-dim shrink-0 border border-border-subtle group-hover:shadow-lg transition-all">
+              <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" alt="Luna Crescent Huggies" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDa7Qp7c4gD8d2QxR4K3mPq3lK4mPq3lK4mPq3lK4mPq3lK4mPq3lK4mPq3lK4mPq3lK4mPq3lK4mPq3lK4mPq3lK4mPq3lK4mPq3lK4mPq3lK4mPq3lK4mPq3lK4mPq3lK4m">
+              <button aria-label="Quick zoom view" class="absolute bottom-1 right-1 sm:bottom-1.5 sm:right-1.5 w-6 h-6 rounded-lg bg-surface-card/80 backdrop-blur-md flex items-center justify-center text-text-platinum active:scale-90 hover:bg-surface-card transition-all cursor-pointer" type="button">
+                <span class="material-symbols-outlined text-[13px] sm:text-[14px]">zoom_in</span>
+              </button>
+              <span class="hidden md:block absolute top-1 left-1 sm:top-1.5 sm:left-1.5 bg-surface-dim/90 backdrop-blur-xs text-text-platinum font-mono-luxury text-[9px] sm:text-[10px] px-1.5 py-0.5 rounded font-bold border border-text-muted/30">925</span>
+            </div>
+            <div class="flex-1 min-w-0 flex flex-col justify-center">
+              <div class="hidden md:flex items-center justify-between md:justify-start gap-2 mb-1">
+                <div class="flex items-center gap-1.5 flex-wrap">
+                  <span class="text-secondary font-mono-luxury text-[10px] font-semibold tracking-wider uppercase bg-surface-card-elevated border border-border-subtle px-2 py-0.5 rounded-full">EARRINGS</span>
+                  <button class="font-mono-luxury text-[11px] text-text-muted hover:text-primary transition-colors flex items-center gap-1 bg-surface-container-low px-2 py-0.5 rounded border border-border-subtle cursor-pointer" onclick="copySku('LUK-SIL-ER-003')" title="Click to copy SKU" type="button">
+                    <span>LUK-SIL-ER-003</span>
+                    <span class="material-symbols-outlined text-[12px]">content_copy</span>
+                  </button>
+                </div>
+              </div>
+              <h2 class="font-serif-luxury text-sm sm:text-base md:text-lg lg:text-xl text-text-platinum font-semibold tracking-wide truncate mt-0.5">
+                <a href="/admin/catalog/product/14/change/" class="hover:text-primary transition-colors">LUNA CRESCENT HUGGIES</a>
+              </h2>
+              <div class="flex md:hidden items-center gap-1.5 my-1.5">
+                <button class="font-mono-luxury text-[11px] text-text-muted hover:text-primary transition-colors flex items-center gap-1 bg-surface-container-low px-2 py-0.5 rounded border border-border-subtle cursor-pointer" onclick="copySku('LUK-SIL-ER-003')" title="Click to copy SKU" type="button">
+                  <span>LUK-SIL-ER-003</span>
+                  <span class="material-symbols-outlined text-[12px]">content_copy</span>
+                </button>
+              </div>
+              <div class="flex items-center gap-1.5 text-text-muted text-[11px] sm:text-xs mt-0.5 md:mt-1 truncate">
+                <span class="material-symbols-outlined text-[14px] text-secondary shrink-0">verified</span>
+                <span class="truncate">925 Sterling Silver • Lever Backing</span>
+                <span class="text-border-strong hidden sm:inline">•</span>
+                <span class="text-text-muted/70 hidden sm:inline">Vault Partition C</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Pricing & Stock Row -->
+          <div class="pricing-stock-row flex items-center justify-between md:gap-6 shrink-0 pt-2.5 md:pt-0 border-t border-border-subtle/50 md:border-t-0 w-full md:w-auto">
+            <div class="flex flex-col items-start md:items-center justify-center gap-1">
+              <div class="flex items-center gap-1.5 bg-primary/10 border border-primary/20 px-2.5 py-0.5 sm:px-3 sm:py-1 rounded-full">
+                <span class="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span>
+                <span class="font-label-sm text-[11px] sm:text-xs text-primary font-medium">25 in stock</span>
+              </div>
+              <span class="font-caption text-[10px] sm:text-[11px] text-text-muted/70 hidden md:block">Optimal Reserve</span>
+            </div>
+            <div class="flex flex-col items-end justify-center gap-0.5 sm:gap-1 min-w-[100px] sm:min-w-[120px]">
+              <div class="product-card-price font-serif-luxury text-lg sm:text-xl md:text-2xl text-secondary font-bold tracking-tight">₹16,100</div>
+              <div class="flex items-center gap-1.5 sm:gap-2">
+                <span class="product-compare-price font-mono-luxury text-[11px] sm:text-xs text-text-muted line-through">₹20,700</span>
+                <span class="font-mono-luxury text-[9px] sm:text-[10px] text-primary font-semibold bg-primary/10 border border-primary/20 px-1.5 py-0.2 rounded">-22%</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Action Footer Row -->
+          <div class="action-footer-row flex items-center justify-between md:justify-end gap-2 pt-2.5 md:pt-0 border-t border-border-subtle/50 md:border-t-0 shrink-0 w-full md:w-auto">
+            <a href="/admin/catalog/product/14/change/" class="flex-1 md:flex-initial flex items-center justify-center gap-1.5 bg-surface-card-elevated hover:bg-surface-variant border border-border-strong text-text-platinum font-label-sm text-xs px-3 py-2 rounded-xl shadow-sm transition-all active:scale-95 cursor-pointer">
+              <span class="material-symbols-outlined text-[15px] text-primary">edit</span>
+              <span>Edit Stock</span>
+            </a>
+            <a href="/admin/catalog/product/14/change/" class="flex-1 md:flex-initial flex items-center justify-center gap-1.5 bg-surface-card-elevated hover:bg-surface-variant border border-border-strong text-text-platinum font-label-sm text-xs px-3 py-2 rounded-xl shadow-sm transition-all active:scale-95 cursor-pointer">
+              <span class="material-symbols-outlined text-[15px] text-secondary">sell</span>
+              <span>Reprice</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- Card 5: Solitaire Cabochon Signet -->
+        <div data-id="13" data-category="rings" data-high-jewelry="true" data-price-inr="19800" data-compare-inr="0" class="product-item bg-surface-card border border-border-strong hover:border-primary/40 transition-all duration-300 rounded-2xl p-4 sm:p-5 shadow-md flex flex-col md:flex-row md:items-center justify-between gap-4 sm:gap-6 relative group">
+          <!-- Mobile Top Kicker Row (md:hidden) -->
+          <div class="flex md:hidden items-center justify-between w-full pb-2.5 border-b border-border-subtle/40">
+            <div class="flex items-center gap-2">
+              <span class="text-secondary font-mono-luxury text-[10px] font-semibold tracking-wider uppercase bg-surface-card-elevated border border-border-subtle px-2 py-0.5 rounded-full">RINGS</span>
+              <span class="bg-surface-dim/90 text-text-platinum font-mono-luxury text-[10px] px-2 py-0.5 rounded font-bold border border-text-muted/30">925</span>
+            </div>
+            <label class="flex items-center cursor-pointer p-0.5">
+              <input class="product-checkbox w-4 h-4 rounded bg-surface-dim border-border-strong accent-primary cursor-pointer shrink-0" type="checkbox">
+            </label>
+          </div>
+
+          <!-- Main Info Block -->
+          <div class="product-info-block flex items-start md:items-center gap-3.5 sm:gap-4 flex-1 min-w-0 w-full md:w-auto">
+            <div class="hidden md:flex items-center shrink-0">
+              <input class="product-checkbox w-4 h-4 rounded bg-surface-dim border-border-strong accent-primary cursor-pointer shrink-0" type="checkbox">
+            </div>
+            <div class="product-thumb-container relative w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 rounded-xl overflow-hidden bg-surface-dim shrink-0 border border-border-subtle group-hover:shadow-lg transition-all">
+              <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" alt="Solitaire Cabochon Signet" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCr_j5X8V092lK4mPq3lK4mPq3lK4mPq3lK4mPq3lK4mPq3lK4mPq3lK4mPq3lK4mPq3lK4mPq3lK4mPq3lK4mPq3lK4mPq3lK4mPq3lK4mPq3lK4mPq3lK4mPq3lK4mPq3lK4mPq">
+              <button aria-label="Quick zoom view" class="absolute bottom-1 right-1 sm:bottom-1.5 sm:right-1.5 w-6 h-6 rounded-lg bg-surface-card/80 backdrop-blur-md flex items-center justify-center text-text-platinum active:scale-90 hover:bg-surface-card transition-all cursor-pointer" type="button">
+                <span class="material-symbols-outlined text-[13px] sm:text-[14px]">zoom_in</span>
+              </button>
+              <span class="hidden md:block absolute top-1 left-1 sm:top-1.5 sm:left-1.5 bg-surface-dim/90 backdrop-blur-xs text-text-platinum font-mono-luxury text-[9px] sm:text-[10px] px-1.5 py-0.5 rounded font-bold border border-text-muted/30">925</span>
+            </div>
+            <div class="flex-1 min-w-0 flex flex-col justify-center">
+              <div class="hidden md:flex items-center justify-between md:justify-start gap-2 mb-1">
+                <div class="flex items-center gap-1.5 flex-wrap">
+                  <span class="text-secondary font-mono-luxury text-[10px] font-semibold tracking-wider uppercase bg-surface-card-elevated border border-border-subtle px-2 py-0.5 rounded-full">RINGS</span>
+                  <button class="font-mono-luxury text-[11px] text-text-muted hover:text-primary transition-colors flex items-center gap-1 bg-surface-container-low px-2 py-0.5 rounded border border-border-subtle cursor-pointer" onclick="copySku('LUK-SIL-RG-001')" title="Click to copy SKU" type="button">
+                    <span>LUK-SIL-RG-001</span>
+                    <span class="material-symbols-outlined text-[12px]">content_copy</span>
+                  </button>
+                </div>
+              </div>
+              <h2 class="font-serif-luxury text-sm sm:text-base md:text-lg lg:text-xl text-text-platinum font-semibold tracking-wide truncate mt-0.5">
+                <a href="/admin/catalog/product/13/change/" class="hover:text-primary transition-colors">SOLITAIRE CABOCHON SIGNET</a>
+              </h2>
+              <div class="flex md:hidden items-center gap-1.5 my-1.5">
+                <button class="font-mono-luxury text-[11px] text-text-muted hover:text-primary transition-colors flex items-center gap-1 bg-surface-container-low px-2 py-0.5 rounded border border-border-subtle cursor-pointer" onclick="copySku('LUK-SIL-RG-001')" title="Click to copy SKU" type="button">
+                  <span>LUK-SIL-RG-001</span>
+                  <span class="material-symbols-outlined text-[12px]">content_copy</span>
+                </button>
+              </div>
+              <div class="flex items-center gap-1.5 text-text-muted text-[11px] sm:text-xs mt-0.5 md:mt-1 truncate">
+                <span class="material-symbols-outlined text-[14px] text-secondary shrink-0">verified</span>
+                <span class="truncate">925 Sterling Silver • Flush Cabochon Setting</span>
+                <span class="text-border-strong hidden sm:inline">•</span>
+                <span class="text-text-muted/70 hidden sm:inline">Vault Partition A</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Pricing & Stock Row -->
+          <div class="pricing-stock-row flex items-center justify-between md:gap-6 shrink-0 pt-2.5 md:pt-0 border-t border-border-subtle/50 md:border-t-0 w-full md:w-auto">
+            <div class="flex flex-col items-start md:items-center justify-center gap-1">
+              <div class="flex items-center gap-1.5 bg-primary/10 border border-primary/20 px-2.5 py-0.5 sm:px-3 sm:py-1 rounded-full">
+                <span class="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span>
+                <span class="font-label-sm text-[11px] sm:text-xs text-primary font-medium">18 in stock</span>
+              </div>
+              <span class="font-caption text-[10px] sm:text-[11px] text-text-muted/70 hidden md:block">Active Reserve</span>
+            </div>
+            <div class="flex flex-col items-end justify-center gap-0.5 sm:gap-1 min-w-[100px] sm:min-w-[120px]">
+              <div class="product-card-price font-serif-luxury text-lg sm:text-xl md:text-2xl text-secondary font-bold tracking-tight">₹19,800</div>
+              <div class="flex items-center gap-1.5 sm:gap-2">
+                <span class="font-mono-luxury text-[9px] sm:text-[10px] text-secondary font-semibold bg-secondary/15 border border-secondary/25 px-1.5 py-0.2 rounded">Bespoke</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Action Footer Row -->
+          <div class="action-footer-row flex items-center justify-between md:justify-end gap-2 pt-2.5 md:pt-0 border-t border-border-subtle/50 md:border-t-0 shrink-0 w-full md:w-auto">
+            <a href="/admin/catalog/product/13/change/" class="flex-1 md:flex-initial flex items-center justify-center gap-1.5 bg-surface-card-elevated hover:bg-surface-variant border border-border-strong text-text-platinum font-label-sm text-xs px-3 py-2 rounded-xl shadow-sm transition-all active:scale-95 cursor-pointer">
+              <span class="material-symbols-outlined text-[15px] text-primary">edit</span>
+              <span>Edit Stock</span>
+            </a>
+            <a href="/admin/catalog/product/13/change/" class="flex-1 md:flex-initial flex items-center justify-center gap-1.5 bg-surface-card-elevated hover:bg-surface-variant border border-border-strong text-text-platinum font-label-sm text-xs px-3 py-2 rounded-xl shadow-sm transition-all active:scale-95 cursor-pointer">
+              <span class="material-symbols-outlined text-[15px] text-secondary">sell</span>
+              <span>Reprice</span>
+            </a>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Floating Bulk Action Toolbar (Shows when items are checked) -->
+      <div class="fixed bottom-6 left-1/2 -translate-x-1/2 z-40 bg-surface-card-elevated border border-border-strong/90 rounded-2xl px-4 sm:px-5 py-3 shadow-2xl flex items-center gap-3 sm:gap-4 transition-all duration-300 translate-y-28 opacity-0 pointer-events-none" id="bulkFloatingToolbar">
+        <div class="flex items-center gap-2.5 pl-1">
+          <span class="w-2.5 h-2.5 rounded-full bg-primary animate-ping"></span>
+          <span class="font-label-sm text-xs sm:text-[13px] text-text-platinum font-semibold" id="bulkBadgeText">0 Selected</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <button class="bg-surface-card hover:bg-surface-variant border border-border-strong text-text-platinum font-label-sm text-xs px-3 py-1.5 rounded-xl shadow-sm flex items-center gap-1 transition-all cursor-pointer" type="button" onclick="showToast('Bulk discount tool activated', 'percent')">
+            <span class="material-symbols-outlined text-[16px] text-secondary">percent</span>
+            <span>Discount</span>
+          </button>
+          <button class="bg-primary hover:bg-primary/90 text-on-primary font-label-sm text-xs px-3.5 py-1.5 rounded-xl shadow-sm flex items-center gap-1 font-semibold active:scale-95 transition-transform cursor-pointer" type="button" onclick="showToast('Bulk update applied to selected', 'tune')">
+            <span class="material-symbols-outlined text-[16px]">tune</span>
+            <span>Update</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Filter Slide-over Sheet / Modal (Responsive Desktop Dialog & Mobile Drawer) -->
+      <div class="fixed inset-0 z-50 bg-black/75 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-300 flex items-end sm:items-center justify-center p-0 sm:p-4" id="filterSheet">
+        <div class="bg-surface-card-elevated border border-border-strong rounded-t-3xl sm:rounded-2xl w-full sm:max-w-md p-6 flex flex-col space-y-5 transform translate-y-full sm:translate-y-0 transition-transform duration-300 shadow-2xl max-h-[85vh] overflow-y-auto" id="filterSheetContent">
+          <div class="flex items-center justify-between pb-2 border-b border-border-subtle">
+            <div class="flex items-center gap-2">
+              <span class="material-symbols-outlined text-[20px] text-secondary">tune</span>
+              <h3 class="font-serif-luxury text-lg text-text-platinum font-semibold">Filter Atelier Vault</h3>
+            </div>
+            <button class="w-8 h-8 rounded-full bg-surface-card text-text-muted hover:text-text-platinum flex items-center justify-center transition-colors cursor-pointer" id="closeFilterSheet" type="button">
+              <span class="material-symbols-outlined text-[20px]">close</span>
+            </button>
+          </div>
+          <div class="space-y-4">
+            <div>
+              <span class="font-label-sm text-[11px] text-text-muted uppercase tracking-wider block mb-2 font-semibold font-mono-luxury">Precious Material</span>
+              <div class="grid grid-cols-2 gap-2">
+                <button class="filter-material-btn p-3 rounded-xl bg-surface-card border border-primary/40 text-left flex items-center justify-between text-text-platinum active:scale-95 transition-all cursor-pointer" type="button">
+                  <span class="font-body-sm text-xs">925 Sterling Silver</span>
+                  <span class="material-symbols-outlined text-[16px] text-primary">check_circle</span>
+                </button>
+                <button class="filter-material-btn p-3 rounded-xl bg-surface-card border border-border-strong text-left flex items-center justify-between text-text-muted hover:text-text-platinum active:scale-95 transition-all cursor-pointer" type="button">
+                  <span class="font-body-sm text-xs">18K Vermeil</span>
+                  <span class="material-symbols-outlined text-[16px] opacity-0">check_circle</span>
+                </button>
+              </div>
+            </div>
+            <div>
+              <span class="font-label-sm text-[11px] text-text-muted uppercase tracking-wider block mb-2 font-semibold font-mono-luxury">Stock Availability</span>
+              <div class="grid grid-cols-3 gap-2">
+                <button class="p-2.5 rounded-xl bg-primary/10 border border-primary/30 text-primary font-label-sm text-xs text-center font-medium cursor-pointer" type="button">In-Vault</button>
+                <button class="p-2.5 rounded-xl bg-surface-card border border-border-strong text-text-muted font-label-sm text-xs text-center hover:text-text-platinum cursor-pointer" type="button">Low Stock</button>
+                <button class="p-2.5 rounded-xl bg-surface-card border border-border-strong text-text-muted font-label-sm text-xs text-center hover:text-text-platinum cursor-pointer" type="button">Bespoke</button>
+              </div>
+            </div>
+          </div>
+          <div class="pt-3 flex items-center gap-3">
+            <button class="flex-1 py-2.5 rounded-xl bg-surface-card border border-border-strong text-text-muted hover:text-text-platinum font-label-md text-xs transition-colors cursor-pointer" id="resetFilters" type="button">Reset</button>
+            <button class="flex-2 w-full py-2.5 rounded-xl bg-primary hover:bg-primary/90 text-on-primary font-label-md text-xs font-semibold active:scale-95 shadow-md shadow-primary/20 transition-all cursor-pointer" id="applyFilters" type="button">Show 17 Results</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Image Lightbox / Zoom Modal -->
+      <div id="zoomModal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-md opacity-0 pointer-events-none transition-opacity duration-300 flex items-center justify-center p-4">
+        <div class="relative bg-surface-card border border-border-strong rounded-2xl max-w-lg w-full p-4 sm:p-6 shadow-2xl flex flex-col items-center gap-4">
+          <button id="closeZoomModalBtn" aria-label="Close zoom preview" class="absolute top-3 right-3 w-8 h-8 rounded-full bg-surface-card-elevated text-text-muted hover:text-text-platinum flex items-center justify-center transition-colors cursor-pointer" type="button">
+            <span class="material-symbols-outlined text-[20px]">close</span>
+          </button>
+          <div class="w-full h-72 sm:h-80 rounded-xl overflow-hidden bg-surface-dim border border-border-subtle flex items-center justify-center">
+            <img id="zoomModalImg" class="w-full h-full object-cover" src="" alt="Jewelry Zoom Preview">
+          </div>
+          <div class="w-full flex items-center justify-between pt-1">
+            <div>
+              <h4 id="zoomModalTitle" class="font-serif-luxury text-base sm:text-lg text-text-platinum font-semibold"></h4>
+              <span id="zoomModalSku" class="font-mono-luxury text-xs text-secondary"></span>
+            </div>
+            <a id="zoomModalEditLink" href="#" class="px-3 py-1.5 rounded-xl bg-primary text-on-primary text-xs font-semibold flex items-center gap-1 shadow-sm cursor-pointer">
+              <span>Edit Piece</span>
+              <span class="material-symbols-outlined text-[15px]">arrow_forward</span>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Toast Notification Container -->
+      <div id="atelierToast" class="fixed bottom-6 right-6 z-50 transform translate-y-20 opacity-0 pointer-events-none transition-all duration-300 bg-surface-card-elevated border border-primary/40 text-text-platinum px-4 py-2.5 rounded-xl shadow-2xl flex items-center gap-2.5 text-xs font-medium">
+        <span class="material-symbols-outlined text-[18px] text-primary" id="toastIcon">check_circle</span>
+        <span id="toastMessage">Action completed</span>
+      </div>
+
+    </main>
+
   </div>
+
 </div>
-<!-- END: Image Lightbox / Zoom Modal -->
 
-<!-- BEGIN: Toast Notification Container -->
-<div id="atelierToast" class="fixed bottom-6 right-6 z-50 transform translate-y-20 opacity-0 pointer-events-none transition-all duration-300 bg-surface-card-elevated border border-primary/40 text-text-platinum px-4 py-2.5 rounded-xl shadow-2xl flex items-center gap-2.5 text-xs font-medium">
-  <span class="material-symbols-outlined text-[18px] text-primary" id="toastIcon">check_circle</span>
-  <span id="toastMessage">Action completed</span>
-</div>
-<!-- END: Toast Notification Container -->
-
-
+<!-- ==========================================
+     INTEGRATED JAVASCRIPT LOGIC
+     ========================================== -->
 <script>
   (function initAtelierVaultApp() {
     // --- Currency Switcher Logic ---
@@ -887,7 +1002,7 @@ tailwind.config = {
       'AED': 1 / 23.4
     };
 
-    function showToast(msg, icon = 'check_circle') {
+    window.showToast = function(msg, icon = 'check_circle') {
       const toast = document.getElementById('atelierToast');
       const msgEl = document.getElementById('toastMessage');
       const iconEl = document.getElementById('toastIcon');
@@ -898,7 +1013,7 @@ tailwind.config = {
       setTimeout(() => {
         toast.classList.add('translate-y-20', 'opacity-0', 'pointer-events-none');
       }, 2500);
-    }
+    };
 
     function setActiveCurrencyUI(curr) {
       currencyButtons.forEach(btn => {
@@ -950,36 +1065,48 @@ tailwind.config = {
       });
     });
 
-    // --- Navigation Drawer Controls ---
+    // --- Left Side Panel Controls (Drawer on Mobile, Collapsible on Desktop) ---
     const openDrawerBtn = document.getElementById('openNavDrawerBtn');
     const closeDrawerBtn = document.getElementById('closeNavDrawerBtn');
-    const drawerContainer = document.getElementById('leftNavDrawerContainer');
     const drawerBackdrop = document.getElementById('leftNavDrawerBackdrop');
     const drawerPanel = document.getElementById('leftNavDrawer');
 
-    function openNavDrawer() {
-      if (!drawerContainer || !drawerBackdrop || !drawerPanel) return;
-      drawerContainer.classList.remove('pointer-events-none');
+    function toggleNavDrawer() {
+      if (!drawerPanel) return;
+      if (window.innerWidth < 1024) {
+        // Mobile / Tablet Drawer Mode
+        const isOpen = !drawerPanel.classList.contains('-translate-x-full');
+        if (isOpen) {
+          closeNavDrawerMobile();
+        } else {
+          openNavDrawerMobile();
+        }
+      } else {
+        // Desktop Toggle Mode (Hide/Show side panel)
+        drawerPanel.classList.toggle('lg:hidden');
+        showToast(drawerPanel.classList.contains('lg:hidden') ? 'Sidebar collapsed' : 'Sidebar expanded', 'side_navigation');
+      }
+    }
+
+    function openNavDrawerMobile() {
+      if (!drawerBackdrop || !drawerPanel) return;
       drawerBackdrop.classList.remove('opacity-0', 'pointer-events-none');
       drawerBackdrop.classList.add('opacity-100', 'pointer-events-auto');
       drawerPanel.classList.remove('-translate-x-full');
       drawerPanel.classList.add('translate-x-0');
     }
 
-    function closeNavDrawer() {
-      if (!drawerContainer || !drawerBackdrop || !drawerPanel) return;
+    function closeNavDrawerMobile() {
+      if (!drawerBackdrop || !drawerPanel) return;
       drawerPanel.classList.remove('translate-x-0');
       drawerPanel.classList.add('-translate-x-full');
       drawerBackdrop.classList.remove('opacity-100', 'pointer-events-auto');
       drawerBackdrop.classList.add('opacity-0', 'pointer-events-none');
-      setTimeout(() => {
-        drawerContainer.classList.add('pointer-events-none');
-      }, 300);
     }
 
-    if (openDrawerBtn) openDrawerBtn.addEventListener('click', openNavDrawer);
-    if (closeDrawerBtn) closeDrawerBtn.addEventListener('click', closeNavDrawer);
-    if (drawerBackdrop) drawerBackdrop.addEventListener('click', closeNavDrawer);
+    if (openDrawerBtn) openDrawerBtn.addEventListener('click', toggleNavDrawer);
+    if (closeDrawerBtn) closeDrawerBtn.addEventListener('click', closeNavDrawerMobile);
+    if (drawerBackdrop) drawerBackdrop.addEventListener('click', closeNavDrawerMobile);
 
     // --- Select All & Bulk Actions Toolbar ---
     const selectAll = document.getElementById('selectAllCheckbox');
@@ -1067,7 +1194,7 @@ tailwind.config = {
         viewListBtn.classList.remove('bg-surface-card-elevated', 'text-primary');
         viewListBtn.classList.add('text-text-muted');
 
-        catalogContainer.classList.remove('flex', 'flex-col', 'gap-4', 'space-y-3.5');
+        catalogContainer.classList.remove('flex', 'flex-col', 'gap-4');
         catalogContainer.classList.add('catalog-grid-mode');
         showToast('Grid showcase view enabled', 'grid_view');
       });
@@ -1123,21 +1250,24 @@ tailwind.config = {
     }
 
     // --- Live Search Filter ---
-    const searchInput = document.getElementById('productSearchInput');
-    if (searchInput) {
-      searchInput.addEventListener('input', (e) => {
+    const searchInputs = [document.getElementById('productSearchInput'), document.getElementById('topSearchInput')];
+    searchInputs.forEach(input => {
+      if (!input) return;
+      input.addEventListener('input', (e) => {
         const query = e.target.value.toLowerCase().trim();
+        searchInputs.forEach(other => { if (other && other !== input) other.value = e.target.value; });
         productItems.forEach(card => {
           const text = card.textContent.toLowerCase();
           card.style.display = text.includes(query) ? '' : 'none';
         });
       });
-    }
+    });
 
     // Global keyboard shortcut: Command/Ctrl + K to focus search
     window.addEventListener('keydown', (e) => {
       if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
         e.preventDefault();
+        const searchInput = document.getElementById('productSearchInput') || document.getElementById('topSearchInput');
         if (searchInput) {
           searchInput.focus();
           searchInput.select();
@@ -1160,7 +1290,7 @@ tailwind.config = {
         if (!card) return;
         const img = card.querySelector('img');
         const titleEl = card.querySelector('h2');
-        const skuEl = card.querySelector('button[title*="copy SKU"] span') || card.querySelector('button[onclick*="clipboard"] span');
+        const skuEl = card.querySelector('button[title*="copy SKU"] span') || card.querySelector('button[onclick*="copySku"] span');
         const pid = card.getAttribute('data-id');
 
         if (zoomModal && zoomModalImg && img) {
@@ -1193,16 +1323,7 @@ tailwind.config = {
       }
     };
 
-    // Update onclick handlers for SKU buttons
-    document.querySelectorAll('button[onclick*="clipboard"]').forEach(btn => {
-      const skuSpan = btn.querySelector('span');
-      if (skuSpan) {
-        const sku = skuSpan.textContent.trim();
-        btn.setAttribute('onclick', `copySku('${sku}')`);
-      }
-    });
-
   })();
 </script>
-
-</body></html>
+</body>
+</html>
