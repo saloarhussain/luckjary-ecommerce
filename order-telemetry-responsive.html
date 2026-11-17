@@ -127,14 +127,14 @@
 </head>
 <body class="min-h-screen bg-obsidian-950 text-platinum-200 pb-32 selection:bg-champagne selection:text-obsidian-950 lg:pb-10">
 
-  <!-- BEGIN: MainContainer -->
-  <div class="w-full max-w-7xl mx-auto min-h-screen bg-obsidian-900 border-x border-[#1a1e28] shadow-2xl relative flex flex-col">
+  <!-- BEGIN: MainContainer (Edge-to-Edge Fluid Layout) -->
+  <div class="w-full min-h-screen bg-obsidian-900 shadow-2xl relative flex flex-col">
     
     <!-- Top Ambient Radial Glow -->
     <div class="absolute top-0 left-0 right-0 h-48 bg-atelier-radial pointer-events-none"></div>
 
     <!-- BEGIN: TopBar -->
-    <header class="sticky top-0 z-40 bg-obsidian-900/90 backdrop-blur-md border-b border-[#1E232E] px-3 sm:px-6 md:px-8 py-2.5 sm:py-3 flex items-center justify-between gap-3">
+    <header class="sticky top-0 z-40 bg-obsidian-900/90 backdrop-blur-md border-b border-[#1E232E] px-4 sm:px-6 md:px-8 py-2.5 sm:py-3 flex items-center justify-between gap-3 w-full">
       <!-- Breadcrumb / Back Navigation -->
       <a class="inline-flex items-center gap-1.5 text-xs font-medium text-platinum-400 hover:text-champagne transition-colors min-w-0" href="#" title="Return to Orders Ledger">
         <svg class="w-4 h-4 text-champagne shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -171,8 +171,8 @@
     <!-- END: TopBar -->
 
     <!-- BEGIN: ScrollableContent -->
-    <main class="flex-1 px-3 sm:px-6 md:px-8 py-4 sm:py-6 md:py-7 relative z-10">
-      <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 md:gap-6 items-start">
+    <main class="flex-1 px-4 sm:px-6 md:px-8 py-4 sm:py-6 md:py-7 relative z-10 w-full">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 md:gap-6 items-start w-full">
 
         <!-- ============================================================
              LEFT / MAIN WORKSPACE COLUMN (7 of 12 cols on desktop ~58%)
