@@ -48,7 +48,7 @@
 
 <style>
 /* ========================================================
-   ATELIER VAULT UNIFIED APP SHELL OVERRIDES
+   ATELIER VAULT UNIFIED APP SHELL & RESET OVERRIDES
    ======================================================== */
 html, body {
   background-color: #0d0e10 !important;
@@ -57,6 +57,22 @@ html, body {
   margin: 0 !important;
   padding: 0 !important;
   min-height: 100vh !important;
+  width: 100% !important;
+}
+
+/* App container: Flex row on all screens */
+#container,
+#container.shopify-app-root,
+#container.atelier-app-root,
+.shopify-app-root {
+  display: flex !important;
+  flex-direction: row !important;
+  width: 100% !important;
+  min-height: 100vh !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  background-color: #0d0e10 !important;
+  overflow-x: hidden !important;
 }
 
 /* Neutralize legacy fixed Shopify header and sidebar */
@@ -68,10 +84,86 @@ html, body {
 }
 .shopify-main-shell {
   display: flex !important;
+  flex-direction: row !important;
   width: 100% !important;
   min-height: 100vh !important;
   margin: 0 !important;
   padding: 0 !important;
+}
+
+/* Reset ALL link styles inside Atelier Left Nav Drawer (NO BLUE LINKS, NO UNDERLINES!) */
+#leftNavDrawer {
+  width: 18rem !important;
+  min-width: 18rem !important;
+  flex-shrink: 0 !important;
+  background-color: #0d0e12 !important;
+  border-right: 1px solid #232732 !important;
+}
+@media (max-width: 1023px) {
+  #leftNavDrawer {
+    max-width: 85vw !important;
+  }
+}
+#leftNavDrawer a,
+#leftNavDrawer a:link,
+#leftNavDrawer a:visited {
+  color: #a1a1aa !important;
+  text-decoration: none !important;
+  text-decoration-line: none !important;
+}
+#leftNavDrawer a:hover,
+#leftNavDrawer a:focus {
+  color: #f4f4f5 !important;
+  background-color: #18191c !important;
+  text-decoration: none !important;
+  text-decoration-line: none !important;
+}
+#leftNavDrawer a.active,
+#leftNavDrawer a[class*="bg-emerald"] {
+  color: #34d399 !important;
+  background-color: rgba(16, 185, 129, 0.1) !important;
+  text-decoration: none !important;
+  text-decoration-line: none !important;
+}
+#leftNavDrawer a.active span,
+#leftNavDrawer a[class*="bg-emerald"] span {
+  color: #f4f4f5 !important;
+  text-decoration: none !important;
+}
+#leftNavDrawer a.active svg,
+#leftNavDrawer a[class*="bg-emerald"] svg {
+  color: #34d399 !important;
+}
+#leftNavDrawer span,
+#leftNavDrawer svg {
+  text-decoration: none !important;
+}
+
+/* Right Main Content Flex Column */
+#atelier-main-shell {
+  display: flex !important;
+  flex-direction: column !important;
+  flex: 1 1 0% !important;
+  min-width: 0 !important;
+  width: calc(100% - 18rem) !important;
+  min-height: 100vh !important;
+  overflow-x: hidden !important;
+  background-color: #0d0e10 !important;
+}
+@media (max-width: 1023px) {
+  #atelier-main-shell {
+    width: 100% !important;
+  }
+}
+
+/* Universal Top Bar */
+#atelier-top-bar {
+  display: flex !important;
+  height: 4rem !important; /* 64px */
+  width: 100% !important;
+  background-color: rgba(14, 16, 21, 0.95) !important;
+  border-bottom: 1px solid #232732 !important;
+  z-index: 30 !important;
 }
 
 /* Content canvas takes 100% of flex column width */
@@ -131,7 +223,7 @@ html, body {
   data-admin-server-timezone="{% get_current_timezone as time_zone %}{{ time_zone }}">
 <a href="#content-start" class="skip-to-content-link">{% translate 'Skip to main content' %}</a>
 
-<div id="container" class="flex flex-1 w-full relative min-h-screen bg-[#0d0e10]">
+<div id="container" class="atelier-app-root flex flex-row flex-1 w-full relative min-h-screen bg-[#0d0e10]">
 
     <!-- Responsive Drawer Overlays -->
     <div id="leftNavDrawerBackdrop" class="fixed inset-0 bg-black/80 z-40 opacity-0 pointer-events-none transition-opacity duration-300 backdrop-blur-sm lg:hidden"></div>
@@ -163,20 +255,20 @@ html, body {
         <div>
           <div class="text-[10px] font-bold tracking-[0.12em] text-zinc-400 uppercase px-2 mb-1.5 font-mono-luxury">Navigation</div>
           <div class="space-y-0.5">
-            <a href="{% url 'admin:index' %}" class="flex items-center gap-3 px-3 py-2 rounded-xl {% if request.path == '/admin/' or request.path == '/admin/index/' %}bg-emerald-500/10 text-emerald-400 font-medium border-l-2 border-emerald-400 shadow-sm{% else %}text-zinc-400 hover:text-zinc-100 hover:bg-[#18191c] transition-colors{% endif %}">
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg>
-              <span {% if request.path == '/admin/' or request.path == '/admin/index/' %}class="text-zinc-100 font-semibold"{% endif %}>Home</span>
+            <a href="{% url 'admin:index' %}" class="flex items-center gap-3 px-3 py-2 rounded-xl {% if request.path == '/admin/' or request.path == '/admin/index/' %}bg-emerald-500/10 text-emerald-400 font-medium border-l-2 border-emerald-400 shadow-sm active{% else %}text-zinc-400 hover:text-zinc-100 hover:bg-[#18191c] transition-colors{% endif %}">
+              <svg class="w-4 h-4 {% if request.path == '/admin/' or request.path == '/admin/index/' %}text-emerald-400{% else %}text-zinc-400{% endif %}" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg>
+              <span {% if request.path == '/admin/' or request.path == '/admin/index/' %}class="text-zinc-100 font-semibold"{% else %}class="text-zinc-400"{% endif %}>Home</span>
             </a>
-            <a href="{% url 'admin:orders_order_changelist' %}" class="flex items-center justify-between px-3 py-2 rounded-xl {% if '/admin/orders/order/' in request.path %}bg-emerald-500/10 text-emerald-400 font-medium border-l-2 border-emerald-400 shadow-sm{% else %}text-zinc-400 hover:text-zinc-100 hover:bg-[#18191c] transition-colors{% endif %}">
+            <a href="{% url 'admin:orders_order_changelist' %}" class="flex items-center justify-between px-3 py-2 rounded-xl {% if '/admin/orders/order/' in request.path %}bg-emerald-500/10 text-emerald-400 font-medium border-l-2 border-emerald-400 shadow-sm active{% else %}text-zinc-400 hover:text-zinc-100 hover:bg-[#18191c] transition-colors{% endif %}">
               <div class="flex items-center gap-3">
-                <svg class="w-4 h-4 {% if '/admin/orders/order/' in request.path %}text-emerald-400{% endif %}" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="16.5" y1="9.4" x2="7.5" y2="4.21"></line><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
-                <span {% if '/admin/orders/order/' in request.path %}class="text-zinc-100 font-semibold"{% endif %}>Orders</span>
+                <svg class="w-4 h-4 {% if '/admin/orders/order/' in request.path %}text-emerald-400{% else %}text-zinc-400{% endif %}" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="16.5" y1="9.4" x2="7.5" y2="4.21"></line><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
+                <span {% if '/admin/orders/order/' in request.path %}class="text-zinc-100 font-semibold"{% else %}class="text-zinc-400"{% endif %}>Orders</span>
               </div>
               <span class="px-2 py-0.5 rounded-full bg-[#181a22] text-[#ebd38d] border border-[#2d3240] text-[11px] font-mono-luxury font-bold">4</span>
             </a>
-            <a href="{% url 'admin:orders_coupon_changelist' %}" class="flex items-center gap-3 px-3 py-2 rounded-xl {% if '/admin/orders/coupon/' in request.path %}bg-emerald-500/10 text-emerald-400 font-medium border-l-2 border-emerald-400 shadow-sm{% else %}text-zinc-400 hover:text-zinc-100 hover:bg-[#18191c] transition-colors{% endif %}">
-              <svg class="w-4 h-4 {% if '/admin/orders/coupon/' in request.path %}text-emerald-400{% endif %}" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="19" y1="5" x2="5" y2="19"></line><circle cx="6.5" cy="6.5" r="2.5"></circle><circle cx="17.5" cy="17.5" r="2.5"></circle></svg>
-              <span {% if '/admin/orders/coupon/' in request.path %}class="text-zinc-100 font-semibold"{% endif %}>Discounts</span>
+            <a href="{% url 'admin:orders_coupon_changelist' %}" class="flex items-center gap-3 px-3 py-2 rounded-xl {% if '/admin/orders/coupon/' in request.path %}bg-emerald-500/10 text-emerald-400 font-medium border-l-2 border-emerald-400 shadow-sm active{% else %}text-zinc-400 hover:text-zinc-100 hover:bg-[#18191c] transition-colors{% endif %}">
+              <svg class="w-4 h-4 {% if '/admin/orders/coupon/' in request.path %}text-emerald-400{% else %}text-zinc-400{% endif %}" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="19" y1="5" x2="5" y2="19"></line><circle cx="6.5" cy="6.5" r="2.5"></circle><circle cx="17.5" cy="17.5" r="2.5"></circle></svg>
+              <span {% if '/admin/orders/coupon/' in request.path %}class="text-zinc-100 font-semibold"{% else %}class="text-zinc-400"{% endif %}>Discounts</span>
             </a>
           </div>
         </div>
@@ -185,43 +277,43 @@ html, body {
         <div>
           <div class="text-[10px] font-bold tracking-[0.12em] text-zinc-400 uppercase px-2 mb-1.5 font-mono-luxury">Products &amp; Inventory</div>
           <div class="space-y-0.5">
-            <a href="{% url 'admin:catalog_product_changelist' %}" class="flex items-center justify-between px-3 py-2 rounded-xl {% if '/admin/catalog/product/' in request.path and '/admin/catalog/productreview/' not in request.path %}bg-emerald-500/10 text-emerald-400 font-medium border-l-2 border-emerald-400 shadow-sm{% else %}text-zinc-400 hover:text-zinc-100 hover:bg-[#18191c] transition-colors{% endif %}">
+            <a href="{% url 'admin:catalog_product_changelist' %}" class="flex items-center justify-between px-3 py-2 rounded-xl {% if '/admin/catalog/product/' in request.path and '/admin/catalog/productreview/' not in request.path %}bg-emerald-500/10 text-emerald-400 font-medium border-l-2 border-emerald-400 shadow-sm active{% else %}text-zinc-400 hover:text-zinc-100 hover:bg-[#18191c] transition-colors{% endif %}">
               <div class="flex items-center gap-3">
                 <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polygon points="6 3 18 3 22 9 12 22 2 9 6 3"></polygon></svg>
                 <span {% if '/admin/catalog/product/' in request.path and '/admin/catalog/productreview/' not in request.path %}class="text-zinc-100 font-semibold"{% else %}class="text-zinc-400"{% endif %}>Vault Products</span>
               </div>
               <span class="px-2 py-0.5 rounded-full bg-[#181a22] text-emerald-400 text-[11px] font-mono-luxury font-bold">17</span>
             </a>
-            <a href="{% url 'admin:catalog_collection_changelist' %}" class="flex items-center gap-3 px-3 py-2 rounded-xl {% if '/admin/catalog/collection/' in request.path %}bg-emerald-500/10 text-emerald-400 font-medium border-l-2 border-emerald-400 shadow-sm{% else %}text-zinc-400 hover:text-zinc-100 hover:bg-[#18191c] transition-colors{% endif %}">
-              <svg class="w-4 h-4 {% if '/admin/catalog/collection/' in request.path %}text-emerald-400{% endif %}" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect height="7" width="7" x="3" y="3"></rect><rect height="7" width="7" x="14" y="3"></rect><rect height="7" width="7" x="14" y="14"></rect><rect height="7" width="7" x="3" y="14"></rect></svg>
-              <span {% if '/admin/catalog/collection/' in request.path %}class="text-zinc-100 font-semibold"{% endif %}>Collections</span>
+            <a href="{% url 'admin:catalog_collection_changelist' %}" class="flex items-center gap-3 px-3 py-2 rounded-xl {% if '/admin/catalog/collection/' in request.path %}bg-emerald-500/10 text-emerald-400 font-medium border-l-2 border-emerald-400 shadow-sm active{% else %}text-zinc-400 hover:text-zinc-100 hover:bg-[#18191c] transition-colors{% endif %}">
+              <svg class="w-4 h-4 {% if '/admin/catalog/collection/' in request.path %}text-emerald-400{% else %}text-zinc-400{% endif %}" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect height="7" width="7" x="3" y="3"></rect><rect height="7" width="7" x="14" y="3"></rect><rect height="7" width="7" x="14" y="14"></rect><rect height="7" width="7" x="3" y="14"></rect></svg>
+              <span {% if '/admin/catalog/collection/' in request.path %}class="text-zinc-100 font-semibold"{% else %}class="text-zinc-400"{% endif %}>Collections</span>
             </a>
-            <a href="{% url 'admin:catalog_category_changelist' %}" class="flex items-center gap-3 px-3 py-2 rounded-xl {% if '/admin/catalog/category/' in request.path %}bg-emerald-500/10 text-emerald-400 font-medium border-l-2 border-emerald-400 shadow-sm{% else %}text-zinc-400 hover:text-zinc-100 hover:bg-[#18191c] transition-colors{% endif %}">
-              <svg class="w-4 h-4 {% if '/admin/catalog/category/' in request.path %}text-emerald-400{% endif %}" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>
-              <span {% if '/admin/catalog/category/' in request.path %}class="text-zinc-100 font-semibold"{% endif %}>Categories</span>
+            <a href="{% url 'admin:catalog_category_changelist' %}" class="flex items-center gap-3 px-3 py-2 rounded-xl {% if '/admin/catalog/category/' in request.path %}bg-emerald-500/10 text-emerald-400 font-medium border-l-2 border-emerald-400 shadow-sm active{% else %}text-zinc-400 hover:text-zinc-100 hover:bg-[#18191c] transition-colors{% endif %}">
+              <svg class="w-4 h-4 {% if '/admin/catalog/category/' in request.path %}text-emerald-400{% else %}text-zinc-400{% endif %}" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>
+              <span {% if '/admin/catalog/category/' in request.path %}class="text-zinc-100 font-semibold"{% else %}class="text-zinc-400"{% endif %}>Categories</span>
             </a>
-            <a href="{% url 'admin:catalog_material_changelist' %}" class="flex items-center gap-3 px-3 py-2 rounded-xl {% if '/admin/catalog/material/' in request.path %}bg-emerald-500/10 text-emerald-400 font-medium border-l-2 border-emerald-400 shadow-sm{% else %}text-zinc-400 hover:text-zinc-100 hover:bg-[#18191c] transition-colors{% endif %}">
-              <svg class="w-4 h-4 {% if '/admin/catalog/material/' in request.path %}text-emerald-400{% endif %}" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
-              <span {% if '/admin/catalog/material/' in request.path %}class="text-zinc-100 font-semibold"{% endif %}>Materials</span>
+            <a href="{% url 'admin:catalog_material_changelist' %}" class="flex items-center gap-3 px-3 py-2 rounded-xl {% if '/admin/catalog/material/' in request.path %}bg-emerald-500/10 text-emerald-400 font-medium border-l-2 border-emerald-400 shadow-sm active{% else %}text-zinc-400 hover:text-zinc-100 hover:bg-[#18191c] transition-colors{% endif %}">
+              <svg class="w-4 h-4 {% if '/admin/catalog/material/' in request.path %}text-emerald-400{% else %}text-zinc-400{% endif %}" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+              <span {% if '/admin/catalog/material/' in request.path %}class="text-zinc-100 font-semibold"{% else %}class="text-zinc-400"{% endif %}>Materials</span>
             </a>
-            <a href="{% url 'admin:catalog_productreview_changelist' %}" class="flex items-center gap-3 px-3 py-2 rounded-xl {% if '/admin/catalog/productreview/' in request.path %}bg-emerald-500/10 text-emerald-400 font-medium border-l-2 border-emerald-400 shadow-sm{% else %}text-zinc-400 hover:text-zinc-100 hover:bg-[#18191c] transition-colors{% endif %}">
-              <svg class="w-4 h-4 {% if '/admin/catalog/productreview/' in request.path %}text-emerald-400{% endif %}" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
-              <span {% if '/admin/catalog/productreview/' in request.path %}class="text-zinc-100 font-semibold"{% endif %}>Product Reviews</span>
+            <a href="{% url 'admin:catalog_productreview_changelist' %}" class="flex items-center gap-3 px-3 py-2 rounded-xl {% if '/admin/catalog/productreview/' in request.path %}bg-emerald-500/10 text-emerald-400 font-medium border-l-2 border-emerald-400 shadow-sm active{% else %}text-zinc-400 hover:text-zinc-100 hover:bg-[#18191c] transition-colors{% endif %}">
+              <svg class="w-4 h-4 {% if '/admin/catalog/productreview/' in request.path %}text-emerald-400{% else %}text-zinc-400{% endif %}" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+              <span {% if '/admin/catalog/productreview/' in request.path %}class="text-zinc-100 font-semibold"{% else %}class="text-zinc-400"{% endif %}>Product Reviews</span>
             </a>
           </div>
         </div>
 
-        <!-- Section: Customers -->
+        <!-- Section: Customers & VIPs -->
         <div>
           <div class="text-[10px] font-bold tracking-[0.12em] text-zinc-400 uppercase px-2 mb-1.5 font-mono-luxury">Customers &amp; VIPs</div>
           <div class="space-y-0.5">
-            <a href="{% url 'admin:accounts_customuser_changelist' %}" class="flex items-center gap-3 px-3 py-2 rounded-xl {% if '/admin/accounts/customuser/' in request.path %}bg-emerald-500/10 text-emerald-400 font-medium border-l-2 border-emerald-400 shadow-sm{% else %}text-zinc-400 hover:text-zinc-100 hover:bg-[#18191c] transition-colors{% endif %}">
-              <svg class="w-4 h-4 {% if '/admin/accounts/customuser/' in request.path %}text-emerald-400{% endif %}" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle></svg>
-              <span {% if '/admin/accounts/customuser/' in request.path %}class="text-zinc-100 font-semibold"{% endif %}>VIP Patrons</span>
+            <a href="{% url 'admin:accounts_customuser_changelist' %}" class="flex items-center gap-3 px-3 py-2 rounded-xl {% if '/admin/accounts/customuser/' in request.path %}bg-emerald-500/10 text-emerald-400 font-medium border-l-2 border-emerald-400 shadow-sm active{% else %}text-zinc-400 hover:text-zinc-100 hover:bg-[#18191c] transition-colors{% endif %}">
+              <svg class="w-4 h-4 {% if '/admin/accounts/customuser/' in request.path %}text-emerald-400{% else %}text-zinc-400{% endif %}" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle></svg>
+              <span {% if '/admin/accounts/customuser/' in request.path %}class="text-zinc-100 font-semibold"{% else %}class="text-zinc-400"{% endif %}>VIP Patrons</span>
             </a>
-            <a href="{% url 'admin:accounts_address_changelist' %}" class="flex items-center gap-3 px-3 py-2 rounded-xl {% if '/admin/accounts/address/' in request.path %}bg-emerald-500/10 text-emerald-400 font-medium border-l-2 border-emerald-400 shadow-sm{% else %}text-zinc-400 hover:text-zinc-100 hover:bg-[#18191c] transition-colors{% endif %}">
-              <svg class="w-4 h-4 {% if '/admin/accounts/address/' in request.path %}text-emerald-400{% endif %}" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
-              <span {% if '/admin/accounts/address/' in request.path %}class="text-zinc-100 font-semibold"{% endif %}>Addresses</span>
+            <a href="{% url 'admin:accounts_address_changelist' %}" class="flex items-center gap-3 px-3 py-2 rounded-xl {% if '/admin/accounts/address/' in request.path %}bg-emerald-500/10 text-emerald-400 font-medium border-l-2 border-emerald-400 shadow-sm active{% else %}text-zinc-400 hover:text-zinc-100 hover:bg-[#18191c] transition-colors{% endif %}">
+              <svg class="w-4 h-4 {% if '/admin/accounts/address/' in request.path %}text-emerald-400{% else %}text-zinc-400{% endif %}" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+              <span {% if '/admin/accounts/address/' in request.path %}class="text-zinc-100 font-semibold"{% else %}class="text-zinc-400"{% endif %}>Addresses</span>
             </a>
           </div>
         </div>
@@ -230,13 +322,13 @@ html, body {
         <div>
           <div class="text-[10px] font-bold tracking-[0.12em] text-zinc-400 uppercase px-2 mb-1.5 font-mono-luxury">Engagement</div>
           <div class="space-y-0.5">
-            <a href="{% url 'admin:core_contactinquiry_changelist' %}" class="flex items-center gap-3 px-3 py-2 rounded-xl {% if '/admin/core/contactinquiry/' in request.path %}bg-emerald-500/10 text-emerald-400 font-medium border-l-2 border-emerald-400 shadow-sm{% else %}text-zinc-400 hover:text-zinc-100 hover:bg-[#18191c] transition-colors{% endif %}">
-              <svg class="w-4 h-4 {% if '/admin/core/contactinquiry/' in request.path %}text-emerald-400{% endif %}" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
-              <span {% if '/admin/core/contactinquiry/' in request.path %}class="text-zinc-100 font-semibold"{% endif %}>Client Inquiries</span>
+            <a href="{% url 'admin:core_contactinquiry_changelist' %}" class="flex items-center gap-3 px-3 py-2 rounded-xl {% if '/admin/core/contactinquiry/' in request.path %}bg-emerald-500/10 text-emerald-400 font-medium border-l-2 border-emerald-400 shadow-sm active{% else %}text-zinc-400 hover:text-zinc-100 hover:bg-[#18191c] transition-colors{% endif %}">
+              <svg class="w-4 h-4 {% if '/admin/core/contactinquiry/' in request.path %}text-emerald-400{% else %}text-zinc-400{% endif %}" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+              <span {% if '/admin/core/contactinquiry/' in request.path %}class="text-zinc-100 font-semibold"{% else %}class="text-zinc-400"{% endif %}>Client Inquiries</span>
             </a>
-            <a href="{% url 'admin:core_newslettersubscriber_changelist' %}" class="flex items-center gap-3 px-3 py-2 rounded-xl {% if '/admin/core/newslettersubscriber/' in request.path %}bg-emerald-500/10 text-emerald-400 font-medium border-l-2 border-emerald-400 shadow-sm{% else %}text-zinc-400 hover:text-zinc-100 hover:bg-[#18191c] transition-colors{% endif %}">
-              <svg class="w-4 h-4 {% if '/admin/core/newslettersubscriber/' in request.path %}text-emerald-400{% endif %}" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
-              <span {% if '/admin/core/newslettersubscriber/' in request.path %}class="text-zinc-100 font-semibold"{% endif %}>Subscribers</span>
+            <a href="{% url 'admin:core_newslettersubscriber_changelist' %}" class="flex items-center gap-3 px-3 py-2 rounded-xl {% if '/admin/core/newslettersubscriber/' in request.path %}bg-emerald-500/10 text-emerald-400 font-medium border-l-2 border-emerald-400 shadow-sm active{% else %}text-zinc-400 hover:text-zinc-100 hover:bg-[#18191c] transition-colors{% endif %}">
+              <svg class="w-4 h-4 {% if '/admin/core/newslettersubscriber/' in request.path %}text-emerald-400{% else %}text-zinc-400{% endif %}" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+              <span {% if '/admin/core/newslettersubscriber/' in request.path %}class="text-zinc-100 font-semibold"{% else %}class="text-zinc-400"{% endif %}>Subscribers</span>
             </a>
           </div>
         </div>
@@ -254,8 +346,8 @@ html, body {
             </a>
             <a href="{% url 'core:home' %}" target="_blank" class="flex items-center justify-between px-3 py-2 rounded-xl text-zinc-400 hover:text-zinc-100 hover:bg-[#18191c] transition-colors">
               <div class="flex items-center gap-3">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
-                <span>Online Store</span>
+                <svg class="w-4 h-4 text-zinc-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+                <span class="text-zinc-400">Online Store</span>
               </div>
               <svg class="w-3.5 h-3.5 text-zinc-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
             </a>
@@ -269,7 +361,7 @@ html, body {
             <a href="{% url 'admin:orders_order_changelist' %}#settings" class="sidebar-settings-btn flex items-center justify-between px-3 py-2 rounded-xl text-zinc-400 hover:text-zinc-100 hover:bg-[#18191c] transition-colors cursor-pointer group">
               <div class="flex items-center gap-3">
                 <svg class="w-4 h-4 text-zinc-400 group-hover:text-[#ebd38d] transition-colors" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
-                <span>Settings</span>
+                <span class="text-zinc-400">Settings</span>
               </div>
               <span class="active-sidebar-curr-pill px-2 py-0.5 rounded-full bg-[#181a22] text-[#ebd38d] border border-[#2d3240] text-[10px] font-mono-luxury font-semibold">₹ INR</span>
             </a>
@@ -305,10 +397,10 @@ html, body {
     <!-- ==========================================
          RIGHT MAIN CONTENT AREA
          ========================================== -->
-    <div class="flex-1 min-w-0 flex flex-col min-h-screen overflow-x-hidden">
+    <div id="atelier-main-shell" class="flex-1 min-w-0 flex flex-col min-h-screen overflow-x-hidden">
       {% if has_permission and not is_popup %}
       <!-- Top Universal Header Bar -->
-      <header class="sticky top-0 z-30 w-full bg-[#0e1015]/95 backdrop-blur-2xl border-b border-[#232732] shadow-sm relative">
+      <header id="atelier-top-bar" class="sticky top-0 z-30 w-full bg-[#0e1015]/95 backdrop-blur-2xl border-b border-[#232732] shadow-sm relative">
         <div class="px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
           
           <!-- Mobile Drawer Toggle (Only visible on mobile/tablet when sidebar is off-canvas) -->
