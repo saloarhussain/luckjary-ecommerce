@@ -402,8 +402,8 @@ tailwind.config = {
           </div>
           <div class="flex items-baseline gap-3">
             <h1 class="font-serif-luxury text-2xl sm:text-3xl lg:text-4xl text-text-platinum font-semibold tracking-wide">Atelier Vault</h1>
-            <span class="bg-surface-card-elevated border border-border-strong text-secondary font-mono-luxury text-[11px] sm:text-xs px-2.5 py-1 rounded-full font-medium shadow-sm">
-              17 PIECES
+            <span id="vaultTotalBadge" class="bg-surface-card-elevated border border-border-strong text-secondary font-mono-luxury text-[11px] sm:text-xs px-2.5 py-1 rounded-full font-medium shadow-sm">
+              <span id="vaultPiecesCount">17</span> PIECES
             </span>
           </div>
         </div>
@@ -486,13 +486,55 @@ tailwind.config = {
       <div class="flex flex-wrap items-center justify-between bg-surface-card border border-border-strong px-4 py-2.5 rounded-xl shadow-md gap-3">
         <label class="flex items-center gap-3 cursor-pointer select-none">
           <input class="w-4 h-4 rounded bg-surface-dim border-border-strong accent-primary cursor-pointer transition-colors" id="selectAllCheckbox" type="checkbox">
-          <span class="font-label-sm text-xs sm:text-[13px] text-text-platinum tracking-wide"><span class="font-semibold text-primary" id="selectedCount">0</span> of 17 Selected</span>
+          <span class="font-label-sm text-xs sm:text-[13px] text-text-platinum tracking-wide"><span class="font-semibold text-primary" id="selectedCount">0</span> of <span id="totalSelectedCount">17</span> Selected</span>
         </label>
         <div class="flex items-center gap-2 sm:gap-3">
-          <button class="font-label-sm text-xs sm:text-[13px] bg-surface-card-elevated hover:bg-surface-variant text-text-platinum border border-border-strong px-3 py-1.5 rounded-lg flex items-center gap-1.5 shadow-sm transition-all cursor-pointer" type="button">
-            <span class="material-symbols-outlined text-[17px] text-secondary">edit_note</span>
-            <span>Batch Actions</span>
-          </button>
+          <!-- Batch Actions Dropdown -->
+          <div class="relative inline-block text-left" id="batchDropdownWrapper">
+            <button id="batchActionsBtn" class="font-label-sm text-xs sm:text-[13px] bg-surface-card-elevated hover:bg-surface-variant text-text-platinum border border-border-strong px-3 py-1.5 rounded-lg flex items-center gap-1.5 shadow-sm transition-all cursor-pointer" type="button">
+              <span class="material-symbols-outlined text-[17px] text-secondary">edit_note</span>
+              <span>Batch Actions</span>
+              <span class="material-symbols-outlined text-[15px] text-text-muted transition-transform duration-200" id="batchChevron">expand_more</span>
+            </button>
+            
+            <!-- Dropdown Menu -->
+            <div id="batchActionsMenu" class="absolute right-0 mt-2 w-64 bg-[#181a22]/95 backdrop-blur-xl border border-border-strong rounded-xl shadow-2xl py-2 z-50 hidden">
+              <div class="px-3.5 py-1.5 border-b border-border-subtle/80 text-[11px] font-mono-luxury text-text-muted uppercase tracking-wider flex items-center justify-between">
+                <span>Vault Operations</span>
+                <span id="batchMenuSelectionCount" class="text-primary font-semibold">0 selected</span>
+              </div>
+              <div class="py-1">
+                <button type="button" class="w-full text-left px-3.5 py-2 hover:bg-surface-variant flex items-center gap-2.5 text-xs text-text-platinum transition-colors cursor-pointer" onclick="handleBatchDiscount()">
+                  <span class="material-symbols-outlined text-[16px] text-secondary">percent</span>
+                  <span>Apply Bulk Discount...</span>
+                </button>
+                <button type="button" class="w-full text-left px-3.5 py-2 hover:bg-surface-variant flex items-center gap-2.5 text-xs text-text-platinum transition-colors cursor-pointer" onclick="handleBatchStock()">
+                  <span class="material-symbols-outlined text-[16px] text-primary">inventory_2</span>
+                  <span>Restock Selected (+10 Units)</span>
+                </button>
+                <button type="button" class="w-full text-left px-3.5 py-2 hover:bg-surface-variant flex items-center gap-2.5 text-xs text-text-platinum transition-colors cursor-pointer" onclick="handleBatchAvailability(true)">
+                  <span class="material-symbols-outlined text-[16px] text-emerald-400">check_circle</span>
+                  <span>Mark as Available in Vault</span>
+                </button>
+                <button type="button" class="w-full text-left px-3.5 py-2 hover:bg-surface-variant flex items-center gap-2.5 text-xs text-text-platinum transition-colors cursor-pointer" onclick="handleBatchAvailability(false)">
+                  <span class="material-symbols-outlined text-[16px] text-amber-400">visibility_off</span>
+                  <span>Mark as Hidden / Reserve</span>
+                </button>
+                <button type="button" class="w-full text-left px-3.5 py-2 hover:bg-surface-variant flex items-center gap-2.5 text-xs text-text-platinum transition-colors cursor-pointer" onclick="handleBatchFeature()">
+                  <span class="material-symbols-outlined text-[16px] text-secondary">star</span>
+                  <span>Feature on Showroom</span>
+                </button>
+              </div>
+              <div class="border-t border-border-subtle/80 my-1"></div>
+              <div class="py-1">
+                <button type="button" class="w-full text-left px-3.5 py-2 hover:bg-red-950/40 flex items-center gap-2.5 text-xs text-red-400 hover:text-red-300 transition-colors cursor-pointer" onclick="handleBulkDelete()">
+                  <span class="material-symbols-outlined text-[16px] text-red-400">delete</span>
+                  <span>Delete Selected Pieces</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
           <button class="font-label-sm text-xs sm:text-[13px] bg-surface-card-elevated hover:bg-surface-variant text-text-platinum border border-border-strong px-3 py-1.5 rounded-lg flex items-center gap-1.5 shadow-sm transition-all cursor-pointer" type="button" onclick="showToast('Exporting vault manifest...', 'file_download')">
             <span class="material-symbols-outlined text-[17px] text-text-muted">file_download</span>
             <span>Export Manifest</span>
@@ -951,18 +993,72 @@ tailwind.config = {
           <span class="font-label-sm text-xs sm:text-[13px] text-text-platinum font-semibold" id="bulkBadgeText">0 Selected</span>
         </div>
         <div class="flex items-center gap-2">
-          <button class="bg-surface-card hover:bg-surface-variant border border-border-strong text-text-platinum font-label-sm text-xs px-3 py-1.5 rounded-xl shadow-sm flex items-center gap-1 transition-all cursor-pointer" type="button" onclick="showToast('Bulk discount tool activated', 'percent')">
+          <button class="bg-surface-card hover:bg-surface-variant border border-border-strong text-text-platinum font-label-sm text-xs px-3 py-1.5 rounded-xl shadow-sm flex items-center gap-1 transition-all cursor-pointer" type="button" onclick="handleBatchDiscount()">
             <span class="material-symbols-outlined text-[16px] text-secondary">percent</span>
             <span>Discount</span>
+          </button>
+          <button class="bg-surface-card hover:bg-surface-variant border border-border-strong text-text-platinum font-label-sm text-xs px-3 py-1.5 rounded-xl shadow-sm flex items-center gap-1 transition-all cursor-pointer" type="button" onclick="handleBatchStock()">
+            <span class="material-symbols-outlined text-[16px] text-primary">inventory_2</span>
+            <span>Restock</span>
           </button>
           <button class="bg-red-950/40 hover:bg-red-900/60 border border-red-500/40 text-red-300 font-label-sm text-xs px-3 py-1.5 rounded-xl shadow-sm flex items-center gap-1 transition-all cursor-pointer" type="button" onclick="handleBulkDelete()">
             <span class="material-symbols-outlined text-[16px] text-red-400">delete</span>
             <span>Delete</span>
           </button>
-          <button class="bg-primary hover:bg-primary/90 text-on-primary font-label-sm text-xs px-3.5 py-1.5 rounded-xl shadow-sm flex items-center gap-1 font-semibold active:scale-95 transition-transform cursor-pointer" type="button" onclick="showToast('Bulk update applied to selected', 'tune')">
-            <span class="material-symbols-outlined text-[16px]">tune</span>
-            <span>Update</span>
+          <button class="bg-primary hover:bg-primary/90 text-on-primary font-label-sm text-xs px-3.5 py-1.5 rounded-xl shadow-sm flex items-center gap-1 font-semibold active:scale-95 transition-transform cursor-pointer" type="button" onclick="handleBatchAvailability(true)">
+            <span class="material-symbols-outlined text-[16px]">check_circle</span>
+            <span>Make Available</span>
           </button>
+        </div>
+      </div>
+
+      <!-- Bulk Discount Modal -->
+      <div id="bulkDiscountModal" class="fixed inset-0 z-50 bg-black/75 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-300 flex items-center justify-center p-4">
+        <div class="bg-surface-card-elevated border border-border-strong rounded-2xl w-full max-w-sm p-5 space-y-4 shadow-2xl">
+          <div class="flex items-center justify-between border-b border-border-subtle pb-3">
+            <div class="flex items-center gap-2">
+              <span class="material-symbols-outlined text-[20px] text-secondary">percent</span>
+              <h3 class="font-serif-luxury text-base text-text-platinum font-semibold">Apply Bulk Discount</h3>
+            </div>
+            <button type="button" onclick="closeBulkDiscountModal()" class="text-text-muted hover:text-text-platinum cursor-pointer">
+              <span class="material-symbols-outlined text-[18px]">close</span>
+            </button>
+          </div>
+          <p class="text-xs text-text-muted leading-relaxed">
+            Choose a promotional discount percentage for all <span id="discountSelectedCount" class="text-primary font-semibold">0</span> selected piece(s):
+          </p>
+          <div class="grid grid-cols-4 gap-2">
+            <button type="button" onclick="applyDiscountPercent(10)" class="py-2 px-2 rounded-lg bg-surface-card hover:bg-surface-variant border border-border-strong text-text-platinum text-xs font-mono font-semibold transition-all cursor-pointer hover:border-primary/40">10%</button>
+            <button type="button" onclick="applyDiscountPercent(15)" class="py-2 px-2 rounded-lg bg-surface-card hover:bg-surface-variant border border-border-strong text-text-platinum text-xs font-mono font-semibold transition-all cursor-pointer hover:border-primary/40">15%</button>
+            <button type="button" onclick="applyDiscountPercent(20)" class="py-2 px-2 rounded-lg bg-surface-card hover:bg-surface-variant border border-border-strong text-text-platinum text-xs font-mono font-semibold transition-all cursor-pointer hover:border-primary/40">20%</button>
+            <button type="button" onclick="applyDiscountPercent(25)" class="py-2 px-2 rounded-lg bg-surface-card hover:bg-surface-variant border border-border-strong text-text-platinum text-xs font-mono font-semibold transition-all cursor-pointer hover:border-primary/40">25%</button>
+          </div>
+          <div class="flex items-center gap-2 pt-1">
+            <input type="number" id="customDiscountInput" min="1" max="90" placeholder="Custom %" class="flex-1 bg-surface-dim border border-border-strong rounded-lg px-3 py-2 text-xs text-text-platinum focus:border-primary focus:outline-none font-mono">
+            <button type="button" onclick="applyCustomDiscount()" class="bg-primary hover:bg-primary/90 text-on-primary px-4 py-2 rounded-lg text-xs font-semibold cursor-pointer transition-all">Apply</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bulk Delete Confirmation Modal -->
+      <div id="bulkDeleteModal" class="fixed inset-0 z-50 bg-black/75 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-300 flex items-center justify-center p-4">
+        <div class="bg-surface-card-elevated border border-border-strong rounded-2xl w-full max-w-sm p-5 space-y-4 shadow-2xl">
+          <div class="flex items-center gap-3 text-red-400">
+            <div class="w-10 h-10 rounded-full bg-red-950/60 border border-red-500/30 flex items-center justify-center shrink-0">
+              <span class="material-symbols-outlined text-[22px]">delete</span>
+            </div>
+            <div>
+              <h3 class="font-serif-luxury text-base text-text-platinum font-semibold">Delete Selected Pieces</h3>
+              <p class="text-[11px] text-text-muted">Permanent Vault Removal</p>
+            </div>
+          </div>
+          <p class="text-xs text-text-muted leading-relaxed">
+            Are you sure you want to delete <span id="deleteModalCount" class="text-red-400 font-semibold">0</span> selected piece(s) from the Atelier Vault? This action cannot be undone.
+          </p>
+          <div class="flex items-center justify-end gap-2 pt-2">
+            <button type="button" onclick="closeBulkDeleteModal()" class="px-4 py-2 rounded-xl bg-surface-card hover:bg-surface-variant border border-border-strong text-text-muted hover:text-text-platinum text-xs transition-colors cursor-pointer">Cancel</button>
+            <button type="button" onclick="confirmBulkDelete()" class="px-4 py-2 rounded-xl bg-red-600 hover:bg-red-500 text-white font-semibold text-xs shadow-md shadow-red-900/30 transition-all cursor-pointer">Delete Now</button>
+          </div>
         </div>
       </div>
 
@@ -1172,37 +1268,301 @@ tailwind.config = {
 
     // --- Select All & Bulk Actions Toolbar ---
     const selectAll = document.getElementById('selectAllCheckbox');
-    const checkboxes = document.querySelectorAll('.product-checkbox');
     const selectedCountSpan = document.getElementById('selectedCount');
     const bulkToolbar = document.getElementById('bulkFloatingToolbar');
     const bulkBadgeText = document.getElementById('bulkBadgeText');
+    const batchActionsBtn = document.getElementById('batchActionsBtn');
+    const batchActionsMenu = document.getElementById('batchActionsMenu');
+    const batchChevron = document.getElementById('batchChevron');
+    const batchMenuSelectionCount = document.getElementById('batchMenuSelectionCount');
+
+    function getCheckboxes() {
+      return document.querySelectorAll('.product-checkbox');
+    }
+
+    function getSelectedCheckboxes() {
+      return Array.from(getCheckboxes()).filter(cb => cb.checked);
+    }
+
+    function updateTotalVaultCounts() {
+      const remainingItems = document.querySelectorAll('.product-item');
+      const count = remainingItems.length;
+      const vaultPiecesCount = document.getElementById('vaultPiecesCount');
+      if (vaultPiecesCount) vaultPiecesCount.textContent = count;
+      const totalSelectedCount = document.getElementById('totalSelectedCount');
+      if (totalSelectedCount) totalSelectedCount.textContent = count;
+    }
 
     function updateSelectionState() {
-      let count = 0;
-      checkboxes.forEach(cb => {
-        if (cb.checked) count++;
-      });
+      const allCbs = getCheckboxes();
+      const count = getSelectedCheckboxes().length;
+
       if (selectedCountSpan) selectedCountSpan.textContent = count;
+      if (bulkBadgeText) bulkBadgeText.textContent = `${count} Selected`;
+      if (batchMenuSelectionCount) batchMenuSelectionCount.textContent = `${count} selected`;
       
       if (count > 0 && bulkToolbar) {
         bulkToolbar.classList.remove('translate-y-28', 'opacity-0', 'pointer-events-none');
-        if (bulkBadgeText) bulkBadgeText.textContent = `${count} Selected`;
       } else if (bulkToolbar) {
         bulkToolbar.classList.add('translate-y-28', 'opacity-0', 'pointer-events-none');
+        closeBatchMenu();
       }
-      if (selectAll) selectAll.checked = count === checkboxes.length && count > 0;
+      if (selectAll) selectAll.checked = (count === allCbs.length && count > 0);
     }
+
+    function promptSelectItems() {
+      showToast('Select one or more pieces to perform batch actions', 'checklist');
+      const selectAllLabel = document.getElementById('selectAllCheckbox')?.closest('label');
+      if (selectAllLabel) {
+        selectAllLabel.classList.add('ring-2', 'ring-primary', 'rounded-lg', 'px-2', 'py-1', 'transition-all');
+        setTimeout(() => {
+          selectAllLabel.classList.remove('ring-2', 'ring-primary', 'rounded-lg', 'px-2', 'py-1');
+        }, 1500);
+      }
+    }
+
+    function closeBatchMenu() {
+      if (batchActionsMenu) batchActionsMenu.classList.add('hidden');
+      if (batchChevron) batchChevron.classList.remove('rotate-180');
+    }
+
+    function toggleBatchMenu() {
+      const selected = getSelectedCheckboxes();
+      if (selected.length === 0) {
+        closeBatchMenu();
+        promptSelectItems();
+        return;
+      }
+      if (batchActionsMenu) {
+        const isHidden = batchActionsMenu.classList.contains('hidden');
+        if (isHidden) {
+          if (batchMenuSelectionCount) batchMenuSelectionCount.textContent = `${selected.length} selected`;
+          batchActionsMenu.classList.remove('hidden');
+          if (batchChevron) batchChevron.classList.add('rotate-180');
+        } else {
+          closeBatchMenu();
+        }
+      }
+    }
+
+    if (batchActionsBtn) {
+      batchActionsBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        toggleBatchMenu();
+      });
+    }
+
+    document.addEventListener('click', (e) => {
+      if (batchActionsMenu && !batchActionsMenu.contains(e.target) && !batchActionsBtn?.contains(e.target)) {
+        closeBatchMenu();
+      }
+    });
 
     if (selectAll) {
       selectAll.addEventListener('change', (e) => {
-        checkboxes.forEach(cb => cb.checked = e.target.checked);
+        getCheckboxes().forEach(cb => cb.checked = e.target.checked);
         updateSelectionState();
       });
     }
 
-    checkboxes.forEach(cb => {
-      cb.addEventListener('change', updateSelectionState);
-    });
+    function attachCheckboxListeners() {
+      getCheckboxes().forEach(cb => {
+        cb.removeEventListener('change', updateSelectionState);
+        cb.addEventListener('change', updateSelectionState);
+      });
+    }
+    attachCheckboxListeners();
+
+    // --- Bulk Discount Operations ---
+    window.handleBatchDiscount = function() {
+      const selected = getSelectedCheckboxes();
+      if (selected.length === 0) {
+        promptSelectItems();
+        return;
+      }
+      closeBatchMenu();
+      const countEl = document.getElementById('discountSelectedCount');
+      if (countEl) countEl.textContent = selected.length;
+      const modal = document.getElementById('bulkDiscountModal');
+      if (modal) modal.classList.remove('opacity-0', 'pointer-events-none');
+    };
+
+    window.closeBulkDiscountModal = function() {
+      const modal = document.getElementById('bulkDiscountModal');
+      if (modal) modal.classList.add('opacity-0', 'pointer-events-none');
+    };
+
+    window.applyDiscountPercent = function(pct) {
+      const selected = getSelectedCheckboxes();
+      if (selected.length === 0) return;
+      
+      const curr = localStorage.getItem('luckjary_currency') || 'INR';
+      const sym = currencySymbols[curr] || '₹';
+      const rate = exchangeRates[curr] || 1.0;
+
+      selected.forEach(cb => {
+        const card = cb.closest('.product-item');
+        if (!card) return;
+
+        let compareInr = parseFloat(card.getAttribute('data-compare-inr') || '0');
+        let priceInr = parseFloat(card.getAttribute('data-price-inr') || '0');
+        if (!compareInr || compareInr <= priceInr) {
+          compareInr = priceInr;
+          card.setAttribute('data-compare-inr', compareInr);
+        }
+
+        const newPriceInr = Math.round(compareInr * (1 - (pct / 100)));
+        card.setAttribute('data-price-inr', newPriceInr);
+
+        const priceEl = card.querySelector('.product-card-price');
+        const compareEl = card.querySelector('.product-compare-price');
+        const discountBadge = card.querySelector('.product-compare-price + span');
+
+        if (priceEl) {
+          const converted = Math.round(newPriceInr * rate);
+          priceEl.textContent = `${sym}${converted.toLocaleString('en-US')}`;
+        }
+        if (compareEl && compareInr > 0) {
+          const convertedComp = Math.round(compareInr * rate);
+          compareEl.textContent = `${sym}${convertedComp.toLocaleString('en-US')}`;
+          compareEl.classList.remove('hidden');
+        }
+        if (discountBadge) {
+          discountBadge.textContent = `-${pct}%`;
+          discountBadge.classList.remove('hidden');
+        }
+      });
+
+      closeBulkDiscountModal();
+      showToast(`Applied ${pct}% promotional discount to ${selected.length} piece(s)`, 'percent');
+    };
+
+    window.applyCustomDiscount = function() {
+      const input = document.getElementById('customDiscountInput');
+      const val = parseInt(input?.value || '0', 10);
+      if (val > 0 && val < 100) {
+        applyDiscountPercent(val);
+        if (input) input.value = '';
+      } else {
+        showToast('Please enter a valid discount between 1% and 99%', 'warning');
+      }
+    };
+
+    // --- Bulk Restock Operations ---
+    window.handleBatchStock = function() {
+      const selected = getSelectedCheckboxes();
+      if (selected.length === 0) {
+        promptSelectItems();
+        return;
+      }
+      selected.forEach(cb => {
+        const card = cb.closest('.product-item');
+        if (!card) return;
+        const stockEl = card.querySelector('.pricing-stock-row .font-label-sm');
+        if (stockEl) {
+          stockEl.textContent = '35 in stock';
+          stockEl.parentElement.className = 'flex items-center gap-1.5 bg-primary/10 border border-primary/20 px-2.5 py-0.5 sm:px-3 sm:py-1 rounded-full';
+          const dot = stockEl.parentElement.querySelector('span');
+          if (dot) dot.className = 'w-1.5 h-1.5 rounded-full bg-primary animate-pulse';
+        }
+      });
+      closeBatchMenu();
+      showToast(`Restocked +10 inventory units across ${selected.length} piece(s)`, 'inventory_2');
+    };
+
+    // --- Bulk Availability Operations ---
+    window.handleBatchAvailability = function(isAvail) {
+      const selected = getSelectedCheckboxes();
+      if (selected.length === 0) {
+        promptSelectItems();
+        return;
+      }
+      selected.forEach(cb => {
+        const card = cb.closest('.product-item');
+        if (!card) return;
+        let badge = card.querySelector('.availability-indicator-badge');
+        if (!badge) {
+          badge = document.createElement('span');
+          badge.className = 'availability-indicator-badge text-[10px] font-mono-luxury px-2 py-0.5 rounded font-semibold ml-2 border';
+          const titleContainer = card.querySelector('h2');
+          if (titleContainer) titleContainer.appendChild(badge);
+        }
+        if (isAvail) {
+          badge.className = 'availability-indicator-badge text-[10px] font-mono-luxury px-2 py-0.5 rounded font-semibold ml-2 border bg-emerald-500/15 text-emerald-400 border-emerald-500/30';
+          badge.textContent = 'AVAILABLE';
+        } else {
+          badge.className = 'availability-indicator-badge text-[10px] font-mono-luxury px-2 py-0.5 rounded font-semibold ml-2 border bg-amber-500/15 text-amber-300 border-amber-500/30';
+          badge.textContent = 'RESERVE / DRAFT';
+        }
+      });
+      closeBatchMenu();
+      showToast(isAvail ? `Marked ${selected.length} pieces as Available in Vault` : `Marked ${selected.length} pieces as Hidden / Reserve`, isAvail ? 'check_circle' : 'visibility_off');
+    };
+
+    // --- Bulk Showroom Feature Operations ---
+    window.handleBatchFeature = function() {
+      const selected = getSelectedCheckboxes();
+      if (selected.length === 0) {
+        promptSelectItems();
+        return;
+      }
+      selected.forEach(cb => {
+        const card = cb.closest('.product-item');
+        if (!card) return;
+        let featBadge = card.querySelector('.featured-vault-badge');
+        if (!featBadge) {
+          featBadge = document.createElement('span');
+          featBadge.className = 'featured-vault-badge bg-secondary/15 text-secondary border border-secondary/30 text-[10px] font-mono-luxury px-2 py-0.5 rounded font-semibold ml-1.5 inline-flex items-center gap-1';
+          featBadge.innerHTML = '<span class="material-symbols-outlined text-[12px]">star</span> FEATURED';
+          const kicker = card.querySelector('.product-info-block .flex.items-center.gap-1\\.5');
+          if (kicker) kicker.appendChild(featBadge);
+        }
+      });
+      closeBatchMenu();
+      showToast(`Featured ${selected.length} piece(s) on showroom showcase`, 'star');
+    };
+
+    // --- Bulk Delete Operations ---
+    window.handleBulkDelete = function() {
+      const selected = getSelectedCheckboxes();
+      if (selected.length === 0) {
+        promptSelectItems();
+        return;
+      }
+      closeBatchMenu();
+      const countEl = document.getElementById('deleteModalCount');
+      if (countEl) countEl.textContent = selected.length;
+      const modal = document.getElementById('bulkDeleteModal');
+      if (modal) modal.classList.remove('opacity-0', 'pointer-events-none');
+    };
+
+    window.closeBulkDeleteModal = function() {
+      const modal = document.getElementById('bulkDeleteModal');
+      if (modal) modal.classList.add('opacity-0', 'pointer-events-none');
+    };
+
+    window.confirmBulkDelete = function() {
+      const selected = getSelectedCheckboxes();
+      const count = selected.length;
+      if (count === 0) return;
+
+      selected.forEach(cb => {
+        const card = cb.closest('.product-item');
+        if (card) {
+          card.style.transition = 'all 0.3s ease-out';
+          card.style.opacity = '0';
+          card.style.transform = 'scale(0.95)';
+          setTimeout(() => {
+            card.remove();
+            updateTotalVaultCounts();
+            updateSelectionState();
+          }, 300);
+        }
+      });
+
+      closeBulkDeleteModal();
+      showToast(`Deleted ${count} piece(s) from Atelier Vault`, 'delete');
+    };
 
     // --- Category Filter Chips ---
     const chips = document.querySelectorAll('#categoryChips .category-chip');
