@@ -2,6 +2,7 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.utils.html import format_html
 from django.utils.safestring import mark_safe
+from django.urls import reverse
 from .models import CustomUser, Address
 
 class AddressInline(admin.StackedInline):
@@ -20,7 +21,7 @@ class AddressInline(admin.StackedInline):
 @admin.register(CustomUser)
 class CustomUserAdmin(UserAdmin):
     show_facets = admin.ShowFacets.NEVER
-    list_display = ('client_display', 'vip_badge', 'is_email_verified_pill', 'newsletter_pill', 'date_joined')
+    list_display = ('client_display', 'vip_badge', 'is_email_verified_pill', 'newsletter_pill', 'date_joined', 'action_buttons')
     list_filter = ('is_email_verified', 'newsletter_subscribed', 'is_staff', 'is_active')
     search_fields = ('email', 'first_name', 'last_name', 'phone_number')
     ordering = ('-date_joined',)
@@ -73,21 +74,32 @@ class CustomUserAdmin(UserAdmin):
         }),
     )
 
-    @admin.display(description='Client / Email', ordering='email')
+    @admin.display(description='Customer / Contact', ordering='first_name')
     def client_display(self, obj):
         name = f"{obj.first_name} {obj.last_name}".strip() or "Patron"
         initials = (obj.first_name[:1] + obj.last_name[:1]).upper() or obj.email[:2].upper()
+        phone_html = f'<div style="color:#94A3B8; font-size:0.71rem; margin-top:2px; font-family:monospace;">📞 {obj.phone_number}</div>' if obj.phone_number else ''
         return format_html(
-            '<div style="display:flex; align-items:center; gap:0.6rem;">'
-            '<div style="width:30px; height:30px; border-radius:50%; background:#242432; border:1px solid #C5A059; color:#DFBE76; font-size:0.75rem; font-weight:700; display:flex; align-items:center; justify-content:center;">{}</div>'
+            '<div style="display:flex; align-items:center; gap:0.75rem;">'
+            '<div style="width:32px; height:32px; border-radius:50%; background:#242432; border:1px solid #C5A059; color:#DFBE76; font-size:0.75rem; font-weight:700; display:flex; align-items:center; justify-content:center; flex-shrink:0;">{}</div>'
             '<div>'
-            '<div style="font-weight:600; color:#FFFFFF;">{}</div>'
-            '<div style="color:#DFBE76; font-size:0.72rem;">{}</div>'
+            '<div style="font-weight:600; color:#FFFFFF; font-size:0.84rem;">{}</div>'
+            '<div style="color:#DFBE76; font-size:0.73rem;">{}</div>'
+            '{}'
             '</div>'
             '</div>',
             initials,
             name,
-            obj.email
+            obj.email,
+            mark_safe(phone_html)
+        )
+
+    @admin.display(description='Action')
+    def action_buttons(self, obj):
+        edit_url = reverse('admin:accounts_customuser_change', args=[obj.id])
+        return format_html(
+            '<a href="{}" style="display:inline-flex; align-items:center; gap:4px; padding:4px 10px; background:#1C202C; border:1px solid #2D3242; border-radius:6px; color:#E2E8F0; font-size:0.72rem; font-weight:600; text-decoration:none; transition:all 0.15s ease;">Edit</a>',
+            edit_url
         )
 
     @admin.display(description='Tier / Role')
