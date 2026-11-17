@@ -824,33 +824,51 @@
     display: flex;
     align-items: center;
     gap: 14px;
+    flex: 1 1 auto;
+    min-width: 0;
 }
 
-.shopify-back-btn {
-    display: inline-flex;
+.shopify-top-header-nav-row {
+    display: flex;
     align-items: center;
-    gap: 6px;
-    color: #94A3B8;
-    text-decoration: none;
-    font-size: 12.5px;
-    font-weight: 600;
-    padding: 6px 12px;
-    background: #181B26;
-    border: 1px solid #2A2F40;
-    border-radius: 6px;
-    transition: all 0.15s ease;
+    gap: 10px;
+    flex-shrink: 0;
+}
+
+.shopify-back-btn,
+.shopify-back-btn:link,
+.shopify-back-btn:visited,
+a.shopify-back-btn,
+a.shopify-back-btn:link,
+a.shopify-back-btn:visited {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+    color: #94A3B8 !important;
+    text-decoration: none !important;
+    text-decoration-line: none !important;
+    font-size: 12.5px !important;
+    font-weight: 600 !important;
+    padding: 6px 12px !important;
+    background: #181B26 !important;
+    border: 1px solid #2A2F40 !important;
+    border-radius: 6px !important;
+    transition: all 0.15s ease !important;
 }
 
 .shopify-back-btn:hover {
-    color: #FFF;
-    border-color: #C5A059;
-    background: #202433;
+    color: #FFF !important;
+    border-color: #C5A059 !important;
+    background: #202433 !important;
+    text-decoration: none !important;
 }
 
 .shopify-page-title-wrap {
     display: flex;
     align-items: center;
     gap: 10px;
+    min-width: 0;
+    flex: 1 1 auto;
 }
 
 .shopify-page-title {
@@ -858,6 +876,9 @@
     font-weight: 700;
     color: #FAF9F6;
     margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .shopify-status-indicator {
@@ -885,42 +906,86 @@
     display: flex;
     align-items: center;
     gap: 10px;
+    flex-shrink: 0;
 }
 
-.shopify-btn-discard {
-    background: #181B26;
-    color: #CBD5E1;
-    border: 1px solid #2F3547;
-    border-radius: 6px;
-    padding: 8px 16px;
-    font-size: 12.5px;
-    font-weight: 600;
-    cursor: pointer;
-    text-decoration: none;
-    transition: all 0.15s ease;
+.shopify-btn-history,
+.shopify-btn-history:link,
+.shopify-btn-history:visited,
+a.shopify-btn-history,
+a.shopify-btn-history:link,
+a.shopify-btn-history:visited {
+    background: #181B26 !important;
+    color: #C5A059 !important;
+    border: 1px solid #2B3045 !important;
+    border-radius: 6px !important;
+    padding: 8px 14px !important;
+    font-size: 12.5px !important;
+    font-weight: 600 !important;
+    cursor: pointer !important;
+    text-decoration: none !important;
+    text-decoration-line: none !important;
+    transition: all 0.15s ease !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+.shopify-btn-history:hover {
+    background: #242938 !important;
+    color: #FAF9F6 !important;
+    border-color: rgba(197, 160, 89, 0.45) !important;
+    text-decoration: none !important;
+}
+
+.shopify-btn-discard,
+.shopify-btn-discard:link,
+.shopify-btn-discard:visited,
+a.shopify-btn-discard,
+a.shopify-btn-discard:link,
+a.shopify-btn-discard:visited {
+    background: #181B26 !important;
+    color: #CBD5E1 !important;
+    border: 1px solid #2F3547 !important;
+    border-radius: 6px !important;
+    padding: 8px 16px !important;
+    font-size: 12.5px !important;
+    font-weight: 600 !important;
+    cursor: pointer !important;
+    text-decoration: none !important;
+    text-decoration-line: none !important;
+    transition: all 0.15s ease !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
 }
 
 .shopify-btn-discard:hover {
-    background: #242938;
-    color: #FFF;
+    background: #242938 !important;
+    color: #FFF !important;
+    border-color: #E2B755 !important;
+    text-decoration: none !important;
 }
 
 .shopify-btn-save {
-    background: #10B981;
-    color: #FFF;
-    border: 1px solid #059669;
-    border-radius: 6px;
-    padding: 8px 20px;
-    font-size: 12.5px;
-    font-weight: 700;
-    cursor: pointer;
-    transition: all 0.15s ease;
-    box-shadow: 0 2px 10px rgba(16, 185, 129, 0.3);
+    background: #10B981 !important;
+    color: #FFF !important;
+    border: 1px solid #059669 !important;
+    border-radius: 6px !important;
+    padding: 8px 20px !important;
+    font-size: 12.5px !important;
+    font-weight: 700 !important;
+    cursor: pointer !important;
+    transition: all 0.15s ease !important;
+    box-shadow: 0 2px 10px rgba(16, 185, 129, 0.3) !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
 }
 
 .shopify-btn-save:hover {
-    background: #059669;
-    transform: translateY(-1px);
+    background: #059669 !important;
+    transform: translateY(-1px) !important;
 }
 
 /* ========================================================
@@ -1765,40 +1830,53 @@ div.breadcrumbs {
         white-space: nowrap !important;
     }
 
-    /* Top Sticky Page Header Bar */
+    /* Top Sticky Page Header Bar (Mobile Optimized) */
     .shopify-top-page-header {
         display: flex !important;
         flex-direction: column !important;
         align-items: stretch !important;
-        gap: 10px !important;
-        padding: 10px 12px !important;
+        gap: 12px !important;
+        padding: 12px 14px !important;
         margin-bottom: 14px !important;
         background: #141620 !important;
         border: 1px solid #232736 !important;
         border-radius: 8px !important;
         box-sizing: border-box !important;
         width: 100% !important;
+        max-width: 100% !important;
     }
     .shopify-top-header-left {
         display: flex !important;
-        flex-direction: row !important;
-        align-items: center !important;
-        justify-content: space-between !important;
+        flex-direction: column !important;
+        align-items: stretch !important;
         gap: 8px !important;
         width: 100% !important;
     }
-    .shopify-back-btn {
+    .shopify-top-header-nav-row {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: space-between !important;
+        width: 100% !important;
+    }
+    .shopify-back-btn,
+    .shopify-back-btn:link,
+    .shopify-back-btn:visited,
+    a.shopify-back-btn,
+    a.shopify-back-btn:link,
+    a.shopify-back-btn:visited {
         padding: 6px 10px !important;
         font-size: 11px !important;
         flex-shrink: 0 !important;
         border-radius: 5px !important;
+        color: #94A3B8 !important;
+        background: #181B26 !important;
+        border: 1px solid #2A2F40 !important;
+        text-decoration: none !important;
     }
     .shopify-page-title-wrap {
         display: flex !important;
         align-items: center !important;
-        gap: 6px !important;
-        flex: 1 1 auto !important;
-        justify-content: flex-end !important;
+        width: 100% !important;
         min-width: 0 !important;
     }
     .shopify-page-title {
@@ -1806,9 +1884,9 @@ div.breadcrumbs {
         font-weight: 700 !important;
         color: #FAF9F6 !important;
         margin: 0 !important;
-        white-space: nowrap !important;
-        overflow: hidden !important;
-        text-overflow: ellipsis !important;
+        white-space: normal !important;
+        word-break: break-word !important;
+        line-height: 1.35 !important;
     }
     .shopify-status-indicator {
         font-size: 9.5px !important;
@@ -1816,16 +1894,23 @@ div.breadcrumbs {
         flex-shrink: 0 !important;
     }
     .shopify-top-header-actions {
-        display: grid !important;
-        grid-template-columns: 1fr 2fr !important;
+        display: flex !important;
+        flex-direction: row !important;
+        align-items: center !important;
         gap: 8px !important;
         width: 100% !important;
+        box-sizing: border-box !important;
     }
-    .shopify-btn-discard {
-        width: 100% !important;
+    .shopify-btn-history,
+    .shopify-btn-history:link,
+    .shopify-btn-history:visited,
+    a.shopify-btn-history,
+    a.shopify-btn-history:link,
+    a.shopify-btn-history:visited {
+        flex: 1 1 auto !important;
         height: 38px !important;
         padding: 0 10px !important;
-        font-size: 12px !important;
+        font-size: 11.5px !important;
         font-weight: 600 !important;
         border-radius: 6px !important;
         display: inline-flex !important;
@@ -1833,9 +1918,37 @@ div.breadcrumbs {
         justify-content: center !important;
         text-align: center !important;
         box-sizing: border-box !important;
+        background: #181B26 !important;
+        color: #C5A059 !important;
+        border: 1px solid #2B3045 !important;
+        text-decoration: none !important;
+        white-space: nowrap !important;
+    }
+    .shopify-btn-discard,
+    .shopify-btn-discard:link,
+    .shopify-btn-discard:visited,
+    a.shopify-btn-discard,
+    a.shopify-btn-discard:link,
+    a.shopify-btn-discard:visited {
+        flex: 1 1 auto !important;
+        height: 38px !important;
+        padding: 0 10px !important;
+        font-size: 11.5px !important;
+        font-weight: 600 !important;
+        border-radius: 6px !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        text-align: center !important;
+        box-sizing: border-box !important;
+        background: #181B26 !important;
+        color: #CBD5E1 !important;
+        border: 1px solid #2F3547 !important;
+        text-decoration: none !important;
+        white-space: nowrap !important;
     }
     .shopify-btn-save {
-        width: 100% !important;
+        flex: 2 1 auto !important;
         height: 38px !important;
         padding: 0 14px !important;
         font-size: 12.5px !important;
@@ -1846,6 +1959,10 @@ div.breadcrumbs {
         justify-content: center !important;
         text-align: center !important;
         box-sizing: border-box !important;
+        background: #10B981 !important;
+        color: #FFFFFF !important;
+        border: 1px solid #059669 !important;
+        white-space: nowrap !important;
     }
 
     /* 2-Column Shopify Grid to 1-Column Fluid Stack */
@@ -2391,25 +2508,16 @@ div.breadcrumbs {
         gap: 6px !important;
     }
 }
+
+/* Hide legacy title and object tools banner so only unified Shopify top header is displayed */
+.titles-and-tools {
+    display: none !important;
+}
 </style>
 {% endblock %}
 
-{% block content_title %}
-<div class="lux-admin-banner">
-    <div class="lux-admin-banner-left">
-        <div class="lux-admin-banner-icon">💎</div>
-        <div class="lux-admin-banner-text">
-            <h3>
-                <span class="lux-banner-mobile-title">Luckjary Atelier</span>
-                <span class="lux-banner-desktop-title">Luckjary Haute Joaillerie Atelier &bull; Piece Management</span>
-            </h3>
-            <p>Unified luxury catalog specifications, live precious metal swatches, and certified gemological details.</p>
-        </div>
-    </div>
-    <span class="lux-admin-badge-gold">Atelier Suite</span>
-</div>
-{{ block.super }}
-{% endblock %}
+{% block content_title %}{% endblock %}
+{% block object-tools %}{% endblock %}
 
 {% block admin_change_form_document_ready %}
 {{ block.super }}
@@ -3001,20 +3109,24 @@ div.breadcrumbs {
     // Build Shopify Top Header Bar
     var isAdd = window.location.pathname.indexOf('/add/') !== -1;
     var currentTitle = titleInput ? (titleInput.value || '').trim() : '';
-    var pageTitleText = isAdd ? 'Add product' : (currentTitle || 'Change product');
+    var pageTitleText = isAdd ? 'Add piece to Atelier Vault' : (currentTitle || 'Change product');
     var isActiveStatus = isAvailableCb ? isAvailableCb.checked : true;
+    var historyBtnHtml = !isAdd ? '<a href="history/" class="shopify-btn-history">History</a>' : '';
 
     var topBar = document.createElement('div');
     topBar.className = 'shopify-top-page-header';
     topBar.innerHTML = 
         '<div class="shopify-top-header-left">' +
-        '  <a href="../" class="shopify-back-btn">← Products</a>' +
+        '  <div class="shopify-top-header-nav-row">' +
+        '    <a href="../" class="shopify-back-btn">← Products</a>' +
+        '    <span class="shopify-status-indicator ' + (isActiveStatus ? 'is-active' : 'is-draft') + '" id="shopify-top-status-badge">' + (isActiveStatus ? 'Active' : 'Draft') + '</span>' +
+        '  </div>' +
         '  <div class="shopify-page-title-wrap">' +
         '    <h1 class="shopify-page-title" id="shopify-top-title">' + pageTitleText + '</h1>' +
-        '    <span class="shopify-status-indicator ' + (isActiveStatus ? 'is-active' : 'is-draft') + '" id="shopify-top-status-badge">' + (isActiveStatus ? 'Active' : 'Draft') + '</span>' +
         '  </div>' +
         '</div>' +
         '<div class="shopify-top-header-actions">' +
+        historyBtnHtml +
         '  <a href="../" class="shopify-btn-discard">Discard</a>' +
         '  <button type="button" class="shopify-btn-save" id="btn-top-save">Save Product</button>' +
         '</div>';
