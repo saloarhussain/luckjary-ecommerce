@@ -4,8 +4,9 @@
 <meta charset="utf-8">
 <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport">
 <title>Atelier Vault | LUCKJARY</title>
-<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..900;1,6..96,400..900&amp;family=Plus+Jakarta+Sans:ital,wght@0,300..800;1,300..800&amp;display=swap" rel="stylesheet">
-<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700;800&amp;family=JetBrains+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..900;1,6..96,400..900&amp;family=Plus+Jakarta+Sans:ital,wght@0,300..800;1,300..800&amp;family=JetBrains+Mono:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <script id="tailwind-config">
@@ -61,16 +62,19 @@ tailwind.config = {
         "surface-tint": "#4edea3"
       },
       fontFamily: {
-        "display-lg": ["Bodoni Moda", "serif"],
-        "headline-lg": ["Bodoni Moda", "serif"],
-        "headline-md": ["Bodoni Moda", "serif"],
-        "headline-sm": ["Bodoni Moda", "serif"],
+        sans: ["Plus Jakarta Sans", "-apple-system", "BlinkMacSystemFont", "Segoe UI", "sans-serif"],
+        mono: ["JetBrains Mono", "SFMono-Regular", "Menlo", "monospace"],
+        serif: ["Bodoni Moda", "Georgia", "serif"],
+        "display-lg": ["Plus Jakarta Sans", "sans-serif"],
+        "headline-lg": ["Plus Jakarta Sans", "sans-serif"],
+        "headline-md": ["Plus Jakarta Sans", "sans-serif"],
+        "headline-sm": ["Plus Jakarta Sans", "sans-serif"],
         "body-lg": ["Plus Jakarta Sans", "sans-serif"],
         "body-md": ["Plus Jakarta Sans", "sans-serif"],
         "body-sm": ["Plus Jakarta Sans", "sans-serif"],
         "label-md": ["Plus Jakarta Sans", "sans-serif"],
         "label-sm": ["Plus Jakarta Sans", "sans-serif"],
-        "serif-luxury": ["Bodoni Moda", "serif"],
+        "serif-luxury": ["Plus Jakarta Sans", "-apple-system", "BlinkMacSystemFont", "Segoe UI", "sans-serif"],
         "mono-luxury": ["JetBrains Mono", "monospace"]
       }
     }
@@ -170,7 +174,7 @@ tailwind.config = {
       <a href="/admin/" class="flex items-center gap-2.5 group focus:outline-none">
         <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 inline-block group-hover:scale-125 transition-transform duration-300 shadow-[0_0_8px_rgba(16,185,129,0.5)]"></span>
         <div class="flex flex-col">
-          <span class="font-bold text-[14px] tracking-[0.16em] text-zinc-100 font-serif-luxury">LUCKJARY</span>
+          <span class="font-bold text-[14px] tracking-[0.16em] text-zinc-100 font-sans">LUCKJARY</span>
           <span class="text-[9px] text-[#ebd38d] uppercase tracking-[0.25em] font-mono-luxury font-semibold">HAUTE ATELIER</span>
         </div>
       </a>
@@ -338,7 +342,7 @@ tailwind.config = {
             <div class="w-7 h-7 rounded-lg bg-surface-card border border-secondary/30 flex items-center justify-center text-secondary">
               <span class="material-symbols-outlined text-[15px]">diamond</span>
             </div>
-            <span class="text-xs uppercase font-serif-luxury tracking-[0.2em] font-semibold text-text-platinum">Luckjary</span>
+            <span class="text-xs uppercase font-sans tracking-[0.2em] font-semibold text-text-platinum">Luckjary</span>
           </div>
         </div>
 
@@ -410,7 +414,7 @@ tailwind.config = {
             </span>
           </div>
           <div class="flex items-baseline gap-3">
-            <h1 class="font-serif-luxury text-2xl sm:text-3xl lg:text-4xl text-text-platinum font-semibold tracking-wide">Atelier Vault</h1>
+            <h1 class="font-sans text-2xl sm:text-3xl text-white font-bold tracking-tight">Atelier Vault</h1>
             <span id="vaultTotalBadge" class="bg-surface-card-elevated border border-border-strong text-secondary font-mono-luxury text-[11px] sm:text-xs px-2.5 py-1 rounded-full font-medium shadow-sm">
               <span id="vaultPiecesCount">{{ cl.result_count }}</span> PIECES
             </span>
@@ -431,256 +435,248 @@ tailwind.config = {
 
       <!-- Search, Fast Controls & View Bar -->
       <div class="flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-3">
-        <!-- Search Bar with SKU / Hallmark & Barcode -->
-        <div class="flex-1 flex items-center gap-2 justify-between">
-          <div class="flex-1 flex items-center relative h-10 bg-surface-card border border-border-strong rounded-xl px-3 text-xs text-text-muted focus-within:border-primary/60 shadow-sm transition-all">
-            <span class="material-symbols-outlined text-[18px] mr-2.5 text-text-muted shrink-0">search</span>
-            <input class="bg-transparent text-text-platinum text-xs placeholder:text-text-muted/70 focus:outline-none w-full min-w-0 font-body-sm" id="productSearchInput" placeholder="Search SKU, hallmark, piece or patron..." type="text">
-            <div class="flex items-center gap-1.5 ml-2 shrink-0">
-              <span class="material-symbols-outlined text-[17px] text-text-muted cursor-pointer hover:text-text-platinum transition-colors" title="Scan Barcode">barcode_scanner</span>
-              <kbd class="hidden sm:inline-block px-1.5 py-0.5 text-[10px] font-mono-luxury bg-surface-dim border border-border-strong rounded text-text-muted">⌘K</kbd>
-            </div>
+        <!-- Search Bar matching Orders font and layout -->
+        <div class="relative flex-1">
+          <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-zinc-400">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+            </svg>
+          </div>
+          <input id="productSearchInput" class="w-full pl-9 pr-24 py-2.5 bg-[#14161c] border border-[#232732] rounded-xl text-xs sm:text-sm font-sans text-zinc-100 placeholder-zinc-500 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500/40 transition-colors" placeholder="Search orders, fine jewelry, SKU, ref..." type="text">
+          <div class="absolute inset-y-0 right-1.5 flex items-center gap-1.5">
+            <button aria-label="Barcode Search" class="p-1.5 rounded-lg text-zinc-400 hover:text-amber-300 transition-colors cursor-pointer" title="Scan Barcode / SKU" type="button">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path d="M3 5v14M7 5v14M11 5v14M15 5v14M17 5v14M21 5v14"></path>
+              </svg>
+            </button>
+            <button id="searchSubmitBtn" class="px-2.5 sm:px-3 py-1.5 text-xs font-semibold uppercase font-mono tracking-wider bg-[#1e222d] hover:bg-[#282d3b] text-zinc-300 rounded-lg border border-[#2d3240] transition-colors cursor-pointer" type="button">
+              Search
+            </button>
           </div>
         </div>
 
-        <!-- Filter & View Switcher Controls -->
-        <div class="flex items-center gap-2 self-end lg:self-auto shrink-0">
-          <button class="h-10 px-3.5 rounded-xl bg-surface-card hover:bg-surface-card-elevated border border-border-strong text-text-platinum text-xs font-label-md flex items-center gap-2 transition-all shadow-sm active:scale-95 cursor-pointer" id="filterModalToggle" type="button">
-            <span class="material-symbols-outlined text-[18px] text-secondary">tune</span>
+        <!-- Filter & Action Buttons -->
+        <div class="flex items-center gap-2.5 shrink-0">
+          <button id="filterModalToggle" class="py-2.5 px-4 bg-[#14161c] hover:bg-[#181a22] border border-[#232732] rounded-xl text-xs font-semibold text-zinc-200 flex items-center justify-center gap-2 transition-all shadow-sm cursor-pointer" type="button">
+            <svg class="w-3.5 h-3.5 text-amber-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <line x1="4" x2="4" y1="21" y2="14"></line><line x1="4" x2="4" y1="10" y2="3"></line>
+              <line x1="12" x2="12" y1="21" y2="12"></line><line x1="12" x2="12" y1="8" y2="3"></line>
+              <line x1="20" x2="20" y1="21" y2="16"></line><line x1="20" x2="20" y1="12" y2="3"></line>
+              <line x1="1" x2="7" y1="14" y2="14"></line><line x1="9" x2="15" y1="8" y2="8"></line><line x1="17" x2="23" y1="16" y2="16"></line>
+            </svg>
             <span>Filters</span>
-            <span class="w-5 h-5 rounded-full bg-surface-card-elevated text-secondary text-[10px] font-mono-luxury flex items-center justify-center font-bold border border-secondary/20">2</span>
+            <span class="w-4 h-4 rounded-full bg-amber-400/20 text-amber-300 text-[10px] font-mono font-bold flex items-center justify-center">2</span>
+          </button>
+          <button onclick="showToast('Exporting vault manifest...', 'file_download')" class="py-2.5 px-4 bg-[#14161c] hover:bg-[#181a22] border border-[#232732] rounded-xl text-xs font-medium text-zinc-300 flex items-center justify-center gap-2 transition-all shadow-sm cursor-pointer" type="button">
+            <svg class="w-3.5 h-3.5 text-zinc-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="7 10 12 15 17 10"></polyline>
+              <line x1="12" x2="12" y1="15" y2="3"></line>
+            </svg>
+            <span>Export</span>
           </button>
           <!-- Grid vs List View Switcher Buttons -->
-          <div class="flex items-center gap-1 bg-surface-card border border-border-strong/70 rounded-xl p-1">
-            <button aria-label="Grid View" class="w-8 h-8 rounded-lg flex items-center justify-center transition-all text-text-muted hover:text-text-platinum cursor-pointer" id="viewGridBtn" title="Gallery Grid View" type="button">
+          <div class="hidden sm:flex items-center gap-1 bg-[#14161c] border border-[#232732] rounded-xl p-1">
+            <button aria-label="Grid View" class="w-8 h-8 rounded-lg flex items-center justify-center transition-all text-zinc-400 hover:text-white cursor-pointer" id="viewGridBtn" title="Gallery Grid View" type="button">
               <span class="material-symbols-outlined text-[19px]">grid_view</span>
             </button>
-            <button aria-label="List View" class="w-8 h-8 rounded-lg bg-surface-card-elevated text-primary flex items-center justify-center transition-colors shadow-sm cursor-pointer" id="viewListBtn" title="Compact List View" type="button">
+            <button aria-label="List View" class="w-8 h-8 rounded-lg bg-[#1e222d] text-emerald-400 flex items-center justify-center transition-colors shadow-sm cursor-pointer" id="viewListBtn" title="Compact List View" type="button">
               <span class="material-symbols-outlined text-[19px]">view_agenda</span>
             </button>
           </div>
         </div>
       </div>
 
-      <!-- Categories Horizontal Filter Chips -->
-      <div class="flex items-center gap-2 sm:gap-2.5 overflow-x-auto pb-1 -mx-4 px-4 sm:mx-0 sm:px-0 scrollbar-none" id="categoryChips">
-        <button class="category-chip active whitespace-nowrap px-4 py-2 rounded-xl font-label-sm text-xs bg-surface-card-elevated text-primary border border-primary/30 shadow-sm flex items-center gap-2 transition-all cursor-pointer" type="button">
+      <!-- Categories Horizontal Filter Chips (Pill Carousel matching Orders) -->
+      <div class="flex items-center gap-2 overflow-x-auto no-scrollbar pt-2 pb-1 text-xs border-y border-[#232732]" id="categoryChips">
+        <button class="category-chip active whitespace-nowrap px-4 py-1.5 rounded-full font-semibold bg-emerald-500 text-[#0d0e10] shadow-sm flex items-center gap-1.5 transition-all cursor-pointer font-sans" type="button">
           <span>All Vault</span>
-          <span class="text-[11px] font-mono-luxury px-1.5 py-0.2 rounded bg-primary/10 text-primary">{{ cl.result_count }}</span>
+          <span class="opacity-90 font-mono text-[11px] font-bold">{{ cl.result_count }}</span>
         </button>
-        <button class="category-chip whitespace-nowrap px-4 py-2 rounded-xl font-label-sm text-xs bg-surface-card text-text-muted hover:text-text-platinum border border-border-strong/70 hover:border-border-strong shadow-sm flex items-center gap-2 transition-all cursor-pointer" type="button">
+        <button class="category-chip whitespace-nowrap px-4 py-1.5 rounded-full font-medium bg-[#14161c] border border-[#232732] text-zinc-400 hover:text-zinc-100 hover:border-zinc-700 flex items-center gap-1.5 transition-all cursor-pointer font-sans" type="button">
           <span>Rings</span>
-          <span class="text-[11px] font-mono-luxury text-text-muted">{{ category_counts.rings|default:5 }}</span>
+          <span class="opacity-90 font-mono text-[11px]">{{ category_counts.rings|default:5 }}</span>
         </button>
-        <button class="category-chip whitespace-nowrap px-4 py-2 rounded-xl font-label-sm text-xs bg-surface-card text-text-muted hover:text-text-platinum border border-border-strong/70 hover:border-border-strong shadow-sm flex items-center gap-2 transition-all cursor-pointer" type="button">
+        <button class="category-chip whitespace-nowrap px-4 py-1.5 rounded-full font-medium bg-[#14161c] border border-[#232732] text-zinc-400 hover:text-zinc-100 hover:border-zinc-700 flex items-center gap-1.5 transition-all cursor-pointer font-sans" type="button">
           <span>Necklaces</span>
-          <span class="text-[11px] font-mono-luxury text-text-muted">{{ category_counts.necklaces|default:4 }}</span>
+          <span class="opacity-90 font-mono text-[11px]">{{ category_counts.necklaces|default:4 }}</span>
         </button>
-        <button class="category-chip whitespace-nowrap px-4 py-2 rounded-xl font-label-sm text-xs bg-surface-card text-text-muted hover:text-text-platinum border border-border-strong/70 hover:border-border-strong shadow-sm flex items-center gap-2 transition-all cursor-pointer" type="button">
+        <button class="category-chip whitespace-nowrap px-4 py-1.5 rounded-full font-medium bg-[#14161c] border border-[#232732] text-zinc-400 hover:text-zinc-100 hover:border-zinc-700 flex items-center gap-1.5 transition-all cursor-pointer font-sans" type="button">
           <span>Bracelets</span>
-          <span class="text-[11px] font-mono-luxury text-text-muted">{{ category_counts.bracelets|default:3 }}</span>
+          <span class="opacity-90 font-mono text-[11px]">{{ category_counts.bracelets|default:3 }}</span>
         </button>
-        <button class="category-chip whitespace-nowrap px-4 py-2 rounded-xl font-label-sm text-xs bg-surface-card text-text-muted hover:text-text-platinum border border-border-strong/70 hover:border-border-strong shadow-sm flex items-center gap-2 transition-all cursor-pointer" type="button">
+        <button class="category-chip whitespace-nowrap px-4 py-1.5 rounded-full font-medium bg-[#14161c] border border-[#232732] text-zinc-400 hover:text-zinc-100 hover:border-zinc-700 flex items-center gap-1.5 transition-all cursor-pointer font-sans" type="button">
           <span>Earrings</span>
-          <span class="text-[11px] font-mono-luxury text-text-muted">{{ category_counts.earrings|default:5 }}</span>
+          <span class="opacity-90 font-mono text-[11px]">{{ category_counts.earrings|default:5 }}</span>
         </button>
-        <button class="category-chip whitespace-nowrap px-4 py-2 rounded-xl font-label-sm text-xs bg-surface-card text-text-muted hover:text-text-platinum border border-border-strong/70 hover:border-border-strong shadow-sm flex items-center gap-2 transition-all cursor-pointer" type="button">
+        <button class="category-chip whitespace-nowrap px-4 py-1.5 rounded-full font-medium bg-[#14161c] border border-[#232732] text-zinc-400 hover:text-zinc-100 hover:border-zinc-700 flex items-center gap-1.5 transition-all cursor-pointer font-sans" type="button">
           <span>High Jewelry</span>
-          <span class="text-[11px] font-mono-luxury text-text-muted">{{ category_counts.high_jewelry|default:2 }}</span>
+          <span class="opacity-90 font-mono text-[11px]">{{ category_counts.high_jewelry|default:2 }}</span>
         </button>
-        <button class="category-chip whitespace-nowrap px-4 py-2 rounded-xl font-label-sm text-xs bg-surface-card text-secondary/90 hover:text-secondary border border-secondary/20 shadow-sm flex items-center gap-2 transition-all ml-auto cursor-pointer" type="button">
-          <span class="w-1.5 h-1.5 rounded-full bg-secondary animate-pulse"></span>
+        <button class="category-chip whitespace-nowrap px-4 py-1.5 rounded-full font-medium bg-[#14161c] border border-[#d97706]/35 text-[#fbbf24] hover:border-amber-500 flex items-center gap-1.5 transition-all ml-auto cursor-pointer font-sans" type="button">
+          <span class="w-1.5 h-1.5 rounded-full bg-[#f59e0b] animate-pulse"></span>
           <span>Low Stock Alert</span>
-          <span class="text-[11px] font-mono-luxury px-1.5 py-0.2 rounded bg-secondary/15 text-secondary">{{ category_counts.low_stock|default:2 }}</span>
+          <span class="font-mono text-[11px] font-bold bg-amber-500/15 px-1.5 py-0.2 rounded text-amber-300">{{ category_counts.low_stock|default:2 }}</span>
         </button>
       </div>
 
-      <!-- Bulk Selection Header Bar -->
-      <div class="flex flex-wrap items-center justify-between bg-surface-card border border-border-strong px-4 py-2.5 rounded-xl shadow-md gap-3">
-        <label class="flex items-center gap-3 cursor-pointer select-none">
-          <input class="w-4 h-4 rounded bg-surface-dim border-border-strong accent-primary cursor-pointer transition-colors" id="selectAllCheckbox" type="checkbox">
-          <span class="font-label-sm text-xs sm:text-[13px] text-text-platinum tracking-wide"><span class="font-semibold text-primary" id="selectedCount">0</span> of <span id="totalSelectedCount">{{ cl.result_count }}</span> Selected</span>
-        </label>
-        <div class="flex items-center gap-2 sm:gap-3">
-          <!-- Batch Actions Dropdown -->
-          <div class="relative inline-block text-left" id="batchDropdownWrapper">
-            <button id="batchActionsBtn" class="font-label-sm text-xs sm:text-[13px] bg-surface-card-elevated hover:bg-surface-variant text-text-platinum border border-border-strong px-3 py-1.5 rounded-lg flex items-center gap-1.5 shadow-sm transition-all cursor-pointer" type="button">
-              <span class="material-symbols-outlined text-[17px] text-secondary">edit_note</span>
-              <span>Batch Actions</span>
-              <span class="material-symbols-outlined text-[15px] text-text-muted transition-transform duration-200" id="batchChevron">expand_more</span>
-            </button>
-            
-            <!-- Dropdown Menu -->
-            <div id="batchActionsMenu" class="absolute right-0 mt-2 w-64 bg-[#181a22]/95 backdrop-blur-xl border border-border-strong rounded-xl shadow-2xl py-2 z-50 hidden">
-              <div class="px-3.5 py-1.5 border-b border-border-subtle/80 text-[11px] font-mono-luxury text-text-muted uppercase tracking-wider flex items-center justify-between">
-                <span>Vault Operations</span>
-                <span id="batchMenuSelectionCount" class="text-primary font-semibold">0 selected</span>
-              </div>
-              <div class="py-1">
-                <button type="button" class="w-full text-left px-3.5 py-2 hover:bg-surface-variant flex items-center gap-2.5 text-xs text-text-platinum transition-colors cursor-pointer" onclick="handleBatchDiscount()">
-                  <span class="material-symbols-outlined text-[16px] text-secondary">percent</span>
-                  <span>Apply Bulk Discount...</span>
-                </button>
-                <button type="button" class="w-full text-left px-3.5 py-2 hover:bg-surface-variant flex items-center gap-2.5 text-xs text-text-platinum transition-colors cursor-pointer" onclick="handleBatchStock()">
-                  <span class="material-symbols-outlined text-[16px] text-primary">inventory_2</span>
-                  <span>Restock Selected (+10 Units)</span>
-                </button>
-                <button type="button" class="w-full text-left px-3.5 py-2 hover:bg-surface-variant flex items-center gap-2.5 text-xs text-text-platinum transition-colors cursor-pointer" onclick="handleBatchAvailability(true)">
-                  <span class="material-symbols-outlined text-[16px] text-emerald-400">check_circle</span>
-                  <span>Mark as Available in Vault</span>
-                </button>
-                <button type="button" class="w-full text-left px-3.5 py-2 hover:bg-surface-variant flex items-center gap-2.5 text-xs text-text-platinum transition-colors cursor-pointer" onclick="handleBatchAvailability(false)">
-                  <span class="material-symbols-outlined text-[16px] text-amber-400">visibility_off</span>
-                  <span>Mark as Hidden / Reserve</span>
-                </button>
-                <button type="button" class="w-full text-left px-3.5 py-2 hover:bg-surface-variant flex items-center gap-2.5 text-xs text-text-platinum transition-colors cursor-pointer" onclick="handleBatchFeature()">
-                  <span class="material-symbols-outlined text-[16px] text-secondary">star</span>
-                  <span>Feature on Showroom</span>
-                </button>
-              </div>
-              <div class="border-t border-border-subtle/80 my-1"></div>
-              <div class="py-1">
-                <button type="button" class="w-full text-left px-3.5 py-2 hover:bg-red-950/40 flex items-center gap-2.5 text-xs text-red-400 hover:text-red-300 transition-colors cursor-pointer" onclick="handleBulkDelete()">
-                  <span class="material-symbols-outlined text-[16px] text-red-400">delete</span>
-                  <span>Delete Selected Pieces</span>
-                </button>
-              </div>
+      <!-- BEGIN: Batch Action Controls matching Orders Page -->
+      <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 bg-[#14161c] border border-[#232732] p-3 rounded-xl">
+        <div class="flex items-center gap-3">
+          <div class="flex items-center gap-2">
+            <input id="selectAllCheckbox" class="w-4 h-4 rounded border-[#383b54] bg-[#18192b] text-emerald-500 focus:ring-emerald-500 cursor-pointer" type="checkbox">
+            <label class="cursor-pointer text-xs font-semibold text-zinc-300 select-none uppercase font-mono tracking-wider" for="selectAllCheckbox">SELECT ALL</label>
+          </div>
+          <span id="batchCountBadge" class="text-[11px] font-medium text-emerald-400 font-mono bg-emerald-500/10 px-2.5 py-0.5 rounded border border-emerald-500/20">
+            <span id="selectedCount">0</span> OF <span id="totalSelectedCount">{{ cl.result_count }}</span> SELECTED
+          </span>
+        </div>
+        <div class="flex items-center gap-2.5 w-full sm:w-auto">
+          <div class="relative flex-1 sm:w-72">
+            <select id="batchActionSelect" class="w-full bg-[#181a22] border border-[#2d3240] text-zinc-300 text-xs rounded-lg py-2 pl-3 pr-8 focus:ring-emerald-500 focus:border-emerald-500 tracking-wide font-sans appearance-none cursor-pointer">
+              <option disabled selected value="">— Batch Action: Select Option —</option>
+              <option value="discount">Apply Bulk Discount (10% - 25%)</option>
+              <option value="restock">Restock Selected (+10 Units)</option>
+              <option value="available">Mark as Available in Vault</option>
+              <option value="hidden">Mark as Hidden / Reserve</option>
+              <option value="feature">Feature on Showroom</option>
+              <option value="delete">Delete Selected Pieces</option>
+            </select>
+            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2.5 text-zinc-400">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+              </svg>
             </div>
           </div>
-
-          <button class="font-label-sm text-xs sm:text-[13px] bg-surface-card-elevated hover:bg-surface-variant text-text-platinum border border-border-strong px-3 py-1.5 rounded-lg flex items-center gap-1.5 shadow-sm transition-all cursor-pointer" type="button" onclick="showToast('Exporting vault manifest...', 'file_download')">
-            <span class="material-symbols-outlined text-[17px] text-text-muted">file_download</span>
-            <span>Export Manifest</span>
+          <button id="runBatchActionBtn" onclick="executeBatchActionSelect()" class="bg-[#1e222d] hover:bg-zinc-700 active:scale-95 border border-[#2d3240] text-zinc-100 text-xs font-semibold rounded-lg py-2 px-5 text-center transition-all shrink-0 cursor-pointer font-sans" type="button">
+            Run
           </button>
         </div>
       </div>
+      <!-- END: Batch Action Controls -->
 
-      <!-- Responsive Product Catalog Grid (Desktop 3-col / List 1-col, Tablet 2-col, Mobile 1-col) -->
       <div class="flex flex-col gap-4" id="catalogContainer">
         {% for product in cl.result_list %}
         <!-- Dynamic Product Card -->
-        <div data-id="{{ product.id }}" data-category="{{ product.category.slug|default:'rings' }}" data-price-inr="{{ product.price|floatformat:0 }}" data-compare-inr="{% if product.compare_at_price %}{{ product.compare_at_price|floatformat:0 }}{% endif %}" data-low-stock="{% if product.inventory <= 5 %}true{% else %}false{% endif %}" data-high-jewelry="{% if product.is_featured %}true{% else %}false{% endif %}" class="product-item bg-surface-card border border-border-strong hover:border-primary/40 transition-all duration-300 rounded-2xl p-4 sm:p-5 shadow-md flex flex-col md:flex-row md:items-center justify-between gap-4 sm:gap-6 relative group">
+        <div data-id="{{ product.id }}" data-category="{{ product.category.slug|default:'rings' }}" data-price-inr="{{ product.price|floatformat:0 }}" data-compare-inr="{% if product.compare_at_price %}{{ product.compare_at_price|floatformat:0 }}{% endif %}" data-low-stock="{% if product.inventory <= 5 %}true{% else %}false{% endif %}" data-high-jewelry="{% if product.is_featured %}true{% else %}false{% endif %}" class="product-item bg-[#14161c] border border-[#232732] hover:border-emerald-500/40 transition-all duration-300 rounded-2xl p-4 sm:p-5 shadow-md flex flex-col md:flex-row md:items-center justify-between gap-4 sm:gap-6 relative group">
           <!-- Mobile Top Kicker Row (md:hidden) -->
-          <div class="flex md:hidden items-center justify-between w-full pb-2.5 border-b border-border-subtle/40">
+          <div class="flex md:hidden items-center justify-between w-full pb-2.5 border-b border-[#232732]/60">
             <div class="flex items-center gap-2">
-              <span class="text-secondary font-mono-luxury text-[10px] font-semibold tracking-wider uppercase bg-surface-card-elevated border border-border-subtle px-2 py-0.5 rounded-full">{{ product.category.name|default:'JEWELRY' }}</span>
-              <span class="bg-surface-dim/90 text-secondary font-mono-luxury text-[10px] px-2 py-0.5 rounded font-bold border border-secondary/20">{% if '18K' in product.karat_metal %}18K{% elif '925' in product.karat_metal %}925{% else %}925{% endif %}</span>
+              <span class="text-emerald-400 font-mono text-[10px] font-bold tracking-wider uppercase bg-emerald-500/10 border border-emerald-500/20 px-2 py-0.5 rounded-full">{{ product.category.name|default:'JEWELRY' }}</span>
+              <span class="bg-[#18192b] text-zinc-300 font-mono text-[10px] px-2 py-0.5 rounded font-bold border border-[#2d3240]">{% if '18K' in product.karat_metal %}18K{% elif '925' in product.karat_metal %}925{% else %}925{% endif %}</span>
               {% if product.is_featured %}
-              <span class="bg-secondary/15 text-secondary border border-secondary/30 text-[10px] font-mono-luxury px-2 py-0.5 rounded font-semibold inline-flex items-center gap-1">
+              <span class="bg-amber-500/15 text-amber-300 border border-amber-500/30 text-[10px] font-mono px-2 py-0.5 rounded font-semibold inline-flex items-center gap-1">
                 <span class="material-symbols-outlined text-[12px]">star</span> FEATURED
               </span>
               {% endif %}
             </div>
             <label class="flex items-center cursor-pointer p-0.5">
-              <input class="product-checkbox w-4 h-4 rounded bg-surface-dim border-border-strong accent-primary cursor-pointer shrink-0" type="checkbox" value="{{ product.id }}">
+              <input class="product-checkbox w-4 h-4 rounded border-[#383b54] bg-[#18192b] text-emerald-500 focus:ring-emerald-500 cursor-pointer shrink-0" type="checkbox" value="{{ product.id }}">
             </label>
           </div>
 
           <!-- Main Info Block -->
           <div class="product-info-block flex items-start md:items-center gap-3.5 sm:gap-4 flex-1 min-w-0 w-full md:w-auto">
             <div class="hidden md:flex items-center shrink-0">
-              <input class="product-checkbox w-4 h-4 rounded bg-surface-dim border-border-strong accent-primary cursor-pointer shrink-0" type="checkbox" value="{{ product.id }}">
+              <input class="product-checkbox w-4 h-4 rounded border-[#383b54] bg-[#18192b] text-emerald-500 focus:ring-emerald-500 cursor-pointer shrink-0" type="checkbox" value="{{ product.id }}">
             </div>
-            <div class="product-thumb-container relative w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 rounded-xl overflow-hidden bg-surface-dim shrink-0 border border-border-subtle group-hover:shadow-lg transition-all">
+            <div class="product-thumb-container relative w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 rounded-xl overflow-hidden bg-[#18192b] shrink-0 border border-[#232732] group-hover:shadow-lg transition-all">
               <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" alt="{{ product.title }}" src="{{ product.primary_image }}" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?auto=format&fit=crop&w=600&q=80';">
-              <button aria-label="Quick zoom view" class="absolute bottom-1 right-1 sm:bottom-1.5 sm:right-1.5 w-6 h-6 rounded-lg bg-surface-card/80 backdrop-blur-md flex items-center justify-center text-text-platinum active:scale-90 hover:bg-surface-card transition-all cursor-pointer" type="button">
+              <button aria-label="Quick zoom view" class="absolute bottom-1 right-1 sm:bottom-1.5 sm:right-1.5 w-6 h-6 rounded-lg bg-[#14161c]/80 backdrop-blur-md flex items-center justify-center text-zinc-300 active:scale-90 hover:bg-[#1e222d] transition-all cursor-pointer" type="button">
                 <span class="material-symbols-outlined text-[13px] sm:text-[14px]">zoom_in</span>
               </button>
-              <span class="hidden md:block absolute top-1 left-1 sm:top-1.5 sm:left-1.5 bg-surface-dim/90 backdrop-blur-xs text-secondary font-mono-luxury text-[9px] sm:text-[10px] px-1.5 py-0.5 rounded font-bold border border-secondary/20">{% if '18K' in product.karat_metal %}18K{% elif '925' in product.karat_metal %}925{% else %}925{% endif %}</span>
+              <span class="hidden md:block absolute top-1 left-1 sm:top-1.5 sm:left-1.5 bg-[#121315]/90 backdrop-blur-xs text-zinc-300 font-mono text-[9px] sm:text-[10px] px-1.5 py-0.5 rounded font-bold border border-[#2d3240]">{% if '18K' in product.karat_metal %}18K{% elif '925' in product.karat_metal %}925{% else %}925{% endif %}</span>
             </div>
             <div class="flex-1 min-w-0 flex flex-col justify-center">
               <div class="hidden md:flex items-center justify-between md:justify-start gap-2 mb-1">
                 <div class="flex items-center gap-1.5 flex-wrap">
-                  <span class="text-secondary font-mono-luxury text-[10px] font-semibold tracking-wider uppercase bg-surface-card-elevated border border-border-subtle px-2 py-0.5 rounded-full">{{ product.category.name|default:'JEWELRY' }}</span>
-                  <button class="font-mono-luxury text-[11px] text-text-muted hover:text-primary transition-colors flex items-center gap-1 bg-surface-container-low px-2 py-0.5 rounded border border-border-subtle cursor-pointer" onclick="copySku('{{ product.sku }}')" title="Click to copy SKU" type="button">
-                    <span>{{ product.sku }}</span>
+                  <span class="text-emerald-400 font-mono text-[10px] font-bold tracking-wider uppercase bg-emerald-500/10 border border-emerald-500/20 px-2 py-0.5 rounded-full">{{ product.category.name|default:'JEWELRY' }}</span>
+                  <button type="button" class="copy-ref-btn inline-flex items-center gap-1.5 font-mono font-bold text-xs text-[#60a5fa] bg-[#1a233d] hover:bg-[#202c4d] border border-[#263e6e] px-2.5 py-0.5 rounded-lg transition-colors cursor-pointer shadow-sm" onclick="copySku('{{ product.sku }}')" title="Click to copy SKU">
+                    <span>#{{ product.sku }}</span>
                     <span class="material-symbols-outlined text-[12px]">content_copy</span>
                   </button>
                   {% if product.is_featured %}
-                  <span class="bg-secondary/15 text-secondary border border-secondary/30 text-[10px] font-mono-luxury px-2 py-0.5 rounded font-semibold inline-flex items-center gap-1">
+                  <span class="bg-amber-500/15 text-amber-300 border border-amber-500/30 text-[10px] font-mono px-2 py-0.5 rounded font-semibold inline-flex items-center gap-1">
                     <span class="material-symbols-outlined text-[12px]">star</span> FEATURED
                   </span>
                   {% endif %}
                 </div>
               </div>
-              <h2 class="font-serif-luxury text-sm sm:text-base md:text-lg lg:text-xl text-text-platinum font-semibold tracking-wide truncate mt-0.5">
-                <a href="/admin/catalog/product/{{ product.id }}/change/" class="hover:text-primary transition-colors">{{ product.title|upper }}</a>
+              <h2 class="font-sans text-sm sm:text-base font-bold text-white tracking-wide truncate mt-0.5">
+                <a href="/admin/catalog/product/{{ product.id }}/change/" class="hover:text-emerald-400 transition-colors">{{ product.title }}</a>
               </h2>
               <div class="flex md:hidden items-center gap-1.5 my-1.5">
-                <button class="font-mono-luxury text-[11px] text-text-muted hover:text-primary transition-colors flex items-center gap-1 bg-surface-container-low px-2 py-0.5 rounded border border-border-subtle cursor-pointer" onclick="copySku('{{ product.sku }}')" title="Click to copy SKU" type="button">
-                  <span>{{ product.sku }}</span>
+                <button type="button" class="copy-ref-btn inline-flex items-center gap-1.5 font-mono font-bold text-xs text-[#60a5fa] bg-[#1a233d] hover:bg-[#202c4d] border border-[#263e6e] px-2.5 py-0.5 rounded-lg transition-colors cursor-pointer shadow-sm" onclick="copySku('{{ product.sku }}')" title="Click to copy SKU">
+                  <span>#{{ product.sku }}</span>
                   <span class="material-symbols-outlined text-[12px]">content_copy</span>
                 </button>
               </div>
-              <div class="flex items-center gap-1.5 text-text-muted text-[11px] sm:text-xs mt-0.5 md:mt-1 truncate">
-                <span class="material-symbols-outlined text-[14px] text-secondary shrink-0">verified</span>
+              <div class="flex items-center gap-1.5 text-zinc-400 font-sans text-xs mt-0.5 md:mt-1 truncate">
+                <span class="material-symbols-outlined text-[14px] text-amber-400 shrink-0">verified</span>
                 <span class="truncate">{{ product.karat_metal|default:'925 Solid Sterling Silver' }}{% if product.gemstone %} • {{ product.gemstone }}{% endif %}</span>
-                <span class="text-border-strong hidden sm:inline">•</span>
-                <span class="text-text-muted/70 hidden sm:inline">{% if product.is_available %}Active in Vault{% else %}Reserve / Hidden{% endif %}</span>
+                <span class="text-zinc-600 hidden sm:inline">•</span>
+                <span class="text-zinc-400 hidden sm:inline">{% if product.is_available %}Active in Vault{% else %}Reserve / Hidden{% endif %}</span>
               </div>
             </div>
           </div>
 
           <!-- Pricing & Stock Row -->
-          <div class="pricing-stock-row flex items-center justify-between md:gap-6 shrink-0 pt-2.5 md:pt-0 border-t border-border-subtle/50 md:border-t-0 w-full md:w-auto">
+          <div class="pricing-stock-row flex items-center justify-between md:gap-6 shrink-0 pt-2.5 md:pt-0 border-t border-[#232732]/60 md:border-t-0 w-full md:w-auto">
             <div class="flex flex-col items-start md:items-center justify-center gap-1">
               {% if product.inventory > 5 %}
-              <div class="flex items-center gap-1.5 bg-primary/10 border border-primary/20 px-2.5 py-0.5 sm:px-3 sm:py-1 rounded-full">
-                <span class="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span>
-                <span class="font-label-sm text-[11px] sm:text-xs text-primary font-medium">{{ product.inventory }} in stock</span>
-              </div>
-              <span class="font-caption text-[10px] sm:text-[11px] text-text-muted/70 hidden md:block">Optimal Reserve</span>
+              <span class="inline-flex items-center gap-1.5 text-xs font-medium px-3 py-1 rounded-full bg-[#0d2822] text-[#34d399] border border-[#10b981]/35 font-sans">
+                <span class="w-1.5 h-1.5 rounded-full bg-[#10b981] animate-pulse"></span>{{ product.inventory }} in stock
+              </span>
+              <span class="font-sans text-[10px] sm:text-[11px] text-zinc-400 hidden md:block">Optimal Reserve</span>
               {% elif product.inventory > 0 %}
-              <div class="flex items-center gap-1.5 bg-secondary/15 border border-secondary/30 px-2.5 py-0.5 sm:px-3 sm:py-1 rounded-full">
-                <span class="w-1.5 h-1.5 rounded-full bg-secondary animate-pulse"></span>
-                <span class="font-label-sm text-[11px] sm:text-xs text-secondary font-medium">{{ product.inventory }} left in vault</span>
-              </div>
-              <span class="font-caption text-[10px] sm:text-[11px] text-secondary/80 hidden md:block font-semibold">Low Stock Alert</span>
+              <span class="inline-flex items-center gap-1.5 text-xs font-medium px-3 py-1 rounded-full bg-[#2d1e16] text-[#fbbf24] border border-[#d97706]/35 font-sans">
+                <span class="w-1.5 h-1.5 rounded-full bg-[#f59e0b] animate-pulse"></span>{{ product.inventory }} left in vault
+              </span>
+              <span class="font-sans text-[10px] sm:text-[11px] text-amber-400 hidden md:block font-semibold">Low Stock Alert</span>
               {% else %}
-              <div class="flex items-center gap-1.5 bg-red-950/40 border border-red-500/30 px-2.5 py-0.5 sm:px-3 sm:py-1 rounded-full">
-                <span class="w-1.5 h-1.5 rounded-full bg-red-400"></span>
-                <span class="font-label-sm text-[11px] sm:text-xs text-red-300 font-medium">Out of Stock</span>
-              </div>
-              <span class="font-caption text-[10px] sm:text-[11px] text-red-400/80 hidden md:block">Bespoke Order Only</span>
+              <span class="inline-flex items-center gap-1.5 text-xs font-medium px-3 py-1 rounded-full bg-red-950/40 text-red-300 border border-red-500/30 font-sans">
+                <span class="w-1.5 h-1.5 rounded-full bg-red-400"></span>Out of Stock
+              </span>
+              <span class="font-sans text-[10px] sm:text-[11px] text-red-400/80 hidden md:block">Bespoke Order Only</span>
               {% endif %}
             </div>
             <div class="flex flex-col items-end justify-center gap-0.5 sm:gap-1 min-w-[100px] sm:min-w-[120px]">
-              <div class="product-card-price font-serif-luxury text-lg sm:text-xl md:text-2xl text-secondary font-bold tracking-tight">₹{{ product.price|floatformat:0 }}</div>
+              <div class="product-card-price font-sans font-bold text-white text-base sm:text-lg md:text-xl tracking-tight">₹{{ product.price|floatformat:0 }}</div>
               {% if product.compare_at_price and product.compare_at_price > product.price %}
               <div class="flex items-center gap-1.5 sm:gap-2">
-                <span class="product-compare-price font-mono-luxury text-[11px] sm:text-xs text-text-muted line-through">₹{{ product.compare_at_price|floatformat:0 }}</span>
-                <span class="font-mono-luxury text-[9px] sm:text-[10px] text-primary font-semibold bg-primary/10 border border-primary/20 px-1.5 py-0.2 rounded">-{{ product.discount_percent }}%</span>
+                <span class="product-compare-price font-mono text-[11px] sm:text-xs text-zinc-500 line-through">₹{{ product.compare_at_price|floatformat:0 }}</span>
+                <span class="font-mono text-[10px] text-emerald-400 font-semibold bg-emerald-500/10 border border-emerald-500/20 px-1.5 py-0.5 rounded">-{{ product.discount_percent }}%</span>
               </div>
               {% endif %}
             </div>
           </div>
 
           <!-- Action Footer Row -->
-          <div class="action-footer-row flex items-center justify-between md:justify-end gap-2 pt-2.5 md:pt-0 border-t border-border-subtle/50 md:border-t-0 shrink-0 w-full md:w-auto">
-            <a href="/admin/catalog/product/{{ product.id }}/change/" class="flex-1 md:flex-initial flex items-center justify-center gap-1.5 bg-surface-card-elevated hover:bg-surface-variant border border-border-strong text-text-platinum font-label-sm text-xs px-3 py-2 rounded-xl shadow-sm transition-all active:scale-95 cursor-pointer">
-              <span class="material-symbols-outlined text-[15px] text-primary">edit</span>
+          <div class="action-footer-row flex items-center justify-between md:justify-end gap-2 pt-2.5 md:pt-0 border-t border-[#232732]/60 md:border-t-0 shrink-0 w-full md:w-auto">
+            <a href="/admin/catalog/product/{{ product.id }}/change/" class="bg-[#1e222d] hover:bg-[#282d3b] border border-[#2d3240] text-zinc-200 hover:text-white font-sans text-xs font-medium px-3 py-1.5 rounded-lg flex items-center justify-center gap-1.5 transition-all shadow-sm active:scale-95 cursor-pointer">
+              <span class="material-symbols-outlined text-[15px] text-emerald-400">edit</span>
               <span>Edit Stock</span>
             </a>
-            <a href="/admin/catalog/product/{{ product.id }}/change/" class="flex-1 md:flex-initial flex items-center justify-center gap-1.5 bg-surface-card-elevated hover:bg-surface-variant border border-border-strong text-text-platinum font-label-sm text-xs px-3 py-2 rounded-xl shadow-sm transition-all active:scale-95 cursor-pointer">
-              <span class="material-symbols-outlined text-[15px] text-secondary">sell</span>
+            <a href="/admin/catalog/product/{{ product.id }}/change/" class="bg-[#1e222d] hover:bg-[#282d3b] border border-[#2d3240] text-zinc-200 hover:text-white font-sans text-xs font-medium px-3 py-1.5 rounded-lg flex items-center justify-center gap-1.5 transition-all shadow-sm active:scale-95 cursor-pointer">
+              <span class="material-symbols-outlined text-[15px] text-amber-400">sell</span>
               <span>Reprice</span>
             </a>
-            <button type="button" onclick="deleteSingleProduct('{{ product.id }}', '{{ product.title|escapejs }}')" class="flex-initial flex items-center justify-center gap-1 bg-red-950/40 hover:bg-red-900/60 border border-red-500/35 text-red-400 hover:text-red-200 font-label-sm text-xs px-2.5 py-2 rounded-xl shadow-sm transition-all active:scale-95 cursor-pointer" title="Delete Product Listing">
+            <button type="button" onclick="deleteSingleProduct('{{ product.id }}', '{{ product.title|escapejs }}')" class="bg-red-950/40 hover:bg-red-900/60 border border-red-500/35 text-red-400 hover:text-red-200 font-sans text-xs font-medium px-2.5 py-1.5 rounded-lg flex items-center justify-center gap-1 transition-all shadow-sm active:scale-95 cursor-pointer" title="Delete Product Listing">
               <span class="material-symbols-outlined text-[15px] text-red-400">delete</span>
               <span>Delete</span>
             </button>
           </div>
         </div>
         {% empty %}
-        <div class="p-12 text-center bg-surface-card border border-border-strong rounded-2xl flex flex-col items-center justify-center gap-4">
-          <div class="w-16 h-16 rounded-full bg-surface-card-elevated border border-border-subtle flex items-center justify-center text-text-muted">
-            <span class="material-symbols-outlined text-3xl text-secondary">diamond</span>
+        <div class="p-12 text-center bg-[#14161c] border border-[#232732] rounded-2xl flex flex-col items-center justify-center gap-4">
+          <div class="w-16 h-16 rounded-full bg-[#181a22] border border-[#2d3240] flex items-center justify-center text-zinc-400">
+            <span class="material-symbols-outlined text-3xl text-amber-400">diamond</span>
           </div>
           <div>
-            <h3 class="font-serif-luxury text-lg text-text-platinum font-semibold">Atelier Vault is Empty</h3>
-            <p class="text-xs text-text-muted mt-1 max-w-sm">No fine jewelry pieces found in this vault query. Create your first creation below.</p>
+            <h3 class="font-sans text-lg text-white font-bold">Atelier Vault is Empty</h3>
+            <p class="text-xs text-zinc-400 mt-1 max-w-sm">No fine jewelry pieces found in this vault query. Create your first creation below.</p>
           </div>
-          <button type="button" onclick="openQuickAddModal()" class="flex items-center gap-2 bg-primary hover:bg-primary/90 text-on-primary font-label-md text-xs px-4 py-2.5 rounded-xl shadow-lg shadow-primary/20 transition-all font-semibold cursor-pointer">
+          <button type="button" onclick="openQuickAddModal()" class="flex items-center gap-2 bg-emerald-500 hover:bg-emerald-600 text-[#0d0e10] font-sans text-xs px-4 py-2.5 rounded-xl shadow-lg shadow-emerald-500/20 transition-all font-semibold cursor-pointer">
             <span class="material-symbols-outlined text-[18px]">add_circle</span>
             <span>+ Add First Piece</span>
           </button>
@@ -720,7 +716,7 @@ tailwind.config = {
           <div class="flex items-center justify-between border-b border-border-subtle pb-3">
             <div class="flex items-center gap-2">
               <span class="material-symbols-outlined text-[20px] text-secondary">percent</span>
-              <h3 class="font-serif-luxury text-base text-text-platinum font-semibold">Apply Bulk Discount</h3>
+              <h3 class="font-sans text-base text-text-platinum font-semibold">Apply Bulk Discount</h3>
             </div>
             <button type="button" onclick="closeBulkDiscountModal()" class="text-text-muted hover:text-text-platinum cursor-pointer">
               <span class="material-symbols-outlined text-[18px]">close</span>
@@ -750,7 +746,7 @@ tailwind.config = {
               <span class="material-symbols-outlined text-[22px]">delete</span>
             </div>
             <div>
-              <h3 class="font-serif-luxury text-base text-text-platinum font-semibold">Delete Selected Pieces</h3>
+              <h3 class="font-sans text-base text-text-platinum font-semibold">Delete Selected Pieces</h3>
               <p class="text-[11px] text-text-muted">Permanent Vault Removal</p>
             </div>
           </div>
@@ -770,7 +766,7 @@ tailwind.config = {
           <div class="flex items-center justify-between pb-2 border-b border-border-subtle">
             <div class="flex items-center gap-2">
               <span class="material-symbols-outlined text-[20px] text-secondary">tune</span>
-              <h3 class="font-serif-luxury text-lg text-text-platinum font-semibold">Filter Atelier Vault</h3>
+              <h3 class="font-sans text-lg text-text-platinum font-semibold">Filter Atelier Vault</h3>
             </div>
             <button class="w-8 h-8 rounded-full bg-surface-card text-text-muted hover:text-text-platinum flex items-center justify-center transition-colors cursor-pointer" id="closeFilterSheet" type="button">
               <span class="material-symbols-outlined text-[20px]">close</span>
@@ -817,7 +813,7 @@ tailwind.config = {
           </div>
           <div class="w-full flex items-center justify-between pt-1">
             <div>
-              <h4 id="zoomModalTitle" class="font-serif-luxury text-base sm:text-lg text-text-platinum font-semibold"></h4>
+              <h4 id="zoomModalTitle" class="font-sans text-base sm:text-lg text-text-platinum font-semibold"></h4>
               <span id="zoomModalSku" class="font-mono-luxury text-xs text-secondary"></span>
             </div>
             <a id="zoomModalEditLink" href="#" class="px-3 py-1.5 rounded-xl bg-primary text-on-primary text-xs font-semibold flex items-center gap-1 shadow-sm cursor-pointer">
@@ -839,7 +835,7 @@ tailwind.config = {
                 <span class="material-symbols-outlined text-[19px]">add_circle</span>
               </div>
               <div>
-                <h3 class="font-serif-luxury text-base sm:text-lg text-text-platinum font-semibold">Add New Atelier Piece</h3>
+                <h3 class="font-sans text-base sm:text-lg text-text-platinum font-semibold">Add New Atelier Piece</h3>
                 <p class="text-[11px] text-text-muted">Instant vault creation with 925 Silver guarantee</p>
               </div>
             </div>
@@ -1402,6 +1398,27 @@ tailwind.config = {
       showToast(`Featured ${selected.length} piece(s) on showroom showcase`, 'star');
     };
 
+    // --- Batch Action Select Runner (matching Orders dropdown) ---
+    window.executeBatchActionSelect = function() {
+      const select = document.getElementById('batchActionSelect');
+      const val = select ? select.value : '';
+      const selected = getSelectedCheckboxes();
+      if (!val) {
+        showToast('Please select a batch action first', 'checklist');
+        return;
+      }
+      if (selected.length === 0) {
+        promptSelectItems();
+        return;
+      }
+      if (val === 'discount') handleBatchDiscount();
+      else if (val === 'restock') handleBatchStock();
+      else if (val === 'available') handleBatchAvailability(true);
+      else if (val === 'hidden') handleBatchAvailability(false);
+      else if (val === 'feature') handleBatchFeature();
+      else if (val === 'delete') handleBulkDelete();
+    };
+
     // --- CSRF Token Helper ---
     function getCsrfToken() {
       const cookieValue = document.cookie
@@ -1607,11 +1624,11 @@ tailwind.config = {
     chips.forEach(chip => {
       chip.addEventListener('click', () => {
         chips.forEach(c => {
-          c.classList.remove('bg-surface-card-elevated', 'text-primary', 'border-primary/30');
-          c.classList.add('bg-surface-card', 'text-text-muted', 'border-border-strong/70');
+          c.classList.remove('bg-emerald-500', 'text-[#0d0e10]', 'font-semibold', 'shadow-sm');
+          c.classList.add('bg-[#14161c]', 'border-[#232732]', 'text-zinc-400', 'font-medium');
         });
-        chip.classList.remove('bg-surface-card', 'text-text-muted', 'border-border-strong/70');
-        chip.classList.add('bg-surface-card-elevated', 'text-primary', 'border-primary/30');
+        chip.classList.remove('bg-[#14161c]', 'border-[#232732]', 'text-zinc-400', 'font-medium');
+        chip.classList.add('bg-emerald-500', 'text-[#0d0e10]', 'font-semibold', 'shadow-sm');
 
         const label = chip.textContent.trim().toLowerCase();
         productItems.forEach(card => {
