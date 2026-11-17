@@ -562,7 +562,87 @@
               </div>
             </section>
 
-            <!-- 2. COMMISSIONED PIECE / DISPATCH & PACKING SPECIFICATION -->
+            <!-- 2. STAGE PROGRESSION PIPELINE -->
+            <section class="rounded-2xl bg-obsidian-850 border border-[#222736] p-4 sm:p-5 shadow-lg" data-purpose="production-pipeline-stepper">
+              <div class="flex items-center justify-between mb-3 sm:mb-4 gap-2">
+                <h2 class="text-xs font-sans uppercase tracking-widest text-champagne font-semibold flex items-center gap-1.5">
+                  <span class="w-1.5 h-1.5 rounded-full bg-champagne"></span>
+                  Stage Progression Pipeline
+                </h2>
+                <span class="text-[10px] font-mono text-platinum-400 shrink-0">
+                  {% if original.status == 'PENDING' %}Step 1 of 4
+                  {% elif original.status == 'PROCESSING' %}Step 2 of 4
+                  {% elif original.status == 'SHIPPED' %}Step 3 of 4
+                  {% elif original.status == 'DELIVERED' %}Step 4 of 4
+                  {% else %}Step 1 of 4{% endif %}
+                </span>
+              </div>
+              <!-- 4-Step Horizontal Timeline -->
+              <div class="relative py-2">
+                <!-- Background Progress Line -->
+                <div class="absolute top-3.5 sm:top-4 left-3 right-3 h-[2px] bg-[#1E232E] -z-0"></div>
+                <!-- Active Highlight Line -->
+                <div class="absolute top-3.5 sm:top-4 left-3 h-[2px] bg-champagne -z-0 transition-all duration-300 
+                  {% if original.status == 'PENDING' %}w-[15%]
+                  {% elif original.status == 'PROCESSING' %}w-[48%]
+                  {% elif original.status == 'SHIPPED' %}w-[80%]
+                  {% elif original.status == 'DELIVERED' %}w-[95%]
+                  {% else %}w-[15%]{% endif %}"></div>
+                <div class="flex justify-between relative z-10 text-center">
+                  <!-- Stage 1 (Intake) -->
+                  <div class="flex flex-col items-center group cursor-pointer">
+                    <div class="w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-champagne text-obsidian-950 flex items-center justify-center ring-4 ring-champagne/20">
+                      <svg class="w-3 h-3 sm:w-3.5 sm:h-3.5" fill="currentColor" viewBox="0 0 20 20">
+                        <path clip-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" fill-rule="evenodd"></path>
+                      </svg>
+                    </div>
+                    <span class="mt-1.5 sm:mt-2 text-[9px] sm:text-[10px] font-medium text-champagne leading-tight">Intake</span>
+                  </div>
+                  <!-- Stage 2 (Production) -->
+                  <div class="flex flex-col items-center {% if original.status in 'PROCESSING,SHIPPED,DELIVERED' %}{% else %}opacity-70{% endif %}">
+                    <div class="w-5 h-5 sm:w-6 sm:h-6 rounded-full {% if original.status in 'PROCESSING,SHIPPED,DELIVERED' %}bg-champagne text-obsidian-950 ring-4 ring-champagne/20{% else %}bg-obsidian-800 border border-champagne/40 text-[10px] text-champagne{% endif %} flex items-center justify-center">
+                      {% if original.status in 'PROCESSING,SHIPPED,DELIVERED' %}
+                        <svg class="w-3 h-3 sm:w-3.5 sm:h-3.5" fill="currentColor" viewBox="0 0 20 20">
+                          <path clip-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" fill-rule="evenodd"></path>
+                        </svg>
+                      {% else %}
+                        2
+                      {% endif %}
+                    </div>
+                    <span class="mt-1.5 sm:mt-2 text-[9px] sm:text-[10px] font-medium {% if original.status in 'PROCESSING,SHIPPED,DELIVERED' %}text-champagne{% else %}text-platinum-400{% endif %} leading-tight">Production</span>
+                  </div>
+                  <!-- Stage 3 (Dispatch) -->
+                  <div class="flex flex-col items-center {% if original.status in 'SHIPPED,DELIVERED' %}{% else %}opacity-40{% endif %}">
+                    <div class="w-5 h-5 sm:w-6 sm:h-6 rounded-full {% if original.status in 'SHIPPED,DELIVERED' %}bg-champagne text-obsidian-950 ring-4 ring-champagne/20{% else %}bg-obsidian-900 border border-[#2D3342] text-[10px] text-platinum-400{% endif %} flex items-center justify-center">
+                      {% if original.status in 'SHIPPED,DELIVERED' %}
+                        <svg class="w-3 h-3 sm:w-3.5 sm:h-3.5" fill="currentColor" viewBox="0 0 20 20">
+                          <path clip-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" fill-rule="evenodd"></path>
+                        </svg>
+                      {% else %}
+                        3
+                      {% endif %}
+                    </div>
+                    <span class="mt-1.5 sm:mt-2 text-[9px] sm:text-[10px] font-medium {% if original.status in 'SHIPPED,DELIVERED' %}text-champagne{% else %}text-platinum-400{% endif %} leading-tight">Dispatch</span>
+                  </div>
+                  <!-- Stage 4 (Delivered) -->
+                  <div class="flex flex-col items-center {% if original.status == 'DELIVERED' %}{% else %}opacity-40{% endif %}">
+                    <div class="w-5 h-5 sm:w-6 sm:h-6 rounded-full {% if original.status == 'DELIVERED' %}bg-champagne text-obsidian-950 ring-4 ring-champagne/20{% else %}bg-obsidian-900 border border-[#2D3342] text-[10px] text-platinum-400{% endif %} flex items-center justify-center">
+                      {% if original.status == 'DELIVERED' %}
+                        <svg class="w-3 h-3 sm:w-3.5 sm:h-3.5" fill="currentColor" viewBox="0 0 20 20">
+                          <path clip-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" fill-rule="evenodd"></path>
+                        </svg>
+                      {% else %}
+                        4
+                      {% endif %}
+                    </div>
+                    <span class="mt-1.5 sm:mt-2 text-[9px] sm:text-[10px] font-medium {% if original.status == 'DELIVERED' %}text-champagne{% else %}text-platinum-400{% endif %} leading-tight">Delivered</span>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+
+            <!-- 3. COMMISSIONED PIECE / DISPATCH & PACKING SPECIFICATION -->
             {% for item in original.items.all %}
             <section class="rounded-2xl bg-obsidian-850 border border-[#222736] p-4 sm:p-5 shadow-lg" data-purpose="commissioned-piece-summary">
               <!-- Header: Manifest & Visual Inspection Directive -->
@@ -888,85 +968,6 @@
               </div>
             </section>
             {% endfor %}
-
-            <!-- 3. STAGE PROGRESSION PIPELINE -->
-            <section class="rounded-2xl bg-obsidian-850 border border-[#222736] p-4 sm:p-5 shadow-lg" data-purpose="production-pipeline-stepper">
-              <div class="flex items-center justify-between mb-3 sm:mb-4 gap-2">
-                <h2 class="text-xs font-sans uppercase tracking-widest text-champagne font-semibold flex items-center gap-1.5">
-                  <span class="w-1.5 h-1.5 rounded-full bg-champagne"></span>
-                  Stage Progression Pipeline
-                </h2>
-                <span class="text-[10px] font-mono text-platinum-400 shrink-0">
-                  {% if original.status == 'PENDING' %}Step 1 of 4
-                  {% elif original.status == 'PROCESSING' %}Step 2 of 4
-                  {% elif original.status == 'SHIPPED' %}Step 3 of 4
-                  {% elif original.status == 'DELIVERED' %}Step 4 of 4
-                  {% else %}Step 1 of 4{% endif %}
-                </span>
-              </div>
-              <!-- 4-Step Horizontal Timeline -->
-              <div class="relative py-2">
-                <!-- Background Progress Line -->
-                <div class="absolute top-3.5 sm:top-4 left-3 right-3 h-[2px] bg-[#1E232E] -z-0"></div>
-                <!-- Active Highlight Line -->
-                <div class="absolute top-3.5 sm:top-4 left-3 h-[2px] bg-champagne -z-0 transition-all duration-300 
-                  {% if original.status == 'PENDING' %}w-[15%]
-                  {% elif original.status == 'PROCESSING' %}w-[48%]
-                  {% elif original.status == 'SHIPPED' %}w-[80%]
-                  {% elif original.status == 'DELIVERED' %}w-[95%]
-                  {% else %}w-[15%]{% endif %}"></div>
-                <div class="flex justify-between relative z-10 text-center">
-                  <!-- Stage 1 (Intake) -->
-                  <div class="flex flex-col items-center group cursor-pointer">
-                    <div class="w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-champagne text-obsidian-950 flex items-center justify-center ring-4 ring-champagne/20">
-                      <svg class="w-3 h-3 sm:w-3.5 sm:h-3.5" fill="currentColor" viewBox="0 0 20 20">
-                        <path clip-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" fill-rule="evenodd"></path>
-                      </svg>
-                    </div>
-                    <span class="mt-1.5 sm:mt-2 text-[9px] sm:text-[10px] font-medium text-champagne leading-tight">Intake</span>
-                  </div>
-                  <!-- Stage 2 (Production) -->
-                  <div class="flex flex-col items-center {% if original.status in 'PROCESSING,SHIPPED,DELIVERED' %}{% else %}opacity-70{% endif %}">
-                    <div class="w-5 h-5 sm:w-6 sm:h-6 rounded-full {% if original.status in 'PROCESSING,SHIPPED,DELIVERED' %}bg-champagne text-obsidian-950 ring-4 ring-champagne/20{% else %}bg-obsidian-800 border border-champagne/40 text-[10px] text-champagne{% endif %} flex items-center justify-center">
-                      {% if original.status in 'PROCESSING,SHIPPED,DELIVERED' %}
-                        <svg class="w-3 h-3 sm:w-3.5 sm:h-3.5" fill="currentColor" viewBox="0 0 20 20">
-                          <path clip-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" fill-rule="evenodd"></path>
-                        </svg>
-                      {% else %}
-                        2
-                      {% endif %}
-                    </div>
-                    <span class="mt-1.5 sm:mt-2 text-[9px] sm:text-[10px] font-medium {% if original.status in 'PROCESSING,SHIPPED,DELIVERED' %}text-champagne{% else %}text-platinum-400{% endif %} leading-tight">Production</span>
-                  </div>
-                  <!-- Stage 3 (Dispatch) -->
-                  <div class="flex flex-col items-center {% if original.status in 'SHIPPED,DELIVERED' %}{% else %}opacity-40{% endif %}">
-                    <div class="w-5 h-5 sm:w-6 sm:h-6 rounded-full {% if original.status in 'SHIPPED,DELIVERED' %}bg-champagne text-obsidian-950 ring-4 ring-champagne/20{% else %}bg-obsidian-900 border border-[#2D3342] text-[10px] text-platinum-400{% endif %} flex items-center justify-center">
-                      {% if original.status in 'SHIPPED,DELIVERED' %}
-                        <svg class="w-3 h-3 sm:w-3.5 sm:h-3.5" fill="currentColor" viewBox="0 0 20 20">
-                          <path clip-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" fill-rule="evenodd"></path>
-                        </svg>
-                      {% else %}
-                        3
-                      {% endif %}
-                    </div>
-                    <span class="mt-1.5 sm:mt-2 text-[9px] sm:text-[10px] font-medium {% if original.status in 'SHIPPED,DELIVERED' %}text-champagne{% else %}text-platinum-400{% endif %} leading-tight">Dispatch</span>
-                  </div>
-                  <!-- Stage 4 (Delivered) -->
-                  <div class="flex flex-col items-center {% if original.status == 'DELIVERED' %}{% else %}opacity-40{% endif %}">
-                    <div class="w-5 h-5 sm:w-6 sm:h-6 rounded-full {% if original.status == 'DELIVERED' %}bg-champagne text-obsidian-950 ring-4 ring-champagne/20{% else %}bg-obsidian-900 border border-[#2D3342] text-[10px] text-platinum-400{% endif %} flex items-center justify-center">
-                      {% if original.status == 'DELIVERED' %}
-                        <svg class="w-3 h-3 sm:w-3.5 sm:h-3.5" fill="currentColor" viewBox="0 0 20 20">
-                          <path clip-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" fill-rule="evenodd"></path>
-                        </svg>
-                      {% else %}
-                        4
-                      {% endif %}
-                    </div>
-                    <span class="mt-1.5 sm:mt-2 text-[9px] sm:text-[10px] font-medium {% if original.status == 'DELIVERED' %}text-champagne{% else %}text-platinum-400{% endif %} leading-tight">Delivered</span>
-                  </div>
-                </div>
-              </div>
-            </section>
 
             <!-- 4. ATELIER PRESENTATION & NOTES -->
             <section class="rounded-2xl bg-gradient-to-b from-obsidian-850 to-obsidian-900 border border-[#222736] p-4 sm:p-5 shadow-xl space-y-4">
