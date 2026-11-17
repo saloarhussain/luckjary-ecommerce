@@ -325,35 +325,16 @@ tailwind.config = {
        ========================================== -->
   <div class="flex-1 min-w-0 flex flex-col min-h-screen overflow-x-hidden">
 
-    <!-- Top Universal Header Bar (Redesigned Haute Joaillerie Luxury Bar) -->
-    <header class="sticky top-0 z-30 w-full bg-[#0e1015]/95 backdrop-blur-2xl border-b border-[#232732] shadow-lg relative">
-      <!-- Subtle Luxury Champagne Highlight Accent Line -->
-      <div class="absolute bottom-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-[#E9C176]/25 to-transparent pointer-events-none"></div>
-
-      <div class="px-3 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-3 sm:gap-6">
+    <!-- Top Universal Header Bar -->
+    <header class="sticky top-0 z-30 w-full bg-[#0e1015]/95 backdrop-blur-2xl border-b border-[#232732] shadow-sm relative">
+      <div class="px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
         
-        <!-- Left: Sidebar Toggle + Contextual Breadcrumb -->
-        <div class="flex items-center gap-2.5 sm:gap-3.5 shrink-0">
-          <button id="openNavDrawerBtn" aria-label="Toggle Navigation Panel" class="w-9 h-9 rounded-xl bg-[#151720] hover:bg-[#1e212d] text-zinc-300 hover:text-white border border-[#262A36] hover:border-secondary/40 flex items-center justify-center active:scale-95 transition-all cursor-pointer shadow-sm group shrink-0" type="button" title="Toggle Navigation Sidebar">
-            <span class="material-symbols-outlined text-[20px] group-hover:text-secondary transition-colors">menu</span>
+        <!-- Mobile Drawer Toggle (Only visible on mobile/tablet when sidebar is off-canvas) -->
+        <div class="flex lg:hidden items-center gap-2.5">
+          <button id="openNavDrawerBtn" aria-label="Toggle Navigation Panel" class="w-9 h-9 rounded-xl bg-[#151720] hover:bg-[#1e212d] text-zinc-300 hover:text-white border border-[#262A36] flex items-center justify-center active:scale-95 transition-all cursor-pointer shadow-sm" type="button" title="Toggle Navigation">
+            <span class="material-symbols-outlined text-[20px]">menu</span>
           </button>
-
-          <!-- Breadcrumb Navigation on Desktop -->
-          <nav aria-label="Breadcrumb" class="hidden sm:flex items-center gap-2 font-mono-luxury text-xs">
-            <a href="/admin/" class="flex items-center gap-1.5 text-text-muted hover:text-secondary transition-colors group">
-              <span class="material-symbols-outlined text-[17px] text-secondary group-hover:scale-110 transition-transform">diamond</span>
-              <span class="font-semibold uppercase tracking-wider text-[11px]">Atelier</span>
-            </a>
-            <span class="text-border-strong text-[11px]">/</span>
-            <span class="font-serif-luxury text-sm font-semibold text-text-platinum tracking-wide">Vault Products</span>
-            <span class="hidden md:inline-flex items-center gap-1.5 ml-1 text-[10px] font-mono-luxury text-primary bg-primary/10 border border-primary/20 px-2 py-0.5 rounded-full">
-              <span class="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span>
-              <span>17 Pieces</span>
-            </span>
-          </nav>
-
-          <!-- Mobile Brand Indicator (when sidebar is hidden) -->
-          <div class="flex sm:hidden items-center gap-2">
+          <div class="flex items-center gap-2">
             <div class="w-7 h-7 rounded-lg bg-surface-card border border-secondary/30 flex items-center justify-center text-secondary">
               <span class="material-symbols-outlined text-[15px]">diamond</span>
             </div>
@@ -361,83 +342,17 @@ tailwind.config = {
           </div>
         </div>
 
-        <!-- Center: Expanded Haute Atelier Command Bar -->
-        <div class="flex-1 max-w-xl mx-1 sm:mx-4 hidden md:block">
-          <div class="relative flex items-center w-full bg-[#12141c]/90 hover:bg-[#161822] border border-[#262A36] hover:border-secondary/30 focus-within:border-primary/60 focus-within:ring-2 focus-within:ring-primary/20 rounded-xl px-3.5 py-1.5 transition-all shadow-inner group">
-            <span class="material-symbols-outlined text-[18px] text-text-muted group-hover:text-secondary group-focus-within:text-primary transition-colors mr-2.5 shrink-0">search</span>
-            <input id="topSearchInput" type="text" placeholder="Jump to SKU, hallmark, piece or patron..." class="bg-transparent text-xs sm:text-[13px] text-text-platinum placeholder-text-muted/60 focus:outline-none w-full font-body-sm font-medium tracking-wide">
-            <div class="flex items-center gap-1.5 shrink-0 ml-2">
-              <kbd class="inline-flex items-center font-mono-luxury text-[10px] text-text-muted bg-[#1A1D27] px-2 py-0.5 rounded-md border border-[#2D3240] shadow-xs">⌘K</kbd>
-            </div>
-          </div>
-        </div>
+        <!-- Desktop Spacer (Keeps profile aligned to the right) -->
+        <div class="hidden lg:block"></div>
 
-        <!-- Right: Status Pill + Currency Switcher + Notifications + Boutique + Director Profile -->
-        <div class="flex items-center gap-2 sm:gap-2.5 shrink-0">
-          
-          <!-- Live Sync Status Pill (xl+) -->
-          <div class="hidden xl:flex items-center gap-2 bg-[#12141c] border border-[#262A36] px-3 py-1.5 rounded-xl text-[11px] font-mono-luxury text-text-muted shadow-sm">
-            <span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
-            <span class="text-text-platinum font-medium">Spring 2025</span>
-            <span class="text-border-strong">•</span>
-            <span class="text-primary font-semibold">Live Sync</span>
-          </div>
-
-          <!-- Currency Quick Switcher Pill -->
-          <div class="relative inline-block text-left" id="headerCurrencyWrapper">
-            <button id="headerCurrencyToggleBtn" class="flex items-center gap-1.5 bg-[#151720] hover:bg-[#1e212d] text-text-platinum border border-[#262A36] hover:border-secondary/40 px-2.5 py-1.5 rounded-xl text-xs font-mono-luxury font-semibold transition-all cursor-pointer shadow-sm" type="button" title="Switch Store Currency">
-              <span class="text-secondary font-bold" id="headerCurrencySymbol">₹</span>
-              <span id="headerCurrencyCode">INR</span>
-              <span class="material-symbols-outlined text-[15px] text-text-muted transition-transform duration-200" id="headerCurrencyChevron">expand_more</span>
-            </button>
-            <!-- Currency Dropdown Menu -->
-            <div id="headerCurrencyMenu" class="absolute right-0 mt-2 w-44 bg-[#181a22]/95 backdrop-blur-xl border border-border-strong rounded-xl shadow-2xl py-1.5 z-50 hidden">
-              <div class="px-3 py-1 border-b border-border-subtle/80 text-[10px] font-mono-luxury text-text-muted uppercase tracking-wider">
-                Store Currency
-              </div>
-              <button type="button" onclick="selectStoreCurrency('INR')" class="w-full text-left px-3 py-1.5 text-xs text-text-platinum hover:bg-surface-variant flex items-center justify-between cursor-pointer">
-                <span class="font-medium">₹ INR (Rupee)</span>
-                <span class="text-[10px] text-primary font-mono-luxury font-semibold">Native</span>
-              </button>
-              <button type="button" onclick="selectStoreCurrency('USD')" class="w-full text-left px-3 py-1.5 text-xs text-text-platinum hover:bg-surface-variant flex items-center justify-between cursor-pointer">
-                <span class="font-medium">$ USD (Dollar)</span>
-                <span class="text-[10px] text-text-muted font-mono-luxury">1:86</span>
-              </button>
-              <button type="button" onclick="selectStoreCurrency('EUR')" class="w-full text-left px-3 py-1.5 text-xs text-text-platinum hover:bg-surface-variant flex items-center justify-between cursor-pointer">
-                <span class="font-medium">€ EUR (Euro)</span>
-                <span class="text-[10px] text-text-muted font-mono-luxury">1:92</span>
-              </button>
-              <button type="button" onclick="selectStoreCurrency('GBP')" class="w-full text-left px-3 py-1.5 text-xs text-text-platinum hover:bg-surface-variant flex items-center justify-between cursor-pointer">
-                <span class="font-medium">£ GBP (Pound)</span>
-                <span class="text-[10px] text-text-muted font-mono-luxury">1:110</span>
-              </button>
-              <button type="button" onclick="selectStoreCurrency('AED')" class="w-full text-left px-3 py-1.5 text-xs text-text-platinum hover:bg-surface-variant flex items-center justify-between cursor-pointer">
-                <span class="font-medium">AED (Dirham)</span>
-                <span class="text-[10px] text-text-muted font-mono-luxury">1:23.4</span>
-              </button>
-            </div>
-          </div>
-
-          <!-- Low Stock Alert / Notifications Bell -->
-          <button id="headerNotificationBtn" class="relative w-9 h-9 rounded-xl bg-[#151720] hover:bg-[#1e212d] text-text-muted hover:text-text-platinum border border-[#262A36] hover:border-secondary/40 flex items-center justify-center transition-all cursor-pointer shadow-sm group" onclick="showToast('2 Low Stock items require atelier restock', 'notifications')" title="Vault Notifications">
-            <span class="material-symbols-outlined text-[19px] group-hover:text-secondary transition-colors">notifications</span>
-            <span class="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-secondary ring-2 ring-[#0e1015] animate-pulse"></span>
-          </button>
-
-          <!-- Online Boutique Link Pill -->
-          <a href="/" target="_blank" class="hidden sm:flex items-center gap-1.5 bg-[#151720] hover:bg-[#1e212d] text-text-platinum hover:text-primary border border-[#262A36] hover:border-primary/40 px-3 py-1.5 rounded-xl text-xs font-label-sm transition-all shadow-sm group" title="Open Customer Online Boutique">
-            <span class="material-symbols-outlined text-[16px] text-secondary group-hover:text-primary transition-colors">storefront</span>
-            <span class="font-medium">Boutique</span>
-            <span class="material-symbols-outlined text-[13px] text-text-muted group-hover:text-primary transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5">arrow_outward</span>
-          </a>
-
-          <!-- Executive Director Profile Menu -->
+        <!-- Right: Executive Director Profile Menu -->
+        <div class="flex items-center gap-2 ml-auto">
           <div class="relative inline-block text-left" id="profileDropdownWrapper">
-            <button id="profileDropdownBtn" class="flex items-center gap-2 pl-1.5 pr-2 py-1 rounded-xl bg-[#151720] hover:bg-[#1e212d] border border-[#262A36] hover:border-secondary/40 transition-all cursor-pointer shadow-sm" type="button" aria-expanded="false">
+            <button id="profileDropdownBtn" class="flex items-center gap-2 pl-1.5 pr-2.5 py-1 rounded-xl bg-[#151720] hover:bg-[#1e212d] border border-[#262A36] hover:border-secondary/40 transition-all cursor-pointer shadow-sm" type="button" aria-expanded="false">
               <div class="w-7 h-7 rounded-lg bg-gradient-to-tr from-amber-600 via-[#ebd38d] to-amber-200 text-[#0d0e10] flex items-center justify-center text-xs font-bold font-mono-luxury shadow-sm shrink-0">
                 E
               </div>
-              <div class="hidden md:flex flex-col text-left">
+              <div class="flex flex-col text-left">
                 <span class="text-xs font-semibold text-text-platinum font-body-sm leading-tight">Eleanor</span>
                 <span class="text-[9px] uppercase tracking-wider text-secondary font-mono-luxury leading-tight font-medium">Director</span>
               </div>
@@ -474,7 +389,6 @@ tailwind.config = {
               </div>
             </div>
           </div>
-
         </div>
 
       </div>
