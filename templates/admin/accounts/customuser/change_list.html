@@ -1,35 +1,38 @@
 {% extends "admin/change_list.html" %}
 {% load i18n admin_urls static admin_list %}
 
+{# Suppress redundant Django breadcrumbs, duplicate object-tools buttons, and right filter panel #}
 {% block breadcrumbs %}{% endblock %}
-
-{# Suppress the right panel filter completely #}
+{% block object-tools %}{% endblock %}
 {% block filters %}{% endblock %}
+{% block search %}{% endblock %}
 
 {% block extrahead %}
 {{ block.super }}
 <style>
-/* 1. Suppress generic Django titles, default breadcrumbs, and right filter panel */
+/* 1. Suppress generic Django titles, default breadcrumbs, redundant tools, and right filter panel */
 #content > h1,
-.change-list h1:first-of-type:not(.atelier-patrons-title),
-#content-main > h1 {
-    display: none !important;
-}
-
+.change-list h1:first-of-type:not(.customer-title),
+#content-main > h1,
+.breadcrumbs,
+.shopify-breadcrumbs-nav,
+ul.object-tools,
+#toolbar,
 #changelist-filter,
-.changelist-filter,
 search#changelist-filter {
     display: none !important;
-    width: 0 !important;
     height: 0 !important;
     margin: 0 !important;
     padding: 0 !important;
     border: none !important;
-    position: absolute !important;
     visibility: hidden !important;
+    position: absolute !important;
 }
 
 /* 2. Full Width Canvas for Changelist Form & Results Table */
+#content-start,
+#content,
+#content-main,
 #changelist,
 #changelist .changelist-form-container,
 #changelist-form {
@@ -37,17 +40,234 @@ search#changelist-filter {
     max-width: 100% !important;
     min-width: 0 !important;
     margin-right: 0 !important;
+    padding: 0 !important;
     flex: 1 1 100% !important;
     display: block !important;
 }
 
-#changelist .results {
+/* 3. Unified Haute Atelier Customer Header & Actions Studio */
+.customer-studio-wrapper {
+    padding: 0.5rem 0 1.5rem 0 !important;
     width: 100% !important;
-    max-width: 100% !important;
+    box-sizing: border-box !important;
+}
+
+.customer-studio-header {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 1.25rem !important;
+    flex-wrap: wrap !important;
+    margin-bottom: 1.25rem !important;
+    padding-bottom: 1rem !important;
+    border-bottom: 1px solid #232734 !important;
+}
+
+.customer-eyebrow {
+    font-size: 0.65rem !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.14em !important;
+    color: #DFBE76 !important;
+    text-transform: uppercase !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 0.5rem !important;
+    margin-bottom: 0.35rem !important;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+}
+
+.customer-title-row {
+    display: flex !important;
+    align-items: center !important;
+    gap: 0.75rem !important;
+}
+
+.customer-title {
+    font-family: 'Bodoni Moda', 'Playfair Display', Georgia, serif !important;
+    font-size: 1.85rem !important;
+    font-weight: 700 !important;
+    color: #FFFFFF !important;
+    letter-spacing: -0.01em !important;
+    line-height: 1.1 !important;
+    margin: 0 !important;
+}
+
+.customer-count-badge {
+    font-family: 'JetBrains Mono', ui-monospace, monospace !important;
+    font-size: 0.68rem !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.06em !important;
+    padding: 0.25rem 0.65rem !important;
+    background: rgba(197, 160, 89, 0.15) !important;
+    border: 1px solid rgba(197, 160, 89, 0.35) !important;
+    color: #EBD38D !important;
+    border-radius: 9999px !important;
+    text-transform: uppercase !important;
+}
+
+.customer-add-btn {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 0.5rem !important;
+    padding: 0.65rem 1.25rem !important;
+    background: #10B981 !important;
+    color: #04251B !important;
+    font-size: 0.8rem !important;
+    font-weight: 700 !important;
+    border-radius: 12px !important;
+    text-decoration: none !important;
+    box-shadow: 0 4px 14px rgba(16, 185, 129, 0.25) !important;
+    transition: all 0.15s ease !important;
+}
+
+.customer-add-btn:hover {
+    background: #34D399 !important;
+    transform: translateY(-1px) !important;
+    color: #04251B !important;
+}
+
+/* 4. Control Bar: Search + Quick Pills */
+.customer-control-bar {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 0.85rem !important;
+    margin-bottom: 1.25rem !important;
+}
+
+.customer-search-box {
+    position: relative !important;
+    width: 100% !important;
+    margin: 0 !important;
+}
+
+.customer-search-input {
+    width: 100% !important;
+    background: #14161F !important;
+    border: 1px solid #262B3A !important;
+    border-radius: 12px !important;
+    padding: 0.65rem 5.5rem 0.65rem 2.6rem !important;
+    color: #F8FAFC !important;
+    font-size: 0.82rem !important;
+    box-sizing: border-box !important;
+    transition: all 0.15s ease !important;
+}
+
+.customer-search-input:focus {
+    outline: none !important;
+    border-color: #10B981 !important;
+    box-shadow: 0 0 0 1px rgba(16, 185, 129, 0.3) !important;
+}
+
+.customer-search-icon {
+    position: absolute !important;
+    left: 0.85rem !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    color: #64748B !important;
+    font-size: 1.15rem !important;
+    pointer-events: none !important;
+}
+
+.customer-search-submit {
+    position: absolute !important;
+    right: 0.4rem !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    background: #1E2230 !important;
+    border: 1px solid #32384C !important;
+    border-radius: 8px !important;
+    padding: 0.35rem 0.85rem !important;
+    color: #E2E8F0 !important;
+    font-size: 0.72rem !important;
+    font-weight: 600 !important;
+    cursor: pointer !important;
+    transition: all 0.15s ease !important;
+}
+
+.customer-search-submit:hover {
+    background: #2A3044 !important;
+    border-color: #10B981 !important;
+    color: #34D399 !important;
+}
+
+/* Quick Filter Pills Row */
+.customer-pills-row {
+    display: flex !important;
+    align-items: center !important;
+    gap: 0.6rem !important;
     overflow-x: auto !important;
-    background: #12141C !important;
+    padding-bottom: 0.2rem !important;
+}
+
+.customer-pill {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 0.45rem !important;
+    padding: 0.35rem 0.85rem !important;
+    background: #141620 !important;
+    border: 1px solid #262B3A !important;
+    border-radius: 20px !important;
+    color: #94A3B8 !important;
+    font-size: 0.75rem !important;
+    font-weight: 500 !important;
+    text-decoration: none !important;
+    white-space: nowrap !important;
+    transition: all 0.15s ease !important;
+}
+
+.customer-pill:hover {
+    color: #FFFFFF !important;
+    background: #1C1F2B !important;
+    border-color: #383F54 !important;
+}
+
+.customer-pill.active {
+    background: rgba(16, 185, 129, 0.15) !important;
+    border-color: #10B981 !important;
+    color: #34D399 !important;
+    font-weight: 600 !important;
+}
+
+/* 5. Clean Action Bar */
+.actions {
+    background: #141620 !important;
     border: 1px solid #232734 !important;
     border-radius: 10px !important;
+    padding: 0.6rem 1rem !important;
+    margin-bottom: 1rem !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 0.85rem !important;
+    font-size: 0.78rem !important;
+    color: #CBD5E1 !important;
+}
+
+.actions select {
+    background: #181A24 !important;
+    border: 1px solid #2B3042 !important;
+    border-radius: 6px !important;
+    padding: 0.35rem 0.75rem !important;
+    color: #E2E8F0 !important;
+    font-size: 0.78rem !important;
+}
+
+.actions .button {
+    background: #1E2230 !important;
+    border: 1px solid #333A4E !important;
+    color: #E2E8F0 !important;
+    border-radius: 6px !important;
+    padding: 0.35rem 0.85rem !important;
+    font-size: 0.76rem !important;
+    font-weight: 600 !important;
+    cursor: pointer !important;
+}
+
+/* 6. Results Table Card */
+#changelist .results {
+    background: #12141C !important;
+    border: 1px solid #232734 !important;
+    border-radius: 12px !important;
+    overflow-x: auto !important;
 }
 
 #changelist table {
@@ -58,208 +278,94 @@ search#changelist-filter {
     margin: 0 !important;
 }
 
-#changelist table th,
+#changelist table th {
+    background: #141620 !important;
+    color: #94A3B8 !important;
+    font-size: 0.7rem !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.08em !important;
+    text-transform: uppercase !important;
+    padding: 0.85rem 1rem !important;
+    border-bottom: 1px solid #232734 !important;
+}
+
 #changelist table td {
     padding: 0.85rem 1rem !important;
-    vertical-align: middle !important;
     border-bottom: 1px solid #1E212D !important;
+    color: #E2E8F0 !important;
+    font-size: 0.82rem !important;
+    vertical-align: middle !important;
+}
+
+#changelist table tbody tr:last-child td {
+    border-bottom: none !important;
 }
 
 #changelist table tbody tr:hover td {
-    background-color: #171A24 !important;
-}
-
-/* 3. Haute Atelier Customer Header Banner */
-.atelier-patrons-header {
-    background: linear-gradient(135deg, #151821 0%, #0d0f14 100%) !important;
-    border: 1px solid #232734 !important;
-    border-radius: 12px !important;
-    padding: 1.25rem 1.75rem !important;
-    margin-bottom: 1.25rem !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: space-between !important;
-    gap: 1rem !important;
-    flex-wrap: wrap !important;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3) !important;
-}
-
-.atelier-patrons-eyebrow {
-    font-size: 0.65rem !important;
-    font-weight: 700 !important;
-    letter-spacing: 0.12em !important;
-    color: #DFBE76 !important;
-    text-transform: uppercase !important;
-    display: flex !important;
-    align-items: center !important;
-    gap: 0.5rem !important;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
-}
-
-.atelier-patrons-title {
-    font-family: 'Bodoni Moda', 'Playfair Display', Georgia, serif !important;
-    font-size: 1.7rem !important;
-    font-weight: 700 !important;
-    color: #FFFFFF !important;
-    margin: 0.25rem 0 0 0 !important;
-    display: flex !important;
-    align-items: center !important;
-    gap: 0.75rem !important;
-    letter-spacing: -0.01em !important;
-}
-
-.atelier-count-pill {
-    font-family: 'JetBrains Mono', ui-monospace, monospace !important;
-    font-size: 0.68rem !important;
-    font-weight: 700 !important;
-    letter-spacing: 0.05em !important;
-    padding: 0.2rem 0.65rem !important;
-    background: rgba(197, 160, 89, 0.15) !important;
-    border: 1px solid rgba(197, 160, 89, 0.35) !important;
-    color: #EBD38D !important;
-    border-radius: 6px !important;
-    text-transform: uppercase !important;
-}
-
-/* 4. Quick Filter Pills Bar (Zero Screen Space Wasted) */
-.atelier-quick-filters {
-    display: flex !important;
-    align-items: center !important;
-    gap: 0.6rem !important;
-    margin-bottom: 1.25rem !important;
-    overflow-x: auto !important;
-    padding-bottom: 0.25rem !important;
-}
-
-.atelier-filter-pill {
-    display: inline-flex !important;
-    align-items: center !important;
-    gap: 0.4rem !important;
-    padding: 0.4rem 0.9rem !important;
-    background: #14161F !important;
-    border: 1px solid #262B3A !important;
-    border-radius: 20px !important;
-    color: #94A3B8 !important;
-    font-size: 0.76rem !important;
-    font-weight: 500 !important;
-    text-decoration: none !important;
-    white-space: nowrap !important;
-    transition: all 0.15s ease !important;
-}
-
-.atelier-filter-pill:hover {
-    color: #FFFFFF !important;
-    background: #1C1F2B !important;
-    border-color: #383F54 !important;
-}
-
-.atelier-filter-pill.active {
-    background: rgba(16, 185, 129, 0.15) !important;
-    border-color: #10B981 !important;
-    color: #34D399 !important;
-    font-weight: 600 !important;
-}
-
-/* 5. Clean Search Toolbar & Hide Redundant Filters Button */
-#changelist-search {
-    display: flex !important;
-    align-items: center !important;
-    gap: 0.5rem !important;
-    margin-bottom: 1rem !important;
-}
-
-#changelist-search button[name="filter"],
-#changelist-search a:has(svg),
-.changelist-filter-toggle {
-    display: none !important;
-}
-
-/* 6. Polished Action Bar */
-.actions {
-    background: #12141C !important;
-    border: 1px solid #232734 !important;
-    border-radius: 8px !important;
-    padding: 0.65rem 1rem !important;
-    margin-bottom: 1rem !important;
-    display: flex !important;
-    align-items: center !important;
-    gap: 0.75rem !important;
-}
-
-.actions select {
-    background: #181A24 !important;
-    border: 1px solid #2B3042 !important;
-    border-radius: 6px !important;
-    padding: 0.4rem 0.75rem !important;
-    color: #E2E8F0 !important;
-    font-size: 0.78rem !important;
-}
-
-.actions .button {
-    background: #1E2230 !important;
-    border: 1px solid #333A4E !important;
-    color: #E2E8F0 !important;
-    border-radius: 6px !important;
-    padding: 0.4rem 0.85rem !important;
-    font-size: 0.78rem !important;
-    font-weight: 600 !important;
-    cursor: pointer !important;
-    transition: all 0.15s ease !important;
-}
-
-.actions .button:hover {
-    background: #282E42 !important;
-    border-color: #10B981 !important;
-    color: #34D399 !important;
+    background-color: #171A26 !important;
 }
 </style>
 {% endblock %}
 
 {% block content %}
-  <!-- Haute Atelier Custom Customers Banner -->
-  <div class="atelier-patrons-header">
+<div class="customer-studio-wrapper">
+  
+  <!-- 1. Unified Clean Header Row (ONE Single Add Customer Button) -->
+  <div class="customer-studio-header">
     <div>
-      <div class="atelier-patrons-eyebrow">
+      <div class="customer-eyebrow">
         <span>Clientele Hub</span>
         <span>•</span>
         <span>Spring 2026</span>
         <span>•</span>
         <span class="inline-flex items-center gap-1 text-emerald-400 font-semibold">
           <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
-          Active Profiles
+          Live Sync
         </span>
       </div>
-      <h1 class="atelier-patrons-title">
-        <span>Customers Directory</span>
-        <span class="atelier-count-pill">{{ cl.result_count }} Customers</span>
-      </h1>
+      <div class="customer-title-row">
+        <h1 class="customer-title">Customers Directory</h1>
+        <span class="customer-count-badge">{{ cl.result_count }} CUSTOMERS</span>
+      </div>
     </div>
 
     <div>
       {% if has_add_permission %}
-      <a href="{% url 'admin:accounts_customuser_add' %}" class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 active:scale-95 text-white font-sans font-semibold text-xs transition-all shadow-md shadow-emerald-900/30">
-        <span class="material-symbols-outlined text-[16px]">person_add</span>
-        <span>Add Customer</span>
+      <a href="{% url 'admin:accounts_customuser_add' %}" class="customer-add-btn">
+        <span class="material-symbols-outlined text-[17px]">person_add</span>
+        <span>+ Add Customer</span>
       </a>
       {% endif %}
     </div>
   </div>
 
-  <!-- Instant Quick Filter Pills Row -->
-  <div class="atelier-quick-filters">
-    <a href="?" class="atelier-filter-pill {% if not request.GET.is_email_verified__exact and not request.GET.is_staff__exact and not request.GET.newsletter_subscribed__exact %}active{% endif %}">
-      All Customers ({{ cl.result_count }})
-    </a>
-    <a href="?is_email_verified__exact=1" class="atelier-filter-pill {% if request.GET.is_email_verified__exact == '1' %}active{% endif %}">
-      ✓ Verified Customers
-    </a>
-    <a href="?newsletter_subscribed__exact=1" class="atelier-filter-pill {% if request.GET.newsletter_subscribed__exact == '1' %}active{% endif %}">
-      ✉ Newsletter Subscribed
-    </a>
-    <a href="?is_staff__exact=1" class="atelier-filter-pill {% if request.GET.is_staff__exact == '1' %}active{% endif %}">
-      💎 Staff &amp; Admins
-    </a>
+  <!-- 2. Integrated Search Bar & Filter Pills -->
+  <div class="customer-control-bar">
+    <form method="get" class="customer-search-box">
+      <span class="material-symbols-outlined customer-search-icon">search</span>
+      <input type="text" name="q" value="{{ cl.query }}" placeholder="Search customers by name, mobile number, or email..." class="customer-search-input">
+      <button type="submit" class="customer-search-submit">Search</button>
+      {% for pair in cl.params.items %}
+        {% if pair.0 != 'q' %}<input type="hidden" name="{{ pair.0 }}" value="{{ pair.1 }}">{% endif %}
+      {% endfor %}
+    </form>
+
+    <div class="customer-pills-row">
+      <a href="?" class="customer-pill {% if not request.GET.is_email_verified__exact and not request.GET.is_staff__exact and not request.GET.newsletter_subscribed__exact %}active{% endif %}">
+        All Customers ({{ cl.result_count }})
+      </a>
+      <a href="?is_email_verified__exact=1" class="customer-pill {% if request.GET.is_email_verified__exact == '1' %}active{% endif %}">
+        ✓ Verified
+      </a>
+      <a href="?newsletter_subscribed__exact=1" class="customer-pill {% if request.GET.newsletter_subscribed__exact == '1' %}active{% endif %}">
+        ✉ Newsletter Subscribed
+      </a>
+      <a href="?is_staff__exact=1" class="customer-pill {% if request.GET.is_staff__exact == '1' %}active{% endif %}">
+        💎 Staff &amp; Admins
+      </a>
+    </div>
   </div>
 
   {{ block.super }}
+</div>
 {% endblock %}

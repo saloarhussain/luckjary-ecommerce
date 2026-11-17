@@ -208,6 +208,28 @@ html, body {
   max-width: 100% !important;
   box-sizing: border-box !important;
 }
+#atelier-top-bar .atelier-top-search {
+  display: flex !important;
+}
+#atelier-top-bar .atelier-top-link {
+  display: inline-flex !important;
+}
+#atelier-top-bar .atelier-top-logout {
+  display: block !important;
+}
+@media (max-width: 767px) {
+  #atelier-top-bar .atelier-top-search {
+    display: none !important;
+  }
+  #atelier-top-bar .atelier-top-link {
+    display: none !important;
+  }
+}
+@media (max-width: 1023px) {
+  #atelier-top-bar .atelier-top-logout {
+    display: none !important;
+  }
+}
 
 /* Content canvas takes 100% of flex column width */
 .shopify-content-canvas,
@@ -470,7 +492,7 @@ html, body {
           </div>
 
           <!-- Middle: Global Atelier Search Bar (From screenshot media_1794924809453_ed80287d.png) -->
-          <div class="hidden md:flex items-center flex-1 max-w-xl">
+          <div class="atelier-top-search items-center flex-1 max-w-xl">
             <form action="{% url 'admin:catalog_product_changelist' %}" method="get" class="relative w-full m-0 p-0" id="globalTopSearchForm">
               <span class="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-400 text-[18px] pointer-events-none">search</span>
               <input type="text" name="q" placeholder="Search orders, fine jewelry, VIP patrons... (Ctrl+K)" class="w-full h-10 pl-10 pr-12 rounded-xl bg-[#14161c] border border-[#262A36] text-xs text-zinc-200 placeholder-zinc-500 focus:outline-none focus:border-[#ebd38d]/50 focus:ring-1 focus:ring-[#ebd38d]/30 transition-all font-sans" id="globalAtelierSearch">
@@ -481,13 +503,13 @@ html, body {
           <!-- Right: Action Pills, Profile Menu & Sign Out (Pushed to far right) -->
           <div class="flex items-center gap-2 sm:gap-3 shrink-0 ml-auto">
             <!-- Online Storefront Link -->
-            <a href="{% url 'core:home' %}" target="_blank" class="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#151720] hover:bg-[#1e212d] border border-[#262A36] text-xs text-zinc-300 hover:text-white transition-all">
+            <a href="{% url 'core:home' %}" target="_blank" class="atelier-top-link items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#151720] hover:bg-[#1e212d] border border-[#262A36] text-xs text-zinc-300 hover:text-white transition-all">
               <span class="material-symbols-outlined text-[15px] text-zinc-400">open_in_new</span>
               <span>Online Store</span>
             </a>
 
             <!-- Atelier OMS Live Status Pill -->
-            <a href="{% url 'orders:oms_dashboard' %}" class="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-950/40 hover:bg-emerald-900/40 border border-emerald-500/30 text-xs text-emerald-400 font-medium transition-all">
+            <a href="{% url 'orders:oms_dashboard' %}" class="atelier-top-link items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-950/40 hover:bg-emerald-900/40 border border-emerald-500/30 text-xs text-emerald-400 font-medium transition-all">
               <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
               <span>Atelier OMS</span>
             </a>
@@ -540,7 +562,7 @@ html, body {
             </div>
 
             <!-- Direct Sign Out Button -->
-            <form method="post" action="{% url 'admin:logout' %}" class="hidden lg:block m-0 p-0">
+            <form method="post" action="{% url 'admin:logout' %}" class="atelier-top-logout m-0 p-0">
               {% csrf_token %}
               <button type="submit" class="flex items-center gap-1.5 px-3 py-1.5 text-xs text-zinc-400 hover:text-red-400 transition-colors cursor-pointer bg-transparent border-0 font-medium" title="Sign Out">
                 <span class="material-symbols-outlined text-[16px]">logout</span>
