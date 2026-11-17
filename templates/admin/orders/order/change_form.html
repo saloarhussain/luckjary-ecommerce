@@ -337,7 +337,7 @@
     {% endfor %}
 
     <!-- BEGIN: MainContainer (Edge-to-Edge Fluid 12-Column Layout) -->
-    <div class="w-full min-h-screen bg-obsidian-900 relative flex flex-col pb-32 lg:pb-10">
+    <div class="w-full min-h-screen bg-obsidian-900 relative flex flex-col pb-10">
       
       <!-- Top Ambient Radial Glow -->
       <div class="absolute top-0 left-0 right-0 h-48 bg-atelier-radial pointer-events-none"></div>
@@ -1132,19 +1132,13 @@
                   </div>
                 </div>
 
-                <!-- Desktop Action Buttons (Inside sticky form card on desktop >= 1024px) -->
-                <div class="hidden lg:flex pt-2 flex-col gap-2.5">
-                  <button class="btn-save-telemetry w-full py-3.5 px-4 rounded-xl bg-emerald-500 hover:bg-emerald-400 active:bg-emerald-600 text-obsidian-950 font-semibold text-xs tracking-wider uppercase flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(16,185,129,0.25)] transition-all duration-150 cursor-pointer" type="submit" name="_save" id="btn-save-telemetry-desktop">
+                <!-- Order Action Button (Scrollable inline on both mobile & desktop) -->
+                <div class="pt-2">
+                  <button class="btn-save-telemetry w-full py-3.5 px-4 rounded-xl bg-emerald-500 hover:bg-emerald-400 active:bg-emerald-600 text-obsidian-950 font-semibold text-xs tracking-wider uppercase flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(16,185,129,0.25)] transition-all duration-150 cursor-pointer" type="submit" name="_save" id="btn-save-telemetry">
                     <svg class="w-4 h-4 text-obsidian-950 stroke-[2.5]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round"></path>
                     </svg>
                     <span>Update Order Telemetry</span>
-                  </button>
-                  <button class="w-full py-2.5 px-4 rounded-xl bg-obsidian-850 hover:bg-obsidian-800 text-champagne-300 border border-champagne/30 text-[11px] font-medium tracking-wide flex items-center justify-center gap-1.5 transition-colors cursor-pointer btn-secondary-champagne" type="button" onclick="window.print()">
-                    <svg class="w-3.5 h-3.5 text-champagne" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"></path>
-                    </svg>
-                    <span>Print Certificate of Authenticity &amp; Packing Slip</span>
                   </button>
                 </div>
 
@@ -1158,29 +1152,7 @@
       </main>
       <!-- END: ScrollableContent -->
 
-      <!-- ============================================================
-           FIXED ACTION FOOTER (Mobile / Tablet Only < 1024px)
-           ============================================================ -->
-      <footer class="lg:hidden fixed bottom-0 left-0 right-0 z-50 bg-obsidian-900/95 backdrop-blur-xl border-t border-[#222736] p-3 shadow-2xl pb-[max(0.75rem,env(safe-area-inset-bottom))]">
-        <div class="max-w-md mx-auto flex flex-col gap-2">
-          <!-- Primary Action Button: Emerald Luxury Glow -->
-          <button class="btn-save-telemetry w-full py-3.5 px-4 rounded-xl bg-emerald-500 hover:bg-emerald-400 active:bg-emerald-600 text-obsidian-950 font-semibold text-xs tracking-wider uppercase flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(16,185,129,0.25)] transition-all duration-150 cursor-pointer" type="submit" name="_save" id="btn-save-telemetry-mobile">
-            <svg class="w-4 h-4 text-obsidian-950 stroke-[2.5]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round"></path>
-            </svg>
-            <span>Update Order Telemetry</span>
-          </button>
 
-          <!-- Secondary Action Button: Dark Champagne Subtle Outline -->
-          <button class="w-full py-2.5 px-4 rounded-xl bg-obsidian-850 hover:bg-obsidian-800 text-champagne-300 border border-champagne/30 text-[11px] font-medium tracking-wide flex items-center justify-center gap-1.5 transition-colors cursor-pointer btn-secondary-champagne" type="button" onclick="window.print()">
-            <svg class="w-3.5 h-3.5 text-champagne" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"></path>
-            </svg>
-            <span>Print Certificate of Authenticity &amp; Packing Slip</span>
-          </button>
-        </div>
-      </footer>
-      <!-- END: FixedActionFooter -->
 
     </div>
     <!-- END: MainContainer -->
