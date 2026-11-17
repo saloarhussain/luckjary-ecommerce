@@ -80,6 +80,26 @@
     display: block !important;
   }
 
+  /* Responsive Display Rules - IMMUNE TO DJANGO's .hidden { display: none !important; } */
+  .atelier-desktop-table {
+    display: block !important;
+    width: 100% !important;
+    overflow-x: auto !important;
+  }
+  .atelier-mobile-cards {
+    display: none !important;
+  }
+
+  @media (max-width: 767px) {
+    .atelier-desktop-table {
+      display: none !important;
+    }
+    .atelier-mobile-cards {
+      display: block !important;
+      width: 100% !important;
+    }
+  }
+
   /* Custom scrollbar and utilities */
   .no-scrollbar::-webkit-scrollbar {
     display: none;
@@ -92,26 +112,155 @@
     box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.05), 0 4px 20px -2px rgba(0, 0, 0, 0.5);
   }
 
-  /* Direct utility fallback rules to guarantee exact styling */
-  .bg-atelier-base { background-color: #0d0e10; }
-  .bg-atelier-surface { background-color: #121315; }
-  .bg-atelier-card { background-color: #16171a; }
-  .bg-atelier-cardElevated { background-color: #1c1d22; }
-  .border-atelier-border { border-color: #23252a; }
-  .border-atelier-borderSubtle { border-color: #1f2025; }
-  .bg-atelier-emerald { background-color: #10b981; }
-  .hover\:bg-atelier-emeraldHover:hover { background-color: #059669; }
-  .text-atelier-gold { color: #c5a059; }
-  .text-atelier-emerald { color: #10b981; }
-  .text-atelier-textMuted { color: #8b8e99; }
-  .text-atelier-textSubtle { color: #626571; }
-  .focus\:border-atelier-emerald:focus { border-color: #10b981; }
-  .font-serif { font-family: 'Bodoni Moda', serif, Georgia; }
+  /* Precise Color and Layout Tokens */
+  .bg-atelier-base { background-color: #0d0e10 !important; }
+  .bg-atelier-surface { background-color: #121315 !important; }
+  .bg-atelier-card { background-color: #16171a !important; }
+  .bg-atelier-cardElevated { background-color: #1c1d22 !important; }
+  .border-atelier-border { border-color: #23252a !important; }
+  .border-atelier-borderSubtle { border-color: #1f2025 !important; }
+  .bg-atelier-emerald { background-color: #10b981 !important; }
+  .hover\:bg-atelier-emeraldHover:hover { background-color: #059669 !important; }
+  .text-atelier-gold { color: #c5a059 !important; }
+  .text-atelier-emerald { color: #10b981 !important; }
+  .text-atelier-textMuted { color: #8b8e99 !important; }
+  .text-atelier-textSubtle { color: #626571 !important; }
+  .font-serif { font-family: 'Bodoni Moda', serif, Georgia !important; }
+
+  /* Scoped Search Input & Button Overrides (beating Django's base.css specificity) */
+  input.atelier-search-input,
+  .atelier-search-input {
+    width: 100% !important;
+    padding-left: 2.75rem !important;
+    padding-right: 1rem !important;
+    padding-top: 0.65rem !important;
+    padding-bottom: 0.65rem !important;
+    font-size: 0.875rem !important;
+    background-color: #121315 !important;
+    border: 1px solid #23252a !important;
+    border-radius: 0.5rem !important;
+    color: #e4e4e7 !important;
+    box-sizing: border-box !important;
+    height: 42px !important;
+  }
+  input.atelier-search-input:focus,
+  .atelier-search-input:focus {
+    outline: none !important;
+    border-color: #10b981 !important;
+    box-shadow: 0 0 0 1px #10b981 !important;
+  }
+
+  button.atelier-search-btn,
+  .atelier-search-btn {
+    padding: 0.65rem 1.25rem !important;
+    background-color: #16171a !important;
+    border: 1px solid #23252a !important;
+    font-size: 0.875rem !important;
+    font-weight: 500 !important;
+    color: #e4e4e7 !important;
+    border-radius: 0.5rem !important;
+    cursor: pointer !important;
+    height: 42px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    white-space: nowrap !important;
+    transition: all 0.15s ease !important;
+  }
+  button.atelier-search-btn:hover,
+  .atelier-search-btn:hover {
+    background-color: #1c1d22 !important;
+    border-color: #333640 !important;
+    color: #ffffff !important;
+  }
+
+  /* Action Dropdown & Run Button */
+  select.atelier-action-select,
+  .atelier-action-select {
+    width: 100% !important;
+    appearance: none !important;
+    -webkit-appearance: none !important;
+    background-color: #16171a !important;
+    border: 1px solid #23252a !important;
+    color: #d4d4d8 !important;
+    font-size: 0.75rem !important;
+    border-radius: 0.5rem !important;
+    padding: 0.5rem 2.25rem 0.5rem 0.75rem !important;
+    height: 36px !important;
+    box-sizing: border-box !important;
+  }
+  select.atelier-action-select:focus,
+  .atelier-action-select:focus {
+    outline: none !important;
+    border-color: #10b981 !important;
+  }
+
+  button.atelier-action-btn,
+  .atelier-action-btn {
+    padding: 0.5rem 1rem !important;
+    background-color: #16171a !important;
+    border: 1px solid #23252a !important;
+    font-size: 0.75rem !important;
+    font-weight: 500 !important;
+    color: #e4e4e7 !important;
+    border-radius: 0.5rem !important;
+    cursor: pointer !important;
+    height: 36px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    transition: all 0.15s ease !important;
+  }
+  button.atelier-action-btn:hover,
+  .atelier-action-btn:hover {
+    background-color: #1c1d22 !important;
+    border-color: #333640 !important;
+    color: #ffffff !important;
+  }
+
+  /* Scoped Table Styles */
+  .atelier-table {
+    width: 100% !important;
+    text-align: left !important;
+    border-collapse: collapse !important;
+    border-spacing: 0 !important;
+    background: transparent !important;
+  }
+  .atelier-table thead tr {
+    border-bottom: 1px solid #23252a !important;
+    background-color: rgba(22, 23, 26, 0.4) !important;
+  }
+  .atelier-table thead th {
+    padding: 0.85rem 1rem !important;
+    font-family: 'JetBrains Mono', monospace !important;
+    font-size: 11px !important;
+    letter-spacing: 0.05em !important;
+    color: #a1a1aa !important;
+    text-transform: uppercase !important;
+    font-weight: 500 !important;
+    background-color: transparent !important;
+    border: none !important;
+    vertical-align: middle !important;
+  }
+  .atelier-table tbody tr {
+    border-bottom: 1px solid rgba(35, 37, 42, 0.6) !important;
+    transition: background-color 0.15s ease !important;
+  }
+  .atelier-table tbody tr:hover {
+    background-color: rgba(22, 23, 26, 0.5) !important;
+  }
+  .atelier-table tbody td {
+    padding: 1rem 1rem !important;
+    vertical-align: middle !important;
+    border: none !important;
+    color: #f4f4f5 !important;
+    font-size: 0.875rem !important;
+  }
 </style>
 {% endblock %}
 
 {% block content %}
-<div class="max-w-7xl w-full mx-auto space-y-6">
+<div class="w-full space-y-5">
 
   <!-- Screen Title & Primary CTA Header -->
   <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
@@ -136,17 +285,17 @@
     <!-- Search Input with Search Button -->
     <form method="get" class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
       <div class="relative flex-1">
-        <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
-          <svg class="w-4 h-4 text-zinc-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-zinc-500">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
           </svg>
         </div>
-        <input type="text" name="q" value="{{ cl.query|default:'' }}" placeholder="Search patrons by name, phone, or email..." class="w-full pl-10 pr-4 py-2.5 text-sm bg-atelier-surface border border-atelier-border rounded-lg text-zinc-200 placeholder-zinc-500 focus:outline-none focus:border-atelier-emerald focus:ring-1 focus:ring-atelier-emerald transition">
+        <input type="text" name="q" value="{{ cl.query|default:'' }}" placeholder="Search patrons by name, phone, or email..." class="atelier-search-input">
       </div>
       {% for pair in cl.params.items %}
         {% if pair.0 != 'q' %}<input type="hidden" name="{{ pair.0 }}" value="{{ pair.1 }}">{% endif %}
       {% endfor %}
-      <button type="submit" class="px-5 py-2.5 bg-atelier-card hover:bg-atelier-cardElevated border border-atelier-border text-sm font-medium text-zinc-200 rounded-lg transition active:scale-[0.98]">
+      <button type="submit" class="atelier-search-btn">
         Search
       </button>
     </form>
@@ -173,7 +322,7 @@
   </div>
 
   <!-- Form for batch actions and results -->
-  <form id="changelist-form" method="post" novalidate class="space-y-6">
+  <form id="changelist-form" method="post" novalidate class="space-y-5">
     {% csrf_token %}
     <input type="hidden" name="select_across" value="0" class="select-across">
 
@@ -182,7 +331,7 @@
       <div class="flex flex-wrap items-center gap-3">
         <span class="text-xs text-zinc-400 font-medium">Action:</span>
         <div class="relative min-w-[200px] flex-1 sm:flex-initial">
-          <select name="action" required class="w-full appearance-none bg-atelier-card border border-atelier-border text-zinc-300 text-xs rounded-lg px-3 py-2 pr-8 focus:outline-none focus:border-atelier-emerald transition">
+          <select name="action" required class="atelier-action-select">
             <option value="">Select an action...</option>
             {% for choice in action_form.fields.action.choices %}
               {% if choice.0 %}
@@ -196,7 +345,7 @@
             </svg>
           </div>
         </div>
-        <button type="submit" name="index" value="0" class="px-4 py-2 bg-atelier-card hover:bg-atelier-cardElevated border border-atelier-border text-xs font-medium text-zinc-200 rounded-lg transition active:scale-[0.98]">
+        <button type="submit" name="index" value="0" class="atelier-action-btn">
           Run
         </button>
       </div>
@@ -209,19 +358,19 @@
     <div class="rounded-xl border border-atelier-border bg-atelier-surface overflow-hidden atelier-glow">
       
       {% if cl.result_list %}
-      <!-- 1. DESKTOP & TABLET TABLE VIEW (Visible on md+ screens) -->
-      <div class="hidden md:block overflow-x-auto">
-        <table class="w-full text-left border-collapse">
+      <!-- 1. DESKTOP & TABLET TABLE VIEW (Visible on >=768px screens) -->
+      <div class="atelier-desktop-table overflow-x-auto">
+        <table class="atelier-table">
           <thead>
-            <tr class="border-b border-atelier-border/80 text-[11px] font-mono tracking-wider text-zinc-400 uppercase bg-atelier-card/40">
-              <th class="py-3.5 pl-5 pr-3 w-10">
+            <tr>
+              <th class="pl-5 pr-3 w-10">
                 <input type="checkbox" id="action-toggle" class="rounded bg-atelier-card border-atelier-border text-atelier-emerald focus:ring-0 focus:ring-offset-0 cursor-pointer">
               </th>
-              <th class="py-3.5 px-4 font-medium">Customer / Contact</th>
-              <th class="py-3.5 px-4 font-medium">Role</th>
-              <th class="py-3.5 px-4 font-medium">Verification</th>
-              <th class="py-3.5 px-4 font-medium">Newsletter</th>
-              <th class="py-3.5 px-4 font-medium">
+              <th>Customer / Contact</th>
+              <th>Role</th>
+              <th>Verification</th>
+              <th>Newsletter</th>
+              <th>
                 <a href="?{% if 'o=4' in request.GET.urlencode %}o=-4{% else %}o=4{% endif %}" class="inline-flex items-center gap-1.5 cursor-pointer hover:text-zinc-200 transition">
                   <span>Joined Date</span>
                   <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
@@ -229,16 +378,16 @@
                   </svg>
                 </a>
               </th>
-              <th class="py-3.5 pr-5 pl-4 text-right font-medium">Actions</th>
+              <th class="pr-5 pl-4 text-right">Actions</th>
             </tr>
           </thead>
           <tbody class="divide-y divide-atelier-border/60 text-sm">
             {% for obj in cl.result_list %}
             <tr class="hover:bg-atelier-card/50 transition-colors group">
-              <td class="py-4 pl-5 pr-3">
+              <td class="pl-5 pr-3">
                 <input type="checkbox" name="_selected_action" value="{{ obj.pk }}" class="action-select-desktop rounded bg-atelier-card border-atelier-border text-atelier-emerald focus:ring-0 cursor-pointer">
               </td>
-              <td class="py-4 px-4">
+              <td>
                 <div class="flex items-center gap-3.5">
                   <div class="w-9 h-9 rounded-full bg-atelier-card border border-atelier-border text-zinc-200 font-mono text-xs flex items-center justify-center font-medium shrink-0">
                     {% if obj.first_name and obj.last_name %}
@@ -265,7 +414,7 @@
                   </div>
                 </div>
               </td>
-              <td class="py-4 px-4">
+              <td>
                 {% if obj.is_superuser %}
                 <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium bg-amber-500/10 border border-amber-500/30 text-amber-400">
                   <span>👑</span>
@@ -282,7 +431,7 @@
                 </span>
                 {% endif %}
               </td>
-              <td class="py-4 px-4">
+              <td>
                 {% if obj.is_email_verified %}
                 <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-emerald-500/10 border border-emerald-500/30 text-emerald-400">
                   <svg class="w-3 h-3 text-emerald-400" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
@@ -296,7 +445,7 @@
                 </span>
                 {% endif %}
               </td>
-              <td class="py-4 px-4">
+              <td>
                 {% if obj.newsletter_subscribed %}
                 <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-atelier-card border border-atelier-border text-zinc-300">
                   Subscribed
@@ -307,10 +456,10 @@
                 </span>
                 {% endif %}
               </td>
-              <td class="py-4 px-4 font-mono text-xs text-zinc-400 whitespace-nowrap">
+              <td class="font-mono text-xs text-zinc-400 whitespace-nowrap">
                 {{ obj.date_joined|date:"M d, Y, g:i A" }}
               </td>
-              <td class="py-4 pr-5 pl-4 text-right">
+              <td class="pr-5 pl-4 text-right">
                 <a href="{% url 'admin:accounts_customuser_change' obj.id %}" class="px-3.5 py-1.5 text-xs font-medium bg-atelier-card hover:bg-atelier-cardElevated border border-atelier-border hover:border-zinc-600 text-zinc-200 rounded-md transition active:scale-[0.98]">
                   Edit
                 </a>
@@ -321,8 +470,8 @@
         </table>
       </div>
 
-      <!-- 2. MOBILE CARD VIEW (Optimized for <768px / mobile screens) -->
-      <div class="block md:hidden divide-y divide-atelier-border/80">
+      <!-- 2. MOBILE CARD VIEW (Visible on <768px screens) -->
+      <div class="atelier-mobile-cards divide-y divide-atelier-border/80">
         {% for obj in cl.result_list %}
         <div class="p-4 space-y-3.5 hover:bg-atelier-card/30 transition">
           <div class="flex items-start justify-between gap-3">
@@ -375,24 +524,24 @@
             {% endif %}
 
             {% if obj.is_email_verified %}
-            <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-medium bg-emerald-500/10 border border-emerald-500/30 text-emerald-400">
+            <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-medium bg-emerald-500/10 border border-emerald-500/30 text-emerald-400">
               <svg class="w-2.5 h-2.5 text-emerald-400" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path>
               </svg>
               <span>Verified</span>
             </span>
             {% else %}
-            <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-medium bg-zinc-500/10 border border-zinc-500/30 text-zinc-400">
+            <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-medium bg-zinc-500/10 border border-zinc-500/30 text-zinc-400">
               <span>Unverified</span>
             </span>
             {% endif %}
 
             {% if obj.newsletter_subscribed %}
-            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-medium bg-atelier-card border border-atelier-border text-zinc-300">
+            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-medium bg-atelier-card border border-atelier-border text-zinc-300">
               Subscribed
             </span>
             {% else %}
-            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-medium bg-atelier-card/40 border border-atelier-border/50 text-zinc-500">
+            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-medium bg-atelier-card/40 border border-atelier-border/50 text-zinc-500">
               Unsubscribed
             </span>
             {% endif %}
