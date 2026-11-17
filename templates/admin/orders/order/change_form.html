@@ -562,62 +562,329 @@
               </div>
             </section>
 
-            <!-- 2. COMMISSIONED PIECE PREVIEW -->
+            <!-- 2. COMMISSIONED PIECE / DISPATCH & PACKING SPECIFICATION -->
             {% for item in original.items.all %}
-            <section class="rounded-xl bg-obsidian-850 border border-[#222736] p-3.5 sm:p-4 shadow-md" data-purpose="commissioned-piece-summary">
-              <div class="flex items-start gap-3 sm:gap-3.5">
-                <!-- Piece Miniature Spec Box -->
-                <div class="w-12 h-12 sm:w-14 sm:h-14 rounded-lg bg-obsidian-950 border border-champagne/20 flex flex-col items-center justify-center text-center p-1 shrink-0 relative overflow-hidden">
-                  {% if item.product_image %}
-                    <img src="{{ item.product_image }}" alt="{{ item.product_name }}" class="w-full h-full object-cover rounded">
-                  {% else %}
-                    <svg class="w-5 h-5 sm:w-6 sm:h-6 text-champagne/90 mb-0.5" fill="none" stroke="currentColor" stroke-width="1.4" viewBox="0 0 24 24">
-                      <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" stroke-linecap="round" stroke-linejoin="round"></path>
-                    </svg>
-                    <span class="text-[8px] font-mono uppercase text-platinum-400">925 SILVER</span>
-                  {% endif %}
+            <section class="rounded-2xl bg-obsidian-850 border border-[#222736] p-4 sm:p-5 shadow-lg" data-purpose="commissioned-piece-summary">
+              <!-- Header: Manifest & Visual Inspection Directive -->
+              <div class="flex items-center justify-between gap-2 mb-3.5 pb-2.5 border-b border-[#1F2432]">
+                <div class="flex items-center gap-2">
+                  <span class="w-2 h-2 rounded-full bg-champagne animate-pulse"></span>
+                  <span class="text-[10px] sm:text-[11px] font-mono uppercase tracking-wider text-champagne font-semibold">
+                    Commissioned Piece • Dispatch Manifest
+                  </span>
+                  <span class="text-[9px] font-mono text-platinum-400 bg-obsidian-950 px-2 py-0.5 rounded border border-[#262B37]">
+                    Item {{ forloop.counter }} of {{ original.items.count|default:1 }}
+                  </span>
                 </div>
-                <div class="flex-1 min-w-0">
-                  <div class="flex items-center justify-between gap-2 flex-wrap">
-                    <span class="text-[10px] font-mono uppercase text-champagne tracking-wider">Jewellery Specification</span>
-                    <span class="text-[10px] font-mono text-platinum-400">SKU: {{ item.product_sku|default:"LCK-SR-925" }}</span>
+                <div class="flex items-center gap-1.5">
+                  <span class="text-[10px] font-mono text-emerald-400 bg-emerald-950/50 border border-emerald-800/40 px-2 py-0.5 rounded flex items-center gap-1">
+                    <svg class="w-2.5 h-2.5 text-emerald-400 shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                      <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                    </svg>
+                    <span>Visual Match Required</span>
+                  </span>
+                </div>
+              </div>
+
+              <!-- Main Visual & Specification Row -->
+              <div class="flex flex-col sm:flex-row items-start gap-4">
+                <!-- Large Visual Match Thumbnail for Packer -->
+                <div class="relative w-24 h-24 sm:w-28 sm:h-28 md:w-32 md:h-32 rounded-xl bg-obsidian-950 border border-champagne/30 p-1 shrink-0 overflow-hidden shadow-inner group">
+                  <img 
+                    src="{{ item.product_image|default:item.product.primary_image|default:'https://images.unsplash.com/photo-1611591475870-760144f8ea56?auto=format&fit=crop&w=600&q=80' }}"
+                    onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1611591475870-760144f8ea56?auto=format&fit=crop&w=600&q=80';"
+                    alt="{{ item.product_name }}"
+                    class="w-full h-full object-cover rounded-lg group-hover:scale-105 transition-transform duration-300"
+                    loading="eager"
+                  >
+                  <!-- Hallmark / Category Tag Overlay -->
+                  <div class="absolute top-2 left-2 bg-obsidian-950/90 backdrop-blur-xs border border-champagne/40 px-1.5 py-0.5 rounded text-[8px] font-mono text-champagne uppercase font-bold tracking-wider pointer-events-none">
+                    {% if item.product.size_category %}{{ item.product.size_category|upper }}{% else %}ATELIER 925{% endif %}
                   </div>
-                  <h2 class="text-xs sm:text-sm font-serif font-medium text-white truncate mt-1 uppercase tracking-wide">{{ item.product_name }}</h2>
-                  <div class="flex flex-wrap gap-x-2.5 sm:gap-x-3 gap-y-1 mt-1.5 text-[10px] sm:text-[11px] text-platinum-400">
-                    <span>Weight: <strong class="text-platinum-200 font-normal">{{ item.selected_material|default:"26.8g Ag" }}</strong></span>
-                    <span>•</span>
-                    <span>Inlay: <strong class="text-platinum-200 font-normal">Natural Obsidian</strong></span>
-                    <span>•</span>
-                    <span>Size: <strong class="text-platinum-200 font-normal">{{ item.selected_size|default:"UK T / US 9.5" }}</strong></span>
-                    <span>•</span>
-                    <span class="text-champagne font-serif font-semibold">₹{{ item.line_total }}</span>
+                  <!-- Click to Zoom Icon for Inspection -->
+                  <a href="{{ item.product_image|default:item.product.primary_image|default:'https://images.unsplash.com/photo-1611591475870-760144f8ea56?auto=format&fit=crop&w=1200&q=85' }}" target="_blank" rel="noopener noreferrer" class="absolute bottom-2 right-2 p-1 rounded-md bg-obsidian-950/85 border border-champagne/40 text-champagne hover:text-white hover:border-champagne transition-colors" title="Zoom full resolution for inspection">
+                    <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                      <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v6m3-3H7" stroke-linecap="round" stroke-linejoin="round"></path>
+                    </svg>
+                  </a>
+                </div>
+
+                <!-- Product Title, SKU, and Variant Details -->
+                <div class="flex-1 min-w-0 w-full">
+                  <div class="flex items-center justify-between gap-2 flex-wrap">
+                    <!-- SKU Badge with Quick Copy for Scanner -->
+                    <div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-obsidian-950 border border-[#2D3342] text-[11px] font-mono text-platinum-200">
+                      <span class="text-champagne font-semibold">SKU:</span>
+                      <span class="tracking-wider select-all font-semibold">{{ item.product_sku|default:item.product.sku|default:"LCK-BRC-001" }}</span>
+                      <button type="button" onclick="navigator.clipboard.writeText('{{ item.product_sku|default:item.product.sku|default:"LCK-BRC-001" }}'); alert('SKU copied: {{ item.product_sku|default:item.product.sku|default:"LCK-BRC-001" }}');" class="text-platinum-400 hover:text-champagne transition-colors ml-1 p-0.5" title="Copy SKU for barcode verification">
+                        <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+                          <path d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" stroke-linecap="round" stroke-linejoin="round"></path>
+                        </svg>
+                      </button>
+                    </div>
+
+                    <!-- Category / Collection Tag -->
+                    <span class="text-[10px] font-mono uppercase tracking-wider text-champagne/80">
+                      {{ item.product.category.name|default:"Fine Atelier Jewellery" }}
+                    </span>
+                  </div>
+
+                  <!-- Product Name -->
+                  <h2 class="text-sm sm:text-base font-serif font-bold text-white tracking-wide mt-2 leading-snug">
+                    {{ item.product_name|default:item.product.title }}
+                  </h2>
+
+                  <!-- Variant Inspection Grid (Auto-Picked by System to Assist Dispatch) -->
+                  <div class="mt-3 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
+                    <!-- 1. Metal / Precious Alloy Specification -->
+                    <div class="p-2.5 rounded-lg bg-obsidian-950/80 border border-[#262B37] flex flex-col justify-between">
+                      <div class="flex items-center gap-1.5 text-[10px] font-mono text-champagne uppercase tracking-wider">
+                        <svg class="w-3 h-3 text-champagne shrink-0" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+                          <path d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" stroke-linecap="round" stroke-linejoin="round"></path>
+                        </svg>
+                        <span>Precious Metal</span>
+                      </div>
+                      <p class="font-medium text-white text-[11px] sm:text-xs mt-1 truncate" title="{{ item.selected_material|default:item.product.karat_metal|default:'Solid 925 Sterling Silver' }}">
+                        {{ item.selected_material|default:item.product.karat_metal|default:"Solid 925 Sterling Silver" }}
+                      </p>
+                    </div>
+
+                    <!-- 2. Sizing Specification (Category Aware: Ring size, Chain length, Bracelet size) -->
+                    <div class="p-2.5 rounded-lg bg-obsidian-950/80 border border-[#262B37] flex flex-col justify-between">
+                      <div class="flex items-center gap-1.5 text-[10px] font-mono text-champagne uppercase tracking-wider">
+                        <svg class="w-3 h-3 text-champagne shrink-0" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+                          <path d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" stroke-linecap="round" stroke-linejoin="round"></path>
+                        </svg>
+                        <span>
+                          {% if item.product.size_category == 'ring' or 'Ring' in item.product_name or 'ring' in item.product.category.slug %}Ring Size
+                          {% elif item.product.size_category == 'bracelet' or 'Bracelet' in item.product_name or 'bracelet' in item.product.category.slug %}Bracelet Size
+                          {% elif item.product.size_category == 'necklace' or 'Chain' in item.product_name or 'Pendant' in item.product_name or 'necklace' in item.product.category.slug %}Chain Length
+                          {% elif item.product.size_category == 'earring' or 'Earring' in item.product_name or 'earring' in item.product.category.slug %}Earring Fitting
+                          {% else %}Size / Dimensions{% endif %}
+                        </span>
+                      </div>
+                      <p class="font-medium text-white text-[11px] sm:text-xs mt-1 truncate" title="{{ item.selected_size|default:item.product.chain_length_or_size|default:'Standard Fit' }}">
+                        {{ item.selected_size|default:item.product.chain_length_or_size|default:"US 7 / 54.4mm" }}
+                      </p>
+                    </div>
+
+                    <!-- 3. Stone / Gemstone Inlay Specification -->
+                    <div class="p-2.5 rounded-lg bg-obsidian-950/80 border border-[#262B37] flex flex-col justify-between sm:col-span-2 lg:col-span-1">
+                      <div class="flex items-center gap-1.5 text-[10px] font-mono text-champagne uppercase tracking-wider">
+                        <svg class="w-3 h-3 text-champagne shrink-0" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+                          <path d="M6 3h12l4 6-10 12L2 9l4-6z" stroke-linecap="round" stroke-linejoin="round"></path>
+                        </svg>
+                        <span>Stone / Gemstone</span>
+                      </div>
+                      <p class="font-medium text-white text-[11px] sm:text-xs mt-1 truncate" title="{{ item.product.gemstone|default:'5A Flawless Cubic Zirconia / Natural Obsidian' }}">
+                        {{ item.product.gemstone|default:"5A Flawless Cubic Zirconia / Natural Obsidian" }}
+                      </p>
+                    </div>
                   </div>
                 </div>
               </div>
+
+              <!-- Financial & Quantity Audit Strip (Qty, Unit Price, Discount, Line Total) -->
+              <div class="mt-3.5 pt-3 border-t border-[#1F2432] flex flex-wrap items-center justify-between gap-3 bg-obsidian-950/70 p-3 rounded-xl border border-[#222736]">
+                <div class="flex flex-wrap items-center gap-2.5 sm:gap-4">
+                  <!-- Quantity Badge -->
+                  <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 font-mono text-xs font-bold">
+                    <svg class="w-3.5 h-3.5 text-emerald-400 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                      <path d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" stroke-linecap="round" stroke-linejoin="round"></path>
+                    </svg>
+                    <span>QTY: {{ item.quantity|default:1 }} PC</span>
+                  </span>
+
+                  <!-- Unit Price -->
+                  <div class="flex items-baseline gap-1 text-xs font-mono text-platinum-400">
+                    <span>Unit Price:</span>
+                    <span class="text-white font-semibold">₹{{ item.unit_price|floatformat:2|default:"4,200.00" }}</span>
+                  </div>
+
+                  <!-- Applied Discount (if present) -->
+                  {% if original.discount_amount and original.discount_amount > 0 %}
+                  <div class="flex items-center gap-1 text-[11px] font-mono text-emerald-400 bg-emerald-950/40 px-2 py-0.5 rounded border border-emerald-800/40">
+                    <span>Discount: -₹{{ original.discount_amount|floatformat:2 }}</span>
+                    {% if original.coupon %}<span class="text-emerald-300 font-bold">({{ original.coupon.code }})</span>{% endif %}
+                  </div>
+                  {% else %}
+                  <div class="text-[11px] font-mono text-platinum-400">
+                    <span>Discount: ₹0.00</span>
+                  </div>
+                  {% endif %}
+                </div>
+
+                <!-- Settled Line Total -->
+                <div class="text-right ml-auto">
+                  <span class="text-[9px] uppercase font-mono tracking-wider text-platinum-400 block">Line Total</span>
+                  <span class="text-base sm:text-lg font-serif font-bold text-champagne tracking-tight">
+                    ₹{{ item.line_total|floatformat:2|default:"4,200.00" }}
+                    <span class="text-[10px] font-sans font-normal text-platinum-400 uppercase">INR</span>
+                  </span>
+                </div>
+              </div>
+
+              <!-- Engraving & Personalization Inscription Verification Box -->
+              {% if original.gift_message or original.customer_notes %}
+              <div class="mt-3 p-3 rounded-xl bg-gradient-to-r from-champagne-900/40 to-obsidian-950 border border-champagne/40 text-xs">
+                <div class="flex items-center justify-between gap-2 mb-2">
+                  <div class="flex items-center gap-1.5 text-champagne-300 font-mono text-[11px] font-semibold">
+                    <svg class="w-3.5 h-3.5 text-champagne shrink-0" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+                      <path d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" stroke-linecap="round" stroke-linejoin="round"></path>
+                    </svg>
+                    <span>Custom Engraving & Gift Inscription</span>
+                  </div>
+                  <span class="inline-flex items-center gap-1 text-[9px] font-mono uppercase px-2 py-0.5 rounded bg-champagne text-obsidian-950 font-bold tracking-wider shrink-0">
+                    Packer Attention Required
+                  </span>
+                </div>
+                <div class="bg-obsidian-950/85 p-3 rounded-lg border border-champagne/25 space-y-1.5">
+                  {% if original.gift_message %}
+                  <div>
+                    <span class="text-[10px] font-mono text-champagne uppercase tracking-wider block mb-0.5">Laser Inscription / Handwritten Inscription:</span>
+                    <p class="font-serif italic text-white text-xs sm:text-sm tracking-wide bg-obsidian-900/90 p-2.5 rounded border border-[#222736]">
+                      "{{ original.gift_message }}"
+                    </p>
+                  </div>
+                  {% endif %}
+                  {% if original.customer_notes %}
+                  <div class="pt-1 text-[11px] font-mono text-platinum-300">
+                    <span class="text-champagne font-semibold">Patron Special Directive:</span> {{ original.customer_notes }}
+                  </div>
+                  {% endif %}
+                </div>
+              </div>
+              {% else %}
+              <div class="mt-3 p-2.5 rounded-lg bg-obsidian-950/70 border border-[#222736] flex items-center justify-between text-xs text-platinum-400">
+                <div class="flex items-center gap-2 min-w-0">
+                  <svg class="w-3.5 h-3.5 text-champagne/70 shrink-0" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+                    <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round"></path>
+                  </svg>
+                  <span class="font-mono text-[11px] truncate">
+                    Personalization: <strong class="text-platinum-300 font-normal">Standard Atelier Hallmark (No Custom Laser Inscription Requested)</strong>
+                  </span>
+                </div>
+                <span class="text-[10px] font-mono text-emerald-400 bg-emerald-950/50 border border-emerald-800/40 px-2 py-0.5 rounded shrink-0 ml-2">
+                  Standard Dispatch
+                </span>
+              </div>
+              {% endif %}
             </section>
             {% empty %}
-            <section class="rounded-xl bg-obsidian-850 border border-[#222736] p-3.5 sm:p-4 shadow-md" data-purpose="commissioned-piece-summary">
-              <div class="flex items-start gap-3 sm:gap-3.5">
-                <div class="w-12 h-12 sm:w-14 sm:h-14 rounded-lg bg-obsidian-950 border border-champagne/20 flex flex-col items-center justify-center text-center p-1 shrink-0 relative overflow-hidden">
-                  <svg class="w-5 h-5 sm:w-6 sm:h-6 text-champagne/90 mb-0.5" fill="none" stroke="currentColor" stroke-width="1.4" viewBox="0 0 24 24">
-                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" stroke-linecap="round" stroke-linejoin="round"></path>
-                  </svg>
-                  <span class="text-[8px] font-mono uppercase text-platinum-400">925 SILVER</span>
+            <!-- Fallback Empty State / Example Piece Spec -->
+            <section class="rounded-2xl bg-obsidian-850 border border-[#222736] p-4 sm:p-5 shadow-lg" data-purpose="commissioned-piece-summary">
+              <div class="flex items-center justify-between gap-2 mb-3.5 pb-2.5 border-b border-[#1F2432]">
+                <div class="flex items-center gap-2">
+                  <span class="w-2 h-2 rounded-full bg-champagne animate-pulse"></span>
+                  <span class="text-[10px] sm:text-[11px] font-mono uppercase tracking-wider text-champagne font-semibold">
+                    Commissioned Piece • Dispatch Manifest
+                  </span>
+                  <span class="text-[9px] font-mono text-platinum-400 bg-obsidian-950 px-2 py-0.5 rounded border border-[#262B37]">
+                    Item 1 of 1
+                  </span>
                 </div>
-                <div class="flex-1 min-w-0">
+                <div class="flex items-center gap-1.5">
+                  <span class="text-[10px] font-mono text-emerald-400 bg-emerald-950/50 border border-emerald-800/40 px-2 py-0.5 rounded flex items-center gap-1">
+                    <svg class="w-2.5 h-2.5 text-emerald-400 shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                      <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                    </svg>
+                    <span>Visual Match Required</span>
+                  </span>
+                </div>
+              </div>
+
+              <div class="flex flex-col sm:flex-row items-start gap-4">
+                <div class="relative w-24 h-24 sm:w-28 sm:h-28 md:w-32 md:h-32 rounded-xl bg-obsidian-950 border border-champagne/30 p-1 shrink-0 overflow-hidden shadow-inner group">
+                  <img 
+                    src="https://images.unsplash.com/photo-1605100804763-247f67b3557e?auto=format&fit=crop&w=600&q=80" 
+                    alt="Solitaire Cabochon Signet Ring"
+                    class="w-full h-full object-cover rounded-lg group-hover:scale-105 transition-transform duration-300"
+                  >
+                  <div class="absolute top-2 left-2 bg-obsidian-950/90 backdrop-blur-xs border border-champagne/40 px-1.5 py-0.5 rounded text-[8px] font-mono text-champagne uppercase font-bold tracking-wider pointer-events-none">
+                    RINGS
+                  </div>
+                </div>
+
+                <div class="flex-1 min-w-0 w-full">
                   <div class="flex items-center justify-between gap-2 flex-wrap">
-                    <span class="text-[10px] font-mono uppercase text-champagne tracking-wider">Jewellery Specification</span>
-                    <span class="text-[10px] font-mono text-platinum-400">SKU: LCK-SR-925</span>
+                    <div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-obsidian-950 border border-[#2D3342] text-[11px] font-mono text-platinum-200">
+                      <span class="text-champagne font-semibold">SKU:</span>
+                      <span class="tracking-wider select-all font-semibold">LUK-SIL-RG-002</span>
+                    </div>
+                    <span class="text-[10px] font-mono uppercase tracking-wider text-champagne/80">Solitaire Collection</span>
                   </div>
-                  <h2 class="text-xs sm:text-sm font-serif font-medium text-white truncate mt-1 uppercase tracking-wide">Solitaire Cabochon Signet Ring in Solid 925 Silver</h2>
-                  <div class="flex flex-wrap gap-x-2.5 sm:gap-x-3 gap-y-1 mt-1.5 text-[10px] sm:text-[11px] text-platinum-400">
-                    <span>Weight: <strong class="text-platinum-200 font-normal">26.8g Ag</strong></span>
-                    <span>•</span>
-                    <span>Inlay: <strong class="text-platinum-200 font-normal">Natural Obsidian</strong></span>
-                    <span>•</span>
-                    <span>Size: <strong class="text-platinum-200 font-normal">UK T / US 9.5</strong></span>
+
+                  <h2 class="text-sm sm:text-base font-serif font-bold text-white tracking-wide mt-2 leading-snug">
+                    Solitaire Cabochon Signet Ring in Solid 925 Silver
+                  </h2>
+
+                  <div class="mt-3 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
+                    <div class="p-2.5 rounded-lg bg-obsidian-950/80 border border-[#262B37] flex flex-col justify-between">
+                      <div class="flex items-center gap-1.5 text-[10px] font-mono text-champagne uppercase tracking-wider">
+                        <svg class="w-3 h-3 text-champagne shrink-0" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+                          <path d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" stroke-linecap="round" stroke-linejoin="round"></path>
+                        </svg>
+                        <span>Precious Metal</span>
+                      </div>
+                      <p class="font-medium text-white text-[11px] sm:text-xs mt-1 truncate">Solid 925 Sterling Silver</p>
+                    </div>
+
+                    <div class="p-2.5 rounded-lg bg-obsidian-950/80 border border-[#262B37] flex flex-col justify-between">
+                      <div class="flex items-center gap-1.5 text-[10px] font-mono text-champagne uppercase tracking-wider">
+                        <svg class="w-3 h-3 text-champagne shrink-0" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+                          <path d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" stroke-linecap="round" stroke-linejoin="round"></path>
+                        </svg>
+                        <span>Ring Size</span>
+                      </div>
+                      <p class="font-medium text-white text-[11px] sm:text-xs mt-1 truncate">US 7 / 54.4mm</p>
+                    </div>
+
+                    <div class="p-2.5 rounded-lg bg-obsidian-950/80 border border-[#262B37] flex flex-col justify-between sm:col-span-2 lg:col-span-1">
+                      <div class="flex items-center gap-1.5 text-[10px] font-mono text-champagne uppercase tracking-wider">
+                        <svg class="w-3 h-3 text-champagne shrink-0" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+                          <path d="M6 3h12l4 6-10 12L2 9l4-6z" stroke-linecap="round" stroke-linejoin="round"></path>
+                        </svg>
+                        <span>Stone / Gemstone</span>
+                      </div>
+                      <p class="font-medium text-white text-[11px] sm:text-xs mt-1 truncate">Natural Obsidian / Flawless Pavé</p>
+                    </div>
                   </div>
                 </div>
+              </div>
+
+              <div class="mt-3.5 pt-3 border-t border-[#1F2432] flex flex-wrap items-center justify-between gap-3 bg-obsidian-950/70 p-3 rounded-xl border border-[#222736]">
+                <div class="flex flex-wrap items-center gap-2.5 sm:gap-4">
+                  <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 font-mono text-xs font-bold">
+                    <span>QTY: 1 PC</span>
+                  </span>
+                  <div class="flex items-baseline gap-1 text-xs font-mono text-platinum-400">
+                    <span>Unit Price:</span>
+                    <span class="text-white font-semibold">₹3,450.00</span>
+                  </div>
+                  <div class="text-[11px] font-mono text-platinum-400">
+                    <span>Discount: ₹0.00</span>
+                  </div>
+                </div>
+                <div class="text-right ml-auto">
+                  <span class="text-[9px] uppercase font-mono tracking-wider text-platinum-400 block">Line Total</span>
+                  <span class="text-base sm:text-lg font-serif font-bold text-champagne tracking-tight">
+                    ₹3,450.00 <span class="text-[10px] font-sans font-normal text-platinum-400 uppercase">INR</span>
+                  </span>
+                </div>
+              </div>
+
+              <div class="mt-3 p-2.5 rounded-lg bg-obsidian-950/70 border border-[#222736] flex items-center justify-between text-xs text-platinum-400">
+                <div class="flex items-center gap-2 min-w-0">
+                  <svg class="w-3.5 h-3.5 text-champagne/70 shrink-0" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+                    <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round"></path>
+                  </svg>
+                  <span class="font-mono text-[11px] truncate">
+                    Personalization: <strong class="text-platinum-300 font-normal">Standard Atelier Hallmark (No Custom Laser Inscription Requested)</strong>
+                  </span>
+                </div>
+                <span class="text-[10px] font-mono text-emerald-400 bg-emerald-950/50 border border-emerald-800/40 px-2 py-0.5 rounded shrink-0 ml-2">
+                  Standard Dispatch
+                </span>
               </div>
             </section>
             {% endfor %}
