@@ -360,17 +360,17 @@ html, body {
           </div>
         </div>
 
-        <!-- Section: Customers & VIPs -->
+        <!-- Section: Customers -->
         <div>
-          <div class="text-[10px] font-bold tracking-[0.12em] text-zinc-400 uppercase px-2 mb-1.5 font-mono-luxury">Customers &amp; VIPs</div>
+          <div class="text-[10px] font-bold tracking-[0.12em] text-zinc-400 uppercase px-2 mb-1.5 font-mono-luxury">Customers</div>
           <div class="space-y-0.5">
             <a href="{% url 'admin:accounts_customuser_changelist' %}" class="flex items-center gap-3 px-3 py-2 rounded-xl {% if '/admin/accounts/customuser/' in request.path %}bg-emerald-500/10 text-emerald-400 font-medium border-l-2 border-emerald-400 shadow-sm active{% else %}text-zinc-400 hover:text-zinc-100 hover:bg-[#18191c] transition-colors{% endif %}">
               <svg class="w-4 h-4 {% if '/admin/accounts/customuser/' in request.path %}text-emerald-400{% else %}text-zinc-400{% endif %}" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle></svg>
-              <span {% if '/admin/accounts/customuser/' in request.path %}class="text-zinc-100 font-semibold"{% else %}class="text-zinc-400"{% endif %}>VIP Patrons</span>
+              <span {% if '/admin/accounts/customuser/' in request.path %}class="text-zinc-100 font-semibold"{% else %}class="text-zinc-400"{% endif %}>Customers</span>
             </a>
-            <a href="{% url 'admin:accounts_address_changelist' %}" class="flex items-center gap-3 px-3 py-2 rounded-xl {% if '/admin/accounts/address/' in request.path %}bg-emerald-500/10 text-emerald-400 font-medium border-l-2 border-emerald-400 shadow-sm active{% else %}text-zinc-400 hover:text-zinc-100 hover:bg-[#18191c] transition-colors{% endif %}">
-              <svg class="w-4 h-4 {% if '/admin/accounts/address/' in request.path %}text-emerald-400{% else %}text-zinc-400{% endif %}" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
-              <span {% if '/admin/accounts/address/' in request.path %}class="text-zinc-100 font-semibold"{% else %}class="text-zinc-400"{% endif %}>Addresses</span>
+            <a href="{% url 'admin:core_newslettersubscriber_changelist' %}" class="flex items-center gap-3 px-3 py-2 rounded-xl {% if '/admin/core/newslettersubscriber/' in request.path %}bg-emerald-500/10 text-emerald-400 font-medium border-l-2 border-emerald-400 shadow-sm active{% else %}text-zinc-400 hover:text-zinc-100 hover:bg-[#18191c] transition-colors{% endif %}">
+              <svg class="w-4 h-4 {% if '/admin/core/newslettersubscriber/' in request.path %}text-emerald-400{% else %}text-zinc-400{% endif %}" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+              <span {% if '/admin/core/newslettersubscriber/' in request.path %}class="text-zinc-100 font-semibold"{% else %}class="text-zinc-400"{% endif %}>Subscribers</span>
             </a>
           </div>
         </div>
@@ -382,10 +382,6 @@ html, body {
             <a href="{% url 'admin:core_contactinquiry_changelist' %}" class="flex items-center gap-3 px-3 py-2 rounded-xl {% if '/admin/core/contactinquiry/' in request.path %}bg-emerald-500/10 text-emerald-400 font-medium border-l-2 border-emerald-400 shadow-sm active{% else %}text-zinc-400 hover:text-zinc-100 hover:bg-[#18191c] transition-colors{% endif %}">
               <svg class="w-4 h-4 {% if '/admin/core/contactinquiry/' in request.path %}text-emerald-400{% else %}text-zinc-400{% endif %}" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
               <span {% if '/admin/core/contactinquiry/' in request.path %}class="text-zinc-100 font-semibold"{% else %}class="text-zinc-400"{% endif %}>Client Inquiries</span>
-            </a>
-            <a href="{% url 'admin:core_newslettersubscriber_changelist' %}" class="flex items-center gap-3 px-3 py-2 rounded-xl {% if '/admin/core/newslettersubscriber/' in request.path %}bg-emerald-500/10 text-emerald-400 font-medium border-l-2 border-emerald-400 shadow-sm active{% else %}text-zinc-400 hover:text-zinc-100 hover:bg-[#18191c] transition-colors{% endif %}">
-              <svg class="w-4 h-4 {% if '/admin/core/newslettersubscriber/' in request.path %}text-emerald-400{% else %}text-zinc-400{% endif %}" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
-              <span {% if '/admin/core/newslettersubscriber/' in request.path %}class="text-zinc-100 font-semibold"{% else %}class="text-zinc-400"{% endif %}>Subscribers</span>
             </a>
           </div>
         </div>

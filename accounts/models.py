@@ -31,6 +31,10 @@ class CustomUser(AbstractUser):
         self.email_verification_token = None
         self.save(update_fields=['is_email_verified', 'email_verification_token'])
 
+    class Meta:
+        verbose_name = "Customer"
+        verbose_name_plural = "Customers"
+
     def __str__(self):
         full_name = self.get_full_name()
         return f"{full_name} ({self.email})" if full_name else self.email
