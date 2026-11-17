@@ -86,7 +86,7 @@
       background: #07080A !important;
     }
 
-    /* Content canvas: aligns flush to the persistent 240px sidebar on desktop, full width on mobile/tablet */
+    /* 1. Content canvas layout: flush with persistent 240px sidebar on desktop, full width on mobile/tablet */
     @media (min-width: 1101px) {
       #content-start.shopify-content-canvas {
         background-color: #07080A !important;
@@ -95,6 +95,9 @@
         max-width: calc(100% - 240px) !important;
         min-width: 0 !important;
         padding: 0 !important;
+        margin-top: 0 !important;
+        margin-right: 0 !important;
+        margin-bottom: 0 !important;
         box-sizing: border-box !important;
       }
     }
@@ -106,12 +109,14 @@
         max-width: 100% !important;
         min-width: 0 !important;
         padding: 0 !important;
+        margin-top: 0 !important;
+        margin-right: 0 !important;
+        margin-bottom: 0 !important;
         box-sizing: border-box !important;
       }
     }
 
-    /* Reset all container padding and margins to dock flush against top bar */
-    #content-start.shopify-content-canvas,
+    /* 2. Inner containers: reset all padding and margins to 0 so content docks flush at top */
     #content,
     #content.shopify-content-box,
     .shopify-content-box,
@@ -324,7 +329,7 @@
       <div class="absolute top-0 left-0 right-0 h-48 bg-atelier-radial pointer-events-none"></div>
 
       <!-- BEGIN: TopBar Navigation (Flush Breadcrumb Subheader) -->
-      <header class="sticky top-[56px] z-30 bg-obsidian-900/95 backdrop-blur-md border-b border-[#1E232E] px-4 sm:px-6 md:px-8 py-2.5 flex items-center justify-between gap-3 w-full">
+      <header class="w-full bg-obsidian-900/95 border-b border-[#1E232E] px-4 sm:px-6 md:px-8 py-2.5 flex items-center justify-between gap-3">
         <!-- Breadcrumb / Back Navigation to Orders Change List -->
         <a class="inline-flex items-center gap-2 text-xs font-medium text-platinum-400 hover:text-champagne transition-colors min-w-0" href="{% url opts|admin_urlname:'changelist' %}" title="Return to Orders Ledger">
           <svg class="w-4 h-4 text-champagne shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -348,7 +353,7 @@
       <!-- END: TopBar -->
 
       <!-- BEGIN: ScrollableContent -->
-      <main class="flex-1 px-4 sm:px-6 md:px-8 py-4 sm:py-6 md:py-7 relative z-10 w-full">
+      <main class="flex-1 px-4 sm:px-6 md:px-8 pt-3 sm:pt-4 pb-6 sm:pb-8 relative z-10 w-full">
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 md:gap-6 items-start w-full">
 
           <!-- ============================================================
