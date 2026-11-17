@@ -2,6 +2,11 @@ from django import forms
 from django.contrib import admin
 from django.utils.html import format_html
 from django.utils.safestring import mark_safe
+from django.urls import path
+from django.http import JsonResponse, HttpResponseRedirect
+from django.db.models import Q, Sum
+import json
+import uuid
 from .models import Category, Material, Collection, Product, ProductImage, ProductReview
 
 class ProductAdminForm(forms.ModelForm):
@@ -53,7 +58,7 @@ class ProductAdminForm(forms.ModelForm):
                 'style': 'width: 100%;'
             }),
             'sku': forms.TextInput(attrs={
-                'placeholder': 'e.g. LCK-SIL-001',
+                'placeholder': 'e.g. LCK-SIL-001 (Leave blank to auto-generate)',
                 'style': 'width: 100%; font-family: monospace; font-weight: 600; letter-spacing: 0.05em;'
             }),
             'available_metals': forms.TextInput(attrs={
@@ -75,6 +80,10 @@ class ProductAdminForm(forms.ModelForm):
         self.fields['metal_presets'].initial = ['925 Sterling Silver']
         if 'gemstone' in self.fields:
             self.fields['gemstone'].initial = '5A Flawless Cubic Zirconia (CZ)'
+        if 'sku' in self.fields:
+            self.fields['sku'].required = False
+        if 'description' in self.fields:
+            self.fields['description'].required = False
 
     def clean(self):
         cleaned_data = super().clean()
@@ -85,11 +94,15 @@ class ProductAdminForm(forms.ModelForm):
         cleaned_data['dimensions'] = ''
         if not cleaned_data.get('certification'):
             cleaned_data['certification'] = 'Luckjary 925 Hallmark & Authenticity Guarantee'
+        if not cleaned_data.get('sku'):
+            cleaned_data['sku'] = f"LUK-SIL-{uuid.uuid4().hex[:6].upper()}"
+        if not cleaned_data.get('description'):
+            cleaned_data['description'] = f"Handcrafted {cleaned_data.get('title', 'fine jewelry piece')} in 925 Solid Sterling Silver with conflict-free handset stones and signature Luckjary hallmark guarantee."
         return cleaned_data
 
 class ProductImageInline(admin.TabularInline):
     model = ProductImage
-    extra = 1
+    extra = 0
 
 class ProductReviewInline(admin.StackedInline):
     model = ProductReview
@@ -263,9 +276,165 @@ class ProductAdmin(admin.ModelAdmin):
         if legacy_mats.exists():
             product.materials.remove(*legacy_mats)
 
+    def get_urls(self):
+        urls = super().get_urls()
+        custom_urls = [
+            path('quick-add/', self.admin_site.admin_view(self.quick_add_view), name='catalog_product_quick_add'),
+            path('bulk-delete/', self.admin_site.admin_view(self.bulk_delete_view), name='catalog_product_bulk_delete'),
+            path('quick-delete/<int:product_id>/', self.admin_site.admin_view(self.quick_delete_view), name='catalog_product_quick_delete'),
+        ]
+        return custom_urls + urls
+
+    def quick_add_view(self, request):
+        if request.method != 'POST':
+            return JsonResponse({'status': 'error', 'message': 'POST required'}, status=405)
+        
+        try:
+            if request.content_type == 'application/json':
+                data = json.loads(request.body.decode('utf-8'))
+            else:
+                data = request.POST
+
+            title = (data.get('title') or '').strip()
+            if not title:
+                return JsonResponse({'status': 'error', 'message': 'Product title is required.'}, status=400)
+
+            price = data.get('price')
+            if not price:
+                return JsonResponse({'status': 'error', 'message': 'Price is required.'}, status=400)
+            
+            category_id = data.get('category')
+            category = None
+            if category_id:
+                category = Category.objects.filter(id=category_id).first()
+            if not category:
+                category = Category.objects.first()
+
+            compare_price = data.get('compare_at_price') or None
+            if compare_price and str(compare_price).strip():
+                try:
+                    compare_price = float(compare_price)
+                except ValueError:
+                    compare_price = None
+            else:
+                compare_price = None
+
+            inventory = int(data.get('inventory') or 25)
+            sku = (data.get('sku') or '').strip()
+            if not sku:
+                sku = f"LUK-SIL-{uuid.uuid4().hex[:6].upper()}"
+
+            size_category = data.get('size_category') or 'ring'
+            gemstone = data.get('gemstone') or '5A Flawless Cubic Zirconia (CZ)'
+            description = (data.get('description') or '').strip() or f"Handcrafted {title} in authentic 925 Solid Sterling Silver with conflict-free handset stones and signature Luckjary hallmark guarantee."
+
+            product = Product.objects.create(
+                title=title,
+                category=category,
+                price=price,
+                compare_at_price=compare_price,
+                inventory=inventory,
+                sku=sku,
+                size_category=size_category,
+                gemstone=gemstone,
+                description=description,
+                karat_metal='925 Sterling Silver',
+                available_metals='925 Sterling Silver',
+                is_available=True,
+                is_featured=bool(data.get('is_featured'))
+            )
+
+            # Ensure 925 silver material
+            silver_mat, _ = Material.objects.get_or_create(
+                slug='925-sterling-silver',
+                defaults={'name': '925 Sterling Silver', 'badge_label': '925 Silver'}
+            )
+            product.materials.add(silver_mat)
+
+            # Image URL if provided
+            image_url = (data.get('image_url') or '').strip()
+            if image_url:
+                ProductImage.objects.create(
+                    product=product,
+                    image_url=image_url,
+                    alt_text=f"{product.title} atelier image",
+                    is_primary=True,
+                    order=0
+                )
+
+            if request.headers.get('x-requested-with') == 'XMLHttpRequest' or request.content_type == 'application/json':
+                return JsonResponse({
+                    'status': 'ok',
+                    'message': f'"{product.title}" successfully added to the Atelier Vault.',
+                    'id': product.id,
+                    'title': product.title,
+                    'sku': product.sku,
+                    'price': float(product.price),
+                    'image': product.primary_image,
+                })
+            
+            try:
+                from django.contrib import messages
+                messages.success(request, f'Piece "{product.title}" (SKU: {product.sku}) was successfully created.', fail_silently=True)
+            except Exception:
+                pass
+            return HttpResponseRedirect('/admin/catalog/product/')
+        except Exception as e:
+            return JsonResponse({'status': 'error', 'message': str(e)}, status=500)
+
+    def bulk_delete_view(self, request):
+        if request.method != 'POST':
+            return JsonResponse({'status': 'error', 'message': 'POST required'}, status=405)
+        try:
+            if request.content_type == 'application/json':
+                data = json.loads(request.body.decode('utf-8'))
+                ids = data.get('ids', [])
+            else:
+                ids = request.POST.getlist('ids') or request.POST.getlist('_selected_action')
+            
+            if not ids:
+                return JsonResponse({'status': 'error', 'message': 'No product IDs provided.'}, status=400)
+            
+            clean_ids = [int(i) for i in ids if str(i).isdigit()]
+            deleted_count, _ = Product.objects.filter(id__in=clean_ids).delete()
+            
+            if request.headers.get('x-requested-with') == 'XMLHttpRequest' or request.content_type == 'application/json':
+                return JsonResponse({
+                    'status': 'ok',
+                    'deleted_count': deleted_count,
+                    'message': f'{deleted_count} piece(s) successfully deleted from the Atelier Vault.'
+                })
+            try:
+                from django.contrib import messages
+                messages.success(request, f'{deleted_count} piece(s) successfully deleted from the Atelier Vault.', fail_silently=True)
+            except Exception:
+                pass
+            return HttpResponseRedirect('/admin/catalog/product/')
+        except Exception as e:
+            return JsonResponse({'status': 'error', 'message': str(e)}, status=500)
+
+    def quick_delete_view(self, request, product_id):
+        if request.method != 'POST':
+            return HttpResponseRedirect(f'/admin/catalog/product/{product_id}/delete/')
+        try:
+            product = Product.objects.filter(id=product_id).first()
+            if not product:
+                return JsonResponse({'status': 'error', 'message': 'Product not found.'}, status=404)
+            title = product.title
+            product.delete()
+            if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+                return JsonResponse({'status': 'ok', 'id': product_id, 'message': f'"{title}" deleted.'})
+            try:
+                from django.contrib import messages
+                messages.success(request, f'Piece "{title}" was deleted from Atelier Vault.', fail_silently=True)
+            except Exception:
+                pass
+            return HttpResponseRedirect('/admin/catalog/product/')
+        except Exception as e:
+            return JsonResponse({'status': 'error', 'message': str(e)}, status=500)
+
     def changelist_view(self, request, extra_context=None):
         extra_context = extra_context or {}
-        from django.db.models import Sum
         total_count = Product.objects.count()
         in_stock_count = Product.objects.filter(inventory__gt=5).count()
         low_stock_count = Product.objects.filter(inventory__gt=0, inventory__lte=5).count()
@@ -284,6 +453,15 @@ class ProductAdmin(admin.ModelAdmin):
             'available': available_count,
             'bestsellers': bestseller_count,
             'vault_value': f"${vault_val:,.2f}",
+        }
+        extra_context['category_counts'] = {
+            'all': total_count,
+            'rings': Product.objects.filter(Q(category__slug='rings') | Q(title__icontains='Ring')).count(),
+            'necklaces': Product.objects.filter(Q(category__slug='necklaces') | Q(title__icontains='Necklace') | Q(title__icontains='Chain') | Q(title__icontains='Pendant')).count(),
+            'bracelets': Product.objects.filter(Q(category__slug='bracelets') | Q(title__icontains='Bracelet') | Q(title__icontains='Bangle')).count(),
+            'earrings': Product.objects.filter(Q(category__slug='earrings') | Q(title__icontains='Earring') | Q(title__icontains='Huggies')).count(),
+            'high_jewelry': Product.objects.filter(is_featured=True).count(),
+            'low_stock': low_stock_count,
         }
         extra_context['categories_list'] = Category.objects.all()
         return super().changelist_view(request, extra_context=extra_context)
