@@ -6,7 +6,7 @@ from django.utils import timezone
 class CustomUser(AbstractUser):
     # Using email as unique login identifier
     email = models.EmailField(unique=True, verbose_name="Email Address")
-    phone_number = models.CharField(max_length=25, blank=True, null=True, verbose_name="Phone Number")
+    phone_number = models.CharField(max_length=25, blank=True, null=True, verbose_name="Mobile Number")
     
     # Email Verification
     is_email_verified = models.BooleanField(default=False, verbose_name="Email Verified")

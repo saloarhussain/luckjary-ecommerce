@@ -7,6 +7,15 @@ from .models import CustomUser, Address
 class AddressInline(admin.StackedInline):
     model = Address
     extra = 0
+    verbose_name = "Saved Address"
+    verbose_name_plural = "Customer Saved Addresses"
+    fields = (
+        ('address_type', 'is_default'),
+        ('full_name', 'phone_number'),
+        'street_address',
+        ('apartment_suite', 'city'),
+        ('state_province', 'postal_code', 'country'),
+    )
 
 @admin.register(CustomUser)
 class CustomUserAdmin(UserAdmin):
@@ -17,12 +26,51 @@ class CustomUserAdmin(UserAdmin):
     ordering = ('-date_joined',)
     inlines = [AddressInline]
     
+    # Organised: Customer Name -> Mobile Number -> Email -> Address (Inline below)
     fieldsets = (
-        (None, {'fields': ('email', 'password')}),
-        ('Personal Info', {'fields': ('first_name', 'last_name', 'phone_number')}),
-        ('Verification & Club', {'fields': ('is_email_verified', 'email_verification_token', 'newsletter_subscribed')}),
-        ('Permissions', {'fields': ('is_active', 'is_staff', 'is_superuser', 'groups', 'user_permissions')}),
-        ('Important Dates', {'fields': ('last_login', 'date_joined')}),
+        ("Customer Details", {
+            'fields': (
+                ('first_name', 'last_name'),
+                ('phone_number', 'email'),
+            ),
+            'description': "Primary customer identity and contact information."
+        }),
+        ("Privé Club & Verification", {
+            'fields': (
+                ('is_email_verified', 'newsletter_subscribed'),
+                'email_verification_token',
+            ),
+            'classes': ('collapse',),
+        }),
+        ("Account Credentials & Password", {
+            'fields': ('password',),
+            'classes': ('collapse',),
+            'description': "Authentication credentials and raw password reset tools."
+        }),
+        ("Permissions & Roles", {
+            'fields': (
+                ('is_active', 'is_staff', 'is_superuser'),
+                'groups',
+                'user_permissions',
+            ),
+            'classes': ('collapse',),
+        }),
+        ("Activity & Dates", {
+            'fields': (('last_login', 'date_joined'),),
+            'classes': ('collapse',),
+        }),
+    )
+
+    add_fieldsets = (
+        ("Customer Details", {
+            'classes': ('wide',),
+            'fields': (
+                ('first_name', 'last_name'),
+                ('phone_number', 'email'),
+                'usable_password',
+                ('password1', 'password2'),
+            ),
+        }),
     )
 
     @admin.display(description='Client / Email', ordering='email')

@@ -2678,6 +2678,96 @@ fieldset .description {
     padding: 0.45rem 0.75rem !important;
     color: #FFFFFF !important;
     font-size: 0.82rem !important;
+}
+
+/* Inline Groups & Stacked Formsets (Customer Saved Addresses, etc.) */
+.inline-group,
+.customer-address-inlines-section {
+    background: var(--shopify-card-bg) !important;
+    border: 1px solid var(--shopify-card-border) !important;
+    border-radius: 10px !important;
+    padding: 1.5rem !important;
+    margin-bottom: 1.5rem !important;
+}
+
+.inline-group h2,
+.inline-group h2.inline-heading {
+    font-size: 0.95rem !important;
+    font-weight: 700 !important;
+    color: #FFFFFF !important;
+    background: transparent !important;
+    border-bottom: 1px solid #232732 !important;
+    padding-bottom: 0.65rem !important;
+    margin: 0 0 1rem 0 !important;
+}
+
+.inline-group .inline-related {
+    background: #141620 !important;
+    border: 1px solid #262A38 !important;
+    border-radius: 8px !important;
+    padding: 1rem !important;
+    margin-bottom: 1rem !important;
+}
+
+.inline-group .inline-related h3 {
+    font-size: 0.82rem !important;
+    font-weight: 600 !important;
+    color: #DFBE76 !important;
+    background: #191C28 !important;
+    border: 1px solid #282D3E !important;
+    border-radius: 6px !important;
+    padding: 0.4rem 0.75rem !important;
+    margin: 0 0 0.85rem 0 !important;
+}
+
+.inline-group .inline-related fieldset.module {
+    background: transparent !important;
+    border: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+.inline-group .add-row,
+.inline-group div.add-row {
+    background: transparent !important;
+    border: none !important;
+    padding: 0.5rem 0 0 0 !important;
+    margin: 0 !important;
+}
+
+.inline-group .add-row a {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 0.5rem !important;
+    padding: 0.45rem 1rem !important;
+    background: rgba(16, 185, 129, 0.12) !important;
+    border: 1px solid rgba(16, 185, 129, 0.35) !important;
+    color: #34D399 !important;
+    font-size: 0.78rem !important;
+    font-weight: 600 !important;
+    border-radius: 8px !important;
+    text-decoration: none !important;
+    transition: all 0.15s ease !important;
+}
+
+.inline-group .add-row a:hover {
+    background: rgba(16, 185, 129, 0.25) !important;
+    color: #FFFFFF !important;
+    border-color: #10B981 !important;
+}
+
+/* Multiline form fields inside inlines */
+.form-row.form-multiline {
+    display: flex !important;
+    gap: 1.25rem !important;
+    align-items: flex-start !important;
+    flex-wrap: wrap !important;
+}
+
+.form-row.form-multiline .fieldBox {
+    flex: 1 1 200px !important;
+    margin: 0 !important;
+}
     font-family: var(--font-sans) !important;
     max-width: 100% !important;
     box-sizing: border-box !important;
