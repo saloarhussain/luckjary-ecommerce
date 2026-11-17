@@ -4,10 +4,10 @@
 <meta charset="utf-8">
 <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport">
 <title>Luckjary Atelier • Order Management</title>
-<!-- Google Fonts: Bodoni Moda, Plus Jakarta Sans, JetBrains Mono -->
+<!-- Google Fonts: Plus Jakarta Sans & JetBrains Mono -->
 <link href="https://fonts.googleapis.com" rel="preconnect">
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
-<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..900;1,6..96,400..900&amp;family=Plus+Jakarta+Sans:ital,wght@0,300..800;1,300..800&amp;family=JetBrains+Mono:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300..800;1,300..800&amp;family=JetBrains+Mono:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
 <!-- Tailwind CSS v3 with forms and container queries -->
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
@@ -32,7 +32,7 @@
             "text-muted": "#9ca3af"
           },
           fontFamily: {
-            serif: ["Bodoni Moda", "Georgia", "serif"],
+            serif: ["Plus Jakarta Sans", "-apple-system", "BlinkMacSystemFont", "Segoe UI", "sans-serif"],
             sans: ["Plus Jakarta Sans", "-apple-system", "BlinkMacSystemFont", "Segoe UI", "sans-serif"],
             mono: ["JetBrains Mono", "SFMono-Regular", "Menlo", "monospace"]
           }
@@ -48,6 +48,7 @@
       padding: 0;
       background-color: #0d0e10;
       color: #e3e2e5;
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
       -webkit-font-smoothing: antialiased;
     }
     .no-scrollbar::-webkit-scrollbar {
@@ -93,7 +94,7 @@
       <a href="/admin/" class="flex items-center gap-2.5 group focus:outline-none">
         <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 inline-block group-hover:scale-125 transition-transform duration-300 shadow-[0_0_8px_rgba(16,185,129,0.5)]"></span>
         <div class="flex flex-col">
-          <span class="font-bold text-[14px] tracking-[0.16em] text-zinc-100 font-serif">LUCKJARY</span>
+          <span class="font-bold text-[14px] tracking-[0.16em] text-white font-sans">LUCKJARY</span>
           <span class="text-[9px] text-[#ebd38d] uppercase tracking-[0.25em] font-mono font-semibold">HAUTE ATELIER</span>
         </div>
       </a>
@@ -261,7 +262,7 @@
       <a href="/admin/" class="flex items-center gap-2.5 group focus:outline-none">
         <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 inline-block group-hover:scale-125 transition-transform duration-300 shadow-[0_0_8px_rgba(16,185,129,0.5)]"></span>
         <div class="flex flex-col">
-          <span class="font-bold text-[14px] tracking-[0.16em] text-zinc-100 font-serif">LUCKJARY</span>
+          <span class="font-bold text-[14px] tracking-[0.16em] text-white font-sans">LUCKJARY</span>
           <span class="text-[9px] text-[#ebd38d] uppercase tracking-[0.25em] font-mono font-semibold">HAUTE ATELIER</span>
         </div>
       </a>
@@ -426,7 +427,7 @@
             <div class="w-7 h-7 rounded-lg bg-[#14161C] border border-[#E9C176]/30 flex items-center justify-center text-[#E9C176]">
               <span class="material-symbols-outlined text-[15px]">diamond</span>
             </div>
-            <span class="text-xs uppercase font-serif tracking-[0.2em] font-semibold text-zinc-100">Luckjary</span>
+            <span class="text-xs uppercase font-sans tracking-[0.2em] font-bold text-white">Luckjary</span>
           </div>
         </div>
 
@@ -495,7 +496,7 @@
       <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 pb-5 border-b border-[#232732]">
         <div class="space-y-1.5">
           <div class="flex flex-wrap items-center gap-2.5">
-            <span class="text-[11px] font-semibold text-amber-400 font-sans tracking-wide">Order Management</span>
+            <span class="text-[11px] font-bold text-amber-400 font-sans tracking-wider uppercase">Order Management</span>
             <span class="w-1.5 h-1.5 rounded-full bg-amber-400/40"></span>
             <span class="font-mono text-[11px] text-zinc-400 font-medium uppercase tracking-wider">Spring 2026</span>
             <span class="inline-flex items-center gap-1.5 text-[10px] font-mono font-medium tracking-wider px-2.5 py-0.5 rounded-full bg-emerald-950/70 text-emerald-400 border border-emerald-500/30">
@@ -503,18 +504,18 @@
             </span>
           </div>
           <div class="flex items-center gap-3 pt-1">
-            <h1 class="font-serif text-2xl sm:text-3xl md:text-4xl text-zinc-100 font-semibold tracking-wide">Atelier Orders</h1>
-            <span class="bg-[#181a22] border border-[#2d3240] text-amber-300 font-mono text-xs px-3 py-1 rounded-full font-semibold" id="ordersTotalBadge">4 ORDERS</span>
+            <h1 class="font-sans text-2xl sm:text-3xl md:text-4xl text-white font-bold tracking-tight">Atelier Orders</h1>
+            <span class="bg-[#181a22] border border-[#2d3240] text-amber-300 font-mono text-xs px-3 py-1 rounded-full font-semibold shadow-sm" id="ordersTotalBadge">4 ORDERS</span>
           </div>
         </div>
         <div class="w-full sm:w-auto shrink-0">
-          <a href="/admin/orders/order/add/" class="w-full sm:w-auto bg-emerald-500 hover:bg-emerald-400 active:scale-[0.985] text-[#0d0e10] font-sans font-semibold text-sm tracking-wide py-2.5 px-6 rounded-xl shadow-[0_4px_24px_rgba(16,185,129,0.35)] flex items-center justify-center gap-2 transition-all cursor-pointer">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+          <a href="/admin/orders/order/add/" class="w-full sm:w-auto bg-[#10b981] hover:bg-[#34d399] active:scale-[0.985] text-[#003824] font-sans font-semibold text-xs sm:text-[13px] py-2.5 px-5 rounded-xl shadow-lg shadow-emerald-500/20 flex items-center justify-center gap-2 transition-all cursor-pointer">
+            <svg class="w-4 h-4 text-[#003824]" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
               <circle cx="12" cy="12" r="10"></circle>
               <line x1="12" y1="8" x2="12" y2="16"></line>
               <line x1="8" y1="12" x2="16" y2="12"></line>
             </svg>
-            <span>Add Order</span>
+            <span>+ Add Order</span>
           </a>
         </div>
       </div>
@@ -817,9 +818,9 @@
             <div class="flex items-center justify-between pb-2.5 border-b border-[#232732]">
               <div class="flex items-center gap-2">
                 <input data-order-id="1" class="order-checkbox w-4 h-4 rounded border-[#383b42] bg-[#1a1b1e] text-emerald-500 focus:ring-emerald-500 cursor-pointer" type="checkbox">
-                <button class="copy-ref-btn text-xs font-mono text-zinc-300 bg-[#181a22] border border-[#2d3240] px-2 py-0.5 rounded-lg inline-flex items-center gap-1.5 hover:text-emerald-400 transition-colors" data-ref="LCK-202611-304918" type="button">
-                  <span class="font-semibold font-mono">LCK-202611-304918</span>
-                  <svg class="w-3 h-3 text-zinc-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect height="13" rx="2" ry="2" width="13" x="9" y="9"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                <button type="button" class="copy-ref-btn order-link inline-flex items-center gap-1.5 font-mono font-bold text-xs text-[#60a5fa] bg-[#1a233d] hover:bg-[#202c4d] border border-[#263e6e] px-2.5 py-1 rounded-lg transition-colors cursor-pointer shadow-sm" data-ref="LCK-202611-304918" title="Copy Reference ID">
+                  <span>#LCK-202611-304918</span>
+                  <svg class="w-3 h-3 text-[#60a5fa]/70" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect height="13" rx="2" ry="2" width="13" x="9" y="9"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
                 </button>
               </div>
               <div class="text-right text-[11px] text-zinc-400 font-mono">
@@ -831,13 +832,13 @@
             <!-- Patron Row -->
             <div class="flex items-center justify-between">
               <div class="flex items-center gap-2.5 min-w-0">
-                <div class="w-8 h-8 rounded-full bg-[#181a22] border border-[#2d3240] flex items-center justify-center text-xs font-semibold text-zinc-200 font-mono shrink-0">JS</div>
+                <div class="w-8 h-8 rounded-full bg-[#181a22] border border-[#2d3240] flex items-center justify-center text-xs font-bold text-zinc-200 font-mono shrink-0">JS</div>
                 <div class="min-w-0">
-                  <div class="text-xs font-bold text-zinc-100 font-sans truncate">Julian Stewart</div>
-                  <div class="text-[11px] text-zinc-400 font-mono truncate">julian.stewart@icloud.com</div>
+                  <div class="text-xs font-bold text-white font-sans truncate">Julian Stewart</div>
+                  <div class="text-[11px] text-[#8e92a8] font-sans truncate">julian.stewart@icloud.com</div>
                 </div>
               </div>
-              <a class="p-2 rounded-xl bg-[#181a22] text-pink-400 border border-pink-500/20 inline-flex items-center justify-center shrink-0 hover:bg-pink-500/10 transition-colors" href="tel:+13109024819" title="Call Patron">
+              <a class="p-2 rounded-xl bg-[#181a22] text-[#ebd38d] hover:text-amber-300 border border-[#2d3240] inline-flex items-center justify-center shrink-0 hover:bg-[#20242e] transition-colors" href="tel:+13109024819" title="Call Patron">
                 <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M6.62 10.79a15.053 15.053 0 006.59 6.59l2.2-2.2a1 1 0 011.02-.24c1.12.37 2.33.57 3.57.57a1 1 0 011 1V20a1 1 0 01-1 1A17 17 0 013 4a1 1 0 011-1h3.5a1 1 0 011 1c0 1.25.2 2.45.57 3.57a1 1 0 01-.24 1.02l-2.21 2.2z"></path></svg>
               </a>
             </div>
@@ -849,18 +850,18 @@
               </div>
               <div class="min-w-0 flex-1">
                 <span class="text-[10px] font-bold uppercase tracking-wider text-amber-300 block font-mono">Fine Rings</span>
-                <p class="text-xs text-zinc-100 font-bold uppercase truncate">Aura Textured Dome Ring</p>
-                <p class="text-[11px] text-zinc-400 truncate">18K Demifine Vermeil • Size 7 (US)</p>
+                <p class="text-xs text-white font-bold uppercase truncate font-sans tracking-tight">Aura Textured Dome Ring</p>
+                <p class="text-[11px] text-zinc-400 font-sans truncate">18K Demifine Vermeil • Size 7 (US)</p>
               </div>
             </div>
 
-            <!-- Status Badges: Rectangular & Side-by-Side -->
-            <div class="flex items-center gap-1.5 sm:gap-2 flex-nowrap overflow-x-auto no-scrollbar">
-              <span class="inline-flex items-center gap-1.5 text-[10px] sm:text-[11px] font-sans font-semibold px-2 py-0.5 rounded-[4px] bg-emerald-500/10 text-emerald-400 border border-emerald-500/25 whitespace-nowrap shrink-0">
-                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse shrink-0"></span>Pre-Payment (Paid)
+            <!-- Status Badges: Refined Pill Badges matching Desktop -->
+            <div class="flex items-center gap-2 flex-wrap">
+              <span class="inline-flex items-center gap-1.5 text-xs font-medium px-3 py-1 rounded-full bg-[#0d2822] text-[#34d399] border border-[#10b981]/35">
+                <span class="w-1.5 h-1.5 rounded-full bg-[#10b981]"></span>Paid
               </span>
-              <span class="inline-flex items-center gap-1.5 text-[10px] sm:text-[11px] font-sans font-semibold px-2 py-0.5 rounded-[4px] bg-amber-500/10 text-amber-300 border border-amber-500/30 whitespace-nowrap shrink-0">
-                <span class="w-1.5 h-1.5 rounded-full bg-amber-400 shrink-0"></span>Unfulfilled / Production
+              <span class="inline-flex items-center gap-1.5 text-xs font-medium px-3 py-1 rounded-full bg-[#2d1e16] text-[#fbbf24] border border-[#d97706]/35">
+                <span class="w-1.5 h-1.5 rounded-full bg-[#f59e0b]"></span>Unfulfilled
               </span>
             </div>
 
@@ -870,7 +871,7 @@
               <div class="flex flex-col">
                 <span class="text-[9px] font-bold tracking-[0.14em] uppercase text-zinc-400 font-mono mb-1">TOTAL SETTLEMENT</span>
                 <div class="flex items-center gap-2 flex-wrap">
-                  <span class="final-price text-2xl font-bold text-amber-300 font-sans tracking-tight leading-none" data-inr="3450" data-usd="42" data-eur="39" data-gbp="33" data-aed="154">₹3,450</span>
+                  <span class="final-price text-2xl font-bold text-white font-sans tracking-tight leading-none" data-inr="3450" data-usd="42" data-eur="39" data-gbp="33" data-aed="154">₹3,450</span>
                   <span class="text-[10px] font-bold text-emerald-400 bg-emerald-500/10 px-1.5 py-0.5 rounded font-mono border border-emerald-500/25">-18%</span>
                   <span class="currency-code-label text-[10px] text-zinc-400 font-mono uppercase tracking-wider">INR TOTAL</span>
                 </div>
@@ -897,9 +898,9 @@
             <div class="flex items-center justify-between pb-2.5 border-b border-[#232732]">
               <div class="flex items-center gap-2">
                 <input data-order-id="2" class="order-checkbox w-4 h-4 rounded border-[#383b42] bg-[#1a1b1e] text-emerald-500 focus:ring-emerald-500 cursor-pointer" type="checkbox">
-                <button class="copy-ref-btn text-xs font-mono text-zinc-300 bg-[#181a22] border border-[#2d3240] px-2 py-0.5 rounded-lg inline-flex items-center gap-1.5 hover:text-emerald-400 transition-colors" data-ref="LCK-202611-194056" type="button">
-                  <span class="font-semibold font-mono">LCK-202611-194056</span>
-                  <svg class="w-3 h-3 text-zinc-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect height="13" rx="2" ry="2" width="13" x="9" y="9"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                <button type="button" class="copy-ref-btn order-link inline-flex items-center gap-1.5 font-mono font-bold text-xs text-[#60a5fa] bg-[#1a233d] hover:bg-[#202c4d] border border-[#263e6e] px-2.5 py-1 rounded-lg transition-colors cursor-pointer shadow-sm" data-ref="LCK-202611-194056" title="Copy Reference ID">
+                  <span>#LCK-202611-194056</span>
+                  <svg class="w-3 h-3 text-[#60a5fa]/70" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect height="13" rx="2" ry="2" width="13" x="9" y="9"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
                 </button>
               </div>
               <div class="text-right text-[11px] text-zinc-400 font-mono">
@@ -911,13 +912,13 @@
             <!-- Patron Row -->
             <div class="flex items-center justify-between">
               <div class="flex items-center gap-2.5 min-w-0">
-                <div class="w-8 h-8 rounded-full bg-[#181a22] border border-[#2d3240] flex items-center justify-center text-xs font-semibold text-zinc-200 font-mono shrink-0">CD</div>
+                <div class="w-8 h-8 rounded-full bg-[#181a22] border border-[#2d3240] flex items-center justify-center text-xs font-bold text-zinc-200 font-mono shrink-0">CD</div>
                 <div class="min-w-0">
-                  <div class="text-xs font-bold text-zinc-100 font-sans truncate">Charlotte Dupré</div>
-                  <div class="text-[11px] text-zinc-400 font-mono truncate">charlotte.dupre@gmail.com</div>
+                  <div class="text-xs font-bold text-white font-sans truncate">Charlotte Dupré</div>
+                  <div class="text-[11px] text-[#8e92a8] font-sans truncate">charlotte.dupre@gmail.com</div>
                 </div>
               </div>
-              <a class="p-2 rounded-xl bg-[#181a22] text-pink-400 border border-pink-500/20 inline-flex items-center justify-center shrink-0 hover:bg-pink-500/10 transition-colors" href="tel:+14158829104" title="Call Patron">
+              <a class="p-2 rounded-xl bg-[#181a22] text-[#ebd38d] hover:text-amber-300 border border-[#2d3240] inline-flex items-center justify-center shrink-0 hover:bg-[#20242e] transition-colors" href="tel:+14158829104" title="Call Patron">
                 <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M6.62 10.79a15.053 15.053 0 006.59 6.59l2.2-2.2a1 1 0 011.02-.24c1.12.37 2.33.57 3.57.57a1 1 0 011 1V20a1 1 0 01-1 1A17 17 0 013 4a1 1 0 011-1h3.5a1 1 0 011 1c0 1.25.2 2.45.57 3.57a1 1 0 01-.24 1.02l-2.21 2.2z"></path></svg>
               </a>
             </div>
@@ -929,18 +930,18 @@
               </div>
               <div class="min-w-0 flex-1">
                 <span class="text-[10px] font-bold uppercase tracking-wider text-amber-300 block font-mono">Necklaces</span>
-                <p class="text-xs text-zinc-100 font-bold uppercase truncate">Celeste Herringbone Chain</p>
-                <p class="text-[11px] text-zinc-400 truncate">18K Yellow Gold Vermeil • 18" Length</p>
+                <p class="text-xs text-white font-bold uppercase truncate font-sans tracking-tight">Celeste Herringbone Chain</p>
+                <p class="text-[11px] text-zinc-400 font-sans truncate">18K Yellow Gold Vermeil • 18" Length</p>
               </div>
             </div>
 
-            <!-- Status Badges: Rectangular & Side-by-Side -->
-            <div class="flex items-center gap-1.5 sm:gap-2 flex-nowrap overflow-x-auto no-scrollbar">
-              <span class="inline-flex items-center gap-1.5 text-[10px] sm:text-[11px] font-sans font-semibold px-2 py-0.5 rounded-[4px] bg-emerald-500/10 text-emerald-400 border border-emerald-500/25 whitespace-nowrap shrink-0">
-                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 shrink-0"></span>Pre-Payment (Paid)
+            <!-- Status Badges: Refined Pill Badges matching Desktop -->
+            <div class="flex items-center gap-2 flex-wrap">
+              <span class="inline-flex items-center gap-1.5 text-xs font-medium px-3 py-1 rounded-full bg-[#0d2822] text-[#34d399] border border-[#10b981]/35">
+                <span class="w-1.5 h-1.5 rounded-full bg-[#10b981]"></span>Paid
               </span>
-              <span class="inline-flex items-center gap-1.5 text-[10px] sm:text-[11px] font-sans font-semibold px-2 py-0.5 rounded-[4px] bg-purple-500/15 text-purple-300 border border-purple-500/30 whitespace-nowrap shrink-0">
-                <span class="w-1.5 h-1.5 rounded-full bg-purple-400 shrink-0"></span>In Atelier QC
+              <span class="inline-flex items-center gap-1.5 text-xs font-medium px-3 py-1 rounded-full bg-[#261536] text-[#c084fc] border border-[#9333ea]/35">
+                <span class="w-1.5 h-1.5 rounded-full bg-[#a855f7]"></span>In Atelier QC
               </span>
             </div>
 
@@ -950,7 +951,7 @@
               <div class="flex flex-col">
                 <span class="text-[9px] font-bold tracking-[0.14em] uppercase text-zinc-400 font-mono mb-1">TOTAL SETTLEMENT</span>
                 <div class="flex items-center gap-2 flex-wrap">
-                  <span class="final-price text-2xl font-bold text-amber-300 font-sans tracking-tight leading-none" data-inr="1485" data-usd="18" data-eur="17" data-gbp="14" data-aed="66">₹1,485</span>
+                  <span class="final-price text-2xl font-bold text-white font-sans tracking-tight leading-none" data-inr="1485" data-usd="18" data-eur="17" data-gbp="14" data-aed="66">₹1,485</span>
                   <span class="text-[10px] font-bold text-emerald-400 bg-emerald-500/10 px-1.5 py-0.5 rounded font-mono border border-emerald-500/25">-20%</span>
                   <span class="currency-code-label text-[10px] text-zinc-400 font-mono uppercase tracking-wider">INR TOTAL</span>
                 </div>
@@ -969,7 +970,6 @@
             </div>
           </div>
           </article>
-
           <!-- MOBILE ORDER 3 -->
           <article class="order-mobile-card bg-[#151628] border border-[#28273f] rounded-2xl p-4 sm:p-5 transition-all hover:border-[#3c4a42]/70 shadow-sm" data-order-id="3" data-status="delivered" data-search="isabella vance isabella.vance@example.com lck-739201 lck-202611-739201 bracelets elysian radiant tennis">
             <div class="flex md:hidden flex-col gap-3">
@@ -977,9 +977,9 @@
             <div class="flex items-center justify-between pb-2.5 border-b border-[#232732]">
               <div class="flex items-center gap-2">
                 <input data-order-id="3" class="order-checkbox w-4 h-4 rounded border-[#383b42] bg-[#1a1b1e] text-emerald-500 focus:ring-emerald-500 cursor-pointer" type="checkbox">
-                <button class="copy-ref-btn text-xs font-mono text-zinc-300 bg-[#181a22] border border-[#2d3240] px-2 py-0.5 rounded-lg inline-flex items-center gap-1.5 hover:text-emerald-400 transition-colors" data-ref="LCK-202611-739201" type="button">
-                  <span class="font-semibold font-mono">LCK-202611-739201</span>
-                  <svg class="w-3 h-3 text-zinc-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect height="13" rx="2" ry="2" width="13" x="9" y="9"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                <button type="button" class="copy-ref-btn order-link inline-flex items-center gap-1.5 font-mono font-bold text-xs text-[#60a5fa] bg-[#1a233d] hover:bg-[#202c4d] border border-[#263e6e] px-2.5 py-1 rounded-lg transition-colors cursor-pointer shadow-sm" data-ref="LCK-202611-739201" title="Copy Reference ID">
+                  <span>#LCK-202611-739201</span>
+                  <svg class="w-3 h-3 text-[#60a5fa]/70" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect height="13" rx="2" ry="2" width="13" x="9" y="9"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
                 </button>
               </div>
               <div class="text-right text-[11px] text-zinc-400 font-mono">
@@ -991,13 +991,13 @@
             <!-- Patron Row -->
             <div class="flex items-center justify-between">
               <div class="flex items-center gap-2.5 min-w-0">
-                <div class="w-8 h-8 rounded-full bg-[#181a22] border border-[#2d3240] flex items-center justify-center text-xs font-semibold text-zinc-200 font-mono shrink-0">IV</div>
+                <div class="w-8 h-8 rounded-full bg-[#181a22] border border-[#2d3240] flex items-center justify-center text-xs font-bold text-zinc-200 font-mono shrink-0">IV</div>
                 <div class="min-w-0">
-                  <div class="text-xs font-bold text-zinc-100 font-sans truncate">Isabella Vance</div>
-                  <div class="text-[11px] text-zinc-400 font-mono truncate">isabella.vance@example.com</div>
+                  <div class="text-xs font-bold text-white font-sans truncate">Isabella Vance</div>
+                  <div class="text-[11px] text-[#8e92a8] font-sans truncate">isabella.vance@example.com</div>
                 </div>
               </div>
-              <a class="p-2 rounded-xl bg-[#181a22] text-pink-400 border border-pink-500/20 inline-flex items-center justify-center shrink-0 hover:bg-pink-500/10 transition-colors" href="tel:+12125550143" title="Call Patron">
+              <a class="p-2 rounded-xl bg-[#181a22] text-[#ebd38d] hover:text-amber-300 border border-[#2d3240] inline-flex items-center justify-center shrink-0 hover:bg-[#20242e] transition-colors" href="tel:+12125550143" title="Call Patron">
                 <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M6.62 10.79a15.053 15.053 0 006.59 6.59l2.2-2.2a1 1 0 011.02-.24c1.12.37 2.33.57 3.57.57a1 1 0 011 1V20a1 1 0 01-1 1A17 17 0 013 4a1 1 0 011-1h3.5a1 1 0 011 1c0 1.25.2 2.45.57 3.57a1 1 0 01-.24 1.02l-2.21 2.2z"></path></svg>
               </a>
             </div>
@@ -1009,19 +1009,18 @@
               </div>
               <div class="min-w-0 flex-1">
                 <span class="text-[10px] font-bold uppercase tracking-wider text-amber-300 block font-mono">Bracelets</span>
-                <p class="text-xs text-zinc-100 font-bold uppercase truncate">Elysian Radiant Tennis</p>
-                <p class="text-[11px] text-zinc-400 truncate">925 Sterling Silver • Dual Clasp</p>
+                <p class="text-xs text-white font-bold uppercase truncate font-sans tracking-tight">Elysian Radiant Tennis</p>
+                <p class="text-[11px] text-zinc-400 font-sans truncate">925 Sterling Silver • Dual Clasp</p>
               </div>
             </div>
 
-            <!-- Status Badges: Rectangular & Side-by-Side -->
-            <div class="flex items-center gap-1.5 sm:gap-2 flex-nowrap overflow-x-auto no-scrollbar">
-              <span class="inline-flex items-center gap-1.5 text-[10px] sm:text-[11px] font-sans font-semibold px-2 py-0.5 rounded-[4px] bg-blue-500/15 text-blue-300 border border-blue-500/30 whitespace-nowrap shrink-0">
-                <span class="w-1.5 h-1.5 rounded-full bg-blue-400 shrink-0"></span>COD (Cash On Delivery)
+            <!-- Status Badges: Refined Pill Badges matching Desktop -->
+            <div class="flex items-center gap-2 flex-wrap">
+              <span class="inline-flex items-center gap-1.5 text-xs font-medium px-3 py-1 rounded-full bg-[#0d2822] text-[#34d399] border border-[#10b981]/35">
+                <span class="w-1.5 h-1.5 rounded-full bg-[#10b981]"></span>Paid
               </span>
-              <span class="inline-flex items-center gap-1.5 text-[10px] sm:text-[11px] font-sans font-semibold px-2 py-0.5 rounded-[4px] bg-cyan-500/15 text-cyan-300 border border-cyan-500/30 whitespace-nowrap shrink-0">
-                <svg class="w-3 h-3 text-cyan-300 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect height="13" width="15" x="1" y="3"></rect><polygon points="16 8 20 8 23 11 23 16 8"></polygon><circle cx="5.5" cy="18.5" r="2.5"></circle><circle cx="18.5" cy="18.5" r="2.5"></circle></svg>
-                <span>In Transit (FedEx Luxury)</span>
+              <span class="inline-flex items-center gap-1.5 text-xs font-medium px-3 py-1 rounded-full bg-[#0f2c29] text-[#2dd4bf] border border-[#0d9488]/35">
+                <span class="w-1.5 h-1.5 rounded-full bg-[#14b8a6]"></span>Delivered
               </span>
             </div>
 
@@ -1031,7 +1030,7 @@
               <div class="flex flex-col">
                 <span class="text-[9px] font-bold tracking-[0.14em] uppercase text-zinc-400 font-mono mb-1">TOTAL SETTLEMENT</span>
                 <div class="flex items-center gap-2 flex-wrap">
-                  <span class="final-price text-2xl font-bold text-amber-300 font-sans tracking-tight leading-none" data-inr="2450" data-usd="30" data-eur="28" data-gbp="24" data-aed="110">₹2,450</span>
+                  <span class="final-price text-2xl font-bold text-white font-sans tracking-tight leading-none" data-inr="2450" data-usd="30" data-eur="28" data-gbp="24" data-aed="110">₹2,450</span>
                   <span class="text-[10px] font-bold text-emerald-400 bg-emerald-500/10 px-1.5 py-0.5 rounded font-mono border border-emerald-500/25">-21%</span>
                   <span class="currency-code-label text-[10px] text-zinc-400 font-mono uppercase tracking-wider">INR TOTAL</span>
                 </div>
@@ -1058,9 +1057,9 @@
             <div class="flex items-center justify-between pb-2.5 border-b border-[#232732]">
               <div class="flex items-center gap-2">
                 <input data-order-id="4" class="order-checkbox w-4 h-4 rounded border-[#383b42] bg-[#1a1b1e] text-emerald-500 focus:ring-emerald-500 cursor-pointer" type="checkbox">
-                <button class="copy-ref-btn text-xs font-mono text-zinc-300 bg-[#181a22] border border-[#2d3240] px-2 py-0.5 rounded-lg inline-flex items-center gap-1.5 hover:text-emerald-400 transition-colors" data-ref="LCK-202611-884102" type="button">
-                  <span class="font-semibold font-mono">LCK-202611-884102</span>
-                  <svg class="w-3 h-3 text-zinc-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect height="13" rx="2" ry="2" width="13" x="9" y="9"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                <button type="button" class="copy-ref-btn order-link inline-flex items-center gap-1.5 font-mono font-bold text-xs text-[#60a5fa] bg-[#1a233d] hover:bg-[#202c4d] border border-[#263e6e] px-2.5 py-1 rounded-lg transition-colors cursor-pointer shadow-sm" data-ref="LCK-202611-884102" title="Copy Reference ID">
+                  <span>#LCK-202611-884102</span>
+                  <svg class="w-3 h-3 text-[#60a5fa]/70" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect height="13" rx="2" ry="2" width="13" x="9" y="9"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
                 </button>
               </div>
               <div class="text-right text-[11px] text-zinc-400 font-mono">
@@ -1072,13 +1071,13 @@
             <!-- Patron Row -->
             <div class="flex items-center justify-between">
               <div class="flex items-center gap-2.5 min-w-0">
-                <div class="w-8 h-8 rounded-full bg-[#181a22] border border-[#2d3240] flex items-center justify-center text-xs font-semibold text-zinc-200 font-mono shrink-0">IV</div>
+                <div class="w-8 h-8 rounded-full bg-[#181a22] border border-[#2d3240] flex items-center justify-center text-xs font-bold text-zinc-200 font-mono shrink-0">IV</div>
                 <div class="min-w-0">
-                  <div class="text-xs font-bold text-zinc-100 font-sans truncate">Isabella Vance</div>
-                  <div class="text-[11px] text-zinc-400 font-mono truncate">isabella.vance@example.com</div>
+                  <div class="text-xs font-bold text-white font-sans truncate">Isabella Vance</div>
+                  <div class="text-[11px] text-[#8e92a8] font-sans truncate">isabella.vance@example.com</div>
                 </div>
               </div>
-              <a class="p-2 rounded-xl bg-[#181a22] text-pink-400 border border-pink-500/20 inline-flex items-center justify-center shrink-0 hover:bg-pink-500/10 transition-colors" href="tel:+12125550143" title="Call Patron">
+              <a class="p-2 rounded-xl bg-[#181a22] text-[#ebd38d] hover:text-amber-300 border border-[#2d3240] inline-flex items-center justify-center shrink-0 hover:bg-[#20242e] transition-colors" href="tel:+12125550143" title="Call Patron">
                 <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M6.62 10.79a15.053 15.053 0 006.59 6.59l2.2-2.2a1 1 0 011.02-.24c1.12.37 2.33.57 3.57.57a1 1 0 011 1V20a1 1 0 01-1 1A17 17 0 013 4a1 1 0 011-1h3.5a1 1 0 011 1c0 1.25.2 2.45.57 3.57a1 1 0 01-.24 1.02l-2.21 2.2z"></path></svg>
               </a>
             </div>
@@ -1090,18 +1089,18 @@
               </div>
               <div class="min-w-0 flex-1">
                 <span class="text-[10px] font-bold uppercase tracking-wider text-amber-300 block font-mono">Atelier Sets</span>
-                <p class="text-xs text-zinc-100 font-bold uppercase truncate">Solitaire Cabochon &amp; Luna</p>
-                <p class="text-[11px] text-zinc-400 truncate">925 Sterling Silver • Tahitian Inlay</p>
+                <p class="text-xs text-white font-bold uppercase truncate font-sans tracking-tight">Solitaire Cabochon &amp; Luna</p>
+                <p class="text-[11px] text-zinc-400 font-sans truncate">925 Sterling Silver • Tahitian Inlay</p>
               </div>
             </div>
 
-            <!-- Status Badges: Rectangular & Side-by-Side -->
-            <div class="flex items-center gap-1.5 sm:gap-2 flex-nowrap overflow-x-auto no-scrollbar">
-              <span class="inline-flex items-center gap-1.5 text-[10px] sm:text-[11px] font-sans font-semibold px-2 py-0.5 rounded-[4px] bg-emerald-500/10 text-emerald-400 border border-emerald-500/25 whitespace-nowrap shrink-0">
-                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 shrink-0"></span>Pre-Payment (Paid)
+            <!-- Status Badges: Refined Pill Badges matching Desktop -->
+            <div class="flex items-center gap-2 flex-wrap">
+              <span class="inline-flex items-center gap-1.5 text-xs font-medium px-3 py-1 rounded-full bg-[#0d2822] text-[#34d399] border border-[#10b981]/35">
+                <span class="w-1.5 h-1.5 rounded-full bg-[#10b981]"></span>Paid
               </span>
-              <span class="inline-flex items-center gap-1.5 text-[10px] sm:text-[11px] font-sans font-semibold px-2 py-0.5 rounded-[4px] bg-teal-500/15 text-teal-300 border border-teal-500/30 whitespace-nowrap shrink-0">
-                <span class="w-1.5 h-1.5 rounded-full bg-teal-400 shrink-0"></span>Delivered
+              <span class="inline-flex items-center gap-1.5 text-xs font-medium px-3 py-1 rounded-full bg-[#13223d] text-[#60a5fa] border border-[#2563eb]/35">
+                <span class="w-1.5 h-1.5 rounded-full bg-[#3b82f6]"></span>In Transit
               </span>
             </div>
 
@@ -1111,7 +1110,7 @@
               <div class="flex flex-col">
                 <span class="text-[9px] font-bold tracking-[0.14em] uppercase text-zinc-400 font-mono mb-1">TOTAL SETTLEMENT</span>
                 <div class="flex items-center gap-2 flex-wrap">
-                  <span class="final-price text-2xl font-bold text-amber-300 font-sans tracking-tight leading-none" data-inr="3780" data-usd="46" data-eur="42" data-gbp="36" data-aed="168">₹3,780</span>
+                  <span class="final-price text-2xl font-bold text-white font-sans tracking-tight leading-none" data-inr="3780" data-usd="46" data-eur="42" data-gbp="36" data-aed="168">₹3,780</span>
                   <span class="text-[10px] font-bold text-emerald-400 bg-emerald-500/10 px-1.5 py-0.5 rounded font-mono border border-emerald-500/25">-16%</span>
                   <span class="currency-code-label text-[10px] text-zinc-400 font-mono uppercase tracking-wider">INR TOTAL</span>
                 </div>
@@ -1140,7 +1139,7 @@
         <div class="w-12 h-12 mx-auto mb-3 rounded-full bg-[#181a22] border border-[#2d3240] flex items-center justify-center text-zinc-400">
           <svg class="w-6 h-6 text-[#ebd38d]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" x2="16.65" y1="21" y2="16.65"></line></svg>
         </div>
-        <h3 class="text-base font-semibold text-zinc-100 font-serif">No Matching Orders Found</h3>
+        <h3 class="text-base font-bold text-white font-sans tracking-tight">No Matching Orders Found</h3>
         <p class="text-xs text-zinc-400 mt-1 font-sans">Try refining your search keyword or clearing the status filter.</p>
         <button id="resetFiltersBtn" class="mt-4 px-4 py-2 rounded-xl bg-emerald-500/10 text-emerald-400 border border-emerald-500/25 text-xs font-semibold hover:bg-emerald-500/20 transition-all cursor-pointer">
           Reset Filter to All Orders
@@ -1198,7 +1197,7 @@
           <span class="w-1.5 h-1.5 rounded-full bg-amber-400/40"></span>
           <span class="font-mono text-[11px] text-zinc-400">HAUTE ATELIER</span>
         </div>
-        <h1 class="text-2xl sm:text-3xl font-bold text-zinc-100 font-serif tracking-wide">Atelier Settings</h1>
+        <h1 class="text-2xl sm:text-3xl font-bold text-white font-sans tracking-tight">Atelier Settings</h1>
         <p class="text-xs sm:text-sm text-zinc-400 mt-1">Configure global store currency valuation, white-glove shipping logistics, and staff access roles.</p>
       </div>
 
@@ -1212,7 +1211,7 @@
                 🪙
               </div>
               <div>
-                <h2 class="text-base font-bold text-zinc-100 font-serif">1. Store Currency &amp; Valuation</h2>
+                <h2 class="text-base font-bold text-white font-sans tracking-tight">1. Store Currency &amp; Valuation</h2>
                 <p class="text-xs text-zinc-400">Choose the active display and settlement currency for online boutique &amp; admin orders.</p>
               </div>
             </div>
@@ -1281,7 +1280,7 @@
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect height="13" width="15" x="1" y="3"></rect><polygon points="16 8 20 8 23 11 23 16 8"></polygon><circle cx="5.5" cy="18.5" r="2.5"></circle><circle cx="18.5" cy="18.5" r="2.5"></circle></svg>
               </div>
               <div>
-                <h2 class="text-base font-bold text-zinc-100 font-serif">2. Shipping Details &amp; Fulfillment</h2>
+                <h2 class="text-base font-bold text-white font-sans tracking-tight">2. Shipping Details &amp; Fulfillment</h2>
                 <p class="text-xs text-zinc-400">Configure global carrier integrations, insured transit thresholds, and delivery dispatch rules.</p>
               </div>
             </div>
@@ -1342,7 +1341,7 @@
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
               </div>
               <div>
-                <h2 class="text-base font-bold text-zinc-100 font-serif">3. User Roles &amp; Atelier Permissions</h2>
+                <h2 class="text-base font-bold text-white font-sans tracking-tight">3. User Roles &amp; Atelier Permissions</h2>
                 <p class="text-xs text-zinc-400">Manage staff administrative access tiers, quality control roles, and VIP client privileges.</p>
               </div>
             </div>
