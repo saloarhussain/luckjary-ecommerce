@@ -5,10 +5,10 @@
 {{ block.super }}
 <!-- Tailwind CSS v3 -->
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-<!-- Google Fonts: Cinzel, JetBrains Mono & Plus Jakarta Sans -->
+<!-- Google Fonts: Plus Jakarta Sans & JetBrains Mono -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300..800;1,300..800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
 <!-- Tailwind Configuration -->
 <script data-purpose="tailwind-config">
     tailwind.config = {
@@ -46,8 +46,8 @@
             }
           },
           fontFamily: {
-            serif: ['Cinzel', 'Playfair Display', 'Georgia', 'serif'],
-            sans: ['Plus Jakarta Sans', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
+            serif: ['Plus Jakarta Sans', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'sans-serif'],
+            sans: ['Plus Jakarta Sans', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'sans-serif'],
             mono: ['JetBrains Mono', 'ui-monospace', 'Menlo', 'monospace'],
           }
         }
@@ -172,7 +172,7 @@
     .text-platinum-300 { color: #CBD0D8 !important; }
     .text-platinum-400 { color: #9CA3AF !important; }
 
-    .font-serif { font-family: 'Cinzel', Playfair Display, Georgia, serif !important; }
+    .font-sans { font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif !important; }
     .font-sans { font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif !important; }
     .font-mono { font-family: 'JetBrains Mono', ui-monospace, Menlo, Monaco, Consolas, monospace !important; }
 
@@ -378,7 +378,7 @@
             <!-- 1. HERO ORDER & PATRON IDENTITY CARD -->
             <section class="relative overflow-hidden rounded-2xl bg-gradient-to-b from-obsidian-850 to-obsidian-900 border border-[#222836] p-4 sm:p-5 md:p-6 shadow-xl lux-order-banner-widget" data-purpose="order-identity-card">
               <!-- Subtle Atelier Watermark -->
-              <div class="absolute -right-5 -bottom-6 text-obsidian-800/40 pointer-events-none select-none font-serif text-7xl sm:text-8xl font-black opacity-30">
+              <div class="absolute -right-5 -bottom-6 text-obsidian-800/40 pointer-events-none select-none font-sans text-7xl sm:text-8xl font-black opacity-30">
                 925
               </div>
               <div class="relative z-10">
@@ -413,7 +413,7 @@
                 </div>
 
                 <!-- Order ID Headline -->
-                <h1 class="text-xl sm:text-2xl md:text-3xl font-serif font-bold text-white tracking-wide mt-1 break-words">
+                <h1 class="text-xl sm:text-2xl md:text-3xl font-sans font-bold text-white tracking-wide mt-1 break-words">
                   {{ original.order_number|default:"LCK-202611-304918" }}
                 </h1>
 
@@ -421,7 +421,7 @@
                 <div class="mt-3 pt-3 border-t border-[#1F2432] flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-2 sm:gap-3">
                   <div>
                     <p class="text-[10px] uppercase tracking-wider text-platinum-400 font-mono">Settled Atelier Total</p>
-                    <p class="text-2xl sm:text-3xl font-serif font-semibold text-champagne mt-0.5 tracking-tight">
+                    <p class="text-2xl sm:text-3xl font-sans font-semibold text-champagne mt-0.5 tracking-tight">
                       ₹{{ original.total_amount|floatformat:0|default:"3,450" }}<span class="text-base text-champagne/80">.{{ original.total_amount|stringformat:".2f"|slice:"-2:"|default:"00" }}</span>
                       <span class="text-[11px] font-sans font-normal text-platinum-400 uppercase tracking-widest ml-1">INR</span>
                     </p>
@@ -437,7 +437,7 @@
                 <div class="mt-4 p-3 sm:p-3.5 rounded-xl bg-obsidian-950/60 border border-[#222736] flex flex-col gap-2.5 lux-patron-summary-card">
                   <div class="flex items-center justify-between gap-2">
                     <div class="flex items-center gap-2.5 min-w-0">
-                      <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-gradient-to-tr from-obsidian-800 to-obsidian-700 border border-champagne/30 flex items-center justify-center font-serif text-xs sm:text-sm font-semibold text-champagne shrink-0">
+                      <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-gradient-to-tr from-obsidian-800 to-obsidian-700 border border-champagne/30 flex items-center justify-center font-sans text-xs sm:text-sm font-semibold text-champagne shrink-0">
                         {{ original.full_name|slice:":2"|upper|default:"JS" }}
                       </div>
                       <div class="min-w-0">
@@ -630,7 +630,7 @@
                   </div>
 
                   <!-- Product Name -->
-                  <h2 class="text-sm sm:text-base font-serif font-bold text-white tracking-wide mt-2 leading-snug">
+                  <h2 class="text-sm sm:text-base font-sans font-bold text-white tracking-wide mt-2 leading-snug">
                     {{ item.product_name|default:item.product.title }}
                   </h2>
 
@@ -717,7 +717,7 @@
                 <!-- Settled Line Total -->
                 <div class="text-right ml-auto">
                   <span class="text-[9px] uppercase font-mono tracking-wider text-platinum-400 block">Line Total</span>
-                  <span class="text-base sm:text-lg font-serif font-bold text-champagne tracking-tight">
+                  <span class="text-base sm:text-lg font-sans font-bold text-champagne tracking-tight">
                     ₹{{ item.line_total|floatformat:2|default:"4,200.00" }}
                     <span class="text-[10px] font-sans font-normal text-platinum-400 uppercase">INR</span>
                   </span>
@@ -742,7 +742,7 @@
                   {% if original.gift_message %}
                   <div>
                     <span class="text-[10px] font-mono text-champagne uppercase tracking-wider block mb-0.5">Laser Inscription / Handwritten Inscription:</span>
-                    <p class="font-serif italic text-white text-xs sm:text-sm tracking-wide bg-obsidian-900/90 p-2.5 rounded border border-[#222736]">
+                    <p class="font-sans italic text-white text-xs sm:text-sm tracking-wide bg-obsidian-900/90 p-2.5 rounded border border-[#222736]">
                       "{{ original.gift_message }}"
                     </p>
                   </div>
@@ -814,7 +814,7 @@
                     <span class="text-[10px] font-mono uppercase tracking-wider text-champagne/80">Solitaire Collection</span>
                   </div>
 
-                  <h2 class="text-sm sm:text-base font-serif font-bold text-white tracking-wide mt-2 leading-snug">
+                  <h2 class="text-sm sm:text-base font-sans font-bold text-white tracking-wide mt-2 leading-snug">
                     Solitaire Cabochon Signet Ring in Solid 925 Silver
                   </h2>
 
@@ -867,7 +867,7 @@
                 </div>
                 <div class="text-right ml-auto">
                   <span class="text-[9px] uppercase font-mono tracking-wider text-platinum-400 block">Line Total</span>
-                  <span class="text-base sm:text-lg font-serif font-bold text-champagne tracking-tight">
+                  <span class="text-base sm:text-lg font-sans font-bold text-champagne tracking-tight">
                     ₹3,450.00 <span class="text-[10px] font-sans font-normal text-platinum-400 uppercase">INR</span>
                   </span>
                 </div>
@@ -892,7 +892,7 @@
             <!-- 3. STAGE PROGRESSION PIPELINE -->
             <section class="rounded-2xl bg-obsidian-850 border border-[#222736] p-4 sm:p-5 shadow-lg" data-purpose="production-pipeline-stepper">
               <div class="flex items-center justify-between mb-3 sm:mb-4 gap-2">
-                <h2 class="text-xs font-serif uppercase tracking-widest text-champagne font-semibold flex items-center gap-1.5">
+                <h2 class="text-xs font-sans uppercase tracking-widest text-champagne font-semibold flex items-center gap-1.5">
                   <span class="w-1.5 h-1.5 rounded-full bg-champagne"></span>
                   Stage Progression Pipeline
                 </h2>
@@ -971,7 +971,7 @@
             <!-- 4. ATELIER PRESENTATION & NOTES -->
             <section class="rounded-2xl bg-gradient-to-b from-obsidian-850 to-obsidian-900 border border-[#222736] p-4 sm:p-5 shadow-xl space-y-4">
               <div class="border-b border-[#1E232E] pb-2.5 flex items-center justify-between gap-2 flex-wrap">
-                <h2 class="text-xs sm:text-sm font-serif font-bold text-champagne tracking-wider uppercase">
+                <h2 class="text-xs sm:text-sm font-sans font-bold text-champagne tracking-wider uppercase">
                   Atelier Directives &amp; Notes
                 </h2>
                 <span class="text-[10px] uppercase font-mono text-champagne/80 tracking-wider">
@@ -1015,7 +1015,7 @@
             <!-- ORDER TELEMETRY & STAGE CONTROL -->
             <section class="rounded-2xl bg-gradient-to-b from-obsidian-850 to-obsidian-900 border border-[#222736] p-4 sm:p-5 shadow-xl space-y-4" data-purpose="telemetry-management-form">
               <div class="border-b border-[#1E232E] pb-3 flex items-center justify-between gap-2 flex-wrap">
-                <h2 class="text-xs sm:text-sm font-serif font-bold text-champagne tracking-wider uppercase">
+                <h2 class="text-xs sm:text-sm font-sans font-bold text-champagne tracking-wider uppercase">
                   Order Telemetry &amp; Stage Control
                 </h2>
                 <span class="text-[10px] uppercase font-mono text-emerald-400 tracking-wider flex items-center gap-1.5 bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-500/20 shrink-0">
