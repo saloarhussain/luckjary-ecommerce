@@ -10,6 +10,7 @@ class AddressInline(admin.StackedInline):
 
 @admin.register(CustomUser)
 class CustomUserAdmin(UserAdmin):
+    show_facets = admin.ShowFacets.NEVER
     list_display = ('client_display', 'vip_badge', 'is_email_verified_pill', 'newsletter_pill', 'date_joined')
     list_filter = ('is_email_verified', 'newsletter_subscribed', 'is_staff', 'is_active')
     search_fields = ('email', 'first_name', 'last_name', 'phone_number')

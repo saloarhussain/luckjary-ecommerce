@@ -2125,15 +2125,15 @@ div.breadcrumbs a:hover {
     color: #F87171 !important;
 }
 
-#changelist-filter #changelist-filter-extra-actions {
-    margin-bottom: 0.75rem !important;
-    border-bottom: 1px solid #1E212B !important;
-    padding-bottom: 0.5rem !important;
-}
-
-#changelist-filter #changelist-filter-extra-actions a {
-    color: #DFBE76 !important;
-    font-size: 0.75rem !important;
+#changelist-filter #changelist-filter-extra-actions,
+#changelist-filter-extra-actions,
+.changelist-filter-extra-actions {
+    display: none !important;
+    visibility: hidden !important;
+    height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: none !important;
 }
 
 #changelist-filter details {
