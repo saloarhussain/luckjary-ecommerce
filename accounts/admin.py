@@ -21,7 +21,7 @@ class AddressInline(admin.StackedInline):
 @admin.register(CustomUser)
 class CustomUserAdmin(UserAdmin):
     show_facets = admin.ShowFacets.NEVER
-    list_display = ('client_display', 'vip_badge', 'is_email_verified_pill', 'newsletter_pill', 'date_joined', 'action_buttons')
+    list_display = ('client_display', 'account_role_pill', 'is_email_verified_pill', 'newsletter_pill', 'date_joined', 'action_buttons')
     list_filter = ('is_email_verified', 'newsletter_subscribed', 'is_staff', 'is_active')
     search_fields = ('email', 'first_name', 'last_name', 'phone_number')
     ordering = ('-date_joined',)
@@ -36,7 +36,7 @@ class CustomUserAdmin(UserAdmin):
             ),
             'description': "Primary customer identity and contact information."
         }),
-        ("Privé Club & Verification", {
+        ("Newsletter & Email Verification", {
             'fields': (
                 ('is_email_verified', 'newsletter_subscribed'),
                 'email_verification_token',
@@ -102,13 +102,13 @@ class CustomUserAdmin(UserAdmin):
             edit_url
         )
 
-    @admin.display(description='Tier / Role')
-    def vip_badge(self, obj):
+    @admin.display(description='Role')
+    def account_role_pill(self, obj):
         if obj.is_superuser:
-            return mark_safe('<span class="badge-luxury" style="background:rgba(197,160,89,0.2); color:#DFBE76; border:1px solid #C5A059;">👑 Atelier Director</span>')
+            return mark_safe('<span class="badge-luxury" style="background:rgba(197,160,89,0.18); color:#DFBE76; border:1px solid #C5A059;">👑 Atelier Admin</span>')
         elif obj.is_staff:
-            return mark_safe('<span class="badge-luxury badge-processing">💎 Atelier Staff</span>')
-        return mark_safe('<span class="badge-luxury badge-delivered">✨ VIP Patron</span>')
+            return mark_safe('<span class="badge-luxury" style="background:rgba(59,130,246,0.15); color:#93C5FD; border:1px solid rgba(59,130,246,0.3);">💎 Staff</span>')
+        return mark_safe('<span class="badge-luxury" style="background:rgba(148,163,184,0.12); color:#CBD5E1; border:1px solid rgba(148,163,184,0.25);">Customer</span>')
 
     @admin.display(description='Email Verification', ordering='is_email_verified')
     def is_email_verified_pill(self, obj):
@@ -116,11 +116,11 @@ class CustomUserAdmin(UserAdmin):
             return mark_safe('<span class="badge-luxury badge-paid">✓ Verified</span>')
         return mark_safe('<span class="badge-luxury badge-pending">⏳ Unverified</span>')
 
-    @admin.display(description='Haute Gazette', ordering='newsletter_subscribed')
+    @admin.display(description='Newsletter', ordering='newsletter_subscribed')
     def newsletter_pill(self, obj):
         if obj.newsletter_subscribed:
-            return mark_safe('<span class="badge-luxury" style="background:rgba(99,102,241,0.12); color:#A5B4FC; border:1px solid rgba(99,102,241,0.3);">Subscribed</span>')
-        return mark_safe('<span style="color:#666677;">No</span>')
+            return mark_safe('<span class="badge-luxury" style="background:rgba(16,185,129,0.12); color:#34D399; border:1px solid rgba(16,185,129,0.3);">Subscribed</span>')
+        return mark_safe('<span style="color:#64748B; font-size:0.75rem;">Not Subscribed</span>')
 
 @admin.register(Address)
 class AddressAdmin(admin.ModelAdmin):

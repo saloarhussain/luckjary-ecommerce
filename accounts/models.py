@@ -13,8 +13,8 @@ class CustomUser(AbstractUser):
     email_verification_token = models.CharField(max_length=100, blank=True, null=True)
     verification_token_created_at = models.DateTimeField(blank=True, null=True)
     
-    # Newsletter & VIP Club
-    newsletter_subscribed = models.BooleanField(default=True, verbose_name="Subscribed to Luckjary Privé Club")
+    # Newsletter
+    newsletter_subscribed = models.BooleanField(default=True, verbose_name="Newsletter Subscribed")
     created_at = models.DateTimeField(auto_now_add=True)
     
     USERNAME_FIELD = 'email'
