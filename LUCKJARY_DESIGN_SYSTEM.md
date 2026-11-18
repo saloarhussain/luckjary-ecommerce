@@ -82,7 +82,7 @@ The typography embodies a high-contrast luxury atelier aesthetic: timeless elega
 | **Main Canvas Base** | `#07080a` to `#0d0e10` | Deep luxury obsidian canvas backdrop |
 | **Sidebar & Header Surface** | `#0c0d10` to `#121315` | Elevated backdrop with subtle `1px solid rgba(255, 255, 255, 0.06)` border |
 | **Card / Container Surface (`.card-surface`)** | `linear-gradient(145deg, rgba(23, 25, 32, 0.7) 0%, rgba(17, 19, 23, 0.95) 100%)` | Semi-transparent luxury panel with `backdrop-filter: blur(12px)` and `1px solid rgba(255, 255, 255, 0.06)` |
-| **Interactive Form Fields (`.glass-input`)** | `rgba(17, 19, 23, 0.85)` | Glassmorphism input with `1px solid rgba(255, 255, 255, 0.08)`, focus ring: `rgba(16, 185, 129, 0.5)` |
+| **Interactive Form Fields (`.glass-input`)** | `#111317` / `rgba(17, 19, 23, 0.85)` | Glassmorphism input with `background-color: #111317 !important; color: #f3f4f6 !important; border: 1px solid rgba(255, 255, 255, 0.08) !important;`. Under no circumstances should inputs be white (`#ffffff`). Focus ring: `rgba(16, 185, 129, 0.5)`. |
 | **Divider & Separator Lines** | `#21242d` / `rgba(255, 255, 255, 0.06)` | Minimal separation lines |
 
 ---

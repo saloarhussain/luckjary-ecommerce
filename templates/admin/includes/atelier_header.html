@@ -15,11 +15,11 @@
 <!-- Search Input Container -->
 <div class="flex-1 max-w-xl min-w-0">
 <div class="relative">
-<span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-neutral-500">
-<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+<span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-neutral-400">
+<svg class="w-4 h-4 text-neutral-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
 </span>
 <form action="{% url 'admin:catalog_product_changelist' %}" method="get" class="m-0 p-0 relative">
-<input name="q" class="w-full glass-input text-xs text-neutral-200 placeholder-neutral-500 pl-9 pr-8 sm:pr-12 py-2 rounded-lg transition outline-none truncate" placeholder="Search orders, fine jewelry..." type="text">
+<input name="q" autocomplete="off" spellcheck="false" class="w-full glass-input text-xs text-neutral-200 placeholder-neutral-400 pl-9 pr-8 sm:pr-12 py-2 rounded-lg transition outline-none truncate" placeholder="Search orders, fine jewelry... (Ctrl+K)" type="text" style="background-color: #111317 !important; color: #f3f4f6 !important; border: 1px solid rgba(255, 255, 255, 0.08) !important;">
 </form>
 <div class="absolute inset-y-0 right-0 pr-2.5 hidden sm:flex items-center pointer-events-none">
 <kbd class="text-[10px] font-mono text-neutral-400 bg-obsidian-800 border border-obsidian-700 px-1.5 py-0.5 rounded">⌘K</kbd>

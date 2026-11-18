@@ -132,13 +132,46 @@ header a,
 .luxury-gold-border {
   border: 1px solid rgba(204, 165, 90, 0.28) !important;
 }
-.glass-input {
-  background: rgba(17, 19, 23, 0.85) !important;
+.glass-input,
+input.glass-input,
+input[name="q"],
+input[type="text"],
+input[type="search"],
+[type='text'],
+[type='search'] {
+  background-color: #111317 !important;
+  background: #111317 !important;
   border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  color: #f3f4f6 !important;
+  color-scheme: dark !important;
 }
-.glass-input:focus {
+.glass-input:focus,
+input.glass-input:focus,
+input[name="q"]:focus,
+input[type="text"]:focus,
+input[type="search"]:focus,
+[type='text']:focus,
+[type='search']:focus {
+  background-color: #111317 !important;
+  background: #111317 !important;
   border-color: rgba(16, 185, 129, 0.6) !important;
   box-shadow: 0 0 0 1px rgba(16, 185, 129, 0.4) !important;
+  color: #ffffff !important;
+  outline: none !important;
+}
+input::placeholder,
+textarea::placeholder {
+  color: #9ca3af !important;
+  opacity: 1 !important;
+}
+input:-webkit-autofill,
+input:-webkit-autofill:hover, 
+input:-webkit-autofill:focus, 
+input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 50px #111317 inset !important;
+  -webkit-text-fill-color: #f3f4f6 !important;
+  caret-color: #f3f4f6 !important;
+  transition: background-color 5000s ease-in-out 0s;
 }
 
 html, body {
@@ -581,7 +614,8 @@ a.bg-obsidian-800:hover {
 .form-row textarea,
 #changelist-search input[type="text"],
 .glass-input {
-  background: rgba(17, 19, 23, 0.85) !important;
+  background-color: #111317 !important;
+  background: #111317 !important;
   border: 1px solid rgba(255, 255, 255, 0.08) !important;
   color: #f3f4f6 !important;
   border-radius: 0.5rem !important;
@@ -589,14 +623,18 @@ a.bg-obsidian-800:hover {
   padding: 0.55rem 0.85rem !important;
   font-family: "Plus Jakarta Sans", sans-serif !important;
   box-shadow: none !important;
+  color-scheme: dark !important;
 }
 .form-row input:focus,
 .form-row select:focus,
 .form-row textarea:focus,
 #changelist-search input[type="text"]:focus,
 .glass-input:focus {
+  background-color: #111317 !important;
+  background: #111317 !important;
   border-color: rgba(16, 185, 129, 0.6) !important;
   box-shadow: 0 0 0 1px rgba(16, 185, 129, 0.4) !important;
+  color: #ffffff !important;
   outline: none !important;
 }
 .form-row label,

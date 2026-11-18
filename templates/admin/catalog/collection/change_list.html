@@ -197,7 +197,7 @@ html, body {
           <!-- Secondary Filter / Quick Search -->
           <div class="flex items-center gap-2 w-full md:w-auto justify-end">
             <div class="relative flex-1 md:flex-initial">
-              <input id="collectionFilterInput" class="w-full md:w-48 bg-[#181a22] text-xs text-stone-300 placeholder-stone-500 rounded-lg pl-8 pr-3 py-1.5 border border-[#282c38] focus:border-emerald-500 focus:outline-none font-sans" placeholder="Filter collections..." type="text" value="{{ request.GET.q|default:'' }}">
+              <input id="collectionFilterInput" class="w-full md:w-48 bg-[#181a22] text-xs text-stone-300 placeholder-stone-500 rounded-lg pl-8 pr-3 py-1.5 border border-[#282c38] focus:border-emerald-500 focus:outline-none font-sans" placeholder="Filter collections..." type="text" value="{{ request.GET.q|default:'' }}" style="background-color: #111317 !important; color: #f3f4f6 !important; border: 1px solid rgba(255, 255, 255, 0.08) !important;">
               <svg class="w-3.5 h-3.5 text-stone-500 absolute left-2.5 top-1/2 -translate-y-1/2" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" stroke-linecap="round" stroke-linejoin="round"></path></svg>
             </div>
             <a href="?" class="p-1.5 text-stone-400 hover:text-stone-200 bg-[#181a22] rounded-lg border border-[#282c38] flex-shrink-0" title="Reset filters">
