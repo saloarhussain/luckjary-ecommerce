@@ -1,696 +1,1299 @@
-{% extends "admin/base_site.html" %}
-{% load i18n static %}
-
-{% block extrahead %}
-{{ block.super }}
-<style data-purpose="luxury-atelier-dashboard">
-  /* Override default Django Admin padding on dashboard */
-  #content,
-  .dashboard #content,
-  .shopify-dashboard-page #content {
-    padding: 0 !important;
-    max-width: 100% !important;
-    width: 100% !important;
-    background: transparent !important;
-  }
-
-  /* Universal Underline Killer for all dashboard links */
-  a,
-  a:link,
-  a:visited,
-  a:hover,
-  a:focus,
-  a:active,
-  .atelier-dashboard-root a,
-  .card-surface a {
-    text-decoration: none !important;
-    text-decoration-line: none !important;
-  }
-
-  /* Exact Card Surfaces and Glows from code.html */
-  .card-surface {
-    background: linear-gradient(145deg, rgba(23, 25, 32, 0.7) 0%, rgba(17, 19, 23, 0.95) 100%) !important;
-    border: 1px solid rgba(255, 255, 255, 0.06) !important;
-    backdrop-filter: blur(12px) !important;
-  }
-  .card-surface:hover {
-    border-color: rgba(255, 255, 255, 0.1) !important;
-  }
-  .glow-emerald {
-    box-shadow: 0 0 20px -3px rgba(16, 185, 129, 0.25) !important;
-  }
-  .luxury-gold-border {
-    border: 1px solid rgba(204, 165, 90, 0.28) !important;
-  }
-  .glass-input {
-    background: rgba(17, 19, 23, 0.85) !important;
-    border: 1px solid rgba(255, 255, 255, 0.08) !important;
-  }
-  .glass-input:focus {
-    border-color: rgba(16, 185, 129, 0.6) !important;
-    box-shadow: 0 0 0 1px rgba(16, 185, 129, 0.4) !important;
-  }
-
-  /* Exact Fonts from code.html */
-  .font-serif {
-    font-family: 'Cormorant Garamond', 'Bodoni Moda', Georgia, serif !important;
-  }
-  .font-sans {
-    font-family: 'Plus Jakarta Sans', sans-serif !important;
-  }
-  .font-mono {
-    font-family: 'JetBrains Mono', monospace !important;
-  }
-
-  /* Hide redundant Django titles & breadcrumbs on dashboard */
-  .dashboard .shopify-breadcrumbs-nav,
-  .dashboard div.breadcrumbs,
-  .dashboard .titles-and-tools,
-  .shopify-dashboard-page .shopify-breadcrumbs-nav,
-  .shopify-dashboard-page div.breadcrumbs,
-  .shopify-dashboard-page .titles-and-tools {
-    display: none !important;
-  }
-
-  .no-scrollbar::-webkit-scrollbar {
-    display: none;
-  }
-  .no-scrollbar {
-    -ms-overflow-style: none;
-    scrollbar-width: none;
-  }
-</style>
-{% endblock %}
-
-{% block bodyclass %}{{ block.super }} dashboard shopify-dashboard-page{% endblock %}
-
-{% block nav-breadcrumbs %}{% endblock %}
-
-{% block content_title %}{% endblock %}
-
-{% block content %}
-<div class="atelier-dashboard-root w-full min-h-screen bg-obsidian-950 text-neutral-300 font-sans antialiased selection:bg-emerald-500/30 selection:text-emerald-300">
-  <div class="p-4 sm:p-6 md:p-8 space-y-5 sm:space-y-6 md:space-y-7 max-w-[1720px] mx-auto w-full">
-
-    <!-- BEGIN: Dashboard Hero Section (from code.html) -->
-    <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3.5 sm:gap-4 pb-1 sm:pb-2" data-purpose="hero-banner">
-      <div>
-        <h1 class="text-2xl sm:text-3xl md:text-4xl font-serif text-white tracking-wide">
-          Welcome back, {{ request.user.first_name|default:"Eleanor" }}
-        </h1>
-        <p class="text-xs md:text-sm text-neutral-400 mt-1 font-sans">
-          Here's what's happening with <span class="text-neutral-200">Luckjary Haute Joaillerie</span> atelier today.
-        </p>
-      </div>
-      <div class="flex flex-wrap sm:flex-nowrap items-center gap-2.5 sm:gap-3 w-full sm:w-auto">
-        <a href="{% url 'orders:oms_dashboard' %}" class="flex-1 sm:flex-none inline-flex items-center justify-center gap-2 px-3.5 py-2 rounded-lg bg-obsidian-800 hover:bg-obsidian-700 text-neutral-200 text-xs font-medium border border-obsidian-700 transition shadow-sm whitespace-nowrap no-underline">
-          <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
-          Open OMS Console
-        </a>
-        <a href="{% url 'admin:orders_order_add' %}" class="flex-1 sm:flex-none inline-flex items-center justify-center gap-2 px-3.5 py-2 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-obsidian-950 font-semibold text-xs tracking-wide transition shadow-lg glow-emerald whitespace-nowrap no-underline">
-          <svg class="w-4 h-4 stroke-[2.2]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 4v16m8-8H4" stroke-linecap="round" stroke-linejoin="round"></path></svg>
-          + Create Order
-        </a>
-      </div>
-    </div>
-    <!-- END: Dashboard Hero Section -->
-
-    <!-- BEGIN: Key Performance Metrics Row (4 Cards from code.html) -->
-    <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5 sm:gap-4" data-purpose="key-metrics-grid">
-      <!-- Metric Card 1: Total Sales -->
-      <div class="card-surface p-4 sm:p-5 rounded-xl flex flex-col justify-between relative overflow-hidden group">
-        <div class="flex items-start justify-between">
-          <span class="text-[11px] font-mono uppercase tracking-wider text-neutral-400">Total Sales</span>
-          <span class="px-2 py-0.5 rounded-full text-[10px] font-mono font-semibold bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 whitespace-nowrap">
-            +14.2%
-          </span>
-        </div>
-        <div class="mt-3 sm:mt-4 mb-3">
-          <div class="text-2xl sm:text-3xl font-mono font-semibold text-white tracking-tight break-words">
-            ₹{{ total_revenue_inr|default:"9,28,400" }} <span class="text-xs sm:text-sm font-sans font-normal text-neutral-400">(${{ total_revenue|default:"11,165.00" }})</span>
-          </div>
-        </div>
-        <div class="flex items-center gap-1.5 text-[11px] text-emerald-400/90 font-medium pt-2 border-t border-obsidian-700/50">
-          <svg class="w-3.5 h-3.5 text-emerald-400 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path clip-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" fill-rule="evenodd"></path></svg>
-          <span class="truncate">Stripe Luxury Payments Captured</span>
-        </div>
-      </div>
-
-      <!-- Metric Card 2: Total Orders -->
-      <div class="card-surface p-4 sm:p-5 rounded-xl flex flex-col justify-between group">
-        <div class="flex items-start justify-between">
-          <span class="text-[11px] font-mono uppercase tracking-wider text-neutral-400">Total Orders</span>
-          <span class="text-[10px] font-mono text-neutral-500 tracking-wider whitespace-nowrap">ALL-TIME</span>
-        </div>
-        <div class="mt-3 sm:mt-4 mb-3">
-          <div class="text-2xl sm:text-3xl font-mono font-semibold text-white tracking-tight">{{ total_orders|default:"4" }}</div>
-        </div>
-        <div class="pt-2 border-t border-obsidian-700/50">
-          <a class="text-[11px] text-neutral-400 hover:text-champagne-300 inline-flex items-center gap-1 transition whitespace-nowrap no-underline" href="{% url 'admin:orders_order_changelist' %}">
-            View all orders <span class="text-champagne-400">→</span>
-          </a>
-        </div>
-      </div>
-
-      <!-- Metric Card 3: Orders To Fulfill (Needs Action) -->
-      <div class="card-surface luxury-gold-border p-4 sm:p-5 rounded-xl flex flex-col justify-between relative bg-gradient-to-br from-obsidian-850 to-amber-950/20">
-        <div class="flex items-start justify-between">
-          <span class="text-[11px] font-mono uppercase tracking-wider text-champagne-300">Orders to Fulfill</span>
-          <span class="px-2 py-0.5 rounded text-[10px] font-mono font-semibold bg-amber-500/20 text-amber-300 border border-amber-500/40 whitespace-nowrap">
-            NEEDS ACTION
-          </span>
-        </div>
-        <div class="mt-3 sm:mt-4 mb-3">
-          <div class="text-2xl sm:text-3xl font-mono font-bold text-champagne-200 tracking-tight">{{ unfulfilled_count|default:"1" }}</div>
-        </div>
-        <div class="pt-2 border-t border-obsidian-700/50">
-          <a class="text-[11px] text-amber-300/90 hover:text-amber-200 inline-flex items-center gap-1 transition whitespace-nowrap no-underline" style="text-decoration: none !important;" href="{% url 'admin:orders_order_changelist' %}?status__exact=PENDING">
-            Open fulfillment queue <span class="text-amber-400">&rarr;</span>
-          </a>
-        </div>
-      </div>
-
-      <!-- Metric Card 4: Average Order Value -->
-      <div class="card-surface p-4 sm:p-5 rounded-xl flex flex-col justify-between group">
-        <div class="flex items-start justify-between">
-          <span class="text-[11px] font-mono uppercase tracking-wider text-neutral-400">Average Order Value</span>
-          <span class="text-[10px] font-mono text-neutral-500 whitespace-nowrap">AOV</span>
-        </div>
-        <div class="mt-3 sm:mt-4 mb-3">
-          <div class="text-2xl sm:text-3xl font-mono font-semibold text-white tracking-tight break-words">
-            ₹{{ avg_aov_inr|default:"2,32,100" }} <span class="text-xs sm:text-sm font-sans font-normal text-neutral-400">(${{ avg_aov|default:"2,791.25" }})</span>
-          </div>
-        </div>
-        <div class="pt-2 border-t border-obsidian-700/50 text-[11px] text-neutral-400">
-          Fine 925 jewelry cart average
-        </div>
-      </div>
-    </section>
-    <!-- END: Key Performance Metrics Row -->
-
-    <!-- BEGIN: Operational Row (Things To Do & Atelier Infrastructure from code.html) -->
-    <section class="grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-5" data-purpose="operational-overview">
-      <!-- Left: Things To Do (7 Cols on desktop) -->
-      <div class="lg:col-span-7 card-surface rounded-xl p-4 sm:p-6 flex flex-col justify-between space-y-3.5 sm:space-y-4">
-        <div class="flex items-center justify-between pb-3 border-b border-obsidian-700/60">
-          <div class="flex items-center gap-2">
-            <svg class="w-4 h-4 text-champagne-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-            <h2 class="text-sm font-semibold text-white tracking-wide">Things to do</h2>
-          </div>
-          <span class="px-2.5 py-0.5 rounded-full text-[10px] font-mono font-semibold bg-amber-500/15 text-amber-300 border border-amber-500/30 whitespace-nowrap inline-flex items-center">
-            {{ unfulfilled_count|default:"1" }} pending
-          </span>
-        </div>
-
-        <!-- Pending Item 1: Orders awaiting Jeweler QA -->
-        <div class="p-3.5 sm:p-4 rounded-lg bg-obsidian-850/80 border border-obsidian-700/70 flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-3.5">
-          <div class="flex items-start gap-3 min-w-0">
-            <div class="p-2.5 rounded-lg bg-amber-500/10 border border-amber-500/30 text-amber-400 mt-0.5 flex-shrink-0">
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m4 10v4m8-4v4" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"></path></svg>
-            </div>
-            <div class="min-w-0">
-              <h3 class="text-xs font-semibold text-neutral-100">{{ unfulfilled_count|default:"1" }} Orders to Fulfill</h3>
-              <p class="text-[11px] text-neutral-400 mt-0.5 leading-relaxed">Orders awaiting sterling silver jeweler QA &amp; bespoke dispatch.</p>
-            </div>
-          </div>
-          <a href="{% url 'admin:orders_order_changelist' %}" class="w-full sm:w-auto px-3.5 py-1.5 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-obsidian-950 font-semibold text-xs tracking-wide transition text-center whitespace-nowrap glow-emerald flex-shrink-0 no-underline inline-block">
-            Fulfill orders
-          </a>
-        </div>
-
-        <!-- Pending Item 2: Courier Logistics Sync -->
-        <div class="p-3.5 sm:p-4 rounded-lg bg-obsidian-850/80 border border-obsidian-700/70 flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-3.5">
-          <div class="flex items-start gap-3 min-w-0">
-            <div class="p-2.5 rounded-lg bg-blue-500/10 border border-blue-500/30 text-blue-400 mt-0.5 flex-shrink-0">
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"></path></svg>
-            </div>
-            <div class="min-w-0">
-              <h3 class="text-xs font-semibold text-neutral-100">Courier Logistics Sync</h3>
-              <p class="text-[11px] text-neutral-400 mt-0.5 leading-relaxed">Live FedEx Luxury &amp; armored courier dispatch telemetry active.</p>
-            </div>
-          </div>
-          <a href="{% url 'orders:oms_dashboard' %}" class="w-full sm:w-auto px-3.5 py-1.5 rounded-lg bg-obsidian-800 hover:bg-obsidian-700 text-neutral-200 border border-obsidian-700 text-xs font-medium transition text-center whitespace-nowrap flex-shrink-0 no-underline inline-block">
-            Launch OMS →
-          </a>
-        </div>
-      </div>
-
-      <!-- Right: Atelier Infrastructure (5 Cols on desktop from code.html) -->
-      <div class="lg:col-span-5 card-surface rounded-xl p-4 sm:p-6 flex flex-col justify-between">
-        <div class="flex items-center justify-between pb-3 border-b border-obsidian-700/60">
-          <h2 class="text-sm font-semibold text-white tracking-wide">Atelier Infrastructure</h2>
-          <span class="px-2.5 py-0.5 rounded-full text-[10px] font-mono text-emerald-400 bg-emerald-950/60 border border-emerald-500/30 flex items-center gap-1.5 whitespace-nowrap shrink-0">
-            <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
-            Optimal
-          </span>
-        </div>
-        <div class="space-y-3 my-3">
-          <!-- Infra item 1 -->
-          <div class="flex items-center justify-between text-xs gap-3">
-            <div class="flex items-center gap-2 min-w-0">
-              <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 shrink-0"></span>
-              <span class="font-medium text-neutral-200 truncate">Stripe Luxury Payments</span>
-              <span class="text-[10px] text-neutral-500 font-mono hidden sm:inline shrink-0">(Webhooks &amp; captured receipts)</span>
-            </div>
-            <span class="whitespace-nowrap shrink-0 px-2.5 py-1 text-xs font-mono bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 rounded">Live</span>
-          </div>
-          <!-- Infra item 2 -->
-          <div class="flex items-center justify-between text-xs gap-3">
-            <div class="flex items-center gap-2 min-w-0">
-              <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 shrink-0"></span>
-              <span class="font-medium text-neutral-200 truncate">WhiteNoise Edge CDN</span>
-              <span class="text-[10px] text-neutral-500 font-mono hidden sm:inline shrink-0">(Static fonts &amp; styles)</span>
-            </div>
-            <span class="whitespace-nowrap shrink-0 px-2.5 py-1 text-xs font-mono bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 rounded">Active</span>
-          </div>
-          <!-- Infra item 3 -->
-          <div class="flex items-center justify-between text-xs gap-3">
-            <div class="flex items-center gap-2 min-w-0">
-              <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 shrink-0"></span>
-              <span class="font-medium text-neutral-200 truncate">30-Day Cookie Sessions</span>
-              <span class="text-[10px] text-neutral-500 font-mono hidden sm:inline shrink-0">(Cryptographically signed)</span>
-            </div>
-            <span class="whitespace-nowrap shrink-0 px-2.5 py-1 text-xs font-mono bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 rounded">Enabled</span>
-          </div>
-          <!-- Infra item 4 -->
-          <div class="flex items-center justify-between text-xs gap-3">
-            <div class="flex items-center gap-2 min-w-0">
-              <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 shrink-0"></span>
-              <span class="font-medium text-neutral-200 truncate">Armored Courier Dispatch</span>
-              <span class="text-[10px] text-neutral-500 font-mono hidden sm:inline shrink-0">(FedEx &amp; Ferrari VIP)</span>
-            </div>
-            <span class="whitespace-nowrap shrink-0 px-2.5 py-1 text-xs font-mono bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 rounded">Active</span>
-          </div>
-        </div>
-        <div class="pt-2 border-t border-obsidian-700/40 text-[10px] font-mono text-neutral-500 flex justify-between items-center">
-          <span class="whitespace-nowrap">Security Layer 1.3 TLS</span>
-          <span class="whitespace-nowrap">Uptime 99.99%</span>
-        </div>
-      </div>
-    </section>
-    <!-- END: Operational Row -->
-
-    <!-- BEGIN: Main Data Section (Recent Orders Table & Quicklinks / Activity from code.html) -->
-    <section class="grid grid-cols-1 xl:grid-cols-12 gap-4 sm:gap-5 pb-6" data-purpose="table-and-quicklinks-grid">
-      <!-- Left: Recent Orders Table (8 Cols on xl) -->
-      <div class="xl:col-span-8 card-surface rounded-xl p-4 sm:p-6 flex flex-col justify-between overflow-hidden">
-        <div>
-          <!-- Table Header Bar -->
-          <div class="flex items-center justify-between pb-3.5 sm:pb-4 border-b border-obsidian-700/60 mb-2 gap-2">
-            <div class="flex items-center gap-2 sm:gap-3 min-w-0">
-              <h2 class="text-sm font-semibold text-white tracking-wide whitespace-nowrap">Recent Orders</h2>
-              <span class="whitespace-nowrap shrink-0 inline-flex items-center px-2 py-0.5 rounded text-[10px] font-mono bg-obsidian-800 text-neutral-400 border border-obsidian-700">
-                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 mr-1.5"></span>Live Orders Vault
-              </span>
-            </div>
-            <a class="text-xs text-neutral-400 hover:text-champagne-300 font-medium inline-flex items-center gap-1 transition whitespace-nowrap shrink-0 no-underline" href="{% url 'admin:orders_order_changelist' %}">
-              View all orders <span class="text-champagne-400">→</span>
-            </a>
-          </div>
-
-          <!-- Desktop Table View (Hidden on mobile < md) -->
-          <div class="hidden md:block overflow-x-auto -mx-4 sm:mx-0 px-4 sm:px-0">
-            <table class="w-full text-left border-collapse min-w-[620px]">
-              <thead>
-                <tr class="border-b border-obsidian-700/60 text-[10px] font-mono uppercase tracking-wider text-neutral-400">
-                  <th class="py-3 px-2 font-medium">Order</th>
-                  <th class="py-3 px-2 font-medium">Date</th>
-                  <th class="py-3 px-2 font-medium">Customer</th>
-                  <th class="py-3 px-2 font-medium">Payment</th>
-                  <th class="py-3 px-2 font-medium">Fulfillment</th>
-                  <th class="py-3 px-2 text-right font-medium">Total</th>
-                  <th class="py-3 px-2 text-right font-medium pr-4">Action</th>
-                </tr>
-              </thead>
-              <tbody class="divide-y divide-obsidian-700/40 text-xs">
-                {% for order in recent_orders %}
-                <tr class="hover:bg-obsidian-800/40 transition group">
-                  <td class="py-3.5 px-2">
-                    <a href="{% url 'admin:orders_order_change' order.id %}" class="font-mono text-emerald-400 bg-emerald-950/40 border border-emerald-500/20 px-2 py-0.5 rounded text-[11px] group-hover:border-emerald-500/40 transition whitespace-nowrap no-underline inline-block">
-                      #{{ order.order_number }}
-                    </a>
-                  </td>
-                  <td class="py-3.5 px-2 text-neutral-400 font-mono text-[11px] whitespace-nowrap">
-                    {{ order.created_at|date:"M d, Y" }}
-                  </td>
-                  <td class="py-3.5 px-2">
-                    <div class="font-medium text-neutral-100">{{ order.full_name|default:"VIP Patron" }}</div>
-                    <div class="text-[10px] text-neutral-400 font-mono">{{ order.email }}</div>
-                  </td>
-                  <td class="py-3.5 px-2 whitespace-nowrap">
-                    {% if order.payment_status == 'PAID' %}
-                    <span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-mono font-medium bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 whitespace-nowrap">
-                      <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span> Paid
-                    </span>
-                    {% else %}
-                    <span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-mono font-medium bg-amber-500/15 text-amber-300 border border-amber-500/30 whitespace-nowrap">
-                      <span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span> {{ order.get_payment_status_display }}
-                    </span>
-                    {% endif %}
-                  </td>
-                  <td class="py-3.5 px-2 whitespace-nowrap">
-                    {% if order.status == 'DELIVERED' %}
-                    <span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-mono font-medium bg-teal-500/15 text-teal-300 border border-teal-500/30 whitespace-nowrap">
-                      <span class="w-1.5 h-1.5 rounded-full bg-teal-400"></span> Delivered
-                    </span>
-                    {% elif order.status == 'SHIPPED' %}
-                    <span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-mono font-medium bg-blue-500/15 text-blue-300 border border-blue-500/30 whitespace-nowrap">
-                      <span class="w-1.5 h-1.5 rounded-full bg-blue-400"></span> In Transit
-                    </span>
-                    {% elif order.status == 'PROCESSING' %}
-                    <span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-mono font-medium bg-purple-500/15 text-purple-300 border border-purple-500/30 whitespace-nowrap">
-                      <span class="w-1.5 h-1.5 rounded-full bg-purple-400"></span> In Atelier QC
-                    </span>
-                    {% else %}
-                    <span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-mono font-medium bg-amber-500/15 text-amber-300 border border-amber-500/30 whitespace-nowrap">
-                      <span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span> Unfulfilled
-                    </span>
-                    {% endif %}
-                  </td>
-                  <td class="py-3.5 px-2 text-right font-mono font-medium text-neutral-100 whitespace-nowrap">
-                    ₹{{ order.total_amount|floatformat:2 }} <span class="text-[10px] text-neutral-400 block font-normal">(${{ order.total_amount }})</span>
-                  </td>
-                  <td class="py-3.5 px-2 text-right pr-4 whitespace-nowrap">
-                    <a href="{% url 'admin:orders_order_change' order.id %}" class="px-2.5 py-1 text-[11px] font-medium text-neutral-300 hover:text-white bg-obsidian-800 hover:bg-obsidian-700 border border-obsidian-700 rounded transition no-underline inline-block">
-                      Edit
-                    </a>
-                  </td>
-                </tr>
-                {% empty %}
-                <tr>
-                  <td colspan="7" class="py-8 text-center text-neutral-500 font-mono text-xs">No orders found.</td>
-                </tr>
-                {% endfor %}
-              </tbody>
-            </table>
-          </div>
-
-          <!-- Mobile Recent Order Cards & Status Filter Chips (< md) -->
-          <div class="block md:hidden space-y-3.5 pt-1">
-            <!-- Horizontal Filter Chips -->
-            <div class="overflow-x-auto -mx-4 px-4 flex items-center gap-2 pb-1 no-scrollbar" id="mobile-order-filter-chips">
-              <button type="button" data-status="all" class="mobile-chip active px-3 py-1 rounded text-xs font-medium bg-neutral-200 text-obsidian-950 font-sans whitespace-nowrap shrink-0 shadow-sm cursor-pointer">
-                All <span class="ml-1 font-mono text-[10px]">{{ recent_orders|length|default:"4" }}</span>
-              </button>
-              <button type="button" data-status="unfulfilled" class="mobile-chip px-3 py-1 rounded text-xs font-medium bg-obsidian-800 text-amber-400 border border-amber-500/20 whitespace-nowrap shrink-0 flex items-center gap-1.5 cursor-pointer">
-                <span class="w-1.5 h-1.5 rounded-full bg-amber-400 shrink-0"></span> Unfulfilled <span class="ml-0.5 font-mono text-[10px] text-neutral-400">{{ unfulfilled_count|default:"1" }}</span>
-              </button>
-              <button type="button" data-status="qc" class="mobile-chip px-3 py-1 rounded text-xs font-medium bg-obsidian-800 text-purple-300 border border-purple-500/30 whitespace-nowrap shrink-0 flex items-center gap-1.5 cursor-pointer">
-                <span class="w-1.5 h-1.5 rounded-full bg-purple-400 shrink-0"></span> In Atelier QC <span class="ml-0.5 font-mono text-[10px] text-neutral-400">{{ processing_count|default:"1" }}</span>
-              </button>
-              <button type="button" data-status="transit" class="mobile-chip px-3 py-1 rounded text-xs font-medium bg-obsidian-800 text-blue-300 border border-blue-500/30 whitespace-nowrap shrink-0 flex items-center gap-1.5 cursor-pointer">
-                <span class="w-1.5 h-1.5 rounded-full bg-blue-400 shrink-0"></span> In Transit <span class="ml-0.5 font-mono text-[10px] text-neutral-400">{{ shipped_count|default:"1" }}</span>
-              </button>
-            </div>
-
-            <!-- Cards List -->
-            <div class="space-y-3" id="mobile-orders-container">
-              {% for order in recent_orders %}
-              <div class="mobile-order-card bg-obsidian-900 border border-obsidian-700/70 rounded-xl p-3.5 space-y-3"
-                   data-status="{% if order.status == 'DELIVERED' %}delivered{% elif order.status == 'SHIPPED' %}transit{% elif order.status == 'PROCESSING' %}qc{% else %}unfulfilled{% endif %}">
-                <div class="flex items-start justify-between gap-2">
-                  <div class="space-y-1.5 min-w-0">
-                    <div>
-                      <button type="button" onclick="copyOrderNumber('{{ order.order_number }}', this)" class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded bg-emerald-950/60 border border-emerald-500/30 text-emerald-400 font-mono text-xs font-medium tracking-tight whitespace-nowrap shrink-0 cursor-pointer">
-                        <span>#{{ order.order_number }}</span>
-                        <svg class="w-3 h-3 text-emerald-400/80 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><rect height="13" rx="2" ry="2" width="13" x="9" y="9"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-                      </button>
-                    </div>
-                    <div class="text-[11px] text-neutral-400 flex items-center gap-1.5 font-sans whitespace-nowrap">
-                      <svg class="w-3 h-3 text-neutral-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><rect height="18" rx="2" ry="2" width="18" x="3" y="4"></rect><line x1="16" x2="16" y1="2" y2="6"></line><line x1="8" x2="8" y1="2" y2="6"></line><line x1="3" x2="21" y1="10" y2="10"></line></svg>
-                      <span>{{ order.created_at|date:"M d, Y" }}</span>
-                      <span>•</span>
-                      <span class="font-mono text-[10px]">{{ order.created_at|date:"H:i" }}</span>
-                    </div>
-                  </div>
-                  <div class="text-right shrink-0">
-                    <div class="font-mono font-semibold text-neutral-100 tracking-tight whitespace-nowrap">₹{{ order.total_amount|floatformat:2 }}</div>
-                    <span class="text-[9px] uppercase tracking-wider text-neutral-400 font-medium whitespace-nowrap block">925 SILVER PIECE</span>
-                  </div>
-                </div>
-
-                <div class="h-px bg-obsidian-700/50"></div>
-
-                <div class="flex items-center justify-between gap-2">
-                  <div class="flex items-center gap-2.5 min-w-0">
-                    <div class="w-8 h-8 rounded-full bg-gradient-to-tr from-obsidian-850 to-amber-950/20 border border-amber-500/30 flex items-center justify-center font-mono text-xs font-semibold text-amber-300 shrink-0">
-                      {{ order.full_name|default:"VIP"|slice:":2"|upper }}
-                    </div>
-                    <div class="min-w-0 overflow-hidden">
-                      <p class="text-xs font-medium text-neutral-100 leading-tight truncate">{{ order.full_name|default:"VIP Patron" }}</p>
-                      <p class="text-[10px] text-neutral-400 font-mono truncate">{{ order.email }}</p>
-                    </div>
-                  </div>
-                  <div class="w-7 h-7 rounded border border-obsidian-700 bg-obsidian-850 flex items-center justify-center text-champagne-400 shrink-0">
-                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 2l2.4 7.4H22l-6 4.6 2.3 7-6.3-4.6-6.3 4.6 2.3-7-6-4.6h7.6z"></path></svg>
-                  </div>
-                </div>
-
-                <div class="pt-1 flex items-center justify-between flex-wrap gap-2">
-                  <div class="flex items-center gap-1.5 flex-wrap">
-                    {% if order.payment_status == 'PAID' %}
-                    <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-medium bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 whitespace-nowrap">
-                      <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 shrink-0"></span> Paid
-                    </span>
-                    {% else %}
-                    <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-medium bg-amber-500/15 text-amber-300 border border-amber-500/30 whitespace-nowrap">
-                      <span class="w-1.5 h-1.5 rounded-full bg-amber-400 shrink-0"></span> {{ order.get_payment_status_display }}
-                    </span>
-                    {% endif %}
-
-                    {% if order.status == 'DELIVERED' %}
-                    <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-medium bg-teal-500/15 text-teal-300 border border-teal-500/30 whitespace-nowrap">
-                      <span class="w-1.5 h-1.5 rounded-full bg-teal-400 shrink-0"></span> Delivered
-                    </span>
-                    {% elif order.status == 'SHIPPED' %}
-                    <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-medium bg-blue-500/15 text-blue-300 border border-blue-500/30 whitespace-nowrap">
-                      <span class="w-1.5 h-1.5 rounded-full bg-blue-400 shrink-0"></span> In Transit
-                    </span>
-                    {% elif order.status == 'PROCESSING' %}
-                    <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-medium bg-purple-500/15 text-purple-300 border border-purple-500/30 whitespace-nowrap">
-                      <span class="w-1.5 h-1.5 rounded-full bg-purple-400 shrink-0"></span> In Atelier QC
-                    </span>
-                    {% else %}
-                    <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-medium bg-amber-500/15 text-amber-300 border border-amber-500/30 whitespace-nowrap">
-                      <span class="w-1.5 h-1.5 rounded-full bg-amber-400 shrink-0"></span> Unfulfilled
-                    </span>
-                    {% endif %}
-                  </div>
-
-                  <div class="flex items-center gap-2 shrink-0 ml-auto">
-                    <a href="{% url 'admin:orders_order_change' order.id %}" class="px-2.5 py-1 text-[11px] font-medium text-neutral-300 bg-obsidian-800 hover:bg-obsidian-700 border border-obsidian-700 rounded transition whitespace-nowrap no-underline">
-                      Invoice
-                    </a>
-                    <a href="{% url 'admin:orders_order_change' order.id %}" class="px-3 py-1 text-[11px] font-semibold text-amber-300 bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 rounded transition flex items-center gap-1 whitespace-nowrap no-underline">
-                      Manage <span>→</span>
-                    </a>
-                  </div>
-                </div>
-              </div>
-              {% empty %}
-              <div class="p-8 text-center text-neutral-500 font-mono text-xs">
-                No orders found.
-              </div>
-              {% endfor %}
-            </div>
-          </div>
-        </div>
-
-        <!-- Table Bottom Note -->
-        <div class="pt-4 border-t border-obsidian-700/50 flex flex-wrap items-center justify-between gap-2 text-[11px] text-neutral-400 font-mono mt-2">
-          <span class="whitespace-nowrap">Showing recent {{ recent_orders|length|default:"4" }} fine jewelry orders</span>
-          <div class="flex gap-2">
-            <button class="px-2.5 py-1 rounded bg-obsidian-800 border border-obsidian-700 text-neutral-300 hover:text-white disabled:opacity-50 whitespace-nowrap cursor-not-allowed" disabled>Previous</button>
-            <button class="px-2.5 py-1 rounded bg-obsidian-800 border border-obsidian-700 text-neutral-300 hover:text-white whitespace-nowrap cursor-pointer">Next</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Right: Management Quicklinks & Activity Timeline (4 Cols on xl from code.html) -->
-      <div class="xl:col-span-4 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-1 gap-4 sm:gap-5">
-        <!-- Management Quicklinks Card -->
-        <div class="card-surface rounded-xl p-4 sm:p-5">
-          <h2 class="text-xs font-semibold uppercase tracking-wider text-neutral-400 font-mono pb-3 border-b border-obsidian-700/60 mb-3 whitespace-nowrap">
-            Management Quicklinks
-          </h2>
-          <div class="space-y-2">
-            <!-- Quicklink 1: Jewelry Catalog -->
-            <a class="flex items-center justify-between p-2.5 rounded-lg hover:bg-obsidian-800/80 transition group border border-transparent hover:border-obsidian-700 no-underline" href="{% url 'admin:catalog_product_changelist' %}">
-              <div class="flex items-center gap-3 min-w-0">
-                <div class="w-8 h-8 rounded-lg bg-champagne-400/10 border border-champagne-400/20 flex items-center justify-center text-champagne-300 flex-shrink-0">
-                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><polygon points="12 2 2 7 12 12 22 7 12 22 2 9 6 3"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
-                </div>
-                <div class="min-w-0">
-                  <div class="text-xs font-medium text-neutral-200 group-hover:text-champagne-300 transition truncate">Jewelry Catalog</div>
-                  <div class="text-[10px] text-neutral-400 truncate">{{ total_products|default:"14" }} active sterling creations</div>
-                </div>
-              </div>
-              <svg class="w-4 h-4 text-neutral-500 group-hover:text-neutral-200 group-hover:translate-x-0.5 transition flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
-            </a>
-
-            <!-- Quicklink 2: Customers -->
-            <a class="flex items-center justify-between p-2.5 rounded-lg hover:bg-obsidian-800/80 transition group border border-transparent hover:border-obsidian-700 no-underline" href="{% url 'admin:accounts_customuser_changelist' %}">
-              <div class="flex items-center gap-3 min-w-0">
-                <div class="w-8 h-8 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 flex-shrink-0">
-                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
-                </div>
-                <div class="min-w-0">
-                  <div class="text-xs font-medium text-neutral-200 group-hover:text-emerald-400 transition truncate">Customers</div>
-                  <div class="text-[10px] text-neutral-400 truncate">{{ total_customers|default:"3" }} registered patrons</div>
-                </div>
-              </div>
-              <svg class="w-4 h-4 text-neutral-500 group-hover:text-neutral-200 group-hover:translate-x-0.5 transition flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
-            </a>
-
-            <!-- Quicklink 3: Discounts & Codes -->
-            <a class="flex items-center justify-between p-2.5 rounded-lg hover:bg-obsidian-800/80 transition group border border-transparent hover:border-obsidian-700 no-underline" href="{% url 'admin:orders_coupon_changelist' %}">
-              <div class="flex items-center gap-3 min-w-0">
-                <div class="w-8 h-8 rounded-lg bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-400 flex-shrink-0">
-                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
-                </div>
-                <div class="min-w-0">
-                  <div class="text-xs font-medium text-neutral-200 group-hover:text-amber-400 transition truncate">Discounts &amp; Codes</div>
-                  <div class="text-[10px] text-neutral-400 truncate">Active promotional campaigns</div>
-                </div>
-              </div>
-              <svg class="w-4 h-4 text-neutral-500 group-hover:text-neutral-200 group-hover:translate-x-0.5 transition flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
-            </a>
-
-            <!-- Quicklink 4: Live Storefront -->
-            <a class="flex items-center justify-between p-2.5 rounded-lg hover:bg-obsidian-800/80 transition group border border-transparent hover:border-obsidian-700 no-underline" href="{% url 'core:home' %}" target="_blank">
-              <div class="flex items-center gap-3 min-w-0">
-                <div class="w-8 h-8 rounded-lg bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-indigo-400 flex-shrink-0">
-                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><path d="M2 12h20M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
-                </div>
-                <div class="min-w-0">
-                  <div class="text-xs font-medium text-neutral-200 group-hover:text-indigo-300 transition truncate">Live Storefront</div>
-                  <div class="text-[10px] text-neutral-400 truncate">Customer shopping experience</div>
-                </div>
-              </div>
-              <svg class="w-4 h-4 text-neutral-500 group-hover:text-neutral-200 group-hover:translate-x-0.5 transition flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
-            </a>
-          </div>
-        </div>
-
-        <!-- Recent Activity Card (from code.html) -->
-        <div class="card-surface rounded-xl p-4 sm:p-5">
-          <h2 class="text-xs font-semibold uppercase tracking-wider text-neutral-400 font-mono pb-3 border-b border-obsidian-700/60 mb-3 whitespace-nowrap">
-            Recent Activity
-          </h2>
-          <div class="space-y-4">
-            {% for entry in log_entries|slice:":3" %}
-            <div class="flex items-start gap-2.5 text-xs">
-              <span class="w-1.5 h-1.5 rounded-full {% if entry.is_deletion %}bg-rose-400{% elif entry.is_addition %}bg-emerald-400{% else %}bg-champagne-400{% endif %} mt-1.5 flex-shrink-0"></span>
-              <div class="space-y-0.5 min-w-0">
-                <p class="text-neutral-300 leading-snug">
-                  <strong class="text-white font-medium">{{ entry.user.get_short_name|default:"Eleanor" }}</strong>
-                  {% if entry.is_addition %}added{% elif entry.is_change %}modified{% elif entry.is_deletion %}removed{% endif %}
-                  <span class="text-champagne-300 font-medium">{{ entry.object_repr }}</span>
-                </p>
-                <span class="text-[10px] font-mono text-neutral-400 block">{{ entry.action_time|timesince }} ago</span>
-              </div>
-            </div>
-            {% empty %}
-            <!-- Curated Haute Atelier Activity from code.html -->
-            <div class="flex items-start gap-2.5 text-xs">
-              <span class="w-1.5 h-1.5 rounded-full bg-champagne-400 mt-1.5 flex-shrink-0"></span>
-              <div class="space-y-0.5 min-w-0">
-                <p class="text-neutral-300 leading-snug">
-                  <strong class="text-white font-medium">Eleanor</strong> removed <span class="text-champagne-300 font-medium">Aura Textured Dome Ring in 925 Sterling Silver</span>
-                </p>
-                <span class="text-[10px] font-mono text-neutral-400 block">1 day, 8 hours ago</span>
-              </div>
-            </div>
-            <div class="flex items-start gap-2.5 text-xs">
-              <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 mt-1.5 flex-shrink-0"></span>
-              <div class="space-y-0.5 min-w-0">
-                <p class="text-neutral-300 leading-snug">
-                  <strong class="text-white font-medium">Eleanor</strong> modified order <span class="font-mono text-emerald-400 whitespace-nowrap">#LCK-202611-304918</span> for Julian Stewart (₹2,86,350)
-                </p>
-                <span class="text-[10px] font-mono text-neutral-400 block">2 days, 6 hours ago</span>
-              </div>
-            </div>
-            <div class="flex items-start gap-2.5 text-xs">
-              <span class="w-1.5 h-1.5 rounded-full bg-neutral-500 mt-1.5 flex-shrink-0"></span>
-              <div class="space-y-0.5 min-w-0">
-                <p class="text-neutral-300 leading-snug">
-                  <strong class="text-white font-medium">Eleanor</strong> modified <span class="text-champagne-300 font-medium">Celeste Herringbone Chain in 925 Silver</span>
-                </p>
-                <span class="text-[10px] font-mono text-neutral-400 block">5 days, 21 hours ago</span>
-              </div>
-            </div>
-            {% endfor %}
-          </div>
-        </div>
-      </div>
-    </section>
-    <!-- END: Main Data Section -->
-
-    <!-- BEGIN: Console Footer -->
-    <footer class="border-t border-obsidian-700/60 bg-obsidian-900/40 px-4 sm:px-6 py-4 text-xs font-mono text-neutral-400 flex flex-col sm:flex-row items-center justify-between gap-3 text-center sm:text-left rounded-xl" data-purpose="console-footer">
-      <div class="flex flex-wrap items-center justify-center sm:justify-start gap-2">
-        <span>Luckjary Haute Joaillerie © 2026</span>
-        <span class="hidden sm:inline">•</span>
-        <span>Atelier OMS Core 4.19</span>
-      </div>
-      <div class="flex flex-wrap items-center justify-center gap-3 text-[11px]">
-        <span class="flex items-center gap-1.5 text-emerald-400 whitespace-nowrap">
-          <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
-          925 Sterling Vault Encrypted
-        </span>
-        <span class="text-neutral-400 whitespace-nowrap">INR Base Currency</span>
-      </div>
-    </footer>
-    <!-- END: Console Footer -->
-
+{% load i18n static tz %}<!DOCTYPE html><html class="dark" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Luckjary Haute Atelier | Admin Management Console</title>
+<!-- Google Fonts: Cormorant Garamond for luxury serif accents, Plus Jakarta Sans for UI, JetBrains Mono for codes -->
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&amp;family=JetBrains+Mono:wght@400;500;600&amp;family=Plus+Jakarta+Sans:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">
+<!-- Tailwind CSS v3 with Plugins -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Custom Configuration -->
+<script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            obsidian: {
+              950: '#07080a',
+              900: '#0c0d10',
+              850: '#111317',
+              800: '#171920',
+              700: '#21242d',
+              600: '#2f3440',
+            },
+            champagne: {
+              100: '#fbf7ee',
+              200: '#f4ebd4',
+              300: '#ebd9b0',
+              400: '#dfc287',
+              500: '#cca55a',
+            },
+            emerald: {
+              400: '#34d399',
+              500: '#10b981',
+              600: '#059669',
+              950: '#022c22',
+            }
+          },
+          fontFamily: {
+            serif: ['"Cormorant Garamond"', 'Georgia', 'serif'],
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace'],
+          }
+        }
+      }
+    }
+  </script>
+<!-- BEGIN: Custom Luxury Theme Styles -->
+<style data-purpose="custom-scrollbars">
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #0c0d10;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #21242d;
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #2f3440;
+    }
+    /* Universal Underline Killer: Wipe out all default link underlines */
+    a, a *, a:hover, a:hover *, a:focus, a:active {
+      text-decoration: none !important;
+      text-decoration-line: none !important;
+    }
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #0c0d10;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #21242d;
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #2f3440;
+    }
+  </style>
+<style data-purpose="glow-and-surfaces">
+    .card-surface {
+      background: linear-gradient(145deg, rgba(23, 25, 32, 0.7) 0%, rgba(17, 19, 23, 0.95) 100%);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      backdrop-filter: blur(12px);
+    }
+    .card-surface:hover {
+      border-color: rgba(255, 255, 255, 0.1);
+    }
+    .glow-emerald {
+      box-shadow: 0 0 20px -3px rgba(16, 185, 129, 0.25);
+    }
+    .luxury-gold-border {
+      border: 1px solid rgba(204, 165, 90, 0.28);
+    }
+    .glass-input {
+      background: rgba(17, 19, 23, 0.85);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .glass-input:focus {
+      border-color: rgba(16, 185, 129, 0.6);
+      box-shadow: 0 0 0 1px rgba(16, 185, 129, 0.4);
+    }
+  </style>
+<!-- END: Custom Luxury Theme Styles -->
+</head>
+<body class="bg-obsidian-950 text-neutral-300 font-sans antialiased selection:bg-emerald-500/30 selection:text-emerald-300 min-h-screen flex">
+<!-- BEGIN: Sidebar Navigation -->
+<aside class="hidden lg:flex w-64 flex-shrink-0 bg-obsidian-900 border-r border-obsidian-700/60 min-h-screen flex-col justify-between select-none sticky top-0 h-screen overflow-y-auto" data-purpose="primary-sidebar" id="desktop-sidebar"><div class="flex flex-col flex-1">
+  <!-- Sidebar Brand Header -->
+  <div class="px-5 pt-6 pb-5">
+    <a href="{% url 'admin:index' %}" class="block group" style="text-decoration: none !important;">
+      <div class="tracking-[0.2em] text-[13px] font-bold text-neutral-100 uppercase font-sans leading-none">LUCKJARY</div>
+      <div class="tracking-[0.28em] text-[9px] text-neutral-400 font-sans uppercase mt-1 font-medium">HAUTE ATELIER</div>
+    </a>
   </div>
+
+  <!-- Navigation Sections -->
+  <nav class="px-3 space-y-5 text-xs font-medium overflow-y-auto flex-1">
+    <!-- Group: NAVIGATION -->
+    <div>
+      <div class="px-3 pb-2 text-[10px] uppercase font-sans tracking-[0.18em] text-neutral-500 font-semibold">NAVIGATION</div>
+      <ul class="space-y-1">
+        <li>
+          <a href="{% url 'admin:index' %}" class="flex items-center justify-between px-3 py-2 rounded-xl bg-obsidian-800/80 text-emerald-400 font-medium border border-emerald-500/30 shadow-sm" style="text-decoration: none !important;">
+            <span class="flex items-center gap-3">
+              <svg class="w-4 h-4 text-emerald-400 stroke-[1.8]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
+              Home
+            </span>
+          </a>
+        </li>
+        <li>
+          <a href="{% url 'admin:orders_order_changelist' %}" class="flex items-center justify-between px-3 py-2 rounded-lg text-neutral-400 hover:text-neutral-100 hover:bg-obsidian-800 transition" style="text-decoration: none !important;">
+            <span class="flex items-center gap-3">
+              <svg class="w-4 h-4 stroke-[1.8] text-neutral-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg>
+              Orders
+            </span>
+            <span class="px-2 py-0.5 text-[10px] font-mono rounded-full bg-obsidian-800 text-neutral-400 border border-obsidian-700/60">{{ total_orders|default:"4" }}</span>
+          </a>
+        </li>
+        <li>
+          <a href="{% url 'admin:orders_coupon_changelist' %}" class="flex items-center justify-between px-3 py-2 rounded-lg text-neutral-400 hover:text-neutral-100 hover:bg-obsidian-800 transition" style="text-decoration: none !important;">
+            <span class="flex items-center gap-3">
+              <svg class="w-4 h-4 stroke-[1.8] text-neutral-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 14l6-6m-5.5.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zm8 5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0z"></path></svg>
+              Discounts
+            </span>
+          </a>
+        </li>
+      </ul>
+    </div>
+
+    <!-- Group: PRODUCTS & INVENTORY -->
+    <div>
+      <div class="px-3 pb-2 text-[10px] uppercase font-sans tracking-[0.18em] text-neutral-500 font-semibold">PRODUCTS &amp; INVENTORY</div>
+      <ul class="space-y-1">
+        <li>
+          <a href="{% url 'admin:catalog_product_changelist' %}" class="flex items-center justify-between px-3 py-2 rounded-lg text-neutral-400 hover:text-neutral-100 hover:bg-obsidian-800 transition" style="text-decoration: none !important;">
+            <span class="flex items-center gap-3">
+              <svg class="w-4 h-4 stroke-[1.8] text-neutral-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 2l8 4.5v11L12 22 4 17.5v-11L12 2z"></path></svg>
+              Vault Products
+            </span>
+            <span class="px-2 py-0.5 text-[10px] font-mono rounded-full bg-obsidian-800 text-neutral-400 border border-obsidian-700/60">{{ total_products|default:"17" }}</span>
+          </a>
+        </li>
+        <li>
+          <a href="{% url 'admin:catalog_collection_changelist' %}" class="flex items-center justify-between px-3 py-2 rounded-lg text-neutral-400 hover:text-neutral-100 hover:bg-obsidian-800 transition" style="text-decoration: none !important;">
+            <span class="flex items-center gap-3">
+              <svg class="w-4 h-4 stroke-[1.8] text-neutral-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"></rect><rect x="14" y="3" width="7" height="7" rx="1"></rect><rect x="14" y="14" width="7" height="7" rx="1"></rect><rect x="3" y="14" width="7" height="7" rx="1"></rect></svg>
+              Collections
+            </span>
+          </a>
+        </li>
+        <li>
+          <a href="{% url 'admin:catalog_category_changelist' %}" class="flex items-center justify-between px-3 py-2 rounded-lg text-neutral-400 hover:text-neutral-100 hover:bg-obsidian-800 transition" style="text-decoration: none !important;">
+            <span class="flex items-center gap-3">
+              <svg class="w-4 h-4 stroke-[1.8] text-neutral-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"></path></svg>
+              Categories
+            </span>
+          </a>
+        </li>
+        <li>
+          <a href="{% url 'admin:catalog_material_changelist' %}" class="flex items-center justify-between px-3 py-2 rounded-lg text-neutral-400 hover:text-neutral-100 hover:bg-obsidian-800 transition" style="text-decoration: none !important;">
+            <span class="flex items-center gap-3">
+              <svg class="w-4 h-4 stroke-[1.8] text-neutral-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"></circle><path stroke-linecap="round" stroke-linejoin="round" d="M12 2v2m0 16v2m10-10h-2M4 12H2m15.07-7.07l-1.41 1.41M8.34 15.66l-1.41 1.41m0-10.14l1.41 1.41m7.32 7.32l1.41 1.41"></path></svg>
+              Materials
+            </span>
+          </a>
+        </li>
+        <li>
+          <a href="{% url 'admin:catalog_product_changelist' %}" class="flex items-center justify-between px-3 py-2 rounded-lg text-neutral-400 hover:text-neutral-100 hover:bg-obsidian-800 transition" style="text-decoration: none !important;">
+            <span class="flex items-center gap-3">
+              <svg class="w-4 h-4 stroke-[1.8] text-neutral-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"></path></svg>
+              Product Reviews
+            </span>
+          </a>
+        </li>
+      </ul>
+    </div>
+
+    <!-- Group: CUSTOMERS -->
+    <div>
+      <div class="px-3 pb-2 text-[10px] uppercase font-sans tracking-[0.18em] text-neutral-500 font-semibold">CUSTOMERS</div>
+      <ul class="space-y-1">
+        <li>
+          <a href="{% url 'admin:accounts_customuser_changelist' %}" class="flex items-center justify-between px-3 py-2 rounded-lg text-neutral-400 hover:text-neutral-100 hover:bg-obsidian-800 transition" style="text-decoration: none !important;">
+            <span class="flex items-center gap-3">
+              <svg class="w-4 h-4 stroke-[1.8] text-neutral-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+              Customers
+            </span>
+          </a>
+        </li>
+        <li>
+          <a href="{% url 'admin:accounts_customuser_changelist' %}" class="flex items-center justify-between px-3 py-2 rounded-lg text-neutral-400 hover:text-neutral-100 hover:bg-obsidian-800 transition" style="text-decoration: none !important;">
+            <span class="flex items-center gap-3">
+              <svg class="w-4 h-4 stroke-[1.8] text-neutral-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+              Subscribers
+            </span>
+          </a>
+        </li>
+      </ul>
+    </div>
+
+    <!-- Group: ENGAGEMENT -->
+    <div>
+      <div class="px-3 pb-2 text-[10px] uppercase font-sans tracking-[0.18em] text-neutral-500 font-semibold">ENGAGEMENT</div>
+      <ul class="space-y-1">
+        <li>
+          <a href="{% url 'admin:orders_order_changelist' %}" class="flex items-center justify-between px-3 py-2 rounded-lg text-neutral-400 hover:text-neutral-100 hover:bg-obsidian-800 transition" style="text-decoration: none !important;">
+            <span class="flex items-center gap-3">
+              <svg class="w-4 h-4 stroke-[1.8] text-neutral-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg>
+              Client Inquiries
+            </span>
+          </a>
+        </li>
+      </ul>
+    </div>
+
+    <!-- Group: SALES CHANNELS -->
+    <div>
+      <div class="px-3 pb-2 text-[10px] uppercase font-sans tracking-[0.18em] text-neutral-500 font-semibold">SALES CHANNELS</div>
+      <ul class="space-y-1">
+        <li>
+          <a href="{% url 'orders:oms_dashboard' %}" class="flex items-center justify-between px-3 py-2 rounded-lg text-neutral-300 hover:text-neutral-100 hover:bg-obsidian-800 transition" style="text-decoration: none !important;">
+            <span class="flex items-center gap-3">
+              <svg class="w-4 h-4 stroke-[1.8] text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 7l8 4 8-4M4 12l8 4 8-4M4 17l8 4 8-4"></path></svg>
+              Atelier OMS
+            </span>
+            <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+          </a>
+        </li>
+        <li>
+          <a href="/" target="_blank" class="flex items-center justify-between px-3 py-2 rounded-lg text-neutral-400 hover:text-neutral-100 hover:bg-obsidian-800 transition" style="text-decoration: none !important;">
+            <span class="flex items-center gap-3">
+              <svg class="w-4 h-4 stroke-[1.8] text-neutral-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><path stroke-linecap="round" stroke-linejoin="round" d="M2 12h20M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"></path></svg>
+              Online Store
+            </span>
+            <svg class="w-3.5 h-3.5 text-neutral-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </nav>
 </div>
 
-<script data-purpose="dashboard-interactivity">
-function copyOrderNumber(orderNum, btn) {
-  if (navigator.clipboard) {
-    navigator.clipboard.writeText(orderNum).then(() => {
-      const originalText = btn.innerHTML;
-      btn.innerHTML = '<span>Copied!</span>';
-      setTimeout(() => { btn.innerHTML = originalText; }, 1500);
-    });
+<!-- Sidebar Bottom / Settings & User Profile Footer -->
+<div class="border-t border-obsidian-700/60 bg-obsidian-950/40 p-3 space-y-3">
+  <div>
+    <div class="px-3 pb-1 text-[10px] uppercase font-sans tracking-[0.18em] text-neutral-500 font-semibold">SETTINGS &amp; PREFERENCES</div>
+    <div class="flex items-center justify-between px-3 py-2 rounded-lg hover:bg-obsidian-800 cursor-pointer transition">
+      <span class="flex items-center gap-3 text-xs text-neutral-300 font-medium">
+        <svg class="w-4 h-4 stroke-[1.8] text-neutral-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+        Settings
+      </span>
+      <span class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-obsidian-800 text-neutral-300 border border-obsidian-700/80">₹ INR</span>
+    </div>
+  </div>
+
+  <!-- Live Status Link -->
+  <div class="px-3 flex items-center gap-2">
+    <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+    <a href="/" target="_blank" class="text-[11px] text-neutral-400 hover:text-neutral-200 transition font-sans inline-flex items-center gap-1" style="text-decoration: none !important;">
+      Luckjary Boutique Online <span class="text-[10px]">↗</span>
+    </a>
+  </div>
+
+  <!-- User Profile Row -->
+  <div class="px-2 pt-1 flex items-center justify-between border-t border-obsidian-700/40">
+    <div class="flex items-center gap-2.5 min-w-0">
+      <div class="w-7 h-7 rounded-full bg-[#dab36a] text-obsidian-950 font-bold text-xs flex items-center justify-center shrink-0 font-sans shadow-sm">
+        {{ request.user.first_name|slice:":1"|default:"E"|upper }}
+      </div>
+      <div class="flex flex-col text-left leading-tight truncate">
+        <span class="text-xs font-semibold text-neutral-100 truncate font-sans">{{ request.user.first_name|default:"Eleanor" }}</span>
+        <span class="text-[9px] uppercase tracking-wider font-sans text-neutral-400 font-medium">Director</span>
+      </div>
+    </div>
+    <form method="post" action="{% url 'admin:logout' %}" class="inline m-0 p-0">
+      {% csrf_token %}
+      <button type="submit" aria-label="Log Out" class="p-1.5 rounded-lg text-neutral-400 hover:text-rose-400 hover:bg-obsidian-800 transition shrink-0 bg-transparent border-0 cursor-pointer" title="Log Out">
+        <svg class="w-4 h-4 stroke-[1.8]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
+      </button>
+    </form>
+  </div>
+</div></aside>
+<!-- BEGIN: Mobile Slide-Over Drawer -->
+<div class="fixed inset-0 z-50 flex hidden lg:hidden" id="mobile-drawer">
+<div class="fixed inset-0 bg-obsidian-950/80 backdrop-blur-sm transition-opacity duration-300" id="mobile-drawer-backdrop"></div>
+<div class="relative w-72 max-w-[85vw] bg-obsidian-900 border-r border-obsidian-700/60 h-full flex flex-col justify-between z-10 shadow-2xl overflow-y-auto"><div class="flex flex-col flex-1">
+  <!-- Mobile Header -->
+  <div class="px-5 py-4 border-b border-obsidian-700/40 flex items-center justify-between">
+    <div class="flex flex-col">
+      <span class="tracking-[0.2em] text-xs font-bold text-neutral-100 uppercase font-sans">LUCKJARY</span>
+      <span class="tracking-[0.28em] text-[9px] text-neutral-400 font-sans uppercase mt-0.5">HAUTE ATELIER</span>
+    </div>
+    <button aria-label="Close Menu" class="p-1.5 rounded-lg text-neutral-400 hover:text-white hover:bg-obsidian-800 transition" id="close-mobile-drawer">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+    </button>
+  </div>
+
+  <!-- Mobile Navigation Sections -->
+  <nav class="px-3 py-4 space-y-5 text-xs font-medium overflow-y-auto flex-1">
+    <!-- Group: NAVIGATION -->
+    <div>
+      <div class="px-3 pb-2 text-[10px] uppercase font-sans tracking-[0.18em] text-neutral-500 font-semibold">NAVIGATION</div>
+      <ul class="space-y-1">
+        <li>
+          <a href="{% url 'admin:index' %}" class="flex items-center justify-between px-3 py-2 rounded-xl bg-obsidian-800/80 text-emerald-400 font-medium border border-emerald-500/30 shadow-sm" style="text-decoration: none !important;">
+            <span class="flex items-center gap-3">
+              <svg class="w-4 h-4 text-emerald-400 stroke-[1.8]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
+              Home
+            </span>
+          </a>
+        </li>
+        <li>
+          <a href="{% url 'admin:orders_order_changelist' %}" class="flex items-center justify-between px-3 py-2 rounded-lg text-neutral-400 hover:text-neutral-100 hover:bg-obsidian-800 transition" style="text-decoration: none !important;">
+            <span class="flex items-center gap-3">
+              <svg class="w-4 h-4 stroke-[1.8] text-neutral-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg>
+              Orders
+            </span>
+            <span class="px-2 py-0.5 text-[10px] font-mono rounded-full bg-obsidian-800 text-neutral-400 border border-obsidian-700/60">{{ total_orders|default:"4" }}</span>
+          </a>
+        </li>
+        <li>
+          <a href="{% url 'admin:orders_coupon_changelist' %}" class="flex items-center justify-between px-3 py-2 rounded-lg text-neutral-400 hover:text-neutral-100 hover:bg-obsidian-800 transition" style="text-decoration: none !important;">
+            <span class="flex items-center gap-3">
+              <svg class="w-4 h-4 stroke-[1.8] text-neutral-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 14l6-6m-5.5.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zm8 5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0z"></path></svg>
+              Discounts
+            </span>
+          </a>
+        </li>
+      </ul>
+    </div>
+
+    <!-- Group: PRODUCTS & INVENTORY -->
+    <div>
+      <div class="px-3 pb-2 text-[10px] uppercase font-sans tracking-[0.18em] text-neutral-500 font-semibold">PRODUCTS &amp; INVENTORY</div>
+      <ul class="space-y-1">
+        <li>
+          <a href="{% url 'admin:catalog_product_changelist' %}" class="flex items-center justify-between px-3 py-2 rounded-lg text-neutral-400 hover:text-neutral-100 hover:bg-obsidian-800 transition" style="text-decoration: none !important;">
+            <span class="flex items-center gap-3">
+              <svg class="w-4 h-4 stroke-[1.8] text-neutral-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 2l8 4.5v11L12 22 4 17.5v-11L12 2z"></path></svg>
+              Vault Products
+            </span>
+            <span class="px-2 py-0.5 text-[10px] font-mono rounded-full bg-obsidian-800 text-neutral-400 border border-obsidian-700/60">{{ total_products|default:"17" }}</span>
+          </a>
+        </li>
+        <li>
+          <a href="{% url 'admin:catalog_collection_changelist' %}" class="flex items-center justify-between px-3 py-2 rounded-lg text-neutral-400 hover:text-neutral-100 hover:bg-obsidian-800 transition" style="text-decoration: none !important;">
+            <span class="flex items-center gap-3">
+              <svg class="w-4 h-4 stroke-[1.8] text-neutral-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"></rect><rect x="14" y="3" width="7" height="7" rx="1"></rect><rect x="14" y="14" width="7" height="7" rx="1"></rect><rect x="3" y="14" width="7" height="7" rx="1"></rect></svg>
+              Collections
+            </span>
+          </a>
+        </li>
+        <li>
+          <a href="{% url 'admin:catalog_category_changelist' %}" class="flex items-center justify-between px-3 py-2 rounded-lg text-neutral-400 hover:text-neutral-100 hover:bg-obsidian-800 transition" style="text-decoration: none !important;">
+            <span class="flex items-center gap-3">
+              <svg class="w-4 h-4 stroke-[1.8] text-neutral-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"></path></svg>
+              Categories
+            </span>
+          </a>
+        </li>
+        <li>
+          <a href="{% url 'admin:catalog_material_changelist' %}" class="flex items-center justify-between px-3 py-2 rounded-lg text-neutral-400 hover:text-neutral-100 hover:bg-obsidian-800 transition" style="text-decoration: none !important;">
+            <span class="flex items-center gap-3">
+              <svg class="w-4 h-4 stroke-[1.8] text-neutral-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"></circle><path stroke-linecap="round" stroke-linejoin="round" d="M12 2v2m0 16v2m10-10h-2M4 12H2m15.07-7.07l-1.41 1.41M8.34 15.66l-1.41 1.41m0-10.14l1.41 1.41m7.32 7.32l1.41 1.41"></path></svg>
+              Materials
+            </span>
+          </a>
+        </li>
+        <li>
+          <a href="{% url 'admin:catalog_product_changelist' %}" class="flex items-center justify-between px-3 py-2 rounded-lg text-neutral-400 hover:text-neutral-100 hover:bg-obsidian-800 transition" style="text-decoration: none !important;">
+            <span class="flex items-center gap-3">
+              <svg class="w-4 h-4 stroke-[1.8] text-neutral-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"></path></svg>
+              Product Reviews
+            </span>
+          </a>
+        </li>
+      </ul>
+    </div>
+
+    <!-- Group: CUSTOMERS -->
+    <div>
+      <div class="px-3 pb-2 text-[10px] uppercase font-sans tracking-[0.18em] text-neutral-500 font-semibold">CUSTOMERS</div>
+      <ul class="space-y-1">
+        <li>
+          <a href="{% url 'admin:accounts_customuser_changelist' %}" class="flex items-center justify-between px-3 py-2 rounded-lg text-neutral-400 hover:text-neutral-100 hover:bg-obsidian-800 transition" style="text-decoration: none !important;">
+            <span class="flex items-center gap-3">
+              <svg class="w-4 h-4 stroke-[1.8] text-neutral-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+              Customers
+            </span>
+          </a>
+        </li>
+        <li>
+          <a href="{% url 'admin:accounts_customuser_changelist' %}" class="flex items-center justify-between px-3 py-2 rounded-lg text-neutral-400 hover:text-neutral-100 hover:bg-obsidian-800 transition" style="text-decoration: none !important;">
+            <span class="flex items-center gap-3">
+              <svg class="w-4 h-4 stroke-[1.8] text-neutral-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+              Subscribers
+            </span>
+          </a>
+        </li>
+      </ul>
+    </div>
+
+    <!-- Group: ENGAGEMENT -->
+    <div>
+      <div class="px-3 pb-2 text-[10px] uppercase font-sans tracking-[0.18em] text-neutral-500 font-semibold">ENGAGEMENT</div>
+      <ul class="space-y-1">
+        <li>
+          <a href="{% url 'admin:orders_order_changelist' %}" class="flex items-center justify-between px-3 py-2 rounded-lg text-neutral-400 hover:text-neutral-100 hover:bg-obsidian-800 transition" style="text-decoration: none !important;">
+            <span class="flex items-center gap-3">
+              <svg class="w-4 h-4 stroke-[1.8] text-neutral-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg>
+              Client Inquiries
+            </span>
+          </a>
+        </li>
+      </ul>
+    </div>
+
+    <!-- Group: SALES CHANNELS -->
+    <div>
+      <div class="px-3 pb-2 text-[10px] uppercase font-sans tracking-[0.18em] text-neutral-500 font-semibold">SALES CHANNELS</div>
+      <ul class="space-y-1">
+        <li>
+          <a href="{% url 'orders:oms_dashboard' %}" class="flex items-center justify-between px-3 py-2 rounded-lg text-neutral-300 hover:text-neutral-100 hover:bg-obsidian-800 transition" style="text-decoration: none !important;">
+            <span class="flex items-center gap-3">
+              <svg class="w-4 h-4 stroke-[1.8] text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 7l8 4 8-4M4 12l8 4 8-4M4 17l8 4 8-4"></path></svg>
+              Atelier OMS
+            </span>
+            <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+          </a>
+        </li>
+        <li>
+          <a href="/" target="_blank" class="flex items-center justify-between px-3 py-2 rounded-lg text-neutral-400 hover:text-neutral-100 hover:bg-obsidian-800 transition" style="text-decoration: none !important;">
+            <span class="flex items-center gap-3">
+              <svg class="w-4 h-4 stroke-[1.8] text-neutral-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><path stroke-linecap="round" stroke-linejoin="round" d="M2 12h20M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"></path></svg>
+              Online Store
+            </span>
+            <svg class="w-3.5 h-3.5 text-neutral-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+</div>
+
+<!-- Drawer Bottom Section -->
+<div class="border-t border-obsidian-700/60 bg-obsidian-950/40 p-3 space-y-3">
+  <div>
+    <div class="px-3 pb-1 text-[10px] uppercase font-sans tracking-[0.18em] text-neutral-500 font-semibold">SETTINGS &amp; PREFERENCES</div>
+    <div class="flex items-center justify-between px-3 py-2 rounded-lg hover:bg-obsidian-800 cursor-pointer transition">
+      <span class="flex items-center gap-3 text-xs text-neutral-300 font-medium">
+        <svg class="w-4 h-4 stroke-[1.8] text-neutral-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+        Settings
+      </span>
+      <span class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-obsidian-800 text-neutral-300 border border-obsidian-700/80">₹ INR</span>
+    </div>
+  </div>
+
+  <div class="px-3 flex items-center gap-2">
+    <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+    <a href="/" target="_blank" class="text-[11px] text-neutral-400 hover:text-neutral-200 transition font-sans inline-flex items-center gap-1" style="text-decoration: none !important;">
+      Luckjary Boutique Online <span class="text-[10px]">↗</span>
+    </a>
+  </div>
+
+  <div class="px-2 pt-1 flex items-center justify-between border-t border-obsidian-700/40">
+    <div class="flex items-center gap-2.5 min-w-0">
+      <div class="w-7 h-7 rounded-full bg-[#dab36a] text-obsidian-950 font-bold text-xs flex items-center justify-center shrink-0 font-sans shadow-sm">
+        {{ request.user.first_name|slice:":1"|default:"E"|upper }}
+      </div>
+      <div class="flex flex-col text-left leading-tight truncate">
+        <span class="text-xs font-semibold text-neutral-100 truncate font-sans">{{ request.user.first_name|default:"Eleanor" }}</span>
+        <span class="text-[9px] uppercase tracking-wider font-sans text-neutral-400 font-medium">Director</span>
+      </div>
+    </div>
+    <form method="post" action="{% url 'admin:logout' %}" class="inline m-0 p-0">
+      {% csrf_token %}
+      <button type="submit" aria-label="Log Out" class="p-1.5 rounded-lg text-neutral-400 hover:text-rose-400 hover:bg-obsidian-800 transition shrink-0 bg-transparent border-0 cursor-pointer" title="Log Out">
+        <svg class="w-4 h-4 stroke-[1.8]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
+      </button>
+    </form>
+  </div>
+</div></div>
+</div>
+<!-- END: Mobile Slide-Over Drawer -->
+<!-- END: Sidebar Navigation -->
+<!-- BEGIN: Main Content Area -->
+<div class="flex-1 flex flex-col min-w-0 overflow-y-auto">
+<!-- BEGIN: Top Navigation Header -->
+<header class="h-16 border-b border-obsidian-700/60 bg-obsidian-900/60 backdrop-blur-md sticky top-0 z-30 px-4 sm:px-6 flex items-center justify-between gap-3 sm:gap-4" data-purpose="top-header">
+<!-- Mobile Hamburger & Brand Identity -->
+<div class="flex items-center gap-2 lg:hidden">
+<button aria-label="Open navigation menu" class="p-2 -ml-2 rounded-lg text-neutral-300 hover:text-white hover:bg-obsidian-800 transition" id="open-mobile-drawer">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</button>
+<div class="flex items-center gap-2">
+<div class="w-7 h-7 rounded-lg bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400">
+<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 3L2 9l10 12 10-12-10-6zM2 9h20M12 21L7 9m5 12l5-12" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"></path></svg>
+</div>
+<span class="tracking-[0.18em] text-[11px] font-bold text-neutral-100 uppercase font-sans hidden sm:inline">Luckjary</span>
+</div>
+</div>
+<!-- Search Input Container -->
+<div class="flex-1 max-w-xl min-w-0">
+<div class="relative">
+<span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-neutral-500">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</span>
+<form action="{% url 'admin:catalog_product_changelist' %}" method="get" class="m-0 p-0 relative">
+<input name="q" class="w-full glass-input text-xs text-neutral-200 placeholder-neutral-500 pl-9 pr-8 sm:pr-12 py-2 rounded-lg transition outline-none truncate" placeholder="Search orders, fine jewelry..." type="text">
+</form>
+<div class="absolute inset-y-0 right-0 pr-2.5 hidden sm:flex items-center pointer-events-none">
+<kbd class="text-[10px] font-mono text-neutral-400 bg-obsidian-800 border border-obsidian-700 px-1.5 py-0.5 rounded">⌘K</kbd>
+</div>
+</div>
+</div>
+<!-- Right Header Actions -->
+<div class="flex items-center gap-2 sm:gap-3 flex-shrink-0">
+<a class="hidden md:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium text-neutral-300 hover:text-white border border-obsidian-700 bg-obsidian-800/60 hover:bg-obsidian-800 transition" href="/" target="_blank" style="text-decoration: none !important;">
+<svg class="w-3.5 h-3.5 text-neutral-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+    Online Store
+  </a>
+<a href="{% url 'orders:oms_dashboard' %}" class="hidden sm:flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-emerald-950/40 border border-emerald-500/20 text-xs font-mono text-emerald-400 whitespace-nowrap hover:bg-emerald-950/70 transition" style="text-decoration: none !important;">
+<span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+<span class="hidden md:inline">Atelier OMS</span>
+</a>
+<div class="h-5 w-px bg-obsidian-700 hidden sm:block"></div>
+<div class="flex items-center gap-2 pl-0 sm:pl-1">
+<div class="w-8 h-8 rounded-lg bg-champagne-300/10 border border-champagne-400/30 flex items-center justify-center text-champagne-400 font-bold text-xs font-mono flex-shrink-0">
+      {{ request.user.first_name|slice:":1"|default:"E"|upper }}
+    </div>
+<div class="hidden xl:flex flex-col text-left leading-tight">
+<span class="text-xs font-semibold text-neutral-100">{{ request.user.first_name|default:"Eleanor" }}</span>
+<span class="text-[9px] tracking-widest uppercase font-mono text-champagne-400/90 font-medium">Director</span>
+</div>
+</div>
+<form method="post" action="{% url 'admin:logout' %}" class="inline m-0 p-0">
+{% csrf_token %}
+<button type="submit" class="flex items-center gap-1.5 text-xs text-neutral-400 hover:text-rose-400 p-1.5 sm:px-2 sm:py-1.5 transition bg-transparent border-0 cursor-pointer" title="Log Out">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"></path></svg>
+<span class="hidden xl:inline">Log Out</span>
+</button>
+</form>
+</div>
+</header>
+<!-- END: Top Navigation Header -->
+<!-- BEGIN: Dashboard Hero Section -->
+<main class="flex-1 p-4 sm:p-6 md:p-8 space-y-5 sm:space-y-6 md:space-y-7 max-w-[1720px] mx-auto w-full">
+<div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3.5 sm:gap-4 pb-1 sm:pb-2" data-purpose="hero-banner">
+<div>
+<h1 class="text-2xl sm:text-3xl md:text-4xl font-serif text-white tracking-wide">
+    Welcome back, {{ request.user.first_name|default:"Eleanor" }}
+  </h1>
+<p class="text-xs md:text-sm text-neutral-400 mt-1 font-sans">
+    Here's what's happening with <span class="text-neutral-200">Luckjary Haute Joaillerie</span> atelier today.
+  </p>
+</div>
+<div class="flex flex-wrap sm:flex-nowrap items-center gap-2.5 sm:gap-3 w-full sm:w-auto">
+<button onclick="window.location.href='{% url 'orders:oms_dashboard' %}'" class="flex-1 sm:flex-none inline-flex items-center justify-center gap-2 px-3.5 py-2 rounded-lg bg-obsidian-800 hover:bg-obsidian-700 text-neutral-200 text-xs font-medium border border-obsidian-700 transition shadow-sm whitespace-nowrap cursor-pointer">
+<span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+    Open OMS Console
+  </button>
+<button onclick="window.location.href='{% url 'admin:orders_order_add' %}'" class="flex-1 sm:flex-none inline-flex items-center justify-center gap-2 px-3.5 py-2 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-obsidian-950 font-semibold text-xs tracking-wide transition shadow-lg glow-emerald whitespace-nowrap cursor-pointer" style="color: #07080a !important;">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 4v16m8-8H4" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2"></path></svg>
+    Create Order
+  </button>
+</div>
+</div>
+<!-- END: Dashboard Hero Section -->
+<!-- BEGIN: Key Performance Metrics Row (4 Cards) -->
+<section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5 sm:gap-4" data-purpose="key-metrics-grid">
+<!-- Metric Card 1: Total Sales -->
+<div class="card-surface p-4 sm:p-5 rounded-xl flex flex-col justify-between relative overflow-hidden group">
+<div class="flex items-start justify-between">
+<span class="text-[11px] font-mono uppercase tracking-wider text-neutral-400">Total Sales</span>
+<span class="px-2 py-0.5 rounded-full text-[10px] font-mono font-semibold bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 whitespace-nowrap">
+              +14.2%
+            </span>
+</div>
+<div class="mt-3 sm:mt-4 mb-3">
+<div class="text-2xl sm:text-3xl font-mono font-semibold text-white tracking-tight break-words">
+              ₹{{ total_revenue_inr|default:"9,28,400" }} <span class="text-xs sm:text-sm font-sans font-normal text-neutral-400">(${{ total_revenue|default:"11,165.00" }})</span>
+</div>
+</div>
+<div class="flex items-center gap-1.5 text-[11px] text-emerald-400/90 font-medium pt-2 border-t border-obsidian-700/50">
+<svg class="w-3.5 h-3.5 text-emerald-400 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path clip-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" fill-rule="evenodd"></path></svg>
+<span class="truncate">Stripe Luxury Payments Captured</span>
+</div>
+</div>
+<!-- Metric Card 2: Total Orders -->
+<div class="card-surface p-4 sm:p-5 rounded-xl flex flex-col justify-between group">
+<div class="flex items-start justify-between">
+<span class="text-[11px] font-mono uppercase tracking-wider text-neutral-400">Total Orders</span>
+<span class="text-[10px] font-mono text-neutral-500 tracking-wider whitespace-nowrap">ALL-TIME</span>
+</div>
+<div class="mt-3 sm:mt-4 mb-3">
+<div class="text-2xl sm:text-3xl font-mono font-semibold text-white tracking-tight">{{ total_orders|default:"4" }}</div>
+</div>
+<div class="pt-2 border-t border-obsidian-700/50">
+<a class="text-[11px] text-neutral-400 hover:text-champagne-300 inline-flex items-center gap-1 transition whitespace-nowrap" href="{% url 'admin:orders_order_changelist' %}" style="text-decoration: none !important;">
+              View all orders <span class="text-champagne-400">→</span>
+</a>
+</div>
+</div>
+<!-- Metric Card 3: Orders To Fulfill (Needs Action) -->
+<div class="card-surface luxury-gold-border p-4 sm:p-5 rounded-xl flex flex-col justify-between relative bg-gradient-to-br from-obsidian-850 to-amber-950/20">
+<div class="flex items-start justify-between">
+<span class="text-[11px] font-mono uppercase tracking-wider text-champagne-300">Orders to Fulfill</span>
+<span class="px-2 py-0.5 rounded text-[10px] font-mono font-semibold bg-amber-500/20 text-amber-300 border border-amber-500/40 whitespace-nowrap">
+              NEEDS ACTION
+            </span>
+</div>
+<div class="mt-3 sm:mt-4 mb-3">
+<div class="text-2xl sm:text-3xl font-mono font-bold text-champagne-200 tracking-tight">1</div>
+</div>
+<div class="pt-2 border-t border-obsidian-700/50">
+<a class="text-[11px] text-amber-300/90 hover:text-amber-200 inline-flex items-center gap-1 transition whitespace-nowrap" href="{% url 'admin:orders_order_changelist' %}?status__exact=PENDING" style="text-decoration: none !important;">
+              Open fulfillment queue <span class="text-amber-400">&rarr;</span>
+</a>
+</div>
+</div>
+<!-- Metric Card 4: Average Order Value -->
+<div class="card-surface p-4 sm:p-5 rounded-xl flex flex-col justify-between group">
+<div class="flex items-start justify-between">
+<span class="text-[11px] font-mono uppercase tracking-wider text-neutral-400">Average Order Value</span>
+<span class="text-[10px] font-mono text-neutral-500 whitespace-nowrap">AOV</span>
+</div>
+<div class="mt-3 sm:mt-4 mb-3">
+<div class="text-2xl sm:text-3xl font-mono font-semibold text-white tracking-tight break-words">
+              ₹2,32,100 <span class="text-xs font-sans text-neutral-400">($2,791.25)</span>
+</div>
+</div>
+<div class="pt-2 border-t border-obsidian-700/50 text-[11px] text-neutral-400">
+            Fine 925 jewelry cart average
+          </div>
+</div>
+</section>
+<!-- END: Key Performance Metrics Row -->
+<!-- BEGIN: Operational Row (Things To Do & Atelier Infrastructure) -->
+<section class="grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-5" data-purpose="operational-overview">
+<!-- Left: Things To Do (7 Cols on desktop) -->
+<div class="lg:col-span-7 card-surface rounded-xl p-4 sm:p-6 flex flex-col justify-between space-y-3.5 sm:space-y-4">
+<div class="flex items-center justify-between pb-3 border-b border-obsidian-700/60">
+<div class="flex items-center gap-2">
+<svg class="w-4 h-4 text-champagne-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+<h2 class="text-sm font-semibold text-white tracking-wide">Things to do</h2>
+</div>
+<span class="px-2.5 py-0.5 rounded-full text-[10px] font-mono font-semibold bg-amber-500/15 text-amber-300 border border-amber-500/30 whitespace-nowrap inline-flex items-center">
+              {{ unfulfilled_count|default:"1" }} pending
+            </span>
+</div>
+<!-- Pending Item 1: Orders awaiting Jeweler QA -->
+<div class="p-3.5 sm:p-4 rounded-lg bg-obsidian-850/80 border border-obsidian-700/70 flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-3.5">
+<div class="flex items-start gap-3 min-w-0">
+<div class="p-2.5 rounded-lg bg-amber-500/10 border border-amber-500/30 text-amber-400 mt-0.5 flex-shrink-0">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m4 10v4m8-4v4" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"></path></svg>
+</div>
+<div class="min-w-0">
+<h3 class="text-xs font-semibold text-neutral-100">{{ unfulfilled_count|default:"1" }} Orders to Fulfill</h3>
+<p class="text-[11px] text-neutral-400 mt-0.5 leading-relaxed">Orders awaiting sterling silver jeweler QA &amp; bespoke dispatch.</p>
+</div>
+</div>
+<button onclick="window.location.href='{% url 'admin:orders_order_changelist' %}?status__exact=PENDING'" class="w-full sm:w-auto px-3.5 py-1.5 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-obsidian-950 font-semibold text-xs tracking-wide transition text-center whitespace-nowrap glow-emerald flex-shrink-0 cursor-pointer" style="color: #07080a !important;">
+              Fulfill orders
+            </button>
+</div>
+<!-- Pending Item 2: Courier Logistics Sync -->
+<div class="p-3.5 sm:p-4 rounded-lg bg-obsidian-850/80 border border-obsidian-700/70 flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-3.5">
+<div class="flex items-start gap-3 min-w-0">
+<div class="p-2.5 rounded-lg bg-blue-500/10 border border-blue-500/30 text-blue-400 mt-0.5 flex-shrink-0">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"></path></svg>
+</div>
+<div class="min-w-0">
+<h3 class="text-xs font-semibold text-neutral-100">Courier Logistics Sync</h3>
+<p class="text-[11px] text-neutral-400 mt-0.5 leading-relaxed">Live FedEx Luxury &amp; armored courier dispatch telemetry active.</p>
+</div>
+</div>
+<button onclick="window.location.href='{% url 'orders:oms_dashboard' %}'" class="w-full sm:w-auto px-3.5 py-1.5 rounded-lg bg-obsidian-800 hover:bg-obsidian-700 text-neutral-200 border border-obsidian-700 text-xs font-medium transition text-center whitespace-nowrap flex-shrink-0 cursor-pointer">
+              Launch OMS →
+            </button>
+</div>
+</div>
+<!-- Right: Atelier Infrastructure (5 Cols on desktop) -->
+<div class="lg:col-span-5 card-surface rounded-xl p-4 sm:p-6 flex flex-col justify-between">
+<div class="flex items-center justify-between pb-3 border-b border-obsidian-700/60">
+<h2 class="text-sm font-semibold text-white tracking-wide">Atelier Infrastructure</h2>
+<span class="px-2.5 py-0.5 rounded-full text-[10px] font-mono text-emerald-400 bg-emerald-950/60 border border-emerald-500/30 flex items-center gap-1.5 whitespace-nowrap shrink-0">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+              Optimal
+            </span>
+</div>
+<div class="space-y-3 my-3">
+<!-- Infra item 1 -->
+<div class="flex items-center justify-between text-xs gap-3">
+<div class="flex items-center gap-2 min-w-0">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-400 shrink-0"></span>
+<span class="font-medium text-neutral-200 truncate">Stripe Luxury Payments</span>
+<span class="text-[10px] text-neutral-500 font-mono hidden sm:inline shrink-0">(Webhooks &amp; captured receipts)</span>
+</div>
+<span class="whitespace-nowrap shrink-0 px-2.5 py-1 text-xs font-mono bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 rounded">Live</span>
+</div>
+<!-- Infra item 2 -->
+<div class="flex items-center justify-between text-xs gap-3">
+<div class="flex items-center gap-2 min-w-0">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-400 shrink-0"></span>
+<span class="font-medium text-neutral-200 truncate">WhiteNoise Edge CDN</span>
+<span class="text-[10px] text-neutral-500 font-mono hidden sm:inline shrink-0">(Static fonts &amp; styles)</span>
+</div>
+<span class="whitespace-nowrap shrink-0 px-2.5 py-1 text-xs font-mono bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 rounded">Active</span>
+</div>
+<!-- Infra item 3 -->
+<div class="flex items-center justify-between text-xs gap-3">
+<div class="flex items-center gap-2 min-w-0">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-400 shrink-0"></span>
+<span class="font-medium text-neutral-200 truncate">30-Day Cookie Sessions</span>
+<span class="text-[10px] text-neutral-500 font-mono hidden sm:inline shrink-0">(Cryptographically signed)</span>
+</div>
+<span class="whitespace-nowrap shrink-0 px-2.5 py-1 text-xs font-mono bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 rounded">Enabled</span>
+</div>
+<!-- Infra item 4 -->
+<div class="flex items-center justify-between text-xs gap-3">
+<div class="flex items-center gap-2 min-w-0">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-400 shrink-0"></span>
+<span class="font-medium text-neutral-200 truncate">Armored Courier Dispatch</span>
+<span class="text-[10px] text-neutral-500 font-mono hidden sm:inline shrink-0">(FedEx &amp; Ferrari VIP)</span>
+</div>
+<span class="whitespace-nowrap shrink-0 px-2.5 py-1 text-xs font-mono bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 rounded">Active</span>
+</div>
+</div>
+<div class="pt-2 border-t border-obsidian-700/40 text-[10px] font-mono text-neutral-500 flex justify-between items-center">
+<span class="whitespace-nowrap">Security Layer 1.3 TLS</span>
+<span class="whitespace-nowrap">Uptime 99.99%</span>
+</div>
+</div>
+</section>
+<!-- END: Operational Row -->
+<!-- BEGIN: Main Data Section (Recent Orders Table & Quicklinks / Timeline) -->
+<section class="grid grid-cols-1 xl:grid-cols-12 gap-4 sm:gap-5 pb-6" data-purpose="table-and-quicklinks-grid">
+<!-- Left: Recent Orders Table (8 Cols on xl) -->
+<div class="xl:col-span-8 card-surface rounded-xl p-4 sm:p-6 flex flex-col justify-between overflow-hidden">
+<div>
+<!-- Table Header Bar -->
+<div class="flex items-center justify-between pb-3.5 sm:pb-4 border-b border-obsidian-700/60 mb-2 gap-2">
+<div class="flex items-center gap-2 sm:gap-3 min-w-0">
+<h2 class="text-sm font-semibold text-white tracking-wide whitespace-nowrap">Recent Orders</h2>
+<span class="whitespace-nowrap shrink-0 inline-flex items-center px-2 py-0.5 rounded text-[10px] font-mono bg-obsidian-800 text-neutral-400 border border-obsidian-700">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-400 mr-1.5"></span>Live Orders Vault
+</span>
+</div>
+<a class="text-xs text-neutral-400 hover:text-champagne-300 font-medium inline-flex items-center gap-1 transition whitespace-nowrap shrink-0" href="{% url 'admin:orders_order_changelist' %}" style="text-decoration: none !important;">
+                View all orders <span class="text-champagne-400">→</span>
+</a>
+</div>
+<!-- Desktop Table View (Hidden on mobile) -->
+<div class="hidden md:block overflow-x-auto -mx-4 sm:mx-0 px-4 sm:px-0">
+<table class="w-full text-left border-collapse min-w-[620px]">
+<thead>
+<tr class="border-b border-obsidian-700/60 text-[10px] font-mono uppercase tracking-wider text-neutral-400">
+<th class="py-3 px-2 font-medium">Order</th>
+<th class="py-3 px-2 font-medium">Date</th>
+<th class="py-3 px-2 font-medium">Customer</th>
+<th class="py-3 px-2 font-medium">Payment</th>
+<th class="py-3 px-2 font-medium">Fulfillment</th>
+<th class="py-3 px-2 text-right font-medium">Total</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-obsidian-700/40 text-xs">
+<!-- Row 1 -->
+<tr class="hover:bg-obsidian-800/40 transition group">
+<td class="py-3.5 px-2">
+<span class="font-mono text-emerald-400 bg-emerald-950/40 border border-emerald-500/20 px-2 py-0.5 rounded text-[11px] group-hover:border-emerald-500/40 transition whitespace-nowrap">
+#LCK-202611-304918
+</span>
+</td>
+<td class="py-3.5 px-2 text-neutral-400 font-mono text-[11px] whitespace-nowrap">Nov 12, 2026</td>
+<td class="py-3.5 px-2">
+<div class="font-medium text-neutral-100">Julian Stewart</div>
+<div class="text-[10px] text-neutral-400 font-mono">julian.stewart@icloud.com</div>
+</td>
+<td class="py-3.5 px-2 whitespace-nowrap">
+<span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-mono font-medium bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 whitespace-nowrap">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span> Paid
+</span>
+</td>
+<td class="py-3.5 px-2 whitespace-nowrap">
+<span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-mono font-medium bg-amber-500/15 text-amber-300 border border-amber-500/30 whitespace-nowrap">
+<span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span> Unfulfilled
+</span>
+</td>
+<td class="py-3.5 px-2 text-right font-mono font-medium text-neutral-100 whitespace-nowrap">
+₹2,86,350 <span class="text-[10px] text-neutral-400 block font-normal">($3,450.00)</span>
+</td>
+</tr>
+<!-- Row 2 -->
+<tr class="hover:bg-obsidian-800/40 transition group">
+<td class="py-3.5 px-2">
+<span class="font-mono text-neutral-300 bg-obsidian-800 border border-obsidian-700 px-2 py-0.5 rounded text-[11px] group-hover:border-neutral-500 transition whitespace-nowrap">
+#LCK-202611-194056
+</span>
+</td>
+<td class="py-3.5 px-2 text-neutral-400 font-mono text-[11px] whitespace-nowrap">Nov 12, 2026</td>
+<td class="py-3.5 px-2">
+<div class="font-medium text-neutral-100">Charlotte Dupré</div>
+<div class="text-[10px] text-neutral-400 font-mono">charlotte.dupre@gmail.com</div>
+</td>
+<td class="py-3.5 px-2 whitespace-nowrap">
+<span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-mono font-medium bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 whitespace-nowrap">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span> Paid
+</span>
+</td>
+<td class="py-3.5 px-2 whitespace-nowrap">
+<span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-mono font-medium bg-purple-500/15 text-purple-300 border border-purple-500/30 whitespace-nowrap">
+<span class="w-1.5 h-1.5 rounded-full bg-purple-400"></span> In Atelier QC
+</span>
+</td>
+<td class="py-3.5 px-2 text-right font-mono font-medium text-neutral-100 whitespace-nowrap">
+₹1,23,255 <span class="text-[10px] text-neutral-400 block font-normal">($1,485.00)</span>
+</td>
+</tr>
+<!-- Row 3 -->
+<tr class="hover:bg-obsidian-800/40 transition group">
+<td class="py-3.5 px-2">
+<span class="font-mono text-neutral-300 bg-obsidian-800 border border-obsidian-700 px-2 py-0.5 rounded text-[11px] group-hover:border-neutral-500 transition whitespace-nowrap">
+#LCK-202611-739201
+</span>
+</td>
+<td class="py-3.5 px-2 text-neutral-400 font-mono text-[11px] whitespace-nowrap">Nov 12, 2026</td>
+<td class="py-3.5 px-2">
+<div class="font-medium text-neutral-100">Isabella Vance</div>
+<div class="text-[10px] text-neutral-400 font-mono">isabella.vance@example.com</div>
+</td>
+<td class="py-3.5 px-2 whitespace-nowrap">
+<span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-mono font-medium bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 whitespace-nowrap">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span> Paid
+</span>
+</td>
+<td class="py-3.5 px-2 whitespace-nowrap">
+<span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-mono font-medium bg-teal-500/15 text-teal-300 border border-teal-500/30 whitespace-nowrap">
+<span class="w-1.5 h-1.5 rounded-full bg-teal-400"></span> Delivered
+</span>
+</td>
+<td class="py-3.5 px-2 text-right font-mono font-medium text-neutral-100 whitespace-nowrap">
+₹2,03,350 <span class="text-[10px] text-neutral-400 block font-normal">($2,450.00)</span>
+</td>
+</tr>
+<!-- Row 4 -->
+<tr class="hover:bg-obsidian-800/40 transition group">
+<td class="py-3.5 px-2">
+<span class="font-mono text-neutral-300 bg-obsidian-800 border border-obsidian-700 px-2 py-0.5 rounded text-[11px] group-hover:border-neutral-500 transition whitespace-nowrap">
+#LCK-202611-884102
+</span>
+</td>
+<td class="py-3.5 px-2 text-neutral-400 font-mono text-[11px] whitespace-nowrap">Nov 12, 2026</td>
+<td class="py-3.5 px-2">
+<div class="font-medium text-neutral-100">Isabella Vance</div>
+<div class="text-[10px] text-neutral-400 font-mono">isabella.vance@example.com</div>
+</td>
+<td class="py-3.5 px-2 whitespace-nowrap">
+<span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-mono font-medium bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 whitespace-nowrap">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span> Paid
+</span>
+</td>
+<td class="py-3.5 px-2 whitespace-nowrap">
+<span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-mono font-medium bg-blue-500/15 text-blue-300 border border-blue-500/30 whitespace-nowrap">
+<span class="w-1.5 h-1.5 rounded-full bg-blue-400"></span> In Transit
+</span>
+</td>
+<td class="py-3.5 px-2 text-right font-mono font-medium text-neutral-100 whitespace-nowrap">
+₹3,13,740 <span class="text-[10px] text-neutral-400 block font-normal">($3,780.00)</span>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Mobile Recent Order Cards & Status Filter Chips (Visible only on mobile < md) -->
+<div class="block md:hidden space-y-3.5 pt-1">
+<!-- Horizontal Filter Chips -->
+<div class="overflow-x-auto -mx-4 px-4 flex items-center gap-2 pb-1 no-scrollbar">
+<button class="px-3 py-1 rounded text-xs font-medium bg-neutral-200 text-obsidian-950 font-sans whitespace-nowrap shrink-0 shadow-sm">
+All <span class="ml-1 font-mono text-[10px]">4</span>
+</button>
+<button class="px-3 py-1 rounded text-xs font-medium bg-obsidian-800 text-amber-400 border border-amber-500/20 whitespace-nowrap shrink-0 flex items-center gap-1.5">
+<span class="w-1.5 h-1.5 rounded-full bg-amber-400 shrink-0"></span> Unfulfilled <span class="ml-0.5 font-mono text-[10px] text-neutral-400">1</span>
+</button>
+<button class="px-3 py-1 rounded text-xs font-medium bg-obsidian-800 text-purple-300 border border-purple-500/30 whitespace-nowrap shrink-0 flex items-center gap-1.5">
+<span class="w-1.5 h-1.5 rounded-full bg-purple-400 shrink-0"></span> In Atelier QC <span class="ml-0.5 font-mono text-[10px] text-neutral-400">1</span>
+</button>
+<button class="px-3 py-1 rounded text-xs font-medium bg-obsidian-800 text-blue-300 border border-blue-500/30 whitespace-nowrap shrink-0 flex items-center gap-1.5">
+<span class="w-1.5 h-1.5 rounded-full bg-blue-400 shrink-0"></span> In Transit <span class="ml-0.5 font-mono text-[10px] text-neutral-400">1</span>
+</button>
+</div>
+<!-- Cards List -->
+<div class="space-y-3">
+<!-- CARD 1 -->
+<div class="bg-obsidian-900 border border-obsidian-700/70 rounded-xl p-3.5 space-y-3">
+<div class="flex items-start justify-between gap-2">
+<div class="space-y-1.5 min-w-0">
+<div>
+<button class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded bg-emerald-950/60 border border-emerald-500/30 text-emerald-400 font-mono text-xs font-medium tracking-tight whitespace-nowrap shrink-0" type="button">
+<span>#LCK-202611-304918</span>
+<svg class="w-3 h-3 text-emerald-400/80 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><rect height="13" rx="2" ry="2" width="13" x="9" y="9"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+</button>
+</div>
+<div class="text-[11px] text-neutral-400 flex items-center gap-1.5 font-sans whitespace-nowrap">
+<svg class="w-3 h-3 text-neutral-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><rect height="18" rx="2" ry="2" width="18" x="3" y="4"></rect><line x1="16" x2="16" y1="2" y2="6"></line><line x1="8" x2="8" y1="2" y2="6"></line><line x1="3" x2="21" y1="10" y2="10"></line></svg>
+<span>Nov 12, 2026</span>
+<span>•</span>
+<span class="font-mono text-[10px]">16:18</span>
+</div>
+</div>
+<div class="text-right shrink-0">
+<div class="font-mono font-semibold text-neutral-100 tracking-tight whitespace-nowrap">₹3,450.00</div>
+<span class="text-[9px] uppercase tracking-wider text-neutral-400 font-medium whitespace-nowrap block">925 SILVER PIECE</span>
+</div>
+</div>
+<div class="h-px bg-obsidian-700/50"></div>
+<div class="flex items-center justify-between gap-2">
+<div class="flex items-center gap-2.5 min-w-0">
+<div class="w-8 h-8 rounded-full bg-gradient-to-tr from-obsidian-850 to-amber-950/20 border border-amber-500/30 flex items-center justify-center font-mono text-xs font-semibold text-amber-300 shrink-0">
+JS
+</div>
+<div class="min-w-0 overflow-hidden">
+<p class="text-xs font-medium text-neutral-100 leading-tight truncate">Julian Stewart</p>
+<p class="text-[10px] text-neutral-400 font-mono truncate">julian.stewart@icloud.com</p>
+</div>
+</div>
+<div class="w-7 h-7 rounded border border-obsidian-700 bg-obsidian-850 flex items-center justify-center text-champagne-400 shrink-0">
+<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 2l2.4 7.4H22l-6 4.6 2.3 7-6.3-4.6-6.3 4.6 2.3-7-6-4.6h7.6z"></path></svg>
+</div>
+</div>
+<div class="pt-1 flex items-center justify-between flex-wrap gap-2">
+<div class="flex items-center gap-1.5 flex-wrap">
+<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-medium bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 whitespace-nowrap">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-400 shrink-0"></span> Paid
+</span>
+<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-medium bg-amber-500/15 text-amber-300 border border-amber-500/30 whitespace-nowrap">
+<span class="w-1.5 h-1.5 rounded-full bg-amber-400 shrink-0"></span> Unfulfilled
+</span>
+</div>
+<div class="flex items-center gap-2 shrink-0 ml-auto">
+<button class="px-2.5 py-1 text-[11px] font-medium text-neutral-300 bg-obsidian-800 hover:bg-obsidian-700 border border-obsidian-700 rounded transition whitespace-nowrap" type="button">
+Invoice
+</button>
+<button class="px-3 py-1 text-[11px] font-semibold text-amber-300 bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 rounded transition flex items-center gap-1 whitespace-nowrap" type="button">
+Manage <span>→</span>
+</button>
+</div>
+</div>
+</div>
+<!-- CARD 2 -->
+<div class="bg-obsidian-900 border border-obsidian-700/70 rounded-xl p-3.5 space-y-3">
+<div class="flex items-start justify-between gap-2">
+<div class="space-y-1.5 min-w-0">
+<div>
+<button class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded bg-obsidian-800 border border-obsidian-700 text-neutral-300 font-mono text-xs font-medium tracking-tight whitespace-nowrap shrink-0" type="button">
+<span>#LCK-202611-194056</span>
+<svg class="w-3 h-3 text-neutral-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><rect height="13" rx="2" ry="2" width="13" x="9" y="9"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+</button>
+</div>
+<div class="text-[11px] text-neutral-400 flex items-center gap-1.5 font-sans whitespace-nowrap">
+<svg class="w-3 h-3 text-neutral-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><rect height="18" rx="2" ry="2" width="18" x="3" y="4"></rect><line x1="16" x2="16" y1="2" y2="6"></line><line x1="8" x2="8" y1="2" y2="6"></line><line x1="3" x2="21" y1="10" y2="10"></line></svg>
+<span>Nov 12, 2026</span>
+<span>•</span>
+<span class="font-mono text-[10px]">13:10</span>
+</div>
+</div>
+<div class="text-right shrink-0">
+<div class="font-mono font-semibold text-neutral-100 tracking-tight whitespace-nowrap">₹1,485.00</div>
+<span class="text-[9px] uppercase tracking-wider text-neutral-400 font-medium whitespace-nowrap block">TENNIS CHAIN</span>
+</div>
+</div>
+<div class="h-px bg-obsidian-700/50"></div>
+<div class="flex items-center justify-between gap-2">
+<div class="flex items-center gap-2.5 min-w-0">
+<div class="w-8 h-8 rounded-full bg-obsidian-800 border border-purple-500/30 flex items-center justify-center font-mono text-xs font-semibold text-purple-300 shrink-0">
+CD
+</div>
+<div class="min-w-0 overflow-hidden">
+<p class="text-xs font-medium text-neutral-100 leading-tight truncate">Charlotte Dupré</p>
+<p class="text-[10px] text-neutral-400 font-mono truncate">charlotte.dupre@gmail.com</p>
+</div>
+</div>
+<div class="w-7 h-7 rounded border border-obsidian-700 bg-obsidian-850 flex items-center justify-center text-purple-400 shrink-0">
+<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
+</div>
+</div>
+<div class="pt-1 flex items-center justify-between flex-wrap gap-2">
+<div class="flex items-center gap-1.5 flex-wrap">
+<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-medium bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 whitespace-nowrap">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-400 shrink-0"></span> Paid
+</span>
+<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-medium bg-purple-500/15 text-purple-300 border border-purple-500/30 whitespace-nowrap">
+<span class="w-1.5 h-1.5 rounded-full bg-purple-400 shrink-0"></span> In Atelier QC
+</span>
+</div>
+<div class="flex items-center gap-2 shrink-0 ml-auto">
+<button class="px-2.5 py-1 text-[11px] font-medium text-neutral-300 bg-obsidian-800 hover:bg-obsidian-700 border border-obsidian-700 rounded transition whitespace-nowrap" type="button">
+Specs
+</button>
+<button class="px-3 py-1 text-[11px] font-semibold text-champagne-300 bg-champagne-400/10 hover:bg-champagne-300/10 border border-champagne-400/30 rounded transition flex items-center gap-1 whitespace-nowrap" type="button">
+Manage <span>→</span>
+</button>
+</div>
+</div>
+</div>
+<!-- CARD 3 -->
+<div class="bg-obsidian-900 border border-obsidian-700/70 rounded-xl p-3.5 space-y-3">
+<div class="flex items-start justify-between gap-2">
+<div class="space-y-1.5 min-w-0">
+<div>
+<button class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded bg-obsidian-800 border border-obsidian-700 text-neutral-300 font-mono text-xs font-medium tracking-tight whitespace-nowrap shrink-0" type="button">
+<span>#LCK-202611-739201</span>
+<svg class="w-3 h-3 text-neutral-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><rect height="13" rx="2" ry="2" width="13" x="9" y="9"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+</button>
+</div>
+<div class="text-[11px] text-neutral-400 flex items-center gap-1.5 font-sans whitespace-nowrap">
+<svg class="w-3 h-3 text-neutral-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><rect height="18" rx="2" ry="2" width="18" x="3" y="4"></rect><line x1="16" x2="16" y1="2" y2="6"></line><line x1="8" x2="8" y1="2" y2="6"></line><line x1="3" x2="21" y1="10" y2="10"></line></svg>
+<span>Nov 12, 2026</span>
+<span>•</span>
+<span class="font-mono text-[10px]">10:45</span>
+</div>
+</div>
+<div class="text-right shrink-0">
+<div class="font-mono font-semibold text-neutral-100 tracking-tight whitespace-nowrap">₹2,450.00</div>
+<span class="text-[9px] uppercase tracking-wider text-neutral-400 font-medium whitespace-nowrap block">SOLITAIRE PENDANT</span>
+</div>
+</div>
+<div class="h-px bg-obsidian-700/50"></div>
+<div class="flex items-center justify-between gap-2">
+<div class="flex items-center gap-2.5 min-w-0">
+<div class="w-8 h-8 rounded-full bg-obsidian-800 border border-emerald-500/30 flex items-center justify-center font-mono text-xs font-semibold text-emerald-300 shrink-0">
+IV
+</div>
+<div class="min-w-0 overflow-hidden">
+<p class="text-xs font-medium text-neutral-100 leading-tight truncate">Isabella Vance</p>
+<p class="text-[10px] text-neutral-400 font-mono truncate">isabella.vance@example.com</p>
+</div>
+</div>
+<div class="w-7 h-7 rounded border border-obsidian-700 bg-obsidian-850 flex items-center justify-center text-teal-400 shrink-0">
+<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"></path></svg>
+</div>
+</div>
+<div class="pt-1 flex items-center justify-between flex-wrap gap-2">
+<div class="flex items-center gap-1.5 flex-wrap">
+<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-medium bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 whitespace-nowrap">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-400 shrink-0"></span> Paid
+</span>
+<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-medium bg-teal-500/15 text-teal-300 border border-teal-500/30 whitespace-nowrap">
+<span class="w-1.5 h-1.5 rounded-full bg-teal-400 shrink-0"></span> Delivered
+</span>
+</div>
+<div class="flex items-center gap-2 shrink-0 ml-auto">
+<button class="px-2.5 py-1 text-[11px] font-medium text-neutral-300 bg-obsidian-800 hover:bg-obsidian-700 border border-obsidian-700 rounded transition whitespace-nowrap" type="button">
+Proof
+</button>
+<button class="px-3 py-1 text-[11px] font-semibold text-champagne-300 bg-champagne-400/10 hover:bg-champagne-300/10 border border-champagne-400/30 rounded transition flex items-center gap-1 whitespace-nowrap" type="button">
+Manage <span>→</span>
+</button>
+</div>
+</div>
+</div>
+<!-- CARD 4 -->
+<div class="bg-obsidian-900 border border-obsidian-700/70 rounded-xl p-3.5 space-y-3">
+<div class="flex items-start justify-between gap-2">
+<div class="space-y-1.5 min-w-0">
+<div>
+<button class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded bg-obsidian-800 border border-obsidian-700 text-neutral-300 font-mono text-xs font-medium tracking-tight whitespace-nowrap shrink-0" type="button">
+<span>#LCK-202611-884102</span>
+<svg class="w-3 h-3 text-neutral-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><rect height="13" rx="2" ry="2" width="13" x="9" y="9"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+</button>
+</div>
+<div class="text-[11px] text-neutral-400 flex items-center gap-1.5 font-sans whitespace-nowrap">
+<svg class="w-3 h-3 text-neutral-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><rect height="18" rx="2" ry="2" width="18" x="3" y="4"></rect><line x1="16" x2="16" y1="2" y2="6"></line><line x1="8" x2="8" y1="2" y2="6"></line><line x1="3" x2="21" y1="10" y2="10"></line></svg>
+<span>Nov 12, 2026</span>
+<span>•</span>
+<span class="font-mono text-[10px]">09:20</span>
+</div>
+</div>
+<div class="text-right shrink-0">
+<div class="font-mono font-semibold text-neutral-100 tracking-tight whitespace-nowrap">₹3,780.00</div>
+<span class="text-[9px] uppercase tracking-wider text-neutral-400 font-medium whitespace-nowrap block">BESPOKE CUFF</span>
+</div>
+</div>
+<div class="h-px bg-obsidian-700/50"></div>
+<div class="flex items-center justify-between gap-2">
+<div class="flex items-center gap-2.5 min-w-0">
+<div class="w-8 h-8 rounded-full bg-obsidian-800 border border-blue-500/30 flex items-center justify-center font-mono text-xs font-semibold text-blue-300 shrink-0">
+IV
+</div>
+<div class="min-w-0 overflow-hidden">
+<p class="text-xs font-medium text-neutral-100 leading-tight truncate">Isabella Vance</p>
+<p class="text-[10px] text-neutral-400 font-mono truncate">isabella.vance@example.com</p>
+</div>
+</div>
+<div class="w-7 h-7 rounded border border-obsidian-700 bg-obsidian-850 flex items-center justify-center text-blue-400 shrink-0">
+<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><rect height="13" rx="2" width="16" x="1" y="3"></rect><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon><circle cx="5.5" cy="18.5" r="2.5"></circle><circle cx="18.5" cy="18.5" r="2.5"></circle></svg>
+</div>
+</div>
+<div class="pt-1 flex items-center justify-between flex-wrap gap-2">
+<div class="flex items-center gap-1.5 flex-wrap">
+<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-medium bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 whitespace-nowrap">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-400 shrink-0"></span> Paid
+</span>
+<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-medium bg-blue-500/15 text-blue-300 border border-blue-500/30 whitespace-nowrap">
+<span class="w-1.5 h-1.5 rounded-full bg-blue-400 shrink-0"></span> In Transit
+</span>
+</div>
+<div class="flex items-center gap-2 shrink-0 ml-auto">
+<button class="px-2.5 py-1 text-[11px] font-medium text-neutral-300 bg-obsidian-800 hover:bg-obsidian-700 border border-obsidian-700 rounded transition whitespace-nowrap" type="button">
+Airway
+</button>
+<button class="px-3 py-1 text-[11px] font-semibold text-champagne-300 bg-champagne-400/10 hover:bg-champagne-300/10 border border-champagne-400/30 rounded transition flex items-center gap-1 whitespace-nowrap" type="button">
+Manage <span>→</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Table Bottom Note -->
+<div class="pt-4 border-t border-obsidian-700/50 flex flex-wrap items-center justify-between gap-2 text-[11px] text-neutral-400 font-mono mt-2">
+<span class="whitespace-nowrap">Showing recent 4 fine jewelry orders</span>
+<div class="flex gap-2">
+<button class="px-2.5 py-1 rounded bg-obsidian-800 border border-obsidian-700 text-neutral-300 hover:text-white disabled:opacity-50 whitespace-nowrap" disabled="">Previous</button>
+<button class="px-2.5 py-1 rounded bg-obsidian-800 border border-obsidian-700 text-neutral-300 hover:text-white whitespace-nowrap">Next</button>
+</div>
+</div>
+</div>
+<!-- Right: Management Quicklinks & Activity Timeline (4 Cols on xl, 2-col on md) -->
+<div class="xl:col-span-4 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-1 gap-4 sm:gap-5">
+<!-- Management Quicklinks Card -->
+<div class="card-surface rounded-xl p-4 sm:p-5">
+<h2 class="text-xs font-semibold uppercase tracking-wider text-neutral-400 font-mono pb-3 border-b border-obsidian-700/60 mb-3 whitespace-nowrap">
+              Management Quicklinks
+            </h2>
+<div class="space-y-2">
+<!-- Quicklink 1: Jewelry Catalog -->
+<a class="flex items-center justify-between p-2.5 rounded-lg hover:bg-obsidian-800/80 transition group border border-transparent hover:border-obsidian-700" href="{% url 'admin:catalog_product_changelist' %}" style="text-decoration: none !important;">
+<div class="flex items-center gap-3 min-w-0">
+<div class="w-8 h-8 rounded-lg bg-champagne-400/10 border border-champagne-400/20 flex items-center justify-center text-champagne-300 flex-shrink-0">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
+</div>
+<div class="min-w-0">
+<div class="text-xs font-medium text-neutral-200 group-hover:text-champagne-300 transition truncate">Jewelry Catalog</div>
+<div class="text-[10px] text-neutral-400 truncate">14 active sterling creations</div>
+</div>
+</div>
+<svg class="w-4 h-4 text-neutral-500 group-hover:text-neutral-200 group-hover:translate-x-0.5 transition flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</a>
+<!-- Quicklink 2: Customers -->
+<a class="flex items-center justify-between p-2.5 rounded-lg hover:bg-obsidian-800/80 transition group border border-transparent hover:border-obsidian-700" href="{% url 'admin:accounts_customuser_changelist' %}" style="text-decoration: none !important;">
+<div class="flex items-center gap-3 min-w-0">
+<div class="w-8 h-8 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 flex-shrink-0">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</div>
+<div class="min-w-0">
+<div class="text-xs font-medium text-neutral-200 group-hover:text-emerald-400 transition truncate">Customers</div>
+<div class="text-[10px] text-neutral-400 truncate">3 registered patrons</div>
+</div>
+</div>
+<svg class="w-4 h-4 text-neutral-500 group-hover:text-neutral-200 group-hover:translate-x-0.5 transition flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</a>
+<!-- Quicklink 3: Discounts & Codes -->
+<a class="flex items-center justify-between p-2.5 rounded-lg hover:bg-obsidian-800/80 transition group border border-transparent hover:border-obsidian-700" href="{% url 'admin:orders_coupon_changelist' %}" style="text-decoration: none !important;">
+<div class="flex items-center gap-3 min-w-0">
+<div class="w-8 h-8 rounded-lg bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-400 flex-shrink-0">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</div>
+<div class="min-w-0">
+<div class="text-xs font-medium text-neutral-200 group-hover:text-amber-400 transition truncate">Discounts &amp; Codes</div>
+<div class="text-[10px] text-neutral-400 truncate">Active promotional campaigns</div>
+</div>
+</div>
+<svg class="w-4 h-4 text-neutral-500 group-hover:text-neutral-200 group-hover:translate-x-0.5 transition flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</a>
+<!-- Quicklink 4: Live Storefront -->
+<a class="flex items-center justify-between p-2.5 rounded-lg hover:bg-obsidian-800/80 transition group border border-transparent hover:border-obsidian-700" href="/" target="_blank" style="text-decoration: none !important;">
+<div class="flex items-center gap-3 min-w-0">
+<div class="w-8 h-8 rounded-lg bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-indigo-400 flex-shrink-0">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><path d="M2 12h20M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</div>
+<div class="min-w-0">
+<div class="text-xs font-medium text-neutral-200 group-hover:text-indigo-300 transition truncate">Live Storefront</div>
+<div class="text-[10px] text-neutral-400 truncate">Customer shopping experience</div>
+</div>
+</div>
+<svg class="w-4 h-4 text-neutral-500 group-hover:text-neutral-200 group-hover:translate-x-0.5 transition flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</a>
+</div>
+</div>
+<!-- Recent Activity Card -->
+<div class="card-surface rounded-xl p-4 sm:p-5">
+<h2 class="text-xs font-semibold uppercase tracking-wider text-neutral-400 font-mono pb-3 border-b border-obsidian-700/60 mb-3 whitespace-nowrap">
+              Recent Activity
+            </h2>
+<div class="space-y-4">
+<!-- Activity 1 -->
+<div class="flex items-start gap-2.5 text-xs">
+<span class="w-1.5 h-1.5 rounded-full bg-champagne-400 mt-1.5 flex-shrink-0"></span>
+<div class="space-y-0.5 min-w-0">
+<p class="text-neutral-300 leading-snug">
+<strong class="text-white font-medium">Eleanor</strong> removed <span class="text-champagne-300 font-medium">Aura Textured Dome Ring in 925 Sterling Silver</span>
+</p>
+<span class="text-[10px] font-mono text-neutral-400 block">1 day, 8 hours ago</span>
+</div>
+</div>
+<!-- Activity 2 -->
+<div class="flex items-start gap-2.5 text-xs">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-400 mt-1.5 flex-shrink-0"></span>
+<div class="space-y-0.5 min-w-0">
+<p class="text-neutral-300 leading-snug">
+<strong class="text-white font-medium">Eleanor</strong> modified order <span class="font-mono text-emerald-400 whitespace-nowrap">LCK-202611-304918</span> for Julian Stewart (₹2,86,350)
+</p>
+<span class="text-[10px] font-mono text-neutral-400 block">2 days, 6 hours ago</span>
+</div>
+</div>
+<!-- Activity 3 -->
+<div class="flex items-start gap-2.5 text-xs">
+<span class="w-1.5 h-1.5 rounded-full bg-neutral-500 mt-1.5 flex-shrink-0"></span>
+<div class="space-y-0.5 min-w-0">
+<p class="text-neutral-300 leading-snug">
+<strong class="text-white font-medium">Eleanor</strong> modified <span class="text-champagne-300 font-medium">Celeste Herringbone Chain in 925 Silver</span>
+</p>
+<span class="text-[10px] font-mono text-neutral-400 block">5 days, 21 hours ago</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- END: Main Data Section -->
+</main>
+<!-- END: Dashboard Hero Section -->
+<!-- BEGIN: Footer -->
+<footer class="border-t border-obsidian-700/60 bg-obsidian-900/40 px-4 sm:px-8 py-4 text-xs font-mono text-neutral-400 flex flex-col sm:flex-row items-center justify-between gap-3 text-center sm:text-left" data-purpose="console-footer">
+<div class="flex flex-wrap items-center justify-center sm:justify-start gap-2">
+<span>Luckjary Haute Joaillerie © 2026</span>
+<span class="hidden sm:inline">•</span>
+<span>Atelier OMS Core 4.19</span>
+</div>
+<div class="flex flex-wrap items-center justify-center gap-3 text-[11px]">
+<span class="flex items-center gap-1.5 text-emerald-400 whitespace-nowrap">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+          925 Sterling Vault Encrypted
+        </span>
+<span class="text-neutral-400 whitespace-nowrap">INR Base Currency</span>
+</div>
+</footer>
+<!-- END: Footer -->
+</div>
+<!-- END: Main Content Area -->
+<!-- BEGIN: Simple Mobile Drawer Toggle Script -->
+<script>
+  const openBtn = document.getElementById('open-mobile-drawer');
+  const closeBtn = document.getElementById('close-mobile-drawer');
+  const drawer = document.getElementById('mobile-drawer');
+  const backdrop = document.getElementById('mobile-drawer-backdrop');
+
+  function openDrawer() {
+    drawer.classList.remove('hidden');
   }
-}
+  function closeDrawer() {
+    drawer.classList.add('hidden');
+  }
 
-document.addEventListener('DOMContentLoaded', () => {
-  // Mobile Order Filter Chips Toggle
-  const chips = document.querySelectorAll('#mobile-order-filter-chips .mobile-chip');
-  const cards = document.querySelectorAll('#mobile-orders-container .mobile-order-card');
-
-  chips.forEach(chip => {
-    chip.addEventListener('click', () => {
-      chips.forEach(c => {
-        c.classList.remove('bg-neutral-200', 'text-obsidian-950', 'active', 'shadow-sm');
-        c.classList.add('bg-obsidian-800', 'border');
-        if (c.dataset.status === 'unfulfilled') {
-          c.classList.add('text-amber-400', 'border-amber-500/20');
-        } else if (c.dataset.status === 'qc') {
-          c.classList.add('text-purple-300', 'border-purple-500/30');
-        } else if (c.dataset.status === 'transit') {
-          c.classList.add('text-blue-300', 'border-blue-500/30');
-        } else {
-          c.classList.add('text-neutral-300', 'border-obsidian-700');
-        }
-      });
-
-      chip.classList.remove('bg-obsidian-800', 'text-amber-400', 'text-purple-300', 'text-blue-300', 'text-neutral-300', 'border-amber-500/20', 'border-purple-500/30', 'border-blue-500/30', 'border-obsidian-700');
-      chip.classList.add('bg-neutral-200', 'text-obsidian-950', 'active', 'shadow-sm');
-
-      const targetStatus = chip.dataset.status;
-      cards.forEach(card => {
-        if (targetStatus === 'all' || card.dataset.status === targetStatus) {
-          card.style.display = '';
-        } else {
-          card.style.display = 'none';
-        }
-      });
-    });
-  });
-});
+  if (openBtn) openBtn.addEventListener('click', openDrawer);
+  if (closeBtn) closeBtn.addEventListener('click', closeDrawer);
+  if (backdrop) backdrop.addEventListener('click', closeDrawer);
 </script>
-{% endblock %}
+<!-- END: Simple Mobile Drawer Toggle Script -->
+
+
+</body></html>
