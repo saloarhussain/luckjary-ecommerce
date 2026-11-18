@@ -12,6 +12,35 @@
   width: 0 !important;
   height: 0 !important;
 }
+
+/* Ensure desktop sidebar is docked and visible on >= 1024px regardless of Django's .hidden rules */
+@media (min-width: 1024px) {
+  #desktopSidebar {
+    display: flex !important;
+    position: fixed !important;
+    top: 0 !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    width: 18rem !important; /* 288px */
+    height: 100vh !important;
+    z-index: 30 !important;
+  }
+  .atelier-desktop-spacer {
+    display: block !important;
+    width: 18rem !important;
+    flex-shrink: 0 !important;
+    pointer-events: none !important;
+  }
+}
+@media (max-width: 1023px) {
+  #desktopSidebar {
+    display: none !important;
+  }
+  .atelier-desktop-spacer {
+    display: none !important;
+    width: 0 !important;
+  }
+}
 </style>
 <!-- ==========================================
      UNIFIED ATELIER SIDEBAR COMPONENT
@@ -166,15 +195,17 @@
       </div>
       <div class="flex items-center justify-between">
         <div class="flex items-center gap-2">
-          <div class="w-7 h-7 rounded-full bg-gradient-to-tr from-amber-600 to-[#ebd38d] text-[#0d0e10] flex items-center justify-center text-xs font-bold font-mono">E</div>
+          <div class="w-7 h-7 rounded-full bg-gradient-to-tr from-amber-600 to-[#ebd38d] text-[#0d0e10] flex items-center justify-center text-xs font-bold font-mono">
+            {{ request.user.first_name|slice:":1"|default:"E"|upper }}
+          </div>
           <div>
-            <div class="text-xs font-bold text-zinc-100 leading-none">Eleanor</div>
+            <div class="text-xs font-bold text-zinc-100 leading-none">{{ request.user.first_name|default:"Eleanor" }}</div>
             <div class="text-[10px] text-zinc-400 font-mono">Director</div>
           </div>
         </div>
         <form method="post" action="{% url 'admin:logout' %}" class="inline m-0 p-0">
           {% csrf_token %}
-          <button type="submit" class="text-zinc-400 hover:text-red-400 p-1.5 rounded-lg hover:bg-[#1e2024] transition-colors cursor-pointer" title="Sign Out">
+          <button type="submit" class="text-zinc-400 hover:text-red-400 p-1.5 rounded-lg hover:bg-[#1e2024] transition-colors cursor-pointer bg-transparent border-0" title="Sign Out">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
           </button>
         </form>
@@ -184,10 +215,11 @@
 </div>
 
 <!-- ==========================================
-     2. PERSISTENT DESKTOP SIDEBAR (hidden lg:flex)
-     Fixed viewport docking on desktop, display:none on mobile
+     2. PERSISTENT DESKTOP SIDEBAR
+     Fixed viewport docking on desktop (>=1024px) via explicit CSS,
+     display:none on mobile (<1024px)
      ========================================== -->
-<aside id="desktopSidebar" class="hidden lg:flex w-72 shrink-0 flex-col h-screen fixed top-0 bottom-0 left-0 bg-[#0d0e12] border-r border-[#232732] shadow-sm z-30 overflow-y-auto no-scrollbar">
+<aside id="desktopSidebar" class="w-72 shrink-0 flex-col h-screen fixed top-0 bottom-0 left-0 bg-[#0d0e12] border-r border-[#232732] shadow-sm z-30 overflow-y-auto no-scrollbar">
   <!-- Panel Header -->
   <div class="p-4 border-b border-[#232732] flex items-center justify-between">
     <a href="/admin/" class="flex items-center gap-2.5 group focus:outline-none">
@@ -323,15 +355,17 @@
     </div>
     <div class="flex items-center justify-between">
       <div class="flex items-center gap-2">
-        <div class="w-7 h-7 rounded-full bg-gradient-to-tr from-amber-600 to-[#ebd38d] text-[#0d0e10] flex items-center justify-center text-xs font-bold font-mono">E</div>
+        <div class="w-7 h-7 rounded-full bg-gradient-to-tr from-amber-600 to-[#ebd38d] text-[#0d0e10] flex items-center justify-center text-xs font-bold font-mono">
+          {{ request.user.first_name|slice:":1"|default:"E"|upper }}
+        </div>
         <div>
-          <div class="text-xs font-bold text-zinc-100 leading-none">Eleanor</div>
+          <div class="text-xs font-bold text-zinc-100 leading-none">{{ request.user.first_name|default:"Eleanor" }}</div>
           <div class="text-[10px] text-zinc-400 font-mono">Director</div>
         </div>
       </div>
       <form method="post" action="{% url 'admin:logout' %}" class="inline m-0 p-0">
         {% csrf_token %}
-        <button type="submit" class="text-zinc-400 hover:text-red-400 p-1.5 rounded-lg hover:bg-[#1e2024] transition-colors cursor-pointer" title="Sign Out">
+        <button type="submit" class="text-zinc-400 hover:text-red-400 p-1.5 rounded-lg hover:bg-[#1e2024] transition-colors cursor-pointer bg-transparent border-0" title="Sign Out">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
         </button>
       </form>
@@ -339,5 +373,5 @@
   </div>
 </aside>
 
-<!-- Desktop Sidebar Flex Flow Placeholder (Preserves 72-unit width for adjacent main content) -->
-<div class="hidden lg:block w-72 shrink-0 pointer-events-none" aria-hidden="true"></div>
+<!-- Desktop Sidebar Flex Flow Placeholder (Preserves 72-unit / 288px width for adjacent main content) -->
+<div class="atelier-desktop-spacer w-72 shrink-0 pointer-events-none" aria-hidden="true"></div>

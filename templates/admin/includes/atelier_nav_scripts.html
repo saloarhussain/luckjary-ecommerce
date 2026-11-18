@@ -6,7 +6,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const mobileModal = document.getElementById('mobileDrawerModal');
   const mobileBackdrop = document.getElementById('mobileDrawerBackdrop');
   const mobilePanel = document.getElementById('mobileDrawerPanel');
-  const desktopSidebar = document.getElementById('desktopSidebar');
 
   function openMobileDrawer() {
     if (!mobileModal || !mobilePanel || !mobileBackdrop) return;
@@ -35,12 +34,7 @@ document.addEventListener('DOMContentLoaded', () => {
   if (openMobileBtn) {
     openMobileBtn.addEventListener('click', (e) => {
       e.stopPropagation();
-      if (window.innerWidth < 1024) {
-        openMobileDrawer();
-      } else if (desktopSidebar) {
-        desktopSidebar.classList.toggle('lg:flex');
-        desktopSidebar.classList.toggle('hidden');
-      }
+      openMobileDrawer();
     });
   }
 
@@ -52,18 +46,6 @@ document.addEventListener('DOMContentLoaded', () => {
     mobileBackdrop.addEventListener('click', closeMobileDrawer);
   }
 
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') {
-      closeMobileDrawer();
-      const profileMenu = document.getElementById('profileDropdownMenu');
-      const profileChevron = document.getElementById('profileChevron');
-      if (profileMenu && !profileMenu.classList.contains('hidden')) {
-        profileMenu.classList.add('hidden');
-        if (profileChevron) profileChevron.classList.remove('rotate-180');
-      }
-    }
-  });
-
   // Profile Dropdown Toggle
   const profileBtn = document.getElementById('profileDropdownBtn');
   const profileMenu = document.getElementById('profileDropdownMenu');
@@ -72,17 +54,41 @@ document.addEventListener('DOMContentLoaded', () => {
   if (profileBtn && profileMenu) {
     profileBtn.addEventListener('click', (e) => {
       e.stopPropagation();
-      const isHidden = profileMenu.classList.contains('hidden');
-      profileMenu.classList.toggle('hidden');
-      if (profileChevron) profileChevron.classList.toggle('rotate-180', isHidden);
+      const isClosed = profileMenu.classList.contains('is-hidden') || profileMenu.classList.contains('hidden');
+      if (isClosed) {
+        profileMenu.classList.remove('is-hidden', 'hidden');
+        if (profileChevron) profileChevron.classList.add('rotate-180');
+      } else {
+        profileMenu.classList.add('is-hidden');
+        if (profileChevron) profileChevron.classList.remove('rotate-180');
+      }
     });
 
     document.addEventListener('click', (e) => {
       if (!profileMenu.contains(e.target) && !profileBtn.contains(e.target)) {
-        profileMenu.classList.add('hidden');
+        profileMenu.classList.add('is-hidden');
         if (profileChevron) profileChevron.classList.remove('rotate-180');
       }
     });
   }
+
+  // Universal Hotkeys: Escape to close modals, Ctrl+K / Cmd+K to search
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      closeMobileDrawer();
+      if (profileMenu && !profileMenu.classList.contains('is-hidden')) {
+        profileMenu.classList.add('is-hidden');
+        if (profileChevron) profileChevron.classList.remove('rotate-180');
+      }
+    }
+    if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
+      const searchInput = document.getElementById('universalHeaderSearch');
+      if (searchInput) {
+        e.preventDefault();
+        searchInput.focus();
+        searchInput.select();
+      }
+    }
+  });
 });
 </script>
