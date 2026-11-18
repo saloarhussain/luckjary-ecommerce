@@ -1,0 +1,326 @@
+{% load i18n admin_urls static %}
+<!-- ==========================================
+     UNIFIED ATELIER SIDEBAR COMPONENT
+     Preserves exact structure from orders/order/change_list.html
+     ========================================== -->
+
+<!-- ==========================================
+     1. MOBILE OFF-CANVAS DRAWER (lg:hidden)
+     Decoupled from layout flow so it never shifts mobile screen
+     ========================================== -->
+<div id="mobileDrawerModal" class="fixed inset-0 z-50 pointer-events-none lg:hidden">
+  <!-- Backdrop overlay for mobile drawer -->
+  <div id="mobileDrawerBackdrop" class="fixed inset-0 bg-black/80 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-300 ease-in-out"></div>
+
+  <!-- Slide-out Drawer Panel -->
+  <aside id="mobileDrawerPanel" class="fixed inset-y-0 left-0 z-50 w-72 max-w-[85vw] bg-[#0d0e12] border-r border-[#232732] shadow-2xl flex flex-col -translate-x-full transition-transform duration-300 ease-out overflow-y-auto">
+    <!-- Panel Header -->
+    <div class="p-4 border-b border-[#232732] flex items-center justify-between">
+      <a href="/admin/" class="flex items-center gap-2.5 group focus:outline-none">
+        <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 inline-block group-hover:scale-125 transition-transform duration-300 shadow-[0_0_8px_rgba(16,185,129,0.5)]"></span>
+        <div class="flex flex-col">
+          <span class="font-bold text-[14px] tracking-[0.16em] text-white font-sans">LUCKJARY</span>
+          <span class="text-[9px] text-[#ebd38d] uppercase tracking-[0.25em] font-mono font-semibold">HAUTE ATELIER</span>
+        </div>
+      </a>
+      <button id="closeMobileDrawerBtn" aria-label="Close navigation" class="w-8 h-8 rounded-lg flex items-center justify-center text-zinc-400 hover:text-zinc-100 active:scale-95 transition-colors cursor-pointer" type="button">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+      </button>
+    </div>
+
+    <!-- Navigation Groups -->
+    <div class="p-3 space-y-4 flex-1 text-[13px] font-sans">
+      <!-- Section: Navigation -->
+      <div>
+        <div class="text-[10px] font-bold tracking-[0.12em] text-zinc-400 uppercase px-2 mb-1.5 font-mono">Navigation</div>
+        <div class="space-y-0.5">
+          <a href="/admin/" class="flex items-center gap-3 px-3 py-2 rounded-xl {% if active_nav == 'home' or request.path == '/admin/' or request.path == '/admin/index/' %}bg-emerald-500/10 text-emerald-400 font-medium border-l-2 border-emerald-400 shadow-sm{% else %}text-zinc-400 hover:text-zinc-100 hover:bg-[#18191c] transition-colors{% endif %}">
+            <svg class="w-4 h-4 {% if active_nav == 'home' or request.path == '/admin/' or request.path == '/admin/index/' %}text-emerald-400{% else %}text-zinc-400{% endif %}" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg>
+            <span class="{% if active_nav == 'home' or request.path == '/admin/' or request.path == '/admin/index/' %}text-zinc-100 font-semibold{% endif %}">Home</span>
+          </a>
+          <a href="/admin/orders/order/" class="flex items-center justify-between px-3 py-2 rounded-xl {% if active_nav == 'orders' or '/admin/orders/order/' in request.path %}bg-emerald-500/10 text-emerald-400 font-medium border-l-2 border-emerald-400 shadow-sm{% else %}text-zinc-400 hover:text-zinc-100 hover:bg-[#18191c] transition-colors{% endif %}">
+            <div class="flex items-center gap-3">
+              <svg class="w-4 h-4 {% if active_nav == 'orders' or '/admin/orders/order/' in request.path %}text-emerald-400{% else %}text-zinc-400{% endif %}" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="16.5" y1="9.4" x2="7.5" y2="4.21"></line><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
+              <span class="{% if active_nav == 'orders' or '/admin/orders/order/' in request.path %}text-zinc-100 font-semibold{% endif %}">Orders</span>
+            </div>
+            <span class="px-2 py-0.5 rounded-full bg-[#181a22] text-[#ebd38d] border border-[#2d3240] text-[11px] font-mono font-bold">4</span>
+          </a>
+          <a href="/admin/orders/coupon/" class="flex items-center gap-3 px-3 py-2 rounded-xl {% if active_nav == 'discounts' or '/admin/orders/coupon/' in request.path %}bg-emerald-500/10 text-emerald-400 font-medium border-l-2 border-emerald-400 shadow-sm{% else %}text-zinc-400 hover:text-zinc-100 hover:bg-[#18191c] transition-colors{% endif %}">
+            <svg class="w-4 h-4 {% if active_nav == 'discounts' or '/admin/orders/coupon/' in request.path %}text-emerald-400{% else %}text-zinc-400{% endif %}" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="19" y1="5" x2="5" y2="19"></line><circle cx="6.5" cy="6.5" r="2.5"></circle><circle cx="17.5" cy="17.5" r="2.5"></circle></svg>
+            <span class="{% if active_nav == 'discounts' or '/admin/orders/coupon/' in request.path %}text-zinc-100 font-semibold{% endif %}">Discounts</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Section: Products & Inventory -->
+      <div>
+        <div class="text-[10px] font-bold tracking-[0.12em] text-zinc-400 uppercase px-2 mb-1.5 font-mono">Products &amp; Inventory</div>
+        <div class="space-y-0.5">
+          <a href="/admin/catalog/product/" class="flex items-center justify-between px-3 py-2 rounded-xl {% if active_nav == 'products' or '/admin/catalog/product/' in request.path and '/admin/catalog/productreview/' not in request.path %}bg-emerald-500/10 text-emerald-400 font-medium border-l-2 border-emerald-400 shadow-sm{% else %}text-zinc-400 hover:text-zinc-100 hover:bg-[#18191c] transition-colors{% endif %}">
+            <div class="flex items-center gap-3">
+              <svg class="w-4 h-4 {% if active_nav == 'products' or '/admin/catalog/product/' in request.path and '/admin/catalog/productreview/' not in request.path %}text-emerald-400{% else %}text-zinc-400{% endif %}" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polygon points="6 3 18 3 22 9 12 22 2 9 6 3"></polygon></svg>
+              <span class="{% if active_nav == 'products' or '/admin/catalog/product/' in request.path and '/admin/catalog/productreview/' not in request.path %}text-zinc-100 font-semibold{% endif %}">Vault Products</span>
+            </div>
+            <span class="px-2 py-0.5 rounded-full bg-[#181a22] text-zinc-300 text-[11px] font-mono font-semibold">17</span>
+          </a>
+          <a href="/admin/catalog/collection/" class="flex items-center gap-3 px-3 py-2 rounded-xl {% if active_nav == 'collections' or '/admin/catalog/collection/' in request.path %}bg-emerald-500/10 text-emerald-400 font-medium border-l-2 border-emerald-400 shadow-sm{% else %}text-zinc-400 hover:text-zinc-100 hover:bg-[#18191c] transition-colors{% endif %}">
+            <svg class="w-4 h-4 {% if active_nav == 'collections' or '/admin/catalog/collection/' in request.path %}text-emerald-400{% else %}text-zinc-400{% endif %}" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect height="7" width="7" x="3" y="3"></rect><rect height="7" width="7" x="14" y="3"></rect><rect height="7" width="7" x="14" y="14"></rect><rect height="7" width="7" x="3" y="14"></rect></svg>
+            <span class="{% if active_nav == 'collections' or '/admin/catalog/collection/' in request.path %}text-zinc-100 font-semibold{% endif %}">Collections</span>
+          </a>
+          <a href="/admin/catalog/category/" class="flex items-center gap-3 px-3 py-2 rounded-xl {% if active_nav == 'categories' or '/admin/catalog/category/' in request.path %}bg-emerald-500/10 text-emerald-400 font-medium border-l-2 border-emerald-400 shadow-sm{% else %}text-zinc-400 hover:text-zinc-100 hover:bg-[#18191c] transition-colors{% endif %}">
+            <svg class="w-4 h-4 {% if active_nav == 'categories' or '/admin/catalog/category/' in request.path %}text-emerald-400{% else %}text-zinc-400{% endif %}" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>
+            <span class="{% if active_nav == 'categories' or '/admin/catalog/category/' in request.path %}text-zinc-100 font-semibold{% endif %}">Categories</span>
+          </a>
+          <a href="/admin/catalog/material/" class="flex items-center gap-3 px-3 py-2 rounded-xl {% if active_nav == 'materials' or '/admin/catalog/material/' in request.path %}bg-emerald-500/10 text-emerald-400 font-medium border-l-2 border-emerald-400 shadow-sm{% else %}text-zinc-400 hover:text-zinc-100 hover:bg-[#18191c] transition-colors{% endif %}">
+            <svg class="w-4 h-4 {% if active_nav == 'materials' or '/admin/catalog/material/' in request.path %}text-emerald-400{% else %}text-zinc-400{% endif %}" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+            <span class="{% if active_nav == 'materials' or '/admin/catalog/material/' in request.path %}text-zinc-100 font-semibold{% endif %}">Materials</span>
+          </a>
+          <a href="/admin/catalog/productreview/" class="flex items-center gap-3 px-3 py-2 rounded-xl {% if active_nav == 'reviews' or '/admin/catalog/productreview/' in request.path %}bg-emerald-500/10 text-emerald-400 font-medium border-l-2 border-emerald-400 shadow-sm{% else %}text-zinc-400 hover:text-zinc-100 hover:bg-[#18191c] transition-colors{% endif %}">
+            <svg class="w-4 h-4 {% if active_nav == 'reviews' or '/admin/catalog/productreview/' in request.path %}text-emerald-400{% else %}text-zinc-400{% endif %}" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+            <span class="{% if active_nav == 'reviews' or '/admin/catalog/productreview/' in request.path %}text-zinc-100 font-semibold{% endif %}">Product Reviews</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Section: Customers -->
+      <div>
+        <div class="text-[10px] font-bold tracking-[0.12em] text-zinc-400 uppercase px-2 mb-1.5 font-mono">Customers</div>
+        <div class="space-y-0.5">
+          <a href="/admin/accounts/customuser/" class="flex items-center gap-3 px-3 py-2 rounded-xl {% if active_nav == 'customers' or '/admin/accounts/customuser/' in request.path %}bg-emerald-500/10 text-emerald-400 font-medium border-l-2 border-emerald-400 shadow-sm{% else %}text-zinc-400 hover:text-zinc-100 hover:bg-[#18191c] transition-colors{% endif %}">
+            <svg class="w-4 h-4 {% if active_nav == 'customers' or '/admin/accounts/customuser/' in request.path %}text-emerald-400{% else %}text-zinc-400{% endif %}" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle></svg>
+            <span class="{% if active_nav == 'customers' or '/admin/accounts/customuser/' in request.path %}text-zinc-100 font-semibold{% endif %}">Customers</span>
+          </a>
+          <a href="/admin/core/newslettersubscriber/" class="flex items-center gap-3 px-3 py-2 rounded-xl {% if active_nav == 'subscribers' or '/admin/core/newslettersubscriber/' in request.path %}bg-emerald-500/10 text-emerald-400 font-medium border-l-2 border-emerald-400 shadow-sm{% else %}text-zinc-400 hover:text-zinc-100 hover:bg-[#18191c] transition-colors{% endif %}">
+            <svg class="w-4 h-4 {% if active_nav == 'subscribers' or '/admin/core/newslettersubscriber/' in request.path %}text-emerald-400{% else %}text-zinc-400{% endif %}" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+            <span class="{% if active_nav == 'subscribers' or '/admin/core/newslettersubscriber/' in request.path %}text-zinc-100 font-semibold{% endif %}">Subscribers</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Section: Engagement -->
+      <div>
+        <div class="text-[10px] font-bold tracking-[0.12em] text-zinc-400 uppercase px-2 mb-1.5 font-mono">Engagement</div>
+        <div class="space-y-0.5">
+          <a href="/admin/core/contactinquiry/" class="flex items-center gap-3 px-3 py-2 rounded-xl {% if active_nav == 'inquiries' or '/admin/core/contactinquiry/' in request.path %}bg-emerald-500/10 text-emerald-400 font-medium border-l-2 border-emerald-400 shadow-sm{% else %}text-zinc-400 hover:text-zinc-100 hover:bg-[#18191c] transition-colors{% endif %}">
+            <svg class="w-4 h-4 {% if active_nav == 'inquiries' or '/admin/core/contactinquiry/' in request.path %}text-emerald-400{% else %}text-zinc-400{% endif %}" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+            <span class="{% if active_nav == 'inquiries' or '/admin/core/contactinquiry/' in request.path %}text-zinc-100 font-semibold{% endif %}">Client Inquiries</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Section: Sales Channels -->
+      <div>
+        <div class="text-[10px] font-bold tracking-[0.12em] text-zinc-400 uppercase px-2 mb-1.5 font-mono">Sales Channels</div>
+        <div class="space-y-0.5">
+          <a href="/orders/oms/" class="flex items-center justify-between px-3 py-2 rounded-xl {% if active_nav == 'oms' or '/orders/oms/' in request.path %}bg-emerald-500/10 text-emerald-400 font-medium border-l-2 border-emerald-400 shadow-sm{% else %}text-emerald-400 hover:bg-[#18191c] transition-colors{% endif %}">
+            <div class="flex items-center gap-3">
+              <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polygon points="12 2 2 7 12 12 22 7 12 22 2 9 6 3"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
+              <span class="{% if active_nav == 'oms' or '/orders/oms/' in request.path %}text-zinc-100 font-semibold{% endif %}">Atelier OMS</span>
+            </div>
+            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+          </a>
+          <a href="/" target="_blank" class="flex items-center justify-between px-3 py-2 rounded-xl text-zinc-400 hover:text-zinc-100 hover:bg-[#18191c] transition-colors">
+            <div class="flex items-center gap-3">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+              <span>Online Store</span>
+            </div>
+            <svg class="w-3.5 h-3.5 text-zinc-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+          </a>
+        </div>
+      </div>
+
+      <!-- Section: Settings & Preferences -->
+      <div class="pt-2 border-t border-[#232732]">
+        <div class="text-[10px] font-bold tracking-[0.12em] text-zinc-400 uppercase px-2 mb-1.5 font-mono">Settings &amp; Preferences</div>
+        <div class="space-y-0.5">
+          <a href="/admin/orders/order/#settings" class="sidebar-settings-btn flex items-center justify-between px-3 py-2 rounded-xl text-zinc-400 hover:text-zinc-100 hover:bg-[#18191c] transition-colors cursor-pointer group">
+            <div class="flex items-center gap-3">
+              <svg class="w-4 h-4 text-zinc-400 group-hover:text-[#ebd38d] transition-colors" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+              <span>Settings</span>
+            </div>
+            <span class="active-sidebar-curr-pill px-2 py-0.5 rounded-full bg-[#181a22] text-[#ebd38d] border border-[#2d3240] text-[10px] font-mono font-semibold">₹ INR</span>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Panel Footer -->
+    <div class="p-3 border-t border-[#232732] bg-[#0d0e10]">
+      <div class="flex items-center gap-2 mb-2">
+        <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 inline-block"></span>
+        <a href="/" target="_blank" class="text-[11px] text-zinc-400 hover:text-emerald-400 transition-colors">Luckjary Boutique Online ↗</a>
+      </div>
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-2">
+          <div class="w-7 h-7 rounded-full bg-gradient-to-tr from-amber-600 to-[#ebd38d] text-[#0d0e10] flex items-center justify-center text-xs font-bold font-mono">E</div>
+          <div>
+            <div class="text-xs font-bold text-zinc-100 leading-none">Eleanor</div>
+            <div class="text-[10px] text-zinc-400 font-mono">Director</div>
+          </div>
+        </div>
+        <form method="post" action="{% url 'admin:logout' %}" class="inline m-0 p-0">
+          {% csrf_token %}
+          <button type="submit" class="text-zinc-400 hover:text-red-400 p-1.5 rounded-lg hover:bg-[#1e2024] transition-colors cursor-pointer" title="Sign Out">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+          </button>
+        </form>
+      </div>
+    </div>
+  </aside>
+</div>
+
+<!-- ==========================================
+     2. PERSISTENT DESKTOP SIDEBAR (hidden lg:flex)
+     Docked and sticky on desktop, display:none on mobile
+     ========================================== -->
+<aside id="desktopSidebar" class="hidden lg:flex w-72 shrink-0 flex-col h-screen sticky top-0 bg-[#0d0e12] border-r border-[#232732] shadow-sm z-30 overflow-y-auto">
+  <!-- Panel Header -->
+  <div class="p-4 border-b border-[#232732] flex items-center justify-between">
+    <a href="/admin/" class="flex items-center gap-2.5 group focus:outline-none">
+      <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 inline-block group-hover:scale-125 transition-transform duration-300 shadow-[0_0_8px_rgba(16,185,129,0.5)]"></span>
+      <div class="flex flex-col">
+        <span class="font-bold text-[14px] tracking-[0.16em] text-white font-sans">LUCKJARY</span>
+        <span class="text-[9px] text-[#ebd38d] uppercase tracking-[0.25em] font-mono font-semibold">HAUTE ATELIER</span>
+      </div>
+    </a>
+  </div>
+
+  <!-- Navigation Groups -->
+  <div class="p-3 space-y-4 flex-1 text-[13px] font-sans">
+    <!-- Section: Navigation -->
+    <div>
+      <div class="text-[10px] font-bold tracking-[0.12em] text-zinc-400 uppercase px-2 mb-1.5 font-mono">Navigation</div>
+      <div class="space-y-0.5">
+        <a href="/admin/" class="flex items-center gap-3 px-3 py-2 rounded-xl {% if active_nav == 'home' or request.path == '/admin/' or request.path == '/admin/index/' %}bg-emerald-500/10 text-emerald-400 font-medium border-l-2 border-emerald-400 shadow-sm{% else %}text-zinc-400 hover:text-zinc-100 hover:bg-[#18191c] transition-colors{% endif %}">
+          <svg class="w-4 h-4 {% if active_nav == 'home' or request.path == '/admin/' or request.path == '/admin/index/' %}text-emerald-400{% else %}text-zinc-400{% endif %}" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg>
+          <span class="{% if active_nav == 'home' or request.path == '/admin/' or request.path == '/admin/index/' %}text-zinc-100 font-semibold{% endif %}">Home</span>
+        </a>
+        <a href="/admin/orders/order/" class="flex items-center justify-between px-3 py-2 rounded-xl {% if active_nav == 'orders' or '/admin/orders/order/' in request.path %}bg-emerald-500/10 text-emerald-400 font-medium border-l-2 border-emerald-400 shadow-sm{% else %}text-zinc-400 hover:text-zinc-100 hover:bg-[#18191c] transition-colors{% endif %}">
+          <div class="flex items-center gap-3">
+            <svg class="w-4 h-4 {% if active_nav == 'orders' or '/admin/orders/order/' in request.path %}text-emerald-400{% else %}text-zinc-400{% endif %}" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="16.5" y1="9.4" x2="7.5" y2="4.21"></line><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
+            <span class="{% if active_nav == 'orders' or '/admin/orders/order/' in request.path %}text-zinc-100 font-semibold{% endif %}">Orders</span>
+          </div>
+          <span class="px-2 py-0.5 rounded-full bg-[#181a22] text-[#ebd38d] border border-[#2d3240] text-[11px] font-mono font-bold">4</span>
+        </a>
+        <a href="/admin/orders/coupon/" class="flex items-center gap-3 px-3 py-2 rounded-xl {% if active_nav == 'discounts' or '/admin/orders/coupon/' in request.path %}bg-emerald-500/10 text-emerald-400 font-medium border-l-2 border-emerald-400 shadow-sm{% else %}text-zinc-400 hover:text-zinc-100 hover:bg-[#18191c] transition-colors{% endif %}">
+          <svg class="w-4 h-4 {% if active_nav == 'discounts' or '/admin/orders/coupon/' in request.path %}text-emerald-400{% else %}text-zinc-400{% endif %}" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="19" y1="5" x2="5" y2="19"></line><circle cx="6.5" cy="6.5" r="2.5"></circle><circle cx="17.5" cy="17.5" r="2.5"></circle></svg>
+          <span class="{% if active_nav == 'discounts' or '/admin/orders/coupon/' in request.path %}text-zinc-100 font-semibold{% endif %}">Discounts</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- Section: Products & Inventory -->
+    <div>
+      <div class="text-[10px] font-bold tracking-[0.12em] text-zinc-400 uppercase px-2 mb-1.5 font-mono">Products &amp; Inventory</div>
+      <div class="space-y-0.5">
+        <a href="/admin/catalog/product/" class="flex items-center justify-between px-3 py-2 rounded-xl {% if active_nav == 'products' or '/admin/catalog/product/' in request.path and '/admin/catalog/productreview/' not in request.path %}bg-emerald-500/10 text-emerald-400 font-medium border-l-2 border-emerald-400 shadow-sm{% else %}text-zinc-400 hover:text-zinc-100 hover:bg-[#18191c] transition-colors{% endif %}">
+          <div class="flex items-center gap-3">
+            <svg class="w-4 h-4 {% if active_nav == 'products' or '/admin/catalog/product/' in request.path and '/admin/catalog/productreview/' not in request.path %}text-emerald-400{% else %}text-zinc-400{% endif %}" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polygon points="6 3 18 3 22 9 12 22 2 9 6 3"></polygon></svg>
+            <span class="{% if active_nav == 'products' or '/admin/catalog/product/' in request.path and '/admin/catalog/productreview/' not in request.path %}text-zinc-100 font-semibold{% endif %}">Vault Products</span>
+          </div>
+          <span class="px-2 py-0.5 rounded-full bg-[#181a22] text-zinc-300 text-[11px] font-mono font-semibold">17</span>
+        </a>
+        <a href="/admin/catalog/collection/" class="flex items-center gap-3 px-3 py-2 rounded-xl {% if active_nav == 'collections' or '/admin/catalog/collection/' in request.path %}bg-emerald-500/10 text-emerald-400 font-medium border-l-2 border-emerald-400 shadow-sm{% else %}text-zinc-400 hover:text-zinc-100 hover:bg-[#18191c] transition-colors{% endif %}">
+          <svg class="w-4 h-4 {% if active_nav == 'collections' or '/admin/catalog/collection/' in request.path %}text-emerald-400{% else %}text-zinc-400{% endif %}" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect height="7" width="7" x="3" y="3"></rect><rect height="7" width="7" x="14" y="3"></rect><rect height="7" width="7" x="14" y="14"></rect><rect height="7" width="7" x="3" y="14"></rect></svg>
+          <span class="{% if active_nav == 'collections' or '/admin/catalog/collection/' in request.path %}text-zinc-100 font-semibold{% endif %}">Collections</span>
+        </a>
+        <a href="/admin/catalog/category/" class="flex items-center gap-3 px-3 py-2 rounded-xl {% if active_nav == 'categories' or '/admin/catalog/category/' in request.path %}bg-emerald-500/10 text-emerald-400 font-medium border-l-2 border-emerald-400 shadow-sm{% else %}text-zinc-400 hover:text-zinc-100 hover:bg-[#18191c] transition-colors{% endif %}">
+          <svg class="w-4 h-4 {% if active_nav == 'categories' or '/admin/catalog/category/' in request.path %}text-emerald-400{% else %}text-zinc-400{% endif %}" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>
+          <span class="{% if active_nav == 'categories' or '/admin/catalog/category/' in request.path %}text-zinc-100 font-semibold{% endif %}">Categories</span>
+        </a>
+        <a href="/admin/catalog/material/" class="flex items-center gap-3 px-3 py-2 rounded-xl {% if active_nav == 'materials' or '/admin/catalog/material/' in request.path %}bg-emerald-500/10 text-emerald-400 font-medium border-l-2 border-emerald-400 shadow-sm{% else %}text-zinc-400 hover:text-zinc-100 hover:bg-[#18191c] transition-colors{% endif %}">
+          <svg class="w-4 h-4 {% if active_nav == 'materials' or '/admin/catalog/material/' in request.path %}text-emerald-400{% else %}text-zinc-400{% endif %}" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+          <span class="{% if active_nav == 'materials' or '/admin/catalog/material/' in request.path %}text-zinc-100 font-semibold{% endif %}">Materials</span>
+        </a>
+        <a href="/admin/catalog/productreview/" class="flex items-center gap-3 px-3 py-2 rounded-xl {% if active_nav == 'reviews' or '/admin/catalog/productreview/' in request.path %}bg-emerald-500/10 text-emerald-400 font-medium border-l-2 border-emerald-400 shadow-sm{% else %}text-zinc-400 hover:text-zinc-100 hover:bg-[#18191c] transition-colors{% endif %}">
+          <svg class="w-4 h-4 {% if active_nav == 'reviews' or '/admin/catalog/productreview/' in request.path %}text-emerald-400{% else %}text-zinc-400{% endif %}" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+          <span class="{% if active_nav == 'reviews' or '/admin/catalog/productreview/' in request.path %}text-zinc-100 font-semibold{% endif %}">Product Reviews</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- Section: Customers -->
+    <div>
+      <div class="text-[10px] font-bold tracking-[0.12em] text-zinc-400 uppercase px-2 mb-1.5 font-mono">Customers</div>
+      <div class="space-y-0.5">
+        <a href="/admin/accounts/customuser/" class="flex items-center gap-3 px-3 py-2 rounded-xl {% if active_nav == 'customers' or '/admin/accounts/customuser/' in request.path %}bg-emerald-500/10 text-emerald-400 font-medium border-l-2 border-emerald-400 shadow-sm{% else %}text-zinc-400 hover:text-zinc-100 hover:bg-[#18191c] transition-colors{% endif %}">
+          <svg class="w-4 h-4 {% if active_nav == 'customers' or '/admin/accounts/customuser/' in request.path %}text-emerald-400{% else %}text-zinc-400{% endif %}" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle></svg>
+          <span class="{% if active_nav == 'customers' or '/admin/accounts/customuser/' in request.path %}text-zinc-100 font-semibold{% endif %}">Customers</span>
+        </a>
+        <a href="/admin/core/newslettersubscriber/" class="flex items-center gap-3 px-3 py-2 rounded-xl {% if active_nav == 'subscribers' or '/admin/core/newslettersubscriber/' in request.path %}bg-emerald-500/10 text-emerald-400 font-medium border-l-2 border-emerald-400 shadow-sm{% else %}text-zinc-400 hover:text-zinc-100 hover:bg-[#18191c] transition-colors{% endif %}">
+          <svg class="w-4 h-4 {% if active_nav == 'subscribers' or '/admin/core/newslettersubscriber/' in request.path %}text-emerald-400{% else %}text-zinc-400{% endif %}" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+          <span class="{% if active_nav == 'subscribers' or '/admin/core/newslettersubscriber/' in request.path %}text-zinc-100 font-semibold{% endif %}">Subscribers</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- Section: Engagement -->
+    <div>
+      <div class="text-[10px] font-bold tracking-[0.12em] text-zinc-400 uppercase px-2 mb-1.5 font-mono">Engagement</div>
+      <div class="space-y-0.5">
+        <a href="/admin/core/contactinquiry/" class="flex items-center gap-3 px-3 py-2 rounded-xl {% if active_nav == 'inquiries' or '/admin/core/contactinquiry/' in request.path %}bg-emerald-500/10 text-emerald-400 font-medium border-l-2 border-emerald-400 shadow-sm{% else %}text-zinc-400 hover:text-zinc-100 hover:bg-[#18191c] transition-colors{% endif %}">
+          <svg class="w-4 h-4 {% if active_nav == 'inquiries' or '/admin/core/contactinquiry/' in request.path %}text-emerald-400{% else %}text-zinc-400{% endif %}" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+          <span class="{% if active_nav == 'inquiries' or '/admin/core/contactinquiry/' in request.path %}text-zinc-100 font-semibold{% endif %}">Client Inquiries</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- Section: Sales Channels -->
+    <div>
+      <div class="text-[10px] font-bold tracking-[0.12em] text-zinc-400 uppercase px-2 mb-1.5 font-mono">Sales Channels</div>
+      <div class="space-y-0.5">
+        <a href="/orders/oms/" class="flex items-center justify-between px-3 py-2 rounded-xl {% if active_nav == 'oms' or '/orders/oms/' in request.path %}bg-emerald-500/10 text-emerald-400 font-medium border-l-2 border-emerald-400 shadow-sm{% else %}text-emerald-400 hover:bg-[#18191c] transition-colors{% endif %}">
+          <div class="flex items-center gap-3">
+            <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polygon points="12 2 2 7 12 12 22 7 12 22 2 9 6 3"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
+            <span class="{% if active_nav == 'oms' or '/orders/oms/' in request.path %}text-zinc-100 font-semibold{% endif %}">Atelier OMS</span>
+          </div>
+          <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+        </a>
+        <a href="/" target="_blank" class="flex items-center justify-between px-3 py-2 rounded-xl text-zinc-400 hover:text-zinc-100 hover:bg-[#18191c] transition-colors">
+          <div class="flex items-center gap-3">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+            <span>Online Store</span>
+          </div>
+          <svg class="w-3.5 h-3.5 text-zinc-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+        </a>
+      </div>
+    </div>
+
+    <!-- Section: Settings & Preferences -->
+    <div class="pt-2 border-t border-[#232732]">
+      <div class="text-[10px] font-bold tracking-[0.12em] text-zinc-400 uppercase px-2 mb-1.5 font-mono">Settings &amp; Preferences</div>
+      <div class="space-y-0.5">
+        <a href="/admin/orders/order/#settings" class="sidebar-settings-btn flex items-center justify-between px-3 py-2 rounded-xl text-zinc-400 hover:text-zinc-100 hover:bg-[#18191c] transition-colors cursor-pointer group">
+          <div class="flex items-center gap-3">
+            <svg class="w-4 h-4 text-zinc-400 group-hover:text-[#ebd38d] transition-colors" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+            <span>Settings</span>
+          </div>
+          <span class="active-sidebar-curr-pill px-2 py-0.5 rounded-full bg-[#181a22] text-[#ebd38d] border border-[#2d3240] text-[10px] font-mono font-semibold">₹ INR</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Panel Footer -->
+  <div class="p-3 border-t border-[#232732] bg-[#0d0e10]">
+    <div class="flex items-center gap-2 mb-2">
+      <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 inline-block"></span>
+      <a href="/" target="_blank" class="text-[11px] text-zinc-400 hover:text-emerald-400 transition-colors">Luckjary Boutique Online ↗</a>
+    </div>
+    <div class="flex items-center justify-between">
+      <div class="flex items-center gap-2">
+        <div class="w-7 h-7 rounded-full bg-gradient-to-tr from-amber-600 to-[#ebd38d] text-[#0d0e10] flex items-center justify-center text-xs font-bold font-mono">E</div>
+        <div>
+          <div class="text-xs font-bold text-zinc-100 leading-none">Eleanor</div>
+          <div class="text-[10px] text-zinc-400 font-mono">Director</div>
+        </div>
+      </div>
+      <form method="post" action="{% url 'admin:logout' %}" class="inline m-0 p-0">
+        {% csrf_token %}
+        <button type="submit" class="text-zinc-400 hover:text-red-400 p-1.5 rounded-lg hover:bg-[#1e2024] transition-colors cursor-pointer" title="Sign Out">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+        </button>
+      </form>
+    </div>
+  </div>
+</aside>

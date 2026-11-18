@@ -105,68 +105,70 @@ html, body {
   padding: 0 !important;
 }
 
-/* Reset ALL link styles inside Atelier Left Nav Drawer (NO BLUE LINKS, NO UNDERLINES!) */
+/* Reset link & layout styles inside Atelier Left Side Panel & Desktop Sidebar */
+#desktopSidebar,
+#mobileDrawerPanel,
 #leftNavDrawer {
-  width: 18rem !important;
-  min-width: 18rem !important;
-  max-width: 18rem !important;
-  flex-shrink: 0 !important;
   background-color: #0d0e12 !important;
   border-right: 1px solid #232732 !important;
-  position: sticky !important;
-  top: 0 !important;
-  height: 100vh !important;
 }
-@media (max-width: 1023px) {
-  #leftNavDrawer {
-    position: fixed !important;
-    top: 0 !important;
-    bottom: 0 !important;
-    left: 0 !important;
-    z-index: 1050 !important;
-    width: 18rem !important;
-    max-width: 85vw !important;
-    min-width: 0 !important;
-    height: 100vh !important;
-    height: 100dvh !important;
-    transform: translateX(-100%);
-    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
-  }
-  #leftNavDrawer.translate-x-0 {
-    transform: translateX(0) !important;
-  }
-}
+#desktopSidebar a,
+#mobileDrawerPanel a,
 #leftNavDrawer a,
+#desktopSidebar a:link,
+#mobileDrawerPanel a:link,
 #leftNavDrawer a:link,
+#desktopSidebar a:visited,
+#mobileDrawerPanel a:visited,
 #leftNavDrawer a:visited {
   color: #a1a1aa !important;
   text-decoration: none !important;
   text-decoration-line: none !important;
 }
+#desktopSidebar a:hover,
+#mobileDrawerPanel a:hover,
 #leftNavDrawer a:hover,
+#desktopSidebar a:focus,
+#mobileDrawerPanel a:focus,
 #leftNavDrawer a:focus {
   color: #f4f4f5 !important;
   background-color: #18191c !important;
   text-decoration: none !important;
   text-decoration-line: none !important;
 }
+#desktopSidebar a.active,
+#mobileDrawerPanel a.active,
 #leftNavDrawer a.active,
+#desktopSidebar a[class*="bg-emerald"],
+#mobileDrawerPanel a[class*="bg-emerald"],
 #leftNavDrawer a[class*="bg-emerald"] {
   color: #34d399 !important;
   background-color: rgba(16, 185, 129, 0.1) !important;
   text-decoration: none !important;
   text-decoration-line: none !important;
 }
+#desktopSidebar a.active span,
+#mobileDrawerPanel a.active span,
 #leftNavDrawer a.active span,
+#desktopSidebar a[class*="bg-emerald"] span,
+#mobileDrawerPanel a[class*="bg-emerald"] span,
 #leftNavDrawer a[class*="bg-emerald"] span {
   color: #f4f4f5 !important;
   text-decoration: none !important;
 }
+#desktopSidebar a.active svg,
+#mobileDrawerPanel a.active svg,
 #leftNavDrawer a.active svg,
+#desktopSidebar a[class*="bg-emerald"] svg,
+#mobileDrawerPanel a[class*="bg-emerald"] svg,
 #leftNavDrawer a[class*="bg-emerald"] svg {
   color: #34d399 !important;
 }
+#desktopSidebar span,
+#mobileDrawerPanel span,
 #leftNavDrawer span,
+#desktopSidebar svg,
+#mobileDrawerPanel svg,
 #leftNavDrawer svg {
   text-decoration: none !important;
 }
@@ -177,7 +179,6 @@ html, body {
   flex-direction: column !important;
   flex: 1 1 0% !important;
   min-width: 0 !important;
-  width: calc(100% - 18rem) !important;
   min-height: 100vh !important;
   overflow-x: hidden !important;
   background-color: #0d0e10 !important;
@@ -193,43 +194,7 @@ html, body {
   }
 }
 
-/* Universal Top Bar */
-#atelier-top-bar {
-  display: flex !important;
-  height: 4rem !important; /* 64px */
-  width: 100% !important;
-  background-color: rgba(14, 16, 21, 0.95) !important;
-  border-bottom: 1px solid #232732 !important;
-  z-index: 30 !important;
-  box-sizing: border-box !important;
-}
-#atelier-top-bar > div {
-  width: 100% !important;
-  max-width: 100% !important;
-  box-sizing: border-box !important;
-}
-#atelier-top-bar .atelier-top-search {
-  display: flex !important;
-}
-#atelier-top-bar .atelier-top-link {
-  display: inline-flex !important;
-}
-#atelier-top-bar .atelier-top-logout {
-  display: block !important;
-}
-@media (max-width: 767px) {
-  #atelier-top-bar .atelier-top-search {
-    display: none !important;
-  }
-  #atelier-top-bar .atelier-top-link {
-    display: none !important;
-  }
-}
-@media (max-width: 1023px) {
-  #atelier-top-bar .atelier-top-logout {
-    display: none !important;
-  }
-}
+
 
 /* Content canvas takes 100% of flex column width */
 .shopify-content-canvas,
@@ -304,169 +269,11 @@ html, body {
 
 <div id="container" class="atelier-app-root flex flex-row flex-1 w-full relative min-h-screen bg-[#0d0e10]">
 
-    <!-- Responsive Drawer Overlays -->
-    <div id="leftNavDrawerBackdrop" class="fixed inset-0 bg-black/80 z-40 opacity-0 pointer-events-none transition-opacity duration-300 backdrop-blur-sm lg:hidden"></div>
+    <!-- Responsive Filter Overlay -->
     <div id="shopify-filter-backdrop" class="shopify-filter-backdrop" onclick="toggleChangelistFilter()" aria-hidden="true"></div>
 
     {% if has_permission and not is_popup %}
-    <!-- ==========================================
-         PRESERVED UNIFIED LEFT SIDE PANEL & DRAWER
-         (Persistent Docked Sidebar on Desktop lg:+, Off-Canvas Slide-out Drawer on Mobile)
-         ========================================== -->
-    <aside id="leftNavDrawer" class="fixed inset-y-0 left-0 z-50 w-72 max-w-[85vw] bg-[#0d0e12] border-r border-[#232732] shadow-2xl flex flex-col -translate-x-full lg:translate-x-0 lg:static lg:sticky lg:top-0 lg:h-screen lg:shadow-none lg:z-30 lg:shrink-0 overflow-y-auto">
-      <!-- Panel Header -->
-      <div class="p-4 border-b border-[#232732] flex items-center justify-between">
-        <a href="{% url 'admin:index' %}" class="flex items-center gap-2.5 group focus:outline-none">
-          <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 inline-block group-hover:scale-125 transition-transform duration-300 shadow-[0_0_8px_rgba(16,185,129,0.5)]"></span>
-          <div class="flex flex-col">
-            <span class="font-bold text-[14px] tracking-[0.16em] text-zinc-100 font-sans">LUCKJARY</span>
-            <span class="text-[9px] text-[#ebd38d] uppercase tracking-[0.25em] font-mono-luxury font-semibold">HAUTE ATELIER</span>
-          </div>
-        </a>
-        <button id="closeNavDrawerBtn" aria-label="Close navigation" class="lg:hidden w-8 h-8 rounded-lg flex items-center justify-center text-zinc-400 hover:text-zinc-100 active:scale-95 transition-colors cursor-pointer" type="button">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-        </button>
-      </div>
-
-      <!-- Navigation Groups -->
-      <div class="p-3 space-y-4 flex-1 text-[13px] font-sans">
-        <!-- Section: Navigation -->
-        <div>
-          <div class="text-[10px] font-bold tracking-[0.12em] text-zinc-400 uppercase px-2 mb-1.5 font-mono-luxury">Navigation</div>
-          <div class="space-y-0.5">
-            <a href="{% url 'admin:index' %}" class="flex items-center gap-3 px-3 py-2 rounded-xl {% if request.path == '/admin/' or request.path == '/admin/index/' %}bg-emerald-500/10 text-emerald-400 font-medium border-l-2 border-emerald-400 shadow-sm active{% else %}text-zinc-400 hover:text-zinc-100 hover:bg-[#18191c] transition-colors{% endif %}">
-              <svg class="w-4 h-4 {% if request.path == '/admin/' or request.path == '/admin/index/' %}text-emerald-400{% else %}text-zinc-400{% endif %}" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg>
-              <span {% if request.path == '/admin/' or request.path == '/admin/index/' %}class="text-zinc-100 font-semibold"{% else %}class="text-zinc-400"{% endif %}>Home</span>
-            </a>
-            <a href="{% url 'admin:orders_order_changelist' %}" class="flex items-center justify-between px-3 py-2 rounded-xl {% if '/admin/orders/order/' in request.path %}bg-emerald-500/10 text-emerald-400 font-medium border-l-2 border-emerald-400 shadow-sm active{% else %}text-zinc-400 hover:text-zinc-100 hover:bg-[#18191c] transition-colors{% endif %}">
-              <div class="flex items-center gap-3">
-                <svg class="w-4 h-4 {% if '/admin/orders/order/' in request.path %}text-emerald-400{% else %}text-zinc-400{% endif %}" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="16.5" y1="9.4" x2="7.5" y2="4.21"></line><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
-                <span {% if '/admin/orders/order/' in request.path %}class="text-zinc-100 font-semibold"{% else %}class="text-zinc-400"{% endif %}>Orders</span>
-              </div>
-              <span class="px-2 py-0.5 rounded-full bg-[#181a22] text-[#ebd38d] border border-[#2d3240] text-[11px] font-mono-luxury font-bold">4</span>
-            </a>
-            <a href="{% url 'admin:orders_coupon_changelist' %}" class="flex items-center gap-3 px-3 py-2 rounded-xl {% if '/admin/orders/coupon/' in request.path %}bg-emerald-500/10 text-emerald-400 font-medium border-l-2 border-emerald-400 shadow-sm active{% else %}text-zinc-400 hover:text-zinc-100 hover:bg-[#18191c] transition-colors{% endif %}">
-              <svg class="w-4 h-4 {% if '/admin/orders/coupon/' in request.path %}text-emerald-400{% else %}text-zinc-400{% endif %}" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="19" y1="5" x2="5" y2="19"></line><circle cx="6.5" cy="6.5" r="2.5"></circle><circle cx="17.5" cy="17.5" r="2.5"></circle></svg>
-              <span {% if '/admin/orders/coupon/' in request.path %}class="text-zinc-100 font-semibold"{% else %}class="text-zinc-400"{% endif %}>Discounts</span>
-            </a>
-          </div>
-        </div>
-
-        <!-- Section: Products & Inventory -->
-        <div>
-          <div class="text-[10px] font-bold tracking-[0.12em] text-zinc-400 uppercase px-2 mb-1.5 font-mono-luxury">Products &amp; Inventory</div>
-          <div class="space-y-0.5">
-            <a href="{% url 'admin:catalog_product_changelist' %}" class="flex items-center justify-between px-3 py-2 rounded-xl {% if '/admin/catalog/product/' in request.path and '/admin/catalog/productreview/' not in request.path %}bg-emerald-500/10 text-emerald-400 font-medium border-l-2 border-emerald-400 shadow-sm active{% else %}text-zinc-400 hover:text-zinc-100 hover:bg-[#18191c] transition-colors{% endif %}">
-              <div class="flex items-center gap-3">
-                <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polygon points="6 3 18 3 22 9 12 22 2 9 6 3"></polygon></svg>
-                <span {% if '/admin/catalog/product/' in request.path and '/admin/catalog/productreview/' not in request.path %}class="text-zinc-100 font-semibold"{% else %}class="text-zinc-400"{% endif %}>Vault Products</span>
-              </div>
-              <span class="px-2 py-0.5 rounded-full bg-[#181a22] text-emerald-400 text-[11px] font-mono-luxury font-bold">17</span>
-            </a>
-            <a href="{% url 'admin:catalog_collection_changelist' %}" class="flex items-center gap-3 px-3 py-2 rounded-xl {% if '/admin/catalog/collection/' in request.path %}bg-emerald-500/10 text-emerald-400 font-medium border-l-2 border-emerald-400 shadow-sm active{% else %}text-zinc-400 hover:text-zinc-100 hover:bg-[#18191c] transition-colors{% endif %}">
-              <svg class="w-4 h-4 {% if '/admin/catalog/collection/' in request.path %}text-emerald-400{% else %}text-zinc-400{% endif %}" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect height="7" width="7" x="3" y="3"></rect><rect height="7" width="7" x="14" y="3"></rect><rect height="7" width="7" x="14" y="14"></rect><rect height="7" width="7" x="3" y="14"></rect></svg>
-              <span {% if '/admin/catalog/collection/' in request.path %}class="text-zinc-100 font-semibold"{% else %}class="text-zinc-400"{% endif %}>Collections</span>
-            </a>
-            <a href="{% url 'admin:catalog_category_changelist' %}" class="flex items-center gap-3 px-3 py-2 rounded-xl {% if '/admin/catalog/category/' in request.path %}bg-emerald-500/10 text-emerald-400 font-medium border-l-2 border-emerald-400 shadow-sm active{% else %}text-zinc-400 hover:text-zinc-100 hover:bg-[#18191c] transition-colors{% endif %}">
-              <svg class="w-4 h-4 {% if '/admin/catalog/category/' in request.path %}text-emerald-400{% else %}text-zinc-400{% endif %}" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>
-              <span {% if '/admin/catalog/category/' in request.path %}class="text-zinc-100 font-semibold"{% else %}class="text-zinc-400"{% endif %}>Categories</span>
-            </a>
-            <a href="{% url 'admin:catalog_material_changelist' %}" class="flex items-center gap-3 px-3 py-2 rounded-xl {% if '/admin/catalog/material/' in request.path %}bg-emerald-500/10 text-emerald-400 font-medium border-l-2 border-emerald-400 shadow-sm active{% else %}text-zinc-400 hover:text-zinc-100 hover:bg-[#18191c] transition-colors{% endif %}">
-              <svg class="w-4 h-4 {% if '/admin/catalog/material/' in request.path %}text-emerald-400{% else %}text-zinc-400{% endif %}" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
-              <span {% if '/admin/catalog/material/' in request.path %}class="text-zinc-100 font-semibold"{% else %}class="text-zinc-400"{% endif %}>Materials</span>
-            </a>
-            <a href="{% url 'admin:catalog_productreview_changelist' %}" class="flex items-center gap-3 px-3 py-2 rounded-xl {% if '/admin/catalog/productreview/' in request.path %}bg-emerald-500/10 text-emerald-400 font-medium border-l-2 border-emerald-400 shadow-sm active{% else %}text-zinc-400 hover:text-zinc-100 hover:bg-[#18191c] transition-colors{% endif %}">
-              <svg class="w-4 h-4 {% if '/admin/catalog/productreview/' in request.path %}text-emerald-400{% else %}text-zinc-400{% endif %}" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
-              <span {% if '/admin/catalog/productreview/' in request.path %}class="text-zinc-100 font-semibold"{% else %}class="text-zinc-400"{% endif %}>Product Reviews</span>
-            </a>
-          </div>
-        </div>
-
-        <!-- Section: Customers -->
-        <div>
-          <div class="text-[10px] font-bold tracking-[0.12em] text-zinc-400 uppercase px-2 mb-1.5 font-mono-luxury">Customers</div>
-          <div class="space-y-0.5">
-            <a href="{% url 'admin:accounts_customuser_changelist' %}" class="flex items-center gap-3 px-3 py-2 rounded-xl {% if '/admin/accounts/customuser/' in request.path %}bg-emerald-500/10 text-emerald-400 font-medium border-l-2 border-emerald-400 shadow-sm active{% else %}text-zinc-400 hover:text-zinc-100 hover:bg-[#18191c] transition-colors{% endif %}">
-              <svg class="w-4 h-4 {% if '/admin/accounts/customuser/' in request.path %}text-emerald-400{% else %}text-zinc-400{% endif %}" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle></svg>
-              <span {% if '/admin/accounts/customuser/' in request.path %}class="text-zinc-100 font-semibold"{% else %}class="text-zinc-400"{% endif %}>Customers</span>
-            </a>
-            <a href="{% url 'admin:core_newslettersubscriber_changelist' %}" class="flex items-center gap-3 px-3 py-2 rounded-xl {% if '/admin/core/newslettersubscriber/' in request.path %}bg-emerald-500/10 text-emerald-400 font-medium border-l-2 border-emerald-400 shadow-sm active{% else %}text-zinc-400 hover:text-zinc-100 hover:bg-[#18191c] transition-colors{% endif %}">
-              <svg class="w-4 h-4 {% if '/admin/core/newslettersubscriber/' in request.path %}text-emerald-400{% else %}text-zinc-400{% endif %}" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
-              <span {% if '/admin/core/newslettersubscriber/' in request.path %}class="text-zinc-100 font-semibold"{% else %}class="text-zinc-400"{% endif %}>Subscribers</span>
-            </a>
-          </div>
-        </div>
-
-        <!-- Section: Engagement -->
-        <div>
-          <div class="text-[10px] font-bold tracking-[0.12em] text-zinc-400 uppercase px-2 mb-1.5 font-mono-luxury">Engagement</div>
-          <div class="space-y-0.5">
-            <a href="{% url 'admin:core_contactinquiry_changelist' %}" class="flex items-center gap-3 px-3 py-2 rounded-xl {% if '/admin/core/contactinquiry/' in request.path %}bg-emerald-500/10 text-emerald-400 font-medium border-l-2 border-emerald-400 shadow-sm active{% else %}text-zinc-400 hover:text-zinc-100 hover:bg-[#18191c] transition-colors{% endif %}">
-              <svg class="w-4 h-4 {% if '/admin/core/contactinquiry/' in request.path %}text-emerald-400{% else %}text-zinc-400{% endif %}" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
-              <span {% if '/admin/core/contactinquiry/' in request.path %}class="text-zinc-100 font-semibold"{% else %}class="text-zinc-400"{% endif %}>Client Inquiries</span>
-            </a>
-          </div>
-        </div>
-
-        <!-- Section: Sales Channels -->
-        <div>
-          <div class="text-[10px] font-bold tracking-[0.12em] text-zinc-400 uppercase px-2 mb-1.5 font-mono-luxury">Sales Channels</div>
-          <div class="space-y-0.5">
-            <a href="{% url 'orders:oms_dashboard' %}" class="flex items-center justify-between px-3 py-2 rounded-xl text-emerald-400 hover:bg-[#18191c] transition-colors">
-              <div class="flex items-center gap-3">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polygon points="12 2 2 7 12 12 22 7 12 22 2 9 6 3"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
-                <span>Atelier OMS</span>
-              </div>
-              <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-            </a>
-            <a href="{% url 'core:home' %}" target="_blank" class="flex items-center justify-between px-3 py-2 rounded-xl text-zinc-400 hover:text-zinc-100 hover:bg-[#18191c] transition-colors">
-              <div class="flex items-center gap-3">
-                <svg class="w-4 h-4 text-zinc-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
-                <span class="text-zinc-400">Online Store</span>
-              </div>
-              <svg class="w-3.5 h-3.5 text-zinc-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
-            </a>
-          </div>
-        </div>
-
-        <!-- Section: Settings & Preferences -->
-        <div class="pt-2 border-t border-[#232732]">
-          <div class="text-[10px] font-bold tracking-[0.12em] text-zinc-400 uppercase px-2 mb-1.5 font-mono-luxury">Settings &amp; Preferences</div>
-          <div class="space-y-0.5">
-            <a href="{% url 'admin:orders_order_changelist' %}#settings" class="sidebar-settings-btn flex items-center justify-between px-3 py-2 rounded-xl text-zinc-400 hover:text-zinc-100 hover:bg-[#18191c] transition-colors cursor-pointer group">
-              <div class="flex items-center gap-3">
-                <svg class="w-4 h-4 text-zinc-400 group-hover:text-[#ebd38d] transition-colors" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
-                <span class="text-zinc-400">Settings</span>
-              </div>
-              <span class="active-sidebar-curr-pill px-2 py-0.5 rounded-full bg-[#181a22] text-[#ebd38d] border border-[#2d3240] text-[10px] font-mono-luxury font-semibold">₹ INR</span>
-            </a>
-          </div>
-        </div>
-      </div>
-
-      <!-- Panel Footer -->
-      <div class="p-3 border-t border-[#232732] bg-[#0d0e10]">
-        <div class="flex items-center gap-2 mb-2">
-          <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 inline-block"></span>
-          <a href="{% url 'core:home' %}" target="_blank" class="text-[11px] text-zinc-400 hover:text-emerald-400 transition-colors">Luckjary Boutique Online ↗</a>
-        </div>
-        <div class="flex items-center justify-between">
-          <div class="flex items-center gap-2">
-            <div class="w-7 h-7 rounded-full bg-gradient-to-tr from-amber-600 to-[#ebd38d] text-[#0d0e10] flex items-center justify-center text-xs font-bold font-mono-luxury">{{ user.first_name|slice:":1"|default:"E"|upper }}</div>
-            <div>
-              <div class="text-xs font-bold text-zinc-100 leading-none">{{ user.first_name|default:"Eleanor" }}</div>
-              <div class="text-[10px] text-zinc-400 font-mono-luxury">Director</div>
-            </div>
-          </div>
-          <form method="post" action="{% url 'admin:logout' %}" class="inline m-0 p-0">
-            {% csrf_token %}
-            <button type="submit" class="text-zinc-400 hover:text-red-400 p-1.5 rounded-lg hover:bg-[#1e2024] transition-colors cursor-pointer" title="Sign Out">
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
-            </button>
-          </form>
-        </div>
-      </div>
-    </aside>
+    {% include "admin/includes/atelier_sidebar.html" %}
     {% endif %}
 
     <!-- ==========================================
@@ -474,105 +281,7 @@ html, body {
          ========================================== -->
     <div id="atelier-main-shell" class="flex-1 min-w-0 flex flex-col min-h-screen overflow-x-hidden">
       {% if has_permission and not is_popup %}
-      <!-- Top Universal Header Bar (Full Width & Aligned with media_1794924809453_ed80287d.png) -->
-      <header id="atelier-top-bar" class="sticky top-0 z-30 w-full bg-[#0e1015]/95 backdrop-blur-2xl border-b border-[#232732] shadow-sm relative">
-        <div class="w-full px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
-          
-          <!-- Mobile Drawer Toggle (Only visible on mobile/tablet when sidebar is off-canvas) -->
-          <div class="flex lg:hidden items-center gap-2.5">
-            <button id="openNavDrawerBtn" aria-label="Toggle Navigation Panel" class="w-9 h-9 rounded-xl bg-[#151720] hover:bg-[#1e212d] text-zinc-300 hover:text-white border border-[#262A36] flex items-center justify-center active:scale-95 transition-all cursor-pointer shadow-sm" type="button" title="Toggle Navigation">
-              <span class="material-symbols-outlined text-[20px]">menu</span>
-            </button>
-            <div class="flex items-center gap-2">
-              <div class="w-7 h-7 rounded-lg bg-[#14161C] border border-[#ebd38d]/30 flex items-center justify-center text-[#ebd38d]">
-                <span class="material-symbols-outlined text-[15px]">diamond</span>
-              </div>
-              <span class="text-xs uppercase font-sans tracking-[0.2em] font-semibold text-[#e3e2e5]">Luckjary</span>
-            </div>
-          </div>
-
-          <!-- Middle: Global Atelier Search Bar (From screenshot media_1794924809453_ed80287d.png) -->
-          <div class="atelier-top-search items-center flex-1 max-w-xl">
-            <form action="{% url 'admin:catalog_product_changelist' %}" method="get" class="relative w-full m-0 p-0" id="globalTopSearchForm">
-              <span class="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-400 text-[18px] pointer-events-none">search</span>
-              <input type="text" name="q" placeholder="Search orders, fine jewelry, VIP patrons... (Ctrl+K)" class="w-full h-10 pl-10 pr-12 rounded-xl bg-[#14161c] border border-[#262A36] text-xs text-zinc-200 placeholder-zinc-500 focus:outline-none focus:border-[#ebd38d]/50 focus:ring-1 focus:ring-[#ebd38d]/30 transition-all font-sans" id="globalAtelierSearch">
-              <kbd class="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] font-mono-luxury text-zinc-400 border border-[#2D3240] px-1.5 py-0.5 rounded bg-[#181A24] pointer-events-none">⌘K</kbd>
-            </form>
-          </div>
-
-          <!-- Right: Action Pills, Profile Menu & Sign Out (Pushed to far right) -->
-          <div class="flex items-center gap-2 sm:gap-3 shrink-0 ml-auto">
-            <!-- Online Storefront Link -->
-            <a href="{% url 'core:home' %}" target="_blank" class="atelier-top-link items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#151720] hover:bg-[#1e212d] border border-[#262A36] text-xs text-zinc-300 hover:text-white transition-all">
-              <span class="material-symbols-outlined text-[15px] text-zinc-400">open_in_new</span>
-              <span>Online Store</span>
-            </a>
-
-            <!-- Atelier OMS Live Status Pill -->
-            <a href="{% url 'orders:oms_dashboard' %}" class="atelier-top-link items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-950/40 hover:bg-emerald-900/40 border border-emerald-500/30 text-xs text-emerald-400 font-medium transition-all">
-              <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-              <span>Atelier OMS</span>
-            </a>
-
-            <!-- Executive Director Profile Menu -->
-            <div class="relative inline-block text-left" id="profileDropdownWrapper">
-              <button id="profileDropdownBtn" class="flex items-center gap-2 pl-1.5 pr-2.5 py-1 rounded-xl bg-[#151720] hover:bg-[#1e212d] border border-[#262A36] hover:border-[#ebd38d]/40 transition-all cursor-pointer shadow-sm" type="button" aria-expanded="false">
-                <div class="w-7 h-7 rounded-lg bg-gradient-to-tr from-amber-600 via-[#ebd38d] to-amber-200 text-[#0d0e10] flex items-center justify-center text-xs font-bold font-mono-luxury shadow-sm shrink-0">
-                  {{ user.first_name|slice:":1"|default:"E"|upper }}
-                </div>
-                <div class="flex flex-col text-left">
-                  <span class="text-xs font-semibold text-[#e3e2e5] leading-tight">{{ user.first_name|default:"Eleanor" }}</span>
-                  <span class="text-[9px] uppercase tracking-wider text-[#ebd38d] font-mono-luxury leading-tight font-medium">Director</span>
-                </div>
-                <span class="material-symbols-outlined text-[15px] text-zinc-400 transition-transform duration-200" id="profileChevron">expand_more</span>
-              </button>
-              
-              <!-- Profile Dropdown Popup -->
-              <div id="profileDropdownMenu" class="absolute right-0 mt-2 w-56 bg-[#181A22]/95 backdrop-blur-xl border border-[#2D3240] rounded-xl shadow-2xl py-2 z-50 hidden">
-                <div class="px-3.5 py-2 border-b border-[#232732]">
-                  <p class="text-xs font-semibold text-[#e3e2e5]">{{ user.get_full_name|default:"Eleanor Vance" }}</p>
-                  <p class="text-[10px] text-[#ebd38d] font-mono-luxury">{{ user.email|default:"director@luckjary.com" }}</p>
-                  <span class="inline-block mt-1 text-[9px] uppercase tracking-wider bg-[#ebd38d]/15 text-[#ebd38d] px-1.5 py-0.2 rounded font-semibold border border-[#ebd38d]/25">Haute Atelier Admin</span>
-                </div>
-                <div class="py-1">
-                  <a href="{% url 'admin:password_change' %}" class="flex items-center gap-2 px-3.5 py-2 text-xs text-[#e3e2e5] hover:bg-[#20232e] transition-colors">
-                    <span class="material-symbols-outlined text-[16px] text-zinc-400">key</span>
-                    <span>Security & Passkey</span>
-                  </a>
-                  <a href="{% url 'core:home' %}" target="_blank" class="flex items-center gap-2 px-3.5 py-2 text-xs text-[#e3e2e5] hover:bg-[#20232e] transition-colors">
-                    <span class="material-symbols-outlined text-[16px] text-zinc-400">storefront</span>
-                    <span>Online Storefront</span>
-                  </a>
-                  <a href="{% url 'admin:orders_order_changelist' %}#settings" class="w-full text-left flex items-center gap-2 px-3.5 py-2 text-xs text-[#e3e2e5] hover:bg-[#20232e] transition-colors cursor-pointer">
-                    <span class="material-symbols-outlined text-[16px] text-zinc-400">settings</span>
-                    <span>Preferences</span>
-                  </a>
-                </div>
-                <div class="border-t border-[#232732] my-1"></div>
-                <div class="py-1">
-                  <form method="post" action="{% url 'admin:logout' %}" class="block m-0 p-0">
-                    {% csrf_token %}
-                    <button type="submit" class="w-full text-left flex items-center gap-2 px-3.5 py-2 text-xs text-red-400 hover:text-red-300 hover:bg-red-950/40 transition-colors cursor-pointer">
-                      <span class="material-symbols-outlined text-[16px] text-red-400">logout</span>
-                      <span>Sign Out</span>
-                    </button>
-                  </form>
-                </div>
-              </div>
-            </div>
-
-            <!-- Direct Sign Out Button -->
-            <form method="post" action="{% url 'admin:logout' %}" class="atelier-top-logout m-0 p-0">
-              {% csrf_token %}
-              <button type="submit" class="flex items-center gap-1.5 px-3 py-1.5 text-xs text-zinc-400 hover:text-red-400 transition-colors cursor-pointer bg-transparent border-0 font-medium" title="Sign Out">
-                <span class="material-symbols-outlined text-[16px]">logout</span>
-                <span>Log Out</span>
-              </button>
-            </form>
-          </div>
-
-        </div>
-      </header>
+      {% include "admin/includes/atelier_header.html" %}
       {% endif %}
 
       <!-- Content Canvas Area -->
@@ -625,85 +334,9 @@ html, body {
 
 <footer id="footer">{% block footer %}{% endblock %}</footer>
 
+{% include "admin/includes/atelier_nav_scripts.html" %}
+
 <script>
-// Left Drawer Navigation Logic (Mobile Slide-out & Desktop Collapsible)
-const openNavDrawerBtn = document.getElementById('openNavDrawerBtn');
-const closeNavDrawerBtn = document.getElementById('closeNavDrawerBtn');
-const leftNavDrawerBackdrop = document.getElementById('leftNavDrawerBackdrop');
-const leftNavDrawer = document.getElementById('leftNavDrawer');
-
-function openNavDrawerMobile() {
-  if (!leftNavDrawer || !leftNavDrawerBackdrop) return;
-  leftNavDrawerBackdrop.classList.remove('opacity-0', 'pointer-events-none');
-  leftNavDrawerBackdrop.classList.add('opacity-100', 'pointer-events-auto');
-  leftNavDrawer.classList.remove('-translate-x-full');
-  leftNavDrawer.classList.add('translate-x-0');
-}
-
-function closeNavDrawerMobile() {
-  if (!leftNavDrawer || !leftNavDrawerBackdrop) return;
-  leftNavDrawer.classList.remove('translate-x-0');
-  leftNavDrawer.classList.add('-translate-x-full');
-  leftNavDrawerBackdrop.classList.remove('opacity-100', 'pointer-events-auto');
-  leftNavDrawerBackdrop.classList.add('opacity-0', 'pointer-events-none');
-}
-
-function toggleShopifySidebar() {
-  if (!leftNavDrawer) return;
-  if (leftNavDrawer.classList.contains('-translate-x-full')) {
-    openNavDrawerMobile();
-  } else {
-    closeNavDrawerMobile();
-  }
-}
-
-if (openNavDrawerBtn) openNavDrawerBtn.addEventListener('click', openNavDrawerMobile);
-if (closeNavDrawerBtn) closeNavDrawerBtn.addEventListener('click', closeNavDrawerMobile);
-if (leftNavDrawerBackdrop) leftNavDrawerBackdrop.addEventListener('click', closeNavDrawerMobile);
-
-// Executive Director Profile Dropdown Logic
-const profileBtn = document.getElementById('profileDropdownBtn');
-const profileMenu = document.getElementById('profileDropdownMenu');
-const profileChevron = document.getElementById('profileChevron');
-
-function closeProfileMenu() {
-  if (profileMenu) profileMenu.classList.add('hidden');
-  if (profileChevron) profileChevron.classList.remove('rotate-180');
-}
-
-if (profileBtn) {
-  profileBtn.addEventListener('click', function(e) {
-    e.stopPropagation();
-    if (profileMenu) {
-      const isHidden = profileMenu.classList.contains('hidden');
-      if (isHidden) {
-        profileMenu.classList.remove('hidden');
-        if (profileChevron) profileChevron.classList.add('rotate-180');
-      } else {
-        closeProfileMenu();
-      }
-    }
-  });
-}
-
-document.addEventListener('click', function(e) {
-  if (profileMenu && !profileMenu.contains(e.target) && !profileBtn?.contains(e.target)) {
-    closeProfileMenu();
-  }
-});
-
-// Keyboard Shortcut Ctrl+K / Cmd+K to focus Atelier Global Search
-document.addEventListener('keydown', function(e) {
-  if ((e.ctrlKey || e.metaKey) && (e.key === 'k' || e.key === 'K')) {
-    e.preventDefault();
-    const searchInput = document.getElementById('globalAtelierSearch');
-    if (searchInput) {
-      searchInput.focus();
-      searchInput.select();
-    }
-  }
-});
-
 // Changelist Filter Drawer Support
 function toggleChangelistFilter() {
     var filter = document.getElementById('changelist-filter');

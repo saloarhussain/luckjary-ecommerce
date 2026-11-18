@@ -1,0 +1,88 @@
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  // Mobile Navigation Drawer Toggle
+  const openMobileBtn = document.getElementById('openMobileDrawerBtn') || document.getElementById('openNavDrawerBtn');
+  const closeMobileBtn = document.getElementById('closeMobileDrawerBtn') || document.getElementById('closeNavDrawerBtn');
+  const mobileModal = document.getElementById('mobileDrawerModal');
+  const mobileBackdrop = document.getElementById('mobileDrawerBackdrop');
+  const mobilePanel = document.getElementById('mobileDrawerPanel');
+  const desktopSidebar = document.getElementById('desktopSidebar');
+
+  function openMobileDrawer() {
+    if (!mobileModal || !mobilePanel || !mobileBackdrop) return;
+    mobileModal.classList.remove('pointer-events-none');
+    mobileBackdrop.classList.remove('opacity-0', 'pointer-events-none');
+    mobileBackdrop.classList.add('opacity-100');
+    mobilePanel.classList.remove('-translate-x-full');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeMobileDrawer() {
+    if (!mobileModal || !mobilePanel || !mobileBackdrop) return;
+    mobilePanel.classList.add('-translate-x-full');
+    mobileBackdrop.classList.remove('opacity-100');
+    mobileBackdrop.classList.add('opacity-0', 'pointer-events-none');
+    setTimeout(() => {
+      mobileModal.classList.add('pointer-events-none');
+    }, 300);
+    document.body.style.overflow = '';
+  }
+
+  // Expose globally for page-level scripts
+  window.openMobileDrawer = openMobileDrawer;
+  window.closeMobileDrawer = closeMobileDrawer;
+
+  if (openMobileBtn) {
+    openMobileBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (window.innerWidth < 1024) {
+        openMobileDrawer();
+      } else if (desktopSidebar) {
+        desktopSidebar.classList.toggle('lg:flex');
+        desktopSidebar.classList.toggle('hidden');
+      }
+    });
+  }
+
+  if (closeMobileBtn) {
+    closeMobileBtn.addEventListener('click', closeMobileDrawer);
+  }
+
+  if (mobileBackdrop) {
+    mobileBackdrop.addEventListener('click', closeMobileDrawer);
+  }
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      closeMobileDrawer();
+      const profileMenu = document.getElementById('profileDropdownMenu');
+      const profileChevron = document.getElementById('profileChevron');
+      if (profileMenu && !profileMenu.classList.contains('hidden')) {
+        profileMenu.classList.add('hidden');
+        if (profileChevron) profileChevron.classList.remove('rotate-180');
+      }
+    }
+  });
+
+  // Profile Dropdown Toggle
+  const profileBtn = document.getElementById('profileDropdownBtn');
+  const profileMenu = document.getElementById('profileDropdownMenu');
+  const profileChevron = document.getElementById('profileChevron');
+
+  if (profileBtn && profileMenu) {
+    profileBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const isHidden = profileMenu.classList.contains('hidden');
+      profileMenu.classList.toggle('hidden');
+      if (profileChevron) profileChevron.classList.toggle('rotate-180', isHidden);
+    });
+
+    document.addEventListener('click', (e) => {
+      if (!profileMenu.contains(e.target) && !profileBtn.contains(e.target)) {
+        profileMenu.classList.add('hidden');
+        if (profileChevron) profileChevron.classList.remove('rotate-180');
+      }
+    });
+  }
+});
+</script>
