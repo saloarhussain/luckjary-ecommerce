@@ -20,6 +20,7 @@ class AddressInline(admin.StackedInline):
 
 @admin.register(CustomUser)
 class CustomUserAdmin(UserAdmin):
+    change_list_template = 'admin/accounts/customuser/change_list.html'
     show_facets = admin.ShowFacets.NEVER
     list_display = ('client_display', 'account_role_pill', 'is_email_verified_pill', 'newsletter_pill', 'date_joined', 'action_buttons')
     list_filter = ('is_email_verified', 'newsletter_subscribed', 'is_staff', 'is_active')
