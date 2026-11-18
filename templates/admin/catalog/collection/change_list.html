@@ -8,7 +8,7 @@
 <!-- Google Fonts for Ultra-Luxury Atelier Aesthetic -->
 <link href="https://fonts.googleapis.com" rel="preconnect">
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
-<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..900;1,6..96,400..700&family=JetBrains+Mono:wght@300;400;500;600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
 
 <!-- Tailwind CSS CDN with Plugins -->
@@ -89,7 +89,13 @@ html, body {
 .font-serif {
   font-family: 'Bodoni Moda', serif, Georgia !important;
 }
-</style>
+
+    /* Universal Underline Killer */
+    a, a *, a:hover, a:hover *, a:focus, a:active {
+      text-decoration: none !important;
+      text-decoration-line: none !important;
+    }
+  </style>
 </head>
 
 <body class="h-full bg-[#0a0b0d] text-stone-300 font-sans antialiased flex flex-col min-h-screen selection:bg-emerald-500/20 selection:text-emerald-300">
@@ -135,7 +141,7 @@ html, body {
           </div>
 
           <!-- Add Collection Primary Button -->
-          <a href="{% url 'admin:catalog_collection_add' %}" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-lg bg-emerald-400 hover:bg-emerald-300 text-stone-950 text-xs font-semibold uppercase tracking-wider shadow-[0_0_20px_rgba(16,185,129,0.25)] hover:shadow-[0_0_25px_rgba(16,185,129,0.4)] transition-all flex-shrink-0 no-underline cursor-pointer">
+          <a href="{% url 'admin:catalog_collection_add' %}" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-3.5 py-2 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-obsidian-950 font-semibold text-xs tracking-wide transition shadow-lg glow-emerald whitespace-nowrap cursor-pointer no-underline" style="color: #07080a !important; text-decoration: none !important;">
             <svg class="w-4 h-4 stroke-[2.5]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 4v16m8-8H4" stroke-linecap="round" stroke-linejoin="round"></path></svg>
             <span>+ Add Collection</span>
           </a>
@@ -421,7 +427,7 @@ html, body {
               <a href="{% url 'admin:catalog_collection_changelist' %}" class="px-4 py-2 text-xs font-medium text-stone-400 hover:text-stone-200 bg-transparent border border-transparent hover:border-stone-800 rounded transition-colors no-underline">
                 Reset Changes
               </a>
-              <button type="submit" name="_save" class="px-5 py-2 text-xs font-semibold uppercase tracking-wider text-black bg-emerald-400 hover:bg-emerald-300 rounded-lg shadow-[0_0_15px_rgba(16,185,129,0.2)] transition-all cursor-pointer">
+              <button type="submit" name="_save" class="px-5 py-2 text-xs font-semibold tracking-wide text-obsidian-950 bg-emerald-500 hover:bg-emerald-400 rounded-lg shadow-lg glow-emerald transition cursor-pointer" style="color: #07080a !important;">
                 Save
               </button>
             </div>

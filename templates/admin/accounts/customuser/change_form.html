@@ -8,7 +8,7 @@
 <!-- Google Fonts: Bodoni Moda & Plus Jakarta Sans & JetBrains Mono -->
 <link href="https://fonts.googleapis.com" rel="preconnect"/>
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
-<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..800;1,6..96,400..700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
 
 <!-- Tailwind CSS v3 with Forms & Container Queries -->
@@ -39,7 +39,7 @@
           }
         },
         fontFamily: {
-          serif: ['"Bodoni Moda"', 'serif', 'Georgia'],
+          serif: ['"Cormorant Garamond"', 'Georgia', 'serif'],
           sans: ['"Plus Jakarta Sans"', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
           mono: ['"JetBrains Mono"', 'SFMono-Regular', 'Menlo', 'monospace']
         }
@@ -128,7 +128,13 @@
     background-color: #10b981 !important;
     border-color: #10b981 !important;
   }
-</style>
+
+    /* Universal Underline Killer */
+    a, a *, a:hover, a:hover *, a:focus, a:active {
+      text-decoration: none !important;
+      text-decoration-line: none !important;
+    }
+  </style>
 </head>
 
 <body class="bg-[#0d0e10] text-[#e3e2e5] font-sans antialiased min-h-screen selection:bg-emerald-500/20 selection:text-emerald-300 flex flex-col">
@@ -438,15 +444,15 @@
           <!-- Left Save Action Cluster -->
           <div class="flex flex-wrap items-center gap-2 sm:gap-3 w-full sm:w-auto">
             <!-- Primary Save Button -->
-            <button class="px-6 py-2.5 rounded-lg bg-emerald-atelier hover:bg-emerald-glow text-obsidian font-bold text-xs uppercase tracking-wider shadow-[0_0_15px_rgba(16,185,129,0.3)] transition transform active:scale-95 cursor-pointer" form="customer-change-form" name="_save" type="submit">
+            <button class="px-6 py-2.5 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-obsidian-950 font-semibold text-xs tracking-wide shadow-lg glow-emerald transition cursor-pointer" style="color: #07080a !important;" type="submit" name="_save">
               Save
             </button>
             <!-- Save and Add Another -->
-            <button class="px-4 py-2.5 rounded-lg bg-emerald-atelier/15 hover:bg-emerald-atelier/25 text-emerald-atelier border border-emerald-atelier/30 text-xs font-medium tracking-wide transition cursor-pointer" form="customer-change-form" name="_addanother" type="submit">
+            <button class="px-4 py-2.5 rounded-lg bg-obsidian-800 hover:bg-obsidian-700 text-neutral-200 border border-obsidian-700 text-xs font-medium tracking-wide transition cursor-pointer" type="submit" name="_addanother">
               Save and add another
             </button>
             <!-- Save and Continue Editing -->
-            <button class="px-4 py-2.5 rounded-lg bg-emerald-atelier/15 hover:bg-emerald-atelier/25 text-emerald-atelier border border-emerald-atelier/30 text-xs font-medium tracking-wide transition cursor-pointer" form="customer-change-form" name="_continue" type="submit">
+            <button class="px-4 py-2.5 rounded-lg bg-obsidian-800 hover:bg-obsidian-700 text-neutral-200 border border-obsidian-700 text-xs font-medium tracking-wide transition cursor-pointer" type="submit" name="_continue">
               Save and continue editing
             </button>
           </div>

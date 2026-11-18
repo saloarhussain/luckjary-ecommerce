@@ -296,7 +296,13 @@
         box-shadow: none !important;
       }
     }
-</style>
+
+    /* Universal Underline Killer */
+    a, a *, a:hover, a:hover *, a:focus, a:active {
+      text-decoration: none !important;
+      text-decoration-line: none !important;
+    }
+  </style>
 {% endblock %}
 
 {% block nav-breadcrumbs %}{% endblock %}
@@ -398,7 +404,7 @@
                 </div>
 
                 <!-- Order ID Headline -->
-                <h1 class="text-xl sm:text-2xl md:text-3xl font-sans font-bold text-white tracking-wide mt-1 break-words">
+                <h1 class="text-xl sm:text-2xl md:text-3xl font-serif text-white tracking-wide mt-1 break-words">
                   {{ original.order_number|default:"LCK-202611-304918" }}
                 </h1>
 

@@ -8,7 +8,7 @@
 <!-- Non-blocking preconnect for Google Fonts -->
 <link href="https://fonts.googleapis.com" rel="preconnect">
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
-<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..900;1,6..96,400..700&family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
 
 <!-- Tailwind CSS v3 -->
@@ -49,7 +49,7 @@ tailwind.config = {
         "text-muted": "#9ca3af"
       },
       fontFamily: {
-        serif: ['"Bodoni Moda"', 'serif', 'Georgia'],
+        serif: ['"Cormorant Garamond"', 'Georgia', 'serif'],
         sans: ['"Plus Jakarta Sans"', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
         mono: ['"JetBrains Mono"', 'SFMono-Regular', 'Menlo', 'monospace'],
         'mono-luxury': ['"JetBrains Mono"', 'SFMono-Regular', 'Menlo', 'monospace']
@@ -167,7 +167,13 @@ html, body {
   color: #f4f4f5 !important;
   font-size: 0.875rem !important;
 }
-</style>
+
+    /* Universal Underline Killer */
+    a, a *, a:hover, a:hover *, a:focus, a:active {
+      text-decoration: none !important;
+      text-decoration-line: none !important;
+    }
+  </style>
 </head>
 
 <body class="bg-[#0d0e10] text-[#e3e2e5] font-sans antialiased min-h-screen selection:bg-emerald-500/20 selection:text-emerald-300 flex flex-col">

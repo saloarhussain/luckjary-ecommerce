@@ -7,7 +7,7 @@
 <meta name="color-scheme" content="dark">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,600;0,6..96,700;1,6..96,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
 
 <!-- Tailwind CSS v3 -->
@@ -74,11 +74,11 @@
           }
         },
         fontFamily: {
-          serif: ['"Cormorant Garamond"', '"Bodoni Moda"', 'Georgia', 'serif'],
-          display: ['"Cormorant Garamond"', '"Bodoni Moda"', 'Georgia', 'serif'],
-          sans: ['"Plus Jakarta Sans"', 'Arimo', 'Inter', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
-          mono: ['"JetBrains Mono"', 'SFMono-Regular', 'Menlo', 'monospace'],
-          "mono-luxury": ['"JetBrains Mono"', 'SFMono-Regular', 'Menlo', 'monospace']
+          serif: ['"Cormorant Garamond"', 'Georgia', 'serif'],
+          display: ['"Cormorant Garamond"', 'Georgia', 'serif'],
+          sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+          mono: ['"JetBrains Mono"', 'monospace'],
+          "mono-luxury": ['"JetBrains Mono"', 'monospace']
         }
       }
     }
@@ -402,6 +402,227 @@ html {
     display: flex !important;
   }
 }
+
+/* ========================================================
+   UNIVERSAL LUXURY ATELIER THEME RULES FOR ALL CONTENT
+   ======================================================== */
+h1, h2, h3, .font-serif, .shopify-standard-title, .module h2, .module caption, .titles h1, .titles h2, legend {
+  font-family: "Cormorant Garamond", Georgia, serif !important;
+  color: #ffffff !important;
+  letter-spacing: 0.02em !important;
+}
+body, input, textarea, select, button, .font-sans {
+  font-family: "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, sans-serif !important;
+}
+.font-mono, kbd, code, pre, .tracking-id, .currency-symbol {
+  font-family: "JetBrains Mono", monospace !important;
+}
+
+/* Primary Action Buttons (Add, Save, Create, Fulfill) across ALL dashboard content */
+.btn-primary,
+.object-tools a.addlink,
+.object-tools a.addlink:link,
+.object-tools a.addlink:visited,
+.submit-row input[type="submit"],
+.submit-row input.default,
+.button.default,
+input[type="submit"].default,
+button.bg-emerald-500,
+a.bg-emerald-500,
+button.bg-emerald-400,
+a.bg-emerald-400,
+.btn-emerald,
+.action-btn-primary {
+  background-color: #10b981 !important;
+  background-image: none !important;
+  color: #07080a !important;
+  font-weight: 600 !important;
+  font-family: "Plus Jakarta Sans", sans-serif !important;
+  font-size: 0.75rem !important;
+  letter-spacing: 0.025em !important;
+  border-radius: 0.5rem !important;
+  box-shadow: 0 0 20px -3px rgba(16, 185, 129, 0.25) !important;
+  border: 1px solid rgba(16, 185, 129, 0.3) !important;
+  text-decoration: none !important;
+  transition: all 0.2s ease !important;
+  cursor: pointer !important;
+  padding: 0.55rem 1.15rem !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 0.4rem !important;
+}
+.btn-primary:hover,
+.object-tools a.addlink:hover,
+.submit-row input[type="submit"]:hover,
+.submit-row input.default:hover,
+.button.default:hover,
+button.bg-emerald-500:hover,
+a.bg-emerald-500:hover,
+button.bg-emerald-400:hover,
+a.bg-emerald-400:hover {
+  background-color: #34d399 !important;
+  color: #07080a !important;
+  box-shadow: 0 0 25px -2px rgba(16, 185, 129, 0.4) !important;
+}
+
+/* Secondary Action Buttons (History, Cancel, Filters, Secondary Saves) */
+.btn-secondary,
+.object-tools a.historylink,
+.object-tools a:not(.addlink),
+.submit-row input:not([type="submit"]):not(.default),
+.submit-row a:not(.deletelink),
+.button,
+input[type="submit"]:not(.default),
+button.bg-obsidian-800,
+a.bg-obsidian-800,
+.btn-obsidian,
+.action-btn-secondary {
+  background-color: #171920 !important;
+  color: #e5e5e5 !important;
+  border: 1px solid #21242d !important;
+  border-radius: 0.5rem !important;
+  font-weight: 500 !important;
+  font-size: 0.75rem !important;
+  font-family: "Plus Jakarta Sans", sans-serif !important;
+  text-decoration: none !important;
+  transition: all 0.15s ease !important;
+  cursor: pointer !important;
+  padding: 0.5rem 1rem !important;
+}
+.btn-secondary:hover,
+.object-tools a.historylink:hover,
+button.bg-obsidian-800:hover,
+a.bg-obsidian-800:hover {
+  background-color: #21242d !important;
+  color: #ffffff !important;
+  border-color: rgba(255, 255, 255, 0.15) !important;
+}
+
+/* Delete / Destructive Buttons */
+.submit-row a.deletelink,
+.deletelink {
+  background: transparent !important;
+  color: #9ca3af !important;
+  border: none !important;
+  font-size: 0.75rem !important;
+  font-weight: 500 !important;
+  font-family: "Plus Jakarta Sans", sans-serif !important;
+  text-decoration: none !important;
+  transition: color 0.15s ease !important;
+  cursor: pointer !important;
+  padding: 0.5rem 1rem !important;
+}
+.submit-row a.deletelink:hover,
+.deletelink:hover {
+  color: #f87171 !important;
+  background: rgba(239, 68, 68, 0.1) !important;
+}
+
+/* Tables across Django Admin */
+#changelist, .results, .card-table-wrapper {
+  background: linear-gradient(145deg, rgba(23, 25, 32, 0.7) 0%, rgba(17, 19, 23, 0.95) 100%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.06) !important;
+  border-radius: 0.75rem !important;
+  overflow: hidden !important;
+}
+#result_list thead th, .results thead th {
+  font-family: "JetBrains Mono", monospace !important;
+  font-size: 10px !important;
+  letter-spacing: 0.05em !important;
+  text-transform: uppercase !important;
+  color: #9ca3af !important;
+  border-bottom: 1px solid rgba(33, 36, 45, 0.6) !important;
+  background: transparent !important;
+  padding: 0.75rem 0.75rem !important;
+}
+#result_list tbody tr, .results tbody tr {
+  border-bottom: 1px solid rgba(33, 36, 45, 0.4) !important;
+  transition: background-color 0.15s ease !important;
+  background: transparent !important;
+}
+#result_list tbody tr:hover, .results tbody tr:hover {
+  background-color: rgba(23, 25, 32, 0.6) !important;
+}
+#result_list tbody td,
+#result_list tbody th,
+.results tbody td,
+.results tbody th {
+  color: #e5e5e5 !important;
+  font-size: 0.75rem !important;
+  padding: 0.85rem 0.75rem !important;
+  font-family: "Plus Jakarta Sans", sans-serif !important;
+  background: transparent !important;
+}
+#result_list tbody td a,
+#result_list tbody th a,
+.results tbody td a,
+.results tbody th a {
+  color: #10b981 !important;
+  font-weight: 500 !important;
+  text-decoration: none !important;
+}
+#result_list tbody td a:hover,
+#result_list tbody th a:hover,
+.results tbody td a:hover,
+.results tbody th a:hover {
+  color: #34d399 !important;
+  text-decoration: none !important;
+}
+
+/* Form Fields across Django Admin */
+.form-row input[type="text"],
+.form-row input[type="email"],
+.form-row input[type="password"],
+.form-row input[type="number"],
+.form-row input[type="url"],
+.form-row input[type="tel"],
+.form-row select,
+.form-row textarea,
+#changelist-search input[type="text"],
+.glass-input {
+  background: rgba(17, 19, 23, 0.85) !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  color: #f3f4f6 !important;
+  border-radius: 0.5rem !important;
+  font-size: 0.75rem !important;
+  padding: 0.55rem 0.85rem !important;
+  font-family: "Plus Jakarta Sans", sans-serif !important;
+  box-shadow: none !important;
+}
+.form-row input:focus,
+.form-row select:focus,
+.form-row textarea:focus,
+#changelist-search input[type="text"]:focus,
+.glass-input:focus {
+  border-color: rgba(16, 185, 129, 0.6) !important;
+  box-shadow: 0 0 0 1px rgba(16, 185, 129, 0.4) !important;
+  outline: none !important;
+}
+.form-row label,
+.form-row label.required {
+  color: #9ca3af !important;
+  font-size: 0.75rem !important;
+  font-weight: 500 !important;
+  font-family: "Plus Jakarta Sans", sans-serif !important;
+}
+fieldset.module {
+  background: linear-gradient(145deg, rgba(23, 25, 32, 0.7) 0%, rgba(17, 19, 23, 0.95) 100%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.06) !important;
+  border-radius: 0.75rem !important;
+  padding: 1.25rem !important;
+  margin-bottom: 1.5rem !important;
+}
+fieldset.module h2 {
+  font-family: "Cormorant Garamond", Georgia, serif !important;
+  font-size: 1.25rem !important;
+  color: #ffffff !important;
+  letter-spacing: 0.02em !important;
+  border-bottom: 1px solid rgba(33, 36, 45, 0.6) !important;
+  padding-bottom: 0.75rem !important;
+  margin-bottom: 1rem !important;
+}
+
 </style>
 
 {% block extrastyle %}{% endblock %}

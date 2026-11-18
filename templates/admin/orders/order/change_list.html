@@ -75,6 +75,12 @@
     a {
       text-decoration: none;
     }
+  
+    /* Universal Underline Killer */
+    a, a *, a:hover, a:hover *, a:focus, a:active {
+      text-decoration: none !important;
+      text-decoration-line: none !important;
+    }
   </style>
 </head>
 <body class="bg-[#0d0e10] min-h-screen text-[#e3e2e5] font-sans antialiased selection:bg-emerald-500/20 selection:text-emerald-300 flex flex-col overflow-x-hidden">
@@ -112,12 +118,12 @@
             </span>
           </div>
           <div class="flex items-center gap-3 pt-1">
-            <h1 class="font-sans text-2xl sm:text-3xl md:text-4xl text-white font-bold tracking-tight">Atelier Orders</h1>
+            <h1 class="font-serif text-2xl sm:text-3xl md:text-4xl text-white font-normal tracking-wide">Atelier Orders</h1>
             <span class="bg-[#181a22] border border-[#2d3240] text-amber-300 font-mono text-xs px-3 py-1 rounded-full font-semibold shadow-sm" id="ordersTotalBadge">4 ORDERS</span>
           </div>
         </div>
         <div class="w-full sm:w-auto shrink-0">
-          <a href="/admin/orders/order/add/" class="w-full sm:w-auto bg-[#10b981] hover:bg-[#34d399] active:scale-[0.985] text-[#003824] font-sans font-semibold text-xs sm:text-[13px] py-2.5 px-5 rounded-xl shadow-lg shadow-emerald-500/20 flex items-center justify-center gap-2 transition-all cursor-pointer">
+          <a href="/admin/orders/order/add/" class="w-full sm:w-auto bg-emerald-500 hover:bg-emerald-400 text-obsidian-950 font-semibold text-xs py-2.5 px-5 rounded-lg shadow-lg glow-emerald flex items-center justify-center gap-2 transition cursor-pointer no-underline" style="color: #07080a !important; text-decoration: none !important;">
             <svg class="w-4 h-4 text-[#003824]" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
               <circle cx="12" cy="12" r="10"></circle>
               <line x1="12" y1="8" x2="12" y2="16"></line>

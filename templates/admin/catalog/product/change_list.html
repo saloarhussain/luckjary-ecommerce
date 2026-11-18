@@ -6,7 +6,7 @@
 <title>Atelier Vault | LUCKJARY</title>
 <link href="https://fonts.googleapis.com" rel="preconnect">
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
-<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..900;1,6..96,400..900&amp;family=Plus+Jakarta+Sans:ital,wght@0,300..800;1,300..800&amp;family=JetBrains+Mono:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <script id="tailwind-config">
@@ -153,7 +153,13 @@ tailwind.config = {
   padding-top: 0.75rem !important;
   border-top: 1px solid rgba(35, 39, 50, 0.7) !important;
 }
-</style>
+
+    /* Universal Underline Killer */
+    a, a *, a:hover, a:hover *, a:focus, a:active {
+      text-decoration: none !important;
+      text-decoration-line: none !important;
+    }
+  </style>
 </head>
 
 <body class="bg-[#0d0e10] text-[#e3e2e5] font-sans antialiased min-h-screen selection:bg-emerald-500/20 selection:text-emerald-300 flex flex-col">
@@ -186,7 +192,7 @@ tailwind.config = {
             </span>
           </div>
           <div class="flex items-baseline gap-3">
-            <h1 class="font-sans text-2xl sm:text-3xl text-white font-bold tracking-tight">Atelier Vault</h1>
+            <h1 class="font-serif text-2xl sm:text-3xl text-white font-normal tracking-wide">Atelier Vault</h1>
             <span id="vaultTotalBadge" class="bg-surface-card-elevated border border-border-strong text-secondary font-mono-luxury text-[11px] sm:text-xs px-2.5 py-1 rounded-full font-medium shadow-sm">
               <span id="vaultPiecesCount">{{ cl.result_count }}</span> PIECES
             </span>
@@ -198,7 +204,7 @@ tailwind.config = {
             <span class="material-symbols-outlined text-[19px]">add_circle</span>
             <span>+ Add Piece</span>
           </button>
-          <a href="/admin/catalog/product/add/" class="hidden sm:flex items-center gap-1.5 bg-surface-card hover:bg-surface-card-elevated text-text-platinum border border-border-strong font-label-md text-xs px-3 py-2.5 rounded-xl transition-all font-medium" title="Open Full Form Studio">
+          <a href="/admin/catalog/product/add/" class="hidden sm:flex items-center gap-1.5 bg-emerald-500 hover:bg-emerald-400 text-obsidian-950 font-semibold text-xs px-3.5 py-2 rounded-lg shadow-lg glow-emerald transition cursor-pointer no-underline" style="color: #07080a !important; text-decoration: none !important;" title="Open Full Form Studio">
             <span class="material-symbols-outlined text-[16px] text-secondary">tune</span>
             <span>Full Studio</span>
           </a>
