@@ -1,0 +1,602 @@
+{% load i18n admin_urls static tz %}<!DOCTYPE html>
+<html class="dark h-full bg-[#0a0b0d]" lang="en">
+<head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport">
+<title>Materials &amp; Precious Alloys | Luckjary Haute Atelier</title>
+
+<!-- Google Fonts: Bodoni Moda, Plus Jakarta Sans, JetBrains Mono -->
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..900;1,6..96,400..900&family=JetBrains+Mono:wght@300;400;500;600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<!-- Tailwind CSS v3 CDN with Forms & Container Queries -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+tailwind.config = {
+  darkMode: 'class',
+  theme: {
+    extend: {
+      colors: {
+        obsidian: {
+          DEFAULT: '#0d0e10',
+          deep: '#090a0c',
+          surface: '#121315',
+          card: '#16181b',
+          elevated: '#1c1e22',
+          border: '#26292f',
+          borderLight: '#32363e',
+        },
+        champagne: {
+          300: '#f7e7ce',
+          400: '#ebd1a7',
+          500: '#d4af37',
+          600: '#aa8c2c',
+        },
+        emerald: {
+          DEFAULT: '#10b981',
+          atelier: '#10b981',
+          atelierLight: '#34d399',
+          atelierGlow: 'rgba(16, 185, 129, 0.15)',
+        }
+      },
+      fontFamily: {
+        serif: ['"Bodoni Moda"', 'serif', 'Georgia'],
+        sans: ['"Plus Jakarta Sans"', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
+        mono: ['"JetBrains Mono"', 'SFMono-Regular', 'Menlo', 'monospace'],
+      }
+    }
+  }
+};
+</script>
+
+<!-- Fine Aesthetics & Scrollbar -->
+<style data-purpose="custom-styling">
+  html, body {
+    background-color: #0d0e10 !important;
+    color: #e4e4e7 !important;
+    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    min-height: 100vh !important;
+    width: 100% !important;
+  }
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #0d0e10;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #26292f;
+    border-radius: 9999px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #3e434c;
+  }
+  .gold-shimmer {
+    background: linear-gradient(135deg, #f7e7ce 0%, #d4af37 60%, #ebd1a7 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .font-serif {
+    font-family: 'Bodoni Moda', serif, Georgia !important;
+  }
+  .atelier-glow {
+    background: radial-gradient(circle at 50% 0%, rgba(16, 185, 129, 0.06) 0%, transparent 60%);
+  }
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+</style>
+</head>
+
+<body class="bg-obsidian text-zinc-200 font-sans antialiased min-h-screen flex flex-col selection:bg-emerald-500/20 selection:text-emerald-300">
+
+<!-- App Container with Unified Left Side Panel + Right Content Area -->
+<div class="flex flex-1 w-full min-h-screen">
+
+  <!-- Unified Left Side Panel (Mobile Drawer & Desktop Docked Sidebar) -->
+  {% include "admin/includes/atelier_sidebar.html" with active_nav="materials" %}
+
+  <!-- Main Content Shell -->
+  <div class="flex-1 min-w-0 flex flex-col min-h-screen overflow-x-hidden bg-obsidian">
+    <!-- Unified Top Universal Header Bar -->
+    {% include "admin/includes/atelier_header.html" %}
+
+    <!-- Main Workspace Container matching code.html & screenshot selection -->
+    <main class="flex-1 overflow-y-auto atelier-glow p-4 sm:p-6 lg:p-8 space-y-6 max-w-7xl mx-auto w-full">
+
+      <!-- Django Messages Notification Banner -->
+      {% if messages %}
+      <div class="space-y-2">
+        {% for message in messages %}
+        <div class="px-4 py-3 rounded-xl border border-emerald-500/30 bg-emerald-500/10 text-emerald-300 text-xs flex items-center justify-between">
+          <span class="flex items-center gap-2">
+            <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+            {{ message }}
+          </span>
+        </div>
+        {% endfor %}
+      </div>
+      {% endif %}
+
+      <!-- BEGIN: PageHeaderSection -->
+      <section class="flex flex-col md:flex-row md:items-end justify-between gap-4 pb-2 border-b border-obsidian-border" data-purpose="page-title-and-actions">
+        <div>
+          <!-- Registry Breadcrumbs & Path Tag -->
+          <div class="flex flex-wrap items-center gap-2.5 mb-1.5">
+            <span class="px-2 py-0.5 text-[10px] font-mono tracking-widest uppercase rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/25">
+              Catalog Registry
+            </span>
+            <span class="text-xs text-zinc-500 font-mono">› /admin/catalog/material/</span>
+          </div>
+          <!-- Editorial Bodoni Heading -->
+          <h1 class="font-serif text-3xl sm:text-4xl text-white font-medium tracking-tight">
+            Materials &amp; Precious Alloys
+          </h1>
+          <p class="text-xs sm:text-sm text-zinc-400 mt-1 max-w-2xl font-light leading-relaxed">
+            Certified hallmark registry, precious metals fineness standards, demifine vermeil coatings, and ethically sourced gems.
+          </p>
+        </div>
+
+        <!-- Add Material Primary CTA & Counter -->
+        <div class="flex items-center gap-3 flex-shrink-0">
+          <div class="hidden sm:flex flex-col text-right font-mono text-[11px] text-zinc-400 mr-2">
+            <span class="text-zinc-200 font-semibold">{{ cl.result_count }} Material{{ cl.result_count|pluralize }}</span>
+            <span class="text-emerald-400/90 flex items-center justify-end gap-1">
+              <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+              ALL Hallmarked Active
+            </span>
+          </div>
+          <!-- Primary Emerald CTA Button -->
+          <a href="{% url 'admin:catalog_material_add' %}" class="inline-flex items-center justify-center gap-2 bg-emerald-500 hover:bg-emerald-400 text-obsidian font-semibold px-4 py-2.5 rounded-lg shadow-[0_0_20px_rgba(16,185,129,0.3)] hover:shadow-[0_0_25px_rgba(16,185,129,0.45)] transition-all hover:scale-[1.02] active:scale-[0.98] text-xs uppercase tracking-wider cursor-pointer no-underline">
+            <svg class="w-4 h-4 stroke-[2.5]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 4v16m8-8H4" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+            <span>+ Add Material</span>
+          </a>
+        </div>
+      </section>
+      <!-- END: PageHeaderSection -->
+
+      <!-- Action Form Wrapping Toolbar & Table -->
+      <form id="changelist-form" method="post" action="" novalidate class="space-y-6">
+        {% csrf_token %}
+        {% if cl.formset %}
+          {{ cl.formset.management_form }}
+        {% endif %}
+
+        <!-- BEGIN: FilterAndActionsBar -->
+        <section class="space-y-3" data-purpose="bulk-actions-and-filters">
+          <!-- Django Admin Action Toolbar Wrapper -->
+          <div class="bg-obsidian-surface border border-obsidian-border rounded-xl p-3.5 flex flex-wrap items-center justify-between gap-4 shadow-sm">
+            <!-- Left: Action selector and Execution -->
+            <div class="flex flex-wrap items-center gap-3">
+              <div class="flex items-center gap-2 text-xs">
+                <label class="text-zinc-400 font-medium" for="materialActionSelect">Action:</label>
+                <div class="relative">
+                  <select name="action" id="materialActionSelect" class="bg-obsidian-card text-xs text-zinc-200 border border-obsidian-border rounded-lg pl-3 pr-8 py-1.5 focus:outline-none focus:border-champagne-500/50 cursor-pointer">
+                    <option value="">--------- Choose action ---------</option>
+                    {% if action_form %}
+                      {% for choice in action_form.fields.action.choices %}
+                        {% if choice.0 %}
+                        <option value="{{ choice.0 }}">{{ choice.1 }}</option>
+                        {% endif %}
+                      {% endfor %}
+                    {% else %}
+                      <option value="delete_selected">Delete selected materials</option>
+                      <option value="export_iso">Export ISO Hallmarking manifest</option>
+                      <option value="sync_live">Sync to public e-boutique catalog</option>
+                      <option value="recalculate_costs">Recalculate live spot price basis</option>
+                    {% endif %}
+                  </select>
+                </div>
+              </div>
+              <button type="submit" name="index" value="0" class="bg-obsidian-elevated hover:bg-zinc-800 text-zinc-200 text-xs font-semibold px-4 py-1.5 rounded-lg border border-obsidian-borderLight transition-colors cursor-pointer" id="runActionBtn">
+                Run
+              </button>
+              <span class="text-xs font-mono text-zinc-500 pl-1" id="selectionCounter">
+                <span class="text-zinc-300 font-medium" id="selected-count">0</span> of {{ cl.result_count }} selected
+              </span>
+              <input type="hidden" name="select_across" value="0" class="select-across">
+            </div>
+
+            <!-- Right: Search Input -->
+            <div class="flex items-center gap-2 w-full sm:w-auto">
+              <div class="relative w-full sm:w-64">
+                <input class="w-full text-xs bg-obsidian-card border border-obsidian-border rounded-lg pl-8 pr-3 py-1.5 text-zinc-200 placeholder-zinc-500 focus:outline-none focus:border-champagne-500 font-sans" id="materialsTableSearch" placeholder="Filter materials..." type="text" value="{{ request.GET.q|default:'' }}">
+                <svg class="w-3.5 h-3.5 text-zinc-500 absolute left-2.5 top-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+              </div>
+              {% if request.GET.q %}
+              <a href="?" class="p-1.5 text-zinc-400 hover:text-zinc-200 bg-obsidian-card rounded-lg border border-obsidian-border flex-shrink-0" title="Reset search">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M6 18L18 6M6 6l12 12" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+              </a>
+              {% endif %}
+            </div>
+          </div>
+
+          <!-- Quick Category Filters Pills -->
+          <div class="flex items-center gap-2 overflow-x-auto pb-1 text-xs no-scrollbar" id="categoryFilterContainer">
+            <span class="text-[11px] font-mono text-zinc-500 mr-1 uppercase">Filter:</span>
+            <button type="button" data-filter="all" class="category-pill px-3 py-1 rounded-full text-xs font-medium bg-zinc-800 text-white border border-zinc-700 whitespace-nowrap cursor-pointer transition-colors shadow-sm">
+              All Materials ({{ cl.result_count }})
+            </button>
+            <button type="button" data-filter="precious" class="category-pill px-3 py-1 rounded-full text-xs text-zinc-400 hover:text-white bg-obsidian-surface hover:bg-obsidian-elevated border border-obsidian-border whitespace-nowrap transition-colors cursor-pointer">
+              Precious Gold &amp; Platinum ({{ precious_count|default:"0" }})
+            </button>
+            <button type="button" data-filter="demifine" class="category-pill px-3 py-1 rounded-full text-xs text-zinc-400 hover:text-white bg-obsidian-surface hover:bg-obsidian-elevated border border-obsidian-border whitespace-nowrap transition-colors cursor-pointer">
+              Demifine &amp; Silver ({{ demifine_count|default:"0" }})
+            </button>
+            <button type="button" data-filter="gemstones" class="category-pill px-3 py-1 rounded-full text-xs text-zinc-400 hover:text-white bg-obsidian-surface hover:bg-obsidian-elevated border border-obsidian-border whitespace-nowrap transition-colors cursor-pointer">
+              Natural Gemstones ({{ gemstone_count|default:"0" }})
+            </button>
+            <button type="button" data-filter="diamonds" class="category-pill px-3 py-1 rounded-full text-xs text-zinc-400 hover:text-white bg-obsidian-surface hover:bg-obsidian-elevated border border-obsidian-border whitespace-nowrap transition-colors cursor-pointer">
+              Lab-Grown Diamonds ({{ diamond_count|default:"0" }})
+            </button>
+          </div>
+        </section>
+        <!-- END: FilterAndActionsBar -->
+
+        <!-- BEGIN: MaterialsTableSection -->
+        <section class="bg-obsidian-surface border border-obsidian-border rounded-xl shadow-2xl overflow-hidden" data-purpose="materials-registry-table">
+          <!-- Desktop & Tablet Viewport: High Precision Table -->
+          <div class="hidden md:block overflow-x-auto">
+            <table class="w-full text-left border-collapse" id="materialsTable">
+              <thead>
+                <tr class="border-b border-obsidian-border bg-obsidian-card/70 text-[11px] uppercase tracking-wider font-mono text-zinc-400">
+                  <th class="py-3.5 pl-4 pr-2 w-10 text-center" scope="col">
+                    <input aria-label="Select all materials" class="action-toggle rounded bg-obsidian-deep border-obsidian-borderLight text-emerald-500 focus:ring-emerald-500/20 focus:ring-offset-0 w-4 h-4 cursor-pointer" id="selectAllCheckbox" type="checkbox" title="Select all materials">
+                  </th>
+                  <th class="py-3.5 px-4 font-semibold text-zinc-200" scope="col">
+                    <div class="flex items-center gap-1.5 uppercase hover:text-champagne-400 transition-colors">
+                      <span>Name</span>
+                      <svg class="w-3.5 h-3.5 text-champagne-500" fill="currentColor" viewBox="0 0 20 20"><path clip-rule="evenodd" d="M14.707 12.707a1 1 0 01-1.414 0L10 9.414l-3.293 3.293a1 1 0 01-1.414-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 010 1.414z" fill-rule="evenodd"></path></svg>
+                    </div>
+                  </th>
+                  <th class="py-3.5 px-4 font-semibold text-zinc-300" scope="col">Slug Identifier</th>
+                  <th class="py-3.5 px-4 font-semibold text-zinc-300" scope="col">Badge Label</th>
+                  <th class="py-3.5 px-4 font-semibold hidden lg:table-cell text-center text-zinc-300" scope="col">Vault Usage</th>
+                  <th class="py-3.5 px-4 font-semibold text-right pr-6 text-zinc-300" scope="col">Manage</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-obsidian-border text-xs" id="materialsTableBody">
+                {% for material in cl.result_list %}
+                <tr class="material-row hover:bg-obsidian-card/60 transition-colors group"
+                    data-name="{{ material.name|lower }}"
+                    data-slug="{{ material.slug|lower }}"
+                    data-badge="{{ material.badge_label|lower }}"
+                    data-category="{% if 'gold' in material.name|lower or 'platinum' in material.name|lower %}precious{% elif 'silver' in material.name|lower or 'vermeil' in material.name|lower or 'demifine' in material.name|lower %}demifine{% elif 'emerald' in material.name|lower or 'pearl' in material.name|lower or 'sapphire' in material.name|lower or 'gem' in material.name|lower or 'beryl' in material.name|lower %}gemstones{% elif 'diamond' in material.name|lower or 'zirconia' in material.name|lower or 'cz' in material.name|lower %}diamonds{% else %}other{% endif %}">
+                  <!-- Checkbox Column -->
+                  <td class="py-3.5 pl-4 pr-2 text-center">
+                    <input class="action-select material-checkbox rounded bg-obsidian-deep border-obsidian-borderLight text-emerald-500 focus:ring-emerald-500/20 focus:ring-offset-0 w-4 h-4 cursor-pointer" type="checkbox" name="_selected_action" value="{{ material.pk }}">
+                  </td>
+                  <!-- Name & Subtitle -->
+                  <td class="py-3.5 px-4">
+                    <a class="font-semibold text-emerald-400 hover:text-emerald-300 transition-colors inline-block group-hover:translate-x-0.5 no-underline" href="{% url 'admin:catalog_material_change' material.pk %}">
+                      {{ material.name }}
+                    </a>
+                    <span class="block text-[10px] text-zinc-500 font-mono mt-0.5">
+                      {{ material.description|default:"Certified alloy hallmark specification" }}
+                    </span>
+                  </td>
+                  <!-- Slug Identifier -->
+                  <td class="py-3.5 px-4 font-mono text-[11px] text-zinc-400 group-hover:text-champagne-300">
+                    {{ material.slug }}
+                  </td>
+                  <!-- Badge Label with Haute Atelier Color Palette -->
+                  <td class="py-3.5 px-4">
+                    {% if 'demifine' in material.badge_label|lower or 'vermeil' in material.badge_label|lower %}
+                      <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-medium bg-amber-500/10 text-amber-300 border border-amber-500/20">
+                        {{ material.badge_label }}
+                      </span>
+                    {% elif 'rose gold' in material.badge_label|lower or 'rose' in material.badge_label|lower %}
+                      <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-medium bg-rose-500/10 text-rose-300 border border-rose-500/25">
+                        {{ material.badge_label }}
+                      </span>
+                    {% elif 'yellow gold' in material.badge_label|lower or 'yellow' in material.badge_label|lower %}
+                      <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-medium bg-yellow-500/10 text-yellow-300 border border-yellow-500/25">
+                        {{ material.badge_label }}
+                      </span>
+                    {% elif 'white gold' in material.badge_label|lower %}
+                      <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-medium bg-slate-300/10 text-slate-200 border border-slate-300/30">
+                        {{ material.badge_label }}
+                      </span>
+                    {% elif 'silver' in material.badge_label|lower %}
+                      <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-medium bg-cyan-500/10 text-cyan-300 border border-cyan-500/25">
+                        {{ material.badge_label }}
+                      </span>
+                    {% elif 'pearl' in material.badge_label|lower %}
+                      <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-medium bg-fuchsia-500/10 text-fuchsia-300 border border-fuchsia-500/25">
+                        {{ material.badge_label }}
+                      </span>
+                    {% elif 'emerald' in material.badge_label|lower %}
+                      <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-medium bg-emerald-500/15 text-emerald-300 border border-emerald-500/30">
+                        {{ material.badge_label }}
+                      </span>
+                    {% elif 'platinum' in material.badge_label|lower %}
+                      <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-medium bg-indigo-500/10 text-indigo-200 border border-indigo-500/25">
+                        {{ material.badge_label }}
+                      </span>
+                    {% elif 'sapphire' in material.badge_label|lower %}
+                      <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-medium bg-blue-500/15 text-blue-300 border border-blue-500/30">
+                        {{ material.badge_label }}
+                      </span>
+                    {% elif 'diamond' in material.badge_label|lower or 'diamonds' in material.badge_label|lower or 'cz' in material.badge_label|lower or 'zirconia' in material.badge_label|lower %}
+                      <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-medium bg-teal-500/10 text-teal-200 border border-teal-500/25">
+                        {{ material.badge_label }}
+                      </span>
+                    {% else %}
+                      <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-medium bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                        {{ material.badge_label }}
+                      </span>
+                    {% endif %}
+                  </td>
+                  <!-- Vault Usage Count -->
+                  <td class="py-3.5 px-4 hidden lg:table-cell text-center">
+                    <span class="px-2 py-0.5 text-[11px] font-mono rounded bg-obsidian-deep text-zinc-400 border border-obsidian-border">
+                      {{ material.products.count }} Piece{{ material.products.count|pluralize }}
+                    </span>
+                  </td>
+                  <!-- Manage Action -->
+                  <td class="py-3.5 px-4 text-right pr-6">
+                    <div class="flex items-center justify-end gap-2">
+                      <a class="text-zinc-400 hover:text-emerald-400 p-1.5 rounded hover:bg-obsidian-card transition-colors inline-block" href="{% url 'admin:catalog_material_change' material.pk %}" title="Edit Material">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"></path></svg>
+                      </a>
+                    </div>
+                  </td>
+                </tr>
+                {% empty %}
+                <tr>
+                  <td colspan="6" class="px-6 py-12 text-center text-zinc-500 font-mono text-xs">
+                    No materials registered in catalog.
+                  </td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Mobile Viewport: Touch-Friendly Material Cards (< 768px) -->
+          <div class="md:hidden divide-y divide-obsidian-border" id="materialsMobileList">
+            {% for material in cl.result_list %}
+            <div class="p-4 space-y-3 material-card hover:bg-obsidian-card/40 transition-colors"
+                 data-name="{{ material.name|lower }}"
+                 data-slug="{{ material.slug|lower }}"
+                 data-badge="{{ material.badge_label|lower }}"
+                 data-category="{% if 'gold' in material.name|lower or 'platinum' in material.name|lower %}precious{% elif 'silver' in material.name|lower or 'vermeil' in material.name|lower or 'demifine' in material.name|lower %}demifine{% elif 'emerald' in material.name|lower or 'pearl' in material.name|lower or 'sapphire' in material.name|lower or 'gem' in material.name|lower or 'beryl' in material.name|lower %}gemstones{% elif 'diamond' in material.name|lower or 'zirconia' in material.name|lower or 'cz' in material.name|lower %}diamonds{% else %}other{% endif %}">
+              <div class="flex items-start justify-between gap-3">
+                <div class="flex items-center gap-3">
+                  <input class="action-select material-checkbox rounded bg-obsidian-deep border-obsidian-borderLight text-emerald-500 focus:ring-0 w-4 h-4 cursor-pointer" type="checkbox" name="_selected_action" value="{{ material.pk }}">
+                  <div>
+                    <a class="font-semibold text-emerald-400 hover:text-emerald-300 text-sm no-underline" href="{% url 'admin:catalog_material_change' material.pk %}">
+                      {{ material.name }}
+                    </a>
+                    <span class="block text-[10px] text-zinc-500 font-mono mt-0.5">
+                      {{ material.description|default:"Certified alloy hallmark specification" }}
+                    </span>
+                  </div>
+                </div>
+                <a class="text-zinc-400 hover:text-emerald-400 p-1.5 rounded hover:bg-obsidian-card transition-colors flex-shrink-0" href="{% url 'admin:catalog_material_change' material.pk %}" title="Edit Material">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"></path></svg>
+                </a>
+              </div>
+
+              <div class="flex flex-wrap items-center justify-between gap-2 pt-1 border-t border-obsidian-border/50 text-[11px] font-mono">
+                <span class="text-zinc-400">{{ material.slug }}</span>
+                <div class="flex items-center gap-2">
+                  {% if 'demifine' in material.badge_label|lower or 'vermeil' in material.badge_label|lower %}
+                    <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-medium bg-amber-500/10 text-amber-300 border border-amber-500/20">
+                      {{ material.badge_label }}
+                    </span>
+                  {% elif 'rose gold' in material.badge_label|lower or 'rose' in material.badge_label|lower %}
+                    <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-medium bg-rose-500/10 text-rose-300 border border-rose-500/25">
+                      {{ material.badge_label }}
+                    </span>
+                  {% elif 'yellow gold' in material.badge_label|lower or 'yellow' in material.badge_label|lower %}
+                    <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-medium bg-yellow-500/10 text-yellow-300 border border-yellow-500/25">
+                      {{ material.badge_label }}
+                    </span>
+                  {% elif 'white gold' in material.badge_label|lower %}
+                    <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-medium bg-slate-300/10 text-slate-200 border border-slate-300/30">
+                      {{ material.badge_label }}
+                    </span>
+                  {% elif 'silver' in material.badge_label|lower %}
+                    <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-medium bg-cyan-500/10 text-cyan-300 border border-cyan-500/25">
+                      {{ material.badge_label }}
+                    </span>
+                  {% elif 'pearl' in material.badge_label|lower %}
+                    <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-medium bg-fuchsia-500/10 text-fuchsia-300 border border-fuchsia-500/25">
+                      {{ material.badge_label }}
+                    </span>
+                  {% elif 'emerald' in material.badge_label|lower %}
+                    <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-medium bg-emerald-500/15 text-emerald-300 border border-emerald-500/30">
+                      {{ material.badge_label }}
+                    </span>
+                  {% elif 'platinum' in material.badge_label|lower %}
+                    <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-medium bg-indigo-500/10 text-indigo-200 border border-indigo-500/25">
+                      {{ material.badge_label }}
+                    </span>
+                  {% elif 'sapphire' in material.badge_label|lower %}
+                    <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-medium bg-blue-500/15 text-blue-300 border border-blue-500/30">
+                      {{ material.badge_label }}
+                    </span>
+                  {% elif 'diamond' in material.badge_label|lower or 'diamonds' in material.badge_label|lower or 'cz' in material.badge_label|lower or 'zirconia' in material.badge_label|lower %}
+                    <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-medium bg-teal-500/10 text-teal-200 border border-teal-500/25">
+                      {{ material.badge_label }}
+                    </span>
+                  {% else %}
+                    <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-medium bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                      {{ material.badge_label }}
+                    </span>
+                  {% endif %}
+                  <span class="px-2 py-0.5 text-[10px] rounded bg-obsidian-deep text-zinc-400 border border-obsidian-border">
+                    {{ material.products.count }} Piece{{ material.products.count|pluralize }}
+                  </span>
+                </div>
+              </div>
+            </div>
+            {% empty %}
+            <div class="p-8 text-center text-zinc-500 font-mono text-xs">
+              No materials registered in catalog.
+            </div>
+            {% endfor %}
+          </div>
+
+          <!-- BEGIN: PaginationAndFooterSummary -->
+          <div class="p-4 bg-obsidian-card/40 border-t border-obsidian-border flex flex-col sm:flex-row items-center justify-between gap-3 text-xs" data-purpose="table-footer-pagination">
+            <div class="text-zinc-500 font-mono">
+              Displaying <span class="text-zinc-200 font-semibold">{{ cl.result_count }} material{{ cl.result_count|pluralize }}</span> registered in catalog
+            </div>
+            <!-- Page Navigation -->
+            <div class="flex items-center gap-1 font-mono">
+              <button type="button" class="px-2.5 py-1 rounded bg-obsidian-surface border border-obsidian-border text-zinc-500 cursor-not-allowed">
+                Previous
+              </button>
+              <button type="button" class="px-3 py-1 rounded bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 font-medium">
+                1
+              </button>
+              <button type="button" class="px-2.5 py-1 rounded bg-obsidian-surface border border-obsidian-border text-zinc-500 cursor-not-allowed">
+                Next
+              </button>
+            </div>
+          </div>
+          <!-- END: PaginationAndFooterSummary -->
+        </section>
+        <!-- END: MaterialsTableSection -->
+      </form>
+
+      <!-- BEGIN: AtelierProtocolNotice -->
+      <section class="border border-obsidian-border rounded-xl p-4 bg-obsidian-surface/60 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs" data-purpose="compliance-telemetry">
+        <div class="flex items-center gap-3">
+          <div class="w-8 h-8 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 flex-shrink-0">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+          </div>
+          <div>
+            <p class="font-medium text-zinc-200">ISO 925/750 Atelier Hallmarking Protocol Active</p>
+            <p class="text-[11px] text-zinc-500">Every alloy formulation is linked with assay bureau certificates and conflict-free Kimberly Process registries.</p>
+          </div>
+        </div>
+        <div class="flex items-center gap-2">
+          <button type="button" class="px-3 py-1.5 rounded-lg border border-obsidian-border hover:border-zinc-700 bg-obsidian-card text-zinc-300 text-[11px] font-mono hover:text-white transition-colors cursor-pointer">
+            Assay Logs (PDF)
+          </button>
+          <button type="button" class="px-3 py-1.5 rounded-lg bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 hover:bg-emerald-500/20 text-[11px] font-mono transition-colors cursor-pointer">
+            Live Bullion Feeds
+          </button>
+        </div>
+      </section>
+      <!-- END: AtelierProtocolNotice -->
+
+    </main>
+    <!-- END: ContentBody -->
+  </div>
+</div>
+
+<!-- Mobile Navigation Drawer & Universal Scripts -->
+{% include "admin/includes/atelier_nav_scripts.html" %}
+
+<!-- Materials DOM Interactivity: Master Selection, Live Filtering & Category Pills -->
+<script data-purpose="materials-interactivity">
+document.addEventListener('DOMContentLoaded', () => {
+  const selectAllCheckbox = document.getElementById('selectAllCheckbox');
+  const itemCheckboxes = document.querySelectorAll('.material-checkbox');
+  const counterElement = document.getElementById('selectionCounter');
+  const selectedCountSpan = document.getElementById('selected-count');
+  const searchInput = document.getElementById('materialsTableSearch');
+  const filterPills = document.querySelectorAll('.category-pill');
+  const tableRows = document.querySelectorAll('#materialsTableBody tr.material-row');
+  const mobileCards = document.querySelectorAll('#materialsMobileList .material-card');
+
+  let currentCategory = 'all';
+  let currentSearch = (searchInput ? searchInput.value.toLowerCase().trim() : '');
+
+  // Update selection count
+  function updateSelectionCounter() {
+    const checkedBoxes = document.querySelectorAll('.material-checkbox:checked');
+    const count = checkedBoxes.length;
+    const total = itemCheckboxes.length;
+
+    if (selectedCountSpan) {
+      selectedCountSpan.textContent = count;
+    } else if (counterElement) {
+      counterElement.innerHTML = `<span class="text-zinc-300 font-medium">${count}</span> of ${total} selected`;
+    }
+
+    if (selectAllCheckbox) {
+      selectAllCheckbox.checked = count === total && total > 0;
+      selectAllCheckbox.indeterminate = count > 0 && count < total;
+    }
+  }
+
+  // Master Checkbox select all / deselect all
+  if (selectAllCheckbox) {
+    selectAllCheckbox.addEventListener('change', (e) => {
+      const isChecked = e.target.checked;
+      itemCheckboxes.forEach(cb => {
+        cb.checked = isChecked;
+      });
+      updateSelectionCounter();
+    });
+  }
+
+  // Individual checkbox event listeners
+  itemCheckboxes.forEach(cb => {
+    cb.addEventListener('change', updateSelectionCounter);
+  });
+
+  // Filter items matching current category and search
+  function applyFilters() {
+    function matches(el) {
+      const category = el.dataset.category || '';
+      const text = (el.innerText || '').toLowerCase();
+      const matchesCategory = (currentCategory === 'all' || category === currentCategory);
+      const matchesSearch = !currentSearch || text.includes(currentSearch);
+      return matchesCategory && matchesSearch;
+    }
+
+    tableRows.forEach(row => {
+      row.style.display = matches(row) ? '' : 'none';
+    });
+
+    mobileCards.forEach(card => {
+      card.style.display = matches(card) ? '' : 'none';
+    });
+  }
+
+  // Search input live filtering
+  if (searchInput) {
+    searchInput.addEventListener('input', (e) => {
+      currentSearch = e.target.value.toLowerCase().trim();
+      applyFilters();
+    });
+  }
+
+  // Category filter pills click handler
+  filterPills.forEach(pill => {
+    pill.addEventListener('click', () => {
+      // Toggle active styling
+      filterPills.forEach(p => {
+        p.classList.remove('bg-zinc-800', 'text-white', 'border-zinc-700', 'shadow-sm');
+        p.classList.add('bg-obsidian-surface', 'text-zinc-400', 'border-obsidian-border');
+      });
+
+      pill.classList.remove('bg-obsidian-surface', 'text-zinc-400', 'border-obsidian-border');
+      pill.classList.add('bg-zinc-800', 'text-white', 'border-zinc-700', 'shadow-sm');
+
+      currentCategory = pill.dataset.filter || 'all';
+      applyFilters();
+    });
+  });
+
+  // Initial calculation
+  updateSelectionCounter();
+});
+</script>
+
+</body>
+</html>

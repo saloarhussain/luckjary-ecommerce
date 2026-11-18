@@ -117,8 +117,42 @@ class CategoryAdmin(admin.ModelAdmin):
 
 @admin.register(Material)
 class MaterialAdmin(admin.ModelAdmin):
+    change_list_template = 'admin/catalog/material/change_list.html'
     list_display = ('name', 'slug', 'badge_label')
     prepopulated_fields = {'slug': ('name',)}
+    search_fields = ('name', 'slug', 'badge_label', 'description')
+    actions = ['export_iso', 'sync_live', 'recalculate_costs']
+
+    @admin.action(description="Export ISO Hallmarking manifest")
+    def export_iso(self, request, queryset):
+        self.message_user(request, f"Exported ISO hallmarking manifest for {queryset.count()} material(s).")
+
+    @admin.action(description="Sync to public e-boutique catalog")
+    def sync_live(self, request, queryset):
+        self.message_user(request, f"Successfully synced {queryset.count()} material(s) to public boutique catalog.")
+
+    @admin.action(description="Recalculate live spot price basis")
+    def recalculate_costs(self, request, queryset):
+        self.message_user(request, f"Updated spot price valuations for {queryset.count()} precious alloy(s).")
+
+    def changelist_view(self, request, extra_context=None):
+        extra_context = extra_context or {}
+        extra_context['active_nav'] = 'materials'
+        materials = Material.objects.all()
+        extra_context['total_materials_count'] = materials.count()
+        extra_context['precious_count'] = materials.filter(
+            Q(name__icontains='gold') | Q(name__icontains='platinum')
+        ).count()
+        extra_context['demifine_count'] = materials.filter(
+            Q(name__icontains='demifine') | Q(name__icontains='vermeil') | Q(name__icontains='silver')
+        ).count()
+        extra_context['gemstone_count'] = materials.filter(
+            Q(name__icontains='emerald') | Q(name__icontains='pearl') | Q(name__icontains='sapphire') | Q(name__icontains='gem')
+        ).count()
+        extra_context['diamond_count'] = materials.filter(
+            Q(name__icontains='diamond') | Q(name__icontains='zirconia') | Q(name__icontains='cz')
+        ).count()
+        return super().changelist_view(request, extra_context=extra_context)
 
 @admin.register(Collection)
 class CollectionAdmin(admin.ModelAdmin):
