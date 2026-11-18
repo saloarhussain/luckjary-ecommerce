@@ -241,19 +241,39 @@ html, body {
   }
 }
 
-/* Custom scrollbars for side drawer */
-#leftNavDrawer::-webkit-scrollbar {
-  width: 4px;
+/* Clean Dark Luxury Scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
 }
-#leftNavDrawer::-webkit-scrollbar-track {
-  background: #0d0e12;
+::-webkit-scrollbar-track {
+  background: #0d0e10;
 }
-#leftNavDrawer::-webkit-scrollbar-thumb {
+::-webkit-scrollbar-thumb {
   background: #232732;
-  border-radius: 4px;
+  border-radius: 9999px;
 }
-#leftNavDrawer::-webkit-scrollbar-thumb:hover {
-  background: #323746;
+::-webkit-scrollbar-thumb:hover {
+  background: #3c4a42;
+}
+html {
+  scrollbar-color: #232732 #0d0e10;
+  scrollbar-width: thin;
+}
+.no-scrollbar::-webkit-scrollbar,
+#desktopSidebar::-webkit-scrollbar,
+#mobileDrawerPanel::-webkit-scrollbar,
+#leftNavDrawer::-webkit-scrollbar {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+.no-scrollbar,
+#desktopSidebar,
+#mobileDrawerPanel,
+#leftNavDrawer {
+  -ms-overflow-style: none !important;
+  scrollbar-width: none !important;
 }
 </style>
 

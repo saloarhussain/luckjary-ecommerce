@@ -1,4 +1,18 @@
 {% load i18n admin_urls static %}
+<style>
+/* Clean luxury invisible scrollbar for Atelier Sidebar across all browsers */
+#desktopSidebar,
+#mobileDrawerPanel {
+  -ms-overflow-style: none !important;
+  scrollbar-width: none !important;
+}
+#desktopSidebar::-webkit-scrollbar,
+#mobileDrawerPanel::-webkit-scrollbar {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+</style>
 <!-- ==========================================
      UNIFIED ATELIER SIDEBAR COMPONENT
      Preserves exact structure from orders/order/change_list.html
@@ -13,7 +27,7 @@
   <div id="mobileDrawerBackdrop" class="fixed inset-0 bg-black/80 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-300 ease-in-out"></div>
 
   <!-- Slide-out Drawer Panel -->
-  <aside id="mobileDrawerPanel" class="fixed inset-y-0 left-0 z-50 w-72 max-w-[85vw] bg-[#0d0e12] border-r border-[#232732] shadow-2xl flex flex-col -translate-x-full transition-transform duration-300 ease-out overflow-y-auto">
+  <aside id="mobileDrawerPanel" class="fixed inset-y-0 left-0 z-50 w-72 max-w-[85vw] bg-[#0d0e12] border-r border-[#232732] shadow-2xl flex flex-col -translate-x-full transition-transform duration-300 ease-out overflow-y-auto no-scrollbar">
     <!-- Panel Header -->
     <div class="p-4 border-b border-[#232732] flex items-center justify-between">
       <a href="/admin/" class="flex items-center gap-2.5 group focus:outline-none">
@@ -173,7 +187,7 @@
      2. PERSISTENT DESKTOP SIDEBAR (hidden lg:flex)
      Fixed viewport docking on desktop, display:none on mobile
      ========================================== -->
-<aside id="desktopSidebar" class="hidden lg:flex w-72 shrink-0 flex-col h-screen fixed top-0 bottom-0 left-0 bg-[#0d0e12] border-r border-[#232732] shadow-sm z-30 overflow-y-auto">
+<aside id="desktopSidebar" class="hidden lg:flex w-72 shrink-0 flex-col h-screen fixed top-0 bottom-0 left-0 bg-[#0d0e12] border-r border-[#232732] shadow-sm z-30 overflow-y-auto no-scrollbar">
   <!-- Panel Header -->
   <div class="p-4 border-b border-[#232732] flex items-center justify-between">
     <a href="/admin/" class="flex items-center gap-2.5 group focus:outline-none">
