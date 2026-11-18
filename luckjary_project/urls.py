@@ -9,7 +9,7 @@ admin.site.site_header = "Luckjary Haute Joaillerie Administration"
 admin.site.site_title = "Luckjary Atelier Portal"
 admin.site.index_title = "Atelier & Order Operations"
 
-# Inject live Shopify-style metrics into Admin Dashboard Index
+# Inject live high-performance metrics into Admin Dashboard Index
 original_admin_index = admin.site.index
 
 def atelier_admin_index(request, extra_context=None):
@@ -18,32 +18,51 @@ def atelier_admin_index(request, extra_context=None):
         from orders.models import Order
         from catalog.models import Product
         from accounts.models import CustomUser
-        from django.db.models import Sum
+        from django.db.models import Sum, Count, Q
+        from django.core.cache import cache
         
-        rev = Order.objects.aggregate(Sum('total_amount'))['total_amount__sum'] or 0
-        total_orders = Order.objects.count()
-        pending = Order.objects.filter(status='PENDING').count()
-        processing = Order.objects.filter(status='PROCESSING').count()
-        shipped = Order.objects.filter(status='SHIPPED').count()
-        delivered = Order.objects.filter(status='DELIVERED').count()
+        cached_stats = cache.get('atelier_dashboard_summary')
+        if not cached_stats:
+            order_stats = Order.objects.aggregate(
+                rev=Sum('total_amount'),
+                total_orders=Count('id'),
+                pending=Count('id', filter=Q(status='PENDING')),
+                processing=Count('id', filter=Q(status='PROCESSING')),
+                shipped=Count('id', filter=Q(status='SHIPPED')),
+                delivered=Count('id', filter=Q(status='DELIVERED'))
+            )
+            total_products = Product.objects.count()
+            total_customers = CustomUser.objects.count()
+            
+            rev = order_stats['rev'] or 0
+            total_orders = order_stats['total_orders'] or 0
+            pending = order_stats['pending'] or 0
+            processing = order_stats['processing'] or 0
+            shipped = order_stats['shipped'] or 0
+            delivered = order_stats['delivered'] or 0
+            
+            avg_aov = (rev / total_orders) if total_orders > 0 else 0
+            rev_inr = int(float(rev) * 83.1527)
+            avg_aov_inr = int(float(avg_aov) * 83.1527)
+            
+            cached_stats = {
+                'total_revenue': f"{rev:,.2f}",
+                'total_revenue_inr': f"{rev_inr:,}",
+                'total_orders': total_orders,
+                'pending_count': pending,
+                'processing_count': processing,
+                'unfulfilled_count': pending + processing,
+                'shipped_count': shipped,
+                'delivered_count': delivered,
+                'avg_aov': f"{avg_aov:,.2f}",
+                'avg_aov_inr': f"{avg_aov_inr:,}",
+                'total_products': total_products,
+                'total_customers': total_customers,
+            }
+            cache.set('atelier_dashboard_summary', cached_stats, 60)
         
-        avg_aov = (rev / total_orders) if total_orders > 0 else 0
-        rev_inr = int(float(rev) * 83.1527)
-        avg_aov_inr = int(float(avg_aov) * 83.1527)
-        
-        extra['total_revenue'] = f"{rev:,.2f}"
-        extra['total_revenue_inr'] = f"{rev_inr:,}"
-        extra['total_orders'] = total_orders
-        extra['pending_count'] = pending
-        extra['processing_count'] = processing
-        extra['unfulfilled_count'] = pending + processing
-        extra['shipped_count'] = shipped
-        extra['delivered_count'] = delivered
-        extra['avg_aov'] = f"{avg_aov:,.2f}"
-        extra['avg_aov_inr'] = f"{avg_aov_inr:,}"
-        extra['total_products'] = Product.objects.count()
-        extra['total_customers'] = CustomUser.objects.count()
-        extra['recent_orders'] = Order.objects.order_by('-created_at')[:6]
+        extra.update(cached_stats)
+        extra['recent_orders'] = Order.objects.select_related('user').order_by('-created_at')[:6]
         extra['active_nav'] = 'home'
         extra['is_dashboard'] = True
     except Exception:

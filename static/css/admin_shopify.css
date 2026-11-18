@@ -874,7 +874,7 @@ div.breadcrumbs a:hover {
 }
 
 .metric-footer a:hover {
-    text-decoration: underline;
+    text-decoration: none;
 }
 
 .text-emerald {
@@ -929,7 +929,7 @@ div.breadcrumbs a:hover {
 }
 
 .card-link:hover {
-    text-decoration: underline;
+    text-decoration: none;
 }
 
 /* Action Items (Things to Do) */
@@ -1134,7 +1134,7 @@ div.breadcrumbs a:hover {
 }
 
 .table-action-link:hover {
-    text-decoration: underline;
+    text-decoration: none;
 }
 
 /* ==========================================================================
@@ -3103,7 +3103,7 @@ ul.messagelist li.error {
 
 .storefront-link:hover {
     color: #FFFFFF;
-    text-decoration: underline;
+    text-decoration: none;
 }
 
 .shopify-alert.error {

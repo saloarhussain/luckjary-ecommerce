@@ -49,6 +49,19 @@ def catalog_context(request):
 
     active_currency = SUPPORTED_CURRENCIES[currency_code]
 
+    # For admin requests, skip querying storefront categories/materials/collections to maximize speed
+    if hasattr(request, 'path') and request.path.startswith('/admin/'):
+        return {
+            'wishlist_count': 0,
+            'site_name': 'Luckjary',
+            'site_tagline': 'Pure 925 Sterling Silver Jewellery',
+            'active_metal': 'silver',
+            'currency_code': currency_code,
+            'currency_symbol': active_currency['symbol'],
+            'active_currency': active_currency,
+            'supported_currencies': SUPPORTED_CURRENCIES,
+        }
+
     return {
         'nav_categories': Category.objects.all(),
         'nav_materials': Material.objects.all()[:6],

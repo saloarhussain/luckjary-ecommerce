@@ -7,7 +7,7 @@
 <meta name="color-scheme" content="dark">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300..800;1,300..800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,600;0,6..96,700;1,6..96,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
 
 <!-- Tailwind CSS v3 -->
@@ -18,24 +18,67 @@
     theme: {
       extend: {
         colors: {
-          "surface-dim": "#0d0e10",
-          "surface-card": "#14161c",
-          "surface-container": "#181a22",
-          "surface-elevated": "#1e222d",
-          "border-subtle": "#232732",
-          "border-strong": "#2d3240",
-          "primary": "#10b981",
-          "primary-light": "#34d399",
-          "secondary": "#ebd38d",
-          "champagne": "#ebd38d",
-          "gold-accent": "#d4af37",
-          "text-platinum": "#e3e2e5",
-          "text-muted": "#9ca3af"
+          obsidian: {
+            DEFAULT: '#07080a',
+            950: '#07080a',
+            900: '#0c0d10',
+            850: '#111317',
+            800: '#171920',
+            700: '#21242d',
+            600: '#2f3440',
+            canvas: '#07080a',
+            surface: '#0c0d10',
+            card: '#111317',
+            hover: '#171920',
+            border: '#21242d',
+          },
+          champagne: {
+            DEFAULT: '#cca55a',
+            100: '#fbf7ee',
+            200: '#f4ebd4',
+            300: '#ebd9b0',
+            400: '#dfc287',
+            500: '#cca55a',
+          },
+          emerald: {
+            DEFAULT: '#10b981',
+            400: '#34d399',
+            500: '#10b981',
+            600: '#059669',
+            950: '#022c22',
+            cta: '#10b981',
+            glow: 'rgba(16, 185, 129, 0.15)',
+            muted: 'rgba(16, 185, 129, 0.12)',
+          },
+          primary: '#10b981',
+          "primary-light": '#34d399',
+          secondary: '#dfc287',
+          "gold-accent": '#cca55a',
+          amber: {
+            DEFAULT: '#fbbf24',
+            400: '#fbbf24',
+            warm: '#f2daae',
+          },
+          "text-platinum": '#f3f4f6',
+          "text-muted": '#9ca3af',
+          "text-inactive": '#6b7280',
+          neutral: {
+            100: '#f5f5f5',
+            200: '#e5e5e5',
+            300: '#d4d4d4',
+            400: '#a3a3a3',
+            500: '#737373',
+            primary: '#f3f4f6',
+            body: '#9ca3af',
+            muted: '#6b7280',
+          }
         },
         fontFamily: {
-          sans: ["Plus Jakarta Sans", "-apple-system", "BlinkMacSystemFont", "Segoe UI", "sans-serif"],
-          mono: ["JetBrains Mono", "SFMono-Regular", "Menlo", "monospace"],
-          "mono-luxury": ["JetBrains Mono", "SFMono-Regular", "Menlo", "monospace"]
+          serif: ['"Cormorant Garamond"', '"Bodoni Moda"', 'Georgia', 'serif'],
+          display: ['"Cormorant Garamond"', '"Bodoni Moda"', 'Georgia', 'serif'],
+          sans: ['"Plus Jakarta Sans"', 'Arimo', 'Inter', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
+          mono: ['"JetBrains Mono"', 'SFMono-Regular', 'Menlo', 'monospace'],
+          "mono-luxury": ['"JetBrains Mono"', 'SFMono-Regular', 'Menlo', 'monospace']
         }
       }
     }
@@ -50,10 +93,58 @@
 /* ========================================================
    ATELIER VAULT UNIFIED APP SHELL & RESET OVERRIDES
    ======================================================== */
+/* Universal Underline Killer: Wipe out all default Django & browser link underlines */
+a,
+a *,
+a:link,
+a:visited,
+a:hover,
+a:hover *,
+a:focus,
+a:active,
+.atelier-app-root a,
+#content a,
+#content-start a,
+#atelier-main-shell a,
+#desktopSidebar a,
+#mobileDrawerPanel a,
+header a,
+.card-surface a,
+.dashboard a,
+.shopify-dashboard-page a,
+.titles-and-tools a {
+  text-decoration: none !important;
+  text-decoration-line: none !important;
+}
+
+/* Glassmorphism, Luxury Surfaces & Glows matching code.html */
+.card-surface {
+  background: linear-gradient(145deg, rgba(23, 25, 32, 0.7) 0%, rgba(17, 19, 23, 0.95) 100%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.06) !important;
+  backdrop-filter: blur(12px) !important;
+}
+.card-surface:hover {
+  border-color: rgba(255, 255, 255, 0.1) !important;
+}
+.glow-emerald {
+  box-shadow: 0 0 20px -3px rgba(16, 185, 129, 0.25) !important;
+}
+.luxury-gold-border {
+  border: 1px solid rgba(204, 165, 90, 0.28) !important;
+}
+.glass-input {
+  background: rgba(17, 19, 23, 0.85) !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+}
+.glass-input:focus {
+  border-color: rgba(16, 185, 129, 0.6) !important;
+  box-shadow: 0 0 0 1px rgba(16, 185, 129, 0.4) !important;
+}
+
 html, body {
   background-color: #0d0e10 !important;
-  color: #e3e2e5 !important;
-  font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif !important;
+  color: #f3f4f6 !important;
+  font-family: 'Plus Jakarta Sans', Arimo, Inter, -apple-system, BlinkMacSystemFont, sans-serif !important;
   margin: 0 !important;
   padding: 0 !important;
   min-height: 100vh !important;
@@ -109,8 +200,8 @@ html, body {
 #desktopSidebar,
 #mobileDrawerPanel,
 #leftNavDrawer {
-  background-color: #0d0e12 !important;
-  border-right: 1px solid #232732 !important;
+  background-color: #121315 !important;
+  border-right: 1px solid #2a2b2f !important;
 }
 #desktopSidebar a,
 #mobileDrawerPanel a,
@@ -121,7 +212,7 @@ html, body {
 #desktopSidebar a:visited,
 #mobileDrawerPanel a:visited,
 #leftNavDrawer a:visited {
-  color: #a1a1aa !important;
+  color: #9ca3af !important;
   text-decoration: none !important;
   text-decoration-line: none !important;
 }
@@ -131,8 +222,8 @@ html, body {
 #desktopSidebar a:focus,
 #mobileDrawerPanel a:focus,
 #leftNavDrawer a:focus {
-  color: #f4f4f5 !important;
-  background-color: #18191c !important;
+  color: #f3f4f6 !important;
+  background-color: #242528 !important;
   text-decoration: none !important;
   text-decoration-line: none !important;
 }
@@ -142,8 +233,9 @@ html, body {
 #desktopSidebar a[class*="bg-emerald"],
 #mobileDrawerPanel a[class*="bg-emerald"],
 #leftNavDrawer a[class*="bg-emerald"] {
-  color: #34d399 !important;
-  background-color: rgba(16, 185, 129, 0.1) !important;
+  color: #10b981 !important;
+  background-color: rgba(16, 185, 129, 0.12) !important;
+  border-left: 2px solid #10b981 !important;
   text-decoration: none !important;
   text-decoration-line: none !important;
 }
@@ -153,7 +245,7 @@ html, body {
 #desktopSidebar a[class*="bg-emerald"] span,
 #mobileDrawerPanel a[class*="bg-emerald"] span,
 #leftNavDrawer a[class*="bg-emerald"] span {
-  color: #f4f4f5 !important;
+  color: #f3f4f6 !important;
   text-decoration: none !important;
 }
 #desktopSidebar a.active svg,
@@ -162,7 +254,7 @@ html, body {
 #desktopSidebar a[class*="bg-emerald"] svg,
 #mobileDrawerPanel a[class*="bg-emerald"] svg,
 #leftNavDrawer a[class*="bg-emerald"] svg {
-  color: #34d399 !important;
+  color: #10b981 !important;
 }
 #desktopSidebar span,
 #mobileDrawerPanel span,
@@ -250,14 +342,14 @@ html, body {
   background: #0d0e10;
 }
 ::-webkit-scrollbar-thumb {
-  background: #232732;
+  background: #2a2b2f;
   border-radius: 9999px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #3c4a42;
+  background: #10b981;
 }
 html {
-  scrollbar-color: #232732 #0d0e10;
+  scrollbar-color: #2a2b2f #0d0e10;
   scrollbar-width: thin;
 }
 .no-scrollbar::-webkit-scrollbar,
@@ -317,7 +409,7 @@ html {
 {% block blockbots %}<meta name="robots" content="NONE,NOARCHIVE">{% endblock %}
 </head>
 
-<body class="bg-[#0d0e10] text-[#e3e2e5] font-sans antialiased min-h-screen selection:bg-emerald-500/20 selection:text-emerald-300 {% if is_popup %}popup{% endif %} {% block bodyclass %}{% endblock %}"
+<body class="bg-[#0d0e10] text-[#f3f4f6] font-sans antialiased min-h-screen selection:bg-emerald-500/20 selection:text-emerald-300 {% if is_popup %}popup{% endif %} {% block bodyclass %}{% endblock %}"
   data-admin-utc-offset="{% now "Z" %}"
   data-admin-server-timezone="{% get_current_timezone as time_zone %}{{ time_zone }}">
 <a href="#content-start" class="skip-to-content-link">{% translate 'Skip to main content' %}</a>
@@ -371,7 +463,7 @@ html {
               <div class="titles-and-tools">
                   <div class="titles">
                       {% block pretitle %}{% endblock %}
-                      {% block content_title %}{% if title and not is_dashboard %}<h1 class="shopify-standard-title text-xl font-bold text-zinc-100 font-sans mb-4">{{ title }}</h1>{% endif %}{% endblock %}
+                      {% block content_title %}{% if title and not is_dashboard %}<h1 class="shopify-standard-title text-xl font-bold text-[#f3f4f6] font-serif mb-4">{{ title }}</h1>{% endif %}{% endblock %}
                       {% block content_subtitle %}{% if subtitle %}<h2 class="text-sm text-zinc-400 mb-4">{{ subtitle }}</h2>{% endif %}{% endblock %}
                   </div>
                   {% block object-tools %}{% endblock %}
