@@ -3,290 +3,100 @@
 
 {% block extrahead %}
 {{ block.super }}
-<style>
-/* ========================================================
-   RECENT COMMISSIONS: DESKTOP & MOBILE RESPONSIVE VIEWS
-   ======================================================== */
-.shopify-orders-mobile-cards {
-    display: none;
-}
+<!-- Google Fonts: Cormorant Garamond for luxury serif accents, Plus Jakarta Sans for UI, JetBrains Mono for codes -->
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..900;1,6..96,400..900&family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
-.orders-desktop-table {
-    display: block;
-    width: 100%;
-}
+<script>
+  if (window.tailwind) {
+    tailwind.config = tailwind.config || {};
+    tailwind.config.theme = tailwind.config.theme || {};
+    tailwind.config.theme.extend = tailwind.config.theme.extend || {};
+    tailwind.config.theme.extend.colors = tailwind.config.theme.extend.colors || {};
+    Object.assign(tailwind.config.theme.extend.colors, {
+      obsidian: {
+        950: '#07080a',
+        900: '#0c0d10',
+        850: '#111317',
+        800: '#171920',
+        700: '#21242d',
+        600: '#2f3440',
+      },
+      champagne: {
+        100: '#fbf7ee',
+        200: '#f4ebd4',
+        300: '#ebd9b0',
+        400: '#dfc287',
+        500: '#cca55a',
+      },
+      emerald: {
+        400: '#34d399',
+        500: '#10b981',
+        600: '#059669',
+        950: '#022c22',
+      }
+    });
+    tailwind.config.theme.extend.fontFamily = tailwind.config.theme.extend.fontFamily || {};
+    tailwind.config.theme.extend.fontFamily.serif = ['"Cormorant Garamond"', '"Bodoni Moda"', 'Georgia', 'serif'];
+  }
+</script>
 
-.order-link {
-    font-family: monospace;
-    font-weight: 700;
-    color: #60A5FA;
-    text-decoration: none;
-    background: rgba(59, 130, 246, 0.12);
-    padding: 3px 8px;
-    border-radius: 4px;
-    border: 1px solid rgba(59, 130, 246, 0.3);
-    white-space: nowrap !important;
-    display: inline-block;
-    letter-spacing: 0.02em;
-}
+<style data-purpose="luxury-atelier-dashboard">
+  /* Override default Django Admin padding on dashboard */
+  #content,
+  .dashboard #content,
+  .shopify-dashboard-page #content {
+    padding: 0 !important;
+    max-width: 100% !important;
+    width: 100% !important;
+    background: transparent !important;
+  }
 
-.order-link:hover {
-    border-color: #C5A059;
-    color: #F8FAFC;
-    background: rgba(197, 160, 89, 0.15);
-}
+  .card-surface {
+    background: linear-gradient(145deg, rgba(23, 25, 32, 0.7) 0%, rgba(17, 19, 23, 0.95) 100%) !important;
+    border: 1px solid rgba(255, 255, 255, 0.06) !important;
+    backdrop-filter: blur(12px) !important;
+  }
+  .card-surface:hover {
+    border-color: rgba(255, 255, 255, 0.1) !important;
+  }
+  .glow-emerald {
+    box-shadow: 0 0 20px -3px rgba(16, 185, 129, 0.25) !important;
+  }
+  .luxury-gold-border {
+    border: 1px solid rgba(204, 165, 90, 0.28) !important;
+  }
+  .glass-input {
+    background: rgba(17, 19, 23, 0.85) !important;
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  }
+  .glass-input:focus {
+    border-color: rgba(16, 185, 129, 0.6) !important;
+    box-shadow: 0 0 0 1px rgba(16, 185, 129, 0.4) !important;
+  }
 
-.shopify-table td.text-muted {
-    white-space: nowrap !important;
-}
+  .font-serif {
+    font-family: 'Cormorant Garamond', 'Bodoni Moda', Georgia, serif !important;
+  }
 
-.shopify-table td.font-bold {
-    font-weight: 700;
-    color: #FAF9F6;
-    white-space: nowrap !important;
-}
-
-.table-action-link {
-    display: inline-flex;
-    align-items: center;
-    padding: 3px 10px;
-    background: #1E212E;
-    border: 1px solid #2B3042;
-    border-radius: 4px;
-    color: #CBD5E1;
-    font-size: 11px;
-    font-weight: 600;
-    text-decoration: none;
-    transition: all 0.15s ease;
-}
-
-.table-action-link:hover {
-    background: #282C3D;
-    color: #FFF;
-    border-color: #475569;
-}
-
-/* Mobile Orders List View (<= 768px) */
-@media (max-width: 768px) {
-    .orders-desktop-table {
-        display: none !important;
-    }
-
-    .shopify-orders-mobile-cards {
-        display: flex !important;
-        flex-direction: column !important;
-        gap: 10px !important;
-        width: 100% !important;
-        box-sizing: border-box !important;
-    }
-
-    .shopify-order-card {
-        display: flex !important;
-        flex-direction: column !important;
-        gap: 8px !important;
-        background: #141722 !important;
-        border: 1px solid #282C3D !important;
-        border-radius: 8px !important;
-        padding: 12px 14px !important;
-        text-decoration: none !important;
-        color: inherit !important;
-        transition: all 0.2s ease !important;
-        box-sizing: border-box !important;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2) !important;
-        width: 100% !important;
-    }
-
-    .shopify-order-card:hover,
-    .shopify-order-card:active {
-        background: #191D2C !important;
-        border-color: rgba(197, 160, 89, 0.45) !important;
-        transform: translateY(-1px) !important;
-    }
-
-    .order-card-header {
-        display: flex !important;
-        align-items: center !important;
-        justify-content: space-between !important;
-        gap: 8px !important;
-        width: 100% !important;
-    }
-
-    .order-card-number {
-        font-family: monospace !important;
-        font-weight: 700 !important;
-        font-size: 12.5px !important;
-        color: #60A5FA !important;
-        background: rgba(59, 130, 246, 0.12) !important;
-        border: 1px solid rgba(59, 130, 246, 0.3) !important;
-        padding: 3px 8px !important;
-        border-radius: 5px !important;
-        white-space: nowrap !important;
-        letter-spacing: 0.02em !important;
-    }
-
-    .order-card-amount {
-        font-size: 15px !important;
-        font-weight: 800 !important;
-        color: #FAF9F6 !important;
-        letter-spacing: -0.01em !important;
-        white-space: nowrap !important;
-    }
-
-    .order-card-body {
-        display: flex !important;
-        align-items: flex-start !important;
-        justify-content: space-between !important;
-        gap: 10px !important;
-        padding: 3px 0 !important;
-        width: 100% !important;
-    }
-
-    .order-card-customer {
-        display: flex !important;
-        flex-direction: column !important;
-        gap: 2px !important;
-        min-width: 0 !important;
-        flex: 1 1 auto !important;
-    }
-
-    .order-card-customer-name {
-        font-size: 13px !important;
-        font-weight: 700 !important;
-        color: #F1F5F9 !important;
-        white-space: nowrap !important;
-        overflow: hidden !important;
-        text-overflow: ellipsis !important;
-    }
-
-    .order-card-customer-email {
-        font-size: 11px !important;
-        color: #94A3B8 !important;
-        white-space: nowrap !important;
-        overflow: hidden !important;
-        text-overflow: ellipsis !important;
-    }
-
-    .order-card-date {
-        font-size: 11px !important;
-        color: #94A3B8 !important;
-        font-weight: 500 !important;
-        white-space: nowrap !important;
-        flex-shrink: 0 !important;
-        padding-top: 2px !important;
-    }
-
-    .order-card-footer {
-        display: flex !important;
-        align-items: center !important;
-        justify-content: space-between !important;
-        gap: 8px !important;
-        padding-top: 8px !important;
-        border-top: 1px solid #1E2232 !important;
-        margin-top: 2px !important;
-        width: 100% !important;
-    }
-
-    .order-card-badges {
-        display: flex !important;
-        align-items: center !important;
-        gap: 6px !important;
-        flex-wrap: wrap !important;
-    }
-
-    .order-card-badges .shopify-badge {
-        font-size: 10px !important;
-        padding: 2px 7px !important;
-        white-space: nowrap !important;
-    }
-
-    .order-card-arrow {
-        font-size: 11.5px !important;
-        font-weight: 700 !important;
-        color: #C5A059 !important;
-        display: inline-flex !important;
-        align-items: center !important;
-        gap: 3px !important;
-        flex-shrink: 0 !important;
-    }
-
-    .order-card-empty {
-        padding: 20px !important;
-        text-align: center !important;
-        color: #94A3B8 !important;
-        font-size: 13px !important;
-    }
-
-    /* Polished Things to Do on Mobile */
-    .action-feed-card .action-item {
-        padding: 12px 14px !important;
-        gap: 12px !important;
-        align-items: center !important;
-    }
-
-    .action-feed-card .action-item-icon {
-        width: 34px !important;
-        height: 34px !important;
-        border-radius: 7px !important;
-        flex-shrink: 0 !important;
-    }
-
-    .action-feed-card .action-item-icon svg {
-        width: 17px !important;
-        height: 17px !important;
-    }
-
-    .action-feed-card .action-item-content {
-        min-width: 0 !important;
-        flex: 1 1 auto !important;
-    }
-
-    .action-feed-card .action-item-title {
-        font-size: 13.5px !important;
-        font-weight: 700 !important;
-        color: #F8FAFC !important;
-        line-height: 1.3 !important;
-    }
-
-    .action-feed-card .action-item-desc {
-        font-size: 11.5px !important;
-        color: #94A3B8 !important;
-        margin-top: 2px !important;
-        line-height: 1.35 !important;
-    }
-
-    .action-feed-card .shopify-btn-sm {
-        font-size: 11px !important;
-        font-weight: 600 !important;
-        padding: 6px 12px !important;
-        border-radius: 6px !important;
-        flex-shrink: 0 !important;
-        white-space: nowrap !important;
-    }
-    /* Dashboard: Hide redundant breadcrumbs and legacy titles */
-    .dashboard .shopify-breadcrumbs-nav,
-    .dashboard div.breadcrumbs,
-    .dashboard .titles-and-tools,
-    .shopify-dashboard-page .shopify-breadcrumbs-nav,
-    .shopify-dashboard-page div.breadcrumbs,
-    .shopify-dashboard-page .titles-and-tools {
-        display: none !important;
-    }
-
-    .shopify-dashboard-page .shopify-page-header {
-        margin-top: 6px !important;
-        margin-bottom: 18px !important;
-    }
-}
-
-/* Global dashboard override for desktop and mobile */
-.dashboard .shopify-breadcrumbs-nav,
-.dashboard div.breadcrumbs,
-.dashboard .titles-and-tools,
-.shopify-dashboard-page .shopify-breadcrumbs-nav,
-.shopify-dashboard-page div.breadcrumbs,
-.shopify-dashboard-page .titles-and-tools {
+  /* Hide redundant titles & breadcrumbs */
+  .dashboard .shopify-breadcrumbs-nav,
+  .dashboard div.breadcrumbs,
+  .dashboard .titles-and-tools,
+  .shopify-dashboard-page .shopify-breadcrumbs-nav,
+  .shopify-dashboard-page div.breadcrumbs,
+  .shopify-dashboard-page .titles-and-tools {
     display: none !important;
-}
+  }
+
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
 </style>
 {% endblock %}
 
@@ -297,397 +107,608 @@
 {% block content_title %}{% endblock %}
 
 {% block content %}
-<div class="shopify-dashboard-wrapper">
-    <!-- Top Greeting & Header Bar -->
-    <div class="shopify-page-header">
+<div class="atelier-dashboard-root w-full min-h-screen bg-obsidian-950 text-neutral-300 font-sans antialiased selection:bg-emerald-500/30 selection:text-emerald-300">
+  <div class="p-4 sm:p-6 md:p-8 space-y-5 sm:space-y-6 md:space-y-7 max-w-[1720px] mx-auto w-full">
+
+    <!-- BEGIN: Dashboard Hero Section -->
+    <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3.5 sm:gap-4 pb-1 sm:pb-2" data-purpose="hero-banner">
+      <div>
+        <h1 class="text-2xl sm:text-3xl md:text-4xl font-serif text-white tracking-wide">
+          Welcome back, {{ request.user.first_name|default:"Eleanor" }}
+        </h1>
+        <p class="text-xs md:text-sm text-neutral-400 mt-1 font-sans">
+          Here's what's happening with <span class="text-neutral-200">Luckjary Haute Joaillerie</span> atelier today.
+        </p>
+      </div>
+      <div class="flex flex-wrap sm:flex-nowrap items-center gap-2.5 sm:gap-3 w-full sm:w-auto">
+        <a href="{% url 'orders:oms_dashboard' %}" class="flex-1 sm:flex-none inline-flex items-center justify-center gap-2 px-3.5 py-2 rounded-lg bg-obsidian-800 hover:bg-obsidian-700 text-neutral-200 text-xs font-medium border border-obsidian-700 transition shadow-sm whitespace-nowrap no-underline">
+          <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+          Open OMS Console
+        </a>
+        <a href="{% url 'admin:orders_order_add' %}" class="flex-1 sm:flex-none inline-flex items-center justify-center gap-2 px-3.5 py-2 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-obsidian-950 font-semibold text-xs tracking-wide transition shadow-lg glow-emerald whitespace-nowrap no-underline">
+          <svg class="w-4 h-4 stroke-[2.2]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 4v16m8-8H4" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+          Create Order
+        </a>
+      </div>
+    </div>
+    <!-- END: Dashboard Hero Section -->
+
+    <!-- BEGIN: Key Performance Metrics Row (4 Cards) -->
+    <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5 sm:gap-4" data-purpose="key-metrics-grid">
+      <!-- Metric Card 1: Total Sales -->
+      <div class="card-surface p-4 sm:p-5 rounded-xl flex flex-col justify-between relative overflow-hidden group">
+        <div class="flex items-start justify-between">
+          <span class="text-[11px] font-mono uppercase tracking-wider text-neutral-400">Total Sales</span>
+          <span class="px-2 py-0.5 rounded-full text-[10px] font-mono font-semibold bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 whitespace-nowrap">
+            +14.2%
+          </span>
+        </div>
+        <div class="mt-3 sm:mt-4 mb-3">
+          <div class="text-2xl sm:text-3xl font-mono font-semibold text-white tracking-tight break-words">
+            ₹{{ total_revenue_inr|default:"9,28,400" }} <span class="text-xs sm:text-sm font-sans font-normal text-neutral-400">(${{ total_revenue|default:"11,165.00" }})</span>
+          </div>
+        </div>
+        <div class="flex items-center gap-1.5 text-[11px] text-emerald-400/90 font-medium pt-2 border-t border-obsidian-700/50">
+          <svg class="w-3.5 h-3.5 text-emerald-400 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path clip-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" fill-rule="evenodd"></path></svg>
+          <span class="truncate">Stripe Luxury Payments Captured</span>
+        </div>
+      </div>
+
+      <!-- Metric Card 2: Total Orders -->
+      <div class="card-surface p-4 sm:p-5 rounded-xl flex flex-col justify-between group">
+        <div class="flex items-start justify-between">
+          <span class="text-[11px] font-mono uppercase tracking-wider text-neutral-400">Total Orders</span>
+          <span class="text-[10px] font-mono text-neutral-500 tracking-wider whitespace-nowrap">ALL-TIME</span>
+        </div>
+        <div class="mt-3 sm:mt-4 mb-3">
+          <div class="text-2xl sm:text-3xl font-mono font-semibold text-white tracking-tight">{{ total_orders|default:"4" }}</div>
+        </div>
+        <div class="pt-2 border-t border-obsidian-700/50">
+          <a class="text-[11px] text-neutral-400 hover:text-champagne-300 inline-flex items-center gap-1 transition whitespace-nowrap no-underline" href="{% url 'admin:orders_order_changelist' %}">
+            View all orders <span class="text-champagne-400">→</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Metric Card 3: Orders To Fulfill (Needs Action) -->
+      <div class="card-surface luxury-gold-border p-4 sm:p-5 rounded-xl flex flex-col justify-between relative bg-gradient-to-br from-obsidian-850 to-amber-950/20">
+        <div class="flex items-start justify-between">
+          <span class="text-[11px] font-mono uppercase tracking-wider text-champagne-300">Orders to Fulfill</span>
+          <span class="px-2 py-0.5 rounded text-[10px] font-mono font-semibold bg-amber-500/20 text-amber-300 border border-amber-500/40 whitespace-nowrap">
+            NEEDS ACTION
+          </span>
+        </div>
+        <div class="mt-3 sm:mt-4 mb-3">
+          <div class="text-2xl sm:text-3xl font-mono font-bold text-champagne-200 tracking-tight">{{ unfulfilled_count|default:"1" }}</div>
+        </div>
+        <div class="pt-2 border-t border-obsidian-700/50">
+          <a class="text-[11px] text-champagne-400 hover:underline inline-flex items-center gap-1 font-medium whitespace-nowrap no-underline" href="{% url 'admin:orders_order_changelist' %}?status__exact=PENDING">
+            Open fulfillment queue <span class="text-champagne-300">→</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Metric Card 4: Average Order Value -->
+      <div class="card-surface p-4 sm:p-5 rounded-xl flex flex-col justify-between group">
+        <div class="flex items-start justify-between">
+          <span class="text-[11px] font-mono uppercase tracking-wider text-neutral-400">Average Order Value</span>
+          <span class="text-[10px] font-mono text-neutral-500 whitespace-nowrap">AOV</span>
+        </div>
+        <div class="mt-3 sm:mt-4 mb-3">
+          <div class="text-2xl sm:text-3xl font-mono font-semibold text-white tracking-tight break-words">
+            ₹{{ avg_aov_inr|default:"2,32,100" }} <span class="text-xs sm:text-sm font-sans font-normal text-neutral-400">(${{ avg_aov|default:"2,791.25" }})</span>
+          </div>
+        </div>
+        <div class="pt-2 border-t border-obsidian-700/50 text-[11px] text-neutral-400">
+          Fine 925 jewelry cart average
+        </div>
+      </div>
+    </section>
+    <!-- END: Key Performance Metrics Row -->
+
+    <!-- BEGIN: Operational Row (Things To Do & Atelier Infrastructure) -->
+    <section class="grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-5" data-purpose="operational-overview">
+      <!-- Left: Things To Do (7 Cols on desktop) -->
+      <div class="lg:col-span-7 card-surface rounded-xl p-4 sm:p-6 flex flex-col justify-between space-y-3.5 sm:space-y-4">
+        <div class="flex items-center justify-between pb-3 border-b border-obsidian-700/60">
+          <div class="flex items-center gap-2">
+            <svg class="w-4 h-4 text-champagne-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+            <h2 class="text-sm font-semibold text-white tracking-wide">Things to do</h2>
+          </div>
+          <span class="px-2.5 py-0.5 rounded-full text-[10px] font-mono font-semibold bg-amber-500/15 text-amber-300 border border-amber-500/30 whitespace-nowrap inline-flex items-center">
+            {{ unfulfilled_count|default:"1" }} pending
+          </span>
+        </div>
+
+        <!-- Pending Item 1: Orders awaiting Jeweler QA -->
+        <div class="p-3.5 sm:p-4 rounded-lg bg-obsidian-850/80 border border-obsidian-700/70 flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-3.5">
+          <div class="flex items-start gap-3 min-w-0">
+            <div class="p-2.5 rounded-lg bg-amber-500/10 border border-amber-500/30 text-amber-400 mt-0.5 flex-shrink-0">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m4 10v4m8-4v4" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"></path></svg>
+            </div>
+            <div class="min-w-0">
+              <h3 class="text-xs font-semibold text-neutral-100">{{ unfulfilled_count|default:"1" }} Orders to Fulfill</h3>
+              <p class="text-[11px] text-neutral-400 mt-0.5 leading-relaxed">Orders awaiting sterling silver jeweler QA &amp; bespoke dispatch.</p>
+            </div>
+          </div>
+          <a href="{% url 'admin:orders_order_changelist' %}" class="w-full sm:w-auto px-3.5 py-1.5 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-obsidian-950 font-semibold text-xs tracking-wide transition text-center whitespace-nowrap glow-emerald flex-shrink-0 no-underline inline-block">
+            Fulfill orders
+          </a>
+        </div>
+
+        <!-- Pending Item 2: Courier Logistics Sync -->
+        <div class="p-3.5 sm:p-4 rounded-lg bg-obsidian-850/80 border border-obsidian-700/70 flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-3.5">
+          <div class="flex items-start gap-3 min-w-0">
+            <div class="p-2.5 rounded-lg bg-blue-500/10 border border-blue-500/30 text-blue-400 mt-0.5 flex-shrink-0">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"></path></svg>
+            </div>
+            <div class="min-w-0">
+              <h3 class="text-xs font-semibold text-neutral-100">Courier Logistics Sync</h3>
+              <p class="text-[11px] text-neutral-400 mt-0.5 leading-relaxed">Live FedEx Luxury &amp; armored courier dispatch telemetry active.</p>
+            </div>
+          </div>
+          <a href="{% url 'orders:oms_dashboard' %}" class="w-full sm:w-auto px-3.5 py-1.5 rounded-lg bg-obsidian-800 hover:bg-obsidian-700 text-neutral-200 border border-obsidian-700 text-xs font-medium transition text-center whitespace-nowrap flex-shrink-0 no-underline inline-block">
+            Launch OMS →
+          </a>
+        </div>
+      </div>
+
+      <!-- Right: Atelier Infrastructure (5 Cols on desktop) -->
+      <div class="lg:col-span-5 card-surface rounded-xl p-4 sm:p-6 flex flex-col justify-between">
+        <div class="flex items-center justify-between pb-3 border-b border-obsidian-700/60">
+          <h2 class="text-sm font-semibold text-white tracking-wide">Atelier Infrastructure</h2>
+          <span class="px-2.5 py-0.5 rounded-full text-[10px] font-mono text-emerald-400 bg-emerald-950/60 border border-emerald-500/30 flex items-center gap-1.5 whitespace-nowrap shrink-0">
+            <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+            Optimal
+          </span>
+        </div>
+        <div class="space-y-3 my-3">
+          <!-- Infra item 1 -->
+          <div class="flex items-center justify-between text-xs gap-3">
+            <div class="flex items-center gap-2 min-w-0">
+              <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 shrink-0"></span>
+              <span class="font-medium text-neutral-200 truncate">Stripe Luxury Payments</span>
+              <span class="text-[10px] text-neutral-500 font-mono hidden sm:inline shrink-0">(Webhooks &amp; captured receipts)</span>
+            </div>
+            <span class="whitespace-nowrap shrink-0 px-2.5 py-1 text-xs font-mono bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 rounded">Live</span>
+          </div>
+          <!-- Infra item 2 -->
+          <div class="flex items-center justify-between text-xs gap-3">
+            <div class="flex items-center gap-2 min-w-0">
+              <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 shrink-0"></span>
+              <span class="font-medium text-neutral-200 truncate">WhiteNoise Edge CDN</span>
+              <span class="text-[10px] text-neutral-500 font-mono hidden sm:inline shrink-0">(Static fonts &amp; styles)</span>
+            </div>
+            <span class="whitespace-nowrap shrink-0 px-2.5 py-1 text-xs font-mono bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 rounded">Active</span>
+          </div>
+          <!-- Infra item 3 -->
+          <div class="flex items-center justify-between text-xs gap-3">
+            <div class="flex items-center gap-2 min-w-0">
+              <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 shrink-0"></span>
+              <span class="font-medium text-neutral-200 truncate">30-Day Cookie Sessions</span>
+              <span class="text-[10px] text-neutral-500 font-mono hidden sm:inline shrink-0">(Cryptographically signed)</span>
+            </div>
+            <span class="whitespace-nowrap shrink-0 px-2.5 py-1 text-xs font-mono bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 rounded">Enabled</span>
+          </div>
+          <!-- Infra item 4 -->
+          <div class="flex items-center justify-between text-xs gap-3">
+            <div class="flex items-center gap-2 min-w-0">
+              <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 shrink-0"></span>
+              <span class="font-medium text-neutral-200 truncate">Armored Courier Dispatch</span>
+              <span class="text-[10px] text-neutral-500 font-mono hidden sm:inline shrink-0">(FedEx &amp; Ferrari VIP)</span>
+            </div>
+            <span class="whitespace-nowrap shrink-0 px-2.5 py-1 text-xs font-mono bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 rounded">Active</span>
+          </div>
+        </div>
+        <div class="pt-2 border-t border-obsidian-700/40 text-[10px] font-mono text-neutral-500 flex justify-between items-center">
+          <span class="whitespace-nowrap">Security Layer 1.3 TLS</span>
+          <span class="whitespace-nowrap">Uptime 99.99%</span>
+        </div>
+      </div>
+    </section>
+    <!-- END: Operational Row -->
+
+    <!-- BEGIN: Main Data Section (Recent Orders Table & Quicklinks / Activity) -->
+    <section class="grid grid-cols-1 xl:grid-cols-12 gap-4 sm:gap-5 pb-6" data-purpose="table-and-quicklinks-grid">
+      <!-- Left: Recent Orders Table (8 Cols on xl) -->
+      <div class="xl:col-span-8 card-surface rounded-xl p-4 sm:p-6 flex flex-col justify-between overflow-hidden">
         <div>
-            <h1 class="shopify-page-title">Welcome back, {{ request.user.first_name|default:"Eleanor" }}</h1>
-            <p class="shopify-page-subtitle">Here's what's happening with Luckjary Haute Joaillerie today.</p>
-        </div>
-        <div class="shopify-header-cta-group">
-            <a href="{% url 'orders:oms_dashboard' %}" class="shopify-btn-secondary">
-                <span class="green-live-dot"></span>
-                <span>Open OMS Console</span>
+          <!-- Table Header Bar -->
+          <div class="flex items-center justify-between pb-3.5 sm:pb-4 border-b border-obsidian-700/60 mb-2 gap-2">
+            <div class="flex items-center gap-2 sm:gap-3 min-w-0">
+              <h2 class="text-sm font-semibold text-white tracking-wide whitespace-nowrap">Recent Orders</h2>
+              <span class="whitespace-nowrap shrink-0 inline-flex items-center px-2 py-0.5 rounded text-[10px] font-mono bg-obsidian-800 text-neutral-400 border border-obsidian-700">
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 mr-1.5"></span>Live Orders Vault
+              </span>
+            </div>
+            <a class="text-xs text-neutral-400 hover:text-champagne-300 font-medium inline-flex items-center gap-1 transition whitespace-nowrap shrink-0 no-underline" href="{% url 'admin:orders_order_changelist' %}">
+              View all orders <span class="text-champagne-400">→</span>
             </a>
-            <a href="{% url 'admin:orders_order_add' %}" class="shopify-btn-primary">
-                + Create Order
+          </div>
+
+          <!-- Desktop Table View (Hidden on mobile < md) -->
+          <div class="hidden md:block overflow-x-auto -mx-4 sm:mx-0 px-4 sm:px-0">
+            <table class="w-full text-left border-collapse min-w-[620px]">
+              <thead>
+                <tr class="border-b border-obsidian-700/60 text-[10px] font-mono uppercase tracking-wider text-neutral-400">
+                  <th class="py-3 px-2 font-medium">Order</th>
+                  <th class="py-3 px-2 font-medium">Date</th>
+                  <th class="py-3 px-2 font-medium">Customer</th>
+                  <th class="py-3 px-2 font-medium">Payment</th>
+                  <th class="py-3 px-2 font-medium">Fulfillment</th>
+                  <th class="py-3 px-2 text-right font-medium">Total</th>
+                  <th class="py-3 px-2 text-right font-medium pr-4">Action</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-obsidian-700/40 text-xs">
+                {% for order in recent_orders %}
+                <tr class="hover:bg-obsidian-800/40 transition group">
+                  <td class="py-3.5 px-2">
+                    <a href="{% url 'admin:orders_order_change' order.id %}" class="font-mono text-emerald-400 bg-emerald-950/40 border border-emerald-500/20 px-2 py-0.5 rounded text-[11px] group-hover:border-emerald-500/40 transition whitespace-nowrap no-underline inline-block">
+                      #{{ order.order_number }}
+                    </a>
+                  </td>
+                  <td class="py-3.5 px-2 text-neutral-400 font-mono text-[11px] whitespace-nowrap">
+                    {{ order.created_at|date:"M d, Y" }}
+                  </td>
+                  <td class="py-3.5 px-2">
+                    <div class="font-medium text-neutral-100">{{ order.full_name|default:"VIP Patron" }}</div>
+                    <div class="text-[10px] text-neutral-400 font-mono">{{ order.email }}</div>
+                  </td>
+                  <td class="py-3.5 px-2 whitespace-nowrap">
+                    {% if order.payment_status == 'PAID' %}
+                    <span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-mono font-medium bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 whitespace-nowrap">
+                      <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span> Paid
+                    </span>
+                    {% else %}
+                    <span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-mono font-medium bg-amber-500/15 text-amber-300 border border-amber-500/30 whitespace-nowrap">
+                      <span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span> {{ order.get_payment_status_display }}
+                    </span>
+                    {% endif %}
+                  </td>
+                  <td class="py-3.5 px-2 whitespace-nowrap">
+                    {% if order.status == 'DELIVERED' %}
+                    <span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-mono font-medium bg-teal-500/15 text-teal-300 border border-teal-500/30 whitespace-nowrap">
+                      <span class="w-1.5 h-1.5 rounded-full bg-teal-400"></span> Delivered
+                    </span>
+                    {% elif order.status == 'SHIPPED' %}
+                    <span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-mono font-medium bg-blue-500/15 text-blue-300 border border-blue-500/30 whitespace-nowrap">
+                      <span class="w-1.5 h-1.5 rounded-full bg-blue-400"></span> In Transit
+                    </span>
+                    {% elif order.status == 'PROCESSING' %}
+                    <span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-mono font-medium bg-purple-500/15 text-purple-300 border border-purple-500/30 whitespace-nowrap">
+                      <span class="w-1.5 h-1.5 rounded-full bg-purple-400"></span> In Atelier QC
+                    </span>
+                    {% else %}
+                    <span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-mono font-medium bg-amber-500/15 text-amber-300 border border-amber-500/30 whitespace-nowrap">
+                      <span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span> Unfulfilled
+                    </span>
+                    {% endif %}
+                  </td>
+                  <td class="py-3.5 px-2 text-right font-mono font-medium text-neutral-100 whitespace-nowrap">
+                    ₹{{ order.total_amount|floatformat:2 }} <span class="text-[10px] text-neutral-400 block font-normal">(${{ order.total_amount }})</span>
+                  </td>
+                  <td class="py-3.5 px-2 text-right pr-4 whitespace-nowrap">
+                    <a href="{% url 'admin:orders_order_change' order.id %}" class="px-2.5 py-1 text-[11px] font-medium text-neutral-300 hover:text-white bg-obsidian-800 hover:bg-obsidian-700 border border-obsidian-700 rounded transition no-underline inline-block">
+                      Edit
+                    </a>
+                  </td>
+                </tr>
+                {% empty %}
+                <tr>
+                  <td colspan="7" class="py-8 text-center text-neutral-500 font-mono text-xs">No orders found.</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Mobile Recent Order Cards & Status Filter Chips (< md) -->
+          <div class="block md:hidden space-y-3.5 pt-1">
+            <!-- Horizontal Filter Chips -->
+            <div class="overflow-x-auto -mx-4 px-4 flex items-center gap-2 pb-1 no-scrollbar" id="mobile-order-filter-chips">
+              <button type="button" data-status="all" class="mobile-chip active px-3 py-1 rounded text-xs font-medium bg-neutral-200 text-obsidian-950 font-sans whitespace-nowrap shrink-0 shadow-sm cursor-pointer">
+                All <span class="ml-1 font-mono text-[10px]">{{ recent_orders|length|default:"4" }}</span>
+              </button>
+              <button type="button" data-status="unfulfilled" class="mobile-chip px-3 py-1 rounded text-xs font-medium bg-obsidian-800 text-amber-400 border border-amber-500/20 whitespace-nowrap shrink-0 flex items-center gap-1.5 cursor-pointer">
+                <span class="w-1.5 h-1.5 rounded-full bg-amber-400 shrink-0"></span> Unfulfilled <span class="ml-0.5 font-mono text-[10px] text-neutral-400">{{ unfulfilled_count|default:"1" }}</span>
+              </button>
+              <button type="button" data-status="qc" class="mobile-chip px-3 py-1 rounded text-xs font-medium bg-obsidian-800 text-purple-300 border border-purple-500/30 whitespace-nowrap shrink-0 flex items-center gap-1.5 cursor-pointer">
+                <span class="w-1.5 h-1.5 rounded-full bg-purple-400 shrink-0"></span> In Atelier QC <span class="ml-0.5 font-mono text-[10px] text-neutral-400">{{ processing_count|default:"1" }}</span>
+              </button>
+              <button type="button" data-status="transit" class="mobile-chip px-3 py-1 rounded text-xs font-medium bg-obsidian-800 text-blue-300 border border-blue-500/30 whitespace-nowrap shrink-0 flex items-center gap-1.5 cursor-pointer">
+                <span class="w-1.5 h-1.5 rounded-full bg-blue-400 shrink-0"></span> In Transit <span class="ml-0.5 font-mono text-[10px] text-neutral-400">{{ shipped_count|default:"1" }}</span>
+              </button>
+            </div>
+
+            <!-- Cards List -->
+            <div class="space-y-3" id="mobile-orders-container">
+              {% for order in recent_orders %}
+              <div class="mobile-order-card bg-obsidian-900 border border-obsidian-700/70 rounded-xl p-3.5 space-y-3"
+                   data-status="{% if order.status == 'DELIVERED' %}delivered{% elif order.status == 'SHIPPED' %}transit{% elif order.status == 'PROCESSING' %}qc{% else %}unfulfilled{% endif %}">
+                <div class="flex items-start justify-between gap-2">
+                  <div class="space-y-1.5 min-w-0">
+                    <div>
+                      <button type="button" onclick="copyOrderNumber('{{ order.order_number }}', this)" class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded bg-emerald-950/60 border border-emerald-500/30 text-emerald-400 font-mono text-xs font-medium tracking-tight whitespace-nowrap shrink-0 cursor-pointer">
+                        <span>#{{ order.order_number }}</span>
+                        <svg class="w-3 h-3 text-emerald-400/80 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><rect height="13" rx="2" ry="2" width="13" x="9" y="9"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                      </button>
+                    </div>
+                    <div class="text-[11px] text-neutral-400 flex items-center gap-1.5 font-sans whitespace-nowrap">
+                      <svg class="w-3 h-3 text-neutral-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><rect height="18" rx="2" ry="2" width="18" x="3" y="4"></rect><line x1="16" x2="16" y1="2" y2="6"></line><line x1="8" x2="8" y1="2" y2="6"></line><line x1="3" x2="21" y1="10" y2="10"></line></svg>
+                      <span>{{ order.created_at|date:"M d, Y" }}</span>
+                      <span>•</span>
+                      <span class="font-mono text-[10px]">{{ order.created_at|date:"H:i" }}</span>
+                    </div>
+                  </div>
+                  <div class="text-right shrink-0">
+                    <div class="font-mono font-semibold text-neutral-100 tracking-tight whitespace-nowrap">₹{{ order.total_amount|floatformat:2 }}</div>
+                    <span class="text-[9px] uppercase tracking-wider text-neutral-400 font-medium whitespace-nowrap block">925 SILVER PIECE</span>
+                  </div>
+                </div>
+
+                <div class="h-px bg-obsidian-700/50"></div>
+
+                <div class="flex items-center justify-between gap-2">
+                  <div class="flex items-center gap-2.5 min-w-0">
+                    <div class="w-8 h-8 rounded-full bg-gradient-to-tr from-obsidian-850 to-amber-950/20 border border-amber-500/30 flex items-center justify-center font-mono text-xs font-semibold text-amber-300 shrink-0">
+                      {{ order.full_name|default:"VIP"|slice:":2"|upper }}
+                    </div>
+                    <div class="min-w-0 overflow-hidden">
+                      <p class="text-xs font-medium text-neutral-100 leading-tight truncate">{{ order.full_name|default:"VIP Patron" }}</p>
+                      <p class="text-[10px] text-neutral-400 font-mono truncate">{{ order.email }}</p>
+                    </div>
+                  </div>
+                  <div class="w-7 h-7 rounded border border-obsidian-700 bg-obsidian-850 flex items-center justify-center text-champagne-400 shrink-0">
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 2l2.4 7.4H22l-6 4.6 2.3 7-6.3-4.6-6.3 4.6 2.3-7-6-4.6h7.6z"></path></svg>
+                  </div>
+                </div>
+
+                <div class="pt-1 flex items-center justify-between flex-wrap gap-2">
+                  <div class="flex items-center gap-1.5 flex-wrap">
+                    {% if order.payment_status == 'PAID' %}
+                    <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-medium bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 whitespace-nowrap">
+                      <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 shrink-0"></span> Paid
+                    </span>
+                    {% else %}
+                    <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-medium bg-amber-500/15 text-amber-300 border border-amber-500/30 whitespace-nowrap">
+                      <span class="w-1.5 h-1.5 rounded-full bg-amber-400 shrink-0"></span> {{ order.get_payment_status_display }}
+                    </span>
+                    {% endif %}
+
+                    {% if order.status == 'DELIVERED' %}
+                    <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-medium bg-teal-500/15 text-teal-300 border border-teal-500/30 whitespace-nowrap">
+                      <span class="w-1.5 h-1.5 rounded-full bg-teal-400 shrink-0"></span> Delivered
+                    </span>
+                    {% elif order.status == 'SHIPPED' %}
+                    <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-medium bg-blue-500/15 text-blue-300 border border-blue-500/30 whitespace-nowrap">
+                      <span class="w-1.5 h-1.5 rounded-full bg-blue-400 shrink-0"></span> In Transit
+                    </span>
+                    {% elif order.status == 'PROCESSING' %}
+                    <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-medium bg-purple-500/15 text-purple-300 border border-purple-500/30 whitespace-nowrap">
+                      <span class="w-1.5 h-1.5 rounded-full bg-purple-400 shrink-0"></span> In Atelier QC
+                    </span>
+                    {% else %}
+                    <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-medium bg-amber-500/15 text-amber-300 border border-amber-500/30 whitespace-nowrap">
+                      <span class="w-1.5 h-1.5 rounded-full bg-amber-400 shrink-0"></span> Unfulfilled
+                    </span>
+                    {% endif %}
+                  </div>
+
+                  <div class="flex items-center gap-2 shrink-0 ml-auto">
+                    <a href="{% url 'admin:orders_order_change' order.id %}" class="px-2.5 py-1 text-[11px] font-medium text-neutral-300 bg-obsidian-800 hover:bg-obsidian-700 border border-obsidian-700 rounded transition whitespace-nowrap no-underline">
+                      Invoice
+                    </a>
+                    <a href="{% url 'admin:orders_order_change' order.id %}" class="px-3 py-1 text-[11px] font-semibold text-amber-300 bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 rounded transition flex items-center gap-1 whitespace-nowrap no-underline">
+                      Manage <span>→</span>
+                    </a>
+                  </div>
+                </div>
+              </div>
+              {% empty %}
+              <div class="p-8 text-center text-neutral-500 font-mono text-xs">
+                No orders found.
+              </div>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+
+        <!-- Table Bottom Note -->
+        <div class="pt-4 border-t border-obsidian-700/50 flex flex-wrap items-center justify-between gap-2 text-[11px] text-neutral-400 font-mono mt-2">
+          <span class="whitespace-nowrap">Showing recent {{ recent_orders|length|default:"4" }} fine jewelry orders</span>
+          <div class="flex gap-2">
+            <button class="px-2.5 py-1 rounded bg-obsidian-800 border border-obsidian-700 text-neutral-300 hover:text-white disabled:opacity-50 whitespace-nowrap cursor-not-allowed" disabled>Previous</button>
+            <button class="px-2.5 py-1 rounded bg-obsidian-800 border border-obsidian-700 text-neutral-300 hover:text-white whitespace-nowrap cursor-pointer">Next</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: Management Quicklinks & Activity Timeline (4 Cols on xl) -->
+      <div class="xl:col-span-4 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-1 gap-4 sm:gap-5">
+        <!-- Management Quicklinks Card -->
+        <div class="card-surface rounded-xl p-4 sm:p-5">
+          <h2 class="text-xs font-semibold uppercase tracking-wider text-neutral-400 font-mono pb-3 border-b border-obsidian-700/60 mb-3 whitespace-nowrap">
+            Management Quicklinks
+          </h2>
+          <div class="space-y-2">
+            <!-- Quicklink 1: Jewelry Catalog -->
+            <a class="flex items-center justify-between p-2.5 rounded-lg hover:bg-obsidian-800/80 transition group border border-transparent hover:border-obsidian-700 no-underline" href="{% url 'admin:catalog_product_changelist' %}">
+              <div class="flex items-center gap-3 min-w-0">
+                <div class="w-8 h-8 rounded-lg bg-champagne-400/10 border border-champagne-400/20 flex items-center justify-center text-champagne-300 flex-shrink-0">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
+                </div>
+                <div class="min-w-0">
+                  <div class="text-xs font-medium text-neutral-200 group-hover:text-champagne-300 transition truncate">Jewelry Catalog</div>
+                  <div class="text-[10px] text-neutral-400 truncate">{{ total_products|default:"14" }} active sterling creations</div>
+                </div>
+              </div>
+              <svg class="w-4 h-4 text-neutral-500 group-hover:text-neutral-200 group-hover:translate-x-0.5 transition flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
             </a>
-        </div>
-    </div>
 
-    <!-- 2-Column Shopify Layout Grid -->
-    <div class="shopify-dashboard-layout">
-        <!-- ==============================================
-             MAIN LEFT COLUMN (70%): METRICS, TASKS, ORDERS
-             ============================================== -->
-        <div class="dashboard-main-col">
-            <!-- 4 Shopify Polaris Metrics Cards -->
-            <div class="shopify-metrics-grid">
-                <!-- Total Sales -->
-                <div class="shopify-metric-card">
-                    <div class="metric-card-header">
-                        <span class="metric-label">Total Sales</span>
-                        <span class="metric-trend positive">+14.2%</span>
-                    </div>
-                    <div class="metric-value">${{ total_revenue|default:"11,165.00" }}</div>
-                    <div class="metric-footer text-emerald">
-                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                        <span>Stripe Luxury Payments Captured</span>
-                    </div>
+            <!-- Quicklink 2: Customers -->
+            <a class="flex items-center justify-between p-2.5 rounded-lg hover:bg-obsidian-800/80 transition group border border-transparent hover:border-obsidian-700 no-underline" href="{% url 'admin:accounts_customuser_changelist' %}">
+              <div class="flex items-center gap-3 min-w-0">
+                <div class="w-8 h-8 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 flex-shrink-0">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
                 </div>
-
-                <!-- Total Orders -->
-                <div class="shopify-metric-card">
-                    <div class="metric-card-header">
-                        <span class="metric-label">Total Orders</span>
-                        <span class="metric-tag">All-time</span>
-                    </div>
-                    <div class="metric-value">{{ total_orders|default:"4" }}</div>
-                    <div class="metric-footer">
-                        <a href="{% url 'admin:orders_order_changelist' %}">View all orders &rarr;</a>
-                    </div>
+                <div class="min-w-0">
+                  <div class="text-xs font-medium text-neutral-200 group-hover:text-emerald-400 transition truncate">Customers</div>
+                  <div class="text-[10px] text-neutral-400 truncate">{{ total_customers|default:"3" }} registered patrons</div>
                 </div>
+              </div>
+              <svg class="w-4 h-4 text-neutral-500 group-hover:text-neutral-200 group-hover:translate-x-0.5 transition flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+            </a>
 
-                <!-- Orders to Fulfill -->
-                <div class="shopify-metric-card alert-card">
-                    <div class="metric-card-header">
-                        <span class="metric-label">Orders to Fulfill</span>
-                        <span class="metric-badge-amber">Needs Action</span>
-                    </div>
-                    <div class="metric-value text-amber">{{ unfulfilled_count|default:"2" }}</div>
-                    <div class="metric-footer">
-                        <a href="{% url 'admin:orders_order_changelist' %}?status__exact=PENDING">Open fulfillment queue &rarr;</a>
-                    </div>
+            <!-- Quicklink 3: Discounts & Codes -->
+            <a class="flex items-center justify-between p-2.5 rounded-lg hover:bg-obsidian-800/80 transition group border border-transparent hover:border-obsidian-700 no-underline" href="{% url 'admin:orders_coupon_changelist' %}">
+              <div class="flex items-center gap-3 min-w-0">
+                <div class="w-8 h-8 rounded-lg bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-400 flex-shrink-0">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
                 </div>
-
-                <!-- Average Order Value -->
-                <div class="shopify-metric-card">
-                    <div class="metric-card-header">
-                        <span class="metric-label">Average Order Value</span>
-                        <span class="metric-tag">AOV</span>
-                    </div>
-                    <div class="metric-value">${{ avg_aov|default:"2,791.25" }}</div>
-                    <div class="metric-footer">
-                        <span>Fine jewelry average</span>
-                    </div>
+                <div class="min-w-0">
+                  <div class="text-xs font-medium text-neutral-200 group-hover:text-amber-400 transition truncate">Discounts &amp; Codes</div>
+                  <div class="text-[10px] text-neutral-400 truncate">Active promotional campaigns</div>
                 </div>
-            </div>
+              </div>
+              <svg class="w-4 h-4 text-neutral-500 group-hover:text-neutral-200 group-hover:translate-x-0.5 transition flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+            </a>
 
-            <!-- Things to Do / Action Feed (Iconic Shopify Card) -->
-            <div class="shopify-card action-feed-card">
-                <div class="card-header">
-                    <div class="card-title-row">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#C5A059" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <circle cx="12" cy="12" r="10"></circle>
-                            <polyline points="12 6 12 12 16 14"></polyline>
-                        </svg>
-                        <h3 class="card-title">Things to do</h3>
-                    </div>
-                    <span class="card-badge">{{ unfulfilled_count|default:"2" }} pending</span>
+            <!-- Quicklink 4: Live Storefront -->
+            <a class="flex items-center justify-between p-2.5 rounded-lg hover:bg-obsidian-800/80 transition group border border-transparent hover:border-obsidian-700 no-underline" href="{% url 'core:home' %}" target="_blank">
+              <div class="flex items-center gap-3 min-w-0">
+                <div class="w-8 h-8 rounded-lg bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-indigo-400 flex-shrink-0">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><path d="M2 12h20M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
                 </div>
-
-                <div class="action-items-list">
-                    <!-- Task 1: Pending Orders -->
-                    <div class="action-item">
-                        <div class="action-item-icon amber">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <line x1="16.5" y1="9.4" x2="7.5" y2="4.21"></line>
-                                <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
-                            </svg>
-                        </div>
-                        <div class="action-item-content">
-                            <div class="action-item-title">{{ unfulfilled_count|default:"2" }} Orders to Fulfill</div>
-                            <div class="action-item-desc">Commissions awaiting jeweler QA & dispatch.</div>
-                        </div>
-                        <div class="action-item-actions">
-                            <a href="{% url 'admin:orders_order_changelist' %}" class="shopify-btn-sm primary">Fulfill orders</a>
-                        </div>
-                    </div>
-
-                    <!-- Task 2: OMS Telemetry -->
-                    <div class="action-item">
-                        <div class="action-item-icon blue">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <polygon points="12 2 2 7 12 12 22 7 12 22 2 9 6 3"></polygon>
-                                <polyline points="2 17 12 22 22 17"></polyline>
-                                <polyline points="2 12 12 17 22 12"></polyline>
-                            </svg>
-                        </div>
-                        <div class="action-item-content">
-                            <div class="action-item-title">Courier Logistics Sync</div>
-                            <div class="action-item-desc">Live FedEx & armored courier telemetry.</div>
-                        </div>
-                        <div class="action-item-actions">
-                            <a href="{% url 'orders:oms_dashboard' %}" class="shopify-btn-sm secondary">Launch OMS &rarr;</a>
-                        </div>
-                    </div>
+                <div class="min-w-0">
+                  <div class="text-xs font-medium text-neutral-200 group-hover:text-indigo-300 transition truncate">Live Storefront</div>
+                  <div class="text-[10px] text-neutral-400 truncate">Customer shopping experience</div>
                 </div>
-            </div>
-
-            <!-- Recent Commissions (Shopify Polaris Table Style) -->
-            <div class="shopify-card">
-                <div class="card-header">
-                    <h3 class="card-title">Recent Commissions</h3>
-                    <a href="{% url 'admin:orders_order_changelist' %}" class="card-link">View all orders &rarr;</a>
-                </div>
-                
-                <!-- Desktop Table View (>= 769px) -->
-                <div class="shopify-table-responsive orders-desktop-table">
-                    <table class="shopify-table">
-                        <thead>
-                            <tr>
-                                <th>Order</th>
-                                <th>Date</th>
-                                <th>Customer</th>
-                                <th>Payment</th>
-                                <th>Fulfillment</th>
-                                <th>Total</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for order in recent_orders %}
-                            <tr>
-                                <td>
-                                    <a href="{% url 'admin:orders_order_change' order.id %}" class="order-link">
-                                        #{{ order.order_number }}
-                                    </a>
-                                </td>
-                                <td class="text-muted">{{ order.created_at|date:"M d, Y" }}</td>
-                                <td>
-                                    <div class="customer-cell">
-                                        <span class="customer-name">{{ order.full_name }}</span>
-                                        <span class="customer-email">{{ order.email }}</span>
-                                    </div>
-                                </td>
-                                <td>
-                                    {% if order.payment_status == 'PAID' %}
-                                    <span class="shopify-badge green">● Paid</span>
-                                    {% else %}
-                                    <span class="shopify-badge amber">● {{ order.get_payment_status_display }}</span>
-                                    {% endif %}
-                                </td>
-                                <td>
-                                    {% if order.status == 'DELIVERED' %}
-                                    <span class="shopify-badge green">● Delivered</span>
-                                    {% elif order.status == 'SHIPPED' %}
-                                    <span class="shopify-badge blue">● In Transit</span>
-                                    {% elif order.status == 'PROCESSING' %}
-                                    <span class="shopify-badge indigo">● In Atelier QC</span>
-                                    {% else %}
-                                    <span class="shopify-badge amber">● Unfulfilled</span>
-                                    {% endif %}
-                                </td>
-                                <td class="font-bold">${{ order.total_amount }}</td>
-                                <td>
-                                    <a href="{% url 'admin:orders_order_change' order.id %}" class="table-action-link">Edit</a>
-                                </td>
-                            </tr>
-                            {% empty %}
-                            <tr>
-                                <td colspan="7" class="text-center py-6 text-muted">No orders found.</td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
-
-                <!-- Luxury Mobile Commissions Stack (<= 768px) -->
-                <div class="shopify-orders-mobile-cards">
-                    {% for order in recent_orders %}
-                    <a href="{% url 'admin:orders_order_change' order.id %}" class="shopify-order-card">
-                        <div class="order-card-header">
-                            <span class="order-card-number">#{{ order.order_number }}</span>
-                            <span class="order-card-amount">${{ order.total_amount }}</span>
-                        </div>
-                        <div class="order-card-body">
-                            <div class="order-card-customer">
-                                <span class="order-card-customer-name">{{ order.full_name|default:"VIP Patron" }}</span>
-                                <span class="order-card-customer-email">{{ order.email }}</span>
-                            </div>
-                            <span class="order-card-date">{{ order.created_at|date:"M d, Y" }}</span>
-                        </div>
-                        <div class="order-card-footer">
-                            <div class="order-card-badges">
-                                {% if order.payment_status == 'PAID' %}
-                                <span class="shopify-badge green">● Paid</span>
-                                {% else %}
-                                <span class="shopify-badge amber">● {{ order.get_payment_status_display }}</span>
-                                {% endif %}
-
-                                {% if order.status == 'DELIVERED' %}
-                                <span class="shopify-badge green">● Delivered</span>
-                                {% elif order.status == 'SHIPPED' %}
-                                <span class="shopify-badge blue">● In Transit</span>
-                                {% elif order.status == 'PROCESSING' %}
-                                <span class="shopify-badge indigo">● In Atelier QC</span>
-                                {% else %}
-                                <span class="shopify-badge amber">● Unfulfilled</span>
-                                {% endif %}
-                            </div>
-                            <span class="order-card-arrow">Manage &rarr;</span>
-                        </div>
-                    </a>
-                    {% empty %}
-                    <div class="order-card-empty">No orders found.</div>
-                    {% endfor %}
-                </div>
-            </div>
+              </div>
+              <svg class="w-4 h-4 text-neutral-500 group-hover:text-neutral-200 group-hover:translate-x-0.5 transition flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+            </a>
+          </div>
         </div>
 
-        <!-- ==============================================
-             RIGHT SIDEBAR RAIL (30%): TELEMETRY & CHANNELS
-             ============================================== -->
-        <div class="dashboard-side-col">
-            <!-- Atelier Operations Health -->
-            <div class="shopify-card">
-                <div class="card-header">
-                    <h3 class="card-title">Atelier Infrastructure</h3>
-                    <span class="shopify-badge green">● Optimal</span>
-                </div>
-                <div class="status-items-list">
-                    <div class="status-item-row">
-                        <div class="status-item-left">
-                            <span class="green-live-dot"></span>
-                            <div>
-                                <div class="status-title">Stripe Luxury Payments</div>
-                                <div class="status-sub">Webhooks & captured receipts</div>
-                            </div>
-                        </div>
-                        <span class="status-tag">Live</span>
-                    </div>
-
-                    <div class="status-item-row">
-                        <div class="status-item-left">
-                            <span class="green-live-dot"></span>
-                            <div>
-                                <div class="status-title">WhiteNoise Edge CDN</div>
-                                <div class="status-sub">Static fonts & stylesheets</div>
-                            </div>
-                        </div>
-                        <span class="status-tag">Active</span>
-                    </div>
-
-                    <div class="status-item-row">
-                        <div class="status-item-left">
-                            <span class="green-live-dot"></span>
-                            <div>
-                                <div class="status-title">30-Day Cookie Sessions</div>
-                                <div class="status-sub">Cryptographically signed</div>
-                            </div>
-                        </div>
-                        <span class="status-tag">Enabled</span>
-                    </div>
-
-                    <div class="status-item-row">
-                        <div class="status-item-left">
-                            <span class="green-live-dot"></span>
-                            <div>
-                                <div class="status-title">Armored Courier Dispatch</div>
-                                <div class="status-sub">FedEx Luxury & Ferrari VIP</div>
-                            </div>
-                        </div>
-                        <span class="status-tag">Active</span>
-                    </div>
-                </div>
+        <!-- Recent Activity Card -->
+        <div class="card-surface rounded-xl p-4 sm:p-5">
+          <h2 class="text-xs font-semibold uppercase tracking-wider text-neutral-400 font-mono pb-3 border-b border-obsidian-700/60 mb-3 whitespace-nowrap">
+            Recent Activity
+          </h2>
+          <div class="space-y-4">
+            {% for entry in log_entries|slice:":3" %}
+            <div class="flex items-start gap-2.5 text-xs">
+              <span class="w-1.5 h-1.5 rounded-full {% if entry.is_deletion %}bg-rose-400{% elif entry.is_addition %}bg-emerald-400{% else %}bg-champagne-400{% endif %} mt-1.5 flex-shrink-0"></span>
+              <div class="space-y-0.5 min-w-0">
+                <p class="text-neutral-300 leading-snug">
+                  <strong class="text-white font-medium">{{ entry.user.get_short_name|default:"Eleanor" }}</strong>
+                  {% if entry.is_addition %}added{% elif entry.is_change %}modified{% elif entry.is_deletion %}removed{% endif %}
+                  <span class="text-champagne-300 font-medium">{{ entry.object_repr }}</span>
+                </p>
+                <span class="text-[10px] font-mono text-neutral-400 block">{{ entry.action_time|timesince }} ago</span>
+              </div>
             </div>
-
-            <!-- Quick Management Channels -->
-            <div class="shopify-card">
-                <div class="card-header">
-                    <h3 class="card-title">Management Quicklinks</h3>
-                </div>
-                <div class="quicklinks-list">
-                    <a href="{% url 'admin:catalog_product_changelist' %}" class="quicklink-row">
-                        <div class="quicklink-left">
-                            <div class="quicklink-icon gold">
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <polygon points="6 3 18 3 22 9 12 22 2 9 6 3"></polygon>
-                                </svg>
-                            </div>
-                            <div>
-                                <div class="quicklink-name">Jewelry Catalog</div>
-                                <div class="quicklink-meta">{{ total_products|default:"11" }} active creations</div>
-                            </div>
-                        </div>
-                        <span class="quicklink-arrow">&rarr;</span>
-                    </a>
-
-                    <a href="{% url 'admin:accounts_customuser_changelist' %}" class="quicklink-row">
-                        <div class="quicklink-left">
-                            <div class="quicklink-icon green">
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
-                                    <circle cx="9" cy="7" r="4"></circle>
-                                </svg>
-                            </div>
-                            <div>
-                                <div class="quicklink-name">Customers</div>
-                                <div class="quicklink-meta">{{ total_customers|default:"2" }} registered customers</div>
-                            </div>
-                        </div>
-                        <span class="quicklink-arrow">&rarr;</span>
-                    </a>
-
-                    <a href="{% url 'admin:orders_coupon_changelist' %}" class="quicklink-row">
-                        <div class="quicklink-left">
-                            <div class="quicklink-icon amber">
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <line x1="19" y1="5" x2="5" y2="19"></line>
-                                    <circle cx="6.5" cy="6.5" r="2.5"></circle>
-                                    <circle cx="17.5" cy="17.5" r="2.5"></circle>
-                                </svg>
-                            </div>
-                            <div>
-                                <div class="quicklink-name">Discounts & Codes</div>
-                                <div class="quicklink-meta">Active promotional campaigns</div>
-                            </div>
-                        </div>
-                        <span class="quicklink-arrow">&rarr;</span>
-                    </a>
-
-                    <a href="{% url 'core:home' %}" target="_blank" class="quicklink-row">
-                        <div class="quicklink-left">
-                            <div class="quicklink-icon purple">
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <circle cx="12" cy="12" r="10"></circle>
-                                    <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
-                                </svg>
-                            </div>
-                            <div>
-                                <div class="quicklink-name">Live Storefront</div>
-                                <div class="quicklink-meta">Customer shopping experience</div>
-                            </div>
-                        </div>
-                        <span class="quicklink-arrow">&rarr;</span>
-                    </a>
-                </div>
+            {% empty %}
+            <!-- Curated Haute Atelier Activity from specification -->
+            <div class="flex items-start gap-2.5 text-xs">
+              <span class="w-1.5 h-1.5 rounded-full bg-champagne-400 mt-1.5 flex-shrink-0"></span>
+              <div class="space-y-0.5 min-w-0">
+                <p class="text-neutral-300 leading-snug">
+                  <strong class="text-white font-medium">Eleanor</strong> removed <span class="text-champagne-300 font-medium">Aura Textured Dome Ring in 925 Sterling Silver</span>
+                </p>
+                <span class="text-[10px] font-mono text-neutral-400 block">1 day, 8 hours ago</span>
+              </div>
             </div>
-
-            <!-- Recent Atelier Admin Audit Log -->
-            {% if log_entries %}
-            <div class="shopify-card">
-                <div class="card-header">
-                    <h3 class="card-title">Recent Activity</h3>
-                </div>
-                <div class="audit-log-list">
-                    {% for entry in log_entries|slice:":5" %}
-                    <div class="audit-log-item">
-                        <span class="audit-dot"></span>
-                        <div class="audit-body">
-                            <div class="audit-msg">
-                                <strong>{{ entry.user.get_short_name|default:"Eleanor" }}</strong>
-                                {% if entry.is_addition %}added{% elif entry.is_change %}modified{% elif entry.is_deletion %}removed{% endif %}
-                                <span class="audit-obj">{{ entry.object_repr }}</span>
-                            </div>
-                            <span class="audit-time">{{ entry.action_time|timesince }} ago</span>
-                        </div>
-                    </div>
-                    {% endfor %}
-                </div>
+            <div class="flex items-start gap-2.5 text-xs">
+              <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 mt-1.5 flex-shrink-0"></span>
+              <div class="space-y-0.5 min-w-0">
+                <p class="text-neutral-300 leading-snug">
+                  <strong class="text-white font-medium">Eleanor</strong> modified order <span class="font-mono text-emerald-400 whitespace-nowrap">LCK-202611-304918</span> for Julian Stewart (₹2,86,350)
+                </p>
+                <span class="text-[10px] font-mono text-neutral-400 block">2 days, 6 hours ago</span>
+              </div>
             </div>
-            {% endif %}
+            <div class="flex items-start gap-2.5 text-xs">
+              <span class="w-1.5 h-1.5 rounded-full bg-neutral-500 mt-1.5 flex-shrink-0"></span>
+              <div class="space-y-0.5 min-w-0">
+                <p class="text-neutral-300 leading-snug">
+                  <strong class="text-white font-medium">Eleanor</strong> modified <span class="text-champagne-300 font-medium">Celeste Herringbone Chain in 925 Silver</span>
+                </p>
+                <span class="text-[10px] font-mono text-neutral-400 block">5 days, 21 hours ago</span>
+              </div>
+            </div>
+            {% endfor %}
+          </div>
         </div>
-    </div>
+      </div>
+    </section>
+    <!-- END: Main Data Section -->
+
+    <!-- BEGIN: Console Footer -->
+    <footer class="border-t border-obsidian-700/60 bg-obsidian-900/40 px-4 sm:px-6 py-4 text-xs font-mono text-neutral-400 flex flex-col sm:flex-row items-center justify-between gap-3 text-center sm:text-left rounded-xl" data-purpose="console-footer">
+      <div class="flex flex-wrap items-center justify-center sm:justify-start gap-2">
+        <span>Luckjary Haute Joaillerie © 2026</span>
+        <span class="hidden sm:inline">•</span>
+        <span>Atelier OMS Core 4.19</span>
+      </div>
+      <div class="flex flex-wrap items-center justify-center gap-3 text-[11px]">
+        <span class="flex items-center gap-1.5 text-emerald-400 whitespace-nowrap">
+          <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+          925 Sterling Vault Encrypted
+        </span>
+        <span class="text-neutral-400 whitespace-nowrap">INR Base Currency</span>
+      </div>
+    </footer>
+    <!-- END: Console Footer -->
+
+  </div>
 </div>
+
+<script data-purpose="dashboard-interactivity">
+function copyOrderNumber(orderNum, btn) {
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(orderNum).then(() => {
+      const originalText = btn.innerHTML;
+      btn.innerHTML = '<span>Copied!</span>';
+      setTimeout(() => { btn.innerHTML = originalText; }, 1500);
+    });
+  }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  // Mobile Order Filter Chips Toggle
+  const chips = document.querySelectorAll('#mobile-order-filter-chips .mobile-chip');
+  const cards = document.querySelectorAll('#mobile-orders-container .mobile-order-card');
+
+  chips.forEach(chip => {
+    chip.addEventListener('click', () => {
+      chips.forEach(c => {
+        c.classList.remove('bg-neutral-200', 'text-obsidian-950', 'active', 'shadow-sm');
+        c.classList.add('bg-obsidian-800', 'border');
+        if (c.dataset.status === 'unfulfilled') {
+          c.classList.add('text-amber-400', 'border-amber-500/20');
+        } else if (c.dataset.status === 'qc') {
+          c.classList.add('text-purple-300', 'border-purple-500/30');
+        } else if (c.dataset.status === 'transit') {
+          c.classList.add('text-blue-300', 'border-blue-500/30');
+        } else {
+          c.classList.add('text-neutral-300', 'border-obsidian-700');
+        }
+      });
+
+      chip.classList.remove('bg-obsidian-800', 'text-amber-400', 'text-purple-300', 'text-blue-300', 'text-neutral-300', 'border-amber-500/20', 'border-purple-500/30', 'border-blue-500/30', 'border-obsidian-700');
+      chip.classList.add('bg-neutral-200', 'text-obsidian-950', 'active', 'shadow-sm');
+
+      const targetStatus = chip.dataset.status;
+      cards.forEach(card => {
+        if (targetStatus === 'all' || card.dataset.status === targetStatus) {
+          card.style.display = '';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    });
+  });
+});
+</script>
 {% endblock %}

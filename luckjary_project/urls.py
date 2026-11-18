@@ -28,8 +28,11 @@ def atelier_admin_index(request, extra_context=None):
         delivered = Order.objects.filter(status='DELIVERED').count()
         
         avg_aov = (rev / total_orders) if total_orders > 0 else 0
+        rev_inr = int(float(rev) * 83.1527)
+        avg_aov_inr = int(float(avg_aov) * 83.1527)
         
         extra['total_revenue'] = f"{rev:,.2f}"
+        extra['total_revenue_inr'] = f"{rev_inr:,}"
         extra['total_orders'] = total_orders
         extra['pending_count'] = pending
         extra['processing_count'] = processing
@@ -37,9 +40,11 @@ def atelier_admin_index(request, extra_context=None):
         extra['shipped_count'] = shipped
         extra['delivered_count'] = delivered
         extra['avg_aov'] = f"{avg_aov:,.2f}"
+        extra['avg_aov_inr'] = f"{avg_aov_inr:,}"
         extra['total_products'] = Product.objects.count()
         extra['total_customers'] = CustomUser.objects.count()
         extra['recent_orders'] = Order.objects.order_by('-created_at')[:6]
+        extra['active_nav'] = 'home'
         extra['is_dashboard'] = True
     except Exception:
         pass
