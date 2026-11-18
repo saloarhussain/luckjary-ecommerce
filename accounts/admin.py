@@ -3,6 +3,7 @@ from django.contrib.auth.admin import UserAdmin
 from django.utils.html import format_html
 from django.utils.safestring import mark_safe
 from django.urls import reverse
+from django.db.models import Sum
 from .models import CustomUser, Address
 
 class AddressInline(admin.StackedInline):
@@ -21,6 +22,7 @@ class AddressInline(admin.StackedInline):
 @admin.register(CustomUser)
 class CustomUserAdmin(UserAdmin):
     change_list_template = 'admin/accounts/customuser/change_list.html'
+    change_form_template = 'admin/accounts/customuser/change_form.html'
     show_facets = admin.ShowFacets.NEVER
     list_display = ('client_display', 'account_role_pill', 'is_email_verified_pill', 'newsletter_pill', 'date_joined', 'action_buttons')
     list_filter = ('is_email_verified', 'newsletter_subscribed', 'is_staff', 'is_active')
@@ -122,6 +124,20 @@ class CustomUserAdmin(UserAdmin):
         if obj.newsletter_subscribed:
             return mark_safe('<span class="badge-luxury" style="background:rgba(16,185,129,0.12); color:#34D399; border:1px solid rgba(16,185,129,0.3);">Subscribed</span>')
         return mark_safe('<span style="color:#64748B; font-size:0.75rem;">Not Subscribed</span>')
+
+    def changeform_view(self, request, object_id=None, form_url='', extra_context=None):
+        extra_context = extra_context or {}
+        if object_id:
+            try:
+                user_obj = self.get_object(request, object_id)
+                if user_obj:
+                    orders_count = user_obj.orders.count()
+                    total_spent = user_obj.orders.aggregate(total=Sum('total_amount'))['total'] or 0
+                    extra_context['orders_count'] = orders_count
+                    extra_context['lifetime_patronage'] = f"₹ {total_spent:,.0f}" if total_spent else "₹ 0"
+            except Exception:
+                pass
+        return super().changeform_view(request, object_id=object_id, form_url=form_url, extra_context=extra_context)
 
 @admin.register(Address)
 class AddressAdmin(admin.ModelAdmin):

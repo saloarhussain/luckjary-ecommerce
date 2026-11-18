@@ -1,28 +1,986 @@
-{% extends "admin/change_form.html" %}
-{% load i18n admin_urls static admin_modify %}
+{% load i18n admin_urls static admin_modify tz %}<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/>
+<title>Luckjary Haute Atelier — {% if add %}Add Customer{% else %}Edit Customer Profile{% endif %}</title>
 
-{% block field_sets %}
-  {# 1. Render Fieldset 0: Customer Details (Customer Name, Mobile Number, Email) #}
-  {% for fieldset in adminform %}
-    {% if forloop.first %}
-      {% include "admin/includes/fieldset.html" with heading_level=2 prefix="fieldset" id_prefix=0 id_suffix=forloop.counter0 %}
-    {% endif %}
-  {% endfor %}
+<!-- Google Fonts: Bodoni Moda & Plus Jakarta Sans & JetBrains Mono -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..800;1,6..96,400..700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
 
-  {# 2. Render Customer Addresses Inline directly below Customer Details #}
-  {% for inline_admin_formset in inline_admin_formsets %}
-    <div class="customer-address-inlines-section">
-      {% include inline_admin_formset.opts.template %}
+<!-- Tailwind CSS v3 with Forms & Container Queries -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Custom Configuration -->
+<script data-purpose="tailwind-config">
+  tailwind.config = {
+    darkMode: 'class',
+    theme: {
+      extend: {
+        colors: {
+          obsidian: {
+            DEFAULT: '#0d0e10',
+            surface: '#121315',
+            card: '#16171a',
+            border: '#26282c',
+            highlight: '#2c2e33'
+          },
+          emerald: {
+            atelier: '#10b981',
+            glow: '#059669',
+            subtle: '#064e3b'
+          },
+          platinum: '#e5e7eb',
+          gold: {
+            atelier: '#d4af37',
+            muted: '#997c27'
+          }
+        },
+        fontFamily: {
+          serif: ['"Bodoni Moda"', 'serif', 'Georgia'],
+          sans: ['"Plus Jakarta Sans"', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
+          mono: ['"JetBrains Mono"', 'SFMono-Regular', 'Menlo', 'monospace']
+        }
+      }
+    }
+  };
+</script>
+
+<style data-purpose="global-layout">
+  html, body {
+    background-color: #0d0e10 !important;
+    color: #e5e7eb !important;
+    font-family: 'Plus Jakarta Sans', sans-serif !important;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    margin: 0 !important;
+    padding: 0 !important;
+    min-height: 100vh !important;
+    overflow-x: hidden !important;
+  }
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+  }
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: #0d0e10;
+  }
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: #26282c;
+    border-radius: 9999px;
+  }
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: #3a3d42;
+  }
+
+  /* Form controls luxury styling matching code.html */
+  input[type="text"],
+  input[type="email"],
+  input[type="tel"],
+  input[type="password"],
+  select,
+  textarea {
+    width: 100% !important;
+    padding: 0.625rem 0.875rem !important;
+    background-color: #16171a !important;
+    border: 1px solid #26282c !important;
+    border-radius: 0.5rem !important;
+    font-size: 0.875rem !important;
+    color: #ffffff !important;
+    transition: all 0.15s ease !important;
+    box-sizing: border-box !important;
+  }
+  input[type="text"]:focus,
+  input[type="email"]:focus,
+  input[type="tel"]:focus,
+  input[type="password"]:focus,
+  select:focus,
+  textarea:focus,
+  .atelier-input:focus {
+    background-color: #121315 !important;
+    border-color: #10b981 !important;
+    box-shadow: 0 0 0 1px #10b981, 0 0 12px rgba(16, 185, 129, 0.15) !important;
+    outline: none !important;
+  }
+  input[type="checkbox"] {
+    border-radius: 0.25rem !important;
+    background-color: #16171a !important;
+    border: 1px solid #26282c !important;
+    color: #10b981 !important;
+    width: 1rem !important;
+    height: 1rem !important;
+    cursor: pointer !important;
+  }
+  input[type="checkbox"]:checked {
+    background-color: #10b981 !important;
+    border-color: #10b981 !important;
+  }
+</style>
+</head>
+
+<body class="bg-obsidian text-platinum min-h-screen flex flex-col antialiased selection:bg-emerald-atelier/30 selection:text-white">
+
+<!-- BEGIN: MainContainer -->
+<div class="flex-1 flex overflow-hidden min-h-screen">
+
+  <!-- Mobile Backdrop Overlay for Sidebar -->
+  <div id="atelier-sidebar-backdrop" class="fixed inset-0 bg-black/80 z-40 opacity-0 pointer-events-none transition-opacity duration-300 backdrop-blur-sm lg:hidden"></div>
+
+  <!-- BEGIN: LeftSidebar -->
+  <aside class="fixed inset-y-0 left-0 z-50 w-72 max-w-[85vw] bg-obsidian-surface border-r border-obsidian-border flex flex-col shrink-0 custom-scrollbar overflow-y-auto select-none -translate-x-full transition-transform duration-300 ease-out lg:translate-x-0 lg:static lg:sticky lg:top-0 lg:h-screen lg:z-30" id="atelier-sidebar" data-purpose="primary-sidebar">
+    <!-- Atelier Brand Logo Area -->
+    <div class="px-6 py-6 border-b border-obsidian-border/70 flex items-center justify-between">
+      <a href="/admin/" class="flex items-center gap-3 group focus:outline-none">
+        <span class="h-3 w-3 rounded-full bg-emerald-atelier shadow-[0_0_8px_#10b981]"></span>
+        <div>
+          <h1 class="font-serif tracking-[0.22em] text-sm font-bold uppercase text-white">LUCKJARY</h1>
+          <p class="text-[9px] font-mono tracking-[0.3em] uppercase text-gold-atelier font-medium">Haute Atelier</p>
+        </div>
+      </a>
+      <button id="closeSidebarBtn" aria-label="Close navigation" class="lg:hidden w-8 h-8 rounded-lg flex items-center justify-center text-zinc-400 hover:text-white active:scale-95 transition-colors cursor-pointer" type="button">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+      </button>
     </div>
-  {% endfor %}
 
-  {# 3. Render Remaining Fieldsets (Privé Club, Password, Permissions, Activity) #}
-  {% for fieldset in adminform %}
-    {% if not forloop.first %}
-      {% include "admin/includes/fieldset.html" with heading_level=2 prefix="fieldset" id_prefix=0 id_suffix=forloop.counter0 %}
-    {% endif %}
-  {% endfor %}
-{% endblock %}
+    <!-- Navigation Menus -->
+    <nav class="flex-1 px-4 py-5 space-y-6 text-xs font-medium">
+      <!-- Navigation Section -->
+      <div>
+        <span class="px-3 text-[10px] font-mono uppercase tracking-widest text-zinc-500 font-semibold block mb-2">Navigation</span>
+        <div class="space-y-1">
+          <a class="flex items-center gap-3 px-3 py-2 rounded-lg text-zinc-400 hover:text-white hover:bg-obsidian-card transition-all" href="/admin/">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.75" viewBox="0 0 24 24"><path d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+            <span>Home</span>
+          </a>
+          <a class="flex items-center justify-between px-3 py-2 rounded-lg text-zinc-400 hover:text-white hover:bg-obsidian-card transition-all" href="/admin/orders/order/">
+            <div class="flex items-center gap-3">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.75" viewBox="0 0 24 24"><path d="M20.25 7.5l-.625 10.632a2.25 2.25 0 01-2.247 2.118H6.622a2.25 2.25 0 01-2.247-2.118L3.75 7.5M10 11.25h4M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125z" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+              <span>Orders</span>
+            </div>
+            <span class="px-1.5 py-0.5 text-[10px] rounded-full bg-obsidian-border text-zinc-300 font-mono">4</span>
+          </a>
+          <a class="flex items-center gap-3 px-3 py-2 rounded-lg text-zinc-400 hover:text-white hover:bg-obsidian-card transition-all" href="/admin/orders/coupon/">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.75" viewBox="0 0 24 24"><path d="M9 14.25l6-6m4.5-3.75l-15 15m0 0h.008v.008H4.5V19.5zm15-15h.008v.008H19.5V4.5zM7.125 7.125a1.125 1.125 0 11-2.25 0 1.125 1.125 0 012.25 0zm11.25 11.25a1.125 1.125 0 11-2.25 0 1.125 1.125 0 012.25 0z" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+            <span>Discounts</span>
+          </a>
+        </div>
+      </div>
 
-{# Suppress the default inline_field_sets block so it does not duplicate at the bottom #}
-{% block inline_field_sets %}{% endblock %}
+      <!-- Products & Inventory -->
+      <div>
+        <span class="px-3 text-[10px] font-mono uppercase tracking-widest text-zinc-500 font-semibold block mb-2">Products &amp; Inventory</span>
+        <div class="space-y-1">
+          <a class="flex items-center justify-between px-3 py-2 rounded-lg text-zinc-400 hover:text-white hover:bg-obsidian-card transition-all" href="/admin/catalog/product/">
+            <div class="flex items-center gap-3">
+              <svg class="w-4 h-4 text-emerald-atelier" fill="none" stroke="currentColor" stroke-width="1.75" viewBox="0 0 24 24"><path d="M21 7.5l-9-5.25L3 7.5m18 0l-9 5.25m9-5.25v9l-9 5.25M3 7.5l9 5.25M3 7.5v9l9 5.25m0-9v9" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+              <span>Vault Products</span>
+            </div>
+            <span class="px-1.5 py-0.5 text-[10px] rounded-full bg-emerald-atelier/20 text-emerald-atelier font-mono">17</span>
+          </a>
+          <a class="flex items-center gap-3 px-3 py-2 rounded-lg text-zinc-400 hover:text-white hover:bg-obsidian-card transition-all" href="/admin/catalog/collection/">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.75" viewBox="0 0 24 24"><path d="M3.75 6A2.25 2.25 0 016 3.75h2.25A2.25 2.25 0 0110.5 6v2.25a2.25 2.25 0 01-2.25 2.25H6a2.25 2.25 0 01-2.25-2.25V6zM3.75 15.75A2.25 2.25 0 016 13.5h2.25a2.25 2.25 0 012.25 2.25V18a2.25 2.25 0 01-2.25 2.25H6A2.25 2.25 0 013.75 18v-2.25zM13.5 6a2.25 2.25 0 012.25-2.25H18A2.25 2.25 0 0120.25 6v2.25A2.25 2.25 0 0118 10.5h-2.25a2.25 2.25 0 01-2.25-2.25V6zM13.5 15.75a2.25 2.25 0 012.25-2.25H18a2.25 2.25 0 012.25 2.25V18A2.25 2.25 0 0118 20.25h-2.25A2.25 2.25 0 0113.5 18v-2.25z" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+            <span>Collections</span>
+          </a>
+          <a class="flex items-center gap-3 px-3 py-2 rounded-lg text-zinc-400 hover:text-white hover:bg-obsidian-card transition-all" href="/admin/catalog/category/">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.75" viewBox="0 0 24 24"><path d="M2.25 12.75V12A2.25 2.25 0 014.5 9.75h15A2.25 2.25 0 0121.75 12v.75m-8.625-1.5V15a2.25 2.25 0 01-2.25 2.25h-2.25A2.25 2.25 0 016 15v-3.75" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+            <span>Categories</span>
+          </a>
+          <a class="flex items-center gap-3 px-3 py-2 rounded-lg text-zinc-400 hover:text-white hover:bg-obsidian-card transition-all" href="/admin/catalog/material/">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.75" viewBox="0 0 24 24"><path d="M11.42 15.17L17.25 21A2.67 2.67 0 0021 17.25l-5.877-5.877M11.42 15.17l2.496-3.03c.317-.384.74-.626 1.208-.766M11.42 15.17l-4.655 5.653a2.548 2.548 0 11-3.586-3.586l6.837-5.63m5.108-.233l2.846-2.846a2.67 2.67 0 00-3.776-3.776l-2.846 2.846m3.776 3.776l-3.776-3.776" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+            <span>Materials</span>
+          </a>
+          <a class="flex items-center gap-3 px-3 py-2 rounded-lg text-zinc-400 hover:text-white hover:bg-obsidian-card transition-all" href="/admin/catalog/productreview/">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.75" viewBox="0 0 24 24"><path d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+            <span>Product Reviews</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Customers Section (ACTIVE) -->
+      <div>
+        <span class="px-3 text-[10px] font-mono uppercase tracking-widest text-zinc-500 font-semibold block mb-2">Customers</span>
+        <div class="space-y-1">
+          <a class="flex items-center gap-3 px-3 py-2 rounded-lg text-white bg-emerald-subtle/40 border border-emerald-atelier/30 shadow-[inset_0_1px_0_rgba(16,185,129,0.3)]" href="/admin/accounts/customuser/">
+            <svg class="w-4 h-4 text-emerald-atelier" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+            <span class="font-semibold text-emerald-100">Customers</span>
+          </a>
+          <a class="flex items-center gap-3 px-3 py-2 rounded-lg text-zinc-400 hover:text-white hover:bg-obsidian-card transition-all" href="/admin/core/newslettersubscriber/">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.75" viewBox="0 0 24 24"><path d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+            <span>Subscribers</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Engagement Section -->
+      <div>
+        <span class="px-3 text-[10px] font-mono uppercase tracking-widest text-zinc-500 font-semibold block mb-2">Engagement</span>
+        <div class="space-y-1">
+          <a class="flex items-center gap-3 px-3 py-2 rounded-lg text-zinc-400 hover:text-white hover:bg-obsidian-card transition-all" href="/admin/core/contactinquiry/">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.75" viewBox="0 0 24 24"><path d="M7.5 8.25h9m-9 3H12m-9.75 1.51c0 1.6 1.123 2.994 2.707 3.227 1.129.166 2.27.293 3.423.379.35.026.67.21.865.501L12 21l2.755-4.133a1.14 1.14 0 01.865-.501 48.172 48.172 0 003.423-.379c1.584-.233 2.707-1.626 2.707-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0012 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018z" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+            <span>Client Inquiries</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Sales Channels -->
+      <div>
+        <span class="px-3 text-[10px] font-mono uppercase tracking-widest text-zinc-500 font-semibold block mb-2">Sales Channels</span>
+        <div class="space-y-1">
+          <a class="flex items-center justify-between px-3 py-2 rounded-lg text-zinc-400 hover:text-white hover:bg-obsidian-card transition-all" href="/orders/oms/">
+            <div class="flex items-center gap-3">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.75" viewBox="0 0 24 24"><path d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+              <span>Atelier OMS</span>
+            </div>
+            <span class="h-2 w-2 rounded-full bg-emerald-atelier animate-pulse"></span>
+          </a>
+          <a class="flex items-center justify-between px-3 py-2 rounded-lg text-zinc-400 hover:text-white hover:bg-obsidian-card transition-all" href="/" target="_blank">
+            <div class="flex items-center gap-3">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.75" viewBox="0 0 24 24"><path d="M12 21a9.004 9.004 0 008.716-6.747M12 21a9.004 9.004 0 01-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 017.843 4.582M12 3a8.997 8.997 0 00-7.843 4.582m15.686 0A11.953 11.953 0 0112 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0121 12c0 .778-.099 1.533-.284 2.253m0 0A17.919 17.919 0 0112 16.5c-3.162 0-6.133-.815-8.716-2.247m0 0A9.015 9.015 0 013 12c0-.778.099-1.533.284-2.253" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+              <span>Online Store</span>
+            </div>
+            <svg class="w-3.5 h-3.5 text-zinc-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+          </a>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Sidebar Footer Settings -->
+    <div class="p-4 border-t border-obsidian-border/70 space-y-2">
+      <span class="text-[10px] font-mono uppercase tracking-widest text-zinc-500 font-semibold block px-2">Settings &amp; Preferences</span>
+      <div class="flex items-center justify-between px-2 py-1.5 text-xs text-zinc-400">
+        <a href="/admin/orders/order/#settings" class="flex items-center gap-2 hover:text-white transition">
+          <svg class="w-4 h-4 text-zinc-500" fill="none" stroke="currentColor" stroke-width="1.75" viewBox="0 0 24 24"><path d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.324.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 011.37.49l1.296 2.247a1.125 1.125 0 01-.26 1.431l-1.003.827c-.293.24-.438.613-.431.992a6.759 6.759 0 010 .255c-.007.378.138.75.43.99l1.005.828c.424.35.534.954.26 1.43l-1.298 2.247a1.125 1.125 0 01-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.57 6.57 0 01-.22.128c-.331.183-.581.495-.644.869l-.213 1.28c-.09.543-.56.941-1.11.941h-2.594c-.55 0-1.02-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 01-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 01-1.369-.49l-1.297-2.247a1.125 1.125 0 01.26-1.431l1.004-.827c.292-.24.437-.613.43-.992a6.932 6.932 0 010-.255c.007-.378-.138-.75-.43-.99l-1.004-.828a1.125 1.125 0 01-.26-1.43l1.297-2.247a1.125 1.125 0 011.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.087.22-.128.332-.183.582-.495.644-.869l.214-1.281z" stroke-linecap="round" stroke-linejoin="round"></path><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+          <span>Settings</span>
+        </a>
+        <span class="px-2 py-0.5 rounded bg-obsidian-border font-mono text-[10px] text-zinc-300">₹ INR</span>
+      </div>
+    </div>
+  </aside>
+  <!-- END: LeftSidebar -->
+
+  <!-- BEGIN: MainContentArea -->
+  <div class="flex-1 flex flex-col min-w-0 overflow-y-auto custom-scrollbar pb-32">
+    <!-- BEGIN: TopBar -->
+    <header class="h-16 px-4 sm:px-6 lg:px-8 border-b border-obsidian-border bg-obsidian/90 backdrop-blur-md sticky top-0 z-30 flex items-center justify-between gap-2 sm:gap-4" data-purpose="top-navigation-bar">
+      <!-- Mobile Drawer Toggle & Search Bar -->
+      <div class="flex items-center gap-2 flex-1 max-w-md">
+        <button id="openSidebarBtn" aria-label="Toggle Menu" class="lg:hidden p-2 -ml-1 text-zinc-400 hover:text-white rounded-lg hover:bg-obsidian-card transition shrink-0" type="button">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+        </button>
+        <div class="relative w-full">
+          <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-zinc-500">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+          </span>
+          <form action="/admin/catalog/product/" method="get" class="m-0 p-0">
+            <input class="w-full pl-9 pr-10 py-1.5 bg-obsidian-surface border border-obsidian-border rounded-lg text-xs placeholder:text-zinc-500 text-zinc-200 atelier-input transition-all" name="q" placeholder="Search orders, fine jewelry, VIP patrons... (Ctrl+K)" type="search"/>
+          </form>
+          <span class="absolute inset-y-0 right-0 pr-2.5 flex items-center pointer-events-none">
+            <kbd class="text-[10px] font-mono text-zinc-400 bg-obsidian-card px-1.5 py-0.5 rounded border border-obsidian-border">⌘K</kbd>
+          </span>
+        </div>
+      </div>
+
+      <!-- Quick Access Actions & Eleanor Director Profile -->
+      <div class="flex items-center gap-3">
+        <!-- Online Store Shortcut -->
+        <a class="hidden md:flex items-center gap-1.5 px-3 py-1.5 text-xs text-zinc-300 hover:text-white rounded-lg border border-obsidian-border bg-obsidian-surface/60 hover:bg-obsidian-card transition" href="/" target="_blank">
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+          <span>Online Store</span>
+        </a>
+        <!-- Atelier OMS Status Pill -->
+        <a href="/orders/oms/" class="hidden sm:flex items-center gap-2 px-3 py-1.5 text-xs text-emerald-400 rounded-lg border border-emerald-950/70 bg-emerald-950/20 hover:bg-emerald-900/30 transition">
+          <span class="h-2 w-2 rounded-full bg-emerald-atelier animate-pulse"></span>
+          <span class="font-medium">Atelier OMS</span>
+        </a>
+        <div class="h-5 w-[1px] bg-obsidian-border mx-1"></div>
+
+        <!-- Director Profile Chip -->
+        <div class="relative inline-block text-left" id="profileDropdownWrapper">
+          <div id="profileDropdownBtn" class="flex items-center gap-2.5 bg-obsidian-surface hover:bg-obsidian-card border border-obsidian-border rounded-lg px-2.5 py-1.5 cursor-pointer transition select-none">
+            <div class="w-7 h-7 rounded-md bg-[#e2be75] text-[#2c1d00] flex items-center justify-center font-bold text-xs tracking-wider">
+              {{ user.first_name|slice:":1"|default:"E"|upper }}
+            </div>
+            <div class="text-left hidden lg:block">
+              <p class="text-xs font-semibold text-white leading-none">{{ user.first_name|default:"Eleanor" }}</p>
+              <p class="text-[9px] font-mono tracking-wider text-gold-atelier uppercase leading-none mt-1">DIRECTOR</p>
+            </div>
+            <svg id="profileChevron" class="w-3.5 h-3.5 text-zinc-400 ml-0.5 transition-transform duration-200" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19.5 8.25l-7.5 7.5-7.5-7.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+          </div>
+
+          <!-- Profile Dropdown Popup -->
+          <div id="profileDropdownMenu" class="absolute right-0 mt-2 w-56 bg-obsidian-surface/95 backdrop-blur-xl border border-obsidian-border rounded-xl shadow-2xl py-2 z-50 hidden">
+            <div class="px-3.5 py-2 border-b border-obsidian-border">
+              <p class="text-xs font-semibold text-white">{{ user.get_full_name|default:"Eleanor Vance" }}</p>
+              <p class="text-[10px] text-gold-atelier font-mono">{{ user.email|default:"director@luckjary.com" }}</p>
+              <span class="inline-block mt-1 text-[9px] uppercase tracking-wider bg-gold-atelier/15 text-gold-atelier px-1.5 py-0.2 rounded font-semibold border border-gold-atelier/25">Haute Atelier Admin</span>
+            </div>
+            <div class="py-1">
+              <a href="/admin/password_change/" class="flex items-center gap-2 px-3.5 py-2 text-xs text-zinc-300 hover:text-white hover:bg-obsidian-card transition-colors">
+                <span class="material-symbols-outlined text-[16px] text-zinc-400">key</span>
+                <span>Security &amp; Passkey</span>
+              </a>
+              <a href="/" target="_blank" class="flex items-center gap-2 px-3.5 py-2 text-xs text-zinc-300 hover:text-white hover:bg-obsidian-card transition-colors">
+                <span class="material-symbols-outlined text-[16px] text-zinc-400">storefront</span>
+                <span>Online Storefront</span>
+              </a>
+              <a href="/admin/orders/order/#settings" class="flex items-center gap-2 px-3.5 py-2 text-xs text-zinc-300 hover:text-white hover:bg-obsidian-card transition-colors">
+                <span class="material-symbols-outlined text-[16px] text-zinc-400">settings</span>
+                <span>Preferences</span>
+              </a>
+            </div>
+            <div class="border-t border-obsidian-border my-1"></div>
+            <div class="py-1">
+              <form method="post" action="{% url 'admin:logout' %}" class="block m-0 p-0">
+                {% csrf_token %}
+                <button type="submit" class="w-full text-left flex items-center gap-2 px-3.5 py-2 text-xs text-red-400 hover:text-red-300 hover:bg-red-950/40 transition-colors cursor-pointer bg-transparent border-0">
+                  <span class="material-symbols-outlined text-[16px] text-red-400">logout</span>
+                  <span>Sign Out</span>
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+
+        <!-- Logout Link -->
+        <form method="post" action="{% url 'admin:logout' %}" class="hidden sm:block m-0 p-0">
+          {% csrf_token %}
+          <button class="p-2 text-zinc-400 hover:text-white rounded-lg hover:bg-obsidian-card transition flex items-center gap-1.5 text-xs bg-transparent border-0 cursor-pointer" title="Log Out" type="submit">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+            <span class="hidden sm:inline">Log Out</span>
+          </button>
+        </form>
+      </div>
+    </header>
+    <!-- END: TopBar -->
+
+    <!-- BEGIN: ContentContainer -->
+    <main class="p-4 sm:p-6 lg:p-8 max-w-7xl w-full mx-auto space-y-6 sm:space-y-8">
+      
+      <!-- Breadcrumbs Navigation -->
+      <nav class="flex items-center gap-2 text-xs text-zinc-500 font-mono" data-purpose="breadcrumbs">
+        <a class="hover:text-zinc-300 transition" href="/admin/">Home</a>
+        <span class="text-zinc-600">›</span>
+        <a class="hover:text-zinc-300 transition" href="{% url 'admin:accounts_customuser_changelist' %}">Customers</a>
+        <span class="text-zinc-600">›</span>
+        <span class="text-zinc-300 font-medium">{% if add %}Add Customer{% else %}Change Customer{% endif %}</span>
+      </nav>
+
+      <!-- Patron Page Headline & Activity Quick-action -->
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2 border-b border-obsidian-border/50">
+        <div>
+          <div class="flex items-center gap-3">
+            <h2 class="font-serif text-3xl font-medium tracking-tight text-white">{% if add %}Add Customer{% else %}Change Customer{% endif %}</h2>
+            {% if not add and original %}
+              {% if original.is_superuser %}
+                <span class="px-2.5 py-0.5 rounded-full text-[10px] font-mono tracking-wider font-semibold bg-gold-atelier/15 text-gold-atelier border border-gold-atelier/30 uppercase">
+                  👑 Atelier Admin
+                </span>
+              {% elif original.is_staff %}
+                <span class="px-2.5 py-0.5 rounded-full text-[10px] font-mono tracking-wider font-semibold bg-blue-500/15 text-blue-400 border border-blue-500/30 uppercase">
+                  💎 Staff
+                </span>
+              {% else %}
+                <span class="px-2.5 py-0.5 rounded-full text-[10px] font-mono tracking-wider font-semibold bg-emerald-atelier/15 text-emerald-atelier border border-emerald-atelier/30 uppercase">
+                  VIP Patron
+                </span>
+              {% endif %}
+            {% endif %}
+          </div>
+          {% if not add and original %}
+          <p class="text-sm text-zinc-400 mt-1">
+            {{ original.get_full_name|default:original.email }} <span class="font-mono text-zinc-500 text-xs font-normal">({{ original.email }})</span>
+          </p>
+          {% endif %}
+        </div>
+
+        {% if not add and original %}
+        <!-- History Button -->
+        <div class="flex items-center gap-3">
+          <span class="text-[11px] font-mono text-zinc-500">ID: #PATRON-{{ original.id|stringformat:"03d" }}</span>
+          <a href="{% url opts|admin_urlname:'history' original.pk|admin_urlquote %}" class="px-3.5 py-1.5 rounded-lg border border-obsidian-border bg-obsidian-card hover:bg-obsidian-highlight text-zinc-300 hover:text-white text-xs font-medium tracking-wide flex items-center gap-1.5 transition shadow-sm">
+            <svg class="w-3.5 h-3.5 text-zinc-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+            <span>History</span>
+          </a>
+        </div>
+        {% endif %}
+      </div>
+
+      <!-- Errors Banner if any -->
+      {% if errors %}
+      <div class="p-4 rounded-xl bg-red-950/40 border border-red-500/50 text-red-200 text-xs space-y-1">
+        <p class="font-semibold text-sm">Please correct the error{{ errors|length|pluralize }} below:</p>
+        {{ adminform.form.non_field_errors }}
+      </div>
+      {% endif %}
+
+      <form action="{{ form_url }}" class="space-y-8" id="customer-change-form" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {% if is_popup %}<input type="hidden" name="{{ is_popup_var }}" value="1">{% endif %}
+        {% if to_field %}<input type="hidden" name="{{ to_field_var }}" value="{{ to_field }}">{% endif %}
+
+        <!-- BEGIN: CustomerDetailsCard -->
+        <section class="bg-obsidian-surface rounded-xl border border-obsidian-border p-6 shadow-xl relative overflow-hidden" data-purpose="customer-details-card">
+          <!-- Subtle accent border on top -->
+          <div class="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-emerald-atelier/60 via-gold-atelier/40 to-transparent"></div>
+          
+          <div class="mb-6">
+            <h3 class="text-lg font-serif text-white tracking-wide font-medium">Customer Details</h3>
+            <p class="text-xs text-zinc-400 mt-0.5">Primary customer identity and contact information.</p>
+          </div>
+
+          <!-- Form Grid -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- First Name -->
+            <div>
+              <label class="block text-xs font-semibold text-zinc-300 uppercase tracking-wider mb-2" for="id_first_name">
+                First name:
+              </label>
+              <input class="w-full px-3.5 py-2.5 bg-obsidian-card border border-obsidian-border rounded-lg text-sm text-white atelier-input focus:bg-obsidian-surface transition-all placeholder:text-zinc-600" id="id_first_name" name="first_name" type="text" value="{{ adminform.form.first_name.value|default:'' }}"/>
+              {% if adminform.form.first_name.errors %}
+                <p class="text-xs text-red-400 mt-1">{{ adminform.form.first_name.errors.0 }}</p>
+              {% endif %}
+            </div>
+
+            <!-- Last Name -->
+            <div>
+              <label class="block text-xs font-semibold text-zinc-300 uppercase tracking-wider mb-2" for="id_last_name">
+                Last name:
+              </label>
+              <input class="w-full px-3.5 py-2.5 bg-obsidian-card border border-obsidian-border rounded-lg text-sm text-white atelier-input focus:bg-obsidian-surface transition-all placeholder:text-zinc-600" id="id_last_name" name="last_name" type="text" value="{{ adminform.form.last_name.value|default:'' }}"/>
+              {% if adminform.form.last_name.errors %}
+                <p class="text-xs text-red-400 mt-1">{{ adminform.form.last_name.errors.0 }}</p>
+              {% endif %}
+            </div>
+
+            <!-- Mobile Number -->
+            <div>
+              <label class="block text-xs font-semibold text-zinc-300 uppercase tracking-wider mb-2" for="id_phone_number">
+                Mobile Number:
+              </label>
+              <div class="relative">
+                <input class="w-full px-3.5 py-2.5 bg-obsidian-card border border-obsidian-border rounded-lg text-sm font-mono text-white atelier-input focus:bg-obsidian-surface transition-all placeholder:text-zinc-600" id="id_phone_number" name="phone_number" type="tel" value="{{ adminform.form.phone_number.value|default:'' }}"/>
+              </div>
+              {% if adminform.form.phone_number.errors %}
+                <p class="text-xs text-red-400 mt-1">{{ adminform.form.phone_number.errors.0 }}</p>
+              {% endif %}
+            </div>
+
+            <!-- Email Address -->
+            <div>
+              <label class="block text-xs font-semibold text-zinc-300 uppercase tracking-wider mb-2" for="id_email">
+                Email Address:
+              </label>
+              <input class="w-full px-3.5 py-2.5 bg-obsidian-card border border-obsidian-border rounded-lg text-sm text-white atelier-input focus:bg-obsidian-surface transition-all placeholder:text-zinc-600" id="id_email" name="email" required="" type="email" value="{{ adminform.form.email.value|default:'' }}"/>
+              {% if adminform.form.email.errors %}
+                <p class="text-xs text-red-400 mt-1">{{ adminform.form.email.errors.0 }}</p>
+              {% endif %}
+            </div>
+          </div>
+
+          {% if not add and original %}
+          <!-- Patron Insights Pill Bar -->
+          <div class="mt-6 pt-5 border-t border-obsidian-border/70 flex flex-wrap items-center gap-6 text-xs text-zinc-400">
+            <div class="flex items-center gap-2">
+              <span class="text-zinc-500 font-mono">Date Joined:</span>
+              <span class="text-zinc-200 font-medium">{{ original.date_joined|date:"M. d, Y" }}</span>
+            </div>
+            <div class="hidden sm:block h-3 w-[1px] bg-obsidian-border"></div>
+            <div class="flex items-center gap-2">
+              <span class="text-zinc-500 font-mono">Total Orders:</span>
+              <span class="text-emerald-atelier font-semibold font-mono">{{ orders_count|default:original.orders.count|default:0 }} Orders</span>
+            </div>
+            <div class="hidden sm:block h-3 w-[1px] bg-obsidian-border"></div>
+            <div class="flex items-center gap-2">
+              <span class="text-zinc-500 font-mono">Lifetime Patronage:</span>
+              <span class="text-gold-atelier font-serif font-medium">{{ lifetime_patronage|default:"₹ 0" }}</span>
+            </div>
+          </div>
+          {% endif %}
+        </section>
+        <!-- END: CustomerDetailsCard -->
+
+        <!-- BEGIN: CustomerSavedAddressesSection -->
+        {% for inline_admin_formset in inline_admin_formsets %}
+        <section class="space-y-6" data-purpose="saved-addresses-container">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-1 sm:gap-4">
+            <div>
+              <h3 class="text-sm font-mono uppercase tracking-widest text-zinc-300 font-bold">
+                CUSTOMER SAVED ADDRESSES
+              </h3>
+              <p class="text-xs text-zinc-500 mt-0.5">Verified shipping destinations and tax billing accounts</p>
+            </div>
+            <span class="text-xs font-mono text-zinc-500" id="address-counter-text">
+              {{ inline_admin_formset.formset.forms|length }} Address{{ inline_admin_formset.formset.forms|length|pluralize:"es" }} Registered
+            </span>
+          </div>
+
+          <!-- Hidden Formset Management Form -->
+          <div id="inline-management-forms">
+            {{ inline_admin_formset.formset.management_form }}
+          </div>
+
+          <!-- Address Cards Container -->
+          <div class="space-y-6" id="address-cards-wrapper">
+            {% for inline_admin_form in inline_admin_formset %}
+            {% with form=inline_admin_form.form %}
+            <article class="bg-obsidian-surface border border-obsidian-border rounded-xl shadow-lg transition duration-200 address-item-card" data-index="{{ forloop.counter0 }}">
+              <!-- Address Card Header Banner -->
+              <div class="px-5 py-3.5 bg-obsidian-card/90 rounded-t-xl border-b border-obsidian-border/70 flex flex-wrap items-center justify-between gap-3">
+                <div class="flex items-center gap-2.5">
+                  <svg class="w-4 h-4 text-gold-atelier shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" stroke-linecap="round" stroke-linejoin="round"></path><path d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+                  <span class="text-xs font-semibold text-gold-atelier/95 tracking-wide">
+                    Saved Address: <span class="text-zinc-200 font-normal">{% if form.instance.pk %}{{ form.instance.full_name }} – {{ form.instance.street_address }}{% if form.instance.city %}, {{ form.instance.city }}{% endif %}{% if form.instance.country %}, {{ form.instance.country }}{% endif %}{% else %}New Destination Address{% endif %}</span>
+                  </span>
+                </div>
+                <!-- Delete Inline Checkbox -->
+                {% if form.instance.pk %}
+                <label class="inline-flex items-center gap-2 cursor-pointer group select-none">
+                  {{ form.DELETE }}
+                  <span class="text-xs text-zinc-400 group-hover:text-red-400 transition-colors">Delete</span>
+                </label>
+                {% endif %}
+              </div>
+
+              <!-- Hidden PK and User fields -->
+              {% for hidden in form.hidden_fields %}
+                {{ hidden }}
+              {% endfor %}
+
+              <!-- Address Form Fields -->
+              <div class="p-6 space-y-5">
+                <!-- Row 1: Address Type & Default Flag -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-end">
+                  <div>
+                    <label class="block text-xs font-semibold text-zinc-300 uppercase tracking-wider mb-2">
+                      Address type:
+                    </label>
+                    {{ form.address_type }}
+                  </div>
+                  <div class="pb-2.5">
+                    <label class="inline-flex items-center gap-2.5 cursor-pointer select-none">
+                      {{ form.is_default }}
+                      <span class="text-xs font-medium text-emerald-400">Default Address</span>
+                    </label>
+                  </div>
+                </div>
+
+                <!-- Row 2: Recipient Full Name & Contact Phone -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div>
+                    <label class="block text-xs font-semibold text-zinc-300 uppercase tracking-wider mb-2">
+                      Recipient Full Name:
+                    </label>
+                    {{ form.full_name }}
+                  </div>
+                  <div>
+                    <label class="block text-xs font-semibold text-zinc-300 uppercase tracking-wider mb-2">
+                      Contact Phone:
+                    </label>
+                    {{ form.phone_number }}
+                  </div>
+                </div>
+
+                <!-- Row 3: Street Address -->
+                <div>
+                  <label class="block text-xs font-semibold text-zinc-300 uppercase tracking-wider mb-2">
+                    Street Address:
+                  </label>
+                  {{ form.street_address }}
+                </div>
+
+                <!-- Row 4: Apt, Suite, Unit & City -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div>
+                    <label class="block text-xs font-semibold text-zinc-300 uppercase tracking-wider mb-2">
+                      Apt, Suite, Unit:
+                    </label>
+                    {{ form.apartment_suite }}
+                  </div>
+                  <div>
+                    <label class="block text-xs font-semibold text-zinc-300 uppercase tracking-wider mb-2">
+                      City:
+                    </label>
+                    {{ form.city }}
+                  </div>
+                </div>
+
+                <!-- Row 5: State, Postal Code, Country -->
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6">
+                  <div>
+                    <label class="block text-xs font-semibold text-zinc-300 uppercase tracking-wider mb-2">
+                      State / Province:
+                    </label>
+                    {{ form.state_province }}
+                  </div>
+                  <div>
+                    <label class="block text-xs font-semibold text-zinc-300 uppercase tracking-wider mb-2">
+                      Postal / ZIP Code:
+                    </label>
+                    {{ form.postal_code }}
+                  </div>
+                  <div>
+                    <label class="block text-xs font-semibold text-zinc-300 uppercase tracking-wider mb-2">
+                      Country:
+                    </label>
+                    {{ form.country }}
+                  </div>
+                </div>
+              </div>
+            </article>
+            {% endwith %}
+            {% endfor %}
+          </div>
+
+          <!-- Add Another Address Button -->
+          <div>
+            <button id="add-address-btn" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg border border-emerald-500/40 bg-emerald-950/30 text-emerald-400 hover:bg-emerald-900/40 hover:border-emerald-400 text-xs font-medium tracking-wide transition shadow-sm cursor-pointer" type="button">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 4.5v15m7.5-7.5h-15" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+              <span>Add another Saved Address</span>
+            </button>
+          </div>
+        </section>
+        {% endfor %}
+        <!-- END: CustomerSavedAddressesSection -->
+
+        <!-- BEGIN: Additional Secondary Fieldsets as Expandable Luxury Cards -->
+        <div class="space-y-4">
+          <!-- Card: Newsletter & Verification -->
+          <details class="group bg-obsidian-surface rounded-xl border border-obsidian-border p-5 shadow-lg transition">
+            <summary class="flex items-center justify-between cursor-pointer list-none select-none">
+              <div class="flex items-center gap-2.5">
+                <span class="w-2 h-2 rounded-full bg-emerald-atelier"></span>
+                <span class="text-sm font-serif font-medium text-white tracking-wide">Newsletter &amp; Email Verification</span>
+              </div>
+              <svg class="w-4 h-4 text-zinc-400 group-open:rotate-180 transition-transform duration-200" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7"></path></svg>
+            </summary>
+            <div class="pt-5 mt-4 border-t border-obsidian-border/70 grid grid-cols-1 md:grid-cols-2 gap-5 text-xs">
+              <div class="space-y-3">
+                <label class="inline-flex items-center gap-2.5 cursor-pointer">
+                  {{ adminform.form.is_email_verified }}
+                  <span class="font-medium text-zinc-300">Email Verified</span>
+                </label>
+                <label class="inline-flex items-center gap-2.5 cursor-pointer block">
+                  {{ adminform.form.newsletter_subscribed }}
+                  <span class="font-medium text-zinc-300">Newsletter Subscribed</span>
+                </label>
+              </div>
+              <div>
+                <label class="block text-zinc-400 uppercase tracking-wider text-[11px] font-semibold mb-1">Email Verification Token:</label>
+                {{ adminform.form.email_verification_token }}
+              </div>
+            </div>
+          </details>
+
+          <!-- Card: Account Credentials & Password -->
+          <details class="group bg-obsidian-surface rounded-xl border border-obsidian-border p-5 shadow-lg transition">
+            <summary class="flex items-center justify-between cursor-pointer list-none select-none">
+              <div class="flex items-center gap-2.5">
+                <span class="w-2 h-2 rounded-full bg-gold-atelier"></span>
+                <span class="text-sm font-serif font-medium text-white tracking-wide">Account Credentials &amp; Password</span>
+              </div>
+              <svg class="w-4 h-4 text-zinc-400 group-open:rotate-180 transition-transform duration-200" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7"></path></svg>
+            </summary>
+            <div class="pt-5 mt-4 border-t border-obsidian-border/70 text-xs text-zinc-400 space-y-3">
+              <p>Raw passwords are not stored. Use the dedicated password reset or administrative change tools below:</p>
+              {% if original %}
+                <a href="{% url 'admin:auth_user_password_change' original.id %}" class="inline-flex items-center gap-2 px-3.5 py-2 bg-obsidian-card hover:bg-obsidian-highlight border border-obsidian-border rounded-lg text-gold-atelier font-medium text-xs transition">
+                  <span class="material-symbols-outlined text-[15px]">lock_reset</span>
+                  <span>Change Password for this User</span>
+                </a>
+              {% else %}
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>{{ adminform.form.password1 }}</div>
+                  <div>{{ adminform.form.password2 }}</div>
+                </div>
+              {% endif %}
+            </div>
+          </details>
+
+          <!-- Card: Permissions & Roles -->
+          <details class="group bg-obsidian-surface rounded-xl border border-obsidian-border p-5 shadow-lg transition">
+            <summary class="flex items-center justify-between cursor-pointer list-none select-none">
+              <div class="flex items-center gap-2.5">
+                <span class="w-2 h-2 rounded-full bg-blue-400"></span>
+                <span class="text-sm font-serif font-medium text-white tracking-wide">Permissions &amp; Roles</span>
+              </div>
+              <svg class="w-4 h-4 text-zinc-400 group-open:rotate-180 transition-transform duration-200" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7"></path></svg>
+            </summary>
+            <div class="pt-5 mt-4 border-t border-obsidian-border/70 space-y-4 text-xs">
+              <div class="flex flex-wrap items-center gap-6">
+                <label class="inline-flex items-center gap-2.5 cursor-pointer">
+                  {{ adminform.form.is_active }}
+                  <span class="font-medium text-zinc-300">Active Account</span>
+                </label>
+                <label class="inline-flex items-center gap-2.5 cursor-pointer">
+                  {{ adminform.form.is_staff }}
+                  <span class="font-medium text-blue-400">💎 Staff Status (Access Atelier Admin)</span>
+                </label>
+                <label class="inline-flex items-center gap-2.5 cursor-pointer">
+                  {{ adminform.form.is_superuser }}
+                  <span class="font-medium text-gold-atelier">👑 Superuser (All Permissions)</span>
+                </label>
+              </div>
+              {% if adminform.form.groups %}
+              <div class="pt-2">
+                <label class="block text-zinc-400 uppercase tracking-wider text-[11px] font-semibold mb-1">User Groups:</label>
+                {{ adminform.form.groups }}
+              </div>
+              {% endif %}
+            </div>
+          </details>
+
+          <!-- Card: Activity & Dates -->
+          {% if original %}
+          <details class="group bg-obsidian-surface rounded-xl border border-obsidian-border p-5 shadow-lg transition">
+            <summary class="flex items-center justify-between cursor-pointer list-none select-none">
+              <div class="flex items-center gap-2.5">
+                <span class="w-2 h-2 rounded-full bg-zinc-500"></span>
+                <span class="text-sm font-serif font-medium text-white tracking-wide">Activity &amp; Telemetry Dates</span>
+              </div>
+              <svg class="w-4 h-4 text-zinc-400 group-open:rotate-180 transition-transform duration-200" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7"></path></svg>
+            </summary>
+            <div class="pt-5 mt-4 border-t border-obsidian-border/70 grid grid-cols-1 md:grid-cols-2 gap-4 text-xs text-zinc-400 font-mono">
+              <div><span class="text-zinc-500">Last Login:</span> {{ original.last_login|default:"Never" }}</div>
+              <div><span class="text-zinc-500">Date Joined:</span> {{ original.date_joined }}</div>
+            </div>
+          </details>
+          {% endif %}
+        </div>
+        <!-- END: Additional Secondary Fieldsets -->
+
+      </form>
+    </main>
+    <!-- END: ContentContainer -->
+
+    <!-- BEGIN: StickyBottomActionBar -->
+    <footer class="fixed bottom-0 right-0 left-0 lg:left-72 bg-[#0c0d0f]/95 backdrop-blur-md border-t border-obsidian-border px-4 py-3 sm:px-8 sm:py-4 z-40 flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4" data-purpose="admin-bottom-actions">
+      <!-- Left Save Action Cluster -->
+      <div class="flex flex-wrap items-center gap-2 sm:gap-3 w-full sm:w-auto">
+        <!-- Primary Save Button -->
+        <button class="px-6 py-2.5 rounded-lg bg-emerald-atelier hover:bg-emerald-glow text-obsidian font-bold text-xs uppercase tracking-wider shadow-[0_0_15px_rgba(16,185,129,0.3)] transition transform active:scale-95 cursor-pointer" form="customer-change-form" name="_save" type="submit">
+          Save
+        </button>
+        <!-- Save and Add Another -->
+        <button class="px-4 py-2.5 rounded-lg bg-emerald-atelier/15 hover:bg-emerald-atelier/25 text-emerald-atelier border border-emerald-atelier/30 text-xs font-medium tracking-wide transition cursor-pointer" form="customer-change-form" name="_addanother" type="submit">
+          Save and add another
+        </button>
+        <!-- Save and Continue Editing -->
+        <button class="px-4 py-2.5 rounded-lg bg-emerald-atelier/15 hover:bg-emerald-atelier/25 text-emerald-atelier border border-emerald-atelier/30 text-xs font-medium tracking-wide transition cursor-pointer" form="customer-change-form" name="_continue" type="submit">
+          Save and continue editing
+        </button>
+      </div>
+
+      <!-- Right Delete Danger Action -->
+      {% if change and has_delete_permission %}
+      <div class="w-full sm:w-auto flex justify-end">
+        <a href="{% url opts|admin_urlname:'delete' original.pk|admin_urlquote %}" class="px-4 py-2 rounded-lg text-red-400 hover:text-red-300 hover:bg-red-950/30 border border-transparent hover:border-red-900/60 text-xs font-medium transition cursor-pointer inline-flex items-center gap-1.5">
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+          <span>Delete</span>
+        </a>
+      </div>
+      {% endif %}
+    </footer>
+    <!-- END: StickyBottomActionBar -->
+
+  </div>
+  <!-- END: MainContentArea -->
+
+</div>
+<!-- END: MainContainer -->
+
+<!-- Prototype Empty Form for Dynamic Address Adding -->
+<template id="empty-address-template">
+  <article class="bg-obsidian-surface border border-obsidian-border rounded-xl shadow-lg transition duration-200 address-item-card" data-index="__prefix__">
+    <div class="px-5 py-3.5 bg-obsidian-card/90 rounded-t-xl border-b border-obsidian-border/70 flex flex-wrap items-center justify-between gap-3">
+      <div class="flex items-center gap-2.5">
+        <svg class="w-4 h-4 text-emerald-atelier shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" stroke-linecap="round" stroke-linejoin="round"></path><path d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+        <span class="text-xs font-semibold text-emerald-400 tracking-wide">
+          New Destination Address
+        </span>
+      </div>
+      <button type="button" class="text-xs text-red-400 hover:text-red-300 remove-dynamic-address cursor-pointer transition">
+        Remove
+      </button>
+    </div>
+
+    <input type="hidden" name="addresses-__prefix__-id" id="id_addresses-__prefix__-id">
+    <input type="hidden" name="addresses-__prefix__-user" id="id_addresses-__prefix__-user" value="{% if original %}{{ original.id }}{% endif %}">
+
+    <div class="p-6 space-y-5">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-end">
+        <div>
+          <label class="block text-xs font-semibold text-zinc-300 uppercase tracking-wider mb-2">
+            Address type:
+          </label>
+          <select name="addresses-__prefix__-address_type" id="id_addresses-__prefix__-address_type" class="w-full px-3.5 py-2.5 bg-obsidian-card border border-obsidian-border rounded-lg text-sm text-white atelier-input">
+            <option value="shipping" selected>Shipping Address</option>
+            <option value="billing">Billing Address</option>
+          </select>
+        </div>
+        <div class="pb-2.5">
+          <label class="inline-flex items-center gap-2.5 cursor-pointer select-none">
+            <input type="checkbox" name="addresses-__prefix__-is_default" id="id_addresses-__prefix__-is_default" class="rounded bg-obsidian-card border-obsidian-border text-emerald-atelier focus:ring-0">
+            <span class="text-xs font-medium text-emerald-400">Default Address</span>
+          </label>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div>
+          <label class="block text-xs font-semibold text-zinc-300 uppercase tracking-wider mb-2">
+            Recipient Full Name:
+          </label>
+          <input type="text" name="addresses-__prefix__-full_name" id="id_addresses-__prefix__-full_name" placeholder="Full legal name" class="w-full px-3.5 py-2.5 bg-obsidian-card border border-obsidian-border rounded-lg text-sm text-white atelier-input">
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-zinc-300 uppercase tracking-wider mb-2">
+            Contact Phone:
+          </label>
+          <input type="tel" name="addresses-__prefix__-phone_number" id="id_addresses-__prefix__-phone_number" placeholder="+1 (555) 000-0000" class="w-full px-3.5 py-2.5 bg-obsidian-card border border-obsidian-border rounded-lg text-sm font-mono text-white atelier-input">
+        </div>
+      </div>
+
+      <div>
+        <label class="block text-xs font-semibold text-zinc-300 uppercase tracking-wider mb-2">
+          Street Address:
+        </label>
+        <input type="text" name="addresses-__prefix__-street_address" id="id_addresses-__prefix__-street_address" placeholder="Suite, Street line" class="w-full px-3.5 py-2.5 bg-obsidian-card border border-obsidian-border rounded-lg text-sm text-white atelier-input">
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div>
+          <label class="block text-xs font-semibold text-zinc-300 uppercase tracking-wider mb-2">
+            Apt, Suite, Unit:
+          </label>
+          <input type="text" name="addresses-__prefix__-apartment_suite" id="id_addresses-__prefix__-apartment_suite" placeholder="e.g. Apt 14B" class="w-full px-3.5 py-2.5 bg-obsidian-card border border-obsidian-border rounded-lg text-sm text-white atelier-input">
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-zinc-300 uppercase tracking-wider mb-2">
+            City:
+          </label>
+          <input type="text" name="addresses-__prefix__-city" id="id_addresses-__prefix__-city" placeholder="City name" class="w-full px-3.5 py-2.5 bg-obsidian-card border border-obsidian-border rounded-lg text-sm text-white atelier-input">
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6">
+        <div>
+          <label class="block text-xs font-semibold text-zinc-300 uppercase tracking-wider mb-2">
+            State / Province:
+          </label>
+          <input type="text" name="addresses-__prefix__-state_province" id="id_addresses-__prefix__-state_province" placeholder="State / Region" class="w-full px-3.5 py-2.5 bg-obsidian-card border border-obsidian-border rounded-lg text-sm text-white atelier-input">
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-zinc-300 uppercase tracking-wider mb-2">
+            Postal / ZIP Code:
+          </label>
+          <input type="text" name="addresses-__prefix__-postal_code" id="id_addresses-__prefix__-postal_code" placeholder="Postal code" class="w-full px-3.5 py-2.5 bg-obsidian-card border border-obsidian-border rounded-lg text-sm font-mono text-white atelier-input">
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-zinc-300 uppercase tracking-wider mb-2">
+            Country:
+          </label>
+          <input type="text" name="addresses-__prefix__-country" id="id_addresses-__prefix__-country" value="United States" class="w-full px-3.5 py-2.5 bg-obsidian-card border border-obsidian-border rounded-lg text-sm text-white atelier-input">
+        </div>
+      </div>
+    </div>
+  </article>
+</template>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // Mobile Sidebar Drawer Controls
+  const sidebar = document.getElementById('atelier-sidebar');
+  const backdrop = document.getElementById('atelier-sidebar-backdrop');
+  const openBtn = document.getElementById('openSidebarBtn');
+  const closeBtn = document.getElementById('closeSidebarBtn');
+
+  function openSidebar() {
+    if (!sidebar || !backdrop) return;
+    sidebar.classList.remove('-translate-x-full');
+    backdrop.classList.remove('opacity-0', 'pointer-events-none');
+    backdrop.classList.add('opacity-100', 'pointer-events-auto');
+  }
+
+  function closeSidebar() {
+    if (!sidebar || !backdrop) return;
+    sidebar.classList.add('-translate-x-full');
+    backdrop.classList.remove('opacity-100', 'pointer-events-auto');
+    backdrop.classList.add('opacity-0', 'pointer-events-none');
+  }
+
+  if (openBtn) openBtn.addEventListener('click', openSidebar);
+  if (closeBtn) closeBtn.addEventListener('click', closeSidebar);
+  if (backdrop) backdrop.addEventListener('click', closeSidebar);
+
+  // Profile Dropdown Toggle
+  const profileBtn = document.getElementById('profileDropdownBtn');
+  const profileMenu = document.getElementById('profileDropdownMenu');
+  const profileChevron = document.getElementById('profileChevron');
+
+  if (profileBtn && profileMenu) {
+    profileBtn.addEventListener('click', function(e) {
+      e.stopPropagation();
+      const isHidden = profileMenu.classList.contains('hidden');
+      if (isHidden) {
+        profileMenu.classList.remove('hidden');
+        if (profileChevron) profileChevron.classList.add('rotate-180');
+      } else {
+        profileMenu.classList.add('hidden');
+        if (profileChevron) profileChevron.classList.remove('rotate-180');
+      }
+    });
+
+    document.addEventListener('click', function(e) {
+      if (!profileMenu.contains(e.target) && !profileBtn.contains(e.target)) {
+        profileMenu.classList.add('hidden');
+        if (profileChevron) profileChevron.classList.remove('rotate-180');
+      }
+    });
+  }
+
+  // Dynamic "Add another Saved Address" Inline Handler
+  const addAddressBtn = document.getElementById('add-address-btn');
+  const cardsWrapper = document.getElementById('address-cards-wrapper');
+  const totalFormsInput = document.getElementById('id_addresses-TOTAL_FORMS');
+  const counterText = document.getElementById('address-counter-text');
+  const template = document.getElementById('empty-address-template');
+
+  if (addAddressBtn && cardsWrapper && totalFormsInput && template) {
+    addAddressBtn.addEventListener('click', function() {
+      const currentCount = parseInt(totalFormsInput.value, 10) || 0;
+      const html = template.innerHTML.replace(/__prefix__/g, currentCount);
+      
+      const tempDiv = document.createElement('div');
+      tempDiv.innerHTML = html.trim();
+      const newCard = tempDiv.firstChild;
+
+      // Attach remove event to the dynamically added card
+      const removeBtn = newCard.querySelector('.remove-dynamic-address');
+      if (removeBtn) {
+        removeBtn.addEventListener('click', function() {
+          newCard.remove();
+          updateCardCount();
+        });
+      }
+
+      cardsWrapper.appendChild(newCard);
+      totalFormsInput.value = currentCount + 1;
+      updateCardCount();
+
+      // Smooth scroll to the new card
+      newCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    });
+  }
+
+  function updateCardCount() {
+    if (!cardsWrapper || !counterText) return;
+    const cards = cardsWrapper.querySelectorAll('.address-item-card:not([style*="display: none"])');
+    counterText.textContent = cards.length + ' Address' + (cards.length === 1 ? '' : 'es') + ' Registered';
+  }
+});
+</script>
+
+</body>
+</html>
