@@ -39,30 +39,6 @@ class CustomUserAdmin(UserAdmin):
             ),
             'description': "Primary customer identity and contact information."
         }),
-        ("Newsletter & Email Verification", {
-            'fields': (
-                ('is_email_verified', 'newsletter_subscribed'),
-                'email_verification_token',
-            ),
-            'classes': ('collapse',),
-        }),
-        ("Account Credentials & Password", {
-            'fields': ('password',),
-            'classes': ('collapse',),
-            'description': "Authentication credentials and raw password reset tools."
-        }),
-        ("Permissions & Roles", {
-            'fields': (
-                ('is_active', 'is_staff', 'is_superuser'),
-                'groups',
-                'user_permissions',
-            ),
-            'classes': ('collapse',),
-        }),
-        ("Activity & Dates", {
-            'fields': (('last_login', 'date_joined'),),
-            'classes': ('collapse',),
-        }),
     )
 
     add_fieldsets = (
