@@ -128,7 +128,7 @@
   {% include "admin/includes/atelier_sidebar.html" with active_nav="customers" %}
 
   <!-- Main Content Area -->
-  <div class="flex-1 min-w-0 w-full flex flex-col min-h-screen overflow-x-hidden pb-32">
+  <div class="flex-1 min-w-0 w-full flex flex-col min-h-screen pb-12">
     <!-- Top Universal Header Bar -->
     {% include "admin/includes/atelier_header.html" %}
 
@@ -421,39 +421,39 @@
         {% endfor %}
         <!-- END: CustomerSavedAddressesSection -->
 
+        <!-- BEGIN: Bottom Action Bar (In-Flow, Not Fixed) -->
+        <div class="mt-8 pt-6 border-t border-obsidian-border flex flex-col sm:flex-row sm:items-center justify-between gap-4" data-purpose="admin-bottom-actions">
+          <!-- Left Save Action Cluster -->
+          <div class="flex flex-wrap items-center gap-2 sm:gap-3 w-full sm:w-auto">
+            <!-- Primary Save Button -->
+            <button class="px-6 py-2.5 rounded-lg bg-emerald-atelier hover:bg-emerald-glow text-obsidian font-bold text-xs uppercase tracking-wider shadow-[0_0_15px_rgba(16,185,129,0.3)] transition transform active:scale-95 cursor-pointer" form="customer-change-form" name="_save" type="submit">
+              Save
+            </button>
+            <!-- Save and Add Another -->
+            <button class="px-4 py-2.5 rounded-lg bg-emerald-atelier/15 hover:bg-emerald-atelier/25 text-emerald-atelier border border-emerald-atelier/30 text-xs font-medium tracking-wide transition cursor-pointer" form="customer-change-form" name="_addanother" type="submit">
+              Save and add another
+            </button>
+            <!-- Save and Continue Editing -->
+            <button class="px-4 py-2.5 rounded-lg bg-emerald-atelier/15 hover:bg-emerald-atelier/25 text-emerald-atelier border border-emerald-atelier/30 text-xs font-medium tracking-wide transition cursor-pointer" form="customer-change-form" name="_continue" type="submit">
+              Save and continue editing
+            </button>
+          </div>
+
+          <!-- Right Delete Danger Action -->
+          {% if change and has_delete_permission %}
+          <div class="w-full sm:w-auto flex justify-end">
+            <a href="{% url opts|admin_urlname:'delete' original.pk|admin_urlquote %}" class="px-4 py-2 rounded-lg text-red-400 hover:text-red-300 hover:bg-red-950/30 border border-transparent hover:border-red-900/60 text-xs font-medium transition cursor-pointer inline-flex items-center gap-1.5">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+              <span>Delete</span>
+            </a>
+          </div>
+          {% endif %}
+        </div>
+        <!-- END: Bottom Action Bar -->
+
       </form>
     </main>
     <!-- END: ContentContainer -->
-
-    <!-- BEGIN: StickyBottomActionBar -->
-    <footer class="fixed bottom-0 right-0 left-0 lg:left-72 bg-[#0c0d0f]/95 backdrop-blur-md border-t border-obsidian-border px-4 py-3 sm:px-8 sm:py-4 z-40 flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4" data-purpose="admin-bottom-actions">
-      <!-- Left Save Action Cluster -->
-      <div class="flex flex-wrap items-center gap-2 sm:gap-3 w-full sm:w-auto">
-        <!-- Primary Save Button -->
-        <button class="px-6 py-2.5 rounded-lg bg-emerald-atelier hover:bg-emerald-glow text-obsidian font-bold text-xs uppercase tracking-wider shadow-[0_0_15px_rgba(16,185,129,0.3)] transition transform active:scale-95 cursor-pointer" form="customer-change-form" name="_save" type="submit">
-          Save
-        </button>
-        <!-- Save and Add Another -->
-        <button class="px-4 py-2.5 rounded-lg bg-emerald-atelier/15 hover:bg-emerald-atelier/25 text-emerald-atelier border border-emerald-atelier/30 text-xs font-medium tracking-wide transition cursor-pointer" form="customer-change-form" name="_addanother" type="submit">
-          Save and add another
-        </button>
-        <!-- Save and Continue Editing -->
-        <button class="px-4 py-2.5 rounded-lg bg-emerald-atelier/15 hover:bg-emerald-atelier/25 text-emerald-atelier border border-emerald-atelier/30 text-xs font-medium tracking-wide transition cursor-pointer" form="customer-change-form" name="_continue" type="submit">
-          Save and continue editing
-        </button>
-      </div>
-
-      <!-- Right Delete Danger Action -->
-      {% if change and has_delete_permission %}
-      <div class="w-full sm:w-auto flex justify-end">
-        <a href="{% url opts|admin_urlname:'delete' original.pk|admin_urlquote %}" class="px-4 py-2 rounded-lg text-red-400 hover:text-red-300 hover:bg-red-950/30 border border-transparent hover:border-red-900/60 text-xs font-medium transition cursor-pointer inline-flex items-center gap-1.5">
-          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" stroke-linecap="round" stroke-linejoin="round"></path></svg>
-          <span>Delete</span>
-        </a>
-      </div>
-      {% endif %}
-    </footer>
-    <!-- END: StickyBottomActionBar -->
 
   </div>
   <!-- END: MainContentArea -->
