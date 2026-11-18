@@ -1,0 +1,534 @@
+{% load i18n admin_urls static tz %}<!DOCTYPE html>
+<html class="dark h-full bg-[#0a0b0d]" lang="en">
+<head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport">
+<title>Collections Directory | Luckjary Haute Atelier</title>
+
+<!-- Google Fonts for Ultra-Luxury Atelier Aesthetic -->
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..900;1,6..96,400..700&family=JetBrains+Mono:wght@300;400;500;600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
+
+<!-- Tailwind CSS CDN with Plugins -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Configuration -->
+<script id="tailwind-config">
+tailwind.config = {
+  darkMode: 'class',
+  theme: {
+    extend: {
+      colors: {
+        obsidian: {
+          950: '#07080a',
+          900: '#0d0e11',
+          850: '#121317',
+          800: '#17191e',
+          750: '#1d1f26',
+          700: '#262931',
+          600: '#343843',
+        },
+        emerald: {
+          DEFAULT: '#10b981',
+          accent: '#059669',
+          light: '#34d399',
+          subtle: '#064e3b',
+          glow: 'rgba(16, 185, 129, 0.15)'
+        },
+        gold: {
+          300: '#fde68a',
+          400: '#fbbf24',
+          500: '#d97706',
+          soft: '#f5efe6'
+        }
+      },
+      fontFamily: {
+        serif: ['"Bodoni Moda"', 'serif', 'Georgia'],
+        sans: ['"Plus Jakarta Sans"', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
+        mono: ['"JetBrains Mono"', 'SFMono-Regular', 'Menlo', 'monospace'],
+      }
+    }
+  }
+};
+</script>
+
+<style data-purpose="scrollbar-and-glow">
+/* Base Resets */
+html, body {
+  background-color: #0a0b0d !important;
+  color: #d6d3d1 !important;
+  font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  min-height: 100vh !important;
+  width: 100% !important;
+}
+
+/* Subtle custom dark scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #0d0e11;
+}
+::-webkit-scrollbar-thumb {
+  background: #262931;
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #343843;
+}
+
+/* Atelier radial glass glow */
+.atelier-glow {
+  background: radial-gradient(circle at 50% 0%, rgba(16, 185, 129, 0.08) 0%, transparent 60%);
+}
+
+.font-serif {
+  font-family: 'Bodoni Moda', serif, Georgia !important;
+}
+</style>
+</head>
+
+<body class="h-full bg-[#0a0b0d] text-stone-300 font-sans antialiased flex flex-col min-h-screen selection:bg-emerald-500/20 selection:text-emerald-300">
+
+<!-- App Container with Unified Left Side Panel + Right Content Area -->
+<div class="flex flex-1 w-full min-h-screen">
+
+  <!-- Unified Left Side Panel (Mobile Drawer & Desktop Docked Sidebar) -->
+  {% include "admin/includes/atelier_sidebar.html" with active_nav="collections" %}
+
+  <!-- Main Content Shell -->
+  <div class="flex-1 min-w-0 flex flex-col min-h-screen overflow-x-hidden bg-[#0c0d10]">
+    <!-- Unified Top Universal Header Bar -->
+    {% include "admin/includes/atelier_header.html" %}
+
+    <!-- Main Workspace Container matching code.html -->
+    <main class="flex-1 overflow-y-auto atelier-glow p-4 sm:p-6 lg:p-8 space-y-6">
+
+      <!-- BEGIN: PageHeader -->
+      <section class="space-y-4" data-purpose="breadcrumbs-and-title">
+        <!-- Django Admin Style Breadcrumbs -->
+        <nav class="flex flex-wrap items-center gap-2 text-xs font-mono text-stone-500">
+          <a class="hover:text-emerald-400 transition-colors" href="{% url 'admin:index' %}">Home</a>
+          <span>›</span>
+          <a class="hover:text-emerald-400 transition-colors" href="{% url 'admin:catalog_product_changelist' %}">Products &amp; Inventory</a>
+          <span>›</span>
+          <span class="text-stone-300 font-medium">Collections</span>
+        </nav>
+
+        <!-- Display Header and Primary Action -->
+        <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 pt-1">
+          <div>
+            <div class="flex flex-wrap items-center gap-2.5 sm:gap-3">
+              <h2 class="text-xl sm:text-2xl lg:text-3xl font-serif text-stone-100 font-normal tracking-wide">
+                Select collection to change
+              </h2>
+              <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-mono font-medium text-emerald-400 bg-emerald-950/40 border border-emerald-500/20">
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                {{ active_collections_count|default:cl.result_count }} Active
+              </span>
+            </div>
+            <p class="text-xs text-stone-400 mt-1 font-sans">Curated 925 sterling silver collections, signature hallmarked motifs, and artisan drops.</p>
+          </div>
+
+          <!-- Add Collection Primary Button -->
+          <a href="{% url 'admin:catalog_collection_add' %}" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-lg bg-emerald-400 hover:bg-emerald-300 text-stone-950 text-xs font-semibold uppercase tracking-wider shadow-[0_0_20px_rgba(16,185,129,0.25)] hover:shadow-[0_0_25px_rgba(16,185,129,0.4)] transition-all flex-shrink-0 no-underline cursor-pointer">
+            <svg class="w-4 h-4 stroke-[2.5]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 4v16m8-8H4" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+            <span>+ Add Collection</span>
+          </a>
+        </div>
+      </section>
+      <!-- END: PageHeader -->
+
+      <!-- Messages -->
+      {% if messages %}
+      <div class="space-y-2">
+        {% for message in messages %}
+        <div class="px-4 py-3 rounded-xl border border-emerald-500/30 bg-emerald-500/10 text-emerald-300 text-xs flex items-center justify-between">
+          <span>{{ message }}</span>
+        </div>
+        {% endfor %}
+      </div>
+      {% endif %}
+
+      <form id="changelist-form" method="post" action="" novalidate class="space-y-6">
+        {% csrf_token %}
+        {% if cl.formset %}
+          {{ cl.formset.management_form }}
+        {% endif %}
+
+        <!-- BEGIN: ActionsAndFilterToolbar -->
+        <section class="bg-[#121318] border border-[#21242e] rounded-xl p-3 sm:p-3.5 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-3 sm:gap-4" data-purpose="actions-toolbar">
+          <!-- Batch Action Controls -->
+          <div class="flex flex-wrap items-center gap-2 sm:gap-3">
+            <div class="flex items-center gap-1.5 bg-[#181a22] border border-[#282c38] rounded-lg p-1">
+              <label class="text-[11px] font-mono text-stone-400 pl-2 uppercase tracking-wider hidden sm:inline" for="action-select">Action:</label>
+              <select id="action-select" name="action" class="bg-transparent text-xs text-stone-200 border-0 focus:ring-0 py-1 pl-2 pr-8 cursor-pointer font-sans focus:outline-none">
+                {% if action_form %}
+                  {% for choice in action_form.fields.action.choices %}
+                    <option value="{{ choice.0 }}" class="bg-[#181a22] text-stone-200">{% if not choice.0 %}-----------------{% else %}{{ choice.1 }}{% endif %}</option>
+                  {% endfor %}
+                {% else %}
+                  <option value="">-----------------</option>
+                  <option value="mark_active" class="bg-[#181a22] text-stone-200">Mark selected collections as active</option>
+                  <option value="mark_inactive" class="bg-[#181a22] text-stone-200">Mark selected collections as inactive</option>
+                  <option value="delete_selected" class="bg-[#181a22] text-stone-200">Delete selected collections</option>
+                {% endif %}
+              </select>
+              <button class="px-3 py-1 bg-[#252936] hover:bg-[#2c303b] text-stone-200 hover:text-white rounded text-xs font-mono font-medium transition-colors border border-[#343843] cursor-pointer" type="submit" name="index" value="0">
+                Run
+              </button>
+            </div>
+            <span class="text-[11px] font-mono text-stone-500 hidden sm:inline-flex items-center px-2.5 py-1 rounded bg-[#181a22] border border-[#282c38]" id="selectionCounter">
+              0 of {{ cl.result_count }} selected
+            </span>
+            <input type="hidden" name="select_across" value="0" class="select-across">
+          </div>
+
+          <!-- Secondary Filter / Quick Search -->
+          <div class="flex items-center gap-2 w-full md:w-auto justify-end">
+            <div class="relative flex-1 md:flex-initial">
+              <input id="collectionFilterInput" class="w-full md:w-48 bg-[#181a22] text-xs text-stone-300 placeholder-stone-500 rounded-lg pl-8 pr-3 py-1.5 border border-[#282c38] focus:border-emerald-500 focus:outline-none font-sans" placeholder="Filter collections..." type="text" value="{{ request.GET.q|default:'' }}">
+              <svg class="w-3.5 h-3.5 text-stone-500 absolute left-2.5 top-1/2 -translate-y-1/2" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+            </div>
+            <a href="?" class="p-1.5 text-stone-400 hover:text-stone-200 bg-[#181a22] rounded-lg border border-[#282c38] flex-shrink-0" title="Reset filters">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+            </a>
+          </div>
+        </section>
+        <!-- END: ActionsAndFilterToolbar -->
+
+        <!-- BEGIN: CollectionsChangelistTable (Responsive Table for Tablet/Desktop & Cards for Mobile) -->
+        <section class="bg-[#111216] border border-[#21242e] rounded-xl overflow-hidden shadow-xl" data-purpose="collections-table-card">
+          <!-- Desktop & Tablet Viewport: High Precision Table -->
+          <div class="hidden md:block overflow-x-auto">
+            <table class="w-full text-left border-collapse text-xs" id="collectionsTable">
+              <!-- Table Header -->
+              <thead>
+                <tr class="border-b border-[#21242e] bg-[#14161c] text-[10px] uppercase font-mono tracking-wider text-stone-400">
+                  <th class="w-10 px-4 py-3.5 text-center" scope="col">
+                    <input id="action-toggle" class="rounded bg-[#1c1f28] border-[#2e3341] text-emerald-500 focus:ring-0 focus:ring-offset-0 w-3.5 h-3.5 cursor-pointer" type="checkbox" title="Select all rows">
+                  </th>
+                  <th class="px-5 py-3.5 font-semibold text-stone-300" scope="col">Name</th>
+                  <th class="px-4 py-3.5 font-semibold text-stone-300" scope="col">Slug</th>
+                  <th class="px-5 py-3.5 font-semibold text-stone-300" scope="col">Subtitle &amp; Narrative</th>
+                  <th class="px-4 py-3.5 font-semibold text-stone-300" scope="col">Curated Vault</th>
+                  <th class="px-4 py-3.5 font-semibold text-center text-stone-300" scope="col">Is Active</th>
+                  <th class="px-5 py-3.5 text-right font-semibold text-stone-300" scope="col">Actions</th>
+                </tr>
+              </thead>
+              <!-- Table Body -->
+              <tbody class="divide-y divide-[#1b1d24]">
+                {% if cl.formset %}
+                  {% for form in cl.formset.forms %}
+                    {% with collection=form.instance %}
+                    <tr class="collection-row hover:bg-[#161820]/75 transition-colors group" data-name="{{ collection.name|lower }}" data-slug="{{ collection.slug|lower }}">
+                      <td class="px-4 py-4 text-center">
+                        {{ form.id }}
+                        <input class="action-select rounded bg-[#1c1f28] border-[#2e3341] text-emerald-500 focus:ring-0 focus:ring-offset-0 w-3.5 h-3.5 cursor-pointer" type="checkbox" name="_selected_action" value="{{ collection.pk }}">
+                      </td>
+                      <td class="px-5 py-4 whitespace-nowrap">
+                        <div class="flex items-center gap-3">
+                          <div>
+                            <a class="font-sans text-sm font-semibold text-stone-100 hover:text-white transition-colors" href="{% url 'admin:catalog_collection_change' collection.pk %}">
+                              {{ collection.name }}
+                            </a>
+                            {% if collection.subtitle %}
+                            <span class="block text-[10px] text-stone-500 font-mono mt-0.5">{{ collection.subtitle }}</span>
+                            {% endif %}
+                          </div>
+                        </div>
+                      </td>
+                      <td class="px-4 py-4 whitespace-nowrap">
+                        <code class="px-2 py-1 rounded bg-[#171920] border border-[#232732] font-mono text-[11px] text-stone-300">{{ collection.slug }}</code>
+                      </td>
+                      <td class="px-5 py-4 text-stone-300 max-w-sm">
+                        <p class="line-clamp-2 leading-relaxed">
+                          {{ collection.description|default:collection.subtitle|default:"Subtle luxury designed for every day, effortless elegance." }}
+                        </p>
+                      </td>
+                      <td class="px-4 py-4 whitespace-nowrap">
+                        <div class="flex items-center gap-2">
+                          <span class="px-2 py-0.5 rounded text-[10px] font-mono bg-stone-900 text-stone-300 border border-stone-800">
+                            {{ collection.products.count }} Vault Piece{{ collection.products.count|pluralize }}
+                          </span>
+                        </div>
+                        <span class="text-[10px] text-stone-500 mt-1 block">925 Solid Silver • Curated Capsule</span>
+                      </td>
+                      <td class="px-4 py-4 text-center whitespace-nowrap">
+                        <label class="cursor-pointer inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-mono font-medium transition-all {% if collection.is_active %}bg-emerald-950/60 text-emerald-300 border border-emerald-500/30{% else %}bg-zinc-800/60 text-zinc-400 border border-zinc-700/30{% endif %}">
+                          <input type="checkbox" name="{{ form.is_active.html_name }}" id="{{ form.is_active.id_for_label }}" {% if collection.is_active %}checked{% endif %} class="sr-only is-active-toggle" onchange="toggleActiveBadge(this)">
+                          <span class="badge-icon">
+                            {% if collection.is_active %}
+                            <svg class="w-3 h-3 text-emerald-400 stroke-[2.5]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+                            {% endif %}
+                          </span>
+                          <span class="badge-text">{% if collection.is_active %}Active{% else %}Inactive{% endif %}</span>
+                        </label>
+                      </td>
+                      <td class="px-5 py-4 text-right whitespace-nowrap">
+                        <div class="flex items-center justify-end gap-2">
+                          <a href="{% url 'admin:catalog_collection_change' collection.pk %}" class="px-2.5 py-1 text-[11px] text-stone-300 hover:text-emerald-300 bg-[#1c1f29] hover:bg-[#252936] rounded border border-[#292e3c] transition-colors no-underline">
+                            Edit
+                          </a>
+                          <a href="/?collection={{ collection.slug }}" target="_blank" class="p-1 text-stone-500 hover:text-stone-300 transition-colors" title="View collection on storefront">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path><path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+                          </a>
+                        </div>
+                      </td>
+                    </tr>
+                    {% endwith %}
+                  {% empty %}
+                  <tr>
+                    <td colspan="7" class="px-6 py-12 text-center text-stone-500 font-mono text-xs">
+                      No collections found in directory.
+                    </td>
+                  </tr>
+                  {% endfor %}
+                {% else %}
+                  {% for collection in cl.result_list %}
+                  <tr class="collection-row hover:bg-[#161820]/75 transition-colors group" data-name="{{ collection.name|lower }}" data-slug="{{ collection.slug|lower }}">
+                    <td class="px-4 py-4 text-center">
+                      <input class="action-select rounded bg-[#1c1f28] border-[#2e3341] text-emerald-500 focus:ring-0 focus:ring-offset-0 w-3.5 h-3.5 cursor-pointer" type="checkbox" name="_selected_action" value="{{ collection.pk }}">
+                    </td>
+                    <td class="px-5 py-4 whitespace-nowrap">
+                      <div class="flex items-center gap-3">
+                        <div>
+                          <a class="font-sans text-sm font-semibold text-stone-100 hover:text-white transition-colors" href="{% url 'admin:catalog_collection_change' collection.pk %}">
+                            {{ collection.name }}
+                          </a>
+                          {% if collection.subtitle %}
+                          <span class="block text-[10px] text-stone-500 font-mono mt-0.5">{{ collection.subtitle }}</span>
+                          {% endif %}
+                        </div>
+                      </div>
+                    </td>
+                    <td class="px-4 py-4 whitespace-nowrap">
+                      <code class="px-2 py-1 rounded bg-[#171920] border border-[#232732] font-mono text-[11px] text-stone-300">{{ collection.slug }}</code>
+                    </td>
+                    <td class="px-5 py-4 text-stone-300 max-w-sm">
+                      <p class="line-clamp-2 leading-relaxed">
+                        {{ collection.description|default:collection.subtitle|default:"Subtle luxury designed for every day, effortless elegance." }}
+                      </p>
+                    </td>
+                    <td class="px-4 py-4 whitespace-nowrap">
+                      <div class="flex items-center gap-2">
+                        <span class="px-2 py-0.5 rounded text-[10px] font-mono bg-stone-900 text-stone-300 border border-stone-800">
+                          {{ collection.products.count }} Vault Piece{{ collection.products.count|pluralize }}
+                        </span>
+                      </div>
+                      <span class="text-[10px] text-stone-500 mt-1 block">925 Solid Silver • Curated Capsule</span>
+                    </td>
+                    <td class="px-4 py-4 text-center whitespace-nowrap">
+                      {% if collection.is_active %}
+                      <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-mono font-medium bg-emerald-950/60 text-emerald-300 border border-emerald-500/30">
+                        <svg class="w-3 h-3 text-emerald-400 stroke-[2.5]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+                        Active
+                      </span>
+                      {% else %}
+                      <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-mono font-medium bg-zinc-800/60 text-zinc-400 border border-zinc-700/30">
+                        Inactive
+                      </span>
+                      {% endif %}
+                    </td>
+                    <td class="px-5 py-4 text-right whitespace-nowrap">
+                      <div class="flex items-center justify-end gap-2">
+                        <a href="{% url 'admin:catalog_collection_change' collection.pk %}" class="px-2.5 py-1 text-[11px] text-stone-300 hover:text-emerald-300 bg-[#1c1f29] hover:bg-[#252936] rounded border border-[#292e3c] transition-colors no-underline">
+                          Edit
+                        </a>
+                        <a href="/?collection={{ collection.slug }}" target="_blank" class="p-1 text-stone-500 hover:text-stone-300 transition-colors" title="View collection on storefront">
+                          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path><path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+                        </a>
+                      </div>
+                    </td>
+                  </tr>
+                  {% empty %}
+                  <tr>
+                    <td colspan="7" class="px-6 py-12 text-center text-stone-500 font-mono text-xs">
+                      No collections found in directory.
+                    </td>
+                  </tr>
+                  {% endfor %}
+                {% endif %}
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Mobile Card View: Optimized for <768px -->
+          <div class="md:hidden divide-y divide-[#1b1d24]" id="collectionsMobileList">
+            {% for collection in cl.result_list %}
+            <div class="p-4 space-y-3 collection-card" data-name="{{ collection.name|lower }}" data-slug="{{ collection.slug|lower }}">
+              <div class="flex items-start justify-between gap-3">
+                <div class="flex items-center gap-3">
+                  <input class="action-select-mobile rounded bg-[#1c1f28] border-[#2e3341] text-emerald-500 focus:ring-0 w-4 h-4 cursor-pointer mt-0.5" type="checkbox" name="_selected_action" value="{{ collection.pk }}">
+                  <div>
+                    <a class="font-sans text-sm font-semibold text-stone-100 hover:text-white transition-colors block" href="{% url 'admin:catalog_collection_change' collection.pk %}">
+                      {{ collection.name }}
+                    </a>
+                    {% if collection.subtitle %}
+                    <span class="text-[10px] text-stone-500 font-mono">{{ collection.subtitle }}</span>
+                    {% endif %}
+                  </div>
+                </div>
+                {% if collection.is_active %}
+                <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-mono font-medium bg-emerald-950/60 text-emerald-300 border border-emerald-500/30 flex-shrink-0">
+                  <svg class="w-2.5 h-2.5 text-emerald-400 stroke-[2.5]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+                  Active
+                </span>
+                {% else %}
+                <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-mono font-medium bg-zinc-800/60 text-zinc-400 border border-zinc-700/30 flex-shrink-0">
+                  Inactive
+                </span>
+                {% endif %}
+              </div>
+              <p class="text-xs text-stone-400 leading-relaxed pl-7">
+                {{ collection.description|default:collection.subtitle|default:"Subtle luxury designed for every day, effortless elegance." }}
+              </p>
+              <div class="flex flex-wrap items-center justify-between gap-2 pl-7 pt-1">
+                <div class="flex flex-wrap items-center gap-2">
+                  <code class="px-2 py-0.5 rounded bg-[#171920] border border-[#232732] font-mono text-[10px] text-stone-400">{{ collection.slug }}</code>
+                  <span class="px-2 py-0.5 rounded text-[10px] font-mono bg-stone-900 text-stone-300 border border-stone-800">{{ collection.products.count }} Vault Piece{{ collection.products.count|pluralize }}</span>
+                </div>
+                <div class="flex items-center gap-2">
+                  <a href="{% url 'admin:catalog_collection_change' collection.pk %}" class="px-3 py-1.5 text-xs text-stone-200 hover:text-emerald-300 bg-[#1c1f29] rounded border border-[#292e3c] no-underline">
+                    Edit
+                  </a>
+                  <a href="/?collection={{ collection.slug }}" target="_blank" class="p-1.5 text-stone-400 hover:text-stone-200 bg-[#1c1f29] rounded border border-[#292e3c]" title="Quick view">
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path><path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+                  </a>
+                </div>
+              </div>
+            </div>
+            {% empty %}
+            <div class="p-8 text-center text-stone-500 font-mono text-xs">
+              No collections found in directory.
+            </div>
+            {% endfor %}
+          </div>
+
+          <!-- Table Summary & Action Footer -->
+          <div class="px-4 sm:px-6 py-4 bg-[#14161c] border-t border-[#21242e] flex flex-col sm:flex-row sm:items-center justify-between gap-4 text-xs">
+            <div class="flex flex-wrap items-center gap-3">
+              <span class="inline-flex items-center px-3 py-1 rounded bg-[#1d202b] text-stone-300 font-mono text-[11px] border border-[#282d3d]">
+                {{ cl.result_count }} collection{{ cl.result_count|pluralize }} registered
+              </span>
+              <span class="text-stone-500 text-[11px]">All items synced with global storefront</span>
+            </div>
+            <div class="flex items-center justify-end gap-3 w-full sm:w-auto">
+              <a href="{% url 'admin:catalog_collection_changelist' %}" class="px-4 py-2 text-xs font-medium text-stone-400 hover:text-stone-200 bg-transparent border border-transparent hover:border-stone-800 rounded transition-colors no-underline">
+                Reset Changes
+              </a>
+              <button type="submit" name="_save" class="px-5 py-2 text-xs font-semibold uppercase tracking-wider text-black bg-emerald-400 hover:bg-emerald-300 rounded-lg shadow-[0_0_15px_rgba(16,185,129,0.2)] transition-all cursor-pointer">
+                Save
+              </button>
+            </div>
+          </div>
+        </section>
+        <!-- END: CollectionsChangelistTable -->
+      </form>
+
+    </main>
+  </div>
+</div>
+
+{% include "admin/includes/atelier_nav_scripts.html" %}
+
+<script>
+function toggleActiveBadge(checkbox) {
+  const label = checkbox.closest('label');
+  const icon = label.querySelector('.badge-icon');
+  const text = label.querySelector('.badge-text');
+  if (checkbox.checked) {
+    label.className = "cursor-pointer inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-mono font-medium transition-all bg-emerald-950/60 text-emerald-300 border border-emerald-500/30";
+    icon.innerHTML = '<svg class="w-3 h-3 text-emerald-400 stroke-[2.5]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round"></path></svg>';
+    text.textContent = 'Active';
+  } else {
+    label.className = "cursor-pointer inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-mono font-medium transition-all bg-zinc-800/60 text-zinc-400 border border-zinc-700/30";
+    icon.innerHTML = '';
+    text.textContent = 'Inactive';
+  }
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  const selectAll = document.getElementById('action-toggle');
+  const desktopChecks = document.querySelectorAll('.action-select');
+  const mobileChecks = document.querySelectorAll('.action-select-mobile');
+  const counter = document.getElementById('selectionCounter');
+  const totalCount = {{ cl.result_count|default:0 }};
+
+  function updateSelectionCount() {
+    let checkedCount = 0;
+    desktopChecks.forEach(c => { if (c.checked) checkedCount++; });
+    if (counter) {
+      counter.textContent = `${checkedCount} of ${totalCount} selected`;
+      if (checkedCount > 0) {
+        counter.classList.add('text-emerald-400', 'border-emerald-500/30', 'bg-emerald-950/20');
+        counter.classList.remove('text-stone-500', 'border-[#282c38]', 'bg-[#181a22]');
+      } else {
+        counter.classList.remove('text-emerald-400', 'border-emerald-500/30', 'bg-emerald-950/20');
+        counter.classList.add('text-stone-500', 'border-[#282c38]', 'bg-[#181a22]');
+      }
+    }
+  }
+
+  if (selectAll) {
+    selectAll.addEventListener('change', function() {
+      const isChecked = this.checked;
+      desktopChecks.forEach(c => { c.checked = isChecked; });
+      mobileChecks.forEach(c => { c.checked = isChecked; });
+      updateSelectionCount();
+    });
+  }
+
+  desktopChecks.forEach((c, idx) => {
+    c.addEventListener('change', function() {
+      if (mobileChecks[idx]) mobileChecks[idx].checked = this.checked;
+      updateSelectionCount();
+    });
+  });
+
+  mobileChecks.forEach((c, idx) => {
+    c.addEventListener('change', function() {
+      if (desktopChecks[idx]) desktopChecks[idx].checked = this.checked;
+      updateSelectionCount();
+    });
+  });
+
+  // Client-Side Live Filter
+  const filterInput = document.getElementById('collectionFilterInput');
+  const rows = document.querySelectorAll('.collection-row');
+  const cards = document.querySelectorAll('.collection-card');
+
+  if (filterInput) {
+    filterInput.addEventListener('input', function() {
+      const q = this.value.trim().toLowerCase();
+      rows.forEach(row => {
+        const name = row.getAttribute('data-name') || '';
+        const slug = row.getAttribute('data-slug') || '';
+        const matches = name.includes(q) || slug.includes(q);
+        row.style.display = matches ? '' : 'none';
+      });
+      cards.forEach(card => {
+        const name = card.getAttribute('data-name') || '';
+        const slug = card.getAttribute('data-slug') || '';
+        const matches = name.includes(q) || slug.includes(q);
+        card.style.display = matches ? '' : 'none';
+      });
+    });
+
+    filterInput.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        const q = this.value.trim();
+        window.location.href = `?q=${encodeURIComponent(q)}`;
+      }
+    });
+  }
+});
+</script>
+
+</body>
+</html>

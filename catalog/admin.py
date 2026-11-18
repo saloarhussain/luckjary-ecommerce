@@ -122,9 +122,28 @@ class MaterialAdmin(admin.ModelAdmin):
 
 @admin.register(Collection)
 class CollectionAdmin(admin.ModelAdmin):
+    change_list_template = 'admin/catalog/collection/change_list.html'
     list_display = ('name', 'slug', 'subtitle', 'is_active')
     prepopulated_fields = {'slug': ('name',)}
     list_editable = ('is_active',)
+    search_fields = ('name', 'slug', 'subtitle', 'description')
+    actions = ['mark_active', 'mark_inactive']
+
+    @admin.action(description="Mark selected collections as active")
+    def mark_active(self, request, queryset):
+        updated = queryset.update(is_active=True)
+        self.message_user(request, f"{updated} collection(s) marked as active.")
+
+    @admin.action(description="Mark selected collections as inactive")
+    def mark_inactive(self, request, queryset):
+        updated = queryset.update(is_active=False)
+        self.message_user(request, f"{updated} collection(s) marked as inactive.")
+
+    def changelist_view(self, request, extra_context=None):
+        extra_context = extra_context or {}
+        extra_context['active_nav'] = 'collections'
+        extra_context['active_collections_count'] = Collection.objects.filter(is_active=True).count()
+        return super().changelist_view(request, extra_context=extra_context)
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
