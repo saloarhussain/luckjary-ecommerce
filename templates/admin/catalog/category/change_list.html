@@ -167,29 +167,11 @@ button, button *, button:hover, button:focus {
         <span class="text-white font-medium">Categories</span>
       </nav>
 
-      <!-- Page Header: Title, Telemetry & Add Category CTA -->
-      <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 pb-5 border-b border-white/[0.06]">
-        <div class="space-y-1.5">
-          <div class="flex flex-wrap items-center gap-2.5">
-            <span class="text-[11px] font-bold text-champagne-400 font-sans tracking-wider uppercase">Catalog Taxonomy</span>
-            <span class="w-1.5 h-1.5 rounded-full bg-champagne-400/40"></span>
-            <span class="font-mono text-[11px] text-neutral-400 font-medium uppercase tracking-wider">Spring 2026</span>
-            <span class="inline-flex items-center gap-1.5 text-[10px] font-mono font-medium tracking-wider px-2.5 py-0.5 rounded-full bg-emerald-950/70 text-emerald-400 border border-emerald-500/30">
-              <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>LIVE DATABASE
-            </span>
-          </div>
-          <div class="flex items-center gap-3 pt-1">
-            <h1 class="text-2xl sm:text-3xl md:text-4xl font-serif text-white font-normal tracking-wide">
-              Atelier Categories
-            </h1>
-            <span class="px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold bg-[#171920] text-amber-300 border border-[#21242d] uppercase tracking-wider">
-              {{ cl.result_count }} DEPARTMENTS
-            </span>
-          </div>
-          <p class="text-xs text-neutral-400 font-sans pt-0.5 max-w-2xl">
-            Structural taxonomy for 925 solid sterling silver creations, precious vermeil lines, and showroom navigation categories.
-          </p>
-        </div>
+      <!-- Page Header: Clean Title & Add Category CTA -->
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 pb-4 border-b border-white/[0.06]">
+        <h1 class="text-2xl sm:text-3xl md:text-4xl font-serif text-white font-normal tracking-wide">
+          Atelier Categories
+        </h1>
 
         <!-- Add Category Primary CTA (Emerald 500, Pitch Black Text, Zero Underline) -->
         <a href="{% url 'admin:catalog_category_add' %}" class="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-obsidian-950 font-semibold text-xs tracking-wide transition whitespace-nowrap cursor-pointer shadow-lg glow-emerald shrink-0" style="color: #07080a !important; text-decoration: none !important;">

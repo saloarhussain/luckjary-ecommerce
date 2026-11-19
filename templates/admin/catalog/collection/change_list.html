@@ -126,22 +126,13 @@ html, body {
         </nav>
 
         <!-- Display Header and Primary Action -->
-        <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 pt-1">
-          <div>
-            <div class="flex flex-wrap items-center gap-2.5 sm:gap-3">
-              <h2 class="text-xl sm:text-2xl lg:text-3xl font-serif text-stone-100 font-normal tracking-wide">
-                Select collection to change
-              </h2>
-              <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-mono font-medium text-emerald-400 bg-emerald-950/40 border border-emerald-500/20">
-                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
-                {{ active_collections_count|default:cl.result_count }} Active
-              </span>
-            </div>
-            <p class="text-xs text-stone-400 mt-1 font-sans">Curated 925 sterling silver collections, signature hallmarked motifs, and artisan drops.</p>
-          </div>
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 pb-4 border-b border-white/[0.06]">
+          <h1 class="text-2xl sm:text-3xl md:text-4xl font-serif text-white font-normal tracking-wide">
+            Atelier Collections
+          </h1>
 
           <!-- Add Collection Primary Button -->
-          <a href="{% url 'admin:catalog_collection_add' %}" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-3.5 py-2 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-obsidian-950 font-semibold text-xs tracking-wide transition shadow-lg glow-emerald whitespace-nowrap cursor-pointer no-underline" style="color: #07080a !important; text-decoration: none !important;">
+          <a href="{% url 'admin:catalog_collection_add' %}" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-3.5 py-2.5 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-obsidian-950 font-semibold text-xs tracking-wide transition shadow-lg glow-emerald whitespace-nowrap cursor-pointer no-underline" style="color: #07080a !important; text-decoration: none !important;">
             <svg class="w-4 h-4 stroke-[2.5]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 4v16m8-8H4" stroke-linecap="round" stroke-linejoin="round"></path></svg>
             <span>Add Collection</span>
           </a>

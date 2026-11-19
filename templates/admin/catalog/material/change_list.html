@@ -133,39 +133,16 @@ tailwind.config = {
       {% endif %}
 
       <!-- BEGIN: PageHeaderSection -->
-      <section class="flex flex-col md:flex-row md:items-end justify-between gap-4 pb-2 border-b border-obsidian-border" data-purpose="page-title-and-actions">
-        <div>
-          <!-- Registry Breadcrumbs & Path Tag -->
-          <div class="flex flex-wrap items-center gap-2.5 mb-1.5">
-            <span class="px-2 py-0.5 text-[10px] font-mono tracking-widest uppercase rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/25">
-              Catalog Registry
-            </span>
-            <span class="text-xs text-zinc-500 font-mono">› /admin/catalog/material/</span>
-          </div>
-          <!-- Editorial Bodoni Heading -->
-          <h1 class="font-serif text-3xl sm:text-4xl text-white font-medium tracking-tight">
-            Materials &amp; Precious Alloys
-          </h1>
-          <p class="text-xs sm:text-sm text-zinc-400 mt-1 max-w-2xl font-light leading-relaxed">
-            Certified hallmark registry, precious metals fineness standards, demifine vermeil coatings, and ethically sourced gems.
-          </p>
-        </div>
+      <section class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 pb-4 border-b border-white/[0.06]" data-purpose="page-title-and-actions">
+        <h1 class="font-serif text-2xl sm:text-3xl md:text-4xl text-white font-normal tracking-wide">
+          Materials &amp; Precious Alloys
+        </h1>
 
-        <!-- Add Material Primary CTA & Counter -->
-        <div class="flex items-center gap-3 flex-shrink-0">
-          <div class="hidden sm:flex flex-col text-right font-mono text-[11px] text-zinc-400 mr-2">
-            <span class="text-zinc-200 font-semibold">{{ cl.result_count }} Material{{ cl.result_count|pluralize }}</span>
-            <span class="text-emerald-400/90 flex items-center justify-end gap-1">
-              <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
-              ALL Hallmarked Active
-            </span>
-          </div>
-          <!-- Primary Emerald CTA Button -->
-          <a href="{% url 'admin:catalog_material_add' %}" class="inline-flex items-center justify-center gap-2 bg-emerald-500 hover:bg-emerald-400 text-obsidian-950 font-semibold px-4 py-2.5 rounded-lg shadow-lg glow-emerald transition text-xs tracking-wide cursor-pointer no-underline" style="color: #07080a !important; text-decoration: none !important;">
-            <svg class="w-4 h-4 stroke-[2.5]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 4v16m8-8H4" stroke-linecap="round" stroke-linejoin="round"></path></svg>
-            <span>Add Material</span>
-          </a>
-        </div>
+        <!-- Primary Emerald CTA Button -->
+        <a href="{% url 'admin:catalog_material_add' %}" class="inline-flex items-center justify-center gap-2 bg-emerald-500 hover:bg-emerald-400 text-obsidian-950 font-semibold px-4 py-2.5 rounded-lg shadow-lg glow-emerald transition text-xs tracking-wide cursor-pointer no-underline shrink-0" style="color: #07080a !important; text-decoration: none !important;">
+          <svg class="w-4 h-4 stroke-[2.5]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 4v16m8-8H4" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+          <span>Add Material</span>
+        </a>
       </section>
       <!-- END: PageHeaderSection -->
 
