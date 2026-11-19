@@ -346,136 +346,148 @@
 <!-- BEGIN: Main Data Section (Recent Orders Table & Quicklinks / Timeline) -->
 <section class="grid grid-cols-1 xl:grid-cols-12 gap-4 sm:gap-5 pb-6" data-purpose="table-and-quicklinks-grid">
 <!-- Left: Recent Orders Table (8 Cols on xl) -->
-<div class="xl:col-span-8 card-surface rounded-xl p-4 sm:p-6 flex flex-col justify-between overflow-hidden">
+<div class="xl:col-span-8 card-surface rounded-2xl p-4 sm:p-6 flex flex-col justify-between overflow-hidden">
 <div>
 <!-- Table Header Bar -->
-<div class="flex items-center justify-between pb-3.5 sm:pb-4 border-b border-obsidian-700/60 mb-2 gap-2">
+<div class="flex items-center justify-between pb-3.5 sm:pb-4 border-b border-white/[0.06] mb-3 gap-2">
 <div class="flex items-center gap-2 sm:gap-3 min-w-0">
 <h2 class="text-sm font-semibold text-white tracking-wide whitespace-nowrap">Recent Orders</h2>
-<span class="whitespace-nowrap shrink-0 inline-flex items-center px-2 py-0.5 rounded text-[10px] font-mono bg-obsidian-800 text-neutral-400 border border-obsidian-700">
+<span class="whitespace-nowrap shrink-0 inline-flex items-center px-2 py-0.5 rounded text-[10px] font-mono bg-obsidian-850 text-neutral-400 border border-obsidian-700">
 <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 mr-1.5"></span>Live Orders Vault
 </span>
 </div>
-<a class="text-xs text-neutral-400 hover:text-champagne-300 font-medium inline-flex items-center gap-1 transition whitespace-nowrap shrink-0" href="{% url 'admin:orders_order_changelist' %}" style="text-decoration: none !important;">
+<a class="text-xs text-neutral-400 hover:text-champagne-300 font-medium inline-flex items-center gap-1.5 transition whitespace-nowrap shrink-0" href="{% url 'admin:orders_order_changelist' %}" style="text-decoration: none !important;">
                 View all orders <span class="text-champagne-400">→</span>
 </a>
 </div>
 <!-- Desktop Table View (Hidden on mobile) -->
-<div class="hidden md:block overflow-x-auto -mx-4 sm:mx-0 px-4 sm:px-0">
-<table class="w-full text-left border-collapse min-w-[620px]">
+<div class="hidden md:block overflow-x-auto rounded-xl border border-white/[0.06] bg-obsidian-950/60 overflow-hidden">
+<table class="w-full text-left border-collapse font-sans text-xs">
 <thead>
-<tr class="border-b border-obsidian-700/60 text-[10px] font-mono uppercase tracking-wider text-neutral-400">
-<th class="py-3 px-2 font-medium">Order</th>
-<th class="py-3 px-2 font-medium">Date</th>
-<th class="py-3 px-2 font-medium">Customer</th>
-<th class="py-3 px-2 font-medium">Payment</th>
-<th class="py-3 px-2 font-medium">Fulfillment</th>
-<th class="py-3 px-2 text-right font-medium">Total</th>
+<tr class="border-b border-white/[0.06] bg-obsidian-850/80 text-[11px] font-bold tracking-[0.08em] text-neutral-400 uppercase font-mono">
+<th class="py-3.5 px-4 font-semibold">ORDER</th>
+<th class="py-3.5 px-4 font-semibold">DATE</th>
+<th class="py-3.5 px-4 font-semibold">CUSTOMER</th>
+<th class="py-3.5 px-4 font-semibold">PAYMENT</th>
+<th class="py-3.5 px-4 font-semibold">FULFILLMENT</th>
+<th class="py-3.5 px-4 font-semibold text-right">TOTAL</th>
 </tr>
 </thead>
-<tbody class="divide-y divide-obsidian-700/40 text-xs">
-<!-- Row 1 -->
-<tr class="hover:bg-obsidian-800/40 transition group">
-<td class="py-3.5 px-2">
-<span class="font-mono text-emerald-400 bg-emerald-950/40 border border-emerald-500/20 px-2 py-0.5 rounded text-[11px] group-hover:border-emerald-500/40 transition whitespace-nowrap">
-#LCK-202611-304918
+<tbody class="divide-y divide-white/[0.04] text-zinc-200">
+<!-- Row 1: Julian Stewart -->
+<tr class="hover:bg-white/[0.025] transition-colors group">
+<td class="py-3.5 px-4 whitespace-nowrap">
+<a href="/admin/orders/order/1/change/" class="inline-flex items-center gap-1.5 font-mono font-bold text-xs text-emerald-400 bg-emerald-950/40 hover:bg-emerald-900/50 border border-emerald-500/25 px-3 py-1 rounded-lg transition-colors cursor-pointer shadow-sm" style="text-decoration: none !important;" title="View Order #LCK-202611-304918">
+<span>#LCK-202611-304918</span>
+</a>
+</td>
+<td class="py-3.5 px-4 text-neutral-400 font-mono text-xs whitespace-nowrap">Nov 12, 2026</td>
+<td class="py-3.5 px-4">
+<div class="flex flex-col">
+<span class="font-bold text-white text-xs hover:text-emerald-400 transition-colors">Julian Stewart</span>
+<span class="text-[11px] text-neutral-400 font-sans">julian.stewart@icloud.com</span>
+</div>
+</td>
+<td class="py-3.5 px-4 whitespace-nowrap">
+<span class="inline-flex items-center gap-1.5 text-xs font-medium px-3 py-1 rounded-full bg-[#0d2822] text-[#34d399] border border-[#10b981]/35">
+<span class="w-1.5 h-1.5 rounded-full bg-[#10b981]"></span>Paid
 </span>
 </td>
-<td class="py-3.5 px-2 text-neutral-400 font-mono text-[11px] whitespace-nowrap">Nov 12, 2026</td>
-<td class="py-3.5 px-2">
-<div class="font-medium text-neutral-100">Julian Stewart</div>
-<div class="text-[10px] text-neutral-400 font-mono">julian.stewart@icloud.com</div>
-</td>
-<td class="py-3.5 px-2 whitespace-nowrap">
-<span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-mono font-medium bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 whitespace-nowrap">
-<span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span> Paid
+<td class="py-3.5 px-4 whitespace-nowrap">
+<span class="inline-flex items-center gap-1.5 text-xs font-medium px-3 py-1 rounded-full bg-[#2d1e16] text-[#fbbf24] border border-[#d97706]/35">
+<span class="w-1.5 h-1.5 rounded-full bg-[#f59e0b]"></span>Unfulfilled
 </span>
 </td>
-<td class="py-3.5 px-2 whitespace-nowrap">
-<span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-mono font-medium bg-amber-500/15 text-amber-300 border border-amber-500/30 whitespace-nowrap">
-<span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span> Unfulfilled
-</span>
-</td>
-<td class="py-3.5 px-2 text-right font-mono font-medium text-neutral-100 whitespace-nowrap">
-₹2,86,350 <span class="text-[10px] text-neutral-400 block font-normal">($3,450.00)</span>
+<td class="py-3.5 px-4 text-right whitespace-nowrap">
+<span class="font-bold text-white font-sans text-sm tracking-tight">₹2,86,350</span>
+<span class="text-[10px] text-neutral-400 block font-mono">($3,450.00)</span>
 </td>
 </tr>
-<!-- Row 2 -->
-<tr class="hover:bg-obsidian-800/40 transition group">
-<td class="py-3.5 px-2">
-<span class="font-mono text-neutral-300 bg-obsidian-800 border border-obsidian-700 px-2 py-0.5 rounded text-[11px] group-hover:border-neutral-500 transition whitespace-nowrap">
-#LCK-202611-194056
+<!-- Row 2: Charlotte Dupré -->
+<tr class="hover:bg-white/[0.025] transition-colors group">
+<td class="py-3.5 px-4 whitespace-nowrap">
+<a href="/admin/orders/order/2/change/" class="inline-flex items-center gap-1.5 font-mono font-bold text-xs text-neutral-300 bg-obsidian-800 hover:bg-obsidian-750 border border-obsidian-700 px-3 py-1 rounded-lg transition-colors cursor-pointer shadow-sm" style="text-decoration: none !important;" title="View Order #LCK-202611-194056">
+<span>#LCK-202611-194056</span>
+</a>
+</td>
+<td class="py-3.5 px-4 text-neutral-400 font-mono text-xs whitespace-nowrap">Nov 12, 2026</td>
+<td class="py-3.5 px-4">
+<div class="flex flex-col">
+<span class="font-bold text-white text-xs hover:text-emerald-400 transition-colors">Charlotte Dupré</span>
+<span class="text-[11px] text-neutral-400 font-sans">charlotte.dupre@gmail.com</span>
+</div>
+</td>
+<td class="py-3.5 px-4 whitespace-nowrap">
+<span class="inline-flex items-center gap-1.5 text-xs font-medium px-3 py-1 rounded-full bg-[#0d2822] text-[#34d399] border border-[#10b981]/35">
+<span class="w-1.5 h-1.5 rounded-full bg-[#10b981]"></span>Paid
 </span>
 </td>
-<td class="py-3.5 px-2 text-neutral-400 font-mono text-[11px] whitespace-nowrap">Nov 12, 2026</td>
-<td class="py-3.5 px-2">
-<div class="font-medium text-neutral-100">Charlotte Dupré</div>
-<div class="text-[10px] text-neutral-400 font-mono">charlotte.dupre@gmail.com</div>
-</td>
-<td class="py-3.5 px-2 whitespace-nowrap">
-<span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-mono font-medium bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 whitespace-nowrap">
-<span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span> Paid
+<td class="py-3.5 px-4 whitespace-nowrap">
+<span class="inline-flex items-center gap-1.5 text-xs font-medium px-3 py-1 rounded-full bg-[#241a38] text-[#c084fc] border border-[#a855f7]/35">
+<span class="w-1.5 h-1.5 rounded-full bg-[#a855f7]"></span>In Atelier QC
 </span>
 </td>
-<td class="py-3.5 px-2 whitespace-nowrap">
-<span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-mono font-medium bg-purple-500/15 text-purple-300 border border-purple-500/30 whitespace-nowrap">
-<span class="w-1.5 h-1.5 rounded-full bg-purple-400"></span> In Atelier QC
-</span>
-</td>
-<td class="py-3.5 px-2 text-right font-mono font-medium text-neutral-100 whitespace-nowrap">
-₹1,23,255 <span class="text-[10px] text-neutral-400 block font-normal">($1,485.00)</span>
+<td class="py-3.5 px-4 text-right whitespace-nowrap">
+<span class="font-bold text-white font-sans text-sm tracking-tight">₹1,23,255</span>
+<span class="text-[10px] text-neutral-400 block font-mono">($1,485.00)</span>
 </td>
 </tr>
-<!-- Row 3 -->
-<tr class="hover:bg-obsidian-800/40 transition group">
-<td class="py-3.5 px-2">
-<span class="font-mono text-neutral-300 bg-obsidian-800 border border-obsidian-700 px-2 py-0.5 rounded text-[11px] group-hover:border-neutral-500 transition whitespace-nowrap">
-#LCK-202611-739201
+<!-- Row 3: Isabella Vance -->
+<tr class="hover:bg-white/[0.025] transition-colors group">
+<td class="py-3.5 px-4 whitespace-nowrap">
+<a href="/admin/orders/order/3/change/" class="inline-flex items-center gap-1.5 font-mono font-bold text-xs text-neutral-300 bg-obsidian-800 hover:bg-obsidian-750 border border-obsidian-700 px-3 py-1 rounded-lg transition-colors cursor-pointer shadow-sm" style="text-decoration: none !important;" title="View Order #LCK-202611-739201">
+<span>#LCK-202611-739201</span>
+</a>
+</td>
+<td class="py-3.5 px-4 text-neutral-400 font-mono text-xs whitespace-nowrap">Nov 12, 2026</td>
+<td class="py-3.5 px-4">
+<div class="flex flex-col">
+<span class="font-bold text-white text-xs hover:text-emerald-400 transition-colors">Isabella Vance</span>
+<span class="text-[11px] text-neutral-400 font-sans">isabella.vance@example.com</span>
+</div>
+</td>
+<td class="py-3.5 px-4 whitespace-nowrap">
+<span class="inline-flex items-center gap-1.5 text-xs font-medium px-3 py-1 rounded-full bg-[#0d2822] text-[#34d399] border border-[#10b981]/35">
+<span class="w-1.5 h-1.5 rounded-full bg-[#10b981]"></span>Paid
 </span>
 </td>
-<td class="py-3.5 px-2 text-neutral-400 font-mono text-[11px] whitespace-nowrap">Nov 12, 2026</td>
-<td class="py-3.5 px-2">
-<div class="font-medium text-neutral-100">Isabella Vance</div>
-<div class="text-[10px] text-neutral-400 font-mono">isabella.vance@example.com</div>
-</td>
-<td class="py-3.5 px-2 whitespace-nowrap">
-<span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-mono font-medium bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 whitespace-nowrap">
-<span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span> Paid
+<td class="py-3.5 px-4 whitespace-nowrap">
+<span class="inline-flex items-center gap-1.5 text-xs font-medium px-3 py-1 rounded-full bg-[#0e272b] text-[#2dd4bf] border border-[#14b8a6]/35">
+<span class="w-1.5 h-1.5 rounded-full bg-[#14b8a6]"></span>Delivered
 </span>
 </td>
-<td class="py-3.5 px-2 whitespace-nowrap">
-<span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-mono font-medium bg-teal-500/15 text-teal-300 border border-teal-500/30 whitespace-nowrap">
-<span class="w-1.5 h-1.5 rounded-full bg-teal-400"></span> Delivered
-</span>
-</td>
-<td class="py-3.5 px-2 text-right font-mono font-medium text-neutral-100 whitespace-nowrap">
-₹2,03,350 <span class="text-[10px] text-neutral-400 block font-normal">($2,450.00)</span>
+<td class="py-3.5 px-4 text-right whitespace-nowrap">
+<span class="font-bold text-white font-sans text-sm tracking-tight">₹2,03,350</span>
+<span class="text-[10px] text-neutral-400 block font-mono">($2,450.00)</span>
 </td>
 </tr>
-<!-- Row 4 -->
-<tr class="hover:bg-obsidian-800/40 transition group">
-<td class="py-3.5 px-2">
-<span class="font-mono text-neutral-300 bg-obsidian-800 border border-obsidian-700 px-2 py-0.5 rounded text-[11px] group-hover:border-neutral-500 transition whitespace-nowrap">
-#LCK-202611-884102
+<!-- Row 4: Isabella Vance -->
+<tr class="hover:bg-white/[0.025] transition-colors group">
+<td class="py-3.5 px-4 whitespace-nowrap">
+<a href="/admin/orders/order/4/change/" class="inline-flex items-center gap-1.5 font-mono font-bold text-xs text-neutral-300 bg-obsidian-800 hover:bg-obsidian-750 border border-obsidian-700 px-3 py-1 rounded-lg transition-colors cursor-pointer shadow-sm" style="text-decoration: none !important;" title="View Order #LCK-202611-884102">
+<span>#LCK-202611-884102</span>
+</a>
+</td>
+<td class="py-3.5 px-4 text-neutral-400 font-mono text-xs whitespace-nowrap">Nov 12, 2026</td>
+<td class="py-3.5 px-4">
+<div class="flex flex-col">
+<span class="font-bold text-white text-xs hover:text-emerald-400 transition-colors">Isabella Vance</span>
+<span class="text-[11px] text-neutral-400 font-sans">isabella.vance@example.com</span>
+</div>
+</td>
+<td class="py-3.5 px-4 whitespace-nowrap">
+<span class="inline-flex items-center gap-1.5 text-xs font-medium px-3 py-1 rounded-full bg-[#0d2822] text-[#34d399] border border-[#10b981]/35">
+<span class="w-1.5 h-1.5 rounded-full bg-[#10b981]"></span>Paid
 </span>
 </td>
-<td class="py-3.5 px-2 text-neutral-400 font-mono text-[11px] whitespace-nowrap">Nov 12, 2026</td>
-<td class="py-3.5 px-2">
-<div class="font-medium text-neutral-100">Isabella Vance</div>
-<div class="text-[10px] text-neutral-400 font-mono">isabella.vance@example.com</div>
-</td>
-<td class="py-3.5 px-2 whitespace-nowrap">
-<span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-mono font-medium bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 whitespace-nowrap">
-<span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span> Paid
+<td class="py-3.5 px-4 whitespace-nowrap">
+<span class="inline-flex items-center gap-1.5 text-xs font-medium px-3 py-1 rounded-full bg-[#14233c] text-[#60a5fa] border border-[#3b82f6]/35">
+<span class="w-1.5 h-1.5 rounded-full bg-[#3b82f6]"></span>In Transit
 </span>
 </td>
-<td class="py-3.5 px-2 whitespace-nowrap">
-<span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-mono font-medium bg-blue-500/15 text-blue-300 border border-blue-500/30 whitespace-nowrap">
-<span class="w-1.5 h-1.5 rounded-full bg-blue-400"></span> In Transit
-</span>
-</td>
-<td class="py-3.5 px-2 text-right font-mono font-medium text-neutral-100 whitespace-nowrap">
-₹3,13,740 <span class="text-[10px] text-neutral-400 block font-normal">($3,780.00)</span>
+<td class="py-3.5 px-4 text-right whitespace-nowrap">
+<span class="font-bold text-white font-sans text-sm tracking-tight">₹3,13,740</span>
+<span class="text-[10px] text-neutral-400 block font-mono">($3,780.00)</span>
 </td>
 </tr>
 </tbody>
@@ -485,242 +497,230 @@
 <div class="block md:hidden space-y-3.5 pt-1">
 <!-- Horizontal Filter Chips -->
 <div class="overflow-x-auto -mx-4 px-4 flex items-center gap-2 pb-1 no-scrollbar">
-<button class="px-3 py-1 rounded text-xs font-medium bg-neutral-200 text-obsidian-950 font-sans whitespace-nowrap shrink-0 shadow-sm">
+<button class="px-3 py-1 rounded-lg text-xs font-medium bg-neutral-200 text-obsidian-950 font-sans whitespace-nowrap shrink-0 shadow-sm">
 All <span class="ml-1 font-mono text-[10px]">4</span>
 </button>
-<button class="px-3 py-1 rounded text-xs font-medium bg-obsidian-800 text-amber-400 border border-amber-500/20 whitespace-nowrap shrink-0 flex items-center gap-1.5">
-<span class="w-1.5 h-1.5 rounded-full bg-amber-400 shrink-0"></span> Unfulfilled <span class="ml-0.5 font-mono text-[10px] text-neutral-400">1</span>
+<button class="px-3 py-1 rounded-lg text-xs font-medium bg-obsidian-850 text-amber-300 border border-amber-500/30 whitespace-nowrap shrink-0 flex items-center gap-1.5">
+<span class="w-1.5 h-1.5 rounded-full bg-[#f59e0b] shrink-0"></span> Unfulfilled <span class="ml-0.5 font-mono text-[10px] text-[#8e92a8]">1</span>
 </button>
-<button class="px-3 py-1 rounded text-xs font-medium bg-obsidian-800 text-purple-300 border border-purple-500/30 whitespace-nowrap shrink-0 flex items-center gap-1.5">
-<span class="w-1.5 h-1.5 rounded-full bg-purple-400 shrink-0"></span> In Atelier QC <span class="ml-0.5 font-mono text-[10px] text-neutral-400">1</span>
+<button class="px-3 py-1 rounded-lg text-xs font-medium bg-obsidian-850 text-purple-300 border border-purple-500/30 whitespace-nowrap shrink-0 flex items-center gap-1.5">
+<span class="w-1.5 h-1.5 rounded-full bg-[#a855f7] shrink-0"></span> In Atelier QC <span class="ml-0.5 font-mono text-[10px] text-[#8e92a8]">1</span>
 </button>
-<button class="px-3 py-1 rounded text-xs font-medium bg-obsidian-800 text-blue-300 border border-blue-500/30 whitespace-nowrap shrink-0 flex items-center gap-1.5">
-<span class="w-1.5 h-1.5 rounded-full bg-blue-400 shrink-0"></span> In Transit <span class="ml-0.5 font-mono text-[10px] text-neutral-400">1</span>
+<button class="px-3 py-1 rounded-lg text-xs font-medium bg-obsidian-850 text-blue-300 border border-blue-500/30 whitespace-nowrap shrink-0 flex items-center gap-1.5">
+<span class="w-1.5 h-1.5 rounded-full bg-[#3b82f6] shrink-0"></span> In Transit <span class="ml-0.5 font-mono text-[10px] text-[#8e92a8]">1</span>
 </button>
 </div>
 <!-- Cards List -->
 <div class="space-y-3">
 <!-- CARD 1 -->
-<div class="bg-obsidian-900 border border-obsidian-700/70 rounded-xl p-3.5 space-y-3">
+<div class="bg-obsidian-900/80 border border-white/[0.06] rounded-xl p-3.5 space-y-3 shadow-md">
 <div class="flex items-start justify-between gap-2">
 <div class="space-y-1.5 min-w-0">
 <div>
-<button class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded bg-emerald-950/60 border border-emerald-500/30 text-emerald-400 font-mono text-xs font-medium tracking-tight whitespace-nowrap shrink-0" type="button">
+<a href="/admin/orders/order/1/change/" class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-emerald-950/40 hover:bg-emerald-900/50 border border-emerald-500/25 text-emerald-400 font-mono text-xs font-bold tracking-tight whitespace-nowrap shrink-0 shadow-sm" style="text-decoration: none !important;">
 <span>#LCK-202611-304918</span>
 <svg class="w-3 h-3 text-emerald-400/80 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><rect height="13" rx="2" ry="2" width="13" x="9" y="9"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-</button>
+</a>
 </div>
-<div class="text-[11px] text-neutral-400 flex items-center gap-1.5 font-sans whitespace-nowrap">
-<svg class="w-3 h-3 text-neutral-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><rect height="18" rx="2" ry="2" width="18" x="3" y="4"></rect><line x1="16" x2="16" y1="2" y2="6"></line><line x1="8" x2="8" y1="2" y2="6"></line><line x1="3" x2="21" y1="10" y2="10"></line></svg>
+<div class="text-[11px] text-[#8e92a8] flex items-center gap-1.5 font-sans whitespace-nowrap">
+<svg class="w-3 h-3 text-[#8e92a8] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><rect height="18" rx="2" ry="2" width="18" x="3" y="4"></rect><line x1="16" x2="16" y1="2" y2="6"></line><line x1="8" x2="8" y1="2" y2="6"></line><line x1="3" x2="21" y1="10" y2="10"></line></svg>
 <span>Nov 12, 2026</span>
 <span>•</span>
 <span class="font-mono text-[10px]">16:18</span>
 </div>
 </div>
 <div class="text-right shrink-0">
-<div class="font-mono font-semibold text-neutral-100 tracking-tight whitespace-nowrap">₹3,450.00</div>
-<span class="text-[9px] uppercase tracking-wider text-neutral-400 font-medium whitespace-nowrap block">925 SILVER PIECE</span>
+<div class="font-mono font-semibold text-white tracking-tight whitespace-nowrap">₹2,86,350</div>
+<span class="text-[9px] uppercase tracking-wider text-[#8e92a8] font-medium whitespace-nowrap block">925 SILVER PIECE</span>
 </div>
 </div>
-<div class="h-px bg-obsidian-700/50"></div>
+<div class="h-px bg-white/[0.06]"></div>
 <div class="flex items-center justify-between gap-2">
 <div class="flex items-center gap-2.5 min-w-0">
-<div class="w-8 h-8 rounded-full bg-gradient-to-tr from-obsidian-850 to-amber-950/20 border border-amber-500/30 flex items-center justify-center font-mono text-xs font-semibold text-amber-300 shrink-0">
+<div class="w-8 h-8 rounded-full bg-obsidian-850 border border-obsidian-700 flex items-center justify-center font-mono text-xs font-semibold text-neutral-300 shrink-0">
 JS
 </div>
 <div class="min-w-0 overflow-hidden">
-<p class="text-xs font-medium text-neutral-100 leading-tight truncate">Julian Stewart</p>
-<p class="text-[10px] text-neutral-400 font-mono truncate">julian.stewart@icloud.com</p>
+<p class="text-xs font-bold text-white leading-tight truncate">Julian Stewart</p>
+<p class="text-[10px] text-[#8e92a8] font-sans truncate">julian.stewart@icloud.com</p>
 </div>
 </div>
-<div class="w-7 h-7 rounded border border-obsidian-700 bg-obsidian-850 flex items-center justify-center text-champagne-400 shrink-0">
+<div class="w-7 h-7 rounded-lg border border-obsidian-700 bg-obsidian-850 flex items-center justify-center text-champagne-400 shrink-0">
 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 2l2.4 7.4H22l-6 4.6 2.3 7-6.3-4.6-6.3 4.6 2.3-7-6-4.6h7.6z"></path></svg>
 </div>
 </div>
 <div class="pt-1 flex items-center justify-between flex-wrap gap-2">
 <div class="flex items-center gap-1.5 flex-wrap">
-<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-medium bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 whitespace-nowrap">
-<span class="w-1.5 h-1.5 rounded-full bg-emerald-400 shrink-0"></span> Paid
+<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-medium bg-[#0d2822] text-[#34d399] border border-[#10b981]/35 whitespace-nowrap">
+<span class="w-1.5 h-1.5 rounded-full bg-[#10b981] shrink-0"></span> Paid
 </span>
-<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-medium bg-amber-500/15 text-amber-300 border border-amber-500/30 whitespace-nowrap">
-<span class="w-1.5 h-1.5 rounded-full bg-amber-400 shrink-0"></span> Unfulfilled
+<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-medium bg-[#2d1e16] text-[#fbbf24] border border-[#d97706]/35 whitespace-nowrap">
+<span class="w-1.5 h-1.5 rounded-full bg-[#f59e0b] shrink-0"></span> Unfulfilled
 </span>
 </div>
 <div class="flex items-center gap-2 shrink-0 ml-auto">
-<button class="px-2.5 py-1 text-[11px] font-medium text-neutral-300 bg-obsidian-800 hover:bg-obsidian-700 border border-obsidian-700 rounded transition whitespace-nowrap" type="button">
-Invoice
-</button>
-<button class="px-3 py-1 text-[11px] font-semibold text-amber-300 bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 rounded transition flex items-center gap-1 whitespace-nowrap" type="button">
-Manage <span>→</span>
-</button>
+<a href="/admin/orders/order/1/change/" class="px-3 py-1 text-[11px] font-semibold text-neutral-300 hover:text-white bg-obsidian-850 hover:bg-obsidian-750 border border-obsidian-700 rounded-lg transition-all flex items-center gap-1 whitespace-nowrap shadow-sm" style="text-decoration: none !important;">
+Edit <span>→</span>
+</a>
 </div>
 </div>
 </div>
 <!-- CARD 2 -->
-<div class="bg-obsidian-900 border border-obsidian-700/70 rounded-xl p-3.5 space-y-3">
+<div class="bg-obsidian-900/80 border border-white/[0.06] rounded-xl p-3.5 space-y-3 shadow-md">
 <div class="flex items-start justify-between gap-2">
 <div class="space-y-1.5 min-w-0">
 <div>
-<button class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded bg-obsidian-800 border border-obsidian-700 text-neutral-300 font-mono text-xs font-medium tracking-tight whitespace-nowrap shrink-0" type="button">
+<a href="/admin/orders/order/2/change/" class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-obsidian-800 hover:bg-obsidian-750 border border-obsidian-700 text-neutral-300 font-mono text-xs font-bold tracking-tight whitespace-nowrap shrink-0 shadow-sm" style="text-decoration: none !important;">
 <span>#LCK-202611-194056</span>
 <svg class="w-3 h-3 text-neutral-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><rect height="13" rx="2" ry="2" width="13" x="9" y="9"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-</button>
+</a>
 </div>
-<div class="text-[11px] text-neutral-400 flex items-center gap-1.5 font-sans whitespace-nowrap">
-<svg class="w-3 h-3 text-neutral-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><rect height="18" rx="2" ry="2" width="18" x="3" y="4"></rect><line x1="16" x2="16" y1="2" y2="6"></line><line x1="8" x2="8" y1="2" y2="6"></line><line x1="3" x2="21" y1="10" y2="10"></line></svg>
+<div class="text-[11px] text-[#8e92a8] flex items-center gap-1.5 font-sans whitespace-nowrap">
+<svg class="w-3 h-3 text-[#8e92a8] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><rect height="18" rx="2" ry="2" width="18" x="3" y="4"></rect><line x1="16" x2="16" y1="2" y2="6"></line><line x1="8" x2="8" y1="2" y2="6"></line><line x1="3" x2="21" y1="10" y2="10"></line></svg>
 <span>Nov 12, 2026</span>
 <span>•</span>
 <span class="font-mono text-[10px]">13:10</span>
 </div>
 </div>
 <div class="text-right shrink-0">
-<div class="font-mono font-semibold text-neutral-100 tracking-tight whitespace-nowrap">₹1,485.00</div>
-<span class="text-[9px] uppercase tracking-wider text-neutral-400 font-medium whitespace-nowrap block">TENNIS CHAIN</span>
+<div class="font-mono font-semibold text-white tracking-tight whitespace-nowrap">₹1,23,255</div>
+<span class="text-[9px] uppercase tracking-wider text-[#8e92a8] font-medium whitespace-nowrap block">TENNIS CHAIN</span>
 </div>
 </div>
-<div class="h-px bg-obsidian-700/50"></div>
+<div class="h-px bg-white/[0.06]"></div>
 <div class="flex items-center justify-between gap-2">
 <div class="flex items-center gap-2.5 min-w-0">
-<div class="w-8 h-8 rounded-full bg-obsidian-800 border border-purple-500/30 flex items-center justify-center font-mono text-xs font-semibold text-purple-300 shrink-0">
+<div class="w-8 h-8 rounded-full bg-obsidian-850 border border-obsidian-700 flex items-center justify-center font-mono text-xs font-semibold text-neutral-300 shrink-0">
 CD
 </div>
 <div class="min-w-0 overflow-hidden">
-<p class="text-xs font-medium text-neutral-100 leading-tight truncate">Charlotte Dupré</p>
-<p class="text-[10px] text-neutral-400 font-mono truncate">charlotte.dupre@gmail.com</p>
+<p class="text-xs font-bold text-white leading-tight truncate">Charlotte Dupré</p>
+<p class="text-[10px] text-[#8e92a8] font-sans truncate">charlotte.dupre@gmail.com</p>
 </div>
 </div>
-<div class="w-7 h-7 rounded border border-obsidian-700 bg-obsidian-850 flex items-center justify-center text-purple-400 shrink-0">
+<div class="w-7 h-7 rounded-lg border border-obsidian-700 bg-obsidian-850 flex items-center justify-center text-champagne-400 shrink-0">
 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
 </div>
 </div>
 <div class="pt-1 flex items-center justify-between flex-wrap gap-2">
 <div class="flex items-center gap-1.5 flex-wrap">
-<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-medium bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 whitespace-nowrap">
-<span class="w-1.5 h-1.5 rounded-full bg-emerald-400 shrink-0"></span> Paid
+<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-medium bg-[#0d2822] text-[#34d399] border border-[#10b981]/35 whitespace-nowrap">
+<span class="w-1.5 h-1.5 rounded-full bg-[#10b981] shrink-0"></span> Paid
 </span>
-<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-medium bg-purple-500/15 text-purple-300 border border-purple-500/30 whitespace-nowrap">
-<span class="w-1.5 h-1.5 rounded-full bg-purple-400 shrink-0"></span> In Atelier QC
+<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-medium bg-[#241a38] text-[#c084fc] border border-[#a855f7]/35 whitespace-nowrap">
+<span class="w-1.5 h-1.5 rounded-full bg-[#a855f7] shrink-0"></span> In Atelier QC
 </span>
 </div>
 <div class="flex items-center gap-2 shrink-0 ml-auto">
-<button class="px-2.5 py-1 text-[11px] font-medium text-neutral-300 bg-obsidian-800 hover:bg-obsidian-700 border border-obsidian-700 rounded transition whitespace-nowrap" type="button">
-Specs
-</button>
-<button class="px-3 py-1 text-[11px] font-semibold text-champagne-300 bg-champagne-400/10 hover:bg-champagne-300/10 border border-champagne-400/30 rounded transition flex items-center gap-1 whitespace-nowrap" type="button">
-Manage <span>→</span>
-</button>
+<a href="/admin/orders/order/2/change/" class="px-3 py-1 text-[11px] font-semibold text-neutral-300 hover:text-white bg-obsidian-850 hover:bg-obsidian-750 border border-obsidian-700 rounded-lg transition-all flex items-center gap-1 whitespace-nowrap shadow-sm" style="text-decoration: none !important;">
+Edit <span>→</span>
+</a>
 </div>
 </div>
 </div>
 <!-- CARD 3 -->
-<div class="bg-obsidian-900 border border-obsidian-700/70 rounded-xl p-3.5 space-y-3">
+<div class="bg-obsidian-900/80 border border-white/[0.06] rounded-xl p-3.5 space-y-3 shadow-md">
 <div class="flex items-start justify-between gap-2">
 <div class="space-y-1.5 min-w-0">
 <div>
-<button class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded bg-obsidian-800 border border-obsidian-700 text-neutral-300 font-mono text-xs font-medium tracking-tight whitespace-nowrap shrink-0" type="button">
+<a href="/admin/orders/order/3/change/" class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-obsidian-800 hover:bg-obsidian-750 border border-obsidian-700 text-neutral-300 font-mono text-xs font-bold tracking-tight whitespace-nowrap shrink-0 shadow-sm" style="text-decoration: none !important;">
 <span>#LCK-202611-739201</span>
 <svg class="w-3 h-3 text-neutral-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><rect height="13" rx="2" ry="2" width="13" x="9" y="9"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-</button>
+</a>
 </div>
-<div class="text-[11px] text-neutral-400 flex items-center gap-1.5 font-sans whitespace-nowrap">
-<svg class="w-3 h-3 text-neutral-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><rect height="18" rx="2" ry="2" width="18" x="3" y="4"></rect><line x1="16" x2="16" y1="2" y2="6"></line><line x1="8" x2="8" y1="2" y2="6"></line><line x1="3" x2="21" y1="10" y2="10"></line></svg>
+<div class="text-[11px] text-[#8e92a8] flex items-center gap-1.5 font-sans whitespace-nowrap">
+<svg class="w-3 h-3 text-[#8e92a8] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><rect height="18" rx="2" ry="2" width="18" x="3" y="4"></rect><line x1="16" x2="16" y1="2" y2="6"></line><line x1="8" x2="8" y1="2" y2="6"></line><line x1="3" x2="21" y1="10" y2="10"></line></svg>
 <span>Nov 12, 2026</span>
 <span>•</span>
 <span class="font-mono text-[10px]">10:45</span>
 </div>
 </div>
 <div class="text-right shrink-0">
-<div class="font-mono font-semibold text-neutral-100 tracking-tight whitespace-nowrap">₹2,450.00</div>
-<span class="text-[9px] uppercase tracking-wider text-neutral-400 font-medium whitespace-nowrap block">SOLITAIRE PENDANT</span>
+<div class="font-mono font-semibold text-white tracking-tight whitespace-nowrap">₹2,03,350</div>
+<span class="text-[9px] uppercase tracking-wider text-[#8e92a8] font-medium whitespace-nowrap block">SOLITAIRE PENDANT</span>
 </div>
 </div>
-<div class="h-px bg-obsidian-700/50"></div>
+<div class="h-px bg-white/[0.06]"></div>
 <div class="flex items-center justify-between gap-2">
 <div class="flex items-center gap-2.5 min-w-0">
-<div class="w-8 h-8 rounded-full bg-obsidian-800 border border-emerald-500/30 flex items-center justify-center font-mono text-xs font-semibold text-emerald-300 shrink-0">
+<div class="w-8 h-8 rounded-full bg-obsidian-850 border border-obsidian-700 flex items-center justify-center font-mono text-xs font-semibold text-neutral-300 shrink-0">
 IV
 </div>
 <div class="min-w-0 overflow-hidden">
-<p class="text-xs font-medium text-neutral-100 leading-tight truncate">Isabella Vance</p>
-<p class="text-[10px] text-neutral-400 font-mono truncate">isabella.vance@example.com</p>
+<p class="text-xs font-bold text-white leading-tight truncate">Isabella Vance</p>
+<p class="text-[10px] text-[#8e92a8] font-sans truncate">isabella.vance@example.com</p>
 </div>
 </div>
-<div class="w-7 h-7 rounded border border-obsidian-700 bg-obsidian-850 flex items-center justify-center text-teal-400 shrink-0">
+<div class="w-7 h-7 rounded-lg border border-obsidian-700 bg-obsidian-850 flex items-center justify-center text-champagne-400 shrink-0">
 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"></path></svg>
 </div>
 </div>
 <div class="pt-1 flex items-center justify-between flex-wrap gap-2">
 <div class="flex items-center gap-1.5 flex-wrap">
-<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-medium bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 whitespace-nowrap">
-<span class="w-1.5 h-1.5 rounded-full bg-emerald-400 shrink-0"></span> Paid
+<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-medium bg-[#0d2822] text-[#34d399] border border-[#10b981]/35 whitespace-nowrap">
+<span class="w-1.5 h-1.5 rounded-full bg-[#10b981] shrink-0"></span> Paid
 </span>
-<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-medium bg-teal-500/15 text-teal-300 border border-teal-500/30 whitespace-nowrap">
-<span class="w-1.5 h-1.5 rounded-full bg-teal-400 shrink-0"></span> Delivered
+<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-medium bg-[#0e272b] text-[#2dd4bf] border border-[#14b8a6]/35 whitespace-nowrap">
+<span class="w-1.5 h-1.5 rounded-full bg-[#14b8a6] shrink-0"></span> Delivered
 </span>
 </div>
 <div class="flex items-center gap-2 shrink-0 ml-auto">
-<button class="px-2.5 py-1 text-[11px] font-medium text-neutral-300 bg-obsidian-800 hover:bg-obsidian-700 border border-obsidian-700 rounded transition whitespace-nowrap" type="button">
-Proof
-</button>
-<button class="px-3 py-1 text-[11px] font-semibold text-champagne-300 bg-champagne-400/10 hover:bg-champagne-300/10 border border-champagne-400/30 rounded transition flex items-center gap-1 whitespace-nowrap" type="button">
-Manage <span>→</span>
-</button>
+<a href="/admin/orders/order/3/change/" class="px-3 py-1 text-[11px] font-semibold text-neutral-300 hover:text-white bg-obsidian-850 hover:bg-obsidian-750 border border-obsidian-700 rounded-lg transition-all flex items-center gap-1 whitespace-nowrap shadow-sm" style="text-decoration: none !important;">
+Edit <span>→</span>
+</a>
 </div>
 </div>
 </div>
 <!-- CARD 4 -->
-<div class="bg-obsidian-900 border border-obsidian-700/70 rounded-xl p-3.5 space-y-3">
+<div class="bg-obsidian-900/80 border border-white/[0.06] rounded-xl p-3.5 space-y-3 shadow-md">
 <div class="flex items-start justify-between gap-2">
 <div class="space-y-1.5 min-w-0">
 <div>
-<button class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded bg-obsidian-800 border border-obsidian-700 text-neutral-300 font-mono text-xs font-medium tracking-tight whitespace-nowrap shrink-0" type="button">
+<a href="/admin/orders/order/4/change/" class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-obsidian-800 hover:bg-obsidian-750 border border-obsidian-700 text-neutral-300 font-mono text-xs font-bold tracking-tight whitespace-nowrap shrink-0 shadow-sm" style="text-decoration: none !important;">
 <span>#LCK-202611-884102</span>
 <svg class="w-3 h-3 text-neutral-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><rect height="13" rx="2" ry="2" width="13" x="9" y="9"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-</button>
+</a>
 </div>
-<div class="text-[11px] text-neutral-400 flex items-center gap-1.5 font-sans whitespace-nowrap">
-<svg class="w-3 h-3 text-neutral-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><rect height="18" rx="2" ry="2" width="18" x="3" y="4"></rect><line x1="16" x2="16" y1="2" y2="6"></line><line x1="8" x2="8" y1="2" y2="6"></line><line x1="3" x2="21" y1="10" y2="10"></line></svg>
+<div class="text-[11px] text-[#8e92a8] flex items-center gap-1.5 font-sans whitespace-nowrap">
+<svg class="w-3 h-3 text-[#8e92a8] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><rect height="18" rx="2" ry="2" width="18" x="3" y="4"></rect><line x1="16" x2="16" y1="2" y2="6"></line><line x1="8" x2="8" y1="2" y2="6"></line><line x1="3" x2="21" y1="10" y2="10"></line></svg>
 <span>Nov 12, 2026</span>
 <span>•</span>
 <span class="font-mono text-[10px]">09:20</span>
 </div>
 </div>
 <div class="text-right shrink-0">
-<div class="font-mono font-semibold text-neutral-100 tracking-tight whitespace-nowrap">₹3,780.00</div>
-<span class="text-[9px] uppercase tracking-wider text-neutral-400 font-medium whitespace-nowrap block">BESPOKE CUFF</span>
+<div class="font-mono font-semibold text-white tracking-tight whitespace-nowrap">₹3,13,740</div>
+<span class="text-[9px] uppercase tracking-wider text-[#8e92a8] font-medium whitespace-nowrap block">BESPOKE CUFF</span>
 </div>
 </div>
-<div class="h-px bg-obsidian-700/50"></div>
+<div class="h-px bg-white/[0.06]"></div>
 <div class="flex items-center justify-between gap-2">
 <div class="flex items-center gap-2.5 min-w-0">
-<div class="w-8 h-8 rounded-full bg-obsidian-800 border border-blue-500/30 flex items-center justify-center font-mono text-xs font-semibold text-blue-300 shrink-0">
+<div class="w-8 h-8 rounded-full bg-obsidian-850 border border-obsidian-700 flex items-center justify-center font-mono text-xs font-semibold text-neutral-300 shrink-0">
 IV
 </div>
 <div class="min-w-0 overflow-hidden">
-<p class="text-xs font-medium text-neutral-100 leading-tight truncate">Isabella Vance</p>
-<p class="text-[10px] text-neutral-400 font-mono truncate">isabella.vance@example.com</p>
+<p class="text-xs font-bold text-white leading-tight truncate">Isabella Vance</p>
+<p class="text-[10px] text-[#8e92a8] font-sans truncate">isabella.vance@example.com</p>
 </div>
 </div>
-<div class="w-7 h-7 rounded border border-obsidian-700 bg-obsidian-850 flex items-center justify-center text-blue-400 shrink-0">
-<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><rect height="13" rx="2" width="16" x="1" y="3"></rect><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon><circle cx="5.5" cy="18.5" r="2.5"></circle><circle cx="18.5" cy="18.5" r="2.5"></circle></svg>
+<div class="w-7 h-7 rounded-lg border border-obsidian-700 bg-obsidian-850 flex items-center justify-center text-champagne-400 shrink-0">
+<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><rect height="13" rx="2" width="16" x="1" y="3"></rect><polygon points="16 8 20 8 23 11 23 16 16 16 8"></polygon><circle cx="5.5" cy="18.5" r="2.5"></circle><circle cx="18.5" cy="18.5" r="2.5"></circle></svg>
 </div>
 </div>
 <div class="pt-1 flex items-center justify-between flex-wrap gap-2">
 <div class="flex items-center gap-1.5 flex-wrap">
-<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-medium bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 whitespace-nowrap">
-<span class="w-1.5 h-1.5 rounded-full bg-emerald-400 shrink-0"></span> Paid
+<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-medium bg-[#0d2822] text-[#34d399] border border-[#10b981]/35 whitespace-nowrap">
+<span class="w-1.5 h-1.5 rounded-full bg-[#10b981] shrink-0"></span> Paid
 </span>
-<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-medium bg-blue-500/15 text-blue-300 border border-blue-500/30 whitespace-nowrap">
-<span class="w-1.5 h-1.5 rounded-full bg-blue-400 shrink-0"></span> In Transit
+<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-medium bg-[#14233c] text-[#60a5fa] border border-[#3b82f6]/35 whitespace-nowrap">
+<span class="w-1.5 h-1.5 rounded-full bg-[#3b82f6] shrink-0"></span> In Transit
 </span>
 </div>
 <div class="flex items-center gap-2 shrink-0 ml-auto">
-<button class="px-2.5 py-1 text-[11px] font-medium text-neutral-300 bg-obsidian-800 hover:bg-obsidian-700 border border-obsidian-700 rounded transition whitespace-nowrap" type="button">
-Airway
-</button>
-<button class="px-3 py-1 text-[11px] font-semibold text-champagne-300 bg-champagne-400/10 hover:bg-champagne-300/10 border border-champagne-400/30 rounded transition flex items-center gap-1 whitespace-nowrap" type="button">
-Manage <span>→</span>
-</button>
+<a href="/admin/orders/order/4/change/" class="px-3 py-1 text-[11px] font-semibold text-neutral-300 hover:text-white bg-obsidian-850 hover:bg-obsidian-750 border border-obsidian-700 rounded-lg transition-all flex items-center gap-1 whitespace-nowrap shadow-sm" style="text-decoration: none !important;">
+Edit <span>→</span>
+</a>
 </div>
 </div>
 </div>
@@ -728,11 +728,11 @@ Manage <span>→</span>
 </div>
 </div>
 <!-- Table Bottom Note -->
-<div class="pt-4 border-t border-obsidian-700/50 flex flex-wrap items-center justify-between gap-2 text-[11px] text-neutral-400 font-mono mt-2">
+<div class="pt-4 border-t border-white/[0.06] flex flex-wrap items-center justify-between gap-2 text-[11px] text-neutral-400 font-mono mt-2">
 <span class="whitespace-nowrap">Showing recent 4 fine jewelry orders</span>
 <div class="flex gap-2">
-<button class="px-2.5 py-1 rounded bg-obsidian-800 border border-obsidian-700 text-neutral-300 hover:text-white disabled:opacity-50 whitespace-nowrap" disabled="">Previous</button>
-<button class="px-2.5 py-1 rounded bg-obsidian-800 border border-obsidian-700 text-neutral-300 hover:text-white whitespace-nowrap">Next</button>
+<button class="px-2.5 py-1 rounded-lg bg-obsidian-850 border border-obsidian-700 text-neutral-400 hover:text-white disabled:opacity-50 whitespace-nowrap" disabled="">Previous</button>
+<button class="px-2.5 py-1 rounded-lg bg-obsidian-850 border border-obsidian-700 text-neutral-300 hover:text-white whitespace-nowrap">Next</button>
 </div>
 </div>
 </div>
@@ -819,7 +819,7 @@ Manage <span>→</span>
 <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 mt-1.5 flex-shrink-0"></span>
 <div class="space-y-0.5 min-w-0">
 <p class="text-neutral-300 leading-snug">
-<strong class="text-white font-medium">Eleanor</strong> modified order <span class="font-mono text-emerald-400 whitespace-nowrap">LCK-202611-304918</span> for Julian Stewart (₹2,86,350)
+<strong class="text-white font-medium">Eleanor</strong> modified order <span class="font-mono text-[#60a5fa] whitespace-nowrap">LCK-202611-304918</span> for Julian Stewart (₹2,86,350)
 </p>
 <span class="text-[10px] font-mono text-neutral-400 block">2 days, 6 hours ago</span>
 </div>
