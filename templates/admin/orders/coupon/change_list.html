@@ -5,7 +5,7 @@
 <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport">
 <title>Discounts &amp; Coupons Vault | Luckjary Haute Atelier</title>
 
-<!-- Google Fonts for Ultra-Luxury Atelier Aesthetic -->
+<!-- Google Fonts: Cormorant Garamond for luxury serif accents, Plus Jakarta Sans for UI, JetBrains Mono for codes & telemetry -->
 <link href="https://fonts.googleapis.com" rel="preconnect">
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -20,31 +20,42 @@ tailwind.config = {
     extend: {
       colors: {
         obsidian: {
+          DEFAULT: '#07080a',
           950: '#07080a',
-          900: '#0d0e11',
-          850: '#121317',
+          900: '#0c0d10',
+          850: '#111317',
           800: '#171920',
-          750: '#1d1f26',
+          750: '#1c1f26',
           700: '#21242d',
           600: '#2f3440',
-        },
-        emerald: {
-          DEFAULT: '#10b981',
-          accent: '#059669',
-          light: '#34d399',
-          subtle: '#064e3b',
-          glow: 'rgba(16, 185, 129, 0.25)'
+          500: '#3c4252',
         },
         champagne: {
+          100: '#fbf7ee',
+          200: '#f4ebd4',
           300: '#ebd9b0',
           400: '#dfc287',
-          500: '#cca55a'
-        }
+          500: '#cca55a',
+        },
+        emerald: {
+          400: '#34d399',
+          500: '#10b981',
+          600: '#059669',
+          950: '#022c22',
+        },
+        "surface-dim": "#07080a",
+        "surface-card": "#171920",
+        "surface-container": "#111317",
+        "border-subtle": "rgba(255, 255, 255, 0.06)",
+        "border-strong": "#21242d",
+        "primary": "#10b981",
+        "text-platinum": "#e5e5e5",
+        "text-muted": "#9ca3af"
       },
       fontFamily: {
         serif: ['"Cormorant Garamond"', 'Georgia', 'serif'],
-        sans: ['"Plus Jakarta Sans"', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
-        mono: ['"JetBrains Mono"', 'SFMono-Regular', 'Menlo', 'monospace'],
+        sans: ['"Plus Jakarta Sans"', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'sans-serif'],
+        mono: ['"JetBrains Mono"', 'SFMono-Regular', 'Menlo', 'monospace']
       }
     }
   }
@@ -55,12 +66,13 @@ tailwind.config = {
 /* Base Resets */
 html, body {
   background-color: #07080a !important;
-  color: #f3f4f6 !important;
+  color: #e5e5e5 !important;
   font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif !important;
   margin: 0 !important;
   padding: 0 !important;
   min-height: 100vh !important;
   width: 100% !important;
+  -webkit-font-smoothing: antialiased;
 }
 
 /* Luxury Atelier Card Surface */
@@ -77,10 +89,12 @@ html, body {
   box-shadow: 0 0 20px -3px rgba(16, 185, 129, 0.35) !important;
 }
 
-/* Primary Button Rule */
+/* Primary Button Rule: Emerald 500, Pitch Black Text, Glow, Zero Underlines */
 .btn-primary-atelier {
   background-color: #10b981 !important;
   color: #07080a !important;
+  font-weight: 600 !important;
+  border: 1px solid rgba(16, 185, 129, 0.35) !important;
   text-decoration: none !important;
   box-shadow: 0 0 20px -3px rgba(16, 185, 129, 0.35) !important;
 }
@@ -90,30 +104,14 @@ html, body {
   text-decoration: none !important;
 }
 
-/* Universal Underline Killer */
-a, a *, a:hover, a:hover *, a:focus, a:active {
+/* Universal Zero-Underline Policy */
+a, a *, a:hover, a:hover *, a:focus, a:active,
+button, button *, button:hover, button:focus {
   text-decoration: none !important;
   text-decoration-line: none !important;
 }
 
-/* Desktop Sidebar Sticky and Immune to Base CSS */
-@media (min-width: 1024px) {
-  #desktop-sidebar, .atelier-desktop-sidebar {
-    display: flex !important;
-    position: sticky !important;
-    top: 0 !important;
-    height: 100vh !important;
-    width: 16rem !important;
-    flex-shrink: 0 !important;
-  }
-}
-@media (max-width: 1023px) {
-  #desktop-sidebar, .atelier-desktop-sidebar {
-    display: none !important;
-  }
-}
-
-/* Custom Scrollbar */
+/* Scrollbar */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
@@ -127,6 +125,13 @@ a, a *, a:hover, a:hover *, a:focus, a:active {
 }
 ::-webkit-scrollbar-thumb:hover {
   background: #2f3440;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
 </style>
 </head>
@@ -157,19 +162,35 @@ a, a *, a:hover, a:hover *, a:focus, a:active {
         <span class="text-white font-medium">Discounts &amp; Coupons</span>
       </nav>
 
-      <!-- Page Header: Clean Title & Add Coupon CTA -->
-      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 pb-4 border-b border-white/[0.06]">
-        <h1 class="text-2xl sm:text-3xl md:text-4xl font-serif text-white font-normal tracking-wide">
-          Discounts &amp; Coupons
-        </h1>
+      <!-- Page Header: Title, Telemetry, and Primary Action CTA -->
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-white/[0.06]">
+        <div>
+          <div class="flex items-center gap-2.5 mb-1.5 flex-wrap">
+            <span class="font-mono text-[10px] uppercase tracking-[0.2em] text-amber-400 font-bold">Privilege Management</span>
+            <span class="text-zinc-600 font-mono text-[10px]">•</span>
+            <span class="font-mono text-[10px] uppercase tracking-wider text-zinc-400">Spring 2026</span>
+            <span class="text-zinc-600 font-mono text-[10px]">•</span>
+            <span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-mono font-medium bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+              <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span> Live Database
+            </span>
+          </div>
+          <div class="flex items-baseline gap-3 flex-wrap">
+            <h1 class="text-2xl sm:text-3xl md:text-4xl font-serif text-white font-normal tracking-wide">
+              Discounts &amp; Coupons
+            </h1>
+            <span class="text-xs font-mono px-2.5 py-0.5 rounded-full bg-obsidian-800 text-amber-300 border border-amber-500/25 font-bold">
+              {{ cl.result_count }} Privileges
+            </span>
+          </div>
+        </div>
 
         <!-- Add Coupon Primary Button (Emerald 500, Pitch Black Text, Zero Underline) -->
-        <a href="{% url 'admin:orders_coupon_add' %}" class="btn-primary-atelier inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl font-sans font-bold text-xs tracking-wide transition whitespace-nowrap cursor-pointer shadow-lg shrink-0">
-          <svg class="w-4 h-4 stroke-[2.5]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 4v16m8-8H4" stroke-linecap="round" stroke-linejoin="round"></path></svg>
-          <span>Add Coupon</span>
-        </a>
-      </div>
-          <svg class="w-4 h-4 stroke-[2.5]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 4v16m8-8H4" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+        <a href="{% url 'admin:orders_coupon_add' %}" class="btn-primary-atelier inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg font-sans font-semibold text-xs tracking-wide transition whitespace-nowrap cursor-pointer shadow-lg shrink-0" style="color: #07080a !important; text-decoration: none !important;">
+          <svg class="w-4 h-4 stroke-[2.5]" fill="none" stroke="#07080a" viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="10"></circle>
+            <line x1="12" y1="8" x2="12" y2="16"></line>
+            <line x1="8" y1="12" x2="16" y2="12"></line>
+          </svg>
           <span>Add Coupon</span>
         </a>
       </div>
@@ -179,7 +200,10 @@ a, a *, a:hover, a:hover *, a:focus, a:active {
       <div class="space-y-2">
         {% for message in messages %}
         <div class="px-4 py-3 rounded-xl border border-emerald-500/30 bg-emerald-500/10 text-emerald-300 text-xs flex items-center justify-between">
-          <span>{{ message }}</span>
+          <span class="flex items-center gap-2">
+            <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+            {{ message }}
+          </span>
         </div>
         {% endfor %}
       </div>
@@ -187,16 +211,16 @@ a, a *, a:hover, a:hover *, a:focus, a:active {
 
       <!-- Filter Chips Navigation -->
       <div class="flex items-center gap-2 overflow-x-auto pb-1 no-scrollbar text-xs">
-        <a href="?" class="px-3 py-1.5 rounded-lg font-medium transition-colors {% if not request.GET.active and not request.GET.is_percent %}bg-emerald-500 text-[#07080a] font-bold{% else %}bg-obsidian-800 text-neutral-300 hover:text-white border border-obsidian-700{% endif %}">
+        <a href="?" class="px-3.5 py-1.5 rounded-lg font-medium transition-all {% if not request.GET.active__exact and not request.GET.is_percent__exact %}bg-emerald-500 text-[#07080a] font-bold glow-emerald{% else %}bg-obsidian-800 text-neutral-300 hover:text-white border border-obsidian-700{% endif %}" {% if not request.GET.active__exact and not request.GET.is_percent__exact %}style="color: #07080a !important;"{% endif %}>
           All Coupons ({{ cl.result_count }})
         </a>
-        <a href="?active__exact=1" class="px-3 py-1.5 rounded-lg font-medium transition-colors {% if request.GET.active__exact == '1' %}bg-emerald-500 text-[#07080a] font-bold{% else %}bg-obsidian-800 text-neutral-300 hover:text-white border border-obsidian-700{% endif %}">
+        <a href="?active__exact=1" class="px-3.5 py-1.5 rounded-lg font-medium transition-all {% if request.GET.active__exact == '1' %}bg-emerald-500 text-[#07080a] font-bold glow-emerald{% else %}bg-obsidian-800 text-neutral-300 hover:text-white border border-obsidian-700{% endif %}" {% if request.GET.active__exact == '1' %}style="color: #07080a !important;"{% endif %}>
           Active Only
         </a>
-        <a href="?is_percent__exact=1" class="px-3 py-1.5 rounded-lg font-medium transition-colors {% if request.GET.is_percent__exact == '1' %}bg-emerald-500 text-[#07080a] font-bold{% else %}bg-obsidian-800 text-neutral-300 hover:text-white border border-obsidian-700{% endif %}">
+        <a href="?is_percent__exact=1" class="px-3.5 py-1.5 rounded-lg font-medium transition-all {% if request.GET.is_percent__exact == '1' %}bg-emerald-500 text-[#07080a] font-bold glow-emerald{% else %}bg-obsidian-800 text-neutral-300 hover:text-white border border-obsidian-700{% endif %}" {% if request.GET.is_percent__exact == '1' %}style="color: #07080a !important;"{% endif %}>
           Percentage (%)
         </a>
-        <a href="?is_percent__exact=0" class="px-3 py-1.5 rounded-lg font-medium transition-colors {% if request.GET.is_percent__exact == '0' %}bg-emerald-500 text-[#07080a] font-bold{% else %}bg-obsidian-800 text-neutral-300 hover:text-white border border-obsidian-700{% endif %}">
+        <a href="?is_percent__exact=0" class="px-3.5 py-1.5 rounded-lg font-medium transition-all {% if request.GET.is_percent__exact == '0' %}bg-emerald-500 text-[#07080a] font-bold glow-emerald{% else %}bg-obsidian-800 text-neutral-300 hover:text-white border border-obsidian-700{% endif %}" {% if request.GET.is_percent__exact == '0' %}style="color: #07080a !important;"{% endif %}>
           Fixed Amount (₹)
         </a>
       </div>
@@ -222,6 +246,8 @@ a, a *, a:hover, a:hover *, a:focus, a:active {
                   {% endfor %}
                 {% else %}
                   <option value="">Select Batch Action</option>
+                  <option value="make_active" class="bg-[#171920] text-neutral-200">Mark selected coupons as active</option>
+                  <option value="make_inactive" class="bg-[#171920] text-neutral-200">Mark selected coupons as inactive</option>
                   <option value="delete_selected" class="bg-[#171920] text-neutral-200">Delete selected coupons</option>
                 {% endif %}
               </select>
@@ -240,7 +266,7 @@ a, a *, a:hover, a:hover *, a:focus, a:active {
             <div class="relative flex-1 md:flex-initial">
               <input id="couponFilterInput" 
                      name="q"
-                     class="w-full md:w-56 bg-[#121317] text-xs text-neutral-200 placeholder-neutral-500 rounded-lg pl-8 pr-3 py-1.5 border border-[#21242d] focus:border-emerald-500 focus:outline-none font-sans" 
+                     class="w-full md:w-60 bg-[#121317] text-xs text-neutral-200 placeholder-neutral-500 rounded-lg pl-8 pr-3 py-1.5 border border-[#21242d] focus:border-emerald-500 focus:outline-none font-sans" 
                      placeholder="Search coupon code..." 
                      type="text" 
                      value="{{ cl.query|default:'' }}">
@@ -281,34 +307,35 @@ a, a *, a:hover, a:hover *, a:focus, a:active {
                     <input class="action-select w-4 h-4 rounded border-obsidian-700 bg-obsidian-900 text-emerald-500 focus:ring-emerald-500 cursor-pointer" type="checkbox" name="_selected_action" value="{{ coupon.pk }}">
                   </td>
                   <td class="py-3.5 px-4 whitespace-nowrap">
+                    <!-- Technical Monospace Obsidian Badge (matches Order Reference IDs standard) -->
                     <button type="button" 
-                            class="copy-code-btn inline-flex items-center gap-1.5 font-mono font-bold text-xs {% if coupon.active %}text-emerald-400 bg-emerald-950/40 hover:bg-emerald-900/50 border border-emerald-500/25{% else %}text-neutral-300 bg-obsidian-800 hover:bg-obsidian-750 border border-obsidian-700{% endif %} px-3 py-1 rounded-lg transition-colors cursor-pointer shadow-sm" 
+                            class="copy-code-btn inline-flex items-center gap-1.5 font-mono font-bold text-xs text-neutral-200 bg-obsidian-800 hover:bg-obsidian-750 border border-obsidian-700 hover:border-emerald-500/40 px-3 py-1.5 rounded-lg transition-all cursor-pointer shadow-sm group-hover:border-obsidian-600" 
                             data-code="{{ coupon.code }}" 
                             title="Click to copy coupon code">
                       <span>#{{ coupon.code }}</span>
-                      <svg class="w-3 h-3 opacity-60 group-hover:opacity-100" fill="none" stroke="currentColor" viewBox="0 0 24 24"><rect height="13" rx="2" ry="2" width="13" x="9" y="9"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                      <svg class="w-3.5 h-3.5 text-neutral-400 group-hover:text-emerald-400 transition-colors shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect height="13" rx="2" ry="2" width="13" x="9" y="9"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
                     </button>
                   </td>
                   <td class="py-3.5 px-4 whitespace-nowrap">
                     {% if coupon.is_percent %}
-                    <span class="inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1 rounded-full bg-emerald-950/40 text-emerald-300 border border-emerald-500/30">
+                    <span class="inline-flex items-center gap-1.5 text-xs font-semibold font-mono px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/25">
                       <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>{{ coupon.discount_percent }}% OFF
                     </span>
                     {% else %}
-                    <span class="inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1 rounded-full bg-amber-950/40 text-amber-300 border border-amber-500/30">
+                    <span class="inline-flex items-center gap-1.5 text-xs font-semibold font-mono px-3 py-1 rounded-full bg-amber-500/10 text-amber-300 border border-amber-500/25">
                       <span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span>₹{{ coupon.discount_amount|floatformat:0 }} OFF
                     </span>
                     {% endif %}
                   </td>
                   <td class="py-3.5 px-4 whitespace-nowrap font-mono text-xs">
                     {% if coupon.is_percent %}
-                    <span class="inline-flex items-center gap-1 text-neutral-300">
-                      <svg class="w-3.5 h-3.5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 14l6-6m-5.5.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zm8 5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0z"></path></svg>
+                    <span class="inline-flex items-center gap-1.5 text-neutral-300">
+                      <span class="w-5 h-5 rounded-md bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 text-[10px] font-bold">%</span>
                       Percent Ratio
                     </span>
                     {% else %}
-                    <span class="inline-flex items-center gap-1 text-neutral-300">
-                      <svg class="w-3.5 h-3.5 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    <span class="inline-flex items-center gap-1.5 text-neutral-300">
+                      <span class="w-5 h-5 rounded-md bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-300 text-[10px] font-bold">₹</span>
                       Fixed Rupee
                     </span>
                     {% endif %}
@@ -351,55 +378,69 @@ a, a *, a:hover, a:hover *, a:focus, a:active {
 
         <!-- ==============================================
              2. MOBILE COUPONS LIST (< md)
-             Responsive luxury cards
+             Responsive luxury cards matching Luckjary system
              ============================================== -->
         <div class="block md:hidden space-y-3.5">
           {% for coupon in cl.result_list %}
-          <article class="card-surface rounded-2xl p-4 sm:p-5 transition-all hover:border-emerald-500/30 shadow-md space-y-3">
+          <article class="card-surface rounded-2xl p-4 sm:p-5 transition-all hover:border-emerald-500/30 shadow-xl border border-white/[0.08] space-y-3.5 coupon-row" data-code="{{ coupon.code|lower }}">
             <!-- Header: Checkbox + Code Badge + Status -->
-            <div class="flex items-center justify-between pb-2.5 border-b border-white/[0.06]">
-              <div class="flex items-center gap-2">
-                <input class="action-select w-4 h-4 rounded border-obsidian-700 bg-obsidian-900 text-emerald-500 focus:ring-emerald-500 cursor-pointer" type="checkbox" name="_selected_action" value="{{ coupon.pk }}">
-                <span class="font-mono font-bold text-xs {% if coupon.active %}text-emerald-400 bg-emerald-950/40 border border-emerald-500/25{% else %}text-neutral-300 bg-obsidian-800 border border-obsidian-700{% endif %} px-2.5 py-1 rounded-lg">
-                  #{{ coupon.code }}
-                </span>
+            <div class="flex items-center justify-between pb-3 border-b border-white/[0.06] gap-2">
+              <div class="flex items-center gap-2 min-w-0">
+                <input class="action-select w-4 h-4 rounded border-obsidian-700 bg-obsidian-900 text-emerald-500 focus:ring-emerald-500 cursor-pointer shrink-0" type="checkbox" name="_selected_action" value="{{ coupon.pk }}">
+                <button type="button" 
+                        class="copy-code-btn inline-flex items-center gap-1.5 font-mono font-bold text-xs text-neutral-200 bg-obsidian-800 hover:bg-obsidian-750 border border-obsidian-700 px-2.5 py-1 rounded-lg transition-colors cursor-pointer shadow-sm truncate" 
+                        data-code="{{ coupon.code }}" 
+                        title="Click to copy coupon code">
+                  <span>#{{ coupon.code }}</span>
+                  <svg class="w-3 h-3 text-neutral-400 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect height="13" rx="2" ry="2" width="13" x="9" y="9"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                </button>
               </div>
-              <div>
+              <div class="shrink-0">
                 {% if coupon.active %}
-                <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-medium bg-[#0d2822] text-[#34d399] border border-[#10b981]/35">
+                <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-medium bg-[#0d2822] text-[#34d399] border border-[#10b981]/35">
                   <span class="w-1.5 h-1.5 rounded-full bg-[#10b981]"></span> Active
                 </span>
                 {% else %}
-                <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-medium bg-obsidian-850 text-neutral-400 border border-obsidian-700">
+                <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-medium bg-obsidian-850 text-neutral-400 border border-obsidian-700">
                   <span class="w-1.5 h-1.5 rounded-full bg-neutral-500"></span> Inactive
                 </span>
                 {% endif %}
               </div>
             </div>
 
-            <!-- Discount Value & Type -->
-            <div class="flex items-center justify-between">
+            <!-- Discount Box: Elevated Container -->
+            <div class="bg-obsidian-900/60 rounded-xl p-3 border border-white/[0.05] flex items-center justify-between gap-3">
               <div>
-                <span class="text-[10px] font-mono text-neutral-400 uppercase tracking-wider block">DISCOUNT VALUE</span>
+                <span class="text-[9px] font-mono text-neutral-400 uppercase tracking-wider block font-bold mb-0.5">DISCOUNT BENEFIT</span>
                 {% if coupon.is_percent %}
-                <span class="text-lg font-bold text-emerald-400 font-sans">{{ coupon.discount_percent }}% OFF</span>
+                <div class="flex items-center gap-1.5">
+                  <span class="text-xl font-bold text-emerald-400 font-mono tracking-tight">{{ coupon.discount_percent }}% OFF</span>
+                  <span class="text-[10px] text-emerald-400/80 font-mono">Ratio</span>
+                </div>
                 {% else %}
-                <span class="text-lg font-bold text-amber-300 font-sans">₹{{ coupon.discount_amount|floatformat:0 }} OFF</span>
+                <div class="flex items-center gap-1.5">
+                  <span class="text-xl font-bold text-amber-300 font-mono tracking-tight">₹{{ coupon.discount_amount|floatformat:0 }} OFF</span>
+                  <span class="text-[10px] text-amber-400/80 font-mono">Rupee</span>
+                </div>
+                {% endif %}
+                {% if coupon.description %}
+                <p class="text-[11px] text-zinc-400 font-sans mt-0.5 truncate">{{ coupon.description }}</p>
                 {% endif %}
               </div>
-              <div class="text-right">
-                <span class="text-[10px] font-mono text-neutral-400 uppercase tracking-wider block">MIN SPEND</span>
-                <span class="font-mono text-sm font-semibold text-white">
-                  {% if coupon.min_spend > 0 %}₹{{ coupon.min_spend|floatformat:0 }}{% else %}None{% endif %}
+              <div class="text-right shrink-0">
+                <span class="text-[9px] font-mono text-neutral-400 uppercase tracking-wider block font-bold mb-0.5">MIN SPEND</span>
+                <span class="font-mono text-sm font-bold text-white block">
+                  {% if coupon.min_spend > 0 %}₹{{ coupon.min_spend|floatformat:0 }}{% else %}No Min{% endif %}
                 </span>
               </div>
             </div>
 
-            <!-- Footer: Actions -->
-            <div class="pt-2.5 border-t border-white/[0.06] flex items-center justify-between">
+            <!-- Footer: Creation Timestamp & Edit CTA -->
+            <div class="pt-3 border-t border-white/[0.06] flex items-center justify-between gap-3">
               <span class="text-[10px] font-mono text-neutral-500">Created {{ coupon.created_at|date:"M d, Y" }}</span>
-              <a href="{% url 'admin:orders_coupon_change' coupon.pk %}" class="px-3.5 py-1.5 rounded-lg bg-[#171920] hover:bg-[#21242d] border border-[#21242d] text-xs font-semibold text-[#e5e5e5] hover:text-white transition-all shadow-sm" style="text-decoration: none !important;">
-                Edit Details →
+              <a href="{% url 'admin:orders_coupon_change' coupon.pk %}" class="inline-flex items-center justify-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-[#171920] hover:bg-[#21242d] border border-[#21242d] text-xs font-semibold text-[#e5e5e5] hover:text-white transition-all shadow-sm" style="text-decoration: none !important;">
+                <span>Edit Voucher</span>
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"></path></svg>
               </a>
             </div>
           </article>
@@ -411,9 +452,9 @@ a, a *, a:hover, a:hover *, a:focus, a:active {
         </div>
 
         <!-- Result Count Footer -->
-        <div class="pt-3 text-xs text-neutral-400 font-mono flex items-center justify-between">
+        <div class="pt-3 text-xs text-neutral-400 font-mono flex flex-col sm:flex-row items-center justify-between gap-2">
           <span>Showing {{ cl.result_count }} of {{ cl.result_count }} coupons</span>
-          <span class="text-[11px] text-neutral-500">Luckjary Haute Atelier Telemetry</span>
+          <span class="text-[11px] text-neutral-500">Luckjary Haute Atelier • Privilege Telemetry</span>
         </div>
       </form>
 
@@ -421,7 +462,7 @@ a, a *, a:hover, a:hover *, a:focus, a:active {
   </div>
 </div>
 
-<!-- Copy to Clipboard and Selection Scripts -->
+<!-- Copy to Clipboard, Live Search and Selection Scripts -->
 <script>
 document.addEventListener('DOMContentLoaded', function() {
   // Select All Checkbox
@@ -447,7 +488,25 @@ document.addEventListener('DOMContentLoaded', function() {
     cb.addEventListener('change', updateCounter);
   });
 
-  // Copy Code to Clipboard with Tooltip Feedback
+  // Client-Side Instant Live Search Filter
+  const searchInput = document.getElementById('couponFilterInput');
+  if (searchInput) {
+    searchInput.addEventListener('input', function() {
+      const q = this.value.trim().toLowerCase();
+      const rows = document.querySelectorAll('.coupon-row');
+      rows.forEach(row => {
+        const code = row.getAttribute('data-code') || '';
+        const text = row.innerText.toLowerCase();
+        if (!q || code.includes(q) || text.includes(q)) {
+          row.style.display = '';
+        } else {
+          row.style.display = 'none';
+        }
+      });
+    });
+  }
+
+  // Copy Code to Clipboard with Inline Feedback
   const copyButtons = document.querySelectorAll('.copy-code-btn');
   copyButtons.forEach(btn => {
     btn.addEventListener('click', function(e) {
@@ -455,10 +514,13 @@ document.addEventListener('DOMContentLoaded', function() {
       const code = this.getAttribute('data-code');
       if (code && navigator.clipboard) {
         navigator.clipboard.writeText(code).then(() => {
-          const originalText = this.querySelector('span').textContent;
-          this.querySelector('span').textContent = 'Copied!';
+          const span = this.querySelector('span');
+          const originalText = span.textContent;
+          span.textContent = 'Copied!';
+          span.classList.add('text-emerald-400');
           setTimeout(() => {
-            this.querySelector('span').textContent = originalText;
+            span.textContent = originalText;
+            span.classList.remove('text-emerald-400');
           }, 1500);
         });
       }
