@@ -162,27 +162,11 @@ button, button *, button:hover, button:focus {
         <span class="text-white font-medium">Discounts &amp; Coupons</span>
       </nav>
 
-      <!-- Page Header: Title, Telemetry, and Primary Action CTA -->
-      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-white/[0.06]">
-        <div>
-          <div class="flex items-center gap-2.5 mb-1.5 flex-wrap">
-            <span class="font-mono text-[10px] uppercase tracking-[0.2em] text-amber-400 font-bold">Privilege Management</span>
-            <span class="text-zinc-600 font-mono text-[10px]">•</span>
-            <span class="font-mono text-[10px] uppercase tracking-wider text-zinc-400">Spring 2026</span>
-            <span class="text-zinc-600 font-mono text-[10px]">•</span>
-            <span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-mono font-medium bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
-              <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span> Live Database
-            </span>
-          </div>
-          <div class="flex items-baseline gap-3 flex-wrap">
-            <h1 class="text-2xl sm:text-3xl md:text-4xl font-serif text-white font-normal tracking-wide">
-              Discounts &amp; Coupons
-            </h1>
-            <span class="text-xs font-mono px-2.5 py-0.5 rounded-full bg-obsidian-800 text-amber-300 border border-amber-500/25 font-bold">
-              {{ cl.result_count }} Privileges
-            </span>
-          </div>
-        </div>
+      <!-- Page Header: Clean Title & Add Coupon CTA -->
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 pb-4 border-b border-white/[0.06]">
+        <h1 class="text-2xl sm:text-3xl md:text-4xl font-serif text-white font-normal tracking-wide">
+          Discounts &amp; Coupons
+        </h1>
 
         <!-- Add Coupon Primary Button (Emerald 500, Pitch Black Text, Zero Underline) -->
         <a href="{% url 'admin:orders_coupon_add' %}" class="btn-primary-atelier inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg font-sans font-semibold text-xs tracking-wide transition whitespace-nowrap cursor-pointer shadow-lg shrink-0" style="color: #07080a !important; text-decoration: none !important;">
@@ -208,24 +192,7 @@ button, button *, button:hover, button:focus {
         {% endfor %}
       </div>
       {% endif %}
-
-      <!-- Filter Chips Navigation -->
-      <div class="flex items-center gap-2 overflow-x-auto pb-1 no-scrollbar text-xs">
-        <a href="?" class="px-3.5 py-1.5 rounded-lg font-medium transition-all {% if not request.GET.active__exact and not request.GET.is_percent__exact %}bg-emerald-500 text-[#07080a] font-bold glow-emerald{% else %}bg-obsidian-800 text-neutral-300 hover:text-white border border-obsidian-700{% endif %}" {% if not request.GET.active__exact and not request.GET.is_percent__exact %}style="color: #07080a !important;"{% endif %}>
-          All Coupons ({{ cl.result_count }})
-        </a>
-        <a href="?active__exact=1" class="px-3.5 py-1.5 rounded-lg font-medium transition-all {% if request.GET.active__exact == '1' %}bg-emerald-500 text-[#07080a] font-bold glow-emerald{% else %}bg-obsidian-800 text-neutral-300 hover:text-white border border-obsidian-700{% endif %}" {% if request.GET.active__exact == '1' %}style="color: #07080a !important;"{% endif %}>
-          Active Only
-        </a>
-        <a href="?is_percent__exact=1" class="px-3.5 py-1.5 rounded-lg font-medium transition-all {% if request.GET.is_percent__exact == '1' %}bg-emerald-500 text-[#07080a] font-bold glow-emerald{% else %}bg-obsidian-800 text-neutral-300 hover:text-white border border-obsidian-700{% endif %}" {% if request.GET.is_percent__exact == '1' %}style="color: #07080a !important;"{% endif %}>
-          Percentage (%)
-        </a>
-        <a href="?is_percent__exact=0" class="px-3.5 py-1.5 rounded-lg font-medium transition-all {% if request.GET.is_percent__exact == '0' %}bg-emerald-500 text-[#07080a] font-bold glow-emerald{% else %}bg-obsidian-800 text-neutral-300 hover:text-white border border-obsidian-700{% endif %}" {% if request.GET.is_percent__exact == '0' %}style="color: #07080a !important;"{% endif %}>
-          Fixed Amount (₹)
-        </a>
-      </div>
-
-      <!-- Main Form with Django Admin Action & Filter Support -->
+<!-- Main Form with Django Admin Action & Filter Support -->
       <form id="changelist-form" method="post" action="" novalidate class="space-y-4">
         {% csrf_token %}
         {% if cl.formset %}
