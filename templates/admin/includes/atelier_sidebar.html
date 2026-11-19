@@ -1,6 +1,18 @@
 {% with p=request.path nav=active_nav|default:'' %}
+<style>
+@media (max-width: 1023px) {
+  #desktop-sidebar, .atelier-desktop-sidebar {
+    display: none !important;
+  }
+}
+@media (min-width: 1024px) {
+  #desktop-sidebar, .atelier-desktop-sidebar {
+    display: flex !important;
+  }
+}
+</style>
 <!-- BEGIN: Sidebar Navigation -->
-<aside class="hidden lg:flex w-64 flex-shrink-0 bg-[#0c0d10] border-r border-[#21242d] min-h-screen flex-col justify-between select-none sticky top-0 h-screen overflow-y-auto" data-purpose="primary-sidebar" id="desktop-sidebar" style="background-color: #0c0d10 !important; border-right: 1px solid rgba(255, 255, 255, 0.08) !important;">
+<aside class="atelier-desktop-sidebar hidden lg:flex w-64 flex-shrink-0 bg-[#0c0d10] border-r border-[#21242d] min-h-screen flex-col justify-between select-none sticky top-0 h-screen overflow-y-auto" data-purpose="primary-sidebar" id="desktop-sidebar" style="background-color: #0c0d10 !important; border-right: 1px solid rgba(255, 255, 255, 0.08) !important;">
 <div class="flex flex-col flex-1">
   <!-- Sidebar Brand Header -->
   <div class="px-5 pt-6 pb-5">

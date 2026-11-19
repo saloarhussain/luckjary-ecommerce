@@ -52,15 +52,25 @@ class OrderStatusUpdateInline(admin.TabularInline):
 
 @admin.register(Coupon)
 class CouponAdmin(admin.ModelAdmin):
+    change_list_template = 'admin/orders/coupon/change_list.html'
     list_display = ('code', 'discount_display', 'is_percent', 'active', 'min_spend')
     list_filter = ('active', 'is_percent')
-    search_fields = ('code',)
+    search_fields = ('code', 'description')
+    actions = ['make_active', 'make_inactive']
 
     @admin.display(description='Discount Value')
     def discount_display(self, obj):
         if obj.is_percent:
             return format_html('<span class="badge-luxury badge-delivered">{}% OFF</span>', obj.discount_percent)
         return format_html('<span class="badge-luxury badge-delivered">${} OFF</span>', obj.discount_amount)
+
+    @admin.action(description="Mark selected coupons as active")
+    def make_active(self, request, queryset):
+        queryset.update(active=True)
+
+    @admin.action(description="Mark selected coupons as inactive")
+    def make_inactive(self, request, queryset):
+        queryset.update(active=False)
 
 
 @admin.register(Order)
