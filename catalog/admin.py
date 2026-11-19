@@ -637,12 +637,40 @@ class ProductAdmin(admin.ModelAdmin):
 
 @admin.register(ProductReview)
 class ProductReviewAdmin(admin.ModelAdmin):
+    change_list_template = 'admin/catalog/productreview/change_list.html'
     list_display = ('product', 'author_name', 'rating_stars', 'is_verified_buyer', 'is_approved', 'created_at')
     list_filter = ('rating', 'is_verified_buyer', 'is_approved')
     search_fields = ('author_name', 'title', 'comment', 'product__title')
     list_editable = ('is_approved',)
+    actions = ['approve_reviews', 'unapprove_reviews']
 
     @admin.display(description='Customer Rating', ordering='rating')
     def rating_stars(self, obj):
         stars = '★' * obj.rating + '☆' * (5 - obj.rating)
         return format_html('<span style="color:#DFBE76; font-size:0.9rem;">{}</span>', stars)
+
+    @admin.action(description="Approve selected reviews")
+    def approve_reviews(self, request, queryset):
+        queryset.update(is_approved=True)
+
+    @admin.action(description="Unapprove / Hold selected reviews")
+    def unapprove_reviews(self, request, queryset):
+        queryset.update(is_approved=False)
+
+    def changelist_view(self, request, extra_context=None):
+        extra_context = extra_context or {}
+        from django.db.models import Avg
+        qs = ProductReview.objects.all()
+        total_count = qs.count()
+        avg_rating = qs.aggregate(Avg('rating'))['rating__avg'] or 5.0
+        verified_count = qs.filter(is_verified_buyer=True).count()
+        approved_count = qs.filter(is_approved=True).count()
+        pending_count = qs.filter(is_approved=False).count()
+        extra_context.update({
+            'total_reviews_count': total_count,
+            'avg_rating_display': f"{avg_rating:.1f}",
+            'verified_patrons_count': verified_count,
+            'approved_count': approved_count,
+            'pending_count': pending_count,
+        })
+        return super().changelist_view(request, extra_context=extra_context)
