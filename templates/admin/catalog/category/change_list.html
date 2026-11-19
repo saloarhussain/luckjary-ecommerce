@@ -1,0 +1,576 @@
+{% load i18n admin_urls static tz %}<!DOCTYPE html>
+<html class="dark h-full bg-[#07080a]" lang="en">
+<head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport">
+<title>Atelier Categories | LUCKJARY HAUTE ATELIER</title>
+
+<!-- Google Fonts: Cormorant Garamond for luxury serif accents, Plus Jakarta Sans for UI, JetBrains Mono for codes & telemetry -->
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
+
+<!-- Tailwind CSS v3 with Plugins -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Custom Configuration adhering strictly to Haute Atelier Design System -->
+<script id="tailwind-config">
+tailwind.config = {
+  darkMode: 'class',
+  theme: {
+    extend: {
+      colors: {
+        obsidian: {
+          950: '#07080a',
+          900: '#0c0d10',
+          850: '#111317',
+          800: '#171920',
+          750: '#1c1f28',
+          700: '#21242d',
+          600: '#2f3440',
+        },
+        champagne: {
+          100: '#fbf7ee',
+          200: '#f4ebd4',
+          300: '#ebd9b0',
+          400: '#dfc287',
+          500: '#cca55a',
+        },
+        emerald: {
+          400: '#34d399',
+          500: '#10b981',
+          600: '#059669',
+          950: '#022c22',
+        },
+        "surface-dim": "#07080a",
+        "surface-card": "#171920",
+        "surface-container": "#111317",
+        "surface-card-elevated": "#1c1f28",
+        "border-subtle": "rgba(255, 255, 255, 0.06)",
+        "border-strong": "#21242d",
+        "primary": "#10b981",
+        "on-primary": "#07080a",
+        "text-platinum": "#e5e5e5",
+        "text-muted": "#9ca3af",
+        "secondary": "#dfc287",
+        "tertiary": "#cca55a"
+      },
+      fontFamily: {
+        serif: ['"Cormorant Garamond"', 'Georgia', 'serif'],
+        sans: ['"Plus Jakarta Sans"', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'sans-serif'],
+        mono: ['"JetBrains Mono"', 'SFMono-Regular', 'Menlo', 'monospace'],
+        "label-md": ['"Plus Jakarta Sans"', 'sans-serif'],
+        "label-sm": ['"Plus Jakarta Sans"', 'sans-serif'],
+        "mono-luxury": ['"JetBrains Mono"', 'monospace']
+      }
+    }
+  }
+};
+</script>
+
+<style data-purpose="atelier-design-system">
+/* Base Resets */
+html, body {
+  background-color: #07080a !important;
+  color: #e5e5e5 !important;
+  font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  min-height: 100vh !important;
+  width: 100% !important;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Card Surface & Glow Tokens from Design System */
+.card-surface {
+  background: linear-gradient(145deg, rgba(23, 25, 32, 0.7) 0%, rgba(17, 19, 23, 0.95) 100%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.06) !important;
+  backdrop-filter: blur(12px) !important;
+}
+.card-surface:hover {
+  border-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+.glow-emerald {
+  box-shadow: 0 0 20px -3px rgba(16, 185, 129, 0.25) !important;
+}
+
+/* Primary Button Rule */
+.btn-primary-atelier {
+  background-color: #10b981 !important;
+  color: #07080a !important;
+  font-weight: 600 !important;
+  text-decoration: none !important;
+  box-shadow: 0 0 20px -3px rgba(16, 185, 129, 0.25) !important;
+}
+.btn-primary-atelier:hover {
+  background-color: #34d399 !important;
+  color: #07080a !important;
+  text-decoration: none !important;
+}
+
+/* Universal Underline Killer */
+a, a *, a:hover, a:hover *, a:focus, a:active,
+button, button *, button:hover, button:focus {
+  text-decoration: none !important;
+  text-decoration-line: none !important;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #07080a;
+}
+::-webkit-scrollbar-thumb {
+  background: #21242d;
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #2f3440;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+</style>
+</head>
+
+<body class="h-full bg-[#07080a] text-zinc-200 font-sans antialiased flex flex-col min-h-screen selection:bg-emerald-500/20 selection:text-emerald-300">
+
+<!-- App Container: Left Side Panel + Right Workspace Area -->
+<div class="flex flex-1 w-full min-h-screen">
+
+  <!-- Left Side Panel (Mobile Drawer & Desktop Docked Sidebar) -->
+  {% include "admin/includes/atelier_sidebar.html" with active_nav="categories" %}
+
+  <!-- Main Content Shell -->
+  <div class="flex-1 min-w-0 flex flex-col min-h-screen overflow-x-hidden bg-[#07080a]">
+    
+    <!-- Top Universal Header Bar -->
+    {% include "admin/includes/atelier_header.html" %}
+
+    <!-- Main Workspace -->
+    <main class="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 space-y-6 max-w-7xl mx-auto w-full">
+
+      <!-- Breadcrumbs -->
+      <nav aria-label="Breadcrumb" class="flex items-center gap-2 text-xs font-mono text-neutral-400 tracking-wide">
+        <a href="{% url 'admin:index' %}" class="text-neutral-400 hover:text-emerald-400 transition-colors">Home</a>
+        <span class="text-neutral-600">›</span>
+        <span class="text-neutral-400">Products &amp; Catalog</span>
+        <span class="text-neutral-600">›</span>
+        <span class="text-white font-medium">Categories</span>
+      </nav>
+
+      <!-- Page Header: Title, Telemetry & + Add Category CTA -->
+      <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 pb-5 border-b border-white/[0.06]">
+        <div class="space-y-1.5">
+          <div class="flex flex-wrap items-center gap-2.5">
+            <span class="text-[11px] font-bold text-champagne-400 font-sans tracking-wider uppercase">Catalog Taxonomy</span>
+            <span class="w-1.5 h-1.5 rounded-full bg-champagne-400/40"></span>
+            <span class="font-mono text-[11px] text-neutral-400 font-medium uppercase tracking-wider">Spring 2026</span>
+            <span class="inline-flex items-center gap-1.5 text-[10px] font-mono font-medium tracking-wider px-2.5 py-0.5 rounded-full bg-emerald-950/70 text-emerald-400 border border-emerald-500/30">
+              <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>LIVE DATABASE
+            </span>
+          </div>
+          <div class="flex items-center gap-3 pt-1">
+            <h1 class="text-2xl sm:text-3xl md:text-4xl font-serif text-white font-normal tracking-wide">
+              Atelier Categories
+            </h1>
+            <span class="px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold bg-[#171920] text-amber-300 border border-[#21242d] uppercase tracking-wider">
+              {{ cl.result_count }} DEPARTMENTS
+            </span>
+          </div>
+          <p class="text-xs text-neutral-400 font-sans pt-0.5 max-w-2xl">
+            Structural taxonomy for 925 solid sterling silver creations, precious vermeil lines, and showroom navigation categories.
+          </p>
+        </div>
+
+        <!-- Add Category Primary CTA (Emerald 500, Pitch Black Text, Zero Underline) -->
+        <a href="{% url 'admin:catalog_category_add' %}" class="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-obsidian-950 font-semibold text-xs tracking-wide transition whitespace-nowrap cursor-pointer shadow-lg glow-emerald shrink-0" style="color: #07080a !important; text-decoration: none !important;">
+          <svg class="w-4 h-4 text-[#07080a]" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="10"></circle>
+            <line x1="12" y1="8" x2="12" y2="16"></line>
+            <line x1="8" y1="12" x2="16" y2="12"></line>
+          </svg>
+          <span>+ Add Category</span>
+        </a>
+      </div>
+
+      <!-- Messages Alert Bar -->
+      {% if messages %}
+      <div class="space-y-2">
+        {% for message in messages %}
+        <div class="px-4 py-3 rounded-xl border border-emerald-500/30 bg-emerald-500/10 text-emerald-300 text-xs flex items-center justify-between">
+          <span class="flex items-center gap-2">
+            <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+            {{ message }}
+          </span>
+        </div>
+        {% endfor %}
+      </div>
+      {% endif %}
+
+      <!-- Filter Chips Navigation -->
+      <div class="flex items-center gap-2 overflow-x-auto pb-1 no-scrollbar text-xs">
+        <a href="?" class="px-3 py-1.5 rounded-lg font-medium transition-colors {% if not request.GET.is_featured__exact %}bg-emerald-500 text-[#07080a] font-bold glow-emerald{% else %}bg-obsidian-800 text-neutral-300 hover:text-white border border-obsidian-700{% endif %}" {% if not request.GET.is_featured__exact %}style="color: #07080a !important;"{% endif %}>
+          All Categories ({{ cl.result_count }})
+        </a>
+        <a href="?is_featured__exact=1" class="px-3 py-1.5 rounded-lg font-medium transition-colors {% if request.GET.is_featured__exact == '1' %}bg-emerald-500 text-[#07080a] font-bold glow-emerald{% else %}bg-obsidian-800 text-neutral-300 hover:text-white border border-obsidian-700{% endif %}" {% if request.GET.is_featured__exact == '1' %}style="color: #07080a !important;"{% endif %}>
+          Featured Only ({{ featured_categories_count|default:cl.result_count }})
+        </a>
+      </div>
+
+      <!-- Main Form with Django Admin Action & List Editable Support -->
+      <form id="changelist-form" method="post" action="" novalidate class="space-y-4">
+        {% csrf_token %}
+        {% if cl.formset %}
+          {{ cl.formset.management_form }}
+        {% endif %}
+
+        <!-- Toolbar: Search & Batch Action Bar -->
+        <section class="card-surface rounded-xl p-3 sm:p-3.5 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-3 sm:gap-4" data-purpose="actions-toolbar">
+          
+          <!-- Batch Action Controls -->
+          <div class="flex flex-wrap items-center gap-2 sm:gap-3">
+            <div class="flex items-center gap-1.5 bg-[#121317] border border-[#21242d] rounded-lg p-1">
+              <label class="text-[11px] font-mono text-neutral-400 pl-2 uppercase tracking-wider hidden sm:inline" for="action-select">Action:</label>
+              <select id="action-select" name="action" class="bg-transparent text-xs text-neutral-200 border-0 focus:ring-0 py-1 pl-2 pr-8 cursor-pointer font-sans focus:outline-none">
+                {% if action_form %}
+                  {% for choice in action_form.fields.action.choices %}
+                    <option value="{{ choice.0 }}" class="bg-[#171920] text-neutral-200">{% if not choice.0 %}Select Batch Action{% else %}{{ choice.1 }}{% endif %}</option>
+                  {% endfor %}
+                {% else %}
+                  <option value="">Select Batch Action</option>
+                  <option value="make_featured" class="bg-[#171920] text-neutral-200">Feature on showroom</option>
+                  <option value="remove_featured" class="bg-[#171920] text-neutral-200">Remove from feature</option>
+                  <option value="delete_selected" class="bg-[#171920] text-neutral-200">Delete selected categories</option>
+                {% endif %}
+              </select>
+              <button class="px-3 py-1 bg-[#171920] hover:bg-[#21242d] text-neutral-200 hover:text-white rounded text-xs font-mono font-medium transition-colors border border-[#21242d] cursor-pointer" type="submit" name="index" value="0">
+                Run
+              </button>
+            </div>
+            <span class="text-[11px] font-mono text-neutral-400 hidden sm:inline-flex items-center px-2.5 py-1 rounded bg-[#121317] border border-[#21242d]" id="selectionCounter">
+              0 of {{ cl.result_count }} selected
+            </span>
+            <input type="hidden" name="select_across" value="0" class="select-across">
+          </div>
+
+          <!-- Quick Search Bar -->
+          <div class="flex items-center gap-2 w-full md:w-auto justify-end">
+            <div class="relative flex-1 md:flex-initial">
+              <input id="categorySearchInput" 
+                     name="q"
+                     class="w-full md:w-56 bg-[#121317] text-xs text-neutral-200 placeholder-neutral-500 rounded-lg pl-8 pr-3 py-1.5 border border-[#21242d] focus:border-emerald-500 focus:outline-none font-sans" 
+                     placeholder="Search categories..." 
+                     type="text" 
+                     value="{{ cl.query|default:'' }}">
+              <svg class="w-3.5 h-3.5 text-neutral-500 absolute left-2.5 top-1/2 -translate-y-1/2" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+            </div>
+            {% if cl.query %}
+            <a href="?" class="p-1.5 text-neutral-400 hover:text-white bg-[#121317] rounded-lg border border-[#21242d] flex-shrink-0" title="Reset Search">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 18L18 6M6 6l12 12" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+            </a>
+            {% endif %}
+          </div>
+        </section>
+
+        <!-- ==============================================
+             1. DESKTOP CATEGORIES TABLE (>= md)
+             Obsidian Card Surface, JetBrains Mono Telemetry
+             ============================================== -->
+        <div class="hidden md:block card-surface rounded-2xl shadow-xl overflow-hidden mb-6">
+          <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse font-sans text-xs" id="categoriesTable">
+              <thead>
+                <tr class="border-b border-white/[0.06] bg-obsidian-850/80 text-[11px] font-bold tracking-[0.08em] text-neutral-400 uppercase font-mono">
+                  <th class="py-3.5 px-4 w-12 text-center">
+                    <input id="action-toggle" class="w-4 h-4 rounded border-obsidian-700 bg-obsidian-900 text-emerald-500 focus:ring-emerald-500 cursor-pointer" type="checkbox" title="Select All">
+                  </th>
+                  <th class="py-3.5 px-4 font-semibold">NAME</th>
+                  <th class="py-3.5 px-4 font-semibold">SLUG</th>
+                  <th class="py-3.5 px-4 font-semibold text-center">SHOWROOM FEATURED</th>
+                  <th class="py-3.5 px-4 font-semibold text-center w-28">ORDER</th>
+                  <th class="py-3.5 px-4 font-semibold text-right">PIECES VAULTED</th>
+                  <th class="py-3.5 px-4 font-semibold text-center w-28">ACTION</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-white/[0.04] text-zinc-200">
+                {% if cl.formset %}
+                  {% for form in cl.formset.forms %}
+                  {% with form.instance as category %}
+                  <tr class="hover:bg-white/[0.025] transition-colors group category-row" data-name="{{ category.name|lower }}">
+                    <td class="py-3.5 px-4 text-center">
+                      <input class="action-select w-4 h-4 rounded border-obsidian-700 bg-obsidian-900 text-emerald-500 focus:ring-emerald-500 cursor-pointer" type="checkbox" name="_selected_action" value="{{ category.pk }}">
+                      {{ form.id }}
+                    </td>
+                    <td class="py-3.5 px-4 whitespace-nowrap">
+                      <div class="flex items-center gap-3">
+                        <div class="w-8 h-8 rounded-lg bg-obsidian-800 border border-obsidian-700 flex items-center justify-center text-champagne-400 shrink-0">
+                          <span class="material-symbols-outlined text-[17px]">
+                            {% if 'ring' in category.name|lower %}diamond
+                            {% elif 'necklace' in category.name|lower %}auto_awesome
+                            {% elif 'earring' in category.name|lower %}adjust
+                            {% elif 'bracelet' in category.name|lower %}radio_button_checked
+                            {% else %}category{% endif %}
+                          </span>
+                        </div>
+                        <div>
+                          <a href="{% url 'admin:catalog_category_change' category.pk %}" class="font-bold text-white text-xs sm:text-sm hover:text-emerald-400 transition-colors inline-block" style="text-decoration: none !important;">
+                            {{ category.name }}
+                          </a>
+                          <span class="block text-[11px] text-neutral-400 font-sans truncate max-w-xs mt-0.5">
+                            {{ category.description|default:"Curated 925 sterling silver department"|truncatewords:8 }}
+                          </span>
+                        </div>
+                      </div>
+                    </td>
+                    <td class="py-3.5 px-4 font-mono text-[11px] text-neutral-400 whitespace-nowrap">
+                      <span class="px-2 py-0.5 rounded bg-obsidian-800 border border-obsidian-700 font-mono text-[11px] text-neutral-300">
+                        {{ category.slug }}
+                      </span>
+                    </td>
+                    <td class="py-3.5 px-4 text-center whitespace-nowrap">
+                      <div class="flex items-center justify-center gap-2">
+                        {{ form.is_featured }}
+                        {% if category.is_featured %}
+                        <span class="inline-flex items-center gap-1 text-[10px] font-mono font-semibold px-2 py-0.5 rounded-full bg-amber-500/15 text-amber-300 border border-amber-500/30">
+                          <span class="material-symbols-outlined text-[11px]">star</span> FEATURED
+                        </span>
+                        {% else %}
+                        <span class="text-[10px] font-mono text-neutral-500">STANDARD</span>
+                        {% endif %}
+                      </div>
+                    </td>
+                    <td class="py-3.5 px-4 text-center whitespace-nowrap">
+                      <div class="flex items-center justify-center">
+                        {{ form.order }}
+                      </div>
+                    </td>
+                    <td class="py-3.5 px-4 text-right whitespace-nowrap">
+                      <span class="inline-flex items-center gap-1 font-mono text-xs font-semibold px-2.5 py-0.5 rounded-full bg-emerald-950/40 text-emerald-400 border border-emerald-500/25">
+                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>{{ category.product_count|default:category.products.count|default:0 }} Pieces
+                      </span>
+                    </td>
+                    <td class="py-3.5 px-4 text-center whitespace-nowrap">
+                      <div class="flex items-center justify-center gap-1.5">
+                        <a href="{% url 'admin:catalog_category_change' category.pk %}" class="bg-obsidian-800 hover:bg-obsidian-750 border border-obsidian-700 text-neutral-200 hover:text-white px-2.5 py-1 rounded-lg text-xs font-medium transition cursor-pointer inline-flex items-center gap-1" style="text-decoration: none !important;">
+                          <span class="material-symbols-outlined text-[13px] text-emerald-400">edit</span>
+                          <span>Edit</span>
+                        </a>
+                        <a href="{{ category.get_absolute_url }}" target="_blank" class="p-1 rounded-lg bg-obsidian-800 hover:bg-obsidian-750 border border-obsidian-700 text-neutral-400 hover:text-white transition cursor-pointer" title="Preview on Online Boutique">
+                          <span class="material-symbols-outlined text-[14px]">open_in_new</span>
+                        </a>
+                      </div>
+                    </td>
+                  </tr>
+                  {% endwith %}
+                  {% endfor %}
+                {% else %}
+                  {% for category in cl.result_list %}
+                  <tr class="hover:bg-white/[0.025] transition-colors group category-row" data-name="{{ category.name|lower }}">
+                    <td class="py-3.5 px-4 text-center">
+                      <input class="action-select w-4 h-4 rounded border-obsidian-700 bg-obsidian-900 text-emerald-500 focus:ring-emerald-500 cursor-pointer" type="checkbox" name="_selected_action" value="{{ category.pk }}">
+                    </td>
+                    <td class="py-3.5 px-4 whitespace-nowrap">
+                      <div class="flex items-center gap-3">
+                        <div class="w-8 h-8 rounded-lg bg-obsidian-800 border border-obsidian-700 flex items-center justify-center text-champagne-400 shrink-0">
+                          <span class="material-symbols-outlined text-[17px]">
+                            {% if 'ring' in category.name|lower %}diamond
+                            {% elif 'necklace' in category.name|lower %}auto_awesome
+                            {% elif 'earring' in category.name|lower %}adjust
+                            {% elif 'bracelet' in category.name|lower %}radio_button_checked
+                            {% else %}category{% endif %}
+                          </span>
+                        </div>
+                        <div>
+                          <a href="{% url 'admin:catalog_category_change' category.pk %}" class="font-bold text-white text-xs sm:text-sm hover:text-emerald-400 transition-colors inline-block" style="text-decoration: none !important;">
+                            {{ category.name }}
+                          </a>
+                          <span class="block text-[11px] text-neutral-400 font-sans truncate max-w-xs mt-0.5">
+                            {{ category.description|default:"Curated 925 sterling silver department"|truncatewords:8 }}
+                          </span>
+                        </div>
+                      </div>
+                    </td>
+                    <td class="py-3.5 px-4 font-mono text-[11px] text-neutral-400 whitespace-nowrap">
+                      <span class="px-2 py-0.5 rounded bg-obsidian-800 border border-obsidian-700 font-mono text-[11px] text-neutral-300">
+                        {{ category.slug }}
+                      </span>
+                    </td>
+                    <td class="py-3.5 px-4 text-center whitespace-nowrap">
+                      {% if category.is_featured %}
+                      <span class="inline-flex items-center gap-1 text-[10px] font-mono font-semibold px-2 py-0.5 rounded-full bg-amber-500/15 text-amber-300 border border-amber-500/30">
+                        <span class="material-symbols-outlined text-[11px]">star</span> FEATURED
+                      </span>
+                      {% else %}
+                      <span class="text-[10px] font-mono text-neutral-500">STANDARD</span>
+                      {% endif %}
+                    </td>
+                    <td class="py-3.5 px-4 text-center font-mono text-xs text-neutral-300 whitespace-nowrap">
+                      {{ category.order }}
+                    </td>
+                    <td class="py-3.5 px-4 text-right whitespace-nowrap">
+                      <span class="inline-flex items-center gap-1 font-mono text-xs font-semibold px-2.5 py-0.5 rounded-full bg-emerald-950/40 text-emerald-400 border border-emerald-500/25">
+                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>{{ category.product_count|default:category.products.count|default:0 }} Pieces
+                      </span>
+                    </td>
+                    <td class="py-3.5 px-4 text-center whitespace-nowrap">
+                      <div class="flex items-center justify-center gap-1.5">
+                        <a href="{% url 'admin:catalog_category_change' category.pk %}" class="bg-obsidian-800 hover:bg-obsidian-750 border border-obsidian-700 text-neutral-200 hover:text-white px-2.5 py-1 rounded-lg text-xs font-medium transition cursor-pointer inline-flex items-center gap-1" style="text-decoration: none !important;">
+                          <span class="material-symbols-outlined text-[13px] text-emerald-400">edit</span>
+                          <span>Edit</span>
+                        </a>
+                        <a href="{{ category.get_absolute_url }}" target="_blank" class="p-1 rounded-lg bg-obsidian-800 hover:bg-obsidian-750 border border-obsidian-700 text-neutral-400 hover:text-white transition cursor-pointer" title="Preview on Online Boutique">
+                          <span class="material-symbols-outlined text-[14px]">open_in_new</span>
+                        </a>
+                      </div>
+                    </td>
+                  </tr>
+                  {% endfor %}
+                {% endif %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- ==============================================
+             2. MOBILE CATEGORIES CARDS (< md)
+             Responsive Mobile Surface Layout
+             ============================================== -->
+        <div class="md:hidden space-y-3.5 mb-6" id="categoriesMobileContainer">
+          {% for category in cl.result_list %}
+          <div class="card-surface rounded-2xl p-4 space-y-3 category-row" data-name="{{ category.name|lower }}">
+            <div class="flex items-start justify-between gap-3">
+              <div class="flex items-center gap-3">
+                <input class="action-select w-4 h-4 rounded border-obsidian-700 bg-obsidian-900 text-emerald-500 focus:ring-emerald-500 cursor-pointer shrink-0 mt-0.5" type="checkbox" name="_selected_action" value="{{ category.pk }}">
+                <div>
+                  <a href="{% url 'admin:catalog_category_change' category.pk %}" class="font-bold text-white text-sm hover:text-emerald-400 transition-colors" style="text-decoration: none !important;">
+                    {{ category.name }}
+                  </a>
+                  <span class="block text-[11px] text-neutral-400 font-mono mt-0.5">
+                    {{ category.slug }}
+                  </span>
+                </div>
+              </div>
+              {% if category.is_featured %}
+              <span class="inline-flex items-center gap-1 text-[10px] font-mono font-semibold px-2 py-0.5 rounded-full bg-amber-500/15 text-amber-300 border border-amber-500/30 shrink-0">
+                <span class="material-symbols-outlined text-[11px]">star</span> FEATURED
+              </span>
+              {% endif %}
+            </div>
+
+            <div class="flex items-center justify-between text-xs pt-2 border-t border-white/[0.06]">
+              <span class="text-neutral-400 font-sans">Display Order: <strong class="text-white font-mono">{{ category.order }}</strong></span>
+              <span class="inline-flex items-center gap-1 font-mono text-xs font-semibold px-2 py-0.5 rounded-full bg-emerald-950/40 text-emerald-400 border border-emerald-500/25">
+                {{ category.product_count|default:category.products.count|default:0 }} Pieces
+              </span>
+            </div>
+
+            <div class="pt-2 flex items-center justify-end gap-2 border-t border-white/[0.06]">
+              <a href="{% url 'admin:catalog_category_change' category.pk %}" class="bg-obsidian-800 hover:bg-obsidian-750 border border-obsidian-700 text-neutral-200 hover:text-white px-3 py-1.5 rounded-lg text-xs font-medium transition cursor-pointer inline-flex items-center gap-1.5" style="text-decoration: none !important;">
+                <span class="material-symbols-outlined text-[14px] text-emerald-400">edit</span>
+                <span>Edit Category</span>
+              </a>
+              <a href="{{ category.get_absolute_url }}" target="_blank" class="p-1.5 rounded-lg bg-obsidian-800 hover:bg-obsidian-750 border border-obsidian-700 text-neutral-400 hover:text-white transition cursor-pointer" title="Preview on Online Boutique">
+                <span class="material-symbols-outlined text-[15px]">open_in_new</span>
+              </a>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+
+        <!-- ==============================================
+             3. BOTTOM SAVE BAR (When list_editable is enabled)
+             ============================================== -->
+        <div class="card-surface rounded-xl p-3.5 sm:p-4 flex items-center justify-between gap-4 border border-white/[0.06]">
+          <div class="flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+            <span class="text-xs font-mono text-neutral-300">
+              <span class="font-bold text-white">{{ cl.result_count }}</span> Categories registered in Haute Atelier
+            </span>
+          </div>
+          <button type="submit" name="_save" class="bg-emerald-500 hover:bg-emerald-400 text-obsidian-950 font-semibold px-5 py-2.5 rounded-lg shadow-lg glow-emerald text-xs tracking-wide cursor-pointer transition active:scale-95" style="color: #07080a !important;">
+            Save Changes
+          </button>
+        </div>
+
+      </form>
+
+    </main>
+
+  </div>
+
+</div>
+
+<!-- Interactive JS Logic -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const selectAll = document.getElementById('action-toggle');
+  const rowCheckboxes = document.querySelectorAll('.action-select');
+  const counter = document.getElementById('selectionCounter');
+  const searchInput = document.getElementById('categorySearchInput');
+  const rows = document.querySelectorAll('.category-row');
+
+  // Multi-Select Checkbox Handler
+  function updateCounter() {
+    const checked = Array.from(rowCheckboxes).filter(cb => cb.checked).length;
+    if (counter) {
+      counter.textContent = `${checked} of ${rowCheckboxes.length} selected`;
+    }
+    if (selectAll) {
+      selectAll.checked = checked > 0 && checked === rowCheckboxes.length;
+    }
+  }
+
+  if (selectAll) {
+    selectAll.addEventListener('change', function() {
+      rowCheckboxes.forEach(cb => {
+        cb.checked = selectAll.checked;
+      });
+      updateCounter();
+    });
+  }
+
+  rowCheckboxes.forEach(cb => {
+    cb.addEventListener('change', updateCounter);
+  });
+
+  // Client-Side Live Search Filter
+  if (searchInput) {
+    searchInput.addEventListener('input', function(e) {
+      const q = e.target.value.toLowerCase().trim();
+      rows.forEach(row => {
+        const name = row.getAttribute('data-name') || '';
+        if (!q || name.includes(q)) {
+          row.style.display = '';
+        } else {
+          row.style.display = 'none';
+        }
+      });
+    });
+  }
+
+  // Style formset inputs nicely to conform to Haute Atelier glass aesthetics
+  const textInputs = document.querySelectorAll('input[type="number"], input[name$="-order"]');
+  textInputs.forEach(input => {
+    input.className = 'w-16 bg-obsidian-900 border border-obsidian-700 text-white rounded-lg px-2.5 py-1 text-xs font-mono text-center focus:border-emerald-500 focus:outline-none';
+  });
+
+  const boolInputs = document.querySelectorAll('input[type="checkbox"][name$="-is_featured"]');
+  boolInputs.forEach(cb => {
+    cb.className = 'w-4 h-4 rounded border-obsidian-700 bg-obsidian-900 text-emerald-500 focus:ring-emerald-500 cursor-pointer';
+  });
+});
+</script>
+
+{% include "admin/includes/atelier_nav_scripts.html" %}
+
+</body>
+</html>

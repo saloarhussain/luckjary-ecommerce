@@ -111,9 +111,33 @@ class ProductReviewInline(admin.StackedInline):
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
+    change_list_template = 'admin/catalog/category/change_list.html'
     list_display = ('name', 'slug', 'is_featured', 'order')
     prepopulated_fields = {'slug': ('name',)}
     list_editable = ('is_featured', 'order')
+    search_fields = ('name', 'slug', 'description')
+    actions = ['make_featured', 'remove_featured']
+
+    @admin.action(description="Feature selected categories on showroom")
+    def make_featured(self, request, queryset):
+        count = queryset.update(is_featured=True)
+        self.message_user(request, f"Featured {count} category/categories on showroom showcase.")
+
+    @admin.action(description="Remove selected categories from showroom feature")
+    def remove_featured(self, request, queryset):
+        count = queryset.update(is_featured=False)
+        self.message_user(request, f"Removed {count} category/categories from featured showcase.")
+
+    def get_queryset(self, request):
+        from django.db.models import Count
+        return super().get_queryset(request).annotate(product_count=Count('products'))
+
+    def changelist_view(self, request, extra_context=None):
+        extra_context = extra_context or {}
+        extra_context['active_nav'] = 'categories'
+        extra_context['total_categories'] = Category.objects.count()
+        extra_context['featured_categories_count'] = Category.objects.filter(is_featured=True).count()
+        return super().changelist_view(request, extra_context=extra_context)
 
 @admin.register(Material)
 class MaterialAdmin(admin.ModelAdmin):
