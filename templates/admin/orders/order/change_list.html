@@ -95,7 +95,17 @@
       border-color: rgba(255, 255, 255, 0.14) !important;
     }
     .glow-emerald {
-      box-shadow: 0 0 20px -3px rgba(16, 185, 129, 0.25) !important;
+      box-shadow: 0 0 20px -3px rgba(16, 185, 129, 0.35) !important;
+    }
+    .btn-primary {
+      background-color: #10b981 !important;
+      color: #07080a !important;
+      border: 1px solid rgba(16, 185, 129, 0.35) !important;
+      text-decoration: none !important;
+    }
+    .btn-primary:hover {
+      background-color: #34d399 !important;
+      color: #07080a !important;
     }
   </style>
 </head>
@@ -431,321 +441,301 @@
           <!-- MOBILE ORDER 1 -->
           <article class="order-mobile-card card-surface rounded-2xl p-4 sm:p-5 transition-all hover:border-emerald-500/30 shadow-xl border border-white/[0.08]" data-order-id="1" data-status="unfulfilled" data-search="julian stewart julian.stewart@icloud.com lck-304918 lck-202611-304918 fine rings aura textured dome ring">
             <div class="flex md:hidden flex-col gap-3.5">
-            <!-- Header: Ref Badge & Date/Time on Right -->
-            <div class="flex items-center justify-between pb-3 border-b border-white/[0.06]">
-              <div class="flex items-center gap-2">
-                <input data-order-id="1" class="order-checkbox w-4 h-4 rounded border-obsidian-700 bg-obsidian-900 text-emerald-500 focus:ring-emerald-500 cursor-pointer" type="checkbox">
-                <button type="button" class="copy-ref-btn order-link inline-flex items-center gap-1.5 font-mono font-bold text-xs text-emerald-400 bg-emerald-950/40 hover:bg-emerald-900/50 border border-emerald-500/25 px-2.5 py-1 rounded-lg transition-colors cursor-pointer shadow-sm" data-ref="LCK-202611-304918" title="Copy Reference ID">
-                  <span>#LCK-202611-304918</span>
-                  <svg class="w-3 h-3 text-emerald-400/80" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect height="13" rx="2" ry="2" width="13" x="9" y="9"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-                </button>
-              </div>
-              <div class="text-right text-[11px] text-zinc-400 font-mono">
-                <span>Apr 24, 2026</span>
-                <span class="text-zinc-500 block text-[10px]">• 14:32</span>
-              </div>
-            </div>
-
-            <!-- Patron Row -->
-            <div class="flex items-center justify-between">
-              <div class="flex items-center gap-2.5 min-w-0">
-                <div class="w-8 h-8 rounded-full bg-[#181a22] border border-[#2d3240] flex items-center justify-center text-xs font-bold text-zinc-200 font-mono shrink-0">JS</div>
-                <div class="min-w-0">
-                  <div class="text-xs font-bold text-white font-sans truncate">Julian Stewart</div>
-                  <div class="text-[11px] text-[#8e92a8] font-sans truncate">julian.stewart@icloud.com</div>
+              <!-- Header: Ref Badge, Date/Time & Order Status Badges -->
+              <div class="pb-3 border-b border-white/[0.06] space-y-2.5">
+                <div class="flex items-center justify-between gap-2">
+                  <div class="flex items-center gap-2 min-w-0">
+                    <input data-order-id="1" class="order-checkbox w-4 h-4 rounded border-obsidian-700 bg-obsidian-900 text-emerald-500 focus:ring-emerald-500 cursor-pointer shrink-0" type="checkbox">
+                    <button type="button" class="copy-ref-btn order-link inline-flex items-center gap-1.5 font-mono font-bold text-xs text-emerald-400 bg-emerald-950/40 hover:bg-emerald-900/50 border border-emerald-500/25 px-2.5 py-1 rounded-lg transition-colors cursor-pointer shadow-sm truncate" data-ref="LCK-202611-304918" title="Copy Reference ID">
+                      <span>#LCK-202611-304918</span>
+                      <svg class="w-3 h-3 text-emerald-400/80 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect height="13" rx="2" ry="2" width="13" x="9" y="9"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                    </button>
+                  </div>
+                  <div class="text-right text-[11px] text-zinc-400 font-mono shrink-0">
+                    <span>Apr 24, 2026</span>
+                    <span class="text-zinc-500 block text-[10px]">• 14:32</span>
+                  </div>
                 </div>
-              </div>
-              <a class="p-2 rounded-xl bg-[#181a22] text-[#ebd38d] hover:text-amber-300 border border-[#2d3240] inline-flex items-center justify-center shrink-0 hover:bg-[#20242e] transition-colors" href="tel:+13109024819" title="Call Patron">
-                <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M6.62 10.79a15.053 15.053 0 006.59 6.59l2.2-2.2a1 1 0 011.02-.24c1.12.37 2.33.57 3.57.57a1 1 0 011 1V20a1 1 0 01-1 1A17 17 0 013 4a1 1 0 011-1h3.5a1 1 0 011 1c0 1.25.2 2.45.57 3.57a1 1 0 01-.24 1.02l-2.21 2.2z"></path></svg>
-              </a>
-            </div>
 
-            <!-- Product Summary Box -->
-            <div class="bg-obsidian-900/60 rounded-xl p-3 border border-white/[0.05] flex items-center gap-3">
-              <div class="w-10 h-10 rounded-lg bg-[#21242e] border border-[#2d3240] flex items-center justify-center shrink-0 text-amber-300">
-                <svg class="w-5 h-5 text-[#ebd38d]" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"></circle><circle cx="12" cy="12" r="4"></circle></svg>
-              </div>
-              <div class="min-w-0 flex-1">
-                <span class="text-[10px] font-bold uppercase tracking-wider text-amber-300 block font-mono">Fine Rings</span>
-                <p class="text-xs text-white font-bold uppercase truncate font-sans tracking-tight">Aura Textured Dome Ring</p>
-                <p class="text-[11px] text-zinc-400 font-sans truncate">18K Demifine Vermeil • Size 7 (US)</p>
-              </div>
-            </div>
-
-            <!-- Status Badges: Refined Pill Badges matching Desktop -->
-            <div class="flex items-center gap-2 flex-wrap">
-              <span class="inline-flex items-center gap-1.5 text-xs font-medium px-3 py-1 rounded-full bg-[#0d2822] text-[#34d399] border border-[#10b981]/35">
-                <span class="w-1.5 h-1.5 rounded-full bg-[#10b981]"></span>Paid
-              </span>
-              <span class="inline-flex items-center gap-1.5 text-xs font-medium px-3 py-1 rounded-full bg-[#2d1e16] text-[#fbbf24] border border-[#d97706]/35">
-                <span class="w-1.5 h-1.5 rounded-full bg-[#f59e0b]"></span>Unfulfilled
-              </span>
-            </div>
-
-            <!-- DEDICATED TOTAL SETTLEMENT & ACTIONS FOOTER ROW -->
-            <div class="pt-3.5 border-t border-white/[0.06] flex items-end justify-between gap-3">
-              <!-- Settlement Amount -->
-              <div class="flex flex-col">
-                <span class="text-[9px] font-bold tracking-[0.14em] uppercase text-zinc-400 font-mono mb-1">TOTAL SETTLEMENT</span>
+                <!-- Status Badges: Payment & Fulfillment -->
                 <div class="flex items-center gap-2 flex-wrap">
-                  <span class="final-price text-2xl font-bold text-white font-sans tracking-tight leading-none" data-inr="3450" data-usd="42" data-eur="39" data-gbp="33" data-aed="154">₹3,450</span>
-                  <span class="text-[10px] font-bold text-emerald-400 bg-emerald-500/10 px-1.5 py-0.5 rounded font-mono border border-emerald-500/25">-18%</span>
-                  <span class="currency-code-label text-[10px] text-zinc-400 font-mono uppercase tracking-wider">INR TOTAL</span>
+                  <span class="inline-flex items-center gap-1.5 text-[11px] font-medium px-2.5 py-0.5 rounded-full bg-[#0d2822] text-[#34d399] border border-[#10b981]/35">
+                    <span class="w-1.5 h-1.5 rounded-full bg-[#10b981]"></span>Paid
+                  </span>
+                  <span class="inline-flex items-center gap-1.5 text-[11px] font-medium px-2.5 py-0.5 rounded-full bg-[#2d1e16] text-[#fbbf24] border border-[#d97706]/35">
+                    <span class="w-1.5 h-1.5 rounded-full bg-[#f59e0b]"></span>Unfulfilled
+                  </span>
                 </div>
               </div>
-              <!-- Action Buttons -->
-              <div class="flex items-center gap-2 shrink-0">
-                <button class="px-3 py-2 rounded-xl bg-[#181a22] hover:bg-[#21242e] border border-[#2d3240] text-xs text-zinc-300 font-sans inline-flex items-center gap-1.5 transition-colors cursor-pointer" title="Invoice PDF" type="button">
-                  <svg class="w-3.5 h-3.5 text-zinc-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
-                  <span>PDF</span>
-                </button>
-                <a class="inline-flex items-center justify-center gap-1.5 text-xs font-semibold text-emerald-400 hover:text-emerald-300 bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/25 px-3 py-2 rounded-xl font-sans transition-colors whitespace-nowrap" href="/admin/orders/order/1/change/">
+
+              <!-- Patron Row -->
+              <div class="flex items-center justify-between gap-3">
+                <div class="flex items-center gap-2.5 min-w-0">
+                  <div class="w-8 h-8 rounded-full bg-[#181a22] border border-[#2d3240] flex items-center justify-center text-xs font-bold text-zinc-200 font-mono shrink-0">JS</div>
+                  <div class="min-w-0">
+                    <div class="text-xs font-bold text-white font-sans truncate">Julian Stewart</div>
+                    <div class="text-[11px] text-[#8e92a8] font-sans truncate">julian.stewart@icloud.com</div>
+                  </div>
+                </div>
+                <a class="p-2 rounded-xl bg-[#171920] hover:bg-[#21242d] text-[#ebd38d] hover:text-amber-300 border border-[#21242d] inline-flex items-center justify-center shrink-0 transition-colors" href="tel:+13109024819" title="Call Patron">
+                  <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M6.62 10.79a15.053 15.053 0 006.59 6.59l2.2-2.2a1 1 0 011.02-.24c1.12.37 2.33.57 3.57.57a1 1 0 011 1V20a1 1 0 01-1 1h3.5a1 1 0 011 1c0 1.25.2 2.45.57 3.57a1 1 0 01-.24 1.02l-2.21 2.2z"></path></svg>
+                </a>
+              </div>
+
+              <!-- Product Summary Box -->
+              <div class="bg-obsidian-900/60 rounded-xl p-3 border border-white/[0.05] flex items-center gap-3">
+                <div class="w-10 h-10 rounded-lg bg-[#21242e] border border-[#2d3240] flex items-center justify-center shrink-0 text-amber-300">
+                  <svg class="w-5 h-5 text-[#ebd38d]" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"></circle><circle cx="12" cy="12" r="4"></circle></svg>
+                </div>
+                <div class="min-w-0 flex-1">
+                  <span class="text-[10px] font-bold uppercase tracking-wider text-amber-300 block font-mono">Fine Rings</span>
+                  <p class="text-xs text-white font-bold uppercase truncate font-sans tracking-tight">Aura Textured Dome Ring</p>
+                  <p class="text-[11px] text-zinc-400 font-sans truncate">18K Demifine Vermeil • Size 7 (US)</p>
+                </div>
+              </div>
+
+              <!-- DEDICATED TOTAL SETTLEMENT & PRIMARY ACTION FOOTER -->
+              <div class="pt-3.5 border-t border-white/[0.06] flex items-center justify-between gap-3">
+                <!-- Settlement Amount -->
+                <div class="flex flex-col min-w-0">
+                  <span class="text-[9px] font-bold tracking-[0.14em] uppercase text-zinc-400 font-mono mb-0.5">TOTAL SETTLEMENT</span>
+                  <div class="flex items-baseline gap-2 flex-wrap">
+                    <span class="final-price text-2xl font-bold text-white font-mono tracking-tight leading-none" data-inr="3450" data-usd="42" data-eur="39" data-gbp="33" data-aed="154">₹3,450</span>
+                    <span class="text-[10px] font-bold text-emerald-400 bg-emerald-500/10 px-1.5 py-0.5 rounded font-mono border border-emerald-500/25">-18%</span>
+                  </div>
+                </div>
+                <!-- Primary Action Button: Luckjary Design System Standard -->
+                <a href="/admin/orders/order/1/change/" class="btn-primary glow-emerald inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg text-xs font-semibold bg-emerald-500 hover:bg-emerald-400 transition-all cursor-pointer shrink-0 shadow-lg" style="color: #07080a !important; text-decoration: none !important;">
                   <span>Manage Order</span>
-                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="5" x2="19" y1="12" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                  <svg class="w-3.5 h-3.5" fill="none" stroke="#07080a" stroke-width="2.5" viewBox="0 0 24 24"><line x1="5" x2="19" y1="12" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
                 </a>
               </div>
             </div>
-          </div>
           </article>
 
           <!-- MOBILE ORDER 2 -->
           <article class="order-mobile-card card-surface rounded-2xl p-4 sm:p-5 transition-all hover:border-emerald-500/30 shadow-xl border border-white/[0.08]" data-order-id="2" data-status="qc" data-search="charlotte dupré charlotte.dupre@gmail.com lck-194056 lck-202611-194056 necklaces celeste herringbone chain">
             <div class="flex md:hidden flex-col gap-3.5">
-            <!-- Header: Ref Badge & Date/Time on Right -->
-            <div class="flex items-center justify-between pb-3 border-b border-white/[0.06]">
-              <div class="flex items-center gap-2">
-                <input data-order-id="2" class="order-checkbox w-4 h-4 rounded border-obsidian-700 bg-obsidian-900 text-emerald-500 focus:ring-emerald-500 cursor-pointer" type="checkbox">
-                <button type="button" class="copy-ref-btn order-link inline-flex items-center gap-1.5 font-mono font-bold text-xs text-neutral-300 bg-obsidian-800 hover:bg-obsidian-750 border border-obsidian-700 px-2.5 py-1 rounded-lg transition-colors cursor-pointer shadow-sm" data-ref="LCK-202611-194056" title="Copy Reference ID">
-                  <span>#LCK-202611-194056</span>
-                  <svg class="w-3 h-3 text-neutral-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect height="13" rx="2" ry="2" width="13" x="9" y="9"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-                </button>
-              </div>
-              <div class="text-right text-[11px] text-zinc-400 font-mono">
-                <span>Apr 24, 2026</span>
-                <span class="text-zinc-500 block text-[10px]">• 13:10</span>
-              </div>
-            </div>
-
-            <!-- Patron Row -->
-            <div class="flex items-center justify-between">
-              <div class="flex items-center gap-2.5 min-w-0">
-                <div class="w-8 h-8 rounded-full bg-[#181a22] border border-[#2d3240] flex items-center justify-center text-xs font-bold text-zinc-200 font-mono shrink-0">CD</div>
-                <div class="min-w-0">
-                  <div class="text-xs font-bold text-white font-sans truncate">Charlotte Dupré</div>
-                  <div class="text-[11px] text-[#8e92a8] font-sans truncate">charlotte.dupre@gmail.com</div>
+              <!-- Header: Ref Badge, Date/Time & Order Status Badges -->
+              <div class="pb-3 border-b border-white/[0.06] space-y-2.5">
+                <div class="flex items-center justify-between gap-2">
+                  <div class="flex items-center gap-2 min-w-0">
+                    <input data-order-id="2" class="order-checkbox w-4 h-4 rounded border-obsidian-700 bg-obsidian-900 text-emerald-500 focus:ring-emerald-500 cursor-pointer shrink-0" type="checkbox">
+                    <button type="button" class="copy-ref-btn order-link inline-flex items-center gap-1.5 font-mono font-bold text-xs text-neutral-300 bg-obsidian-800 hover:bg-obsidian-750 border border-obsidian-700 px-2.5 py-1 rounded-lg transition-colors cursor-pointer shadow-sm truncate" data-ref="LCK-202611-194056" title="Copy Reference ID">
+                      <span>#LCK-202611-194056</span>
+                      <svg class="w-3 h-3 text-neutral-400 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect height="13" rx="2" ry="2" width="13" x="9" y="9"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                    </button>
+                  </div>
+                  <div class="text-right text-[11px] text-zinc-400 font-mono shrink-0">
+                    <span>Apr 24, 2026</span>
+                    <span class="text-zinc-500 block text-[10px]">• 13:10</span>
+                  </div>
                 </div>
-              </div>
-              <a class="p-2 rounded-xl bg-[#181a22] text-[#ebd38d] hover:text-amber-300 border border-[#2d3240] inline-flex items-center justify-center shrink-0 hover:bg-[#20242e] transition-colors" href="tel:+14158829104" title="Call Patron">
-                <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M6.62 10.79a15.053 15.053 0 006.59 6.59l2.2-2.2a1 1 0 011.02-.24c1.12.37 2.33.57 3.57.57a1 1 0 011 1V20a1 1 0 01-1 1A17 17 0 013 4a1 1 0 011-1h3.5a1 1 0 011 1c0 1.25.2 2.45.57 3.57a1 1 0 01-.24 1.02l-2.21 2.2z"></path></svg>
-              </a>
-            </div>
 
-            <!-- Product Summary Box -->
-            <div class="bg-obsidian-900/60 rounded-xl p-3 border border-white/[0.05] flex items-center gap-3">
-              <div class="w-10 h-10 rounded-lg bg-[#21242e] border border-[#2d3240] flex items-center justify-center shrink-0 text-amber-300">
-                <svg class="w-5 h-5 text-[#ebd38d]" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M4 10a8 8 0 1 0 16 0 8 8 0 1 0-16 0"></path><path d="M12 2v4"></path><path d="M12 18v4"></path></svg>
-              </div>
-              <div class="min-w-0 flex-1">
-                <span class="text-[10px] font-bold uppercase tracking-wider text-amber-300 block font-mono">Necklaces</span>
-                <p class="text-xs text-white font-bold uppercase truncate font-sans tracking-tight">Celeste Herringbone Chain</p>
-                <p class="text-[11px] text-zinc-400 font-sans truncate">18K Yellow Gold Vermeil • 18" Length</p>
-              </div>
-            </div>
-
-            <!-- Status Badges: Refined Pill Badges matching Desktop -->
-            <div class="flex items-center gap-2 flex-wrap">
-              <span class="inline-flex items-center gap-1.5 text-xs font-medium px-3 py-1 rounded-full bg-[#0d2822] text-[#34d399] border border-[#10b981]/35">
-                <span class="w-1.5 h-1.5 rounded-full bg-[#10b981]"></span>Paid
-              </span>
-              <span class="inline-flex items-center gap-1.5 text-xs font-medium px-3 py-1 rounded-full bg-[#261536] text-[#c084fc] border border-[#9333ea]/35">
-                <span class="w-1.5 h-1.5 rounded-full bg-[#a855f7]"></span>In Atelier QC
-              </span>
-            </div>
-
-            <!-- DEDICATED TOTAL SETTLEMENT & ACTIONS FOOTER ROW -->
-            <div class="pt-3.5 border-t border-white/[0.06] flex items-end justify-between gap-3">
-              <!-- Settlement Amount -->
-              <div class="flex flex-col">
-                <span class="text-[9px] font-bold tracking-[0.14em] uppercase text-zinc-400 font-mono mb-1">TOTAL SETTLEMENT</span>
+                <!-- Status Badges: Payment & Fulfillment -->
                 <div class="flex items-center gap-2 flex-wrap">
-                  <span class="final-price text-2xl font-bold text-white font-sans tracking-tight leading-none" data-inr="1485" data-usd="18" data-eur="17" data-gbp="14" data-aed="66">₹1,485</span>
-                  <span class="text-[10px] font-bold text-emerald-400 bg-emerald-500/10 px-1.5 py-0.5 rounded font-mono border border-emerald-500/25">-20%</span>
-                  <span class="currency-code-label text-[10px] text-zinc-400 font-mono uppercase tracking-wider">INR TOTAL</span>
+                  <span class="inline-flex items-center gap-1.5 text-[11px] font-medium px-2.5 py-0.5 rounded-full bg-[#0d2822] text-[#34d399] border border-[#10b981]/35">
+                    <span class="w-1.5 h-1.5 rounded-full bg-[#10b981]"></span>Paid
+                  </span>
+                  <span class="inline-flex items-center gap-1.5 text-[11px] font-medium px-2.5 py-0.5 rounded-full bg-[#261536] text-[#c084fc] border border-[#9333ea]/35">
+                    <span class="w-1.5 h-1.5 rounded-full bg-[#a855f7]"></span>In Atelier QC
+                  </span>
                 </div>
               </div>
-              <!-- Action Buttons -->
-              <div class="flex items-center gap-2 shrink-0">
-                <button class="px-3 py-2 rounded-xl bg-[#181a22] hover:bg-[#21242e] border border-[#2d3240] text-xs text-zinc-300 font-sans inline-flex items-center gap-1.5 transition-colors cursor-pointer" title="Invoice PDF" type="button">
-                  <svg class="w-3.5 h-3.5 text-zinc-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
-                  <span>PDF</span>
-                </button>
-                <a class="inline-flex items-center justify-center gap-1.5 text-xs font-semibold text-emerald-400 hover:text-emerald-300 bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/25 px-3 py-2 rounded-xl font-sans transition-colors whitespace-nowrap" href="/admin/orders/order/2/change/">
+
+              <!-- Patron Row -->
+              <div class="flex items-center justify-between gap-3">
+                <div class="flex items-center gap-2.5 min-w-0">
+                  <div class="w-8 h-8 rounded-full bg-[#181a22] border border-[#2d3240] flex items-center justify-center text-xs font-bold text-zinc-200 font-mono shrink-0">CD</div>
+                  <div class="min-w-0">
+                    <div class="text-xs font-bold text-white font-sans truncate">Charlotte Dupré</div>
+                    <div class="text-[11px] text-[#8e92a8] font-sans truncate">charlotte.dupre@gmail.com</div>
+                  </div>
+                </div>
+                <a class="p-2 rounded-xl bg-[#171920] hover:bg-[#21242d] text-[#ebd38d] hover:text-amber-300 border border-[#21242d] inline-flex items-center justify-center shrink-0 transition-colors" href="tel:+14158829104" title="Call Patron">
+                  <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M6.62 10.79a15.053 15.053 0 006.59 6.59l2.2-2.2a1 1 0 011.02-.24c1.12.37 2.33.57 3.57.57a1 1 0 011 1V20a1 1 0 01-.24 1.02l-2.21 2.2z"></path></svg>
+                </a>
+              </div>
+
+              <!-- Product Summary Box -->
+              <div class="bg-obsidian-900/60 rounded-xl p-3 border border-white/[0.05] flex items-center gap-3">
+                <div class="w-10 h-10 rounded-lg bg-[#21242e] border border-[#2d3240] flex items-center justify-center shrink-0 text-amber-300">
+                  <svg class="w-5 h-5 text-[#ebd38d]" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M4 10a8 8 0 1 0 16 0 8 8 0 1 0-16 0"></path><path d="M12 2v4"></path><path d="M12 18v4"></path></svg>
+                </div>
+                <div class="min-w-0 flex-1">
+                  <span class="text-[10px] font-bold uppercase tracking-wider text-amber-300 block font-mono">Necklaces</span>
+                  <p class="text-xs text-white font-bold uppercase truncate font-sans tracking-tight">Celeste Herringbone Chain</p>
+                  <p class="text-[11px] text-zinc-400 font-sans truncate">18K Yellow Gold Vermeil • 18" Length</p>
+                </div>
+              </div>
+
+              <!-- DEDICATED TOTAL SETTLEMENT & PRIMARY ACTION FOOTER -->
+              <div class="pt-3.5 border-t border-white/[0.06] flex items-center justify-between gap-3">
+                <!-- Settlement Amount -->
+                <div class="flex flex-col min-w-0">
+                  <span class="text-[9px] font-bold tracking-[0.14em] uppercase text-zinc-400 font-mono mb-0.5">TOTAL SETTLEMENT</span>
+                  <div class="flex items-baseline gap-2 flex-wrap">
+                    <span class="final-price text-2xl font-bold text-white font-mono tracking-tight leading-none" data-inr="1485" data-usd="18" data-eur="17" data-gbp="14" data-aed="66">₹1,485</span>
+                    <span class="text-[10px] font-bold text-emerald-400 bg-emerald-500/10 px-1.5 py-0.5 rounded font-mono border border-emerald-500/25">-20%</span>
+                  </div>
+                </div>
+                <!-- Primary Action Button: Luckjary Design System Standard -->
+                <a href="/admin/orders/order/2/change/" class="btn-primary glow-emerald inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg text-xs font-semibold bg-emerald-500 hover:bg-emerald-400 transition-all cursor-pointer shrink-0 shadow-lg" style="color: #07080a !important; text-decoration: none !important;">
                   <span>Manage Order</span>
-                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="5" x2="19" y1="12" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                  <svg class="w-3.5 h-3.5" fill="none" stroke="#07080a" stroke-width="2.5" viewBox="0 0 24 24"><line x1="5" x2="19" y1="12" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
                 </a>
               </div>
             </div>
-          </div>
           </article>
 
           <!-- MOBILE ORDER 3 -->
           <article class="order-mobile-card card-surface rounded-2xl p-4 sm:p-5 transition-all hover:border-emerald-500/30 shadow-xl border border-white/[0.08]" data-order-id="3" data-status="delivered" data-search="isabella vance isabella.vance@example.com lck-739201 lck-202611-739201 bracelets elysian radiant tennis">
             <div class="flex md:hidden flex-col gap-3.5">
-            <!-- Header: Ref Badge & Date/Time on Right -->
-            <div class="flex items-center justify-between pb-3 border-b border-white/[0.06]">
-              <div class="flex items-center gap-2">
-                <input data-order-id="3" class="order-checkbox w-4 h-4 rounded border-obsidian-700 bg-obsidian-900 text-emerald-500 focus:ring-emerald-500 cursor-pointer" type="checkbox">
-                <button type="button" class="copy-ref-btn order-link inline-flex items-center gap-1.5 font-mono font-bold text-xs text-neutral-300 bg-obsidian-800 hover:bg-obsidian-750 border border-obsidian-700 px-2.5 py-1 rounded-lg transition-colors cursor-pointer shadow-sm" data-ref="LCK-202611-739201" title="Copy Reference ID">
-                  <span>#LCK-202611-739201</span>
-                  <svg class="w-3 h-3 text-neutral-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect height="13" rx="2" ry="2" width="13" x="9" y="9"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-                </button>
-              </div>
-              <div class="text-right text-[11px] text-zinc-400 font-mono">
-                <span>Apr 23, 2026</span>
-                <span class="text-zinc-500 block text-[10px]">• 18:45</span>
-              </div>
-            </div>
-
-            <!-- Patron Row -->
-            <div class="flex items-center justify-between">
-              <div class="flex items-center gap-2.5 min-w-0">
-                <div class="w-8 h-8 rounded-full bg-[#181a22] border border-[#2d3240] flex items-center justify-center text-xs font-bold text-zinc-200 font-mono shrink-0">IV</div>
-                <div class="min-w-0">
-                  <div class="text-xs font-bold text-white font-sans truncate">Isabella Vance</div>
-                  <div class="text-[11px] text-[#8e92a8] font-sans truncate">isabella.vance@example.com</div>
+              <!-- Header: Ref Badge, Date/Time & Order Status Badges -->
+              <div class="pb-3 border-b border-white/[0.06] space-y-2.5">
+                <div class="flex items-center justify-between gap-2">
+                  <div class="flex items-center gap-2 min-w-0">
+                    <input data-order-id="3" class="order-checkbox w-4 h-4 rounded border-obsidian-700 bg-obsidian-900 text-emerald-500 focus:ring-emerald-500 cursor-pointer shrink-0" type="checkbox">
+                    <button type="button" class="copy-ref-btn order-link inline-flex items-center gap-1.5 font-mono font-bold text-xs text-neutral-300 bg-obsidian-800 hover:bg-obsidian-750 border border-obsidian-700 px-2.5 py-1 rounded-lg transition-colors cursor-pointer shadow-sm truncate" data-ref="LCK-202611-739201" title="Copy Reference ID">
+                      <span>#LCK-202611-739201</span>
+                      <svg class="w-3 h-3 text-neutral-400 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect height="13" rx="2" ry="2" width="13" x="9" y="9"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                    </button>
+                  </div>
+                  <div class="text-right text-[11px] text-zinc-400 font-mono shrink-0">
+                    <span>Apr 23, 2026</span>
+                    <span class="text-zinc-500 block text-[10px]">• 18:45</span>
+                  </div>
                 </div>
-              </div>
-              <a class="p-2 rounded-xl bg-[#181a22] text-[#ebd38d] hover:text-amber-300 border border-[#2d3240] inline-flex items-center justify-center shrink-0 hover:bg-[#20242e] transition-colors" href="tel:+12125550143" title="Call Patron">
-                <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M6.62 10.79a15.053 15.053 0 006.59 6.59l2.2-2.2a1 1 0 011.02-.24c1.12.37 2.33.57 3.57.57a1 1 0 011 1V20a1 1 0 01-1 1A17 17 0 013 4a1 1 0 011-1h3.5a1 1 0 011 1c0 1.25.2 2.45.57 3.57a1 1 0 01-.24 1.02l-2.21 2.2z"></path></svg>
-              </a>
-            </div>
 
-            <!-- Product Summary Box -->
-            <div class="bg-obsidian-900/60 rounded-xl p-3 border border-white/[0.05] flex items-center gap-3">
-              <div class="w-10 h-10 rounded-lg bg-[#21242e] border border-[#2d3240] flex items-center justify-center shrink-0 text-amber-300">
-                <svg class="w-5 h-5 text-[#ebd38d]" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="12" r="3"></circle><line x1="9" x2="15" y1="12" y2="12"></line></svg>
-              </div>
-              <div class="min-w-0 flex-1">
-                <span class="text-[10px] font-bold uppercase tracking-wider text-amber-300 block font-mono">Bracelets</span>
-                <p class="text-xs text-white font-bold uppercase truncate font-sans tracking-tight">Elysian Radiant Tennis</p>
-                <p class="text-[11px] text-zinc-400 font-sans truncate">925 Sterling Silver • Dual Clasp</p>
-              </div>
-            </div>
-
-            <!-- Status Badges: Refined Pill Badges matching Desktop -->
-            <div class="flex items-center gap-2 flex-wrap">
-              <span class="inline-flex items-center gap-1.5 text-xs font-medium px-3 py-1 rounded-full bg-[#0d2822] text-[#34d399] border border-[#10b981]/35">
-                <span class="w-1.5 h-1.5 rounded-full bg-[#10b981]"></span>Paid
-              </span>
-              <span class="inline-flex items-center gap-1.5 text-xs font-medium px-3 py-1 rounded-full bg-[#0f2c29] text-[#2dd4bf] border border-[#0d9488]/35">
-                <span class="w-1.5 h-1.5 rounded-full bg-[#14b8a6]"></span>Delivered
-              </span>
-            </div>
-
-            <!-- DEDICATED TOTAL SETTLEMENT & ACTIONS FOOTER ROW -->
-            <div class="pt-3.5 border-t border-white/[0.06] flex items-end justify-between gap-3">
-              <!-- Settlement Amount -->
-              <div class="flex flex-col">
-                <span class="text-[9px] font-bold tracking-[0.14em] uppercase text-zinc-400 font-mono mb-1">TOTAL SETTLEMENT</span>
+                <!-- Status Badges: Payment & Fulfillment -->
                 <div class="flex items-center gap-2 flex-wrap">
-                  <span class="final-price text-2xl font-bold text-white font-sans tracking-tight leading-none" data-inr="2450" data-usd="30" data-eur="28" data-gbp="24" data-aed="110">₹2,450</span>
-                  <span class="text-[10px] font-bold text-emerald-400 bg-emerald-500/10 px-1.5 py-0.5 rounded font-mono border border-emerald-500/25">-21%</span>
-                  <span class="currency-code-label text-[10px] text-zinc-400 font-mono uppercase tracking-wider">INR TOTAL</span>
+                  <span class="inline-flex items-center gap-1.5 text-[11px] font-medium px-2.5 py-0.5 rounded-full bg-[#0d2822] text-[#34d399] border border-[#10b981]/35">
+                    <span class="w-1.5 h-1.5 rounded-full bg-[#10b981]"></span>Paid
+                  </span>
+                  <span class="inline-flex items-center gap-1.5 text-[11px] font-medium px-2.5 py-0.5 rounded-full bg-[#0f2c29] text-[#2dd4bf] border border-[#0d9488]/35">
+                    <span class="w-1.5 h-1.5 rounded-full bg-[#14b8a6]"></span>Delivered
+                  </span>
                 </div>
               </div>
-              <!-- Action Buttons -->
-              <div class="flex items-center gap-2 shrink-0">
-                <button class="px-3 py-2 rounded-xl bg-[#181a22] hover:bg-[#21242e] border border-[#2d3240] text-xs text-cyan-400 font-sans inline-flex items-center gap-1.5 transition-colors cursor-pointer" title="Track Airway Bill" type="button">
-                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect height="13" width="15" x="1" y="3"></rect><polygon points="16 8 20 8 23 11 23 16 8"></polygon></svg>
-                  <span>Track</span>
-                </button>
-                <a class="inline-flex items-center justify-center gap-1.5 text-xs font-semibold text-emerald-400 hover:text-emerald-300 bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/25 px-3 py-2 rounded-xl font-sans transition-colors whitespace-nowrap" href="/admin/orders/order/3/change/">
+
+              <!-- Patron Row -->
+              <div class="flex items-center justify-between gap-3">
+                <div class="flex items-center gap-2.5 min-w-0">
+                  <div class="w-8 h-8 rounded-full bg-[#181a22] border border-[#2d3240] flex items-center justify-center text-xs font-bold text-zinc-200 font-mono shrink-0">IV</div>
+                  <div class="min-w-0">
+                    <div class="text-xs font-bold text-white font-sans truncate">Isabella Vance</div>
+                    <div class="text-[11px] text-[#8e92a8] font-sans truncate">isabella.vance@example.com</div>
+                  </div>
+                </div>
+                <a class="p-2 rounded-xl bg-[#171920] hover:bg-[#21242d] text-[#ebd38d] hover:text-amber-300 border border-[#21242d] inline-flex items-center justify-center shrink-0 transition-colors" href="tel:+12125550143" title="Call Patron">
+                  <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M6.62 10.79a15.053 15.053 0 006.59 6.59l2.2-2.2a1 1 0 011.02-.24c1.12.37 2.33.57 3.57.57a1 1 0 011 1V20a1 1 0 01-1 1h3.5a1 1 0 011 1c0 1.25.2 2.45.57 3.57a1 1 0 01-.24 1.02l-2.21 2.2z"></path></svg>
+                </a>
+              </div>
+
+              <!-- Product Summary Box -->
+              <div class="bg-obsidian-900/60 rounded-xl p-3 border border-white/[0.05] flex items-center gap-3">
+                <div class="w-10 h-10 rounded-lg bg-[#21242e] border border-[#2d3240] flex items-center justify-center shrink-0 text-amber-300">
+                  <svg class="w-5 h-5 text-[#ebd38d]" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="12" r="3"></circle><line x1="9" x2="15" y1="12" y2="12"></line></svg>
+                </div>
+                <div class="min-w-0 flex-1">
+                  <span class="text-[10px] font-bold uppercase tracking-wider text-amber-300 block font-mono">Bracelets</span>
+                  <p class="text-xs text-white font-bold uppercase truncate font-sans tracking-tight">Elysian Radiant Tennis</p>
+                  <p class="text-[11px] text-zinc-400 font-sans truncate">925 Sterling Silver • Dual Clasp</p>
+                </div>
+              </div>
+
+              <!-- DEDICATED TOTAL SETTLEMENT & PRIMARY ACTION FOOTER -->
+              <div class="pt-3.5 border-t border-white/[0.06] flex items-center justify-between gap-3">
+                <!-- Settlement Amount -->
+                <div class="flex flex-col min-w-0">
+                  <span class="text-[9px] font-bold tracking-[0.14em] uppercase text-zinc-400 font-mono mb-0.5">TOTAL SETTLEMENT</span>
+                  <div class="flex items-baseline gap-2 flex-wrap">
+                    <span class="final-price text-2xl font-bold text-white font-mono tracking-tight leading-none" data-inr="2450" data-usd="30" data-eur="28" data-gbp="24" data-aed="110">₹2,450</span>
+                    <span class="text-[10px] font-bold text-emerald-400 bg-emerald-500/10 px-1.5 py-0.5 rounded font-mono border border-emerald-500/25">-21%</span>
+                  </div>
+                </div>
+                <!-- Primary Action Button: Luckjary Design System Standard -->
+                <a href="/admin/orders/order/3/change/" class="btn-primary glow-emerald inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg text-xs font-semibold bg-emerald-500 hover:bg-emerald-400 transition-all cursor-pointer shrink-0 shadow-lg" style="color: #07080a !important; text-decoration: none !important;">
                   <span>Manage Order</span>
-                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="5" x2="19" y1="12" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                  <svg class="w-3.5 h-3.5" fill="none" stroke="#07080a" stroke-width="2.5" viewBox="0 0 24 24"><line x1="5" x2="19" y1="12" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
                 </a>
               </div>
             </div>
-          </div>
           </article>
 
           <!-- MOBILE ORDER 4 -->
           <article class="order-mobile-card card-surface rounded-2xl p-4 sm:p-5 transition-all hover:border-emerald-500/30 shadow-xl border border-white/[0.08]" data-order-id="4" data-status="transit" data-search="isabella vance isabella.vance@example.com lck-884102 lck-202611-884102 atelier sets solitaire cabochon luna">
             <div class="flex md:hidden flex-col gap-3.5">
-            <!-- Header: Ref Badge & Date/Time on Right -->
-            <div class="flex items-center justify-between pb-3 border-b border-white/[0.06]">
-              <div class="flex items-center gap-2">
-                <input data-order-id="4" class="order-checkbox w-4 h-4 rounded border-obsidian-700 bg-obsidian-900 text-emerald-500 focus:ring-emerald-500 cursor-pointer" type="checkbox">
-                <button type="button" class="copy-ref-btn order-link inline-flex items-center gap-1.5 font-mono font-bold text-xs text-neutral-300 bg-obsidian-800 hover:bg-obsidian-750 border border-obsidian-700 px-2.5 py-1 rounded-lg transition-colors cursor-pointer shadow-sm" data-ref="LCK-202611-884102" title="Copy Reference ID">
-                  <span>#LCK-202611-884102</span>
-                  <svg class="w-3 h-3 text-neutral-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect height="13" rx="2" ry="2" width="13" x="9" y="9"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-                </button>
-              </div>
-              <div class="text-right text-[11px] text-zinc-400 font-mono">
-                <span>Apr 22, 2026</span>
-                <span class="text-zinc-500 block text-[10px]">• 11:05</span>
-              </div>
-            </div>
-
-            <!-- Patron Row -->
-            <div class="flex items-center justify-between">
-              <div class="flex items-center gap-2.5 min-w-0">
-                <div class="w-8 h-8 rounded-full bg-[#181a22] border border-[#2d3240] flex items-center justify-center text-xs font-bold text-zinc-200 font-mono shrink-0">IV</div>
-                <div class="min-w-0">
-                  <div class="text-xs font-bold text-white font-sans truncate">Isabella Vance</div>
-                  <div class="text-[11px] text-[#8e92a8] font-sans truncate">isabella.vance@example.com</div>
+              <!-- Header: Ref Badge, Date/Time & Order Status Badges -->
+              <div class="pb-3 border-b border-white/[0.06] space-y-2.5">
+                <div class="flex items-center justify-between gap-2">
+                  <div class="flex items-center gap-2 min-w-0">
+                    <input data-order-id="4" class="order-checkbox w-4 h-4 rounded border-obsidian-700 bg-obsidian-900 text-emerald-500 focus:ring-emerald-500 cursor-pointer shrink-0" type="checkbox">
+                    <button type="button" class="copy-ref-btn order-link inline-flex items-center gap-1.5 font-mono font-bold text-xs text-neutral-300 bg-obsidian-800 hover:bg-obsidian-750 border border-obsidian-700 px-2.5 py-1 rounded-lg transition-colors cursor-pointer shadow-sm truncate" data-ref="LCK-202611-884102" title="Copy Reference ID">
+                      <span>#LCK-202611-884102</span>
+                      <svg class="w-3 h-3 text-neutral-400 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect height="13" rx="2" ry="2" width="13" x="9" y="9"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                    </button>
+                  </div>
+                  <div class="text-right text-[11px] text-zinc-400 font-mono shrink-0">
+                    <span>Apr 22, 2026</span>
+                    <span class="text-zinc-500 block text-[10px]">• 11:05</span>
+                  </div>
                 </div>
-              </div>
-              <a class="p-2 rounded-xl bg-[#181a22] text-[#ebd38d] hover:text-amber-300 border border-[#2d3240] inline-flex items-center justify-center shrink-0 hover:bg-[#20242e] transition-colors" href="tel:+12125550143" title="Call Patron">
-                <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M6.62 10.79a15.053 15.053 0 006.59 6.59l2.2-2.2a1 1 0 011.02-.24c1.12.37 2.33.57 3.57.57a1 1 0 011 1V20a1 1 0 01-1 1A17 17 0 013 4a1 1 0 011-1h3.5a1 1 0 011 1c0 1.25.2 2.45.57 3.57a1 1 0 01-.24 1.02l-2.21 2.2z"></path></svg>
-              </a>
-            </div>
 
-            <!-- Product Summary Box -->
-            <div class="bg-obsidian-900/60 rounded-xl p-3 border border-white/[0.05] flex items-center gap-3">
-              <div class="w-10 h-10 rounded-lg bg-[#21242e] border border-[#2d3240] flex items-center justify-center shrink-0 text-amber-300">
-                <svg class="w-5 h-5 text-[#ebd38d]" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
-              </div>
-              <div class="min-w-0 flex-1">
-                <span class="text-[10px] font-bold uppercase tracking-wider text-amber-300 block font-mono">Atelier Sets</span>
-                <p class="text-xs text-white font-bold uppercase truncate font-sans tracking-tight">Solitaire Cabochon &amp; Luna</p>
-                <p class="text-[11px] text-zinc-400 font-sans truncate">925 Sterling Silver • Tahitian Inlay</p>
-              </div>
-            </div>
-
-            <!-- Status Badges: Refined Pill Badges matching Desktop -->
-            <div class="flex items-center gap-2 flex-wrap">
-              <span class="inline-flex items-center gap-1.5 text-xs font-medium px-3 py-1 rounded-full bg-[#0d2822] text-[#34d399] border border-[#10b981]/35">
-                <span class="w-1.5 h-1.5 rounded-full bg-[#10b981]"></span>Paid
-              </span>
-              <span class="inline-flex items-center gap-1.5 text-xs font-medium px-3 py-1 rounded-full bg-[#13223d] text-[#60a5fa] border border-[#2563eb]/35">
-                <span class="w-1.5 h-1.5 rounded-full bg-[#3b82f6]"></span>In Transit
-              </span>
-            </div>
-
-            <!-- DEDICATED TOTAL SETTLEMENT & ACTIONS FOOTER ROW -->
-            <div class="pt-3.5 border-t border-white/[0.06] flex items-end justify-between gap-3">
-              <!-- Settlement Amount -->
-              <div class="flex flex-col">
-                <span class="text-[9px] font-bold tracking-[0.14em] uppercase text-zinc-400 font-mono mb-1">TOTAL SETTLEMENT</span>
+                <!-- Status Badges: Payment & Fulfillment -->
                 <div class="flex items-center gap-2 flex-wrap">
-                  <span class="final-price text-2xl font-bold text-white font-sans tracking-tight leading-none" data-inr="3780" data-usd="46" data-eur="42" data-gbp="36" data-aed="168">₹3,780</span>
-                  <span class="text-[10px] font-bold text-emerald-400 bg-emerald-500/10 px-1.5 py-0.5 rounded font-mono border border-emerald-500/25">-16%</span>
-                  <span class="currency-code-label text-[10px] text-zinc-400 font-mono uppercase tracking-wider">INR TOTAL</span>
+                  <span class="inline-flex items-center gap-1.5 text-[11px] font-medium px-2.5 py-0.5 rounded-full bg-[#0d2822] text-[#34d399] border border-[#10b981]/35">
+                    <span class="w-1.5 h-1.5 rounded-full bg-[#10b981]"></span>Paid
+                  </span>
+                  <span class="inline-flex items-center gap-1.5 text-[11px] font-medium px-2.5 py-0.5 rounded-full bg-[#13223d] text-[#60a5fa] border border-[#2563eb]/35">
+                    <span class="w-1.5 h-1.5 rounded-full bg-[#3b82f6]"></span>In Transit
+                  </span>
                 </div>
               </div>
-              <!-- Action Buttons -->
-              <div class="flex items-center gap-2 shrink-0">
-                <button class="px-3 py-2 rounded-xl bg-[#181a22] hover:bg-[#21242e] border border-[#2d3240] text-xs text-zinc-300 font-sans inline-flex items-center gap-1.5 transition-colors cursor-pointer" title="Receipt PDF" type="button">
-                  <svg class="w-3.5 h-3.5 text-zinc-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
-                  <span>Receipt</span>
-                </button>
-                <a class="inline-flex items-center justify-center gap-1.5 text-xs font-semibold text-emerald-400 hover:text-emerald-300 bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/25 px-3 py-2 rounded-xl font-sans transition-colors whitespace-nowrap" href="/admin/orders/order/4/change/">
+
+              <!-- Patron Row -->
+              <div class="flex items-center justify-between gap-3">
+                <div class="flex items-center gap-2.5 min-w-0">
+                  <div class="w-8 h-8 rounded-full bg-[#181a22] border border-[#2d3240] flex items-center justify-center text-xs font-bold text-zinc-200 font-mono shrink-0">IV</div>
+                  <div class="min-w-0">
+                    <div class="text-xs font-bold text-white font-sans truncate">Isabella Vance</div>
+                    <div class="text-[11px] text-[#8e92a8] font-sans truncate">isabella.vance@example.com</div>
+                  </div>
+                </div>
+                <a class="p-2 rounded-xl bg-[#171920] hover:bg-[#21242d] text-[#ebd38d] hover:text-amber-300 border border-[#21242d] inline-flex items-center justify-center shrink-0 transition-colors" href="tel:+12125550143" title="Call Patron">
+                  <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M6.62 10.79a15.053 15.053 0 006.59 6.59l2.2-2.2a1 1 0 011.02-.24c1.12.37 2.33.57 3.57.57a1 1 0 011 1V20a1 1 0 01-1 1h3.5a1 1 0 011 1c0 1.25.2 2.45.57 3.57a1 1 0 01-.24 1.02l-2.21 2.2z"></path></svg>
+                </a>
+              </div>
+
+              <!-- Product Summary Box -->
+              <div class="bg-obsidian-900/60 rounded-xl p-3 border border-white/[0.05] flex items-center gap-3">
+                <div class="w-10 h-10 rounded-lg bg-[#21242e] border border-[#2d3240] flex items-center justify-center shrink-0 text-amber-300">
+                  <svg class="w-5 h-5 text-[#ebd38d]" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                </div>
+                <div class="min-w-0 flex-1">
+                  <span class="text-[10px] font-bold uppercase tracking-wider text-amber-300 block font-mono">Atelier Sets</span>
+                  <p class="text-xs text-white font-bold uppercase truncate font-sans tracking-tight">Solitaire Cabochon &amp; Luna</p>
+                  <p class="text-[11px] text-zinc-400 font-sans truncate">925 Sterling Silver • Tahitian Inlay</p>
+                </div>
+              </div>
+
+              <!-- DEDICATED TOTAL SETTLEMENT & PRIMARY ACTION FOOTER -->
+              <div class="pt-3.5 border-t border-white/[0.06] flex items-center justify-between gap-3">
+                <!-- Settlement Amount -->
+                <div class="flex flex-col min-w-0">
+                  <span class="text-[9px] font-bold tracking-[0.14em] uppercase text-zinc-400 font-mono mb-0.5">TOTAL SETTLEMENT</span>
+                  <div class="flex items-baseline gap-2 flex-wrap">
+                    <span class="final-price text-2xl font-bold text-white font-mono tracking-tight leading-none" data-inr="3780" data-usd="46" data-eur="42" data-gbp="36" data-aed="168">₹3,780</span>
+                    <span class="text-[10px] font-bold text-emerald-400 bg-emerald-500/10 px-1.5 py-0.5 rounded font-mono border border-emerald-500/25">-16%</span>
+                  </div>
+                </div>
+                <!-- Primary Action Button: Luckjary Design System Standard -->
+                <a href="/admin/orders/order/4/change/" class="btn-primary glow-emerald inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg text-xs font-semibold bg-emerald-500 hover:bg-emerald-400 transition-all cursor-pointer shrink-0 shadow-lg" style="color: #07080a !important; text-decoration: none !important;">
                   <span>Manage Order</span>
-                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="5" x2="19" y1="12" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                  <svg class="w-3.5 h-3.5" fill="none" stroke="#07080a" stroke-width="2.5" viewBox="0 0 24 24"><line x1="5" x2="19" y1="12" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
                 </a>
               </div>
             </div>
-          </div>
           </article>
         </div>
 
