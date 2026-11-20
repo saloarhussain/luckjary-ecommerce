@@ -2,6 +2,7 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
+from django.http import HttpResponseRedirect
 from core.views import set_currency
 
 # Customize Django Admin Header & Title
@@ -72,6 +73,7 @@ def atelier_admin_index(request, extra_context=None):
 admin.site.index = atelier_admin_index
 
 urlpatterns = [
+    path('admin/settings/', lambda request: HttpResponseRedirect('/admin/orders/order/#settings'), name='admin_settings'),
     path('admin/set-currency/', set_currency, name='admin_set_currency'),
     path('set-currency/', set_currency, name='set_currency'),
     path('admin/', admin.site.urls),
