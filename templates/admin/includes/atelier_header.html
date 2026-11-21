@@ -1,16 +1,20 @@
 <!-- BEGIN: Top Navigation Header -->
 <header class="h-16 border-b border-[#21242d] bg-[#0c0d10]/90 backdrop-blur-md sticky top-0 z-30 px-4 sm:px-6 flex items-center justify-between gap-3 sm:gap-4 select-none" data-purpose="top-header" style="background-color: rgba(12, 13, 16, 0.95) !important; border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;">
 <!-- Mobile Hamburger & Brand Identity -->
-<div class="flex items-center gap-2 lg:hidden">
-  <button aria-label="Open navigation menu" class="p-2 -ml-2 rounded-lg text-neutral-300 hover:text-white hover:bg-[#171920] transition cursor-pointer" id="open-mobile-drawer">
+<div class="flex items-center gap-2.5 sm:gap-3 flex-shrink-0">
+  <button aria-label="Open navigation menu" class="p-2 -ml-2 rounded-lg text-neutral-300 hover:text-white hover:bg-[#171920] transition cursor-pointer lg:hidden" id="open-mobile-drawer">
     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
   </button>
-  <div class="flex items-center gap-2">
-    <div class="w-7 h-7 rounded-lg bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400">
+  <a href="{% url 'admin:index' %}" class="flex items-center gap-2.5 group select-none py-1" style="text-decoration: none !important;" title="Luckjary Haute Atelier Console">
+    <div class="w-7 h-7 rounded-lg bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400 group-hover:border-emerald-400/60 group-hover:bg-emerald-500/20 transition-all flex-shrink-0">
       <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 3L2 9l10 12 10-12-10-6zM2 9h20M12 21L7 9m5 12l5-12" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"></path></svg>
     </div>
-    <span class="tracking-[0.18em] text-[11px] font-bold text-neutral-100 uppercase font-sans hidden sm:inline">Luckjary</span>
-  </div>
+    <div class="flex flex-col text-left leading-tight">
+      <span class="tracking-[0.2em] text-[12px] sm:text-[13px] font-bold text-white uppercase font-sans group-hover:text-emerald-400 transition-colors">LUCKJARY</span>
+      <span class="tracking-[0.28em] text-[7.5px] sm:text-[8px] text-neutral-400 font-sans uppercase font-medium">HAUTE ATELIER</span>
+    </div>
+  </a>
+  <div class="h-5 w-px bg-[#21242d] hidden sm:block" style="background-color: rgba(255, 255, 255, 0.08) !important;"></div>
 </div>
 
 <!-- Search Input Container -->
