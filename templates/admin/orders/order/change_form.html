@@ -53,6 +53,44 @@
 </script>
 
 <style data-purpose="dashboard-reference-styles">
+    /* Zero-Bullet Reset: Eradicate all Django bullet dots before navigation tabs */
+    #desktop-sidebar ul,
+    #desktop-sidebar ol,
+    #desktop-sidebar li,
+    .atelier-desktop-sidebar ul,
+    .atelier-desktop-sidebar ol,
+    .atelier-desktop-sidebar li,
+    #mobile-drawer ul,
+    #mobile-drawer li {
+      list-style: none !important;
+      list-style-type: none !important;
+      margin: 0 !important;
+      padding: 0 !important;
+    }
+    #desktop-sidebar li::before,
+    #desktop-sidebar li::after,
+    .atelier-desktop-sidebar li::before,
+    .atelier-desktop-sidebar li::after {
+      content: none !important;
+      display: none !important;
+    }
+
+    /* Universal Spacious 64px Top Header Matching Home */
+    header[data-purpose="top-header"],
+    .atelier-universal-top-header {
+      height: 64px !important;
+      min-height: 64px !important;
+      max-height: 64px !important;
+      display: flex !important;
+      align-items: center !important;
+      box-sizing: border-box !important;
+    }
+    header[data-purpose="top-header"] input#universalHeaderSearch {
+      height: 40px !important;
+      min-height: 40px !important;
+      max-height: 40px !important;
+    }
+
     /* Universal Underline Killer */
     a, a *, a:hover, a:hover *, a:focus, a:active {
       text-decoration: none !important;

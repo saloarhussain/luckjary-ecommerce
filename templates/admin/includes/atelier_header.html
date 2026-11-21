@@ -1,5 +1,56 @@
 <!-- BEGIN: Top Navigation Header -->
-<header class="h-16 border-b border-[#21242d] bg-[#0c0d10]/90 backdrop-blur-md sticky top-0 z-30 px-4 sm:px-6 flex items-center justify-between gap-3 sm:gap-4 select-none" data-purpose="top-header" style="background-color: rgba(12, 13, 16, 0.95) !important; border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;">
+<style>
+header[data-purpose="top-header"],
+.atelier-universal-top-header {
+  height: 64px !important;
+  min-height: 64px !important;
+  max-height: 64px !important;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+  padding-left: 1rem !important;
+  padding-right: 1rem !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  box-sizing: border-box !important;
+}
+@media (min-width: 640px) {
+  header[data-purpose="top-header"],
+  .atelier-universal-top-header {
+    padding-left: 1.5rem !important;
+    padding-right: 1.5rem !important;
+  }
+}
+header[data-purpose="top-header"] form[data-purpose="top-search-form"] {
+  height: 40px !important;
+  margin: 0 !important;
+  display: flex !important;
+  align-items: center !important;
+  position: relative !important;
+}
+header[data-purpose="top-header"] input#universalHeaderSearch {
+  height: 40px !important;
+  min-height: 40px !important;
+  max-height: 40px !important;
+  padding-top: 0.5rem !important;
+  padding-bottom: 0.5rem !important;
+  padding-left: 2.25rem !important;
+  padding-right: 7rem !important;
+  font-size: 0.75rem !important;
+  line-height: 1rem !important;
+  border-radius: 0.5rem !important;
+  margin: 0 !important;
+  box-sizing: border-box !important;
+}
+header[data-purpose="top-header"] button[type="submit"] {
+  height: 30px !important;
+  padding: 0 0.625rem !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  box-sizing: border-box !important;
+}
+</style>
+<header class="h-16 border-b border-[#21242d] bg-[#0c0d10]/90 backdrop-blur-md sticky top-0 z-30 px-4 sm:px-6 flex items-center justify-between gap-3 sm:gap-4 select-none atelier-universal-top-header" data-purpose="top-header" style="height: 64px !important; min-height: 64px !important; max-height: 64px !important; background-color: rgba(12, 13, 16, 0.95) !important; border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important; box-sizing: border-box !important;">
 <!-- Mobile Hamburger & Brand Identity -->
 <div class="flex items-center gap-2 lg:hidden">
   <button aria-label="Open navigation menu" class="p-2 -ml-2 rounded-lg text-neutral-300 hover:text-white hover:bg-[#171920] transition cursor-pointer" id="open-mobile-drawer">

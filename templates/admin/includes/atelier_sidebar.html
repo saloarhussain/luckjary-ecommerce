@@ -10,6 +10,30 @@
     display: flex !important;
   }
 }
+/* Bullet dot eliminator: enforce zero list bullets across all layouts */
+#desktop-sidebar ul,
+#desktop-sidebar ol,
+#desktop-sidebar li,
+.atelier-desktop-sidebar ul,
+.atelier-desktop-sidebar ol,
+.atelier-desktop-sidebar li,
+#mobile-drawer ul,
+#mobile-drawer ol,
+#mobile-drawer li {
+  list-style: none !important;
+  list-style-type: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+#desktop-sidebar li::before,
+#desktop-sidebar li::after,
+.atelier-desktop-sidebar li::before,
+.atelier-desktop-sidebar li::after,
+#mobile-drawer li::before,
+#mobile-drawer li::after {
+  content: none !important;
+  display: none !important;
+}
 </style>
 <!-- BEGIN: Sidebar Navigation -->
 <aside class="atelier-desktop-sidebar hidden lg:flex w-64 flex-shrink-0 bg-[#0c0d10] border-r border-[#21242d] min-h-screen flex-col justify-between select-none sticky top-0 h-screen overflow-y-auto" data-purpose="primary-sidebar" id="desktop-sidebar" style="background-color: #0c0d10 !important; border-right: 1px solid rgba(255, 255, 255, 0.08) !important;">

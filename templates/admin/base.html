@@ -93,6 +93,39 @@
 /* ========================================================
    ATELIER VAULT UNIFIED APP SHELL & RESET OVERRIDES
    ======================================================== */
+/* Zero Bullet Reset: Eradicate all Django base.css bullet dots in sidebar */
+#desktop-sidebar ul,
+#desktop-sidebar ol,
+#desktop-sidebar li,
+.atelier-desktop-sidebar ul,
+.atelier-desktop-sidebar ol,
+.atelier-desktop-sidebar li,
+#mobile-drawer ul,
+#mobile-drawer li {
+  list-style: none !important;
+  list-style-type: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+#desktop-sidebar li::before,
+#desktop-sidebar li::after,
+.atelier-desktop-sidebar li::before,
+.atelier-desktop-sidebar li::after {
+  content: none !important;
+  display: none !important;
+}
+
+/* Enforce 64px height and alignment on header */
+header[data-purpose="top-header"],
+.atelier-universal-top-header {
+  height: 64px !important;
+  min-height: 64px !important;
+  max-height: 64px !important;
+  box-sizing: border-box !important;
+  display: flex !important;
+  align-items: center !important;
+}
+
 /* Universal Underline Killer: Wipe out all default Django & browser link underlines */
 a,
 a *,
