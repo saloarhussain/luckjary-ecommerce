@@ -5,6 +5,12 @@
 <div class="bg-neutral-900 text-white border-b border-neutral-800 py-8">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
+            <!-- Breadcrumbs -->
+            <nav aria-label="Breadcrumb" class="flex items-center gap-2 text-xs font-mono text-neutral-400 mb-3 tracking-wide">
+                <a href="{% url 'admin:index' %}" class="text-neutral-400 hover:text-emerald-400 transition-colors">Home</a>
+                <span class="text-neutral-600">›</span>
+                <span class="text-neutral-200 font-medium">Atelier OMS Console</span>
+            </nav>
             <div class="flex items-center space-x-2">
                 <span class="inline-block w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
                 <span class="text-xs font-display tracking-[0.25em] text-[#C5A059] uppercase font-bold">Atelier OMS Console</span>

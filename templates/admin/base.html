@@ -705,10 +705,13 @@ fieldset.module h2 {
           {% if not is_popup %}
           <!-- Breadcrumbs -->
           {% block nav-breadcrumbs %}
-          <nav aria-label="{% translate 'Breadcrumbs' %}" class="shopify-breadcrumbs-nav px-4 sm:px-6 lg:px-8 pt-4 pb-2">
-              <ol class="shopify-breadcrumbs-list flex items-center gap-2 text-xs text-zinc-400">
-                  <li><a href="{% url 'admin:index' %}" class="hover:text-emerald-400 transition-colors">Home</a></li>
-                  {% if title %}<li class="text-zinc-600">/</li><li aria-current="page" class="text-zinc-200 font-medium">{{ title }}</li>{% endif %}
+          <nav aria-label="Breadcrumb" class="shopify-breadcrumbs-nav px-4 sm:px-6 lg:px-8 pt-4 pb-2">
+              <ol class="shopify-breadcrumbs-list flex items-center gap-2 text-xs font-mono text-zinc-400 tracking-wide">
+                  <li><a href="{% url 'admin:index' %}" class="text-zinc-500 hover:text-zinc-300 transition-colors cursor-pointer">Home</a></li>
+                  {% if title %}
+                  <li class="text-zinc-600">›</li>
+                  <li aria-current="page" class="text-zinc-200 font-medium">{{ title }}</li>
+                  {% endif %}
               </ol>
           </nav>
           {% endblock %}

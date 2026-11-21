@@ -154,12 +154,12 @@
     <main class="p-4 sm:p-6 lg:p-8 max-w-7xl w-full mx-auto space-y-6 sm:space-y-8">
       
       <!-- Breadcrumbs Navigation -->
-      <nav class="flex items-center gap-2 text-xs text-zinc-500 font-mono" data-purpose="breadcrumbs">
-        <a class="hover:text-zinc-300 transition" href="/admin/">Home</a>
+      <nav aria-label="Breadcrumb" class="flex items-center gap-2 text-xs font-mono text-zinc-400 tracking-wide" data-purpose="breadcrumbs">
+        <a class="text-zinc-500 hover:text-zinc-300 transition-colors cursor-pointer" href="/admin/">Home</a>
         <span class="text-zinc-600">›</span>
-        <a class="hover:text-zinc-300 transition" href="{% url 'admin:accounts_customuser_changelist' %}">Customers</a>
+        <a class="text-zinc-500 hover:text-zinc-300 transition-colors cursor-pointer" href="{% url 'admin:accounts_customuser_changelist' %}">Customers</a>
         <span class="text-zinc-600">›</span>
-        <span class="text-zinc-300 font-medium">{% if add %}Add Customer{% else %}Change Customer{% endif %}</span>
+        <span class="text-zinc-200 font-medium">{% if add %}Add Customer{% else %}{{ original.email|default:"Edit Customer" }}{% endif %}</span>
       </nav>
 
       <!-- Patron Page Headline & Activity Quick-action -->

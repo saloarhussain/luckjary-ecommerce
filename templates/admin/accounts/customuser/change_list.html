@@ -192,6 +192,13 @@ html, body {
     <!-- Main Workspace Content -->
     <main class="flex-1 w-full min-w-0 p-4 sm:p-6 lg:p-8 space-y-6">
 
+      <!-- Breadcrumbs -->
+      <nav aria-label="Breadcrumb" class="flex items-center gap-2 text-xs font-mono text-zinc-400 tracking-wide">
+        <a href="{% url 'admin:index' %}" class="text-zinc-500 hover:text-zinc-300 transition-colors cursor-pointer">Home</a>
+        <span class="text-zinc-600">›</span>
+        <span class="text-zinc-200 font-medium">Customers</span>
+      </nav>
+
       <!-- Screen Title & Primary CTA Header -->
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div class="flex items-center gap-3">

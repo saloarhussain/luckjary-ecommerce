@@ -372,9 +372,16 @@
 <!-- BEGIN: Breadcrumb & Title Section -->
 <section data-purpose="page-header">
 <!-- Navigation Breadcrumb & Back Action -->
+<nav aria-label="Breadcrumb" class="flex items-center gap-2 text-xs font-mono text-zinc-400 mb-3 tracking-wide">
+  <a href="/admin/" class="text-zinc-500 hover:text-zinc-300 cursor-pointer">Home</a>
+  <span class="text-zinc-600">›</span>
+  <a href="/admin/orders/order/" class="text-zinc-500 hover:text-zinc-300 cursor-pointer">Orders &amp; Changelist</a>
+  <span class="text-zinc-600">›</span>
+  <span class="text-zinc-200 font-medium" id="settingsBreadcrumbActiveTab">Atelier Settings</span>
+</nav>
 <div class="flex items-center justify-between">
 <div class="flex items-center space-x-3 text-xs">
-<a class="btn-secondary inline-flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-medium bg-[#171920] hover:bg-[#21242d] border border-[#21242d] text-[#e5e5e5] hover:text-white transition-all cursor-pointer" href="#" style="text-decoration: none !important;">
+<a class="btn-secondary inline-flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-medium bg-[#171920] hover:bg-[#21242d] border border-[#21242d] text-[#e5e5e5] hover:text-white transition-all cursor-pointer" href="/admin/orders/order/" style="text-decoration: none !important;">
 <span>←</span>
 <span class="font-medium">Back to Orders</span>
 </a>
@@ -1006,6 +1013,16 @@ Standard Luxury Rounding (e.g. ₹3,450 / $42)
   // Switch Atelier Settings Tabs Functionality
   function switchAtelierTab(selectedTab) {
     const tabs = ['currency', 'shipping', 'roles', 'design'];
+    const tabLabels = {
+      'currency': 'Store Currency',
+      'shipping': 'Shipping & Fulfillment',
+      'roles': 'User Roles & Permissions',
+      'design': 'Design & Theme Style'
+    };
+    const breadcrumbLabel = document.getElementById('settingsBreadcrumbActiveTab');
+    if (breadcrumbLabel) {
+      breadcrumbLabel.textContent = `Atelier Settings › ${tabLabels[selectedTab] || selectedTab}`;
+    }
 
     tabs.forEach(tab => {
       const btn = document.getElementById(`tab-btn-${tab}`);

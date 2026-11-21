@@ -4,10 +4,11 @@
 {% block bodyclass %}{{ block.super }} app-{{ app_label }}{% endblock %}
 
 {% block nav-breadcrumbs %}
-<nav aria-label="{% translate 'Breadcrumbs' %}" class="shopify-breadcrumbs-nav">
-    <ol class="shopify-breadcrumbs-list">
-        <li><a href="{% url 'admin:index' %}">Home</a></li>
-        <li aria-current="page">{% for app in app_list %}{{ app.name }}{% endfor %}</li>
+<nav aria-label="{% translate 'Breadcrumbs' %}" class="shopify-breadcrumbs-nav px-4 sm:px-6 lg:px-8 pt-4 pb-2">
+    <ol class="shopify-breadcrumbs-list flex items-center gap-2 text-xs font-mono text-zinc-400 tracking-wide">
+        <li><a href="{% url 'admin:index' %}" class="text-zinc-500 hover:text-zinc-300 transition-colors cursor-pointer">Home</a></li>
+        <li class="text-zinc-600">›</li>
+        <li aria-current="page" class="text-zinc-200 font-medium">{% for app in app_list %}{{ app.name }}{% endfor %}</li>
     </ol>
 </nav>
 {% endblock %}

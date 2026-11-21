@@ -153,13 +153,11 @@ button, button *, button:hover, button:focus {
     <!-- Main Workspace -->
     <main class="flex-1 overflow-y-auto px-3.5 sm:px-6 lg:px-8 py-4 sm:py-6 space-y-4 sm:space-y-6 w-full">
 
-      <!-- Breadcrumbs (Single-line clean truncation on mobile) -->
-      <nav aria-label="Breadcrumb" class="flex items-center gap-1.5 text-xs font-mono text-neutral-400 tracking-wide overflow-hidden whitespace-nowrap">
-        <a href="{% url 'admin:index' %}" class="text-neutral-500 hover:text-neutral-300 transition-colors shrink-0">Home</a>
-        <span class="text-neutral-600 shrink-0">›</span>
-        <span class="text-neutral-400 shrink-0 hidden sm:inline">Products &amp; Inventory</span>
-        <span class="text-neutral-600 shrink-0 hidden sm:inline">›</span>
-        <span class="text-white font-medium truncate">Product Reviews</span>
+      <!-- Breadcrumbs -->
+      <nav aria-label="Breadcrumb" class="flex items-center gap-2 text-xs font-mono text-zinc-400 mb-4 tracking-wide overflow-hidden whitespace-nowrap">
+        <a href="{% url 'admin:index' %}" class="text-zinc-500 hover:text-zinc-300 transition-colors shrink-0 cursor-pointer">Home</a>
+        <span class="text-zinc-600 shrink-0">›</span>
+        <span class="text-zinc-200 font-medium truncate">Product Reviews</span>
       </nav>
 
       <!-- Page Header: Clean Title & Add Review Action Button -->

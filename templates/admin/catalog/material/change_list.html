@@ -132,6 +132,13 @@ tailwind.config = {
       </div>
       {% endif %}
 
+      <!-- Breadcrumbs -->
+      <nav aria-label="Breadcrumb" class="flex items-center gap-2 text-xs font-mono text-zinc-400 tracking-wide">
+        <a href="{% url 'admin:index' %}" class="text-zinc-500 hover:text-zinc-300 transition-colors cursor-pointer">Home</a>
+        <span class="text-zinc-600">›</span>
+        <span class="text-zinc-200 font-medium">Materials</span>
+      </nav>
+
       <!-- BEGIN: PageHeaderSection -->
       <section class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 pb-4 border-b border-white/[0.06]" data-purpose="page-title-and-actions">
         <h1 class="font-serif text-2xl sm:text-3xl md:text-4xl text-white font-normal tracking-wide">
