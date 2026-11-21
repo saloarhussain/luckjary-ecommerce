@@ -163,10 +163,10 @@
     <!-- BEGIN: Main Orders & Changelist Section -->
     <main id="ordersMainView" class="flex-1 w-full px-4 sm:px-6 lg:px-8 pt-5 sm:pt-6 pb-16">
       <!-- Breadcrumbs -->
-      <nav aria-label="Breadcrumb" class="flex items-center gap-2 text-xs font-mono text-zinc-400 mb-4 tracking-wide">
-        <a href="/admin/" class="text-zinc-500 hover:text-zinc-300 cursor-pointer">Home</a>
-        <span class="text-zinc-600">›</span>
-        <span class="text-zinc-200 font-medium">Orders &amp; Changelist</span>
+      <nav aria-label="Breadcrumb" class="flex items-center gap-1.5 sm:gap-2 text-xs font-mono text-zinc-400 mb-4 tracking-wide whitespace-nowrap overflow-x-auto no-scrollbar">
+        <a href="/admin/" class="text-zinc-500 hover:text-zinc-300 cursor-pointer shrink-0">Home</a>
+        <span class="text-zinc-600 shrink-0">›</span>
+        <span class="text-zinc-200 font-medium shrink-0">Orders</span>
       </nav>
 
       <!-- Page Header: Title & Add Order CTA -->
@@ -819,12 +819,12 @@
          ========================================== -->
     <section id="settingsMainView" class="hidden flex-1 w-full px-4 sm:px-6 lg:px-8 pt-5 sm:pt-6 pb-20 font-sans">
       <!-- Breadcrumbs -->
-      <nav aria-label="Breadcrumb" class="flex items-center gap-2 text-xs font-mono text-zinc-400 mb-4 tracking-wide">
-        <a href="/admin/" class="text-zinc-500 hover:text-zinc-300 cursor-pointer">Home</a>
-        <span class="text-zinc-600">›</span>
-        <button type="button" onclick="showOrdersView()" class="text-zinc-500 hover:text-zinc-300 cursor-pointer bg-transparent border-0 p-0 font-mono text-xs">Orders &amp; Changelist</button>
-        <span class="text-zinc-600">›</span>
-        <span class="text-zinc-200 font-medium" id="settingsBreadcrumbActiveTab">Atelier Settings</span>
+      <nav aria-label="Breadcrumb" class="flex items-center gap-1.5 sm:gap-2 text-xs font-mono text-zinc-400 mb-4 tracking-wide whitespace-nowrap overflow-x-auto no-scrollbar">
+        <a href="/admin/" class="text-zinc-500 hover:text-zinc-300 cursor-pointer shrink-0">Home</a>
+        <span class="text-zinc-600 shrink-0">›</span>
+        <button type="button" onclick="showOrdersView()" class="text-zinc-500 hover:text-zinc-300 cursor-pointer bg-transparent border-0 p-0 font-mono text-xs shrink-0">Orders</button>
+        <span class="text-zinc-600 shrink-0">›</span>
+        <span class="text-zinc-200 font-medium shrink-0" id="settingsBreadcrumbActiveTab">Settings</span>
       </nav>
 
       <!-- Back Action Button -->
@@ -1513,7 +1513,7 @@ document.addEventListener('DOMContentLoaded', () => {
     };
     const breadcrumbLabel = document.getElementById('settingsBreadcrumbActiveTab');
     if (breadcrumbLabel) {
-      breadcrumbLabel.textContent = `Atelier Settings › ${tabLabels[tabName] || tabName}`;
+      breadcrumbLabel.textContent = 'Settings';
     }
 
     tabs.forEach(tab => {

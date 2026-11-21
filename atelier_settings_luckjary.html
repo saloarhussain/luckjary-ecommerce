@@ -372,12 +372,12 @@
 <!-- BEGIN: Breadcrumb & Title Section -->
 <section data-purpose="page-header">
 <!-- Navigation Breadcrumb & Back Action -->
-<nav aria-label="Breadcrumb" class="flex items-center gap-2 text-xs font-mono text-zinc-400 mb-3 tracking-wide">
-  <a href="/admin/" class="text-zinc-500 hover:text-zinc-300 cursor-pointer">Home</a>
-  <span class="text-zinc-600">›</span>
-  <a href="/admin/orders/order/" class="text-zinc-500 hover:text-zinc-300 cursor-pointer">Orders &amp; Changelist</a>
-  <span class="text-zinc-600">›</span>
-  <span class="text-zinc-200 font-medium" id="settingsBreadcrumbActiveTab">Atelier Settings</span>
+<nav aria-label="Breadcrumb" class="flex items-center gap-1.5 sm:gap-2 text-xs font-mono text-zinc-400 mb-3 tracking-wide whitespace-nowrap overflow-x-auto no-scrollbar">
+  <a href="/admin/" class="text-zinc-500 hover:text-zinc-300 cursor-pointer shrink-0">Home</a>
+  <span class="text-zinc-600 shrink-0">›</span>
+  <a href="/admin/orders/order/" class="text-zinc-500 hover:text-zinc-300 cursor-pointer shrink-0">Orders</a>
+  <span class="text-zinc-600 shrink-0">›</span>
+  <span class="text-zinc-200 font-medium shrink-0" id="settingsBreadcrumbActiveTab">Settings</span>
 </nav>
 <div class="flex items-center justify-between">
 <div class="flex items-center space-x-3 text-xs">
@@ -1021,7 +1021,7 @@ Standard Luxury Rounding (e.g. ₹3,450 / $42)
     };
     const breadcrumbLabel = document.getElementById('settingsBreadcrumbActiveTab');
     if (breadcrumbLabel) {
-      breadcrumbLabel.textContent = `Atelier Settings › ${tabLabels[selectedTab] || selectedTab}`;
+      breadcrumbLabel.textContent = 'Settings';
     }
 
     tabs.forEach(tab => {
