@@ -2,10 +2,10 @@
 <meta charset="utf-8">
 <meta content="width=device-width, initial-scale=1.0" name="viewport">
 <title>Luckjary Haute Atelier | Admin Management Console</title>
-<!-- Google Fonts: Cormorant Garamond for luxury serif accents, Plus Jakarta Sans for UI, JetBrains Mono for codes -->
+<!-- Google Fonts: Luxury Typography Palette -->
 <link href="https://fonts.googleapis.com" rel="preconnect">
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&amp;family=JetBrains+Mono:wght@400;500;600&amp;family=Plus+Jakarta+Sans:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..700;1,6..96,400..700&family=Cinzel:wght@400..700&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,400..700;1,400..700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Mono:wght@400;700&family=Urbanist:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <!-- Tailwind CSS v3 with Plugins -->
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <!-- Tailwind Custom Configuration -->
@@ -738,6 +738,60 @@ Edit <span>→</span>
 </div>
 <!-- Right: Management Quicklinks & Activity Timeline (4 Cols on xl, 2-col on md) -->
 <div class="xl:col-span-4 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-1 gap-4 sm:gap-5">
+<!-- Atelier Design Style Control Card -->
+<div class="card-surface rounded-xl p-4 sm:p-5" data-purpose="design-system-dashboard-widget">
+<div class="flex items-center justify-between pb-3 border-b border-obsidian-700/60 mb-3">
+<div class="flex items-center gap-2">
+<svg class="w-4 h-4 text-emerald-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01"></path></svg>
+<h2 class="text-xs font-semibold uppercase tracking-wider text-neutral-300 font-mono whitespace-nowrap">
+Atelier Design Style
+</h2>
+</div>
+<span class="px-2 py-0.5 rounded-full text-[10px] font-mono text-emerald-400 bg-emerald-950/60 border border-emerald-500/30 flex items-center gap-1.5" id="dashThemePill">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-400" id="dashThemeDot"></span>
+<span id="dashThemeName">Emerald</span>
+</span>
+</div>
+
+<p class="text-[11px] text-neutral-400 font-sans mb-3 leading-relaxed">
+Active design tokens: fine jewelry serif headings, clean UI sans, and high-contrast buttons.
+</p>
+
+<!-- Active Tokens Summary Chips -->
+<div class="grid grid-cols-2 gap-2 mb-3">
+<div class="p-2 rounded-lg bg-obsidian-850 border border-obsidian-700/60">
+<div class="text-[9px] font-mono text-neutral-400 uppercase tracking-wider">Heading Font</div>
+<div class="text-[11px] font-serif text-white truncate mt-0.5" id="dashSerifDisplay">Cormorant Garamond</div>
+</div>
+<div class="p-2 rounded-lg bg-obsidian-850 border border-obsidian-700/60">
+<div class="text-[9px] font-mono text-neutral-400 uppercase tracking-wider">UI Sans Font</div>
+<div class="text-[11px] font-sans text-white truncate mt-0.5" id="dashSansDisplay">Plus Jakarta Sans</div>
+</div>
+</div>
+
+<!-- Quick Accent Swatches on Dashboard -->
+<div class="mb-3">
+<div class="text-[10px] font-mono text-neutral-400 uppercase tracking-wider mb-2 flex items-center justify-between">
+<span>Quick Accent Switch</span>
+<span class="text-[9px] text-neutral-400 font-mono">1-Click Live</span>
+</div>
+<div class="flex items-center gap-2">
+<button type="button" onclick="dashSetAccent('#10b981', 'Emerald')" class="w-6 h-6 rounded-lg bg-[#10b981] hover:scale-110 transition-transform cursor-pointer border border-white/20" title="Emerald"></button>
+<button type="button" onclick="dashSetAccent('#cca55a', 'Champagne')" class="w-6 h-6 rounded-lg bg-[#cca55a] hover:scale-110 transition-transform cursor-pointer border border-white/20" title="Champagne Gold"></button>
+<button type="button" onclick="dashSetAccent('#3b82f6', 'Sapphire')" class="w-6 h-6 rounded-lg bg-[#3b82f6] hover:scale-110 transition-transform cursor-pointer border border-white/20" title="Sapphire"></button>
+<button type="button" onclick="dashSetAccent('#e11d48', 'Ruby')" class="w-6 h-6 rounded-lg bg-[#e11d48] hover:scale-110 transition-transform cursor-pointer border border-white/20" title="Ruby"></button>
+<button type="button" onclick="dashSetAccent('#f472b6', 'Rose')" class="w-6 h-6 rounded-lg bg-[#f472b6] hover:scale-110 transition-transform cursor-pointer border border-white/20" title="Rose Quartz"></button>
+<button type="button" onclick="dashSetAccent('#f3f4f6', 'Platinum')" class="w-6 h-6 rounded-lg bg-[#f3f4f6] hover:scale-110 transition-transform cursor-pointer border border-white/20" title="Platinum"></button>
+</div>
+</div>
+
+<!-- Direct Link to Design Settings Customizer -->
+<a href="{% url 'admin:orders_order_changelist' %}#settings-design" class="w-full inline-flex items-center justify-center gap-2 px-3.5 py-2 rounded-lg bg-obsidian-800 hover:bg-obsidian-750 text-neutral-200 hover:text-white border border-obsidian-700 text-xs font-semibold font-sans transition-all cursor-pointer shadow-sm group" style="text-decoration: none !important;">
+<span>Customize Atelier Style &amp; Fonts</span>
+<span class="group-hover:translate-x-0.5 transition-transform">→</span>
+</a>
+</div>
+
 <!-- Management Quicklinks Card -->
 <div class="card-surface rounded-xl p-4 sm:p-5">
 <h2 class="text-xs font-semibold uppercase tracking-wider text-neutral-400 font-mono pb-3 border-b border-obsidian-700/60 mb-3 whitespace-nowrap">
@@ -888,6 +942,77 @@ Edit <span>→</span>
       }
     }
   });
+
+  // Atelier Design System Tokens Engine for Dashboard
+  function hexToRgbDash(hex) {
+    let c = (hex || '#10b981').replace('#', '');
+    if (c.length === 3) c = c.split('').map(x => x + x).join('');
+    const num = parseInt(c, 16) || 0;
+    return `${(num >> 16) & 255}, ${(num >> 8) & 255}, ${num & 255}`;
+  }
+
+  function applyDashTokens(tokens) {
+    if (!tokens) return;
+    const root = document.documentElement;
+    if (tokens.accent) {
+      root.style.setProperty('--luckjary-accent', tokens.accent);
+      root.style.setProperty('--luckjary-accent-rgb', hexToRgbDash(tokens.accent));
+      root.style.setProperty('--luckjary-accent-glow', `rgba(${hexToRgbDash(tokens.accent)}, 0.35)`);
+    }
+    if (tokens.serif) root.style.setProperty('--luckjary-font-serif', tokens.serif);
+    if (tokens.sans) root.style.setProperty('--luckjary-font-sans', tokens.sans);
+    if (tokens.mono) root.style.setProperty('--luckjary-font-mono', tokens.mono);
+    if (tokens.radius) root.style.setProperty('--luckjary-btn-radius', tokens.radius);
+
+    const nameEl = document.getElementById('dashThemeName');
+    const dotEl = document.getElementById('dashThemeDot');
+    const serifEl = document.getElementById('dashSerifDisplay');
+    const sansEl = document.getElementById('dashSansDisplay');
+
+    if (nameEl) nameEl.textContent = tokens.accentName || 'Custom';
+    if (dotEl && tokens.accent) dotEl.style.backgroundColor = tokens.accent;
+    if (serifEl && tokens.serif) {
+      serifEl.textContent = tokens.serif.split(',')[0].replace(/['"]/g, '');
+      serifEl.style.fontFamily = tokens.serif;
+    }
+    if (sansEl && tokens.sans) {
+      sansEl.textContent = tokens.sans.split(',')[0].replace(/['"]/g, '');
+      sansEl.style.fontFamily = tokens.sans;
+    }
+
+    if (tokens.accent) {
+      document.querySelectorAll('.glow-emerald, button.bg-emerald-500, a.btn-primary').forEach(el => {
+        el.style.backgroundColor = tokens.accent;
+        el.style.color = '#07080a !important;';
+        if (tokens.radius) el.style.borderRadius = tokens.radius;
+      });
+    }
+  }
+
+  window.dashSetAccent = function(hex, name) {
+    let tokens = {
+      preset: 'custom',
+      serif: "'Cormorant Garamond', Georgia, serif",
+      sans: "'Plus Jakarta Sans', sans-serif",
+      mono: "'JetBrains Mono', monospace",
+      accent: hex,
+      accentName: name,
+      radius: '8px'
+    };
+    try {
+      const saved = localStorage.getItem('luckjary_design_tokens');
+      if (saved) tokens = { ...tokens, ...JSON.parse(saved), accent: hex, accentName: name, preset: 'custom' };
+      localStorage.setItem('luckjary_design_tokens', JSON.stringify(tokens));
+    } catch(e) {}
+    applyDashTokens(tokens);
+  };
+
+  try {
+    const saved = localStorage.getItem('luckjary_design_tokens');
+    if (saved) {
+      applyDashTokens(JSON.parse(saved));
+    }
+  } catch(e) {}
 </script>
 <!-- END: Simple Mobile Drawer Toggle Script -->
 

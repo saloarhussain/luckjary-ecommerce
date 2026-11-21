@@ -2,10 +2,10 @@
 <meta charset="utf-8">
 <meta content="width=device-width, initial-scale=1.0" name="viewport">
 <title>Atelier Settings — LUCKJARY Haute Atelier</title>
-<!-- Google Fonts: Cormorant Garamond, Plus Jakarta Sans, JetBrains Mono -->
+<!-- Google Fonts: Luxury Typography Palette -->
 <link href="https://fonts.googleapis.com" rel="preconnect">
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&amp;family=JetBrains+Mono:wght@400;500;600&amp;family=Plus+Jakarta+Sans:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..700;1,6..96,400..700&family=Cinzel:wght@400..700&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,400..700;1,400..700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Mono:wght@400;700&family=Urbanist:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <!-- Tailwind CSS v3 -->
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <script>
@@ -406,6 +406,13 @@
 </span>
 <span class="tab-title font-normal text-[#9ca3af]">User Roles &amp; Permissions</span>
 </button>
+<!-- Tab 4: Design & Theme Style (Inactive) -->
+<button class="tab-button relative px-3 sm:px-3.5 py-2 rounded-lg bg-transparent border border-transparent text-[#9ca3af] hover:text-white hover:bg-[#171920] font-medium text-xs tracking-wide flex items-center gap-2 sm:gap-2.5 transition-all whitespace-nowrap focus:outline-none flex-shrink-0" id="tab-btn-design" onclick="switchAtelierTab('design')" type="button">
+<span class="tab-icon flex items-center text-[#75777F]">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01"></path></svg>
+</span>
+<span class="tab-title font-normal text-[#9ca3af]">Design &amp; Theme Style</span>
+</button>
 </div>
 </div>
 <!-- END: Luxury Atelier Tab Navigation Bar -->
@@ -657,6 +664,290 @@ Standard Luxury Rounding (e.g. ₹3,450 / $42)
 </section>
 </div>
 <!-- END: Panel 3 - User Roles & Atelier Permissions -->
+
+<!-- BEGIN: Panel 4 - Design & Theme Style -->
+<div class="tab-panel hidden" data-purpose="design-theme-card" id="tab-panel-design">
+<section class="card-surface rounded-xl p-5 sm:p-7 shadow-luxury-card space-y-7">
+  <!-- Header -->
+  <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-5 border-b border-[#21242d] gap-4">
+    <div>
+      <div class="text-[10px] font-mono uppercase tracking-[0.18em] text-emerald-400 font-semibold mb-1">
+        LUCKJARY DESIGN SYSTEM • ATELIER THEME CUSTOMIZER
+      </div>
+      <h2 class="text-lg sm:text-xl font-normal text-white font-serif tracking-wide">
+        Atelier Visual Identity &amp; Token Controls
+      </h2>
+      <p class="text-xs text-[#9ca3af] font-sans mt-1">
+        Configure bespoke typography pairings, luxury accent palette, and button geometries for the Luckjary Haute Joaillerie console.
+      </p>
+    </div>
+    <div class="flex items-center gap-2 self-start sm:self-auto">
+      <span class="px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 text-[10px] font-mono uppercase tracking-wider font-semibold flex items-center gap-1.5" id="activeThemeBadge">
+        <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" id="activeThemeBadgeDot"></span>
+        <span id="activeThemeBadgeText">Haute Emerald (Active)</span>
+      </span>
+    </div>
+  </div>
+
+  <!-- Section 1: Curated 1-Click Luxury Presets -->
+  <div>
+    <div class="flex items-center justify-between mb-3">
+      <label class="block text-xs font-mono uppercase tracking-[0.16em] text-[#9ca3af] font-semibold">
+        1. CURATED HAUTE ATELIER PRESETS
+      </label>
+      <span class="text-[11px] text-[#6b7280] font-sans">1-click complete visual harmonization</span>
+    </div>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+      <!-- Preset 1: Haute Emerald -->
+      <button type="button" onclick="applyPreset('emerald')" class="preset-card group p-3.5 rounded-xl bg-[#171920] border-2 border-emerald-500/80 text-left transition-all hover:bg-[#1a1d26] cursor-pointer shadow-[0_0_15px_rgba(16,185,129,0.15)] relative" id="preset-btn-emerald">
+        <div class="flex items-center justify-between mb-2">
+          <span class="w-3 h-3 rounded-full bg-[#10b981] shadow-[0_0_8px_#10B981]"></span>
+          <span class="text-[9px] font-mono uppercase px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300 font-semibold">Default</span>
+        </div>
+        <div class="text-sm font-semibold text-white font-sans group-hover:text-emerald-300 transition-colors">Haute Emerald</div>
+        <div class="text-[11px] text-[#9ca3af] mt-1 font-serif italic">Cormorant Garamond + Emerald</div>
+        <div class="mt-2 text-[10px] font-mono text-[#6b7280]">8px radius • JetBrains Mono</div>
+      </button>
+
+      <!-- Preset 2: Imperial Champagne -->
+      <button type="button" onclick="applyPreset('champagne')" class="preset-card group p-3.5 rounded-xl bg-[#171920] border border-[#21242d] text-left transition-all hover:border-[#cca55a]/60 hover:bg-[#1a1d26] cursor-pointer" id="preset-btn-champagne">
+        <div class="flex items-center justify-between mb-2">
+          <span class="w-3 h-3 rounded-full bg-[#cca55a] shadow-[0_0_8px_#cca55a]"></span>
+          <span class="text-[9px] font-mono uppercase px-1.5 py-0.5 rounded bg-[#cca55a]/20 text-amber-300 font-semibold">Imperial</span>
+        </div>
+        <div class="text-sm font-semibold text-white font-sans group-hover:text-amber-200 transition-colors">Champagne Atelier</div>
+        <div class="text-[11px] text-[#9ca3af] mt-1 font-serif italic">Bodoni Moda + Champagne</div>
+        <div class="mt-2 text-[10px] font-mono text-[#6b7280]">8px radius • JetBrains Mono</div>
+      </button>
+
+      <!-- Preset 3: Sapphire Sovereign -->
+      <button type="button" onclick="applyPreset('sapphire')" class="preset-card group p-3.5 rounded-xl bg-[#171920] border border-[#21242d] text-left transition-all hover:border-[#3b82f6]/60 hover:bg-[#1a1d26] cursor-pointer" id="preset-btn-sapphire">
+        <div class="flex items-center justify-between mb-2">
+          <span class="w-3 h-3 rounded-full bg-[#3b82f6] shadow-[0_0_8px_#3b82f6]"></span>
+          <span class="text-[9px] font-mono uppercase px-1.5 py-0.5 rounded bg-blue-500/20 text-blue-300 font-semibold">Sovereign</span>
+        </div>
+        <div class="text-sm font-semibold text-white font-sans group-hover:text-blue-300 transition-colors">Royal Sapphire</div>
+        <div class="text-[11px] text-[#9ca3af] mt-1 font-serif italic">Playfair Display + Sapphire</div>
+        <div class="mt-2 text-[10px] font-mono text-[#6b7280]">12px radius • Space Mono</div>
+      </button>
+
+      <!-- Preset 4: Velvet Crimson -->
+      <button type="button" onclick="applyPreset('ruby')" class="preset-card group p-3.5 rounded-xl bg-[#171920] border border-[#21242d] text-left transition-all hover:border-[#e11d48]/60 hover:bg-[#1a1d26] cursor-pointer" id="preset-btn-ruby">
+        <div class="flex items-center justify-between mb-2">
+          <span class="w-3 h-3 rounded-full bg-[#e11d48] shadow-[0_0_8px_#e11d48]"></span>
+          <span class="text-[9px] font-mono uppercase px-1.5 py-0.5 rounded bg-rose-500/20 text-rose-300 font-semibold">Salon</span>
+        </div>
+        <div class="text-sm font-semibold text-white font-sans group-hover:text-rose-300 transition-colors">Velvet Ruby</div>
+        <div class="text-[11px] text-[#9ca3af] mt-1 font-serif italic">Cinzel + Velvet Ruby</div>
+        <div class="mt-2 text-[10px] font-mono text-[#6b7280]">Pill radius • JetBrains Mono</div>
+      </button>
+    </div>
+  </div>
+
+  <!-- Section 2: Granular Typography Controls -->
+  <div class="pt-2 border-t border-[#21242d]">
+    <label class="block text-xs font-mono uppercase tracking-[0.16em] text-[#9ca3af] font-semibold mb-3">
+      2. BESPOKE TYPOGRAPHY PARADIGM
+    </label>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <!-- Display Serif Font -->
+      <div class="p-4 rounded-xl bg-[#171920] border border-[#21242d] space-y-2">
+        <div class="flex items-center justify-between">
+          <span class="text-xs font-semibold text-white font-sans">Display &amp; Headings</span>
+          <span class="text-[10px] font-mono text-[#9ca3af]">Serif</span>
+        </div>
+        <p class="text-[11px] text-[#9ca3af] font-sans">Used for high-jewelry page titles, greetings, and editorial labels.</p>
+        <select id="tokenSerifSelect" onchange="onTypographyChange()" class="w-full mt-2 px-3 py-2 rounded-lg bg-[#0d0e10] border border-[#21242d] text-white text-xs font-sans focus:border-emerald-500 focus:outline-none cursor-pointer">
+          <option value="'Cormorant Garamond', Georgia, serif">Cormorant Garamond (Default Haute)</option>
+          <option value="'Bodoni Moda', serif">Bodoni Moda (Vogue Editorial)</option>
+          <option value="'Playfair Display', serif">Playfair Display (Classic Atelier)</option>
+          <option value="'Cinzel', serif">Cinzel (Imperial Sculpted)</option>
+        </select>
+      </div>
+
+      <!-- UI Sans Font -->
+      <div class="p-4 rounded-xl bg-[#171920] border border-[#21242d] space-y-2">
+        <div class="flex items-center justify-between">
+          <span class="text-xs font-semibold text-white font-sans">Interface &amp; Buttons</span>
+          <span class="text-[10px] font-mono text-[#9ca3af]">Sans-Serif</span>
+        </div>
+        <p class="text-[11px] text-[#9ca3af] font-sans">Used for buttons, table rows, form inputs, navigation links, and controls.</p>
+        <select id="tokenSansSelect" onchange="onTypographyChange()" class="w-full mt-2 px-3 py-2 rounded-lg bg-[#0d0e10] border border-[#21242d] text-white text-xs font-sans focus:border-emerald-500 focus:outline-none cursor-pointer">
+          <option value="'Plus Jakarta Sans', sans-serif">Plus Jakarta Sans (Default Precision)</option>
+          <option value="'Inter', sans-serif">Inter (Modernist Clean)</option>
+          <option value="'Urbanist', sans-serif">Urbanist (Contemporary Atelier)</option>
+        </select>
+      </div>
+
+      <!-- Telemetry Mono Font -->
+      <div class="p-4 rounded-xl bg-[#171920] border border-[#21242d] space-y-2">
+        <div class="flex items-center justify-between">
+          <span class="text-xs font-semibold text-white font-sans">Data &amp; Telemetry</span>
+          <span class="text-[10px] font-mono text-[#9ca3af]">Monospace</span>
+        </div>
+        <p class="text-[11px] text-[#9ca3af] font-sans">Used for order tracking codes (#LCK-...), SKU tags, and INR prices.</p>
+        <select id="tokenMonoSelect" onchange="onTypographyChange()" class="w-full mt-2 px-3 py-2 rounded-lg bg-[#0d0e10] border border-[#21242d] text-white text-xs font-sans focus:border-emerald-500 focus:outline-none cursor-pointer">
+          <option value="'JetBrains Mono', monospace">JetBrains Mono (Default Tabular)</option>
+          <option value="'Space Mono', monospace">Space Mono (Architectural Code)</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <!-- Section 3: Accent Color & Button Style Controls -->
+  <div class="pt-2 border-t border-[#21242d]">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+      <!-- Left: Accent Colors (7 cols) -->
+      <div class="lg:col-span-7 space-y-3">
+        <label class="block text-xs font-mono uppercase tracking-[0.16em] text-[#9ca3af] font-semibold">
+          3. HAUTE ACCENT &amp; PRIMARY BUTTON COLOR
+        </label>
+        <p class="text-[11px] text-[#9ca3af] font-sans">
+          Sets the primary brand luminescence, active tabs, telemetry highlights, and primary CTA background.
+        </p>
+
+        <div class="flex flex-wrap items-center gap-3 pt-1" id="swatchList">
+          <!-- Swatch 1: Emerald (Default) -->
+          <button type="button" onclick="setAccentColor('#10b981', 'Emerald')" class="swatch-btn relative w-9 h-9 rounded-xl bg-[#10b981] border-2 border-white flex items-center justify-center transition-transform hover:scale-105 shadow-[0_0_12px_rgba(16,185,129,0.4)] cursor-pointer" data-color="#10b981" title="Atelier Emerald (#10b981)">
+            <svg class="w-4 h-4 text-[#07080a] checkmark" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
+          </button>
+          <!-- Swatch 2: Champagne Gold -->
+          <button type="button" onclick="setAccentColor('#cca55a', 'Champagne')" class="swatch-btn relative w-9 h-9 rounded-xl bg-[#cca55a] border-2 border-transparent flex items-center justify-center transition-transform hover:scale-105 cursor-pointer" data-color="#cca55a" title="Champagne Gold (#cca55a)">
+            <svg class="w-4 h-4 text-[#07080a] checkmark hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
+          </button>
+          <!-- Swatch 3: Royal Sapphire -->
+          <button type="button" onclick="setAccentColor('#3b82f6', 'Sapphire')" class="swatch-btn relative w-9 h-9 rounded-xl bg-[#3b82f6] border-2 border-transparent flex items-center justify-center transition-transform hover:scale-105 cursor-pointer" data-color="#3b82f6" title="Royal Sapphire (#3b82f6)">
+            <svg class="w-4 h-4 text-[#07080a] checkmark hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
+          </button>
+          <!-- Swatch 4: Velvet Ruby -->
+          <button type="button" onclick="setAccentColor('#e11d48', 'Ruby')" class="swatch-btn relative w-9 h-9 rounded-xl bg-[#e11d48] border-2 border-transparent flex items-center justify-center transition-transform hover:scale-105 cursor-pointer" data-color="#e11d48" title="Velvet Ruby (#e11d48)">
+            <svg class="w-4 h-4 text-[#07080a] checkmark hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
+          </button>
+          <!-- Swatch 5: Rose Quartz -->
+          <button type="button" onclick="setAccentColor('#f472b6', 'Rose')" class="swatch-btn relative w-9 h-9 rounded-xl bg-[#f472b6] border-2 border-transparent flex items-center justify-center transition-transform hover:scale-105 cursor-pointer" data-color="#f472b6" title="Rose Quartz (#f472b6)">
+            <svg class="w-4 h-4 text-[#07080a] checkmark hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
+          </button>
+          <!-- Swatch 6: Pure Platinum -->
+          <button type="button" onclick="setAccentColor('#f3f4f6', 'Platinum')" class="swatch-btn relative w-9 h-9 rounded-xl bg-[#f3f4f6] border-2 border-transparent flex items-center justify-center transition-transform hover:scale-105 cursor-pointer" data-color="#f3f4f6" title="Pure Platinum (#f3f4f6)">
+            <svg class="w-4 h-4 text-[#07080a] checkmark hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
+          </button>
+
+          <!-- Custom Color Picker -->
+          <div class="flex items-center gap-2 pl-2 border-l border-[#21242d]">
+            <input type="color" id="customColorPicker" value="#10b981" onchange="onCustomColorChange(this.value)" class="w-9 h-9 rounded-xl cursor-pointer bg-transparent border-0 p-0" title="Choose custom hex color">
+            <span class="text-xs font-mono text-[#9ca3af]" id="customHexLabel">#10b981</span>
+          </div>
+        </div>
+
+        <!-- Strict Rule Notice Box -->
+        <div class="p-3 rounded-lg bg-[#0e1117] border border-[#21242d] flex items-start gap-2.5 mt-3">
+          <span class="text-emerald-400 text-xs">🛡️</span>
+          <div class="text-[11px] text-[#9ca3af] font-sans leading-relaxed">
+            <strong class="text-neutral-200">Design System Rule:</strong> Primary action buttons strictly maintain <code class="text-emerald-400 font-mono">#07080a !important;</code> pitch-black text and zero underlines for maximum contrast, luxury readability, and accessibility across all themes.
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: Button Radius & Geometry (5 cols) -->
+      <div class="lg:col-span-5 space-y-3">
+        <label class="block text-xs font-mono uppercase tracking-[0.16em] text-[#9ca3af] font-semibold">
+          4. BUTTON CORNER GEOMETRY
+        </label>
+        <p class="text-[11px] text-[#9ca3af] font-sans">
+          Choose the architectural curvature for buttons and interactive controls.
+        </p>
+        <div class="grid grid-cols-3 gap-2 pt-1">
+          <button type="button" onclick="setBtnRadius('8px')" id="radius-btn-8" class="radius-btn p-3 rounded-lg bg-[#171920] border-2 border-emerald-500/80 text-center transition-all cursor-pointer">
+            <div class="text-xs font-semibold text-white font-sans">8px</div>
+            <div class="text-[10px] text-emerald-400 font-mono mt-0.5">Standard</div>
+          </button>
+          <button type="button" onclick="setBtnRadius('12px')" id="radius-btn-12" class="radius-btn p-3 rounded-lg bg-[#171920] border border-[#21242d] text-center transition-all cursor-pointer hover:border-[#383A43]">
+            <div class="text-xs font-semibold text-neutral-300 font-sans">12px</div>
+            <div class="text-[10px] text-[#9ca3af] font-mono mt-0.5">Architectural</div>
+          </button>
+          <button type="button" onclick="setBtnRadius('9999px')" id="radius-btn-pill" class="radius-btn p-3 rounded-lg bg-[#171920] border border-[#21242d] text-center transition-all cursor-pointer hover:border-[#383A43]">
+            <div class="text-xs font-semibold text-neutral-300 font-sans">Pill</div>
+            <div class="text-[10px] text-[#9ca3af] font-mono mt-0.5">Haute Curve</div>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Section 4: Live Interactive Preview Card -->
+  <div class="pt-2 border-t border-[#21242d]">
+    <div class="flex items-center justify-between mb-3">
+      <label class="block text-xs font-mono uppercase tracking-[0.16em] text-[#9ca3af] font-semibold">
+        5. LIVE ATELIER RENDER PREVIEW
+      </label>
+      <span class="text-[11px] text-emerald-400 font-mono">Real-time dynamic styling</span>
+    </div>
+
+    <!-- Preview Canvas Card -->
+    <div class="p-5 sm:p-6 rounded-xl bg-[#090a0d] border border-white/[0.08] shadow-2xl space-y-4" id="livePreviewContainer">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-white/[0.06]">
+        <div>
+          <span class="text-[10px] font-mono uppercase tracking-widest text-[#9ca3af]">COLLECTION SHOWCASE</span>
+          <h3 class="text-xl sm:text-2xl font-normal text-white mt-1 transition-all" id="previewDisplayHeading" style="font-family: 'Cormorant Garamond', Georgia, serif;">
+            Celestial Solitaire 925 Pavé Ring
+          </h3>
+        </div>
+        <div class="flex items-center gap-2">
+          <span class="px-2.5 py-1 rounded-full text-[10px] font-mono uppercase tracking-wider font-semibold transition-all inline-flex items-center gap-1.5" id="previewBadge" style="background-color: rgba(16, 185, 129, 0.15); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.35);">
+            <span class="w-1.5 h-1.5 rounded-full" id="previewBadgeDot" style="background-color: #10b981;"></span>
+            Atelier Certified
+          </span>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 py-1">
+        <div class="p-3 rounded-lg bg-[#12141a] border border-white/[0.05]">
+          <span class="text-[10px] font-mono text-[#9ca3af] uppercase tracking-wider block">Order Reference</span>
+          <span class="text-xs font-mono font-semibold text-white mt-1 block" id="previewOrderRef">#LCK-202611-304918</span>
+        </div>
+        <div class="p-3 rounded-lg bg-[#12141a] border border-white/[0.05]">
+          <span class="text-[10px] font-mono text-[#9ca3af] uppercase tracking-wider block">Bespoke Valuation</span>
+          <span class="text-sm font-mono font-semibold text-white mt-1 block" id="previewPrice">₹2,86,350 <span class="text-[11px] text-[#9ca3af] font-sans font-normal">($3,450.00)</span></span>
+        </div>
+        <div class="p-3 rounded-lg bg-[#12141a] border border-white/[0.05]">
+          <span class="text-[10px] font-mono text-[#9ca3af] uppercase tracking-wider block">Artisan Status</span>
+          <span class="text-xs font-sans text-neutral-200 mt-1 block">In Jeweler Hallmarking</span>
+        </div>
+      </div>
+
+      <!-- Sample Buttons in Preview -->
+      <div class="flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-white/[0.06]">
+        <div class="flex items-center gap-3">
+          <button type="button" id="previewPrimaryBtn" class="inline-flex items-center gap-2 px-5 py-2.5 text-xs font-semibold font-sans transition-all cursor-pointer shadow-lg" style="background-color: #10b981; color: #07080a !important; border-radius: 8px; box-shadow: 0 0 20px -3px rgba(16, 185, 129, 0.35); text-decoration: none !important;">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="#07080a" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4"></path></svg>
+            <span style="color: #07080a !important;">+ Create Bespoke Order</span>
+          </button>
+          <button type="button" id="previewSecondaryBtn" class="inline-flex items-center gap-1.5 px-4 py-2.5 text-xs font-medium font-sans bg-[#171920] hover:bg-[#21242d] text-neutral-200 border border-[#21242d] transition-all cursor-pointer" style="border-radius: 8px; text-decoration: none !important;">
+            <span>Launch OMS Console</span>
+            <span>→</span>
+          </button>
+        </div>
+        <span class="text-[11px] text-[#9ca3af] font-mono hidden md:inline">
+          Active Token: <span id="previewTokenSummary" class="text-emerald-400 font-semibold">Emerald • Cormorant • 8px</span>
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom Action Controls: Save & Reset -->
+  <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-between pt-5 border-t border-[#21242d] gap-3">
+    <button type="button" onclick="resetDesignTokens()" class="btn-secondary inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-lg text-xs font-medium font-sans text-neutral-300 hover:text-white transition-all cursor-pointer">
+      <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+      <span>Reset to Default Luckjary Style</span>
+    </button>
+    <button type="button" onclick="saveDesignTokens()" id="saveDesignTokensBtn" class="btn-primary glow-emerald w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-lg text-xs font-semibold font-sans cursor-pointer border border-[#10b981]/40" style="color: #07080a !important; text-decoration: none !important;">
+      <svg class="w-4 h-4" fill="none" stroke="#07080a" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+      <span style="color: #07080a !important; font-weight: 600;">Save Style Preferences</span>
+    </button>
+  </div>
+</section>
+</div>
+<!-- END: Panel 4 - Design & Theme Style -->
 </div>
 <!-- END: Tab Content Panels Container -->
 </div>
@@ -714,11 +1005,12 @@ Standard Luxury Rounding (e.g. ₹3,450 / $42)
 
   // Switch Atelier Settings Tabs Functionality
   function switchAtelierTab(selectedTab) {
-    const tabs = ['currency', 'shipping', 'roles'];
+    const tabs = ['currency', 'shipping', 'roles', 'design'];
 
     tabs.forEach(tab => {
       const btn = document.getElementById(`tab-btn-${tab}`);
       const panel = document.getElementById(`tab-panel-${tab}`);
+      if (!btn || !panel) return;
       const title = btn.querySelector('.tab-title');
       const icon = btn.querySelector('.tab-icon');
 
@@ -729,8 +1021,8 @@ Standard Luxury Rounding (e.g. ₹3,450 / $42)
 
         // Active Button styling
         btn.className = "tab-button relative px-3.5 sm:px-4 py-2 rounded-lg bg-[#171920] border border-emerald-500/35 text-emerald-400 font-medium text-xs tracking-wide flex items-center gap-2 sm:gap-2.5 transition-all whitespace-nowrap focus:outline-none flex-shrink-0 shadow-sm cursor-pointer";
-        title.className = "tab-title font-medium text-emerald-300";
-        icon.className = "tab-icon flex items-center text-emerald-400";
+        if (title) title.className = "tab-title font-medium text-emerald-300";
+        if (icon) icon.className = "tab-icon flex items-center text-emerald-400";
       } else {
         // Inactive Panel
         panel.classList.remove('block');
@@ -738,10 +1030,284 @@ Standard Luxury Rounding (e.g. ₹3,450 / $42)
 
         // Inactive Button styling
         btn.className = "tab-button relative px-3 sm:px-3.5 py-2 rounded-lg bg-transparent border border-transparent text-[#9ca3af] hover:text-white hover:bg-[#18191D] font-medium text-xs tracking-wide flex items-center gap-2 sm:gap-2.5 transition-all whitespace-nowrap focus:outline-none flex-shrink-0";
-        title.className = "tab-title font-normal text-[#9ca3af]";
-        icon.className = "tab-icon flex items-center text-[#75777F]";
+        if (title) title.className = "tab-title font-normal text-[#9ca3af]";
+        if (icon) icon.className = "tab-icon flex items-center text-[#75777F]";
       }
     });
+  }
+
+  // ==========================================
+  // LUCKJARY DESIGN SYSTEM CUSTOMIZER ENGINE
+  // ==========================================
+  const defaultTokens = {
+    preset: 'emerald',
+    serif: "'Cormorant Garamond', Georgia, serif",
+    sans: "'Plus Jakarta Sans', sans-serif",
+    mono: "'JetBrains Mono', monospace",
+    accent: '#10b981',
+    accentName: 'Emerald',
+    radius: '8px'
+  };
+
+  const presetDefinitions = {
+    emerald: {
+      name: 'Haute Emerald',
+      serif: "'Cormorant Garamond', Georgia, serif",
+      sans: "'Plus Jakarta Sans', sans-serif",
+      mono: "'JetBrains Mono', monospace",
+      accent: '#10b981',
+      accentName: 'Emerald',
+      radius: '8px'
+    },
+    champagne: {
+      name: 'Champagne Atelier',
+      serif: "'Bodoni Moda', serif",
+      sans: "'Plus Jakarta Sans', sans-serif",
+      mono: "'JetBrains Mono', monospace",
+      accent: '#cca55a',
+      accentName: 'Champagne',
+      radius: '8px'
+    },
+    sapphire: {
+      name: 'Royal Sapphire',
+      serif: "'Playfair Display', serif",
+      sans: "'Inter', sans-serif",
+      mono: "'Space Mono', monospace",
+      accent: '#3b82f6',
+      accentName: 'Sapphire',
+      radius: '12px'
+    },
+    ruby: {
+      name: 'Velvet Ruby',
+      serif: "'Cinzel', serif",
+      sans: "'Urbanist', sans-serif",
+      mono: "'JetBrains Mono', monospace",
+      accent: '#e11d48',
+      accentName: 'Ruby',
+      radius: '9999px'
+    }
+  };
+
+  let currentTokens = { ...defaultTokens };
+
+  function hexToRgb(hex) {
+    let c = (hex || '#10b981').replace('#', '');
+    if (c.length === 3) c = c.split('').map(x => x + x).join('');
+    const num = parseInt(c, 16) || 0;
+    return `${(num >> 16) & 255}, ${(num >> 8) & 255}, ${num & 255}`;
+  }
+
+  function applyGlobalTheme(tokens) {
+    if (!tokens) return;
+    const root = document.documentElement;
+    root.style.setProperty('--luckjary-accent', tokens.accent);
+    root.style.setProperty('--luckjary-accent-rgb', hexToRgb(tokens.accent));
+    root.style.setProperty('--luckjary-accent-glow', `rgba(${hexToRgb(tokens.accent)}, 0.35)`);
+    root.style.setProperty('--luckjary-font-serif', tokens.serif);
+    root.style.setProperty('--luckjary-font-sans', tokens.sans);
+    root.style.setProperty('--luckjary-font-mono', tokens.mono);
+    root.style.setProperty('--luckjary-btn-radius', tokens.radius);
+
+    document.querySelectorAll('.btn-primary').forEach(btn => {
+      btn.style.backgroundColor = tokens.accent;
+      btn.style.color = '#07080a !important;';
+      btn.style.borderRadius = tokens.radius;
+      btn.style.boxShadow = `0 0 20px -3px rgba(${hexToRgb(tokens.accent)}, 0.35)`;
+      btn.style.borderColor = `rgba(${hexToRgb(tokens.accent)}, 0.4)`;
+    });
+
+    const badgeText = document.getElementById('activeThemeBadgeText');
+    const badgeDot = document.getElementById('activeThemeBadgeDot');
+    if (badgeText) {
+      const pName = presetDefinitions[tokens.preset]?.name || tokens.accentName || 'Custom';
+      badgeText.textContent = `${pName} (Active)`;
+    }
+    if (badgeDot) {
+      badgeDot.style.backgroundColor = tokens.accent;
+    }
+
+    updateDesignPreview();
+  }
+
+  window.updateDesignPreview = function() {
+    const heading = document.getElementById('previewDisplayHeading');
+    const badge = document.getElementById('previewBadge');
+    const badgeDot = document.getElementById('previewBadgeDot');
+    const primaryBtn = document.getElementById('previewPrimaryBtn');
+    const secondaryBtn = document.getElementById('previewSecondaryBtn');
+    const tokenSummary = document.getElementById('previewTokenSummary');
+    const orderRef = document.getElementById('previewOrderRef');
+    const price = document.getElementById('previewPrice');
+
+    if (heading) heading.style.fontFamily = currentTokens.serif;
+    if (orderRef) orderRef.style.fontFamily = currentTokens.mono;
+    if (price) price.style.fontFamily = currentTokens.mono;
+
+    const rgb = hexToRgb(currentTokens.accent);
+    if (badge) {
+      badge.style.backgroundColor = `rgba(${rgb}, 0.15)`;
+      badge.style.color = currentTokens.accent;
+      badge.style.borderColor = `rgba(${rgb}, 0.35)`;
+    }
+    if (badgeDot) {
+      badgeDot.style.backgroundColor = currentTokens.accent;
+    }
+
+    if (primaryBtn) {
+      primaryBtn.style.backgroundColor = currentTokens.accent;
+      primaryBtn.style.color = '#07080a !important;';
+      primaryBtn.style.borderRadius = currentTokens.radius;
+      primaryBtn.style.boxShadow = `0 0 20px -3px rgba(${rgb}, 0.35)`;
+      primaryBtn.style.fontFamily = currentTokens.sans;
+    }
+
+    if (secondaryBtn) {
+      secondaryBtn.style.borderRadius = currentTokens.radius;
+      secondaryBtn.style.fontFamily = currentTokens.sans;
+    }
+
+    if (tokenSummary) {
+      const sName = currentTokens.serif.split(',')[0].replace(/['"]/g, '');
+      tokenSummary.textContent = `${currentTokens.accentName || currentTokens.accent} • ${sName} • ${currentTokens.radius}`;
+      tokenSummary.style.color = currentTokens.accent;
+    }
+  };
+
+  window.applyPreset = function(presetKey) {
+    const preset = presetDefinitions[presetKey];
+    if (!preset) return;
+    currentTokens = { ...preset, preset: presetKey };
+
+    const serifSel = document.getElementById('tokenSerifSelect');
+    const sansSel = document.getElementById('tokenSansSelect');
+    const monoSel = document.getElementById('tokenMonoSelect');
+    if (serifSel) serifSel.value = preset.serif;
+    if (sansSel) sansSel.value = preset.sans;
+    if (monoSel) monoSel.value = preset.mono;
+
+    document.querySelectorAll('.preset-card').forEach(card => {
+      card.className = 'preset-card group p-3.5 rounded-xl bg-[#171920] border border-[#21242d] text-left transition-all hover:bg-[#1a1d26] cursor-pointer';
+      card.style.borderColor = '#21242d';
+      card.style.boxShadow = 'none';
+    });
+    const activeCard = document.getElementById(`preset-btn-${presetKey}`);
+    if (activeCard) {
+      activeCard.className = 'preset-card group p-3.5 rounded-xl bg-[#171920] border-2 text-left transition-all hover:bg-[#1a1d26] cursor-pointer relative';
+      activeCard.style.borderColor = preset.accent;
+      activeCard.style.boxShadow = `0 0 15px rgba(${hexToRgb(preset.accent)}, 0.2)`;
+    }
+
+    highlightSwatch(preset.accent);
+    highlightRadius(preset.radius);
+    applyGlobalTheme(currentTokens);
+  };
+
+  window.onTypographyChange = function() {
+    const serifSel = document.getElementById('tokenSerifSelect');
+    const sansSel = document.getElementById('tokenSansSelect');
+    const monoSel = document.getElementById('tokenMonoSelect');
+
+    if (serifSel) currentTokens.serif = serifSel.value;
+    if (sansSel) currentTokens.sans = sansSel.value;
+    if (monoSel) currentTokens.mono = monoSel.value;
+    currentTokens.preset = 'custom';
+
+    applyGlobalTheme(currentTokens);
+  };
+
+  function highlightSwatch(color) {
+    document.querySelectorAll('#swatchList .swatch-btn').forEach(btn => {
+      const check = btn.querySelector('.checkmark');
+      const btnColor = btn.dataset.color;
+      if (btnColor && btnColor.toLowerCase() === color.toLowerCase()) {
+        btn.classList.add('border-white', 'shadow-lg');
+        btn.classList.remove('border-transparent');
+        if (check) check.classList.remove('hidden');
+      } else {
+        btn.classList.remove('border-white', 'shadow-lg');
+        btn.classList.add('border-transparent');
+        if (check) check.classList.add('hidden');
+      }
+    });
+
+    const picker = document.getElementById('customColorPicker');
+    const label = document.getElementById('customHexLabel');
+    if (picker) picker.value = color;
+    if (label) label.textContent = color.toUpperCase();
+  }
+
+  function highlightRadius(radius) {
+    document.querySelectorAll('.radius-btn').forEach(btn => {
+      btn.className = 'radius-btn p-3 rounded-lg bg-[#171920] border border-[#21242d] text-center transition-all cursor-pointer hover:border-[#383A43]';
+      btn.style.borderColor = '#21242d';
+    });
+    let targetId = 'radius-btn-8';
+    if (radius === '12px') targetId = 'radius-btn-12';
+    if (radius === '9999px') targetId = 'radius-btn-pill';
+    const target = document.getElementById(targetId);
+    if (target) {
+      target.className = 'radius-btn p-3 rounded-lg bg-[#171920] border-2 text-center transition-all cursor-pointer';
+      target.style.borderColor = currentTokens.accent;
+    }
+  }
+
+  window.setAccentColor = function(hex, name) {
+    currentTokens.accent = hex;
+    currentTokens.accentName = name || 'Custom';
+    currentTokens.preset = 'custom';
+    highlightSwatch(hex);
+    applyGlobalTheme(currentTokens);
+  };
+
+  window.onCustomColorChange = function(hex) {
+    window.setAccentColor(hex, 'Custom');
+  };
+
+  window.setBtnRadius = function(radius) {
+    currentTokens.radius = radius;
+    currentTokens.preset = 'custom';
+    highlightRadius(radius);
+    applyGlobalTheme(currentTokens);
+  };
+
+  window.saveDesignTokens = function() {
+    try {
+      localStorage.setItem('luckjary_design_tokens', JSON.stringify(currentTokens));
+      alert('Atelier design preferences saved successfully!');
+    } catch(e) {}
+  };
+
+  window.resetDesignTokens = function() {
+    currentTokens = { ...defaultTokens };
+    try {
+      localStorage.removeItem('luckjary_design_tokens');
+    } catch(e) {}
+    window.applyPreset('emerald');
+  };
+
+  try {
+    const saved = localStorage.getItem('luckjary_design_tokens');
+    if (saved) {
+      const parsed = JSON.parse(saved);
+      currentTokens = { ...defaultTokens, ...parsed };
+      if (parsed.preset && presetDefinitions[parsed.preset]) {
+        window.applyPreset(parsed.preset);
+      } else {
+        const serifSel = document.getElementById('tokenSerifSelect');
+        const sansSel = document.getElementById('tokenSansSelect');
+        const monoSel = document.getElementById('tokenMonoSelect');
+        if (serifSel) serifSel.value = currentTokens.serif;
+        if (sansSel) sansSel.value = currentTokens.sans;
+        if (monoSel) monoSel.value = currentTokens.mono;
+        highlightSwatch(currentTokens.accent);
+        highlightRadius(currentTokens.radius);
+        applyGlobalTheme(currentTokens);
+      }
+    } else {
+      window.updateDesignPreview();
+    }
+  } catch(e) {
+    window.updateDesignPreview();
   }
 
   // Active Selected Currency State
