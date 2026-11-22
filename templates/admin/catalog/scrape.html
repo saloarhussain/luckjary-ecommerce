@@ -253,6 +253,10 @@ a, a *, a:hover, a:hover *, a:focus, a:active, button, button * {
         <!-- One-Click Sample Product Demos -->
         <div class="flex flex-wrap items-center gap-2 pt-1 text-xs text-neutral-400 font-sans">
           <span class="text-neutral-500 font-medium">Quick Test Demonstrations:</span>
+          <button type="button" onclick="loadSampleProduct('sparelelo')" class="px-3 py-1.5 rounded-lg bg-[#111317] hover:bg-[#171920] border border-emerald-500/40 text-emerald-300 hover:text-white flex items-center gap-1.5 transition-colors cursor-pointer">
+            <span>📱 Sparelelo Samsung Repair</span>
+            <span class="font-mono text-[10px] text-emerald-400 bg-emerald-500/15 px-1.5 py-0.2 rounded">30 Items • 14 Variants</span>
+          </button>
           <button type="button" onclick="loadSampleProduct('ring')" class="px-3 py-1.5 rounded-lg bg-[#111317] hover:bg-[#171920] border border-[#21242d] hover:border-emerald-500/40 text-neutral-300 hover:text-white flex items-center gap-1.5 transition-colors cursor-pointer">
             <span>💍 Solitaire Diamond Band</span>
             <span class="font-mono text-[10px] text-emerald-400 bg-emerald-500/10 px-1.5 py-0.2 rounded">JSON-LD</span>
@@ -275,6 +279,29 @@ a, a *, a:hover, a:hover *, a:focus, a:active, button, button * {
           <span id="feedbackText" class="font-medium"></span>
         </div>
         <button type="button" onclick="document.getElementById('scrapeFeedbackBanner').classList.add('hidden')" class="text-neutral-400 hover:text-white cursor-pointer">✕</button>
+      </div>
+
+      <!-- Collection Detected Banner (Shows when a collection URL is scraped) -->
+      <div id="collectionBanner" class="hidden card-surface p-4 rounded-2xl flex-col gap-3 border border-champagne-400/30">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+          <div class="flex items-center gap-2.5">
+            <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
+            <div>
+              <span class="text-xs font-semibold text-white font-sans">
+                Collection Detected: <strong id="collectionTitleDisplay" class="text-champagne-300 font-serif text-sm">Samsung Repair</strong>
+                (<span id="collectionCountDisplay" class="font-mono text-emerald-400">30</span> Pieces)
+              </span>
+              <p class="text-[11px] text-neutral-400 font-sans">Click any piece below to instantly curate its variants, SKUs, pricing, and photography.</p>
+            </div>
+          </div>
+          <span class="text-[10px] font-mono text-neutral-400 px-2 py-1 rounded bg-[#111317] border border-[#21242d] self-start sm:self-auto">
+            SELECT PIECE TO CURATE
+          </span>
+        </div>
+        <!-- Scrollable collection items -->
+        <div id="collectionProductsChips" class="flex items-center gap-2 overflow-x-auto no-scrollbar pt-1 pb-1">
+          <!-- Populated by JS -->
+        </div>
       </div>
 
       <!-- Live Scraped Studio & Curator (Hidden until product scraped) -->
@@ -781,15 +808,88 @@ function loadScrapedDataIntoStudio(product) {
   renderVariantsTable();
   renderImagesGrid();
 
+  // Handle Collection Banner
+  const colBanner = document.getElementById('collectionBanner');
+  if (product.is_collection && Array.isArray(product.collection_products) && product.collection_products.length > 0) {
+    colBanner.classList.remove('hidden');
+    colBanner.classList.add('flex');
+    document.getElementById('collectionTitleDisplay').textContent = product.collection_title || 'Collection';
+    document.getElementById('collectionCountDisplay').textContent = product.collection_total || product.collection_products.length;
+    renderCollectionChips(product.collection_products, product.id);
+  } else {
+    colBanner.classList.add('hidden');
+    colBanner.classList.remove('flex');
+  }
+
   // Reset Success Alert
   document.getElementById('importSuccessBox').classList.add('hidden');
+}
+
+// Render Collection Chips
+function renderCollectionChips(products, activeId) {
+  const container = document.getElementById('collectionProductsChips');
+  if (!container) return;
+  container.innerHTML = '';
+  products.forEach(p => {
+    const isActive = p.id === activeId || (currentProduct && p.title === currentProduct.title);
+    const chip = document.createElement('button');
+    chip.type = 'button';
+    chip.className = `whitespace-nowrap px-3 py-1.5 rounded-xl text-xs font-sans transition-all flex items-center gap-2 cursor-pointer shrink-0 ${isActive ? 'bg-emerald-500 text-obsidian-950 font-bold shadow-sm' : 'bg-[#111317] hover:bg-[#171920] border border-[#21242d] text-neutral-300 hover:text-white'}`;
+    if (isActive) chip.style.color = '#07080a !important;';
+    chip.onclick = () => selectCollectionPiece(p);
+    chip.innerHTML = `
+      ${p.image ? `<img src="${escapeHtml(p.image)}" class="w-5 h-5 rounded object-cover" onerror="this.style.display='none'">` : ''}
+      <span class="truncate max-w-[180px]">${escapeHtml(p.title)}</span>
+      <span class="font-mono text-[10px] ${isActive ? 'opacity-90' : 'text-emerald-400'}">${p.price ? '₹' + Math.round(parseFloat(p.price)).toLocaleString('en-IN') : ''}</span>
+      <span class="font-mono text-[9px] px-1 py-0.2 rounded bg-black/40 text-neutral-300">${p.variants_count} vars</span>
+    `;
+    container.appendChild(chip);
+  });
+}
+
+async function selectCollectionPiece(p) {
+  if (!p || !p.handle) return;
+  let sourceDomain = 'sparelelo.com';
+  if (currentProduct && currentProduct.source_url) {
+    try {
+      sourceDomain = new URL(currentProduct.source_url).host;
+    } catch (e) {}
+  }
+  const prodUrl = `https://${sourceDomain}/products/${p.handle}`;
+  document.getElementById('targetUrlInput').value = prodUrl;
+  setScrapingLoading(true);
+
+  try {
+    const csrfToken = getCsrfToken();
+    const res = await fetch('/admin/catalog/product/api/scrape/', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'X-CSRFToken': csrfToken },
+      body: JSON.stringify({ url: prodUrl })
+    });
+    const data = await res.json();
+    if (res.ok && data.status === 'ok') {
+      data.product.is_collection = true;
+      data.product.collection_products = currentProduct.collection_products;
+      data.product.collection_title = currentProduct.collection_title;
+      data.product.collection_total = currentProduct.collection_total;
+      loadScrapedDataIntoStudio(data.product);
+      showFeedback(`Loaded "${data.product.title}" (${data.product.variants.length} variants)`);
+    } else {
+      showFeedback(data.message || 'Failed to load selected product from collection.', true);
+    }
+  } catch (err) {
+    showFeedback(`Error loading piece: ${err.message}`, true);
+  } finally {
+    setScrapingLoading(false);
+  }
 }
 
 // Update Price Telemetry & INR Calculation
 function updatePriceTelemetry() {
   const priceVal = parseFloat(document.getElementById('fieldPrice').value) || 0;
   const compVal = parseFloat(document.getElementById('fieldComparePrice').value) || 0;
-  const inrVal = Math.round(priceVal * INR_RATE);
+  const isDirectInr = currentProduct && currentProduct.currency === 'INR';
+  const inrVal = isDirectInr ? Math.round(priceVal) : Math.round(priceVal * INR_RATE);
 
   const displayEl = document.getElementById('displayInrPrice');
   const discountPill = document.getElementById('discountPill');
@@ -1154,6 +1254,13 @@ function clearScrapeHistory() {
 
 // Sample Products Demonstrations
 function loadSampleProduct(type) {
+  if (type === 'sparelelo') {
+    document.getElementById('targetUrlInput').value = 'https://sparelelo.com/collections/samsung-repair';
+    const form = document.getElementById('scrapeUrlForm');
+    form.dispatchEvent(new Event('submit', { cancelable: true }));
+    return;
+  }
+
   let sample;
   if (type === 'ring') {
     sample = {

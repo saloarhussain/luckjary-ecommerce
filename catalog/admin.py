@@ -411,7 +411,10 @@ class ProductAdmin(admin.ModelAdmin):
 
             # Incur INR conversion if currency is USD
             price_num = scraped.get('price') or 0.0
-            inr_val = int(float(price_num) * 83.1527)
+            if scraped.get('currency') == 'INR':
+                inr_val = int(float(price_num))
+            else:
+                inr_val = int(float(price_num) * 83.1527)
             scraped['price_inr'] = inr_val
 
             # Best match category

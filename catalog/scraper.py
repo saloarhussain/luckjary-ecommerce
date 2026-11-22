@@ -1,26 +1,81 @@
 """
-Luckjary Atelier - E-Commerce Product Scraper Engine
+Luckjary Atelier - E-Commerce Product & Collection Scraper Engine
 Extracts product titles, descriptions, pricing, SKUs, variants, and high-res images
-from Shopify stores, WooCommerce, Schema.org JSON-LD, OpenGraph metadata, and custom HTML.
+from Shopify stores, collections, WooCommerce, Schema.org JSON-LD, OpenGraph metadata, and custom HTML.
+Zero mandatory external dependencies - uses standard library urllib with requests fallback.
 """
 
 import json
 import re
 import urllib.parse
 from html.parser import HTMLParser
-import requests
+
+# Safe import of requests (optional enhancement; standard library works independently)
+try:
+    import requests
+except ImportError:
+    requests = None
 
 HEADERS = {
     'User-Agent': (
         'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 '
         '(KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36'
     ),
-    'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8',
+    'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,application/json,image/avif,image/webp,*/*;q=0.8',
     'Accept-Language': 'en-US,en;q=0.9',
     'Sec-Ch-Ua': '"Chromium";v="122", "Not(A:Brand";v="24", "Google Chrome";v="122"',
     'Sec-Ch-Ua-Mobile': '?0',
     'Sec-Ch-Ua-Platform': '"Windows"',
 }
+
+
+def http_get(url, timeout=12):
+    """
+    Robust HTTP GET with automatic fallback to Python standard library urllib.
+    Ensures zero dependency crashes on Vercel / Serverless environments.
+    """
+    if requests is not None:
+        try:
+            session = requests.Session()
+            resp = session.get(url, headers=HEADERS, timeout=timeout)
+            if resp.status_code == 200:
+                resp.encoding = resp.apparent_encoding or 'utf-8'
+                return resp.text, 200
+            elif resp.status_code in (403, 404, 429):
+                # Try urllib fallback before giving up
+                pass
+        except Exception:
+            pass
+
+    # Standard library fallback (zero external dependencies)
+    import urllib.request
+    import ssl
+    import gzip
+    import io
+
+    req = urllib.request.Request(url, headers=HEADERS)
+    ctx = ssl.create_default_context()
+    ctx.check_hostname = False
+    ctx.verify_mode = ssl.CERT_NONE
+
+    try:
+        with urllib.request.urlopen(req, timeout=timeout, context=ctx) as r:
+            code = r.status
+            raw = r.read()
+            if r.headers.get('Content-Encoding') == 'gzip':
+                try:
+                    raw = gzip.GzipFile(fileobj=io.BytesIO(raw)).read()
+                except Exception:
+                    pass
+            charset = r.headers.get_content_charset() or 'utf-8'
+            try:
+                text = raw.decode(charset)
+            except Exception:
+                text = raw.decode('utf-8', errors='ignore')
+            return text, code
+    except Exception as e:
+        return "", getattr(e, 'code', 500)
+
 
 class FastMetaHTMLParser(HTMLParser):
     """
@@ -50,11 +105,9 @@ class FastMetaHTMLParser(HTMLParser):
         elif tag == 'h1' and not self.h1:
             self.in_h1 = True
         elif tag == 'meta':
-            # Property or name
             prop = attr_dict.get('property', '').lower() or attr_dict.get('name', '').lower()
             content = attr_dict.get('content', '')
             if prop and content:
-                # Save multiple or single
                 if prop not in self.meta_tags:
                     self.meta_tags[prop] = content
                 elif isinstance(self.meta_tags[prop], list):
@@ -71,7 +124,6 @@ class FastMetaHTMLParser(HTMLParser):
             srcset = attr_dict.get('srcset')
             alt = attr_dict.get('alt', '')
             if srcset:
-                # Pick largest image from srcset
                 candidates = [s.strip().split() for s in srcset.split(',') if s.strip()]
                 if candidates:
                     src = candidates[-1][0]
@@ -137,31 +189,88 @@ def absolute_url(base_url, link):
     return link
 
 
-def try_shopify_json_endpoint(product_url):
+def try_shopify_endpoints(target_url):
     """
-    Attempts to fetch directly from Shopify's standard public product JSON API.
-    e.g. https://store.com/products/ring-name -> https://store.com/products/ring-name.json
+    Detects and extracts from Shopify store endpoints:
+    1. Product URLs (/products/{handle}) -> {domain}/products/{handle}.json
+    2. Collection URLs (/collections/{handle}) -> {domain}/collections/{handle}/products.json
     """
     try:
-        parsed = urllib.parse.urlparse(product_url)
+        parsed = urllib.parse.urlparse(target_url)
+        netloc = parsed.netloc
+        scheme = parsed.scheme or 'https'
         path = parsed.path
-        if '/products/' in path:
-            json_path = re.sub(r'(\.json)?$', '.json', path)
-            shopify_json_url = urllib.parse.urlunparse((
-                parsed.scheme or 'https',
-                parsed.netloc,
-                json_path,
-                '', '', ''
-            ))
-            resp = requests.get(shopify_json_url, headers=HEADERS, timeout=8)
-            if resp.status_code == 200:
-                data = resp.json()
+
+        # Case 1: Collection URL (e.g. /collections/samsung-repair)
+        col_match = re.search(r'/collections/([^/?#]+)', path)
+        if col_match:
+            col_handle = col_match.group(1)
+            col_json_url = f"{scheme}://{netloc}/collections/{col_handle}/products.json"
+            body, code = http_get(col_json_url)
+            if code == 200 and body:
+                data = json.loads(body)
+                products = data.get('products', [])
+                if products:
+                    return parse_shopify_collection(products, col_handle, target_url, netloc)
+
+        # Case 2: Product URL (e.g. /products/ring-name)
+        prod_match = re.search(r'/products/([^/?#]+)', path)
+        if prod_match:
+            prod_handle = prod_match.group(1).replace('.json', '')
+            prod_json_url = f"{scheme}://{netloc}/products/{prod_handle}.json"
+            body, code = http_get(prod_json_url)
+            if code == 200 and body:
+                data = json.loads(body)
                 if 'product' in data:
-                    prod = data['product']
-                    return parse_shopify_product_dict(prod, product_url)
+                    return parse_shopify_product_dict(data['product'], target_url)
+
+        # Case 3: Direct JSON URL
+        if path.endswith('.json'):
+            body, code = http_get(target_url)
+            if code == 200 and body:
+                data = json.loads(body)
+                if 'product' in data:
+                    return parse_shopify_product_dict(data['product'], target_url)
+                elif 'products' in data and data['products']:
+                    return parse_shopify_collection(data['products'], 'collection', target_url, netloc)
     except Exception:
         pass
     return None
+
+
+def parse_shopify_collection(products_list, col_handle, source_url, domain):
+    """
+    Parses a Shopify collection into:
+    - Primary loaded product (product 0)
+    - Full list of all collection products for 1-click selection in the UI
+    """
+    formatted_products = []
+    for p in products_list:
+        parsed = parse_shopify_product_dict(p, f"https://{domain}/products/{p.get('handle', '')}")
+        formatted_products.append(parsed)
+
+    # Primary product to show in studio
+    primary = formatted_products[0] if formatted_products else {}
+    col_name = col_handle.replace('-', ' ').title()
+
+    primary['is_collection'] = True
+    primary['collection_title'] = col_name
+    primary['collection_handle'] = col_handle
+    primary['collection_total'] = len(formatted_products)
+    primary['collection_products'] = [
+        {
+            'id': p.get('id'),
+            'title': p.get('title'),
+            'price': p.get('price'),
+            'sku': p.get('sku'),
+            'image': p.get('images', [{}])[0].get('src', '') if p.get('images') else '',
+            'variants_count': len(p.get('variants', [])),
+            'handle': p.get('handle')
+        }
+        for p in products_list
+    ]
+    primary['source_type'] = f"Shopify Collection ({len(formatted_products)} pieces)"
+    return primary
 
 
 def parse_shopify_product_dict(prod, source_url):
@@ -194,7 +303,7 @@ def parse_shopify_product_dict(prod, source_url):
 
         variants.append({
             'title': v_title,
-            'sku': v_sku,
+            'sku': v_sku or f"SKU-{len(variants)+1}",
             'price': v_price,
             'compare_at_price': v_comp,
             'available': v_avail,
@@ -215,7 +324,7 @@ def parse_shopify_product_dict(prod, source_url):
                 'height': img.get('height')
             })
 
-    # Options (e.g. Size, Color, Metal)
+    # Options (e.g. Size, Color, Metal, Item)
     options = []
     for opt in prod.get('options', []):
         options.append({
@@ -223,22 +332,24 @@ def parse_shopify_product_dict(prod, source_url):
             'values': opt.get('values', [])
         })
 
-    # Determine primary SKU
+    # Primary SKU
     first_sku = variants[0]['sku'] if variants and variants[0]['sku'] else ''
-    if not first_sku:
+    if not first_sku or first_sku.startswith('SKU-'):
         slug_part = prod.get('handle') or re.sub(r'[^A-Za-z0-9]', '', title)[:8].upper()
-        first_sku = f"LCK-SCR-{slug_part.upper()[:12]}"
+        first_sku = f"LCK-SCR-{slug_part.upper()[:14]}"
 
     return {
         'source_type': 'Shopify Product API',
         'source_url': source_url,
+        'id': prod.get('id'),
+        'handle': prod.get('handle'),
         'title': title,
         'subtitle': f"Curated from {vendor}" if vendor else "Haute Atelier Import",
         'description': description or f"Exquisite handcrafted {title} featuring master gemstone setting and premium fine finishes.",
         'sku': first_sku,
         'price': min_price or 0.0,
         'compare_at_price': compare_at_price,
-        'currency': 'USD',
+        'currency': 'INR' if (min_price and min_price >= 100 and ('.in' in source_url or 'sparelelo' in source_url)) else 'USD',
         'brand': vendor,
         'product_type': product_type,
         'tags': tags,
@@ -331,7 +442,7 @@ def parse_json_ld_scripts(scripts_list, source_url):
 
         variants.append({
             'title': v_name,
-            'sku': curr_sku,
+            'sku': curr_sku or f"SKU-{len(variants)+1}",
             'price': p,
             'compare_at_price': None,
             'available': avail,
@@ -363,7 +474,6 @@ def parse_json_ld_scripts(scripts_list, source_url):
 def parse_opengraph_fallback(meta_tags, images_found, title_found, source_url):
     """Extracts OpenGraph, Twitter, and microdata from page meta tags."""
     title = meta_tags.get('og:title') or meta_tags.get('twitter:title') or title_found or ""
-    # Clean common title suffixes like " - Tiffany & Co." or " | Mejuri"
     title = re.sub(r'\s+[\|\-–—]\s+.*$', '', title).strip()
 
     description = meta_tags.get('og:description') or meta_tags.get('twitter:description') or meta_tags.get('description') or ""
@@ -389,7 +499,7 @@ def parse_opengraph_fallback(meta_tags, images_found, title_found, source_url):
         if not any(i['src'] == tw_url for i in images):
             images.append({'src': tw_url, 'alt': title})
 
-    # Additional images from parser if less than 6
+    # Additional images from parser if needed
     for im in images_found:
         im_url = absolute_url(source_url, im['src'])
         if not any(i['src'] == im_url for i in images) and len(images) < 12:
@@ -426,9 +536,9 @@ def parse_opengraph_fallback(meta_tags, images_found, title_found, source_url):
 
 def scrape_ecommerce_product(url=None, raw_html=None, raw_json=None):
     """
-    Main entry point for scraping an e-commerce product.
+    Main entry point for scraping an e-commerce product or collection.
     Accepts:
-    - url: Live website product URL
+    - url: Live website product/collection URL
     - raw_html: User-pasted HTML source
     - raw_json: User-pasted JSON (e.g. Shopify .json format or Schema.org)
     """
@@ -440,32 +550,33 @@ def scrape_ecommerce_product(url=None, raw_html=None, raw_json=None):
             data = json.loads(raw_json)
             if 'product' in data:
                 return parse_shopify_product_dict(data['product'], url or 'pasted-shopify.json')
+            if 'products' in data and data['products']:
+                return parse_shopify_collection(data['products'], 'pasted-collection', url or 'pasted-collection.json', 'pasted')
             if isinstance(data, dict) and data.get('@type') in ('Product', 'IndividualProduct'):
                 return parse_json_ld_scripts([raw_json], url or 'pasted-schema.json')
         except Exception as e:
             return {'success': False, 'error': f"Failed to parse pasted JSON: {str(e)}"}
 
-    # 2. If URL is provided, try direct Shopify JSON endpoint first if applicable
+    # 2. If URL is provided, try direct Shopify endpoints (Product or Collection)
     if url and not raw_html:
-        shopify_res = try_shopify_json_endpoint(url)
+        shopify_res = try_shopify_endpoints(url)
         if shopify_res and shopify_res.get('title'):
             return shopify_res
 
     # 3. Fetch HTML if URL provided, or use raw_html
     html = raw_html or ""
     if url and not html:
-        try:
-            resp = requests.get(url, headers=HEADERS, timeout=12)
-            resp.encoding = resp.apparent_encoding or 'utf-8'
-            html = resp.text
-        except requests.exceptions.RequestException as e:
+        fetched_text, code = http_get(url)
+        if code == 200 and fetched_text:
+            html = fetched_text
+        else:
             return {
                 'success': False,
-                'error': f"Network connection failed: {str(e)}. Try pasting the raw HTML in the Advanced tab if the store blocks automated web scrapers."
+                'error': f"Target server returned HTTP {code}. The store may require manual copy-paste: open the page in your browser, right-click 'View Page Source' (Ctrl+U), copy the source, and paste it into the 'Advanced: Paste Source' tab."
             }
 
     if not html.strip():
-        return {'success': False, 'error': 'No HTML or URL provided for scraping.'}
+        return {'success': False, 'error': 'No content could be retrieved from the provided URL.'}
 
     # 4. Parse HTML using FastMetaHTMLParser
     parser = FastMetaHTMLParser()
@@ -478,7 +589,6 @@ def scrape_ecommerce_product(url=None, raw_html=None, raw_json=None):
     if parser.json_ld_scripts:
         json_ld_res = parse_json_ld_scripts(parser.json_ld_scripts, url)
         if json_ld_res and json_ld_res.get('title'):
-            # If JSON-LD didn't catch images, complement with parser images
             if not json_ld_res.get('images') and parser.images:
                 json_ld_res['images'] = [
                     {'src': absolute_url(url, im['src']), 'alt': json_ld_res['title']}
