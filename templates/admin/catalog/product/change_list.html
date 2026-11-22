@@ -215,18 +215,13 @@ button, button *, button:hover, button:focus {
         <!-- Top Actions adhering strictly to Primary Emerald & Secondary Obsidian tokens -->
         <div class="flex items-center gap-2.5 self-start md:self-auto">
           <!-- Primary CTA Button: Emerald background, pitch-black text, glow-emerald -->
-          <button type="button" onclick="openQuickAddModal()" class="flex items-center gap-2 bg-emerald-500 hover:bg-emerald-400 text-obsidian-950 font-semibold text-xs sm:text-[13px] px-4 py-2.5 rounded-lg shadow-lg glow-emerald active:scale-95 transition-all cursor-pointer" style="color: #07080a !important; text-decoration: none !important;">
+          <a href="{% url 'admin:catalog_product_add' %}" class="flex items-center gap-2 bg-emerald-500 hover:bg-emerald-400 text-obsidian-950 font-semibold text-xs sm:text-[13px] px-4 py-2.5 rounded-lg shadow-lg glow-emerald active:scale-95 transition-all cursor-pointer" style="color: #07080a !important; text-decoration: none !important;">
             <svg class="w-4 h-4 text-[#07080a]" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
               <circle cx="12" cy="12" r="10"></circle>
               <line x1="12" y1="8" x2="12" y2="16"></line>
               <line x1="8" y1="12" x2="16" y2="12"></line>
             </svg>
             <span>Add Piece</span>
-          </button>
-          <!-- Secondary Action: Obsidian surface, border-obsidian-700, neutral-200 text -->
-          <a href="/admin/catalog/product/add/" class="hidden sm:flex items-center gap-1.5 bg-obsidian-800 hover:bg-obsidian-700 text-neutral-200 hover:text-white font-semibold text-xs px-3.5 py-2.5 rounded-lg border border-obsidian-700 transition cursor-pointer" style="text-decoration: none !important;" title="Open Full Studio Form">
-            <span class="material-symbols-outlined text-[16px] text-champagne-400">tune</span>
-            <span>Full Studio</span>
           </a>
         </div>
       </div>
@@ -491,14 +486,14 @@ button, button *, button:hover, button:focus {
             <h3 class="font-serif text-xl text-white font-normal">Atelier Vault is Empty</h3>
             <p class="text-xs text-neutral-400 mt-1 max-w-sm">No fine jewelry pieces found in this vault query. Create your first creation below.</p>
           </div>
-          <button type="button" onclick="openQuickAddModal()" class="flex items-center gap-2 bg-emerald-500 hover:bg-emerald-400 text-obsidian-950 font-semibold text-xs px-4 py-2.5 rounded-lg shadow-lg glow-emerald transition-all cursor-pointer" style="color: #07080a !important; text-decoration: none !important;">
+          <a href="{% url 'admin:catalog_product_add' %}" class="flex items-center gap-2 bg-emerald-500 hover:bg-emerald-400 text-obsidian-950 font-semibold text-xs px-4 py-2.5 rounded-lg shadow-lg glow-emerald transition-all cursor-pointer" style="color: #07080a !important; text-decoration: none !important;">
             <svg class="w-4 h-4 text-[#07080a]" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
               <circle cx="12" cy="12" r="10"></circle>
               <line x1="12" y1="8" x2="12" y2="16"></line>
               <line x1="8" y1="12" x2="16" y2="12"></line>
             </svg>
             <span>Add First Piece</span>
-          </button>
+          </a>
         </div>
         {% endfor %}
       </div>
