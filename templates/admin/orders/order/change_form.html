@@ -138,9 +138,36 @@
       color: #ffffff !important;
     }
 
-    /* Clean select dropdown arrow */
-    #content-main select {
+    /* Clean, fully visible select dropdown styling - prevents text clipping and ensures perfect vertical alignment */
+    #content-main select,
+    .atelier-select {
+      height: 42px !important;
+      min-height: 42px !important;
+      padding-top: 0 !important;
+      padding-bottom: 0 !important;
+      padding-left: 0.875rem !important;
+      padding-right: 2.5rem !important;
+      line-height: 40px !important;
+      font-size: 0.8125rem !important;
+      font-family: 'Plus Jakarta Sans', sans-serif !important;
+      color: #f3f4f6 !important;
+      background-color: #111317 !important;
       background-image: none !important;
+      -webkit-appearance: none !important;
+      -moz-appearance: none !important;
+      appearance: none !important;
+      box-sizing: border-box !important;
+      vertical-align: middle !important;
+      cursor: pointer !important;
+    }
+
+    #content-main select option,
+    .atelier-select option {
+      background-color: #111317 !important;
+      color: #f3f4f6 !important;
+      padding: 10px 14px !important;
+      font-size: 0.8125rem !important;
+      font-family: 'Plus Jakarta Sans', sans-serif !important;
     }
 
     /* Layout flush reset */
@@ -671,7 +698,7 @@
                   Workflow Status
                 </label>
                 <div class="relative">
-                  <select class="glass-input w-full appearance-none rounded-lg text-xs px-3.5 py-2.5 pr-10 cursor-pointer" id="id_status" name="status">
+                  <select class="glass-input atelier-select w-full appearance-none rounded-lg text-xs px-3.5 pr-10 cursor-pointer" id="id_status" name="status">
                     <option value="PENDING" {% if original.status == 'PENDING' %}selected{% endif %}>Pending Confirmation (Review Completed)</option>
                     <option value="PROCESSING" {% if original.status == 'PROCESSING' %}selected{% endif %}>Commenced at Silversmith Bench</option>
                     <option value="SHIPPED" {% if original.status == 'SHIPPED' or not original.status %}selected{% endif %}>Armored Transit In Progress</option>
@@ -690,7 +717,7 @@
                   Payment Telemetry &amp; Method
                 </label>
                 <div class="relative">
-                  <select class="glass-input w-full appearance-none rounded-lg text-xs px-3.5 py-2.5 pr-10 cursor-pointer" id="id_payment_status" name="payment_status">
+                  <select class="glass-input atelier-select w-full appearance-none rounded-lg text-xs px-3.5 pr-10 cursor-pointer" id="id_payment_status" name="payment_status">
                     <option value="PAID" {% if original.payment_status == 'PAID' or not original.payment_status %}selected{% endif %}>Pre-Payment (Card / Net Banking / Wire - Settled)</option>
                     <option value="PENDING" {% if original.payment_status == 'PENDING' %}selected{% endif %}>Pre-Payment (Hold Authorized - Settlement Pending)</option>
                     <option value="REFUNDED" {% if original.payment_status == 'REFUNDED' %}selected{% endif %}>Payment Reversal / Discharged</option>
@@ -708,7 +735,7 @@
                   Designated Courier Service
                 </label>
                 <div class="relative">
-                  <select class="glass-input w-full appearance-none rounded-lg text-xs px-3.5 py-2.5 pr-10 cursor-pointer" id="id_carrier" name="carrier">
+                  <select class="glass-input atelier-select w-full appearance-none rounded-lg text-xs px-3.5 pr-10 cursor-pointer" id="id_carrier" name="carrier">
                     <option value="FedEx Luxury Priority Overnight (Air Signature)" {% if 'FedEx' in original.carrier or not original.carrier %}selected{% endif %}>FedEx Luxury Priority Overnight (Air Signature)</option>
                     <option value="Malca-Amit Ultra-Secure Armored Transport" {% if 'Malca' in original.carrier %}selected{% endif %}>Malca-Amit Ultra-Secure Armored Transport</option>
                     <option value="Brink's Global Precious Metals Logistics" {% if 'Brink' in original.carrier %}selected{% endif %}>Brink's Global Precious Metals Logistics</option>

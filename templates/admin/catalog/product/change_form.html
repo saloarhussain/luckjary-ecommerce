@@ -147,9 +147,36 @@
       color: #ffffff !important;
     }
 
-    /* Clean select dropdown arrow */
-    #content-main select {
+    /* Clean, fully visible select dropdown styling - prevents text clipping and ensures perfect vertical alignment */
+    #content-main select,
+    .atelier-select {
+      height: 42px !important;
+      min-height: 42px !important;
+      padding-top: 0 !important;
+      padding-bottom: 0 !important;
+      padding-left: 0.875rem !important;
+      padding-right: 2.5rem !important;
+      line-height: 40px !important;
+      font-size: 0.8125rem !important;
+      font-family: 'Plus Jakarta Sans', sans-serif !important;
+      color: #f3f4f6 !important;
+      background-color: #111317 !important;
       background-image: none !important;
+      -webkit-appearance: none !important;
+      -moz-appearance: none !important;
+      appearance: none !important;
+      box-sizing: border-box !important;
+      vertical-align: middle !important;
+      cursor: pointer !important;
+    }
+
+    #content-main select option,
+    .atelier-select option {
+      background-color: #111317 !important;
+      color: #f3f4f6 !important;
+      padding: 10px 14px !important;
+      font-size: 0.8125rem !important;
+      font-family: 'Plus Jakarta Sans', sans-serif !important;
     }
 
     /* Luxury Interactive Toggle & Checkbox Treatments */
@@ -552,7 +579,7 @@
                     Sizing Framework Category
                   </label>
                   <div class="relative">
-                    <select class="glass-input w-full appearance-none rounded-lg text-xs px-3.5 py-2.5 pr-10 cursor-pointer" id="id_size_category" name="size_category" onchange="handleSizeCategoryChange(this.value)">
+                    <select class="glass-input atelier-select w-full appearance-none rounded-lg text-xs px-3.5 pr-10 cursor-pointer" id="id_size_category" name="size_category" onchange="handleSizeCategoryChange(this.value)">
                       {% for val, label in adminform.form.size_category.field.choices %}
                         <option value="{{ val }}" {% if adminform.form.size_category.value|stringformat:"s" == val|stringformat:"s" %}selected{% endif %}>{{ label }}</option>
                       {% endfor %}
@@ -1118,7 +1145,7 @@
                   Primary Category <span class="text-emerald-400">*</span>
                 </label>
                 <div class="relative">
-                  <select class="glass-input w-full appearance-none rounded-lg text-xs px-3.5 py-2.5 pr-10 cursor-pointer" id="id_category" name="category" required onchange="handleCategoryChange(this)">
+                  <select class="glass-input atelier-select w-full appearance-none rounded-lg text-xs px-3.5 pr-10 cursor-pointer" id="id_category" name="category" required onchange="handleCategoryChange(this)">
                     {% for choice_val, choice_label in adminform.form.category.field.choices %}
                       <option value="{{ choice_val }}" {% if adminform.form.category.value|stringformat:"s" == choice_val|stringformat:"s" %}selected{% endif %}>{{ choice_label }}</option>
                     {% endfor %}
@@ -1135,7 +1162,7 @@
                   Atelier Collection (Optional)
                 </label>
                 <div class="relative">
-                  <select class="glass-input w-full appearance-none rounded-lg text-xs px-3.5 py-2.5 pr-10 cursor-pointer" id="id_collection" name="collection">
+                  <select class="glass-input atelier-select w-full appearance-none rounded-lg text-xs px-3.5 pr-10 cursor-pointer" id="id_collection" name="collection">
                     {% for choice_val, choice_label in adminform.form.collection.field.choices %}
                       <option value="{{ choice_val }}" {% if adminform.form.collection.value|stringformat:"s" == choice_val|stringformat:"s" %}selected{% endif %}>{{ choice_label }}</option>
                     {% endfor %}
@@ -1152,7 +1179,7 @@
                   Aesthetic Style
                 </label>
                 <div class="relative">
-                  <select class="glass-input w-full appearance-none rounded-lg text-xs px-3.5 py-2.5 pr-10 cursor-pointer" id="id_style" name="style" onchange="handleStyleChange(this)">
+                  <select class="glass-input atelier-select w-full appearance-none rounded-lg text-xs px-3.5 pr-10 cursor-pointer" id="id_style" name="style" onchange="handleStyleChange(this)">
                     {% for val, label in adminform.form.style.field.choices %}
                       <option value="{{ val }}" {% if adminform.form.style.value|stringformat:"s" == val|stringformat:"s" %}selected{% endif %}>{{ label }}</option>
                     {% endfor %}
