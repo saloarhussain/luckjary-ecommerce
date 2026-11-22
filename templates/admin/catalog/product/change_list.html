@@ -214,6 +214,11 @@ button, button *, button:hover, button:focus {
         </div>
         <!-- Top Actions adhering strictly to Primary Emerald & Secondary Obsidian tokens -->
         <div class="flex items-center gap-2.5 self-start md:self-auto">
+          <!-- Scrape Products Action Button -->
+          <a href="{% url 'admin:catalog_product_scrape' %}" class="flex items-center gap-2 bg-[#171920] hover:bg-[#1c1f28] text-[#e5e5e5] hover:text-white border border-[#21242d] hover:border-emerald-500/40 font-semibold text-xs sm:text-[13px] px-3.5 py-2.5 rounded-lg shadow-sm transition-all cursor-pointer" style="text-decoration: none !important;">
+            <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" /></svg>
+            <span>Scrape Products</span>
+          </a>
           <!-- Primary CTA Button: Emerald background, pitch-black text, glow-emerald -->
           <a href="{% url 'admin:catalog_product_add' %}" class="flex items-center gap-2 bg-emerald-500 hover:bg-emerald-400 text-obsidian-950 font-semibold text-xs sm:text-[13px] px-4 py-2.5 rounded-lg shadow-lg glow-emerald active:scale-95 transition-all cursor-pointer" style="color: #07080a !important; text-decoration: none !important;">
             <svg class="w-4 h-4 text-[#07080a]" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">

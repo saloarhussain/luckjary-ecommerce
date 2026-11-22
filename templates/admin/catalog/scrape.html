@@ -1,0 +1,1254 @@
+{% load i18n static tz %}<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport">
+<title>Product Scraper & Extractor | LUCKJARY HAUTE ATELIER</title>
+<!-- Google Fonts: Cormorant Garamond for luxury serif accents, Plus Jakarta Sans for UI, JetBrains Mono for telemetry -->
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<!-- Tailwind CSS v3 with Plugins -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Custom Configuration adhering strictly to Haute Atelier Design System -->
+<script id="tailwind-config">
+tailwind.config = {
+  darkMode: 'class',
+  theme: {
+    extend: {
+      colors: {
+        obsidian: {
+          950: '#07080a',
+          900: '#0c0d10',
+          850: '#111317',
+          800: '#171920',
+          750: '#1c1f28',
+          700: '#21242d',
+          600: '#2f3440',
+        },
+        champagne: {
+          100: '#fbf7ee',
+          200: '#f4ebd4',
+          300: '#ebd9b0',
+          400: '#dfc287',
+          500: '#cca55a',
+        },
+        emerald: {
+          400: '#34d399',
+          500: '#10b981',
+          600: '#059669',
+          950: '#022c22',
+        }
+      },
+      fontFamily: {
+        serif: ['"Cormorant Garamond"', 'Georgia', 'serif'],
+        sans: ['"Plus Jakarta Sans"', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'sans-serif'],
+        mono: ['"JetBrains Mono"', 'SFMono-Regular', 'Menlo', 'monospace'],
+      }
+    }
+  }
+};
+</script>
+<style>
+@layer base {
+  html, body {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    min-height: 100%;
+    background-color: #07080a;
+    color: #e5e5e5;
+    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+}
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #0c0d10;
+}
+::-webkit-scrollbar-thumb {
+  background: #21242d;
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #2f3440;
+}
+/* Zero Underline Policy across all states */
+a, a *, a:hover, a:hover *, a:focus, a:active, button, button * {
+  text-decoration: none !important;
+  text-decoration-line: none !important;
+}
+.card-surface {
+  background: linear-gradient(145deg, rgba(23, 25, 32, 0.7) 0%, rgba(17, 19, 23, 0.95) 100%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.06) !important;
+  backdrop-filter: blur(12px) !important;
+}
+.card-surface:hover {
+  border-color: rgba(255, 255, 255, 0.1) !important;
+}
+.glow-emerald {
+  box-shadow: 0 0 20px -3px rgba(16, 185, 129, 0.3) !important;
+}
+.glow-amber {
+  box-shadow: 0 0 20px -3px rgba(245, 158, 11, 0.25) !important;
+}
+/* Primary Button Token */
+.btn-primary {
+  background-color: #10b981 !important;
+  color: #07080a !important;
+  font-weight: 600 !important;
+  border: none !important;
+  box-shadow: 0 0 20px -3px rgba(16, 185, 129, 0.3) !important;
+  text-decoration: none !important;
+  transition: all 0.2s ease-in-out;
+}
+.btn-primary:hover {
+  background-color: #34d399 !important;
+}
+/* Secondary Button Token */
+.btn-secondary {
+  background-color: #171920 !important;
+  color: #e5e5e5 !important;
+  border: 1px solid #21242d !important;
+  text-decoration: none !important;
+  transition: all 0.2s ease-in-out;
+}
+.btn-secondary:hover {
+  background-color: #1c1f28 !important;
+  border-color: rgba(255, 255, 255, 0.15) !important;
+  color: #ffffff !important;
+}
+.luxury-input {
+  background-color: #111317 !important;
+  border: 1px solid #21242d !important;
+  color: #ffffff !important;
+  font-size: 0.875rem !important;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.luxury-input:focus {
+  border-color: #10b981 !important;
+  box-shadow: 0 0 0 1px rgba(16, 185, 129, 0.3) !important;
+  outline: none !important;
+}
+@keyframes pulseSlow {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.7; transform: scale(0.97); }
+}
+.pulse-emerald {
+  animation: pulseSlow 3s ease-in-out infinite;
+}
+</style>
+</head>
+
+<body class="bg-[#07080a] text-[#e5e5e5] font-sans antialiased min-h-screen selection:bg-emerald-500/20 selection:text-emerald-300 flex flex-col">
+
+<!-- Main App Root with Persistent Left Side Panel + Right Content Area -->
+<div class="flex flex-1 w-full relative min-h-screen">
+
+  {% include "admin/includes/atelier_sidebar.html" with active_nav="scrape" %}
+
+  <!-- RIGHT MAIN CONTENT AREA -->
+  <div class="flex-1 min-w-0 flex flex-col min-h-screen overflow-x-hidden">
+
+    {% include "admin/includes/atelier_header.html" %}
+
+    <!-- Main Scraper Content Container -->
+    <main class="flex-1 w-full px-4 sm:px-6 lg:px-8 py-6 sm:py-8 flex flex-col gap-6">
+
+      <!-- Breadcrumbs -->
+      <nav aria-label="Breadcrumb" class="flex items-center gap-2 text-xs font-mono text-zinc-400 tracking-wide">
+        <a href="{% url 'admin:index' %}" class="text-zinc-500 hover:text-zinc-300 transition-colors cursor-pointer">Home</a>
+        <span class="text-zinc-600">›</span>
+        <a href="{% url 'admin:catalog_product_changelist' %}" class="text-zinc-500 hover:text-zinc-300 transition-colors cursor-pointer">Products &amp; Inventory</a>
+        <span class="text-zinc-600">›</span>
+        <span class="text-emerald-400 font-medium">Scrape</span>
+      </nav>
+
+      <!-- Page Header & Top Tabs Switcher -->
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-4 border-b border-white/[0.06]">
+        <div>
+          <div class="flex items-center gap-3">
+            <h1 class="font-serif text-2xl sm:text-3xl md:text-4xl text-white font-normal tracking-wide">E-Commerce Scraper</h1>
+            <span class="bg-[#171920] border border-emerald-500/30 text-emerald-400 font-mono text-[11px] px-2.5 py-0.5 rounded-full font-semibold flex items-center gap-1.5 shadow-sm">
+              <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 pulse-emerald"></span>
+              LIVE EXTRACTOR
+            </span>
+          </div>
+          <p class="text-xs sm:text-sm text-neutral-400 mt-1 font-sans">
+            Scrape product titles, variants, SKUs, pricing, specifications, and high-resolution photography from any e-commerce boutique.
+          </p>
+        </div>
+
+        <!-- Top Tab Switcher & Quick Navigation -->
+        <div class="flex items-center gap-2 self-start md:self-auto">
+          <a href="{% url 'admin:catalog_product_changelist' %}" class="btn-secondary flex items-center gap-2 text-xs font-semibold px-3.5 py-2.5 rounded-xl cursor-pointer">
+            <svg class="w-4 h-4 text-neutral-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M12 2l8 4.5v11L12 22 4 17.5v-11L12 2z"></path></svg>
+            <span>Vault Products</span>
+            <span class="font-mono text-[10px] px-1.5 py-0.2 bg-[#111317] rounded text-neutral-400">{{ total_products|default:"17" }}</span>
+          </a>
+          <div class="flex items-center gap-2 px-3.5 py-2.5 rounded-xl bg-[#171920] border border-emerald-500/40 text-emerald-400 text-xs font-semibold shadow-sm">
+            <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" /></svg>
+            <span>Scrape Tab</span>
+            <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Scraper Input Studio Card -->
+      <section class="card-surface p-5 sm:p-6 rounded-2xl flex flex-col gap-4">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+          <div class="flex items-center gap-2.5">
+            <div class="w-8 h-8 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+            </div>
+            <div>
+              <h2 class="font-sans text-sm font-semibold text-white">Target Product URL or Boutique Source</h2>
+              <p class="text-xs text-neutral-400">Supports Shopify stores, WooCommerce, Schema.org JSON-LD, OpenGraph, and fine jewelry brands.</p>
+            </div>
+          </div>
+
+          <!-- Toggle Source Mode Button -->
+          <button id="toggleAdvancedModeBtn" type="button" class="text-xs font-mono text-champagne-400 hover:text-champagne-300 flex items-center gap-1.5 self-start sm:self-auto cursor-pointer">
+            <span id="advancedModeLabel">Advanced: Paste HTML / JSON Source</span>
+            <svg class="w-3.5 h-3.5 transition-transform" id="advancedChevron" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+          </button>
+        </div>
+
+        <!-- URL Input Form -->
+        <form id="scrapeUrlForm" onsubmit="handleScrapeSubmit(event)" class="flex flex-col sm:flex-row items-stretch gap-2.5">
+          {% csrf_token %}
+          <div class="relative flex-1">
+            <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3.5 text-neutral-400">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"></path></svg>
+            </div>
+            <input id="targetUrlInput" type="url" placeholder="Paste e-commerce product URL (e.g. https://boutique.com/products/diamond-ring)" class="luxury-input w-full pl-10 pr-4 py-3 rounded-xl font-sans placeholder-neutral-500" required>
+          </div>
+          <button id="scrapeSubmitBtn" type="submit" class="btn-primary px-6 py-3 rounded-xl flex items-center justify-center gap-2 cursor-pointer font-sans whitespace-nowrap">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" /></svg>
+            <span id="scrapeBtnText">Scrape Product</span>
+          </button>
+        </form>
+
+        <!-- Advanced Accordion: Raw HTML / Raw JSON Paste -->
+        <div id="advancedSourceContainer" class="hidden flex-col gap-3 pt-3 border-t border-white/[0.06]">
+          <div class="flex items-center justify-between text-xs">
+            <span class="text-neutral-300 font-medium">Direct Page Source Inspector (bypass anti-bot protections):</span>
+            <div class="flex items-center gap-2">
+              <button type="button" onclick="setPasteMode('html')" id="tabPasteHtml" class="px-2.5 py-1 rounded bg-[#171920] text-emerald-400 border border-emerald-500/30 font-mono text-[11px] cursor-pointer">HTML</button>
+              <button type="button" onclick="setPasteMode('json')" id="tabPasteJson" class="px-2.5 py-1 rounded bg-[#111317] text-neutral-400 hover:text-white border border-[#21242d] font-mono text-[11px] cursor-pointer">JSON</button>
+            </div>
+          </div>
+          <textarea id="rawSourceInput" rows="5" placeholder="Paste raw page source HTML (<html...> or <script type='application/ld+json'>) or Shopify product .json payload here..." class="luxury-input w-full p-3 rounded-xl font-mono text-xs placeholder-neutral-600"></textarea>
+          <div class="flex justify-end">
+            <button type="button" onclick="handleRawSourceScrape()" class="btn-secondary px-4 py-2 rounded-xl text-xs font-semibold flex items-center gap-2 cursor-pointer">
+              <svg class="w-3.5 h-3.5 text-champagne-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+              <span>Parse Pasted Source</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- One-Click Sample Product Demos -->
+        <div class="flex flex-wrap items-center gap-2 pt-1 text-xs text-neutral-400 font-sans">
+          <span class="text-neutral-500 font-medium">Quick Test Demonstrations:</span>
+          <button type="button" onclick="loadSampleProduct('ring')" class="px-3 py-1.5 rounded-lg bg-[#111317] hover:bg-[#171920] border border-[#21242d] hover:border-emerald-500/40 text-neutral-300 hover:text-white flex items-center gap-1.5 transition-colors cursor-pointer">
+            <span>💍 Solitaire Diamond Band</span>
+            <span class="font-mono text-[10px] text-emerald-400 bg-emerald-500/10 px-1.5 py-0.2 rounded">JSON-LD</span>
+          </button>
+          <button type="button" onclick="loadSampleProduct('pendant')" class="px-3 py-1.5 rounded-lg bg-[#111317] hover:bg-[#171920] border border-[#21242d] hover:border-emerald-500/40 text-neutral-300 hover:text-white flex items-center gap-1.5 transition-colors cursor-pointer">
+            <span>✨ Starburst Sapphire Pendant</span>
+            <span class="font-mono text-[10px] text-champagne-400 bg-champagne-400/10 px-1.5 py-0.2 rounded">Shopify API</span>
+          </button>
+          <button type="button" onclick="loadSampleProduct('bangle')" class="px-3 py-1.5 rounded-lg bg-[#111317] hover:bg-[#171920] border border-[#21242d] hover:border-emerald-500/40 text-neutral-300 hover:text-white flex items-center gap-1.5 transition-colors cursor-pointer">
+            <span>⚜️ Imperial Pavé Bangle</span>
+            <span class="font-mono text-[10px] text-amber-300 bg-amber-400/10 px-1.5 py-0.2 rounded">Multi-Variant</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- Scraping Feedback Banner (hidden by default) -->
+      <div id="scrapeFeedbackBanner" class="hidden p-4 rounded-xl border flex items-center justify-between text-xs font-sans">
+        <div class="flex items-center gap-3">
+          <div id="feedbackIcon" class="w-6 h-6 rounded-full flex items-center justify-center shrink-0"></div>
+          <span id="feedbackText" class="font-medium"></span>
+        </div>
+        <button type="button" onclick="document.getElementById('scrapeFeedbackBanner').classList.add('hidden')" class="text-neutral-400 hover:text-white cursor-pointer">✕</button>
+      </div>
+
+      <!-- Live Scraped Studio & Curator (Hidden until product scraped) -->
+      <section id="scrapedStudioSection" class="hidden flex-col gap-6">
+
+        <!-- Top Telemetry & Source Bar -->
+        <div class="card-surface p-4 rounded-2xl flex flex-wrap items-center justify-between gap-3 text-xs font-sans">
+          <div class="flex items-center gap-3">
+            <span class="px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 font-mono font-semibold flex items-center gap-1.5">
+              <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+              <span id="badgeSourceType">Shopify JSON</span>
+            </span>
+            <span class="text-neutral-400">Target: <span id="telemetrySourceUrl" class="font-mono text-neutral-200">https://boutique...</span></span>
+          </div>
+          <div class="flex items-center gap-4 font-mono text-[11px] text-neutral-400">
+            <span>Detected: <strong id="detectedVariantsCount" class="text-white">0</strong> Variants</span>
+            <span>•</span>
+            <span>Images: <strong id="detectedImagesCount" class="text-white">0</strong> High-Res</span>
+            <span>•</span>
+            <span>Telemetry: <strong id="telemetryInrDisplay" class="text-emerald-400 font-bold">₹0</strong></span>
+          </div>
+        </div>
+
+        <!-- 2-Column Workspace: Left Product Details & Variants, Right Images & Actions -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+
+          <!-- LEFT COLUMN: Product Specifications & Variants (7 Cols) -->
+          <div class="lg:col-span-7 flex flex-col gap-6">
+
+            <!-- Card: Product Identity -->
+            <div class="card-surface p-5 sm:p-6 rounded-2xl flex flex-col gap-4">
+              <div class="flex items-center justify-between border-b border-white/[0.06] pb-3">
+                <h3 class="font-serif text-lg text-white font-normal">Piece Information</h3>
+                <span class="text-[11px] font-mono text-neutral-400">EDITABLE ATELIER SPECS</span>
+              </div>
+
+              <!-- Title -->
+              <div>
+                <label class="block text-xs font-semibold text-neutral-300 mb-1.5 font-sans" for="fieldTitle">Product Title</label>
+                <input id="fieldTitle" type="text" class="luxury-input w-full p-2.5 rounded-xl font-sans text-sm font-medium" placeholder="Jewelry Title">
+              </div>
+
+              <!-- Subtitle & Brand -->
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div>
+                  <label class="block text-xs font-semibold text-neutral-300 mb-1.5 font-sans" for="fieldSubtitle">Subtitle / Tagline</label>
+                  <input id="fieldSubtitle" type="text" class="luxury-input w-full p-2.5 rounded-xl font-sans text-xs" placeholder="e.g. Handcrafted in 925 Solid Sterling Silver">
+                </div>
+                <div>
+                  <label class="block text-xs font-semibold text-neutral-300 mb-1.5 font-sans" for="fieldBrand">Original Brand / Source</label>
+                  <input id="fieldBrand" type="text" class="luxury-input w-full p-2.5 rounded-xl font-sans text-xs" placeholder="Brand Name">
+                </div>
+              </div>
+
+              <!-- SKU, Price, Compare-At Price, and Category -->
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div>
+                  <div class="flex items-center justify-between mb-1.5">
+                    <label class="text-xs font-semibold text-neutral-300 font-sans" for="fieldSku">Vault SKU</label>
+                    <button type="button" onclick="regenerateSku()" class="text-[10px] font-mono text-emerald-400 hover:text-emerald-300 cursor-pointer">Auto-Gen</button>
+                  </div>
+                  <input id="fieldSku" type="text" class="luxury-input w-full p-2.5 rounded-xl font-mono text-xs font-bold tracking-wider text-amber-300" placeholder="LCK-SCR-001">
+                </div>
+
+                <div>
+                  <label class="block text-xs font-semibold text-neutral-300 mb-1.5 font-sans" for="fieldCategory">Vault Category</label>
+                  <select id="fieldCategory" class="luxury-input w-full p-2.5 rounded-xl font-sans text-xs cursor-pointer">
+                    {% for cat in categories %}
+                      <option value="{{ cat.id }}">{{ cat.name }}</option>
+                    {% empty %}
+                      <option value="1">Rings</option>
+                      <option value="2">Necklaces</option>
+                      <option value="3">Bracelets</option>
+                      <option value="4">Earrings</option>
+                    {% endfor %}
+                  </select>
+                </div>
+              </div>
+
+              <!-- Pricing Matrix with Live Rupee Telemetry -->
+              <div class="p-3.5 rounded-xl bg-[#0e1014] border border-[#21242d] flex flex-col gap-3">
+                <div class="flex items-center justify-between text-xs">
+                  <span class="font-semibold text-neutral-200">Pricing &amp; Valuation</span>
+                  <span class="font-mono text-neutral-400">Exchange Rate: ~₹83.15 / USD</span>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                  <div>
+                    <label class="block text-[11px] text-neutral-400 mb-1 font-sans" for="fieldPrice">Retail Price ($ USD)</label>
+                    <input id="fieldPrice" oninput="updatePriceTelemetry()" type="number" step="0.01" class="luxury-input w-full p-2 rounded-lg font-mono text-xs text-white" placeholder="0.00">
+                  </div>
+                  <div>
+                    <label class="block text-[11px] text-neutral-400 mb-1 font-sans" for="fieldComparePrice">Compare-At / MSRP ($)</label>
+                    <input id="fieldComparePrice" oninput="updatePriceTelemetry()" type="number" step="0.01" class="luxury-input w-full p-2 rounded-lg font-mono text-xs text-neutral-400" placeholder="0.00">
+                  </div>
+                  <div>
+                    <label class="block text-[11px] text-neutral-400 mb-1 font-sans">Telemetry (₹ INR)</label>
+                    <div id="displayInrPrice" class="p-2 rounded-lg bg-[#171920] border border-[#21242d] font-mono text-xs font-bold text-emerald-400 flex items-center justify-between">
+                      <span>₹0</span>
+                      <span id="discountPill" class="hidden text-[9px] bg-rose-500/20 text-rose-300 px-1.5 py-0.2 rounded font-mono font-bold">-0%</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Materials & Specifications according to Luckjary Design Guidelines -->
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div>
+                  <label class="block text-xs font-semibold text-neutral-300 mb-1.5 font-sans" for="fieldMetal">Precious Metal</label>
+                  <input id="fieldMetal" type="text" value="925 Sterling Silver" class="luxury-input w-full p-2.5 rounded-xl font-sans text-xs text-neutral-200" placeholder="925 Sterling Silver">
+                </div>
+                <div>
+                  <label class="block text-xs font-semibold text-neutral-300 mb-1.5 font-sans" for="fieldGemstone">Gemstone Specification</label>
+                  <input id="fieldGemstone" type="text" value="5A Flawless Cubic Zirconia (CZ)" class="luxury-input w-full p-2.5 rounded-xl font-sans text-xs text-neutral-200" placeholder="e.g. 5A Flawless Cubic Zirconia">
+                </div>
+              </div>
+
+              <!-- Description -->
+              <div>
+                <label class="block text-xs font-semibold text-neutral-300 mb-1.5 font-sans" for="fieldDescription">Product Description</label>
+                <textarea id="fieldDescription" rows="4" class="luxury-input w-full p-3 rounded-xl font-sans text-xs leading-relaxed text-neutral-300 placeholder-neutral-600" placeholder="Write or edit product description..."></textarea>
+              </div>
+            </div>
+
+            <!-- Card: Scraped Variants & SKUs Matrix -->
+            <div class="card-surface p-5 sm:p-6 rounded-2xl flex flex-col gap-4">
+              <div class="flex items-center justify-between border-b border-white/[0.06] pb-3">
+                <div class="flex items-center gap-2">
+                  <h3 class="font-serif text-lg text-white font-normal">Variants &amp; SKU Matrix</h3>
+                  <span id="variantCountPill" class="px-2 py-0.5 rounded-full bg-emerald-500/15 border border-emerald-500/30 text-emerald-300 text-[10px] font-mono font-bold">0 VARIANTS</span>
+                </div>
+                <button type="button" onclick="addEmptyVariant()" class="text-xs font-semibold text-emerald-400 hover:text-emerald-300 flex items-center gap-1 cursor-pointer font-sans">
+                  <span>+ Add Variant</span>
+                </button>
+              </div>
+
+              <div class="overflow-x-auto no-scrollbar">
+                <table class="w-full text-left text-xs font-sans">
+                  <thead>
+                    <tr class="border-b border-[#21242d] text-neutral-400 font-mono text-[10px] uppercase tracking-wider">
+                      <th class="pb-2.5">Variant Title / Option</th>
+                      <th class="pb-2.5">Variant SKU</th>
+                      <th class="pb-2.5">Price ($)</th>
+                      <th class="pb-2.5">Stock</th>
+                      <th class="pb-2.5 text-right">Action</th>
+                    </tr>
+                  </thead>
+                  <tbody id="variantsTableBody" class="divide-y divide-[#21242d]/60 font-mono">
+                    <!-- Populated dynamically by JS -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- RIGHT COLUMN: Images Curator & 1-Click Vault Importer (5 Cols) -->
+          <div class="lg:col-span-5 flex flex-col gap-6 sticky top-6">
+
+            <!-- Card: Image Gallery Curator -->
+            <div class="card-surface p-5 sm:p-6 rounded-2xl flex flex-col gap-4">
+              <div class="flex items-center justify-between border-b border-white/[0.06] pb-3">
+                <div class="flex items-center gap-2">
+                  <h3 class="font-serif text-lg text-white font-normal">Media &amp; Photography</h3>
+                  <span id="imageCountPill" class="px-2 py-0.5 rounded-full bg-[#111317] border border-[#21242d] text-neutral-300 text-[10px] font-mono">0 IMAGES</span>
+                </div>
+                <button type="button" onclick="promptAddCustomImage()" class="text-xs font-semibold text-champagne-400 hover:text-champagne-300 flex items-center gap-1 cursor-pointer font-sans">
+                  <span>+ Add URL</span>
+                </button>
+              </div>
+
+              <p class="text-xs text-neutral-400">
+                Select images to attach to this piece. The starred item becomes the primary showcase photo.
+              </p>
+
+              <!-- Images Grid -->
+              <div id="imagesGridContainer" class="grid grid-cols-2 sm:grid-cols-3 gap-3 max-h-[460px] overflow-y-auto pr-1">
+                <!-- Populated dynamically by JS -->
+              </div>
+
+              <!-- Image Stats Footer -->
+              <div class="flex items-center justify-between text-xs text-neutral-400 pt-2 border-t border-white/[0.06] font-mono">
+                <span id="selectedImagesCountLabel">0 of 0 Selected</span>
+                <button type="button" onclick="selectAllImages(true)" class="text-emerald-400 hover:underline cursor-pointer">Select All</button>
+              </div>
+            </div>
+
+            <!-- Card: 1-Click Vault Importer & Export Suite -->
+            <div class="card-surface p-5 sm:p-6 rounded-2xl flex flex-col gap-4">
+              <div class="border-b border-white/[0.06] pb-3">
+                <h3 class="font-serif text-lg text-white font-normal">Import to Atelier Vault</h3>
+                <p class="text-xs text-neutral-400 mt-0.5 font-sans">Instantly registers product, creates image links, and sets up catalog inventory.</p>
+              </div>
+
+              <!-- Success Alert Box (Populated after import) -->
+              <div id="importSuccessBox" class="hidden p-4 rounded-xl bg-emerald-500/10 border border-emerald-500/30 flex flex-col gap-2.5">
+                <div class="flex items-center gap-2 text-emerald-400 text-xs font-semibold font-sans">
+                  <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path></svg>
+                  <span id="importSuccessTitle">Piece Successfully Saved to Vault!</span>
+                </div>
+                <div class="flex items-center gap-2 text-xs font-mono">
+                  <a id="linkEditProduct" href="#" class="px-3 py-1.5 rounded-lg bg-[#171920] border border-emerald-500/40 text-emerald-300 hover:text-white flex items-center gap-1 cursor-pointer">
+                    <span>Edit Piece in Admin →</span>
+                  </a>
+                  <a id="linkViewProduct" href="#" target="_blank" class="px-3 py-1.5 rounded-lg bg-[#111317] border border-[#21242d] text-neutral-300 hover:text-white flex items-center gap-1 cursor-pointer">
+                    <span>View in Store ↗</span>
+                  </a>
+                </div>
+              </div>
+
+              <!-- Primary Action Button -->
+              <button id="importToVaultBtn" onclick="handleImportToVault()" type="button" class="btn-primary w-full py-3.5 px-4 rounded-xl flex items-center justify-center gap-2 text-sm font-semibold cursor-pointer font-sans shadow-lg glow-emerald">
+                <svg class="w-4 h-4 text-[#07080a]" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"></path></svg>
+                <span id="importBtnText">Import to Vault Products</span>
+              </button>
+
+              <!-- Secondary Action Buttons -->
+              <div class="grid grid-cols-2 gap-2.5">
+                <button type="button" onclick="exportScrapedJson()" class="btn-secondary py-2.5 px-3 rounded-xl text-xs font-semibold flex items-center justify-center gap-1.5 cursor-pointer font-sans">
+                  <svg class="w-3.5 h-3.5 text-neutral-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                  <span>Export JSON</span>
+                </button>
+                <button type="button" onclick="exportScrapedCsv()" class="btn-secondary py-2.5 px-3 rounded-xl text-xs font-semibold flex items-center justify-center gap-1.5 cursor-pointer font-sans">
+                  <svg class="w-3.5 h-3.5 text-neutral-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                  <span>Export CSV</span>
+                </button>
+              </div>
+
+              <!-- Reset / Scrape Another -->
+              <button type="button" onclick="resetScraperWorkspace()" class="text-xs text-neutral-400 hover:text-white py-1 transition-colors text-center cursor-pointer font-sans">
+                Clear &amp; Scrape Another Product
+              </button>
+            </div>
+
+          </div>
+
+        </div>
+
+      </section>
+
+      <!-- Scraped History Vault in this session -->
+      <section class="card-surface p-5 sm:p-6 rounded-2xl flex flex-col gap-4">
+        <div class="flex items-center justify-between border-b border-white/[0.06] pb-3">
+          <div class="flex items-center gap-2">
+            <h3 class="font-serif text-lg text-white font-normal">Recent Scrape Cache</h3>
+            <span id="historyCountPill" class="px-2 py-0.5 rounded-full bg-[#111317] border border-[#21242d] text-neutral-400 text-[10px] font-mono">0 SAVED</span>
+          </div>
+          <button type="button" onclick="clearScrapeHistory()" class="text-xs text-neutral-400 hover:text-rose-400 cursor-pointer font-sans">Clear History</button>
+        </div>
+        <div id="scrapeHistoryGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+          <div class="p-4 rounded-xl bg-[#0c0d10] border border-[#21242d] text-neutral-500 text-xs text-center py-6 col-span-full font-sans">
+            No scraped products in local history yet. Enter a product URL above to begin.
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+  </div>
+
+</div>
+
+<!-- Image Lightbox Modal -->
+<div id="imageLightboxModal" class="fixed inset-0 z-50 hidden bg-[#07080a]/90 backdrop-blur-md flex items-center justify-center p-4">
+  <div class="relative max-w-2xl w-full bg-[#111317] border border-[#21242d] rounded-2xl p-4 flex flex-col items-center gap-3">
+    <button type="button" onclick="closeImageLightbox()" class="absolute top-3 right-3 text-neutral-400 hover:text-white text-lg p-1.5 cursor-pointer">✕</button>
+    <img id="lightboxImg" src="" alt="Product Preview" class="max-h-[70vh] w-auto rounded-xl object-contain">
+    <div id="lightboxCaption" class="text-xs font-mono text-neutral-400 truncate max-w-full"></div>
+  </div>
+</div>
+
+<!-- SCRAPER ENGINE FRONTEND JAVASCRIPT -->
+<script>
+// Global Scraped Product State
+let currentProduct = null;
+let currentVariants = [];
+let currentImages = [];
+let primaryImageIndex = 0;
+let scrapeHistory = [];
+const INR_RATE = 83.1527;
+
+// Load History from localStorage on init
+try {
+  const saved = localStorage.getItem('luckjary_scrape_history');
+  if (saved) {
+    scrapeHistory = JSON.parse(saved);
+  }
+} catch (e) {}
+
+document.addEventListener('DOMContentLoaded', () => {
+  renderHistoryGrid();
+  // Auto-init with demo if URL has demo param
+  const urlParams = new URLSearchParams(window.location.search);
+  if (urlParams.get('demo') === '1') {
+    loadSampleProduct('ring');
+  }
+});
+
+// Toggle Advanced Accordion
+const toggleBtn = document.getElementById('toggleAdvancedModeBtn');
+const advContainer = document.getElementById('advancedSourceContainer');
+const advChevron = document.getElementById('advancedChevron');
+
+if (toggleBtn && advContainer) {
+  toggleBtn.addEventListener('click', () => {
+    const isHidden = advContainer.classList.contains('hidden');
+    if (isHidden) {
+      advContainer.classList.remove('hidden');
+      advContainer.classList.add('flex');
+      advChevron.style.transform = 'rotate(180deg)';
+    } else {
+      advContainer.classList.add('hidden');
+      advContainer.classList.remove('flex');
+      advChevron.style.transform = 'rotate(0deg)';
+    }
+  });
+}
+
+function setPasteMode(mode) {
+  const htmlBtn = document.getElementById('tabPasteHtml');
+  const jsonBtn = document.getElementById('tabPasteJson');
+  const input = document.getElementById('rawSourceInput');
+  if (mode === 'html') {
+    htmlBtn.className = 'px-2.5 py-1 rounded bg-[#171920] text-emerald-400 border border-emerald-500/30 font-mono text-[11px] cursor-pointer';
+    jsonBtn.className = 'px-2.5 py-1 rounded bg-[#111317] text-neutral-400 hover:text-white border border-[#21242d] font-mono text-[11px] cursor-pointer';
+    input.placeholder = 'Paste raw page source HTML (<html...> or <script type="application/ld+json">)...';
+  } else {
+    jsonBtn.className = 'px-2.5 py-1 rounded bg-[#171920] text-emerald-400 border border-emerald-500/30 font-mono text-[11px] cursor-pointer';
+    htmlBtn.className = 'px-2.5 py-1 rounded bg-[#111317] text-neutral-400 hover:text-white border border-[#21242d] font-mono text-[11px] cursor-pointer';
+    input.placeholder = 'Paste Shopify product .json or Schema.org product JSON payload...';
+  }
+}
+
+// Show Feedback Alert
+function showFeedback(message, isError = false) {
+  const banner = document.getElementById('scrapeFeedbackBanner');
+  const icon = document.getElementById('feedbackIcon');
+  const text = document.getElementById('feedbackText');
+  banner.classList.remove('hidden');
+  text.textContent = message;
+
+  if (isError) {
+    banner.className = 'p-4 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-300 flex items-center justify-between text-xs font-sans';
+    icon.className = 'w-6 h-6 rounded-full bg-rose-500/20 text-rose-400 flex items-center justify-center shrink-0';
+    icon.innerHTML = '!';
+  } else {
+    banner.className = 'p-4 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 flex items-center justify-between text-xs font-sans';
+    icon.className = 'w-6 h-6 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center shrink-0';
+    icon.innerHTML = '✓';
+  }
+}
+
+// Handle Scrape Submit
+async function handleScrapeSubmit(e) {
+  e.preventDefault();
+  const url = document.getElementById('targetUrlInput').value.trim();
+  if (!url) return;
+
+  setScrapingLoading(true);
+
+  try {
+    const csrfToken = getCsrfToken();
+    const res = await fetch('/admin/catalog/product/api/scrape/', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRFToken': csrfToken
+      },
+      body: JSON.stringify({ url: url })
+    });
+
+    const data = await res.json();
+    if (res.ok && data.status === 'ok') {
+      showFeedback(`Product "${data.product.title}" extracted successfully!`);
+      loadScrapedDataIntoStudio(data.product);
+      saveToHistory(data.product);
+    } else {
+      showFeedback(data.message || 'Scraping failed. Try pasting the page HTML directly in the Advanced tab.', true);
+    }
+  } catch (err) {
+    showFeedback(`Network error during scraping: ${err.message}. Try pasting raw HTML.`, true);
+  } finally {
+    setScrapingLoading(false);
+  }
+}
+
+// Handle Raw Source Scrape
+async function handleRawSourceScrape() {
+  const source = document.getElementById('rawSourceInput').value.trim();
+  if (!source) {
+    showFeedback('Please paste source HTML or JSON before parsing.', true);
+    return;
+  }
+
+  setScrapingLoading(true);
+
+  try {
+    const csrfToken = getCsrfToken();
+    const payload = {};
+    if (source.startsWith('{') || source.startsWith('[')) {
+      payload.raw_json = source;
+    } else {
+      payload.raw_html = source;
+    }
+
+    const res = await fetch('/admin/catalog/product/api/scrape/', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRFToken': csrfToken
+      },
+      body: JSON.stringify(payload)
+    });
+
+    const data = await res.json();
+    if (res.ok && data.status === 'ok') {
+      showFeedback(`Source parsed successfully! Extracted "${data.product.title}".`);
+      loadScrapedDataIntoStudio(data.product);
+      saveToHistory(data.product);
+    } else {
+      showFeedback(data.message || 'Could not extract product data from pasted source.', true);
+    }
+  } catch (err) {
+    showFeedback(`Parsing error: ${err.message}`, true);
+  } finally {
+    setScrapingLoading(false);
+  }
+}
+
+function setScrapingLoading(isLoading) {
+  const btn = document.getElementById('scrapeSubmitBtn');
+  const txt = document.getElementById('scrapeBtnText');
+  if (isLoading) {
+    btn.disabled = true;
+    btn.classList.add('opacity-75');
+    txt.innerHTML = '<span class="inline-block animate-spin mr-1">↻</span> Extracting Telemetry...';
+  } else {
+    btn.disabled = false;
+    btn.classList.remove('opacity-75');
+    txt.textContent = 'Scrape Product';
+  }
+}
+
+// Load Scraped Data into Studio
+function loadScrapedDataIntoStudio(product) {
+  currentProduct = product;
+  currentVariants = Array.isArray(product.variants) && product.variants.length > 0
+    ? [...product.variants]
+    : [{
+        title: 'Default Luxury Fit',
+        sku: product.sku || generateSkuString(product.title),
+        price: product.price || 0,
+        available: true
+      }];
+
+  currentImages = Array.isArray(product.images) && product.images.length > 0
+    ? product.images.map((img, i) => ({
+        src: typeof img === 'string' ? img : img.src,
+        alt: typeof img === 'string' ? product.title : (img.alt || product.title),
+        selected: true
+      }))
+    : [{
+        src: 'https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?auto=format&fit=crop&w=1000&q=80',
+        alt: product.title,
+        selected: true
+      }];
+
+  primaryImageIndex = 0;
+
+  // Reveal Section
+  const studio = document.getElementById('scrapedStudioSection');
+  studio.classList.remove('hidden');
+  studio.classList.add('flex');
+  studio.scrollIntoView({ behavior: 'smooth' });
+
+  // Update Telemetry Header
+  document.getElementById('badgeSourceType').textContent = product.source_type || 'E-Commerce Extractor';
+  document.getElementById('telemetrySourceUrl').textContent = product.source_url || 'Direct Import';
+
+  // Fields
+  document.getElementById('fieldTitle').value = product.title || '';
+  document.getElementById('fieldSubtitle').value = product.subtitle || 'Handcrafted in 925 Solid Sterling Silver';
+  document.getElementById('fieldBrand').value = product.brand || 'Boutique Import';
+  document.getElementById('fieldSku').value = product.sku || generateSkuString(product.title);
+
+  // Category
+  const catSelect = document.getElementById('fieldCategory');
+  if (product.suggested_category_id) {
+    catSelect.value = product.suggested_category_id;
+  }
+
+  // Price & Telemetry
+  document.getElementById('fieldPrice').value = product.price || 0;
+  document.getElementById('fieldComparePrice').value = product.compare_at_price || '';
+  updatePriceTelemetry();
+
+  // Materials
+  document.getElementById('fieldMetal').value = '925 Sterling Silver';
+  document.getElementById('fieldGemstone').value = '5A Flawless Cubic Zirconia (CZ)';
+
+  // Description
+  document.getElementById('fieldDescription').value = product.description || '';
+
+  // Render Variants & Images
+  renderVariantsTable();
+  renderImagesGrid();
+
+  // Reset Success Alert
+  document.getElementById('importSuccessBox').classList.add('hidden');
+}
+
+// Update Price Telemetry & INR Calculation
+function updatePriceTelemetry() {
+  const priceVal = parseFloat(document.getElementById('fieldPrice').value) || 0;
+  const compVal = parseFloat(document.getElementById('fieldComparePrice').value) || 0;
+  const inrVal = Math.round(priceVal * INR_RATE);
+
+  const displayEl = document.getElementById('displayInrPrice');
+  const discountPill = document.getElementById('discountPill');
+
+  displayEl.firstElementChild.textContent = `₹${inrVal.toLocaleString('en-IN')}`;
+  document.getElementById('telemetryInrDisplay').textContent = `₹${inrVal.toLocaleString('en-IN')}`;
+
+  if (compVal > priceVal && priceVal > 0) {
+    const pct = Math.round(((compVal - priceVal) / compVal) * 100);
+    discountPill.textContent = `-${pct}%`;
+    discountPill.classList.remove('hidden');
+  } else {
+    discountPill.classList.add('hidden');
+  }
+}
+
+// Render Variants Table
+function renderVariantsTable() {
+  const tbody = document.getElementById('variantsTableBody');
+  const countPill = document.getElementById('variantCountPill');
+  const detectedCount = document.getElementById('detectedVariantsCount');
+
+  tbody.innerHTML = '';
+  countPill.textContent = `${currentVariants.length} VARIANTS`;
+  detectedCount.textContent = currentVariants.length;
+
+  currentVariants.forEach((v, index) => {
+    const tr = document.createElement('tr');
+    tr.className = 'hover:bg-[#111317]/60 transition-colors';
+    tr.innerHTML = `
+      <td class="py-2.5 pr-2">
+        <input type="text" value="${escapeHtml(v.title || '')}" onchange="currentVariants[${index}].title = this.value" class="luxury-input w-full p-1.5 rounded-lg text-xs font-sans">
+      </td>
+      <td class="py-2.5 pr-2">
+        <input type="text" value="${escapeHtml(v.sku || '')}" onchange="currentVariants[${index}].sku = this.value" class="luxury-input w-full p-1.5 rounded-lg text-xs font-mono text-amber-300">
+      </td>
+      <td class="py-2.5 pr-2 w-24">
+        <input type="number" step="0.01" value="${v.price !== null && v.price !== undefined ? v.price : ''}" onchange="currentVariants[${index}].price = parseFloat(this.value) || 0" class="luxury-input w-full p-1.5 rounded-lg text-xs font-mono">
+      </td>
+      <td class="py-2.5 pr-2 w-20">
+        <span class="inline-flex items-center gap-1 text-[10px] font-mono font-semibold px-2 py-0.5 rounded-full ${v.available !== false ? 'bg-emerald-500/10 text-emerald-300 border border-emerald-500/30' : 'bg-rose-500/10 text-rose-300 border border-rose-500/30'}">
+          ${v.available !== false ? 'In Stock' : 'Sold Out'}
+        </span>
+      </td>
+      <td class="py-2.5 text-right">
+        <button type="button" onclick="deleteVariant(${index})" class="text-neutral-500 hover:text-rose-400 transition-colors p-1 cursor-pointer" title="Remove Variant">✕</button>
+      </td>
+    `;
+    tbody.appendChild(tr);
+  });
+}
+
+function addEmptyVariant() {
+  const currentSku = document.getElementById('fieldSku').value || 'LCK-SCR';
+  currentVariants.push({
+    title: `Size Option ${currentVariants.length + 1}`,
+    sku: `${currentSku}-V${currentVariants.length + 1}`,
+    price: parseFloat(document.getElementById('fieldPrice').value) || 0,
+    available: true
+  });
+  renderVariantsTable();
+}
+
+function deleteVariant(index) {
+  if (currentVariants.length <= 1) {
+    showFeedback('A product must contain at least 1 specification variant.', true);
+    return;
+  }
+  currentVariants.splice(index, 1);
+  renderVariantsTable();
+}
+
+// Render Images Grid
+function renderImagesGrid() {
+  const grid = document.getElementById('imagesGridContainer');
+  const countPill = document.getElementById('imageCountPill');
+  const detectedCount = document.getElementById('detectedImagesCount');
+  const selectedCountLabel = document.getElementById('selectedImagesCountLabel');
+
+  grid.innerHTML = '';
+  countPill.textContent = `${currentImages.length} IMAGES`;
+  detectedCount.textContent = currentImages.length;
+
+  const selCount = currentImages.filter(i => i.selected).length;
+  selectedCountLabel.textContent = `${selCount} of ${currentImages.length} Selected`;
+
+  currentImages.forEach((img, index) => {
+    const isPrimary = index === primaryImageIndex;
+    const card = document.createElement('div');
+    card.className = `relative group rounded-xl overflow-hidden border transition-all ${isPrimary ? 'border-emerald-500 shadow-md ring-1 ring-emerald-500/40 bg-[#171920]' : 'border-[#21242d] bg-[#111317]'}`;
+
+    card.innerHTML = `
+      <div class="relative w-full h-32 bg-[#0c0d10] cursor-pointer flex items-center justify-center overflow-hidden" onclick="openImageLightbox('${escapeHtml(img.src)}')">
+        <img src="${escapeHtml(img.src)}" alt="Scraped Photo" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" onerror="this.src='https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?auto=format&fit=crop&w=600&q=80'">
+        <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+          <span class="text-[10px] font-mono text-white bg-black/60 px-2 py-1 rounded">Zoom 🔍</span>
+        </div>
+      </div>
+      <div class="p-2 flex items-center justify-between text-xs bg-[#111317]/90 border-t border-[#21242d]">
+        <label class="flex items-center gap-1.5 cursor-pointer text-[11px] text-neutral-300">
+          <input type="checkbox" ${img.selected ? 'checked' : ''} onchange="currentImages[${index}].selected = this.checked; renderImagesGrid();" class="rounded border-obsidian-700 bg-obsidian-900 text-emerald-500 focus:ring-emerald-500">
+          <span>Include</span>
+        </label>
+        <button type="button" onclick="setPrimaryImage(${index})" class="text-[10px] font-mono px-2 py-0.5 rounded cursor-pointer ${isPrimary ? 'bg-emerald-500 text-obsidian-950 font-bold' : 'bg-[#171920] text-neutral-400 hover:text-white border border-[#21242d]'}" style="${isPrimary ? 'color: #07080a !important;' : ''}">
+          ${isPrimary ? '★ Primary' : 'Set Primary'}
+        </button>
+      </div>
+    `;
+    grid.appendChild(card);
+  });
+}
+
+function setPrimaryImage(index) {
+  primaryImageIndex = index;
+  if (currentImages[index]) {
+    currentImages[index].selected = true;
+  }
+  renderImagesGrid();
+}
+
+function selectAllImages(selectAll) {
+  currentImages.forEach(img => img.selected = selectAll);
+  renderImagesGrid();
+}
+
+function promptAddCustomImage() {
+  const url = prompt('Enter public high-resolution image URL:');
+  if (url && url.trim()) {
+    currentImages.push({
+      src: url.trim(),
+      alt: document.getElementById('fieldTitle').value || 'Product Image',
+      selected: true
+    });
+    renderImagesGrid();
+  }
+}
+
+// Lightbox Modal
+function openImageLightbox(src) {
+  document.getElementById('lightboxImg').src = src;
+  document.getElementById('lightboxCaption').textContent = src;
+  document.getElementById('imageLightboxModal').classList.remove('hidden');
+}
+
+function closeImageLightbox() {
+  document.getElementById('imageLightboxModal').classList.add('hidden');
+}
+
+// Auto-generate SKU
+function regenerateSku() {
+  const title = document.getElementById('fieldTitle').value;
+  const sku = generateSkuString(title);
+  document.getElementById('fieldSku').value = sku;
+  currentVariants.forEach((v, i) => {
+    v.sku = `${sku}-V${i + 1}`;
+  });
+  renderVariantsTable();
+}
+
+function generateSkuString(title) {
+  const slug = (title || 'PIECE').replace(/[^a-zA-Z0-9]/g, '').slice(0, 6).toUpperCase();
+  const rand = Math.random().toString(36).substring(2, 6).toUpperCase();
+  return `LCK-SCR-${slug || 'JEWEL'}-${rand}`;
+}
+
+// 1-Click Vault Importer
+async function handleImportToVault() {
+  const title = document.getElementById('fieldTitle').value.trim();
+  if (!title) {
+    showFeedback('Product title is required to import into the Atelier Vault.', true);
+    return;
+  }
+
+  const sku = document.getElementById('fieldSku').value.trim() || generateSkuString(title);
+  const price = parseFloat(document.getElementById('fieldPrice').value) || 0;
+  const comparePrice = parseFloat(document.getElementById('fieldComparePrice').value) || null;
+  const categoryId = document.getElementById('fieldCategory').value;
+  const description = document.getElementById('fieldDescription').value;
+  const metal = document.getElementById('fieldMetal').value;
+  const gemstone = document.getElementById('fieldGemstone').value;
+
+  const selectedImages = currentImages.filter(i => i.selected).map((img, idx) => ({
+    src: img.src,
+    alt: img.alt || title,
+    is_primary: idx === 0 || currentImages.indexOf(img) === primaryImageIndex
+  }));
+
+  if (selectedImages.length === 0 && currentImages.length > 0) {
+    selectedImages.push({ src: currentImages[0].src, is_primary: true });
+  }
+
+  // Sizing strings
+  const sizeList = currentVariants.map(v => v.title).join(', ');
+
+  const importPayload = {
+    title: title,
+    sku: sku,
+    price: price,
+    compare_at_price: comparePrice,
+    category: categoryId,
+    description: description,
+    karat_metal: metal || '925 Sterling Silver',
+    available_metals: metal || '925 Sterling Silver',
+    gemstone: gemstone,
+    size_category: 'universal',
+    available_sizes: sizeList,
+    inventory: 20,
+    images: selectedImages,
+    variants: currentVariants
+  };
+
+  const importBtn = document.getElementById('importToVaultBtn');
+  const importBtnText = document.getElementById('importBtnText');
+  importBtn.disabled = true;
+  importBtnText.innerHTML = '<span class="inline-block animate-spin mr-1">↻</span> Registering in Vault...';
+
+  try {
+    const csrfToken = getCsrfToken();
+    const res = await fetch('/admin/catalog/product/api/import-scraped/', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRFToken': csrfToken
+      },
+      body: JSON.stringify(importPayload)
+    });
+
+    const data = await res.json();
+    if (res.ok && data.status === 'ok') {
+      showFeedback(`"${data.title}" successfully added to the Atelier Vault!`);
+      const successBox = document.getElementById('importSuccessBox');
+      successBox.classList.remove('hidden');
+      document.getElementById('importSuccessTitle').textContent = `Piece "${data.title}" (SKU: ${data.sku}) is live in the Atelier Vault!`;
+      document.getElementById('linkEditProduct').href = data.edit_url;
+      document.getElementById('linkViewProduct').href = data.detail_url;
+      successBox.scrollIntoView({ behavior: 'smooth' });
+    } else {
+      showFeedback(data.message || 'Error importing product to vault.', true);
+    }
+  } catch (err) {
+    showFeedback(`Import error: ${err.message}`, true);
+  } finally {
+    importBtn.disabled = false;
+    importBtnText.textContent = 'Import to Vault Products';
+  }
+}
+
+// Export to JSON
+function exportScrapedJson() {
+  if (!currentProduct) return;
+  const payload = {
+    title: document.getElementById('fieldTitle').value,
+    sku: document.getElementById('fieldSku').value,
+    price: parseFloat(document.getElementById('fieldPrice').value) || 0,
+    compare_at_price: parseFloat(document.getElementById('fieldComparePrice').value) || null,
+    inr_price: Math.round((parseFloat(document.getElementById('fieldPrice').value) || 0) * INR_RATE),
+    description: document.getElementById('fieldDescription').value,
+    metal: document.getElementById('fieldMetal').value,
+    gemstone: document.getElementById('fieldGemstone').value,
+    variants: currentVariants,
+    images: currentImages.filter(i => i.selected),
+    exported_at: new Date().toISOString()
+  };
+
+  const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `${payload.sku || 'scraped-product'}.json`;
+  a.click();
+}
+
+// Export to CSV
+function exportScrapedCsv() {
+  if (!currentProduct) return;
+  const title = document.getElementById('fieldTitle').value.replace(/"/g, '""');
+  const sku = document.getElementById('fieldSku').value;
+  const price = document.getElementById('fieldPrice').value;
+  const comp = document.getElementById('fieldComparePrice').value;
+  const inr = Math.round((parseFloat(price) || 0) * INR_RATE);
+  const images = currentImages.filter(i => i.selected).map(i => i.src).join(';');
+  const desc = document.getElementById('fieldDescription').value.replace(/"/g, '""');
+
+  let csv = 'Title,SKU,Price_USD,Compare_Price_USD,Price_INR,Variants,Images,Description\n';
+  const varSummary = currentVariants.map(v => `${v.title}:${v.sku}`).join(';');
+  csv += `"${title}","${sku}","${price}","${comp}","${inr}","${varSummary}","${images}","${desc}"\n`;
+
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `${sku || 'scraped-product'}.csv`;
+  a.click();
+}
+
+function resetScraperWorkspace() {
+  currentProduct = null;
+  currentVariants = [];
+  currentImages = [];
+  document.getElementById('targetUrlInput').value = '';
+  document.getElementById('rawSourceInput').value = '';
+  document.getElementById('scrapedStudioSection').classList.add('hidden');
+  document.getElementById('scrapedStudioSection').classList.remove('flex');
+  document.getElementById('scrapeFeedbackBanner').classList.add('hidden');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// History Handling
+function saveToHistory(product) {
+  const existingIdx = scrapeHistory.findIndex(h => h.title === product.title);
+  if (existingIdx !== -1) {
+    scrapeHistory.splice(existingIdx, 1);
+  }
+  scrapeHistory.unshift(product);
+  if (scrapeHistory.length > 8) scrapeHistory.pop();
+  try {
+    localStorage.setItem('luckjary_scrape_history', JSON.stringify(scrapeHistory));
+  } catch (e) {}
+  renderHistoryGrid();
+}
+
+function renderHistoryGrid() {
+  const grid = document.getElementById('scrapeHistoryGrid');
+  const count = document.getElementById('historyCountPill');
+  count.textContent = `${scrapeHistory.length} SAVED`;
+
+  if (scrapeHistory.length === 0) {
+    grid.innerHTML = `
+      <div class="p-4 rounded-xl bg-[#0c0d10] border border-[#21242d] text-neutral-500 text-xs text-center py-6 col-span-full font-sans">
+        No scraped products in local history yet. Enter a product URL above to begin.
+      </div>
+    `;
+    return;
+  }
+
+  grid.innerHTML = '';
+  scrapeHistory.forEach((item, idx) => {
+    const thumb = item.images && item.images.length > 0 ? (item.images[0].src || item.images[0]) : 'https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?auto=format&fit=crop&w=400&q=80';
+    const card = document.createElement('div');
+    card.className = 'p-3 rounded-xl bg-[#111317] border border-[#21242d] hover:border-emerald-500/40 transition-colors flex items-center gap-3 cursor-pointer group';
+    card.onclick = () => loadScrapedDataIntoStudio(item);
+    card.innerHTML = `
+      <img src="${escapeHtml(thumb)}" alt="" class="w-12 h-12 rounded-lg object-cover bg-obsidian-900 shrink-0">
+      <div class="min-w-0 flex-1">
+        <h4 class="text-xs font-semibold text-neutral-200 group-hover:text-emerald-400 truncate transition-colors font-sans">${escapeHtml(item.title)}</h4>
+        <div class="flex items-center gap-2 text-[10px] font-mono text-neutral-400 mt-0.5">
+          <span class="text-emerald-400 font-bold">$${parseFloat(item.price || 0).toFixed(2)}</span>
+          <span>•</span>
+          <span class="text-amber-300">${item.variants ? item.variants.length : 1} vars</span>
+        </div>
+      </div>
+    `;
+    grid.appendChild(card);
+  });
+}
+
+function clearScrapeHistory() {
+  scrapeHistory = [];
+  try {
+    localStorage.removeItem('luckjary_scrape_history');
+  } catch (e) {}
+  renderHistoryGrid();
+}
+
+// Sample Products Demonstrations
+function loadSampleProduct(type) {
+  let sample;
+  if (type === 'ring') {
+    sample = {
+      source_type: 'Schema.org JSON-LD',
+      source_url: 'https://luxury-atelier.com/products/solitaire-diamond-band',
+      title: 'Seraphina Pavé Solitaire Ring',
+      subtitle: 'Handcrafted in 925 Solid Sterling Silver & 5A Flawless Cubic Zirconia',
+      brand: 'Maison Joaillerie',
+      sku: 'LCK-SCR-RING-084',
+      price: 249.00,
+      compare_at_price: 320.00,
+      description: 'The Seraphina Pavé Solitaire Ring captures eternal brilliance with a brilliant-cut center stone bordered by handset micro-pavé accents in solid 925 sterling silver.',
+      variants: [
+        { title: 'US Size 5 (49.3mm)', sku: 'LCK-SCR-RING-084-5', price: 249.00, available: true },
+        { title: 'US Size 6 (51.9mm)', sku: 'LCK-SCR-RING-084-6', price: 249.00, available: true },
+        { title: 'US Size 7 (54.4mm - Popular)', sku: 'LCK-SCR-RING-084-7', price: 249.00, available: true },
+        { title: 'US Size 8 (57.0mm)', sku: 'LCK-SCR-RING-084-8', price: 249.00, available: true }
+      ],
+      images: [
+        { src: 'https://images.unsplash.com/photo-1605100804763-247f67b3557e?auto=format&fit=crop&w=1000&q=80', alt: 'Seraphina Ring front angle' },
+        { src: 'https://images.unsplash.com/photo-1603561591411-07134e71a2a9?auto=format&fit=crop&w=1000&q=80', alt: 'Seraphina Ring close detail' },
+        { src: 'https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?auto=format&fit=crop&w=1000&q=80', alt: 'Seraphina Ring velvet box showcase' }
+      ]
+    };
+  } else if (type === 'pendant') {
+    sample = {
+      source_type: 'Shopify Product API',
+      source_url: 'https://celestial-finejewelry.com/products/starburst-sapphire-pendant',
+      title: 'Celeste Starburst Sapphire Pendant',
+      subtitle: 'Curated from Celestial Joaillerie',
+      brand: 'Celestial Joaillerie',
+      sku: 'LCK-SCR-PEND-192',
+      price: 195.00,
+      compare_at_price: 260.00,
+      description: 'A stellar starburst medallion radiating master-forged sterling silver rays with a brilliant blue simulated sapphire focal point.',
+      variants: [
+        { title: '16 Inch Classic Cable Chain', sku: 'LCK-SCR-PEND-192-16', price: 195.00, available: true },
+        { title: '18 Inch Adjustable Chain', sku: 'LCK-SCR-PEND-192-18', price: 215.00, available: true },
+        { title: '20 Inch Statement Rope Chain', sku: 'LCK-SCR-PEND-192-20', price: 235.00, available: true }
+      ],
+      images: [
+        { src: 'https://images.unsplash.com/photo-1599643477877-530eb83abc8e?auto=format&fit=crop&w=1000&q=80', alt: 'Celeste Sapphire Pendant' },
+        { src: 'https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?auto=format&fit=crop&w=1000&q=80', alt: 'Lifestyle showcase model' },
+        { src: 'https://images.unsplash.com/photo-1611591475249-f81d1136b9c9?auto=format&fit=crop&w=1000&q=80', alt: 'Chain clasp macro' }
+      ]
+    };
+  } else {
+    sample = {
+      source_type: 'OpenGraph & Meta Tags',
+      source_url: 'https://haute-bangles.com/products/imperial-pave-cuff',
+      title: 'Imperial Pavé Hinged Bangle',
+      subtitle: 'Atelier Curated Piece',
+      brand: 'Imperial Joaillerie',
+      sku: 'LCK-SCR-CUFF-440',
+      price: 389.00,
+      compare_at_price: 490.00,
+      description: 'Engineered with double-safety luxury box clasp and precision pavé channels across solid 925 sterling silver.',
+      variants: [
+        { title: 'Small (6.0 Inch Circumference)', sku: 'LCK-SCR-CUFF-440-S', price: 389.00, available: true },
+        { title: 'Medium (6.5 Inch - Standard)', sku: 'LCK-SCR-CUFF-440-M', price: 389.00, available: true },
+        { title: 'Large (7.0 Inch Circumference)', sku: 'LCK-SCR-CUFF-440-L', price: 410.00, available: true }
+      ],
+      images: [
+        { src: 'https://images.unsplash.com/photo-1611591475143-460d771034f8?auto=format&fit=crop&w=1000&q=80', alt: 'Imperial Bangle Front' },
+        { src: 'https://images.unsplash.com/photo-1602751584552-8ba73aad10e1?auto=format&fit=crop&w=1000&q=80', alt: 'Imperial Bangle Clasp Detail' }
+      ]
+    };
+  }
+
+  showFeedback(`Loaded sample demo: "${sample.title}" (${sample.source_type})`);
+  loadScrapedDataIntoStudio(sample);
+}
+
+// Helper: Escape HTML
+function escapeHtml(str) {
+  if (!str) return '';
+  return String(str).replace(/[&<>"']/g, function(m) {
+    switch (m) {
+      case '&': return '&amp;';
+      case '<': return '&lt;';
+      case '>': return '&gt;';
+      case '"': return '&quot;';
+      case "'": return '&#39;';
+    }
+  });
+}
+
+// Helper: CSRF Token
+function getCsrfToken() {
+  const meta = document.querySelector('[name=csrfmiddlewaretoken]');
+  if (meta) return meta.value;
+  const match = document.cookie.match(/csrftoken=([^;]+)/);
+  return match ? match[1] : '';
+}
+</script>
+
+</body>
+</html>

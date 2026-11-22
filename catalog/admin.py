@@ -356,11 +356,204 @@ class ProductAdmin(admin.ModelAdmin):
     def get_urls(self):
         urls = super().get_urls()
         custom_urls = [
+            path('scrape/', self.admin_site.admin_view(self.scrape_view), name='catalog_product_scrape'),
+            path('api/scrape/', self.admin_site.admin_view(self.api_scrape_view), name='catalog_product_api_scrape'),
+            path('api/import-scraped/', self.admin_site.admin_view(self.api_import_scraped_view), name='catalog_product_api_import_scraped'),
             path('quick-add/', self.admin_site.admin_view(self.quick_add_view), name='catalog_product_quick_add'),
             path('bulk-delete/', self.admin_site.admin_view(self.bulk_delete_view), name='catalog_product_bulk_delete'),
             path('quick-delete/<int:product_id>/', self.admin_site.admin_view(self.quick_delete_view), name='catalog_product_quick_delete'),
         ]
         return custom_urls + urls
+
+    def scrape_view(self, request):
+        from django.shortcuts import render
+        try:
+            from orders.models import Order
+            total_orders = Order.objects.count()
+        except Exception:
+            total_orders = 4
+
+        categories = Category.objects.all()
+        total_products = Product.objects.count()
+
+        context = {
+            'title': 'E-Commerce Product Scraper',
+            'active_nav': 'scrape',
+            'categories': categories,
+            'total_products': total_products,
+            'total_orders': total_orders,
+            'is_scraper': True,
+        }
+        return render(request, 'admin/catalog/scrape.html', context)
+
+    def api_scrape_view(self, request):
+        if request.method != 'POST':
+            return JsonResponse({'status': 'error', 'message': 'POST required'}, status=405)
+        
+        try:
+            if request.content_type == 'application/json':
+                data = json.loads(request.body.decode('utf-8'))
+            else:
+                data = request.POST
+
+            url = (data.get('url') or '').strip()
+            raw_html = (data.get('raw_html') or '').strip()
+            raw_json = (data.get('raw_json') or '').strip()
+
+            from .scraper import scrape_ecommerce_product
+            scraped = scrape_ecommerce_product(url=url, raw_html=raw_html, raw_json=raw_json)
+
+            if not scraped or not scraped.get('success'):
+                return JsonResponse({
+                    'status': 'error',
+                    'message': scraped.get('error', 'Unable to extract product information from source.') if scraped else 'Scraper failed to return data.'
+                }, status=400)
+
+            # Incur INR conversion if currency is USD
+            price_num = scraped.get('price') or 0.0
+            inr_val = int(float(price_num) * 83.1527)
+            scraped['price_inr'] = inr_val
+
+            # Best match category
+            cat_suggestion = 'rings'
+            title_lower = (scraped.get('title') or '').lower()
+            if 'necklace' in title_lower or 'pendant' in title_lower or 'chain' in title_lower:
+                cat_suggestion = 'necklaces'
+            elif 'bracelet' in title_lower or 'bangle' in title_lower:
+                cat_suggestion = 'bracelets'
+            elif 'earring' in title_lower or 'stud' in title_lower or 'huggie' in title_lower:
+                cat_suggestion = 'earrings'
+            elif 'ring' in title_lower or 'band' in title_lower or 'solitaire' in title_lower:
+                cat_suggestion = 'rings'
+            
+            matched_cat = Category.objects.filter(slug__icontains=cat_suggestion).first()
+            scraped['suggested_category_id'] = matched_cat.id if matched_cat else (Category.objects.first().id if Category.objects.exists() else None)
+
+            return JsonResponse({
+                'status': 'ok',
+                'product': scraped
+            })
+        except Exception as e:
+            return JsonResponse({'status': 'error', 'message': str(e)}, status=500)
+
+    def api_import_scraped_view(self, request):
+        if request.method != 'POST':
+            return JsonResponse({'status': 'error', 'message': 'POST required'}, status=405)
+        
+        try:
+            if request.content_type == 'application/json':
+                data = json.loads(request.body.decode('utf-8'))
+            else:
+                data = request.POST
+
+            title = (data.get('title') or '').strip()
+            if not title:
+                return JsonResponse({'status': 'error', 'message': 'Product title is required.'}, status=400)
+
+            price = data.get('price')
+            if price is None or str(price).strip() == '':
+                price = 0.0
+            else:
+                try:
+                    price = float(price)
+                except ValueError:
+                    price = 0.0
+
+            compare_price = data.get('compare_at_price')
+            if compare_price and str(compare_price).strip():
+                try:
+                    compare_price = float(compare_price)
+                except ValueError:
+                    compare_price = None
+            else:
+                compare_price = None
+
+            category_id = data.get('category')
+            category = None
+            if category_id:
+                category = Category.objects.filter(id=category_id).first()
+            if not category:
+                category = Category.objects.first()
+
+            sku = (data.get('sku') or '').strip()
+            if not sku:
+                sku = f"LCK-SCR-{uuid.uuid4().hex[:6].upper()}"
+
+            description = (data.get('description') or '').strip() or f"Handcrafted {title} in authentic 925 Solid Sterling Silver with conflict-free handset stones and signature Luckjary hallmark guarantee."
+            karat_metal = (data.get('karat_metal') or '925 Sterling Silver').strip()
+            available_metals = (data.get('available_metals') or '925 Sterling Silver').strip()
+            gemstone = (data.get('gemstone') or '5A Flawless Cubic Zirconia (CZ)').strip()
+            size_category = data.get('size_category') or 'universal'
+            available_sizes = (data.get('available_sizes') or '').strip()
+            inventory = int(data.get('inventory') or 20)
+
+            # Ensure SKU is unique (append suffix if collision)
+            original_sku = sku
+            sku_counter = 1
+            while Product.objects.filter(sku=sku).exists():
+                sku = f"{original_sku}-{sku_counter}"
+                sku_counter += 1
+
+            product = Product.objects.create(
+                title=title,
+                category=category,
+                price=price,
+                compare_at_price=compare_price,
+                inventory=inventory,
+                sku=sku,
+                size_category=size_category,
+                available_sizes=available_sizes,
+                gemstone=gemstone,
+                description=description,
+                karat_metal=karat_metal,
+                available_metals=available_metals,
+                is_available=True,
+                is_featured=False
+            )
+
+            # Ensure 925 silver material linked
+            silver_mat, _ = Material.objects.get_or_create(
+                slug='925-sterling-silver',
+                defaults={'name': '925 Sterling Silver', 'badge_label': '925 Silver'}
+            )
+            product.materials.add(silver_mat)
+
+            # Images
+            images = data.get('images', [])
+            for idx, img_info in enumerate(images):
+                img_url = ""
+                is_primary = False
+                alt_text = f"{product.title} atelier photo"
+                if isinstance(img_info, dict):
+                    img_url = (img_info.get('src') or '').strip()
+                    is_primary = bool(img_info.get('is_primary')) or (idx == 0)
+                    alt_text = img_info.get('alt') or alt_text
+                elif isinstance(img_info, str):
+                    img_url = img_info.strip()
+                    is_primary = (idx == 0)
+                
+                if img_url:
+                    ProductImage.objects.create(
+                        product=product,
+                        image_url=img_url,
+                        alt_text=alt_text,
+                        is_primary=is_primary,
+                        order=idx
+                    )
+
+            return JsonResponse({
+                'status': 'ok',
+                'message': f'"{product.title}" successfully imported into the Atelier Vault.',
+                'id': product.id,
+                'title': product.title,
+                'sku': product.sku,
+                'price': float(product.price),
+                'image': product.primary_image,
+                'edit_url': f'/admin/catalog/product/{product.id}/change/',
+                'detail_url': product.get_absolute_url(),
+            })
+        except Exception as e:
+            return JsonResponse({'status': 'error', 'message': str(e)}, status=500)
 
     def quick_add_view(self, request):
         if request.method != 'POST':

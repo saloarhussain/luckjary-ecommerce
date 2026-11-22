@@ -169,6 +169,10 @@
   </p>
 </div>
 <div class="flex flex-wrap sm:flex-nowrap items-center gap-2.5 sm:gap-3 w-full sm:w-auto">
+  <a href="{% url 'admin:catalog_product_scrape' %}" class="flex-1 sm:flex-none inline-flex items-center justify-center gap-2 px-3.5 py-2 rounded-lg bg-obsidian-800 hover:bg-obsidian-750 text-neutral-200 text-xs font-medium border border-obsidian-700 transition shadow-sm whitespace-nowrap cursor-pointer" style="text-decoration: none !important;">
+    <svg class="w-3.5 h-3.5 text-emerald-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" /></svg>
+    Scrape Products
+  </a>
 <button onclick="window.location.href='{% url 'orders:oms_dashboard' %}'" class="flex-1 sm:flex-none inline-flex items-center justify-center gap-2 px-3.5 py-2 rounded-lg bg-obsidian-800 hover:bg-obsidian-700 text-neutral-200 text-xs font-medium border border-obsidian-700 transition shadow-sm whitespace-nowrap cursor-pointer">
 <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
     Open OMS Console

@@ -73,6 +73,7 @@ def atelier_admin_index(request, extra_context=None):
 admin.site.index = atelier_admin_index
 
 urlpatterns = [
+    path('admin/scrape/', lambda request: HttpResponseRedirect('/admin/catalog/product/scrape/'), name='admin_scrape'),
     path('admin/settings/', lambda request: HttpResponseRedirect('/admin/orders/order/#settings'), name='admin_settings'),
     path('admin/set-currency/', set_currency, name='admin_set_currency'),
     path('set-currency/', set_currency, name='set_currency'),
