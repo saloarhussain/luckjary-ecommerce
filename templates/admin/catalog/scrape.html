@@ -281,30 +281,134 @@ a, a *, a:hover, a:hover *, a:focus, a:active, button, button * {
         <button type="button" onclick="document.getElementById('scrapeFeedbackBanner').classList.add('hidden')" class="text-neutral-400 hover:text-white cursor-pointer">✕</button>
       </div>
 
-      <!-- Collection Detected Banner (Shows when a collection URL is scraped) -->
-      <div id="collectionBanner" class="hidden card-surface p-4 rounded-2xl flex-col gap-3 border border-champagne-400/30">
-        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-          <div class="flex items-center gap-2.5">
-            <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
-            <div>
-              <span class="text-xs font-semibold text-white font-sans">
-                Collection Detected: <strong id="collectionTitleDisplay" class="text-champagne-300 font-serif text-sm">Samsung Repair</strong>
-                (<span id="collectionCountDisplay" class="font-mono text-emerald-400">30</span> Pieces)
-              </span>
-              <p class="text-[11px] text-neutral-400 font-sans">Click any piece below to instantly curate its variants, SKUs, pricing, and photography.</p>
-            </div>
-          </div>
-          <span class="text-[10px] font-mono text-neutral-400 px-2 py-1 rounded bg-[#111317] border border-[#21242d] self-start sm:self-auto">
-            SELECT PIECE TO CURATE
-          </span>
+      <!-- Collection Tabs Bar (Switches between Bulk Collection View and Single Product Studio) -->
+      <div id="collectionTabsBar" class="hidden flex-wrap items-center justify-between gap-3 border-b border-white/[0.06] pb-3">
+        <div class="flex items-center gap-2">
+          <button type="button" onclick="switchCollectionTab('bulk')" id="tabBulkViewBtn" class="px-4 py-2.5 rounded-xl bg-emerald-500 text-obsidian-950 font-bold text-xs font-sans shadow-md flex items-center gap-2 cursor-pointer" style="color: #07080a !important;">
+            <svg class="w-4 h-4 text-[#07080a]" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 10h16M4 14h16M4 18h16" /></svg>
+            <span>All Collection Pieces (<span id="tabBulkCount">0</span>)</span>
+          </button>
+          <button type="button" onclick="switchCollectionTab('single')" id="tabSingleViewBtn" class="px-4 py-2.5 rounded-xl bg-[#171920] text-neutral-300 hover:text-white border border-[#21242d] text-xs font-semibold font-sans flex items-center gap-2 cursor-pointer">
+            <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>
+            <span>Single Piece Studio / Inspector</span>
+          </button>
         </div>
-        <!-- Scrollable collection items -->
-        <div id="collectionProductsChips" class="flex items-center gap-2 overflow-x-auto no-scrollbar pt-1 pb-1">
-          <!-- Populated by JS -->
+        <div class="flex items-center gap-3 text-xs font-mono text-neutral-400">
+          <span>Total Variants: <strong id="headerTotalVariants" class="text-amber-300">0</strong></span>
         </div>
       </div>
 
-      <!-- Live Scraped Studio & Curator (Hidden until product scraped) -->
+      <!-- Bulk Collection Workspace (Shown when scraping a multi-product collection) -->
+      <section id="collectionBulkSection" class="hidden flex-col gap-5">
+
+        <!-- Collection Summary & Bulk Action Bar -->
+        <div class="card-surface p-5 rounded-2xl flex flex-col gap-4 border border-emerald-500/20">
+          <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-3">
+            <div>
+              <div class="flex items-center gap-2.5">
+                <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                <h2 class="font-serif text-xl sm:text-2xl text-white font-normal">
+                  <span id="bulkCollectionTitle">Collection</span>
+                </h2>
+                <span id="bulkTotalBadge" class="px-2.5 py-0.5 rounded-full bg-emerald-500/15 border border-emerald-500/30 text-emerald-300 text-xs font-mono font-bold">
+                  0 PIECES
+                </span>
+              </div>
+              <p class="text-xs text-neutral-400 mt-1 font-sans">
+                Review all scraped products and their complete variant matrices. Select items to bulk import directly into the Atelier Vault.
+              </p>
+            </div>
+
+            <!-- Category Selector & Primary Bulk Import CTA -->
+            <div class="flex flex-wrap items-center gap-2.5">
+              <div class="flex items-center gap-2">
+                <label for="bulkCategorySelect" class="text-xs text-neutral-400 font-sans hidden sm:inline">Category:</label>
+                <select id="bulkCategorySelect" class="luxury-input py-2 px-3 rounded-xl text-xs font-sans cursor-pointer">
+                  {% for cat in categories %}
+                    <option value="{{ cat.id }}">{{ cat.name }}</option>
+                  {% empty %}
+                    <option value="1">Rings</option>
+                    <option value="2">Necklaces</option>
+                  {% endfor %}
+                </select>
+              </div>
+
+              <!-- Primary Bulk Import Button -->
+              <button id="bulkImportBtn" onclick="executeBulkImport()" type="button" class="btn-primary py-2.5 px-4 rounded-xl text-xs font-bold font-sans flex items-center gap-2 cursor-pointer shadow-lg glow-emerald">
+                <svg class="w-4 h-4 text-[#07080a]" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" /></svg>
+                <span id="bulkImportBtnText">Bulk Import Selected (<span id="bulkSelectedCount">0</span>)</span>
+              </button>
+
+              <!-- Exports -->
+              <button type="button" onclick="exportBulkCsv()" class="btn-secondary py-2 px-3 rounded-xl text-xs font-semibold flex items-center gap-1.5 cursor-pointer font-sans" title="Export all collection items to CSV">
+                <svg class="w-3.5 h-3.5 text-neutral-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                <span>CSV</span>
+              </button>
+              <button type="button" onclick="exportBulkJson()" class="btn-secondary py-2 px-3 rounded-xl text-xs font-semibold flex items-center gap-1.5 cursor-pointer font-sans" title="Export all collection items to JSON">
+                <svg class="w-3.5 h-3.5 text-neutral-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                <span>JSON</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Live Progress Container (Shows during bulk import) -->
+          <div id="bulkProgressContainer" class="hidden flex-col gap-2 p-3.5 rounded-xl bg-[#0c0d10] border border-emerald-500/30">
+            <div class="flex items-center justify-between text-xs font-mono">
+              <span class="text-neutral-300 flex items-center gap-2">
+                <span class="inline-block animate-spin text-emerald-400">↻</span>
+                <span id="bulkProgressTitle">Importing pieces into Atelier Vault...</span>
+              </span>
+              <span id="bulkProgressCount" class="text-emerald-400 font-bold">0 / 0</span>
+            </div>
+            <div class="w-full bg-[#171920] rounded-full h-2 overflow-hidden border border-[#21242d]">
+              <div id="bulkProgressBar" class="bg-emerald-500 h-full transition-all duration-300" style="width: 0%"></div>
+            </div>
+          </div>
+
+          <!-- Filter & Selection Bar -->
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-2 border-t border-white/[0.06] text-xs">
+            <div class="flex items-center gap-3">
+              <label class="flex items-center gap-2 cursor-pointer font-mono font-semibold text-neutral-300">
+                <input type="checkbox" id="selectAllBulkCheckbox" onchange="toggleSelectAllBulk(this.checked)" class="rounded border-obsidian-700 bg-obsidian-900 text-emerald-500 focus:ring-emerald-500" checked>
+                <span>SELECT ALL (<span id="bulkSelectAllCount">0</span>)</span>
+              </label>
+              <span class="text-neutral-500">•</span>
+              <span id="bulkSelectionStatus" class="font-mono text-emerald-400">0 of 0 Selected</span>
+            </div>
+
+            <!-- In-Collection Search Input -->
+            <div class="relative w-full sm:w-72">
+              <input type="text" id="filterCollectionInput" oninput="filterCollectionItems(this.value)" placeholder="Filter by title, model, SKU..." class="luxury-input w-full pl-8 pr-3 py-1.5 rounded-lg text-xs font-sans placeholder-neutral-500">
+              <svg class="w-3.5 h-3.5 text-neutral-400 absolute left-2.5 top-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+            </div>
+          </div>
+        </div>
+
+        <!-- Products Table with Expandable Variants -->
+        <div class="card-surface rounded-2xl overflow-hidden border border-white/[0.06]">
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-xs font-sans">
+              <thead>
+                <tr class="border-b border-[#21242d] bg-[#0c0d10]/60 text-neutral-400 font-mono text-[10px] uppercase tracking-wider">
+                  <th class="py-3 px-4 w-10 text-center">#</th>
+                  <th class="py-3 px-3 w-16">Photo</th>
+                  <th class="py-3 px-4">Piece Title &amp; Specification</th>
+                  <th class="py-3 px-4">Price (₹ INR)</th>
+                  <th class="py-3 px-4">Variants Matrix</th>
+                  <th class="py-3 px-4">Primary SKU</th>
+                  <th class="py-3 px-4 text-right">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="collectionTableBody" class="divide-y divide-[#21242d]/60 font-mono">
+                <!-- Populated dynamically by JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- Live Scraped Studio & Curator (Single Product Inspector) -->
       <section id="scrapedStudioSection" class="hidden flex-col gap-6">
 
         <!-- Top Telemetry & Source Bar -->
@@ -580,6 +684,9 @@ let currentVariants = [];
 let currentImages = [];
 let primaryImageIndex = 0;
 let scrapeHistory = [];
+let collectionProducts = [];
+let selectedBulkIndices = new Set();
+let currentCollectionMode = 'bulk';
 const INR_RATE = 83.1527;
 
 // Load History from localStorage on init
@@ -808,80 +915,302 @@ function loadScrapedDataIntoStudio(product) {
   renderVariantsTable();
   renderImagesGrid();
 
-  // Handle Collection Banner
-  const colBanner = document.getElementById('collectionBanner');
+  // Handle Multi-Product Collection Mode
+  const tabsBar = document.getElementById('collectionTabsBar');
   if (product.is_collection && Array.isArray(product.collection_products) && product.collection_products.length > 0) {
-    colBanner.classList.remove('hidden');
-    colBanner.classList.add('flex');
-    document.getElementById('collectionTitleDisplay').textContent = product.collection_title || 'Collection';
-    document.getElementById('collectionCountDisplay').textContent = product.collection_total || product.collection_products.length;
-    renderCollectionChips(product.collection_products, product.id);
+    collectionProducts = product.collection_products;
+    selectedBulkIndices = new Set(collectionProducts.map((_, i) => i));
+
+    tabsBar.classList.remove('hidden');
+    tabsBar.classList.add('flex');
+    document.getElementById('tabBulkCount').textContent = collectionProducts.length;
+    document.getElementById('headerTotalVariants').textContent = (product.total_variants_count || collectionProducts.reduce((sum, p) => sum + (p.variants ? p.variants.length : 0), 0)).toLocaleString();
+    document.getElementById('bulkCollectionTitle').textContent = product.collection_title || 'Collection';
+    document.getElementById('bulkTotalBadge').textContent = `${collectionProducts.length} PIECES`;
+
+    renderCollectionTable();
+    switchCollectionTab('bulk');
   } else {
-    colBanner.classList.add('hidden');
-    colBanner.classList.remove('flex');
+    tabsBar.classList.add('hidden');
+    tabsBar.classList.remove('flex');
+    switchCollectionTab('single');
   }
 
   // Reset Success Alert
   document.getElementById('importSuccessBox').classList.add('hidden');
 }
 
-// Render Collection Chips
-function renderCollectionChips(products, activeId) {
-  const container = document.getElementById('collectionProductsChips');
-  if (!container) return;
-  container.innerHTML = '';
-  products.forEach(p => {
-    const isActive = p.id === activeId || (currentProduct && p.title === currentProduct.title);
-    const chip = document.createElement('button');
-    chip.type = 'button';
-    chip.className = `whitespace-nowrap px-3 py-1.5 rounded-xl text-xs font-sans transition-all flex items-center gap-2 cursor-pointer shrink-0 ${isActive ? 'bg-emerald-500 text-obsidian-950 font-bold shadow-sm' : 'bg-[#111317] hover:bg-[#171920] border border-[#21242d] text-neutral-300 hover:text-white'}`;
-    if (isActive) chip.style.color = '#07080a !important;';
-    chip.onclick = () => selectCollectionPiece(p);
-    chip.innerHTML = `
-      ${p.image ? `<img src="${escapeHtml(p.image)}" class="w-5 h-5 rounded object-cover" onerror="this.style.display='none'">` : ''}
-      <span class="truncate max-w-[180px]">${escapeHtml(p.title)}</span>
-      <span class="font-mono text-[10px] ${isActive ? 'opacity-90' : 'text-emerald-400'}">${p.price ? '₹' + Math.round(parseFloat(p.price)).toLocaleString('en-IN') : ''}</span>
-      <span class="font-mono text-[9px] px-1 py-0.2 rounded bg-black/40 text-neutral-300">${p.variants_count} vars</span>
+// Switch between Bulk Collection View and Single Product Studio
+function switchCollectionTab(tab) {
+  currentCollectionMode = tab;
+  const bulkSection = document.getElementById('collectionBulkSection');
+  const singleSection = document.getElementById('scrapedStudioSection');
+  const bulkBtn = document.getElementById('tabBulkViewBtn');
+  const singleBtn = document.getElementById('tabSingleViewBtn');
+
+  if (tab === 'bulk') {
+    bulkSection.classList.remove('hidden');
+    bulkSection.classList.add('flex');
+    singleSection.classList.add('hidden');
+    singleSection.classList.remove('flex');
+
+    bulkBtn.className = 'px-4 py-2.5 rounded-xl bg-emerald-500 text-obsidian-950 font-bold text-xs font-sans shadow-md flex items-center gap-2 cursor-pointer';
+    bulkBtn.style.color = '#07080a !important;';
+    singleBtn.className = 'px-4 py-2.5 rounded-xl bg-[#171920] text-neutral-300 hover:text-white border border-[#21242d] text-xs font-semibold font-sans flex items-center gap-2 cursor-pointer';
+    singleBtn.style.color = '#e5e5e5 !important;';
+  } else {
+    singleSection.classList.remove('hidden');
+    singleSection.classList.add('flex');
+    bulkSection.classList.add('hidden');
+    bulkSection.classList.remove('flex');
+
+    singleBtn.className = 'px-4 py-2.5 rounded-xl bg-emerald-500 text-obsidian-950 font-bold text-xs font-sans shadow-md flex items-center gap-2 cursor-pointer';
+    singleBtn.style.color = '#07080a !important;';
+    bulkBtn.className = 'px-4 py-2.5 rounded-xl bg-[#171920] text-neutral-300 hover:text-white border border-[#21242d] text-xs font-semibold font-sans flex items-center gap-2 cursor-pointer';
+    bulkBtn.style.color = '#e5e5e5 !important;';
+  }
+}
+
+// Render Collection Table
+function renderCollectionTable(filterText = '') {
+  const tbody = document.getElementById('collectionTableBody');
+  if (!tbody) return;
+  tbody.innerHTML = '';
+
+  const q = (filterText || '').toLowerCase().trim();
+  const filtered = collectionProducts.map((p, idx) => ({ ...p, origIndex: idx }))
+    .filter(p => !q || (p.title || '').toLowerCase().includes(q) || (p.sku || '').toLowerCase().includes(q) || (p.handle || '').toLowerCase().includes(q));
+
+  document.getElementById('bulkSelectionStatus').textContent = `${selectedBulkIndices.size} of ${collectionProducts.length} Selected`;
+  document.getElementById('bulkSelectedCount').textContent = selectedBulkIndices.size;
+  document.getElementById('bulkSelectAllCount').textContent = collectionProducts.length;
+
+  if (filtered.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="7" class="py-8 text-center text-neutral-500 font-sans text-xs">No pieces found matching "${escapeHtml(filterText)}"</td></tr>`;
+    return;
+  }
+
+  filtered.forEach(p => {
+    const idx = p.origIndex;
+    const isSelected = selectedBulkIndices.has(idx);
+    const thumb = p.images && p.images.length > 0 ? (p.images[0].src || p.images[0]) : 'https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?auto=format&fit=crop&w=200&q=80';
+    const priceVal = parseFloat(p.price || 0);
+    const inrDisplay = p.currency === 'INR' ? Math.round(priceVal) : Math.round(priceVal * INR_RATE);
+    const varCount = p.variants ? p.variants.length : 1;
+
+    const tr = document.createElement('tr');
+    tr.id = `bulk-row-${idx}`;
+    tr.className = `hover:bg-[#111317]/80 transition-colors ${isSelected ? 'bg-emerald-500/[0.04]' : ''}`;
+    tr.innerHTML = `
+      <td class="py-3 px-4 text-center">
+        <input type="checkbox" ${isSelected ? 'checked' : ''} onchange="toggleBulkRow(${idx}, this.checked)" class="rounded border-obsidian-700 bg-obsidian-900 text-emerald-500 focus:ring-emerald-500 cursor-pointer">
+      </td>
+      <td class="py-3 px-3">
+        <img src="${escapeHtml(thumb)}" alt="" class="w-11 h-11 rounded-lg object-cover bg-obsidian-900 border border-[#21242d]" onerror="this.src='https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?auto=format&fit=crop&w=200&q=80'">
+      </td>
+      <td class="py-3 px-4 min-w-[240px]">
+        <div class="font-semibold text-white font-sans text-xs hover:text-emerald-400 transition-colors cursor-pointer" onclick="inspectSinglePiece(${idx})">${escapeHtml(p.title)}</div>
+        <div class="text-[10px] text-neutral-400 font-sans mt-0.5">${escapeHtml(p.brand || 'Boutique Import')} • <span class="font-mono text-neutral-500">${escapeHtml(p.handle || '')}</span></div>
+      </td>
+      <td class="py-3 px-4 whitespace-nowrap">
+        <div class="font-mono font-bold text-emerald-400 text-xs">₹${inrDisplay.toLocaleString('en-IN')}</div>
+        ${p.currency !== 'INR' ? `<div class="font-mono text-[10px] text-neutral-500">$${priceVal.toFixed(2)} USD</div>` : ''}
+      </td>
+      <td class="py-3 px-4 whitespace-nowrap">
+        <button type="button" onclick="toggleVariantsDropdown(${idx})" class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-[#171920] hover:bg-[#1c1f28] border border-[#21242d] text-[11px] font-mono text-amber-300 cursor-pointer" title="Click to view all variant options">
+          <span>⚡ ${varCount} Variants</span>
+          <span class="text-[9px]">▾</span>
+        </button>
+      </td>
+      <td class="py-3 px-4 whitespace-nowrap font-mono text-xs text-neutral-300">
+        ${escapeHtml(p.sku || 'LCK-SCR')}
+      </td>
+      <td class="py-3 px-4 text-right whitespace-nowrap">
+        <button type="button" onclick="inspectSinglePiece(${idx})" class="btn-secondary py-1.5 px-3 rounded-lg text-[11px] font-semibold font-sans cursor-pointer hover:border-emerald-500/40">
+          Inspect &amp; Edit ↗
+        </button>
+      </td>
     `;
-    container.appendChild(chip);
+    tbody.appendChild(tr);
+
+    // Collapsible sub-row showing the complete list of variants for this item
+    const subTr = document.createElement('tr');
+    subTr.id = `variants-sub-${idx}`;
+    subTr.className = 'hidden bg-[#0c0d10] border-b border-[#21242d]';
+    subTr.innerHTML = `
+      <td colspan="7" class="p-3 pl-16">
+        <div class="p-3.5 rounded-xl bg-[#111317] border border-[#21242d] flex flex-col gap-2.5">
+          <div class="flex items-center justify-between text-[11px] font-sans font-semibold text-neutral-300">
+            <span>Detected Variant Specifications for "${escapeHtml(p.title)}":</span>
+            <span class="font-mono text-amber-300">${varCount} Total Options</span>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 max-h-52 overflow-y-auto pr-1">
+            ${(p.variants || []).map(v => `
+              <div class="p-2 rounded-lg bg-[#0e1014] border border-[#21242d] flex items-center justify-between text-[11px] font-mono">
+                <div class="truncate pr-2">
+                  <span class="text-neutral-200 font-sans block truncate">${escapeHtml(v.title || 'Standard')}</span>
+                  <span class="text-[9px] text-neutral-500">${escapeHtml(v.sku || '')}</span>
+                </div>
+                <span class="text-emerald-400 font-bold shrink-0">₹${p.currency === 'INR' ? Math.round(v.price || 0).toLocaleString('en-IN') : Math.round((v.price || 0) * INR_RATE).toLocaleString('en-IN')}</span>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      </td>
+    `;
+    tbody.appendChild(subTr);
   });
 }
 
-async function selectCollectionPiece(p) {
-  if (!p || !p.handle) return;
-  let sourceDomain = 'sparelelo.com';
-  if (currentProduct && currentProduct.source_url) {
-    try {
-      sourceDomain = new URL(currentProduct.source_url).host;
-    } catch (e) {}
+function toggleVariantsDropdown(idx) {
+  const row = document.getElementById(`variants-sub-${idx}`);
+  if (row) {
+    row.classList.toggle('hidden');
   }
-  const prodUrl = `https://${sourceDomain}/products/${p.handle}`;
-  document.getElementById('targetUrlInput').value = prodUrl;
-  setScrapingLoading(true);
+}
+
+function toggleBulkRow(idx, checked) {
+  if (checked) {
+    selectedBulkIndices.add(idx);
+  } else {
+    selectedBulkIndices.delete(idx);
+  }
+  const row = document.getElementById(`bulk-row-${idx}`);
+  if (row) {
+    if (checked) {
+      row.classList.add('bg-emerald-500/[0.04]');
+    } else {
+      row.classList.remove('bg-emerald-500/[0.04]');
+    }
+  }
+  document.getElementById('bulkSelectionStatus').textContent = `${selectedBulkIndices.size} of ${collectionProducts.length} Selected`;
+  document.getElementById('bulkSelectedCount').textContent = selectedBulkIndices.size;
+  document.getElementById('selectAllBulkCheckbox').checked = selectedBulkIndices.size === collectionProducts.length;
+}
+
+function toggleSelectAllBulk(checked) {
+  if (checked) {
+    selectedBulkIndices = new Set(collectionProducts.map((_, i) => i));
+  } else {
+    selectedBulkIndices.clear();
+  }
+  renderCollectionTable(document.getElementById('filterCollectionInput').value);
+}
+
+function filterCollectionItems(val) {
+  renderCollectionTable(val);
+}
+
+function inspectSinglePiece(idx) {
+  const p = collectionProducts[idx];
+  if (!p) return;
+  loadScrapedDataIntoStudio(p);
+  switchCollectionTab('single');
+  document.getElementById('scrapedStudioSection').scrollIntoView({ behavior: 'smooth' });
+}
+
+// Bulk Import Execution
+async function executeBulkImport() {
+  const selected = Array.from(selectedBulkIndices).map(i => collectionProducts[i]);
+  if (selected.length === 0) {
+    showFeedback('Please select at least 1 piece to import.', true);
+    return;
+  }
+
+  const categoryId = document.getElementById('bulkCategorySelect').value;
+  const progressContainer = document.getElementById('bulkProgressContainer');
+  const progressBar = document.getElementById('bulkProgressBar');
+  const progressCount = document.getElementById('bulkProgressCount');
+  const progressTitle = document.getElementById('bulkProgressTitle');
+  const bulkBtn = document.getElementById('bulkImportBtn');
+  const bulkBtnText = document.getElementById('bulkImportBtnText');
+
+  progressContainer.classList.remove('hidden');
+  progressContainer.classList.add('flex');
+  bulkBtn.disabled = true;
+  bulkBtnText.innerHTML = '<span class="inline-block animate-spin mr-1">↻</span> Importing to Vault...';
+
+  const batchSize = 25;
+  let importedTotal = 0;
+  const csrfToken = getCsrfToken();
 
   try {
-    const csrfToken = getCsrfToken();
-    const res = await fetch('/admin/catalog/product/api/scrape/', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'X-CSRFToken': csrfToken },
-      body: JSON.stringify({ url: prodUrl })
-    });
-    const data = await res.json();
-    if (res.ok && data.status === 'ok') {
-      data.product.is_collection = true;
-      data.product.collection_products = currentProduct.collection_products;
-      data.product.collection_title = currentProduct.collection_title;
-      data.product.collection_total = currentProduct.collection_total;
-      loadScrapedDataIntoStudio(data.product);
-      showFeedback(`Loaded "${data.product.title}" (${data.product.variants.length} variants)`);
-    } else {
-      showFeedback(data.message || 'Failed to load selected product from collection.', true);
+    for (let i = 0; i < selected.length; i += batchSize) {
+      const batch = selected.slice(i, i + batchSize);
+      progressTitle.textContent = `Importing batch ${Math.floor(i / batchSize) + 1} of ${Math.ceil(selected.length / batchSize)}...`;
+
+      const res = await fetch('/admin/catalog/product/api/bulk-import-scraped/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRFToken': csrfToken
+        },
+        body: JSON.stringify({
+          items: batch,
+          category_id: categoryId
+        })
+      });
+
+      const data = await res.json();
+      if (res.ok && data.status === 'ok') {
+        importedTotal += data.imported_count || batch.length;
+        const pct = Math.round((importedTotal / selected.length) * 100);
+        progressBar.style.width = `${pct}%`;
+        progressCount.textContent = `${importedTotal} / ${selected.length}`;
+      } else {
+        throw new Error(data.message || 'Batch import failed');
+      }
     }
+
+    showFeedback(`Bulk Import Complete: ${importedTotal} pieces successfully imported into the Atelier Vault!`);
   } catch (err) {
-    showFeedback(`Error loading piece: ${err.message}`, true);
+    showFeedback(`Bulk import error: ${err.message}`, true);
   } finally {
-    setScrapingLoading(false);
+    bulkBtn.disabled = false;
+    bulkBtnText.innerHTML = `Bulk Import Selected (<span id="bulkSelectedCount">${selectedBulkIndices.size}</span>)`;
   }
+}
+
+// Export All Collection Products to CSV
+function exportBulkCsv() {
+  if (!collectionProducts || collectionProducts.length === 0) return;
+  let csv = 'Title,Brand,Handle,Price_INR,Variants_Count,Variants_List,Images\n';
+
+  collectionProducts.forEach(p => {
+    const title = (p.title || '').replace(/"/g, '""');
+    const brand = (p.brand || '').replace(/"/g, '""');
+    const handle = p.handle || '';
+    const priceVal = parseFloat(p.price || 0);
+    const inr = p.currency === 'INR' ? Math.round(priceVal) : Math.round(priceVal * INR_RATE);
+    const varCount = p.variants ? p.variants.length : 1;
+    const varSummary = (p.variants || []).map(v => `${v.title}:${v.sku || ''}`).join(';').replace(/"/g, '""');
+    const imgSummary = (p.images || []).map(i => i.src || i).join(';');
+
+    csv += `"${title}","${brand}","${handle}","${inr}","${varCount}","${varSummary}","${imgSummary}"\n`;
+  });
+
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `collection-${currentProduct ? currentProduct.collection_handle || 'items' : 'scraped'}.csv`;
+  a.click();
+}
+
+// Export All Collection Products to JSON
+function exportBulkJson() {
+  if (!collectionProducts || collectionProducts.length === 0) return;
+  const payload = {
+    collection_title: currentProduct ? currentProduct.collection_title : 'Collection',
+    total_items: collectionProducts.length,
+    exported_at: new Date().toISOString(),
+    products: collectionProducts
+  };
+
+  const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `collection-${currentProduct ? currentProduct.collection_handle || 'items' : 'scraped'}.json`;
+  a.click();
 }
 
 // Update Price Telemetry & INR Calculation

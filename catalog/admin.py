@@ -359,6 +359,7 @@ class ProductAdmin(admin.ModelAdmin):
             path('scrape/', self.admin_site.admin_view(self.scrape_view), name='catalog_product_scrape'),
             path('api/scrape/', self.admin_site.admin_view(self.api_scrape_view), name='catalog_product_api_scrape'),
             path('api/import-scraped/', self.admin_site.admin_view(self.api_import_scraped_view), name='catalog_product_api_import_scraped'),
+            path('api/bulk-import-scraped/', self.admin_site.admin_view(self.api_bulk_import_scraped_view), name='catalog_product_api_bulk_import_scraped'),
             path('quick-add/', self.admin_site.admin_view(self.quick_add_view), name='catalog_product_quick_add'),
             path('bulk-delete/', self.admin_site.admin_view(self.bulk_delete_view), name='catalog_product_bulk_delete'),
             path('quick-delete/<int:product_id>/', self.admin_site.admin_view(self.quick_delete_view), name='catalog_product_quick_delete'),
@@ -554,6 +555,125 @@ class ProductAdmin(admin.ModelAdmin):
                 'image': product.primary_image,
                 'edit_url': f'/admin/catalog/product/{product.id}/change/',
                 'detail_url': product.get_absolute_url(),
+            })
+        except Exception as e:
+            return JsonResponse({'status': 'error', 'message': str(e)}, status=500)
+
+    def api_bulk_import_scraped_view(self, request):
+        if request.method != 'POST':
+            return JsonResponse({'status': 'error', 'message': 'POST required'}, status=405)
+        try:
+            if request.content_type == 'application/json':
+                data = json.loads(request.body.decode('utf-8'))
+            else:
+                data = request.POST
+
+            items = data.get('items', [])
+            if not items:
+                return JsonResponse({'status': 'error', 'message': 'No products provided for bulk import.'}, status=400)
+
+            default_category = Category.objects.first()
+            category_id = data.get('category_id')
+            if category_id:
+                target_category = Category.objects.filter(id=category_id).first() or default_category
+            else:
+                target_category = default_category
+
+            silver_mat, _ = Material.objects.get_or_create(
+                slug='925-sterling-silver',
+                defaults={'name': '925 Sterling Silver', 'badge_label': '925 Silver'}
+            )
+
+            created_products = []
+            for item in items:
+                title = (item.get('title') or '').strip()
+                if not title:
+                    continue
+
+                sku = (item.get('sku') or '').strip()
+                if not sku:
+                    slug_part = item.get('handle') or re.sub(r'[^A-Za-z0-9]', '', title)[:8].upper()
+                    sku = f"LCK-SCR-{slug_part[:12]}"
+
+                # Unique SKU check
+                base_sku = sku
+                cnt = 1
+                while Product.objects.filter(sku=sku).exists():
+                    sku = f"{base_sku}-{cnt}"
+                    cnt += 1
+
+                price = item.get('price') or 0.0
+                try:
+                    price = float(price)
+                except ValueError:
+                    price = 0.0
+
+                comp = item.get('compare_at_price')
+                if comp:
+                    try:
+                        comp = float(comp)
+                    except ValueError:
+                        comp = None
+
+                description = (item.get('description') or '').strip() or f"Handcrafted {title} with fine precision and authentic Luckjary hallmark guarantee."
+                karat_metal = item.get('karat_metal') or '925 Sterling Silver'
+                available_metals = item.get('available_metals') or '925 Sterling Silver'
+                gemstone = item.get('gemstone') or '5A Flawless Cubic Zirconia (CZ)'
+
+                variants = item.get('variants', [])
+                size_list = ', '.join([v.get('title', '') for v in variants if v.get('title')]) if variants else ''
+
+                product = Product.objects.create(
+                    title=title,
+                    category=target_category,
+                    price=price,
+                    compare_at_price=comp,
+                    inventory=25,
+                    sku=sku,
+                    size_category='universal',
+                    available_sizes=size_list,
+                    gemstone=gemstone,
+                    description=description,
+                    karat_metal=karat_metal,
+                    available_metals=available_metals,
+                    is_available=True,
+                    is_featured=False
+                )
+                product.materials.add(silver_mat)
+
+                # Images
+                images = item.get('images', [])
+                for idx, img_info in enumerate(images):
+                    img_url = ""
+                    alt_text = f"{product.title} image {idx+1}"
+                    if isinstance(img_info, dict):
+                        img_url = (img_info.get('src') or '').strip()
+                        alt_text = img_info.get('alt') or alt_text
+                    elif isinstance(img_info, str):
+                        img_url = img_info.strip()
+
+                    if img_url:
+                        ProductImage.objects.create(
+                            product=product,
+                            image_url=img_url,
+                            alt_text=alt_text,
+                            is_primary=(idx == 0),
+                            order=idx
+                        )
+
+                created_products.append({
+                    'id': product.id,
+                    'title': product.title,
+                    'sku': product.sku,
+                    'price': float(product.price),
+                    'edit_url': f'/admin/catalog/product/{product.id}/change/'
+                })
+
+            return JsonResponse({
+                'status': 'ok',
+                'imported_count': len(created_products),
+                'message': f"Successfully imported {len(created_products)} pieces into the Atelier Vault.",
+                'products': created_products
             })
         except Exception as e:
             return JsonResponse({'status': 'error', 'message': str(e)}, status=500)

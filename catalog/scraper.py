@@ -205,13 +205,24 @@ def try_shopify_endpoints(target_url):
         col_match = re.search(r'/collections/([^/?#]+)', path)
         if col_match:
             col_handle = col_match.group(1)
-            col_json_url = f"{scheme}://{netloc}/collections/{col_handle}/products.json"
-            body, code = http_get(col_json_url)
-            if code == 200 and body:
-                data = json.loads(body)
-                products = data.get('products', [])
-                if products:
-                    return parse_shopify_collection(products, col_handle, target_url, netloc)
+            all_products = []
+            page = 1
+            while page <= 4:
+                col_json_url = f"{scheme}://{netloc}/collections/{col_handle}/products.json?limit=250&page={page}"
+                body, code = http_get(col_json_url)
+                if code == 200 and body:
+                    data = json.loads(body)
+                    prods = data.get('products', [])
+                    if not prods:
+                        break
+                    all_products.extend(prods)
+                    if len(prods) < 250:
+                        break
+                    page += 1
+                else:
+                    break
+            if all_products:
+                return parse_shopify_collection(all_products, col_handle, target_url, netloc)
 
         # Case 2: Product URL (e.g. /products/ring-name)
         prod_match = re.search(r'/products/([^/?#]+)', path)
@@ -241,35 +252,27 @@ def try_shopify_endpoints(target_url):
 def parse_shopify_collection(products_list, col_handle, source_url, domain):
     """
     Parses a Shopify collection into:
-    - Primary loaded product (product 0)
-    - Full list of all collection products for 1-click selection in the UI
+    - Complete list of all collection products with variants, SKUs, and images
+    - Primary product for studio view
+    - Aggregate metrics (total items, total variants)
     """
     formatted_products = []
+    total_variants_count = 0
     for p in products_list:
         parsed = parse_shopify_product_dict(p, f"https://{domain}/products/{p.get('handle', '')}")
         formatted_products.append(parsed)
+        total_variants_count += len(parsed.get('variants', []))
 
-    # Primary product to show in studio
-    primary = formatted_products[0] if formatted_products else {}
+    primary = dict(formatted_products[0]) if formatted_products else {}
     col_name = col_handle.replace('-', ' ').title()
 
     primary['is_collection'] = True
     primary['collection_title'] = col_name
     primary['collection_handle'] = col_handle
     primary['collection_total'] = len(formatted_products)
-    primary['collection_products'] = [
-        {
-            'id': p.get('id'),
-            'title': p.get('title'),
-            'price': p.get('price'),
-            'sku': p.get('sku'),
-            'image': p.get('images', [{}])[0].get('src', '') if p.get('images') else '',
-            'variants_count': len(p.get('variants', [])),
-            'handle': p.get('handle')
-        }
-        for p in products_list
-    ]
-    primary['source_type'] = f"Shopify Collection ({len(formatted_products)} pieces)"
+    primary['total_variants_count'] = total_variants_count
+    primary['collection_products'] = formatted_products
+    primary['source_type'] = f"Shopify Collection ({len(formatted_products)} items, {total_variants_count} variants)"
     return primary
 
 
