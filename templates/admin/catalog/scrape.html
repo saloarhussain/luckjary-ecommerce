@@ -854,11 +854,21 @@ function setScrapingLoading(isLoading) {
 // Load Scraped Data into Studio
 function loadScrapedDataIntoStudio(product) {
   currentProduct = product;
+  const baseSku = product.sku || generateSkuString(product.title);
   currentVariants = Array.isArray(product.variants) && product.variants.length > 0
-    ? [...product.variants]
+    ? product.variants.map((v, i) => {
+        let skuVal = (v.sku || '').trim();
+        if (!skuVal || skuVal.startsWith('SKU-') || skuVal.includes('/') || skuVal.includes(' ') || skuVal.length < 4) {
+          skuVal = `${baseSku}-V${i + 1}`;
+        }
+        return {
+          ...v,
+          sku: skuVal
+        };
+      })
     : [{
         title: 'Default Luxury Fit',
-        sku: product.sku || generateSkuString(product.title),
+        sku: baseSku,
         price: product.price || 0,
         available: true
       }];
@@ -997,6 +1007,11 @@ function renderCollectionTable(filterText = '') {
     const priceVal = parseFloat(p.price || 0);
     const inrDisplay = p.currency === 'INR' ? Math.round(priceVal) : Math.round(priceVal * INR_RATE);
     const varCount = p.variants ? p.variants.length : 1;
+    const minVal = p.min_price != null ? parseFloat(p.min_price) : priceVal;
+    const maxVal = p.max_price != null ? parseFloat(p.max_price) : priceVal;
+    const hasRange = minVal !== maxVal && minVal > 0 && maxVal > 0;
+    const minInr = p.currency === 'INR' ? Math.round(minVal) : Math.round(minVal * INR_RATE);
+    const maxInr = p.currency === 'INR' ? Math.round(maxVal) : Math.round(maxVal * INR_RATE);
 
     const tr = document.createElement('tr');
     tr.id = `bulk-row-${idx}`;
@@ -1014,7 +1029,7 @@ function renderCollectionTable(filterText = '') {
       </td>
       <td class="py-3 px-4 whitespace-nowrap">
         <div class="font-mono font-bold text-emerald-400 text-xs">₹${inrDisplay.toLocaleString('en-IN')}</div>
-        ${p.currency !== 'INR' ? `<div class="font-mono text-[10px] text-neutral-500">$${priceVal.toFixed(2)} USD</div>` : ''}
+        ${hasRange ? `<div class="font-mono text-[10px] text-neutral-400">Range: ₹${minInr.toLocaleString('en-IN')} – ₹${maxInr.toLocaleString('en-IN')}</div>` : (p.currency !== 'INR' ? `<div class="font-mono text-[10px] text-neutral-500">$${priceVal.toFixed(2)} USD</div>` : '')}
       </td>
       <td class="py-3 px-4 whitespace-nowrap">
         <button type="button" onclick="toggleVariantsDropdown(${idx})" class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-[#171920] hover:bg-[#1c1f28] border border-[#21242d] text-[11px] font-mono text-amber-300 cursor-pointer" title="Click to view all variant options">
@@ -1046,12 +1061,9 @@ function renderCollectionTable(filterText = '') {
           </div>
           <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 max-h-52 overflow-y-auto pr-1">
             ${(p.variants || []).map(v => `
-              <div class="p-2 rounded-lg bg-[#0e1014] border border-[#21242d] flex items-center justify-between text-[11px] font-mono">
-                <div class="truncate pr-2">
-                  <span class="text-neutral-200 font-sans block truncate">${escapeHtml(v.title || 'Standard')}</span>
-                  <span class="text-[9px] text-neutral-500">${escapeHtml(v.sku || '')}</span>
-                </div>
-                <span class="text-emerald-400 font-bold shrink-0">₹${p.currency === 'INR' ? Math.round(v.price || 0).toLocaleString('en-IN') : Math.round((v.price || 0) * INR_RATE).toLocaleString('en-IN')}</span>
+              <div class="p-2.5 rounded-xl bg-[#0e1014] border border-[#21242d] hover:border-emerald-500/30 transition-colors flex items-center justify-between text-xs">
+                <span class="text-neutral-200 font-sans font-medium truncate pr-2" title="${escapeHtml(v.title || 'Standard')}">${escapeHtml(v.title || 'Standard')}</span>
+                <span class="text-emerald-400 font-bold shrink-0 font-mono">₹${p.currency === 'INR' ? Math.round(v.price || 0).toLocaleString('en-IN') : Math.round((v.price || 0) * INR_RATE).toLocaleString('en-IN')}</span>
               </div>
             `).join('')}
           </div>

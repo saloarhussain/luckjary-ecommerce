@@ -290,6 +290,7 @@ def parse_shopify_product_dict(prod, source_url):
     # Variants
     variants = []
     min_price = None
+    max_price = None
     compare_at_price = None
 
     for v in prod.get('variants', []):
@@ -299,8 +300,12 @@ def parse_shopify_product_dict(prod, source_url):
         v_title = v.get('title') or ''
         v_avail = v.get('available', True)
 
-        if min_price is None or (v_price is not None and v_price < min_price):
-            min_price = v_price
+        if v_price is not None:
+            if min_price is None or v_price < min_price:
+                min_price = v_price
+            if max_price is None or v_price > max_price:
+                max_price = v_price
+
         if compare_at_price is None and v_comp:
             compare_at_price = v_comp
 
@@ -335,11 +340,33 @@ def parse_shopify_product_dict(prod, source_url):
             'values': opt.get('values', [])
         })
 
-    # Primary SKU
+    # Primary SKU: Use clean atelier SKU if raw variant SKU contains stock bin notes, slashes or spaces
     first_sku = variants[0]['sku'] if variants and variants[0]['sku'] else ''
-    if not first_sku or first_sku.startswith('SKU-'):
-        slug_part = prod.get('handle') or re.sub(r'[^A-Za-z0-9]', '', title)[:8].upper()
-        first_sku = f"LCK-SCR-{slug_part.upper()[:14]}"
+    slug_part = prod.get('handle') or re.sub(r'[^A-Za-z0-9]', '', title)[:8].upper()
+    atelier_sku = f"LCK-SCR-{slug_part.upper().replace('_', '-')[:14]}"
+    if not first_sku or first_sku.startswith('SKU-') or '/' in first_sku or ' ' in first_sku or len(first_sku) < 4:
+        first_sku = atelier_sku
+
+    # Featured primary price: match the live store's featured variant price (e.g. Display)
+    first_var_price = variants[0]['price'] if (variants and variants[0].get('price') is not None) else None
+    primary_price = first_var_price if first_var_price is not None else (min_price or 0.0)
+
+    # Clean variant SKUs so internal warehouse codes (like 'Frame', 'Back Panel', 'A13 4G/23/M33') don't pollute data
+    for i, v in enumerate(variants):
+        v_sku_val = (v.get('sku') or '').strip()
+        is_suspicious = (
+            not v_sku_val
+            or v_sku_val.startswith('SKU-')
+            or '/' in v_sku_val
+            or ' ' in v_sku_val
+            or len(v_sku_val) < 4
+            or not any(ch.isdigit() for ch in v_sku_val)
+        )
+        if is_suspicious:
+            v['sku'] = f"{atelier_sku}-V{i+1}"
+
+    is_inr = ('.in' in source_url or 'sparelelo' in source_url or 'india' in source_url)
+    currency = 'INR' if is_inr else 'USD'
 
     return {
         'source_type': 'Shopify Product API',
@@ -350,9 +377,11 @@ def parse_shopify_product_dict(prod, source_url):
         'subtitle': f"Curated from {vendor}" if vendor else "Haute Atelier Import",
         'description': description or f"Exquisite handcrafted {title} featuring master gemstone setting and premium fine finishes.",
         'sku': first_sku,
-        'price': min_price or 0.0,
+        'price': primary_price,
+        'min_price': min_price if min_price is not None else primary_price,
+        'max_price': max_price if max_price is not None else primary_price,
         'compare_at_price': compare_at_price,
-        'currency': 'INR' if (min_price and min_price >= 100 and ('.in' in source_url or 'sparelelo' in source_url)) else 'USD',
+        'currency': currency,
         'brand': vendor,
         'product_type': product_type,
         'tags': tags,
@@ -428,6 +457,7 @@ def parse_json_ld_scripts(scripts_list, source_url):
 
     variants = []
     min_price = None
+    max_price = None
     currency = 'USD'
     compare_at_price = None
 
@@ -442,6 +472,8 @@ def parse_json_ld_scripts(scripts_list, source_url):
             if min_price is None or p < min_price:
                 min_price = p
                 currency = c
+            if max_price is None or p > max_price:
+                max_price = p
 
         variants.append({
             'title': v_name,
@@ -456,6 +488,9 @@ def parse_json_ld_scripts(scripts_list, source_url):
     if not sku:
         sku = variants[0]['sku'] if variants and variants[0]['sku'] else f"LCK-SCR-{re.sub(r'[^A-Za-z0-9]', '', title)[:8].upper()}"
 
+    first_var_price = variants[0]['price'] if (variants and variants[0].get('price') is not None) else None
+    primary_price = first_var_price if first_var_price is not None else (min_price or 0.0)
+
     return {
         'source_type': 'Schema.org JSON-LD',
         'source_url': source_url,
@@ -463,7 +498,9 @@ def parse_json_ld_scripts(scripts_list, source_url):
         'subtitle': f"Curated from {brand}" if brand else "Haute Joaillerie Import",
         'description': description or f"Handcrafted {title} with precision metalwork and luxury stones.",
         'sku': sku,
-        'price': min_price or 0.0,
+        'price': primary_price,
+        'min_price': min_price if min_price is not None else primary_price,
+        'max_price': max_price if max_price is not None else primary_price,
         'compare_at_price': compare_at_price,
         'currency': currency,
         'brand': brand,
