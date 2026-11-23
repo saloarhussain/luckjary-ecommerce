@@ -1168,7 +1168,7 @@ fieldset.module h2 {
       </div>
     </div>
     <form method="post" action="/admin/logout/" class="inline m-0 p-0">
-      <input type="hidden" name="csrfmiddlewaretoken" value="SP1TmKWpFSvic3Uh1Kp90oiFbREhVnVNY2DSlgX0ZMoeEEbxRTNVQbmvlu56xGUt">
+      <input type="hidden" name="csrfmiddlewaretoken" value="0KAB4pTC8U3eMqxLHK8MVttFIeIZPybdbt0CSey2Ne5sHPLGbFn40biwRztIEM2u">
       <button type="submit" aria-label="Log Out" class="p-1.5 rounded-lg text-neutral-400 hover:text-rose-400 hover:bg-[#171920] transition shrink-0 bg-transparent border-0 cursor-pointer" title="Log Out">
         <svg class="w-4 h-4 stroke-[1.8]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
       </button>
@@ -1429,7 +1429,7 @@ fieldset.module h2 {
       </div>
     </div>
     <form method="post" action="/admin/logout/" class="inline m-0 p-0">
-      <input type="hidden" name="csrfmiddlewaretoken" value="SP1TmKWpFSvic3Uh1Kp90oiFbREhVnVNY2DSlgX0ZMoeEEbxRTNVQbmvlu56xGUt">
+      <input type="hidden" name="csrfmiddlewaretoken" value="0KAB4pTC8U3eMqxLHK8MVttFIeIZPybdbt0CSey2Ne5sHPLGbFn40biwRztIEM2u">
       <button type="submit" aria-label="Log Out" class="p-1.5 rounded-lg text-neutral-400 hover:text-rose-400 hover:bg-[#171920] transition shrink-0 bg-transparent border-0 cursor-pointer" title="Log Out">
         <svg class="w-4 h-4 stroke-[1.8]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
       </button>
@@ -1604,7 +1604,7 @@ header[data-purpose="top-header"] button[type="submit"] {
     </div>
   </div>
   <form method="post" action="/admin/logout/" class="inline m-0 p-0">
-    <input type="hidden" name="csrfmiddlewaretoken" value="SP1TmKWpFSvic3Uh1Kp90oiFbREhVnVNY2DSlgX0ZMoeEEbxRTNVQbmvlu56xGUt">
+    <input type="hidden" name="csrfmiddlewaretoken" value="0KAB4pTC8U3eMqxLHK8MVttFIeIZPybdbt0CSey2Ne5sHPLGbFn40biwRztIEM2u">
     <button type="submit" class="flex items-center gap-1.5 text-xs text-neutral-400 hover:text-rose-400 p-1.5 sm:px-2 sm:py-1.5 transition bg-transparent border-0 cursor-pointer" title="Log Out">
       <svg class="w-4 h-4 stroke-[1.8]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" stroke-linecap="round" stroke-linejoin="round"></path></svg>
       <span class="hidden xl:inline font-sans">Log Out</span>
@@ -1642,7 +1642,7 @@ header[data-purpose="top-header"] button[type="submit"] {
               
 <div id="content-main" class="min-h-screen bg-obsidian-950 text-neutral-300 font-sans antialiased selection:bg-emerald-500/30 selection:text-emerald-300">
   <form action="" method="post" id="order_form" novalidate>
-    <input type="hidden" name="csrfmiddlewaretoken" value="SP1TmKWpFSvic3Uh1Kp90oiFbREhVnVNY2DSlgX0ZMoeEEbxRTNVQbmvlu56xGUt">
+    <input type="hidden" name="csrfmiddlewaretoken" value="0KAB4pTC8U3eMqxLHK8MVttFIeIZPybdbt0CSey2Ne5sHPLGbFn40biwRztIEM2u">
     
     <!-- Inline Management Forms for Django Formset Validation -->
     
@@ -1852,11 +1852,15 @@ header[data-purpose="top-header"] button[type="submit"] {
                   </div>
                 </div>
 
-                <div class="flex items-center justify-between pt-2 border-t border-obsidian-700/40 text-xs font-mono">
-                  <span class="text-neutral-400">Unit Price: ₹3450.00 × 1</span>
-                  <div class="flex items-center gap-2">
-                    <span class="text-neutral-500 line-through">₹4,200.00</span>
-                    <span class="text-neutral-200 font-medium">₹3450.00 (VIP Discount -10%)</span>
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pt-2.5 border-t border-obsidian-700/50 text-xs font-mono">
+                  <div class="flex items-center gap-1.5 text-neutral-400">
+                    <span class="text-neutral-500 text-[11px] sm:text-xs">Unit Price:</span>
+                    <span class="text-neutral-200">₹3450.00 × 1</span>
+                  </div>
+                  <div class="flex items-center gap-2 flex-wrap">
+                    <span class="text-neutral-500 line-through text-[11px]">₹3450.00</span>
+                    <span class="text-white font-semibold">₹3450.00</span>
+                    <span class="inline-flex items-center text-[10px] font-sans font-medium text-emerald-400 bg-emerald-500/10 border border-emerald-500/30 px-1.5 py-0.5 rounded whitespace-nowrap">VIP -10%</span>
                   </div>
                 </div>
               </div>
@@ -1888,19 +1892,21 @@ header[data-purpose="top-header"] button[type="submit"] {
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-2.5">
-              <div class="flex items-center justify-between nested-surface p-2.5 bg-obsidian-850/90 border border-obsidian-700/60 rounded-lg">
-                <div class="flex items-center gap-2 truncate pr-2">
+              <div class="flex items-center justify-between nested-surface p-2.5 bg-obsidian-850/90 border border-obsidian-700/60 rounded-lg gap-2">
+                <div class="flex items-center gap-2 min-w-0 flex-1">
                   <svg class="w-3.5 h-3.5 text-neutral-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6"></path></svg>
                   <span class="text-xs font-mono text-neutral-200 truncate">julian.stewart@icloud.com</span>
                 </div>
-                <a class="btn-obsidian-secondary text-[11px] font-medium px-2.5 py-1 rounded transition-colors cursor-pointer" href="mailto:julian.stewart@icloud.com">Send Email</a>
+                <a class="btn-obsidian-secondary text-[11px] font-medium px-3 py-1.5 rounded-lg transition-colors cursor-pointer shrink-0 whitespace-nowrap leading-none flex items-center justify-center h-7" href="mailto:julian.stewart@icloud.com">
+                  <span class="hidden sm:inline">Send </span>Email
+                </a>
               </div>
-              <div class="flex items-center justify-between nested-surface p-2.5 bg-obsidian-850/90 border border-obsidian-700/60 rounded-lg">
-                <div class="flex items-center gap-2 truncate pr-2">
+              <div class="flex items-center justify-between nested-surface p-2.5 bg-obsidian-850/90 border border-obsidian-700/60 rounded-lg gap-2">
+                <div class="flex items-center gap-2 min-w-0 flex-1">
                   <svg class="w-3.5 h-3.5 text-neutral-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6"></path></svg>
-                  <span class="text-xs font-mono text-neutral-200">+1 (310) 902-4411</span>
+                  <span class="text-xs font-mono text-neutral-200 truncate">+1 (310) 902-4411</span>
                 </div>
-                <a class="btn-obsidian-secondary text-[11px] font-medium px-2.5 py-1 rounded transition-colors cursor-pointer" href="tel:+1 (310) 902-4411">Call</a>
+                <a class="btn-obsidian-secondary text-[11px] font-medium px-3 py-1.5 rounded-lg transition-colors cursor-pointer shrink-0 whitespace-nowrap leading-none flex items-center justify-center h-7" href="tel:+1 (310) 902-4411">Call</a>
               </div>
             </div>
 
@@ -1914,7 +1920,7 @@ header[data-purpose="top-header"] button[type="submit"] {
 
               <!-- Display Box -->
               <div id="addressDisplayBox" class="nested-surface p-3.5 space-y-1 bg-obsidian-850/90 border border-obsidian-700/60 rounded-lg">
-                <div class="font-medium text-xs text-white" id="disp_street">9641 Sunset Blvd, Apt 14B</div>
+                <div class="font-medium text-xs text-white" id="disp_street">9641 Sunset Blvd</div>
                 <div class="text-xs font-mono text-neutral-400">
                   <span id="disp_city">Beverly Hills</span>, <span id="disp_state">CA</span> <span id="disp_zip">90210</span> • <span id="disp_country">United States</span>
                 </div>

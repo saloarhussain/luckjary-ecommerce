@@ -469,11 +469,15 @@
                   </div>
                 </div>
 
-                <div class="flex items-center justify-between pt-2 border-t border-obsidian-700/40 text-xs font-mono">
-                  <span class="text-neutral-400">Unit Price: ₹{{ item.unit_price|floatformat:2|default:"4,200.00" }} × {{ item.quantity|default:1 }}</span>
-                  <div class="flex items-center gap-2">
-                    <span class="text-neutral-500 line-through">₹4,200.00</span>
-                    <span class="text-neutral-200 font-medium">₹{{ item.line_total|floatformat:2|default:"3,780.00" }} (VIP Discount -10%)</span>
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pt-2.5 border-t border-obsidian-700/50 text-xs font-mono">
+                  <div class="flex items-center gap-1.5 text-neutral-400">
+                    <span class="text-neutral-500 text-[11px] sm:text-xs">Unit Price:</span>
+                    <span class="text-neutral-200">₹{{ item.unit_price|floatformat:2|default:"4,200.00" }} × {{ item.quantity|default:1 }}</span>
+                  </div>
+                  <div class="flex items-center gap-2 flex-wrap">
+                    <span class="text-neutral-500 line-through text-[11px]">₹{{ item.unit_price|floatformat:2|default:"4,200.00" }}</span>
+                    <span class="text-white font-semibold">₹{{ item.line_total|floatformat:2|default:"3,780.00" }}</span>
+                    <span class="inline-flex items-center text-[10px] font-sans font-medium text-emerald-400 bg-emerald-500/10 border border-emerald-500/30 px-1.5 py-0.5 rounded whitespace-nowrap">VIP -10%</span>
                   </div>
                 </div>
               </div>
@@ -520,11 +524,15 @@
                   </div>
                 </div>
 
-                <div class="flex items-center justify-between pt-2 border-t border-obsidian-700/40 text-xs font-mono">
-                  <span class="text-neutral-400">Unit Price: ₹4,200.00 × 1</span>
-                  <div class="flex items-center gap-2">
-                    <span class="text-neutral-500 line-through">₹4,200.00</span>
-                    <span class="text-neutral-200 font-medium">₹3,780.00 (VIP Discount -10%)</span>
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pt-2.5 border-t border-obsidian-700/50 text-xs font-mono">
+                  <div class="flex items-center gap-1.5 text-neutral-400">
+                    <span class="text-neutral-500 text-[11px] sm:text-xs">Unit Price:</span>
+                    <span class="text-neutral-200">₹4,200.00 × 1</span>
+                  </div>
+                  <div class="flex items-center gap-2 flex-wrap">
+                    <span class="text-neutral-500 line-through text-[11px]">₹4,200.00</span>
+                    <span class="text-white font-semibold">₹3,780.00</span>
+                    <span class="inline-flex items-center text-[10px] font-sans font-medium text-emerald-400 bg-emerald-500/10 border border-emerald-500/30 px-1.5 py-0.5 rounded whitespace-nowrap">VIP -10%</span>
                   </div>
                 </div>
               </div>
@@ -556,19 +564,21 @@
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-2.5">
-              <div class="flex items-center justify-between nested-surface p-2.5 bg-obsidian-850/90 border border-obsidian-700/60 rounded-lg">
-                <div class="flex items-center gap-2 truncate pr-2">
+              <div class="flex items-center justify-between nested-surface p-2.5 bg-obsidian-850/90 border border-obsidian-700/60 rounded-lg gap-2">
+                <div class="flex items-center gap-2 min-w-0 flex-1">
                   <svg class="w-3.5 h-3.5 text-neutral-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6"></path></svg>
                   <span class="text-xs font-mono text-neutral-200 truncate">{{ original.email|default:"isabella.vance@example.com" }}</span>
                 </div>
-                <a class="btn-obsidian-secondary text-[11px] font-medium px-2.5 py-1 rounded transition-colors cursor-pointer" href="mailto:{{ original.email|default:'isabella.vance@example.com' }}">Send Email</a>
+                <a class="btn-obsidian-secondary text-[11px] font-medium px-3 py-1.5 rounded-lg transition-colors cursor-pointer shrink-0 whitespace-nowrap leading-none flex items-center justify-center h-7" href="mailto:{{ original.email|default:'isabella.vance@example.com' }}">
+                  <span class="hidden sm:inline">Send </span>Email
+                </a>
               </div>
-              <div class="flex items-center justify-between nested-surface p-2.5 bg-obsidian-850/90 border border-obsidian-700/60 rounded-lg">
-                <div class="flex items-center gap-2 truncate pr-2">
+              <div class="flex items-center justify-between nested-surface p-2.5 bg-obsidian-850/90 border border-obsidian-700/60 rounded-lg gap-2">
+                <div class="flex items-center gap-2 min-w-0 flex-1">
                   <svg class="w-3.5 h-3.5 text-neutral-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6"></path></svg>
-                  <span class="text-xs font-mono text-neutral-200">{{ original.phone|default:"+1 (212) 555-0198" }}</span>
+                  <span class="text-xs font-mono text-neutral-200 truncate">{{ original.phone|default:"+1 (212) 555-0198" }}</span>
                 </div>
-                <a class="btn-obsidian-secondary text-[11px] font-medium px-2.5 py-1 rounded transition-colors cursor-pointer" href="tel:{{ original.phone|default:'+12125550198' }}">Call</a>
+                <a class="btn-obsidian-secondary text-[11px] font-medium px-3 py-1.5 rounded-lg transition-colors cursor-pointer shrink-0 whitespace-nowrap leading-none flex items-center justify-center h-7" href="tel:{{ original.phone|default:'+12125550198' }}">Call</a>
               </div>
             </div>
 
@@ -582,7 +592,7 @@
 
               <!-- Display Box -->
               <div id="addressDisplayBox" class="nested-surface p-3.5 space-y-1 bg-obsidian-850/90 border border-obsidian-700/60 rounded-lg">
-                <div class="font-medium text-xs text-white" id="disp_street">{{ original.shipping_street|default:"740 Park Avenue" }}{% if original.shipping_apartment %}, {{ original.shipping_apartment }}{% else %}, Apt 14B{% endif %}</div>
+                <div class="font-medium text-xs text-white" id="disp_street">{{ original.shipping_street|default:"740 Park Avenue, Apt 14B" }}{% if original.shipping_apartment and original.shipping_apartment not in original.shipping_street %}, {{ original.shipping_apartment }}{% endif %}</div>
                 <div class="text-xs font-mono text-neutral-400">
                   <span id="disp_city">{{ original.shipping_city|default:"New York" }}</span>, <span id="disp_state">{{ original.shipping_state|default:"NY" }}</span> <span id="disp_zip">{{ original.shipping_zip|default:"10021" }}</span> • <span id="disp_country">{{ original.shipping_country|default:"United States" }}</span>
                 </div>
