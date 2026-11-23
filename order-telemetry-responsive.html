@@ -469,16 +469,9 @@
                   </div>
                 </div>
 
-                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pt-2.5 border-t border-obsidian-700/50 text-xs font-mono">
-                  <div class="flex items-center gap-1.5 text-neutral-400">
-                    <span class="text-neutral-500 text-[11px] sm:text-xs">Unit Price:</span>
-                    <span class="text-neutral-200">₹{{ item.unit_price|floatformat:2|default:"4,200.00" }} × {{ item.quantity|default:1 }}</span>
-                  </div>
-                  <div class="flex items-center gap-2 flex-wrap">
-                    <span class="text-neutral-500 line-through text-[11px]">₹{{ item.unit_price|floatformat:2|default:"4,200.00" }}</span>
-                    <span class="text-white font-semibold">₹{{ item.line_total|floatformat:2|default:"3,780.00" }}</span>
-                    <span class="inline-flex items-center text-[10px] font-sans font-medium text-emerald-400 bg-emerald-500/10 border border-emerald-500/30 px-1.5 py-0.5 rounded whitespace-nowrap">VIP -10%</span>
-                  </div>
+                <div class="pt-2.5 border-t border-obsidian-700/50 text-xs font-mono">
+                  <span class="text-neutral-400">Unit Price:</span>
+                  <span class="text-neutral-200 font-medium ml-1">₹{{ item.unit_price|floatformat:2|default:"4,200.00" }} × {{ item.quantity|default:1 }}</span>
                 </div>
               </div>
             </div>
@@ -524,16 +517,9 @@
                   </div>
                 </div>
 
-                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pt-2.5 border-t border-obsidian-700/50 text-xs font-mono">
-                  <div class="flex items-center gap-1.5 text-neutral-400">
-                    <span class="text-neutral-500 text-[11px] sm:text-xs">Unit Price:</span>
-                    <span class="text-neutral-200">₹4,200.00 × 1</span>
-                  </div>
-                  <div class="flex items-center gap-2 flex-wrap">
-                    <span class="text-neutral-500 line-through text-[11px]">₹4,200.00</span>
-                    <span class="text-white font-semibold">₹3,780.00</span>
-                    <span class="inline-flex items-center text-[10px] font-sans font-medium text-emerald-400 bg-emerald-500/10 border border-emerald-500/30 px-1.5 py-0.5 rounded whitespace-nowrap">VIP -10%</span>
-                  </div>
+                <div class="pt-2.5 border-t border-obsidian-700/50 text-xs font-mono">
+                  <span class="text-neutral-400">Unit Price:</span>
+                  <span class="text-neutral-200 font-medium ml-1">₹4,200.00 × 1</span>
                 </div>
               </div>
             </div>
