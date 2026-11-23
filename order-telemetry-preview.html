@@ -652,7 +652,7 @@ fieldset.module h2 {
 <script src="/static/admin/js/prepopulate.js"></script>
 <script src="/static/admin/js/vendor/xregexp/xregexp.js"></script>
 
-<!-- Google Fonts: Luxury Typography Palette matching Dashboard Reference -->
+<!-- Google Fonts: Luxury Typography Palette matching Haute Atelier Design System -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -660,7 +660,7 @@ fieldset.module h2 {
 <!-- Tailwind CSS v3 with Plugins -->
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 
-<!-- Tailwind Custom Configuration matching Modern Vault & Atelier Reference -->
+<!-- Tailwind Custom Configuration matching Haute Atelier Design System -->
 <script data-purpose="tailwind-config">
     tailwind.config = {
       important: true,
@@ -668,21 +668,6 @@ fieldset.module h2 {
       theme: {
         extend: {
           colors: {
-            vault: {
-              bg: '#101319',
-              surface: '#161922',
-              card: '#161922',
-              nested: '#11141b',
-              sidebar: '#0d1016',
-              border: '#232834',
-              borderMuted: '#1b1f28',
-              borderLight: '#323849',
-              gold: '#e9c349',
-              goldMuted: '#c5a336',
-              goldDim: '#252011',
-              emerald: '#10b981',
-              emeraldDim: '#0d261c',
-            },
             obsidian: {
               950: '#07080a',
               900: '#0c0d10',
@@ -691,8 +676,14 @@ fieldset.module h2 {
               750: '#1c1f28',
               700: '#21242d',
               600: '#2f3440',
+              canvas: '#07080a',
+              surface: '#0c0d10',
+              card: '#111317',
+              hover: '#171920',
+              border: '#21242d',
             },
             champagne: {
+              DEFAULT: '#cca55a',
               100: '#fbf7ee',
               200: '#f4ebd4',
               300: '#ebd9b0',
@@ -700,10 +691,19 @@ fieldset.module h2 {
               500: '#cca55a',
             },
             emerald: {
+              DEFAULT: '#10b981',
               400: '#34d399',
               500: '#10b981',
               600: '#059669',
               950: '#022c22',
+            },
+            neutral: {
+              100: '#f5f5f5',
+              200: '#e5e5e5',
+              300: '#d4d4d4',
+              400: '#a3a3a3',
+              500: '#737373',
+              600: '#525252',
             }
           },
           fontFamily: {
@@ -716,7 +716,7 @@ fieldset.module h2 {
     }
 </script>
 
-<style data-purpose="modern-vault-styles">
+<style data-purpose="atelier-color-system-styles">
     /* Universal Underline Killer */
     a, a *, a:hover, a:hover *, a:focus, a:active,
     button, button *, button:hover, button:active {
@@ -724,24 +724,21 @@ fieldset.module h2 {
       text-decoration-line: none !important;
     }
 
-    /* Modern Vault card surfaces with subtle hairlines */
-    .vault-card,
+    /* Core Luxury Atelier Card Surface */
     .card-surface {
-      background: linear-gradient(145deg, rgba(23, 25, 32, 0.7) 0%, rgba(17, 19, 23, 0.95) 100%) !important;
-      background-color: #161922 !important;
-      border: 1px solid #232834 !important;
-      border-radius: 0.5rem !important;
+      background: linear-gradient(145deg, rgba(23, 25, 32, 0.75) 0%, rgba(17, 19, 23, 0.95) 100%) !important;
+      border: 1px solid rgba(255, 255, 255, 0.06) !important;
       backdrop-filter: blur(12px) !important;
+      border-radius: 0.75rem !important;
     }
-    .vault-card:hover,
     .card-surface:hover {
       border-color: rgba(255, 255, 255, 0.1) !important;
     }
 
-    .vault-nested {
-      background-color: #11141b !important;
-      border: 1px solid #1e2430 !important;
-      border-radius: 0.375rem !important;
+    .nested-surface {
+      background-color: #111317 !important;
+      border: 1px solid rgba(255, 255, 255, 0.06) !important;
+      border-radius: 0.5rem !important;
     }
 
     .glow-emerald {
@@ -757,12 +754,13 @@ fieldset.module h2 {
     #content-main textarea {
       background-color: #111317 !important;
       background: #111317 !important;
-      border: 1px solid #232834 !important;
+      border: 1px solid rgba(255, 255, 255, 0.08) !important;
       color: #f3f4f6 !important;
       color-scheme: dark !important;
       outline: none !important;
-      border-radius: 6px !important;
+      border-radius: 0.5rem !important;
       transition: all 0.2s ease !important;
+      font-family: 'Plus Jakarta Sans', sans-serif !important;
     }
     .glass-input:focus,
     #content-main select:focus,
@@ -778,16 +776,16 @@ fieldset.module h2 {
     /* Clean select dropdown styling */
     #content-main select,
     .atelier-select {
-      height: 38px !important;
-      min-height: 38px !important;
+      height: 40px !important;
+      min-height: 40px !important;
       padding-top: 0 !important;
       padding-bottom: 0 !important;
-      padding-left: 0.75rem !important;
-      padding-right: 2rem !important;
-      font-size: 0.75rem !important;
+      padding-left: 0.875rem !important;
+      padding-right: 2.25rem !important;
+      font-size: 0.8125rem !important;
       font-family: 'Plus Jakarta Sans', sans-serif !important;
-      color: #cbd2e0 !important;
-      background-color: #101319 !important;
+      color: #f3f4f6 !important;
+      background-color: #111317 !important;
       -webkit-appearance: none !important;
       -moz-appearance: none !important;
       appearance: none !important;
@@ -797,13 +795,13 @@ fieldset.module h2 {
 
     #content-main select option,
     .atelier-select option {
-      background-color: #11141b !important;
-      color: #cbd2e0 !important;
-      padding: 8px 12px !important;
-      font-size: 0.75rem !important;
+      background-color: #111317 !important;
+      color: #f3f4f6 !important;
+      padding: 10px 14px !important;
+      font-size: 0.8125rem !important;
     }
 
-    /* Layout flush reset */
+    /* Layout flush reset to ensure pure deep obsidian canvas */
     #content-start,
     #content-start.shopify-content-canvas,
     #content,
@@ -812,6 +810,7 @@ fieldset.module h2 {
     #content-main,
     #order_form {
       background-color: #07080a !important;
+      background: #07080a !important;
       padding: 0 !important;
       margin: 0 !important;
       border: none !important;
@@ -832,27 +831,37 @@ fieldset.module h2 {
       padding: 0 !important;
     }
 
-    /* Primary buttons */
-    .btn-emerald-primary {
+    /* Primary buttons: Strict Emerald #10b981 with pitch-black #07080a text */
+    .btn-emerald-primary,
+    .btn-primary {
       background-color: #10b981 !important;
+      background: #10b981 !important;
       color: #07080a !important;
       font-weight: 600 !important;
       box-shadow: 0 0 20px -3px rgba(16, 185, 129, 0.35) !important;
       text-decoration: none !important;
+      border: 1px solid rgba(16, 185, 129, 0.4) !important;
+      border-radius: 0.5rem !important;
     }
-    .btn-emerald-primary:hover {
+    .btn-emerald-primary:hover,
+    .btn-primary:hover {
       background-color: #34d399 !important;
+      background: #34d399 !important;
       color: #07080a !important;
+      box-shadow: 0 0 25px -2px rgba(16, 185, 129, 0.45) !important;
     }
 
-    /* Secondary buttons */
-    .btn-obsidian-secondary {
+    /* Secondary buttons: Obsidian #171920 with #e5e5e5 text */
+    .btn-obsidian-secondary,
+    .btn-secondary {
       background-color: #171920 !important;
       color: #e5e5e5 !important;
       border: 1px solid #21242d !important;
       text-decoration: none !important;
+      border-radius: 0.5rem !important;
     }
-    .btn-obsidian-secondary:hover {
+    .btn-obsidian-secondary:hover,
+    .btn-secondary:hover {
       background-color: #21242d !important;
       color: #ffffff !important;
       border-color: rgba(255, 255, 255, 0.15) !important;
@@ -1159,7 +1168,7 @@ fieldset.module h2 {
       </div>
     </div>
     <form method="post" action="/admin/logout/" class="inline m-0 p-0">
-      <input type="hidden" name="csrfmiddlewaretoken" value="W9YYr9xLUoAjCUX1KA4nbEqiRszqyFQg7b1IIDCz47axstNwB7OzMgMrWGEXk7H0">
+      <input type="hidden" name="csrfmiddlewaretoken" value="07ujcwkgXKKms7PIW3NZDlFQiFCiqwVIV22pbir8F0XbJl43cLxgny9zBg66KtG0">
       <button type="submit" aria-label="Log Out" class="p-1.5 rounded-lg text-neutral-400 hover:text-rose-400 hover:bg-[#171920] transition shrink-0 bg-transparent border-0 cursor-pointer" title="Log Out">
         <svg class="w-4 h-4 stroke-[1.8]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
       </button>
@@ -1420,7 +1429,7 @@ fieldset.module h2 {
       </div>
     </div>
     <form method="post" action="/admin/logout/" class="inline m-0 p-0">
-      <input type="hidden" name="csrfmiddlewaretoken" value="W9YYr9xLUoAjCUX1KA4nbEqiRszqyFQg7b1IIDCz47axstNwB7OzMgMrWGEXk7H0">
+      <input type="hidden" name="csrfmiddlewaretoken" value="07ujcwkgXKKms7PIW3NZDlFQiFCiqwVIV22pbir8F0XbJl43cLxgny9zBg66KtG0">
       <button type="submit" aria-label="Log Out" class="p-1.5 rounded-lg text-neutral-400 hover:text-rose-400 hover:bg-[#171920] transition shrink-0 bg-transparent border-0 cursor-pointer" title="Log Out">
         <svg class="w-4 h-4 stroke-[1.8]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
       </button>
@@ -1595,7 +1604,7 @@ header[data-purpose="top-header"] button[type="submit"] {
     </div>
   </div>
   <form method="post" action="/admin/logout/" class="inline m-0 p-0">
-    <input type="hidden" name="csrfmiddlewaretoken" value="W9YYr9xLUoAjCUX1KA4nbEqiRszqyFQg7b1IIDCz47axstNwB7OzMgMrWGEXk7H0">
+    <input type="hidden" name="csrfmiddlewaretoken" value="07ujcwkgXKKms7PIW3NZDlFQiFCiqwVIV22pbir8F0XbJl43cLxgny9zBg66KtG0">
     <button type="submit" class="flex items-center gap-1.5 text-xs text-neutral-400 hover:text-rose-400 p-1.5 sm:px-2 sm:py-1.5 transition bg-transparent border-0 cursor-pointer" title="Log Out">
       <svg class="w-4 h-4 stroke-[1.8]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" stroke-linecap="round" stroke-linejoin="round"></path></svg>
       <span class="hidden xl:inline font-sans">Log Out</span>
@@ -1631,9 +1640,9 @@ header[data-purpose="top-header"] button[type="submit"] {
               </div>
 
               
-<div id="content-main" class="min-h-screen bg-vault-bg text-slate-300 font-sans antialiased selection:bg-vault-gold/20 selection:text-vault-gold">
+<div id="content-main" class="min-h-screen bg-obsidian-950 text-neutral-300 font-sans antialiased selection:bg-emerald-500/30 selection:text-emerald-300">
   <form action="" method="post" id="order_form" novalidate>
-    <input type="hidden" name="csrfmiddlewaretoken" value="W9YYr9xLUoAjCUX1KA4nbEqiRszqyFQg7b1IIDCz47axstNwB7OzMgMrWGEXk7H0">
+    <input type="hidden" name="csrfmiddlewaretoken" value="07ujcwkgXKKms7PIW3NZDlFQiFCiqwVIV22pbir8F0XbJl43cLxgny9zBg66KtG0">
     
     <!-- Inline Management Forms for Django Formset Validation -->
     
@@ -1654,8 +1663,8 @@ header[data-purpose="top-header"] button[type="submit"] {
       
     
 
-    <!-- BEGIN: MainContentWorkspace (Modern Vault Architecture) -->
-    <main class="flex-1 overflow-y-auto bg-vault-bg p-4 sm:p-6 lg:p-8 space-y-6" data-purpose="modern-vault-workspace">
+    <!-- BEGIN: MainContentWorkspace (Haute Atelier Obsidian Architecture) -->
+    <main class="flex-1 overflow-y-auto bg-obsidian-950 p-4 sm:p-6 lg:p-8 space-y-6" data-purpose="modern-vault-workspace">
       <!-- 2-Column Precision Split Layout: Left 68% / Right 32% -->
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start max-w-[1600px] mx-auto">
       
@@ -1663,120 +1672,120 @@ header[data-purpose="top-header"] button[type="submit"] {
         <div class="lg:col-span-8 space-y-6">
         
           <!-- 1a. Order Header with clean breadcrumb & top quick actions -->
-          <section class="vault-card p-5 lg:p-6 space-y-4" data-purpose="order-header-card">
-            <div class="flex items-center justify-between gap-4 text-xs font-mono pb-2 border-b border-vault-border/60">
-              <nav class="flex items-center gap-2 text-slate-500">
-                <a class="hover:text-slate-300 transition-colors" href="/admin/orders/order/">Orders</a>
-                <span class="text-slate-700">/</span>
-                <span class="text-slate-300 font-medium">LCK-202611-304918</span>
+          <section class="card-surface p-5 lg:p-6 space-y-4" data-purpose="order-header-card">
+            <div class="flex items-center justify-between gap-4 text-xs font-mono pb-2 border-b border-obsidian-700/60">
+              <nav class="flex items-center gap-2 text-neutral-500">
+                <a class="hover:text-neutral-300 transition-colors cursor-pointer" href="/admin/orders/order/">Orders</a>
+                <span class="text-neutral-600">/</span>
+                <span class="text-neutral-200 font-medium font-mono">LCK-202611-304918</span>
               </nav>
               <div class="flex items-center gap-2">
-                <span class="text-[11px] font-mono text-slate-500">Channel:</span>
-                <span class="text-[11px] font-mono text-slate-300 bg-vault-nested border border-vault-border px-2 py-0.5 rounded">Direct Online</span>
-                <span class="text-[11px] font-mono text-slate-500 ml-1">Priority:</span>
-                <span class="text-[11px] font-mono text-vault-gold bg-vault-goldDim border border-vault-goldMuted/40 px-2 py-0.5 rounded font-medium">Express High Value</span>
+                <span class="text-[11px] font-mono text-neutral-500">Channel:</span>
+                <span class="text-[11px] font-mono text-neutral-300 bg-obsidian-850 border border-obsidian-700/70 px-2 py-0.5 rounded-md">Direct Online</span>
+                <span class="text-[11px] font-mono text-neutral-500 ml-1">Priority:</span>
+                <span class="text-[11px] font-mono text-champagne-300 bg-champagne-400/10 border border-champagne-400/30 px-2 py-0.5 rounded-md font-medium">Express High Value</span>
               </div>
             </div>
 
             <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 pt-1">
               <div class="flex items-center gap-3.5 flex-wrap">
                 <h1 class="text-2xl lg:text-3xl font-serif text-white font-normal tracking-tight whitespace-nowrap">
-                  Order <span class="font-mono text-xl lg:text-2xl font-normal text-slate-200">#LCK-202611-304918</span>
+                  Order <span class="font-mono text-xl lg:text-2xl font-normal text-neutral-200">#LCK-202611-304918</span>
                 </h1>
-                <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-mono font-medium bg-vault-nested border border-emerald-500/30 text-emerald-400">
+                <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-mono font-medium bg-emerald-500/10 border border-emerald-500/30 text-emerald-400">
                   <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
                   Order Placed
                 </span>
               </div>
               <div class="flex items-center gap-2.5 shrink-0">
-                <button class="btn-obsidian-secondary inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-md transition-all active:scale-[0.98] cursor-pointer" onclick="window.print()" type="button">
-                  <svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4H7v4a2 2 0 002 2zM9 9V5a2 2 0 012-2h2a2 2 0 012 2v4" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6"></path></svg>
+                <button class="btn-obsidian-secondary inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-medium rounded-lg transition-all active:scale-[0.98] cursor-pointer" onclick="window.print()" type="button">
+                  <svg class="w-3.5 h-3.5 text-neutral-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4H7v4a2 2 0 002 2zM9 9V5a2 2 0 012-2h2a2 2 0 012 2v4" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6"></path></svg>
                   <span>Print Packing Slip</span>
                 </button>
-                <button type="submit" name="_save" class="btn-emerald-primary glow-emerald inline-flex items-center gap-1.5 px-3.5 py-1.5 text-xs font-semibold rounded-md shadow-sm transition-all active:scale-[0.98] cursor-pointer" style="background-color: #10b981 !important; color: #07080a !important; text-decoration: none !important;">
-                  <svg class="w-3.5 h-3.5 stroke-[2.2]" fill="none" stroke="#07080a" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+                <button type="submit" name="_save" class="btn-emerald-primary glow-emerald inline-flex items-center gap-1.5 px-4 py-2 text-xs font-semibold rounded-lg shadow-lg transition-all active:scale-[0.98] cursor-pointer" style="background-color: #10b981 !important; color: #07080a !important; text-decoration: none !important;">
+                  <svg class="w-3.5 h-3.5 stroke-[2.5]" fill="none" stroke="#07080a" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round"></path></svg>
                   <span>Update Status</span>
                 </button>
               </div>
             </div>
 
-            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 pt-2 border-t border-vault-border">
-              <div class="vault-nested p-2.5">
-                <span class="text-[9px] font-mono uppercase text-slate-500 block mb-0.5">Placed On</span>
-                <div class="text-xs font-mono text-slate-200 font-medium truncate">Nov 10, 2026 • 17:51</div>
-                <span class="text-[10px] font-mono text-slate-500 block truncate">EST (UTC-5)</span>
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 pt-2 border-t border-obsidian-700/60">
+              <div class="nested-surface p-2.5 bg-obsidian-850/90 border border-obsidian-700/60 rounded-lg">
+                <span class="text-[9px] font-mono uppercase text-neutral-500 block mb-0.5">Placed On</span>
+                <div class="text-xs font-mono text-neutral-200 font-medium truncate">Nov 10, 2026 • 17:51</div>
+                <span class="text-[10px] font-mono text-neutral-500 block truncate">EST (UTC-5)</span>
               </div>
-              <div class="vault-nested p-2.5">
-                <span class="text-[9px] font-mono uppercase text-slate-500 block mb-0.5">Customer</span>
+              <div class="nested-surface p-2.5 bg-obsidian-850/90 border border-obsidian-700/60 rounded-lg">
+                <span class="text-[9px] font-mono uppercase text-neutral-500 block mb-0.5">Customer</span>
                 <div class="flex items-center gap-1.5 truncate">
-                  <span class="text-xs font-sans text-slate-200 font-medium truncate">Julian Stewart</span>
-                  <span class="text-[9px] font-mono text-vault-gold bg-vault-goldDim border border-vault-goldMuted/40 px-1 py-0.2 rounded shrink-0">VIP</span>
+                  <span class="text-xs font-sans text-neutral-200 font-medium truncate">Julian Stewart</span>
+                  <span class="text-[9px] font-mono text-champagne-300 bg-champagne-400/10 border border-champagne-400/30 px-1.5 py-0.2 rounded shrink-0 font-medium">VIP</span>
                 </div>
-                <span class="text-[10px] font-mono text-slate-500 block truncate">#CUST-00004</span>
+                <span class="text-[10px] font-mono text-neutral-500 block truncate">#CUST-00004</span>
               </div>
-              <div class="vault-nested p-2.5">
-                <span class="text-[9px] font-mono uppercase text-slate-500 block mb-0.5">Payment</span>
+              <div class="nested-surface p-2.5 bg-obsidian-850/90 border border-obsidian-700/60 rounded-lg">
+                <span class="text-[9px] font-mono uppercase text-neutral-500 block mb-0.5">Payment</span>
                 <div class="text-xs font-mono text-emerald-400 font-medium truncate">
                   Paid in Full
                 </div>
-                <span class="text-[10px] font-mono text-slate-400 block truncate">Secure Card Payment (Stripe Luxury)</span>
+                <span class="text-[10px] font-mono text-neutral-400 block truncate">Secure Card Payment (Stripe Luxury)</span>
               </div>
-              <div class="vault-nested p-2.5">
-                <span class="text-[9px] font-mono uppercase text-slate-500 block mb-0.5">Fulfillment</span>
-                <div class="text-xs font-mono text-slate-200 font-medium truncate">FedEx Luxury Priority Overnight</div>
+              <div class="nested-surface p-2.5 bg-obsidian-850/90 border border-obsidian-700/60 rounded-lg">
+                <span class="text-[9px] font-mono uppercase text-neutral-500 block mb-0.5">Fulfillment</span>
+                <div class="text-xs font-mono text-neutral-200 font-medium truncate">FedEx Luxury Priority Overnight</div>
                 <span class="text-[10px] font-mono text-emerald-400 block truncate">In Transit (FDX-9948)</span>
               </div>
             </div>
           </section>
 
           <!-- 1b. Clean Fulfillment Progression Pipeline -->
-          <section class="vault-card p-5 lg:p-6" data-purpose="fulfillment-pipeline-card">
+          <section class="card-surface p-5 lg:p-6" data-purpose="fulfillment-pipeline-card">
             <div class="flex items-center justify-between mb-5">
               <div class="flex items-center gap-2">
                 <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
-                <h2 class="text-xs font-mono uppercase tracking-wider text-slate-300 font-medium">Order Timeline</h2>
+                <h2 class="text-xs font-mono uppercase tracking-wider text-neutral-300 font-medium">Order Timeline</h2>
               </div>
-              <span class="text-[11px] font-mono text-slate-400">
+              <span class="text-[11px] font-mono text-neutral-400">
                 Step 1 of 4: Order Placed
                 
               </span>
             </div>
             <div class="relative px-2 py-1">
-              <div class="absolute top-4 left-6 right-6 h-[1px] bg-vault-border -z-0"></div>
+              <div class="absolute top-4 left-6 right-6 h-[1px] bg-obsidian-700/60 -z-0"></div>
               <div class="absolute top-4 left-6 h-[1px] bg-emerald-400 -z-0 transition-all duration-300
                 w-[15%]
                 "></div>
               <div class="grid grid-cols-4 relative z-10 text-center">
                 <!-- Step 1: Order Placed -->
                 <div class="flex flex-col items-center">
-                  <div class="w-8 h-8 rounded-full bg-vault-nested border border-emerald-500/40 text-emerald-400 flex items-center justify-center font-mono text-xs">
+                  <div class="w-8 h-8 rounded-full bg-emerald-500/15 border border-emerald-500/40 text-emerald-400 flex items-center justify-center font-mono text-xs">
                     <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2"></path></svg>
                   </div>
-                  <span class="mt-2 text-xs font-medium text-slate-300">Order Placed</span>
-                  <span class="text-[10px] font-mono text-slate-500">Nov 10</span>
+                  <span class="mt-2 text-xs font-medium text-neutral-300">Order Placed</span>
+                  <span class="text-[10px] font-mono text-neutral-500">Nov 10</span>
                 </div>
                 <!-- Step 2: In Production -->
                 <div class="flex flex-col items-center">
-                  <div class="w-8 h-8 rounded-full bg-vault-nested border border-vault-border text-slate-600 flex items-center justify-center font-mono text-xs">
+                  <div class="w-8 h-8 rounded-full bg-obsidian-850 border border-obsidian-700/70 text-neutral-500 flex items-center justify-center font-mono text-xs">
                     2
                   </div>
-                  <span class="mt-2 text-xs font-medium text-slate-500">In Production</span>
-                  <span class="text-[10px] font-mono text-slate-500">Pending</span>
+                  <span class="mt-2 text-xs font-medium text-neutral-500">In Production</span>
+                  <span class="text-[10px] font-mono text-neutral-500">Pending</span>
                 </div>
                 <!-- Step 3: Shipped -->
                 <div class="flex flex-col items-center">
                   
-                  <div class="w-8 h-8 rounded-full bg-vault-nested border border-vault-border text-slate-600 flex items-center justify-center font-mono text-xs">3</div>
-                  <span class="mt-2 text-xs font-medium text-slate-500">Shipped</span>
-                  <span class="text-[10px] font-mono text-slate-600">Pending</span>
+                  <div class="w-8 h-8 rounded-full bg-obsidian-850 border border-obsidian-700/70 text-neutral-500 flex items-center justify-center font-mono text-xs">3</div>
+                  <span class="mt-2 text-xs font-medium text-neutral-500">Shipped</span>
+                  <span class="text-[10px] font-mono text-neutral-600">Pending</span>
                   
                 </div>
                 <!-- Step 4: Delivered -->
                 <div class="flex flex-col items-center">
                   
-                  <div class="w-8 h-8 rounded-full bg-vault-nested border border-vault-border text-slate-600 flex items-center justify-center font-mono text-xs">4</div>
-                  <span class="mt-2 text-xs font-medium text-slate-500">Delivered</span>
-                  <span class="text-[10px] font-mono text-slate-600">Pending</span>
+                  <div class="w-8 h-8 rounded-full bg-obsidian-850 border border-obsidian-700/70 text-neutral-500 flex items-center justify-center font-mono text-xs">4</div>
+                  <span class="mt-2 text-xs font-medium text-neutral-500">Delivered</span>
+                  <span class="text-[10px] font-mono text-neutral-600">Pending</span>
                   
                 </div>
               </div>
@@ -1784,58 +1793,63 @@ header[data-purpose="top-header"] button[type="submit"] {
           </section>
 
           <!-- 1c. Commissioned Piece Card -->
-          <section class="vault-card p-5 lg:p-6 space-y-4" data-purpose="commissioned-piece-card">
-            <div class="flex items-center justify-between border-b border-vault-border pb-3.5">
-              <h3 class="text-xs font-mono uppercase tracking-wider text-slate-300 font-medium">Order Item</h3>
-              <span class="text-[10px] font-mono text-slate-400">1 item</span>
+          <section class="card-surface p-5 lg:p-6 space-y-4" data-purpose="commissioned-piece-card">
+            <div class="flex items-center justify-between border-b border-obsidian-700/60 pb-3.5">
+              <h3 class="text-xs font-mono uppercase tracking-wider text-neutral-300 font-medium">Order Item</h3>
+              <span class="text-[10px] font-mono text-neutral-400">1 item</span>
             </div>
 
             
             <div class="flex flex-col sm:flex-row items-start gap-4 ">
-              <div class="w-20 h-20 rounded-md bg-vault-nested border border-vault-border flex flex-col items-center justify-center p-2 text-center shrink-0 overflow-hidden">
+              <div class="w-20 h-20 rounded-lg bg-obsidian-900 border border-obsidian-700/80 flex flex-col items-center justify-center p-2 text-center shrink-0 overflow-hidden relative">
                 
-                <img src="https://images.unsplash.com/photo-1630019852942-f89202989a59?auto=format&amp;fit=crop&amp;w=1200&amp;q=85" alt="Giselle Cascading Diamond Chandelier Earrings" class="w-full h-full object-cover rounded">
+                <img src="https://images.unsplash.com/photo-1630019852942-f89202989a59?auto=format&amp;fit=crop&amp;w=1200&amp;q=85" alt="Giselle Cascading Diamond Chandelier Earrings" class="w-full h-full object-cover rounded-md" onerror="this.classList.add('hidden'); this.nextElementSibling.classList.remove('hidden');">
                 
+                <div class="hidden flex flex-col items-center justify-center text-center w-full h-full">
+                  <span class="text-[9px] font-mono tracking-widest text-neutral-400 uppercase">PIECE</span>
+                  <span class="text-[11px] font-serif text-white font-medium mt-0.5 leading-tight">Tennis 925</span>
+                  <span class="text-[9px] font-mono text-champagne-300 mt-1">LCK-001</span>
+                </div>
               </div>
               <div class="flex-1 space-y-3 w-full">
                 <div class="flex flex-wrap items-center justify-between gap-2">
                   <div>
                     <div class="flex items-center gap-2 flex-wrap">
-                      <span class="text-[10px] font-mono text-slate-400 bg-vault-nested border border-vault-border px-1.5 py-0.5 rounded">SKU: LCK-EAR-002</span>
-                      <a class="inline-flex items-center gap-1 text-[10px] font-mono text-slate-300 hover:text-white bg-vault-nested border border-vault-borderLight px-2 py-0.5 rounded transition-all" href="/product/giselle-cascading-diamond-chandelier-earrings/" target="_blank" rel="noopener noreferrer">
+                      <span class="text-[10px] font-mono text-neutral-400 bg-obsidian-850 border border-obsidian-700/70 px-2 py-0.5 rounded-md">SKU: LCK-EAR-002</span>
+                      <a class="inline-flex items-center gap-1 text-[10px] font-mono text-neutral-300 hover:text-white bg-obsidian-850 hover:bg-obsidian-800 border border-obsidian-700/70 px-2 py-0.5 rounded-md transition-all cursor-pointer" href="/product/giselle-cascading-diamond-chandelier-earrings/" target="_blank" rel="noopener noreferrer">
                         <span>View in Storefront</span>
-                        <svg class="w-3 h-3 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75"></path></svg>
+                        <svg class="w-3 h-3 text-neutral-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75"></path></svg>
                       </a>
                     </div>
                     <h4 class="text-base font-serif font-medium text-white mt-1">Giselle Cascading Diamond Chandelier Earrings</h4>
                   </div>
                   <div class="text-right">
                     <span class="text-base font-mono font-semibold text-white">₹3450.00</span>
-                    <span class="text-[10px] font-mono text-slate-500 ml-1">INR</span>
+                    <span class="text-[10px] font-mono text-neutral-500 ml-1">INR</span>
                   </div>
                 </div>
 
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-                  <div class="vault-nested p-2.5">
-                    <span class="text-[9px] font-mono uppercase text-slate-500 block mb-1">Finish</span>
-                    <div class="flex flex-wrap items-center gap-1">
-                      <span class="inline-flex items-center whitespace-nowrap px-2 py-0.5 rounded text-[10px] font-mono bg-vault-goldDim text-vault-gold border border-vault-goldMuted/40 font-medium">Yellow Gold ✓</span>
-                      <span class="inline-flex items-center whitespace-nowrap px-1.5 py-0.5 rounded text-[10px] font-mono text-slate-500 border border-vault-border">Rose</span>
-                      <span class="inline-flex items-center whitespace-nowrap px-1.5 py-0.5 rounded text-[10px] font-mono text-slate-500 border border-vault-border">White</span>
+                  <div class="nested-surface p-2.5 bg-obsidian-850/90 border border-obsidian-700/60 rounded-lg">
+                    <span class="text-[9px] font-mono uppercase text-neutral-500 block mb-1">Finish</span>
+                    <div class="flex flex-wrap items-center gap-1.5">
+                      <span class="inline-flex items-center whitespace-nowrap px-2 py-0.5 rounded text-[10px] font-mono bg-champagne-400/15 text-champagne-300 border border-champagne-400/40 font-medium">Yellow Gold ✓</span>
+                      <span class="inline-flex items-center whitespace-nowrap px-1.5 py-0.5 rounded text-[10px] font-mono text-neutral-400 bg-obsidian-900 border border-obsidian-700/60">Rose</span>
+                      <span class="inline-flex items-center whitespace-nowrap px-1.5 py-0.5 rounded text-[10px] font-mono text-neutral-400 bg-obsidian-900 border border-obsidian-700/60">White</span>
                     </div>
                   </div>
-                  <div class="vault-nested p-2.5">
-                    <span class="text-[9px] font-mono uppercase text-slate-500 block mb-0.5">Specifications</span>
-                    <div class="text-xs font-mono text-slate-200 font-medium">Standard Chandelier Post</div>
-                    <span class="text-[10px] font-mono text-slate-400 block truncate mt-0.5">18K White Gold</span>
+                  <div class="nested-surface p-2.5 bg-obsidian-850/90 border border-obsidian-700/60 rounded-lg">
+                    <span class="text-[9px] font-mono uppercase text-neutral-500 block mb-0.5">Specifications</span>
+                    <div class="text-xs font-mono text-neutral-200 font-medium">Standard Chandelier Post</div>
+                    <span class="text-[10px] font-mono text-neutral-400 block truncate mt-0.5">18K White Gold</span>
                   </div>
                 </div>
 
-                <div class="flex items-center justify-between pt-2 border-t border-vault-borderMuted text-xs font-mono">
-                  <span class="text-slate-400">Unit Price: ₹3450.00 × 1</span>
+                <div class="flex items-center justify-between pt-2 border-t border-obsidian-700/40 text-xs font-mono">
+                  <span class="text-neutral-400">Unit Price: ₹3450.00 × 1</span>
                   <div class="flex items-center gap-2">
-                    <span class="text-slate-500 line-through">₹4,200.00</span>
-                    <span class="text-slate-200 font-medium">₹3450.00 (VIP Discount -10%)</span>
+                    <span class="text-neutral-500 line-through">₹4,200.00</span>
+                    <span class="text-neutral-200 font-medium">₹3450.00 (VIP Discount -10%)</span>
                   </div>
                 </div>
               </div>
@@ -1844,92 +1858,92 @@ header[data-purpose="top-header"] button[type="submit"] {
           </section>
 
           <!-- 1d. Patron Identity & White-Glove Delivery Card -->
-          <section class="vault-card p-5 lg:p-6 space-y-4" data-purpose="patron-identity-card">
-            <div class="flex items-center justify-between border-b border-vault-border pb-3.5">
-              <h3 class="text-xs font-mono uppercase tracking-wider text-slate-300 font-medium">Customer &amp; Shipping</h3>
-              <a class="text-xs font-mono text-slate-400 hover:text-white transition-colors flex items-center gap-1" href="#patrons">
+          <section class="card-surface p-5 lg:p-6 space-y-4" data-purpose="patron-identity-card">
+            <div class="flex items-center justify-between border-b border-obsidian-700/60 pb-3.5">
+              <h3 class="text-xs font-mono uppercase tracking-wider text-neutral-300 font-medium">Customer &amp; Shipping</h3>
+              <a class="text-xs font-mono text-neutral-400 hover:text-white transition-colors flex items-center gap-1 cursor-pointer" href="#patrons">
                 <span>Customer Profile</span>
                 <span>→</span>
               </a>
             </div>
 
             <div class="flex items-center gap-3">
-              <div class="w-10 h-10 rounded-full bg-vault-nested border border-vault-border flex items-center justify-center font-mono text-slate-200 text-xs font-medium">
+              <div class="w-10 h-10 rounded-full bg-obsidian-800 border border-obsidian-700 flex items-center justify-center font-mono text-white text-xs font-medium">
                 JU
               </div>
               <div class="flex-1">
                 <div class="flex items-center gap-2">
                   <span class="text-sm font-medium text-white">Julian Stewart</span>
-                  <span class="text-[10px] font-mono text-slate-400 bg-vault-nested border border-vault-border px-1.5 py-0.2 rounded">VIP Customer</span>
+                  <span class="text-[10px] font-mono text-champagne-300 bg-champagne-400/10 border border-champagne-400/30 px-1.5 py-0.2 rounded font-medium">VIP Customer</span>
                 </div>
-                <p class="text-xs text-slate-400 font-mono">Customer ID: #CUST-00004</p>
+                <p class="text-xs text-neutral-400 font-mono">Customer ID: #CUST-00004</p>
               </div>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-2.5">
-              <div class="flex items-center justify-between vault-nested p-2.5">
+              <div class="flex items-center justify-between nested-surface p-2.5 bg-obsidian-850/90 border border-obsidian-700/60 rounded-lg">
                 <div class="flex items-center gap-2 truncate pr-2">
-                  <svg class="w-3.5 h-3.5 text-slate-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6"></path></svg>
-                  <span class="text-xs font-mono text-slate-300 truncate">julian.stewart@icloud.com</span>
+                  <svg class="w-3.5 h-3.5 text-neutral-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6"></path></svg>
+                  <span class="text-xs font-mono text-neutral-200 truncate">julian.stewart@icloud.com</span>
                 </div>
-                <a class="text-[11px] font-medium text-slate-300 bg-vault-surface hover:bg-vault-borderLight border border-vault-border px-2.5 py-0.5 rounded transition-colors" href="mailto:julian.stewart@icloud.com">Send Email</a>
+                <a class="btn-obsidian-secondary text-[11px] font-medium px-2.5 py-1 rounded transition-colors cursor-pointer" href="mailto:julian.stewart@icloud.com">Send Email</a>
               </div>
-              <div class="flex items-center justify-between vault-nested p-2.5">
+              <div class="flex items-center justify-between nested-surface p-2.5 bg-obsidian-850/90 border border-obsidian-700/60 rounded-lg">
                 <div class="flex items-center gap-2 truncate pr-2">
-                  <svg class="w-3.5 h-3.5 text-slate-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6"></path></svg>
-                  <span class="text-xs font-mono text-slate-300">+1 (310) 902-4411</span>
+                  <svg class="w-3.5 h-3.5 text-neutral-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6"></path></svg>
+                  <span class="text-xs font-mono text-neutral-200">+1 (310) 902-4411</span>
                 </div>
-                <a class="text-[11px] font-medium text-slate-300 bg-vault-surface hover:bg-vault-borderLight border border-vault-border px-2.5 py-0.5 rounded transition-colors" href="tel:+1 (310) 902-4411">Call</a>
+                <a class="btn-obsidian-secondary text-[11px] font-medium px-2.5 py-1 rounded transition-colors cursor-pointer" href="tel:+1 (310) 902-4411">Call</a>
               </div>
             </div>
 
             <div class="space-y-1.5 pt-1">
               <div class="flex items-center justify-between">
-                <span class="text-[10px] font-mono tracking-wider text-slate-500 uppercase">Shipping Address</span>
-                <button class="text-[11px] font-medium text-slate-400 hover:text-white transition-colors cursor-pointer" type="button" onclick="toggleAddressEdit()">
+                <span class="text-[10px] font-mono tracking-wider text-neutral-400 uppercase">Shipping Address</span>
+                <button class="text-[11px] font-medium text-neutral-400 hover:text-white transition-colors cursor-pointer" type="button" onclick="toggleAddressEdit()">
                   <span id="toggleAddressBtnText">Edit Address</span>
                 </button>
               </div>
 
               <!-- Display Box -->
-              <div id="addressDisplayBox" class="vault-nested p-3.5 space-y-1">
+              <div id="addressDisplayBox" class="nested-surface p-3.5 space-y-1 bg-obsidian-850/90 border border-obsidian-700/60 rounded-lg">
                 <div class="font-medium text-xs text-white" id="disp_street">9641 Sunset Blvd, Apt 14B</div>
-                <div class="text-xs font-mono text-slate-400">
+                <div class="text-xs font-mono text-neutral-400">
                   <span id="disp_city">Beverly Hills</span>, <span id="disp_state">CA</span> <span id="disp_zip">90210</span> • <span id="disp_country">United States</span>
                 </div>
-                <div class="text-[10px] font-mono text-slate-400 pt-1 flex items-center gap-1.5">
+                <div class="text-[10px] font-mono text-neutral-400 pt-1 flex items-center gap-1.5">
                   <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
                   <span>Delivery Method: Express Insured Delivery (Signature Required)</span>
                 </div>
               </div>
 
               <!-- Inline Edit Form (Hidden by default) -->
-              <div id="addressEditBox" class="vault-nested p-3.5 space-y-2.5 hidden">
+              <div id="addressEditBox" class="nested-surface p-3.5 space-y-2.5 bg-obsidian-850/90 border border-obsidian-700/60 rounded-lg hidden">
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
                   <div>
-                    <label class="block text-[10px] font-mono text-slate-500 mb-0.5">Street Address</label>
+                    <label class="block text-[10px] font-mono text-neutral-400 mb-0.5">Street Address</label>
                     <input type="text" name="shipping_street" id="id_shipping_street" value="9641 Sunset Blvd" class="glass-input w-full text-xs px-2.5 py-1.5 font-sans" placeholder="Street" oninput="updateAddressDisplay()">
                   </div>
                   <div>
-                    <label class="block text-[10px] font-mono text-slate-500 mb-0.5">Suite / Apt</label>
+                    <label class="block text-[10px] font-mono text-neutral-400 mb-0.5">Suite / Apt</label>
                     <input type="text" name="shipping_apartment" id="id_shipping_apartment" value="Apt 14B" class="glass-input w-full text-xs px-2.5 py-1.5 font-sans" placeholder="Apt" oninput="updateAddressDisplay()">
                   </div>
                 </div>
                 <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
                   <div>
-                    <label class="block text-[10px] font-mono text-slate-500 mb-0.5">City</label>
+                    <label class="block text-[10px] font-mono text-neutral-400 mb-0.5">City</label>
                     <input type="text" name="shipping_city" id="id_shipping_city" value="Beverly Hills" class="glass-input w-full text-xs px-2.5 py-1.5 font-sans" placeholder="City" oninput="updateAddressDisplay()">
                   </div>
                   <div>
-                    <label class="block text-[10px] font-mono text-slate-500 mb-0.5">State</label>
+                    <label class="block text-[10px] font-mono text-neutral-400 mb-0.5">State</label>
                     <input type="text" name="shipping_state" id="id_shipping_state" value="CA" class="glass-input w-full text-xs px-2.5 py-1.5 font-sans" placeholder="State" oninput="updateAddressDisplay()">
                   </div>
                   <div>
-                    <label class="block text-[10px] font-mono text-slate-500 mb-0.5">ZIP Code</label>
+                    <label class="block text-[10px] font-mono text-neutral-400 mb-0.5">ZIP Code</label>
                     <input type="text" name="shipping_zip" id="id_shipping_zip" value="90210" class="glass-input w-full text-xs px-2.5 py-1.5 font-mono" placeholder="ZIP" oninput="updateAddressDisplay()">
                   </div>
                   <div>
-                    <label class="block text-[10px] font-mono text-slate-500 mb-0.5">Country</label>
+                    <label class="block text-[10px] font-mono text-neutral-400 mb-0.5">Country</label>
                     <input type="text" name="shipping_country" id="id_shipping_country" value="United States" class="glass-input w-full text-xs px-2.5 py-1.5 font-sans" placeholder="Country" oninput="updateAddressDisplay()">
                   </div>
                 </div>
@@ -1938,23 +1952,23 @@ header[data-purpose="top-header"] button[type="submit"] {
           </section>
 
           <!-- 1e. Atelier Directives & Packaging Card -->
-          <section class="vault-card p-5 lg:p-6 space-y-4" data-purpose="atelier-directives-card">
-            <div class="flex items-center justify-between border-b border-vault-border pb-3.5">
-              <h3 class="text-xs font-mono uppercase tracking-wider text-slate-300 font-medium">Packaging &amp; Gift Notes</h3>
+          <section class="card-surface p-5 lg:p-6 space-y-4" data-purpose="atelier-directives-card">
+            <div class="flex items-center justify-between border-b border-obsidian-700/60 pb-3.5">
+              <h3 class="text-xs font-mono uppercase tracking-wider text-neutral-300 font-medium">Packaging &amp; Gift Notes</h3>
             </div>
             <label class="flex items-center gap-2.5 cursor-pointer select-none">
-              <input type="checkbox" name="gift_wrapping" id="id_gift_wrapping" class="w-3.5 h-3.5 rounded bg-vault-bg border-vault-border text-emerald-500 focus:ring-0 focus:ring-offset-0" checked>
-              <span class="text-xs text-slate-300">Signature Gift Box &amp; Certificate of Authenticity</span>
+              <input type="checkbox" name="gift_wrapping" id="id_gift_wrapping" class="w-3.5 h-3.5 rounded bg-obsidian-900 border-obsidian-700 text-emerald-500 focus:ring-0 focus:ring-offset-0" checked>
+              <span class="text-xs text-neutral-200">Signature Gift Box &amp; Certificate of Authenticity</span>
             </label>
             <div class="space-y-1.5">
-              <label class="block text-[11px] font-mono text-slate-500 uppercase tracking-wider" for="id_gift_message">Handwritten Gift Card Message</label>
-              <div class="vault-nested p-3.5">
-                <textarea name="gift_message" id="id_gift_message" rows="2" class="w-full bg-transparent border-0 p-0 text-slate-200 font-serif italic text-xs lg:text-sm focus:ring-0 resize-none leading-relaxed" placeholder="Write gift note...">“To my dearest Isabella, celebrating a glorious milestone. With all my love.”</textarea>
+              <label class="block text-[11px] font-mono text-neutral-400 uppercase tracking-wider" for="id_gift_message">Handwritten Gift Card Message</label>
+              <div class="nested-surface p-3.5 bg-obsidian-850/90 border border-obsidian-700/60 rounded-lg">
+                <textarea name="gift_message" id="id_gift_message" rows="2" class="w-full bg-transparent border-0 p-0 text-neutral-200 font-serif italic text-xs lg:text-sm focus:ring-0 resize-none leading-relaxed" placeholder="Write gift note...">“To my dearest Isabella, celebrating a glorious milestone. With all my love.”</textarea>
               </div>
             </div>
             <div class="space-y-1.5">
-              <label class="block text-[11px] font-mono text-slate-500 uppercase tracking-wider" for="id_internal_admin_notes">Internal Notes</label>
-              <input class="w-full bg-vault-bg border border-vault-borderMuted rounded-md px-3 py-2 text-xs text-slate-200 placeholder-slate-600 focus:outline-none focus:border-vault-borderLight font-sans" placeholder="Internal instructions for workshop..." type="text" name="internal_admin_notes" id="id_internal_admin_notes" value="Include microscopic inspection slip in pouch.">
+              <label class="block text-[11px] font-mono text-neutral-400 uppercase tracking-wider" for="id_internal_admin_notes">Internal Notes</label>
+              <input class="glass-input w-full bg-obsidian-850 border border-obsidian-700/60 rounded-lg px-3 py-2 text-xs text-neutral-200 placeholder-neutral-500 font-sans" placeholder="Internal instructions for workshop..." type="text" name="internal_admin_notes" id="id_internal_admin_notes" value="Include microscopic inspection slip in pouch.">
             </div>
           </section>
 
@@ -1965,34 +1979,34 @@ header[data-purpose="top-header"] button[type="submit"] {
         <div class="lg:col-span-4 space-y-6">
 
           <!-- 2a. Order Status & Fulfillment Control -->
-          <section class="vault-card p-5 space-y-4" data-purpose="fulfillment-control-card">
-            <div class="flex items-center justify-between border-b border-vault-border pb-3.5">
+          <section class="card-surface p-5 space-y-4" data-purpose="fulfillment-control-card">
+            <div class="flex items-center justify-between border-b border-obsidian-700/60 pb-3.5">
               <h3 class="text-xs font-mono uppercase tracking-wider text-white font-medium">Fulfillment &amp; Shipping</h3>
-              <span class="text-[10px] font-mono text-emerald-400 bg-vault-nested border border-emerald-500/30 px-2 py-0.5 rounded font-medium">
+              <span class="text-[10px] font-mono text-emerald-400 bg-emerald-500/10 border border-emerald-500/30 px-2 py-0.5 rounded-full font-medium">
                 Order Placed
               </span>
             </div>
 
             <div class="space-y-1.5">
-              <label class="block text-[11px] font-mono text-slate-500 uppercase tracking-wider" for="id_status">Order Status</label>
+              <label class="block text-[11px] font-mono text-neutral-400 uppercase tracking-wider" for="id_status">Order Status</label>
               <div class="relative">
-                <select class="w-full bg-vault-bg border border-vault-border rounded-md px-3 py-2 text-xs text-slate-200 focus:ring-1 focus:ring-emerald-400/20 focus:border-emerald-500/40 font-sans appearance-none pr-8 cursor-pointer" id="id_status" name="status">
+                <select class="atelier-select glass-input w-full appearance-none rounded-lg text-xs px-3.5 pr-8 cursor-pointer font-sans" id="id_status" name="status">
                   <option value="SHIPPED" >In Transit</option>
                   <option value="PROCESSING" >In Production</option>
                   <option value="DELIVERED" >Delivered</option>
                   <option value="PENDING" selected>Pending Confirmation</option>
                   <option value="CANCELLED" >Cancelled</option>
                 </select>
-                <span class="absolute inset-y-0 right-2.5 flex items-center pointer-events-none text-slate-500">
+                <span class="absolute inset-y-0 right-2.5 flex items-center pointer-events-none text-neutral-400">
                   <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"></path></svg>
                 </span>
               </div>
             </div>
 
             <div class="space-y-1.5">
-              <label class="block text-[11px] font-mono text-slate-500 uppercase tracking-wider" for="id_carrier">Courier</label>
+              <label class="block text-[11px] font-mono text-neutral-400 uppercase tracking-wider" for="id_carrier">Courier</label>
               <div class="relative">
-                <select class="w-full bg-vault-bg border border-vault-border rounded-md px-3 py-2 text-xs text-slate-200 focus:ring-1 focus:ring-emerald-400/20 focus:border-emerald-500/40 font-sans appearance-none pr-8 cursor-pointer" id="id_carrier" name="carrier">
+                <select class="atelier-select glass-input w-full appearance-none rounded-lg text-xs px-3.5 pr-8 cursor-pointer font-sans" id="id_carrier" name="carrier">
                   <option value="FedEx Express Overnight" selected>FedEx Express Overnight</option>
                   <option value="FedEx Standard 2-Day" >FedEx Standard 2-Day</option>
                   <option value="DHL Express International" >DHL Express International</option>
@@ -2000,75 +2014,75 @@ header[data-purpose="top-header"] button[type="submit"] {
                   <option value="Brink's Global Services" >Brink's Global Services</option>
                   <option value="Malca-Amit Luxury Security" >Malca-Amit Luxury Security</option>
                 </select>
-                <span class="absolute inset-y-0 right-2.5 flex items-center pointer-events-none text-slate-500">
+                <span class="absolute inset-y-0 right-2.5 flex items-center pointer-events-none text-neutral-400">
                   <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"></path></svg>
                 </span>
               </div>
             </div>
 
             <div class="space-y-1.5">
-              <label class="block text-[11px] font-mono text-slate-500 uppercase tracking-wider" for="id_tracking_number">Tracking Number</label>
-              <div class="flex items-center bg-vault-bg border border-vault-border rounded-md overflow-hidden">
-                <input class="bg-transparent border-0 px-3 py-1.5 text-xs font-mono text-slate-200 w-full focus:ring-0 select-all" id="id_tracking_number" name="tracking_number" type="text" value="FDX-994827104921-USA">
-                <button class="px-2.5 py-1.5 text-xs font-mono text-slate-400 hover:text-white bg-vault-nested hover:bg-vault-surface transition-colors border-l border-vault-border shrink-0 copy-btn cursor-pointer" onclick="copyTrackingCode()" type="button">Copy</button>
+              <label class="block text-[11px] font-mono text-neutral-400 uppercase tracking-wider" for="id_tracking_number">Tracking Number</label>
+              <div class="flex items-center bg-obsidian-850 border border-obsidian-700/70 rounded-lg overflow-hidden">
+                <input class="bg-transparent border-0 px-3 py-2 text-xs font-mono text-neutral-200 w-full focus:ring-0 select-all" id="id_tracking_number" name="tracking_number" type="text" value="FDX-994827104921-USA">
+                <button class="px-3 py-2 text-xs font-mono text-neutral-300 hover:text-white bg-obsidian-800 hover:bg-obsidian-750 transition-colors border-l border-obsidian-700/70 shrink-0 copy-btn cursor-pointer" onclick="copyTrackingCode()" type="button">Copy</button>
               </div>
             </div>
 
             <div class="space-y-1.5">
-              <label class="block text-[11px] font-mono text-slate-500 uppercase tracking-wider" for="id_tracking_url">Tracking Link</label>
-              <a class="flex items-center justify-between vault-nested p-2.5 text-xs font-mono text-slate-300 hover:text-white hover:border-slate-600 transition-all group" href="https://www.fedex.com" target="_blank" rel="noopener noreferrer">
+              <label class="block text-[11px] font-mono text-neutral-400 uppercase tracking-wider" for="id_tracking_url">Tracking Link</label>
+              <a class="flex items-center justify-between nested-surface p-2.5 text-xs font-mono text-neutral-300 hover:text-white hover:border-obsidian-600 transition-all group bg-obsidian-850/90 border border-obsidian-700/60 rounded-lg cursor-pointer" href="https://www.fedex.com" target="_blank" rel="noopener noreferrer">
                 <span class="truncate pr-2">Track package on FedEx</span>
-                <svg class="w-3.5 h-3.5 text-slate-500 group-hover:text-slate-300 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"></path></svg>
+                <svg class="w-3.5 h-3.5 text-neutral-500 group-hover:text-emerald-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"></path></svg>
               </a>
               <input type="hidden" name="tracking_url" id="id_tracking_url" value="https://www.fedex.com">
             </div>
 
-            <button type="submit" name="_save" class="btn-emerald-primary glow-emerald w-full py-2.5 px-4 rounded-md font-semibold text-xs tracking-wider uppercase transition-all shadow-lg flex items-center justify-center gap-2 active:scale-[0.99] cursor-pointer" style="background-color: #10b981 !important; color: #07080a !important; text-decoration: none !important;">
-              <svg class="w-3.5 h-3.5 stroke-[2.2]" fill="none" stroke="#07080a" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+            <button type="submit" name="_save" class="btn-primary glow-emerald w-full py-2.5 px-4 rounded-lg font-semibold text-xs tracking-wider uppercase transition-all shadow-lg flex items-center justify-center gap-2 active:scale-[0.99] cursor-pointer" style="background-color: #10b981 !important; color: #07080a !important; text-decoration: none !important;">
+              <svg class="w-3.5 h-3.5 stroke-[2.5]" fill="none" stroke="#07080a" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round"></path></svg>
               <span>Update Tracking / Save</span>
             </button>
           </section>
 
           <!-- 2b. Financial Reconciliation & Settlement Summary -->
-          <section class="vault-card p-5 space-y-4" data-purpose="financial-summary-card">
-            <div class="flex items-center justify-between border-b border-vault-border pb-3.5">
+          <section class="card-surface p-5 space-y-4" data-purpose="financial-summary-card">
+            <div class="flex items-center justify-between border-b border-obsidian-700/60 pb-3.5">
               <h3 class="text-xs font-mono uppercase tracking-wider text-white font-medium">Payment Summary</h3>
-              <span class="text-[10px] font-mono text-emerald-400 bg-vault-emeraldDim border border-emerald-500/30 px-2 py-0.5 rounded font-medium">
+              <span class="text-[10px] font-mono text-emerald-400 bg-emerald-500/10 border border-emerald-500/30 px-2 py-0.5 rounded-full font-medium">
                 Paid in Full
               </span>
             </div>
 
             <div class="space-y-2 text-xs">
               <div class="flex items-center justify-between">
-                <span class="text-slate-500 font-sans">Paid via:</span>
-                <span class="text-slate-200 font-mono text-[11px]">Secure Card Payment (Stripe Luxury)</span>
+                <span class="text-neutral-400 font-sans">Paid via:</span>
+                <span class="text-neutral-200 font-mono text-[11px]">Secure Card Payment (Stripe Luxury)</span>
               </div>
               <input type="hidden" name="payment_method" value="Secure Card Payment (Stripe Luxury)">
               <input type="hidden" name="payment_status" value="PAID">
             </div>
 
-            <div class="vault-nested p-3.5 rounded-md space-y-2 font-mono text-xs border-t border-vault-border">
-              <div class="flex items-center justify-between text-slate-400">
+            <div class="nested-surface p-3.5 rounded-lg space-y-2 font-mono text-xs border border-obsidian-700/60 bg-obsidian-850/90">
+              <div class="flex items-center justify-between text-neutral-400">
                 <span>Subtotal</span>
-                <span class="text-slate-200">₹3450.00</span>
+                <span class="text-neutral-200">₹3450.00</span>
               </div>
-              <div class="flex items-center justify-between text-slate-400">
+              <div class="flex items-center justify-between text-neutral-400">
                 <span>Discount (VIP 10%)</span>
                 <span class="text-emerald-400">-₹0.00</span>
               </div>
-              <div class="flex items-center justify-between text-slate-400">
+              <div class="flex items-center justify-between text-neutral-400">
                 <span>Shipping</span>
                 <span class="text-emerald-400 font-medium">Free</span>
               </div>
-              <div class="flex items-center justify-between text-slate-400">
+              <div class="flex items-center justify-between text-neutral-400">
                 <span>Estimated Taxes (GST)</span>
-                <span class="text-slate-300">Included</span>
+                <span class="text-neutral-300">Included</span>
               </div>
-              <div class="flex items-center justify-between pt-2.5 border-t border-vault-border text-sm font-semibold">
+              <div class="flex items-center justify-between pt-2.5 border-t border-obsidian-700/60 text-sm font-semibold">
                 <span class="text-white">Total Paid</span>
                 <div class="text-right">
                   <span class="text-white">₹3450.00</span>
-                  <span class="text-[11px] font-normal text-slate-400 ml-1.5">($45.30 USD)</span>
+                  <span class="text-[11px] font-normal text-neutral-400 ml-1.5">($45.30 USD)</span>
                 </div>
               </div>
             </div>
