@@ -369,7 +369,7 @@
             <div class="flex items-center justify-between pb-3 border-b border-obsidian-700/60">
               <div class="flex items-center gap-2">
                 <svg class="w-4 h-4 text-emerald-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"></path></svg>
-                <h2 class="text-sm font-semibold text-white tracking-wide">Core Assignment &amp; Identity</h2>
+                <h2 class="text-sm font-semibold text-white tracking-wide">Product Details &amp; Identity</h2>
               </div>
               <span class="px-2 py-0.5 rounded text-[10px] font-mono text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 whitespace-nowrap">
                 Mandatory
@@ -381,9 +381,9 @@
               <div class="space-y-1.5">
                 <div class="flex items-center justify-between">
                   <label class="block text-xs font-semibold text-neutral-200" for="id_title">
-                    Project Title / Model Name <span class="text-emerald-400">*</span>
+                    Product Title <span class="text-emerald-400">*</span>
                   </label>
-                  <span class="text-[10px] font-mono text-neutral-400">Headline Descriptor</span>
+                  <span class="text-[10px] font-mono text-neutral-400">Headline</span>
                 </div>
                 <input 
                   type="text" 
@@ -432,7 +432,7 @@
               <div class="space-y-1.5">
                 <div class="flex items-center justify-between">
                   <label class="block text-xs font-medium text-neutral-300" for="id_description">
-                    Haute Joaillerie Narrative &amp; Craftsmanship Description
+                    Product Description
                   </label>
                   <span class="text-[10px] font-mono text-neutral-500">Full Description</span>
                 </div>
@@ -441,7 +441,7 @@
                   id="id_description" 
                   rows="4" 
                   class="glass-input w-full text-xs px-3.5 py-2.5 leading-relaxed" 
-                  placeholder="Write a compelling narrative highlighting 925 solid sterling silver hallmarking, brilliant cubic zirconia handset facets, silversmith bench hours, and styling advice..."
+                  placeholder="Enter product description, craftsmanship highlights, materials, and styling details..."
                 >{{ adminform.form.description.value|default:'' }}</textarea>
               </div>
             </div>
