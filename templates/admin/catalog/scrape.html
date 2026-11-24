@@ -1729,6 +1729,27 @@ function getCsrfToken() {
   const match = document.cookie.match(/csrftoken=([^;]+)/);
   return match ? match[1] : '';
 }
+
+// Auto-parse CSV if redirected from Vault Changelist
+window.addEventListener('DOMContentLoaded', () => {
+  const params = new URLSearchParams(window.location.search);
+  if (params.get('autoload') === 'csv') {
+    const csvData = sessionStorage.getItem('luckjary_pasted_csv');
+    if (csvData) {
+      sessionStorage.removeItem('luckjary_pasted_csv');
+      document.getElementById('rawSourceInput').value = csvData;
+      setPasteMode('csv');
+      const advContainer = document.getElementById('advancedSourceContainer');
+      const advChevron = document.getElementById('advancedChevron');
+      if (advContainer) {
+        advContainer.classList.remove('hidden');
+        advContainer.classList.add('flex');
+      }
+      if (advChevron) advChevron.style.transform = 'rotate(180deg)';
+      handleRawSourceScrape();
+    }
+  }
+});
 </script>
 
 </body>
