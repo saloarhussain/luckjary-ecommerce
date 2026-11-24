@@ -285,6 +285,7 @@
     <input type="hidden" name="karat_metal" id="id_karat_metal" value="925 Sterling Silver">
     <input type="hidden" name="available_metals" id="id_available_metals" value="925 Sterling Silver">
     <input type="checkbox" name="metal_presets" value="925 Sterling Silver" checked style="display:none;">
+    <input type="hidden" name="certification" id="id_certification" value="{{ adminform.form.certification.value|default:'Luckjary 925 Hallmark & Authenticity Guarantee' }}">
 
     <!-- BEGIN: Main Content Area matching Atelier Design System -->
     <main class="flex-1 p-4 sm:p-6 md:p-8 space-y-5 sm:space-y-6 md:space-y-7 max-w-[1720px] mx-auto w-full">
@@ -447,56 +448,7 @@
             </div>
           </div>
 
-          <!-- 2. 925 SOLID STERLING SILVER SPECIFICATION STUDIO -->
-          <div class="card-surface rounded-xl p-4 sm:p-6 space-y-4" data-purpose="precious-metals-card">
-            <div class="flex items-center justify-between pb-3 border-b border-obsidian-700/60">
-              <div class="flex items-center gap-2">
-                <span class="text-base">🛡️</span>
-                <h2 class="text-sm font-semibold text-white tracking-wide">Precious Metal &amp; Atelier Hallmarking</h2>
-              </div>
-              <span class="px-2 py-0.5 rounded text-[10px] font-mono text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 whitespace-nowrap">
-                Strict Atelier Standard
-              </span>
-            </div>
 
-            <!-- Standard Metal Feature Banner -->
-            <div class="p-4 rounded-lg bg-obsidian-850/90 border border-obsidian-700 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3.5">
-              <div class="flex items-center gap-3.5">
-                <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-neutral-200 via-neutral-300 to-neutral-400 flex items-center justify-center text-lg text-obsidian-950 shadow-md font-serif font-bold shrink-0">
-                  925
-                </div>
-                <div>
-                  <div class="text-sm font-semibold text-white">925 Solid Sterling Silver (92.5% Pure Fine Silver)</div>
-                  <div class="text-xs text-neutral-400 mt-0.5">Forged exclusively in authentic 925 Solid Sterling Silver • 100% Nickel-Free &amp; Hypoallergenic</div>
-                </div>
-              </div>
-              <div class="flex items-center gap-2 shrink-0">
-                <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded bg-emerald-500/15 border border-emerald-500/30 text-emerald-400 text-xs font-semibold">
-                  <span>✓</span> Standard Active Metal
-                </span>
-              </div>
-            </div>
-
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
-              <div class="space-y-1">
-                <label class="block text-[11px] font-mono text-neutral-400 uppercase" for="id_certification">Certification &amp; Stamp</label>
-                <input 
-                  type="text" 
-                  name="certification" 
-                  id="id_certification" 
-                  value="{{ adminform.form.certification.value|default:'Luckjary 925 Hallmark & Authenticity Guarantee' }}" 
-                  class="glass-input w-full text-xs px-3 py-2 font-mono text-neutral-300"
-                >
-              </div>
-              <div class="space-y-1">
-                <label class="block text-[11px] font-mono text-neutral-400 uppercase">Precious Metal Alloy Purity</label>
-                <div class="glass-input w-full text-xs px-3 py-2 text-neutral-300 flex items-center justify-between bg-obsidian-900">
-                  <span>92.5% Ag (Pure Silver) + 7.5% Cu</span>
-                  <span class="text-emerald-400 font-mono text-[10px]">100% Solid</span>
-                </div>
-              </div>
-            </div>
-          </div>
 
           <!-- 3. GEMSTONES & SPECIALTY MATERIALS -->
           <div class="card-surface rounded-xl p-4 sm:p-6 space-y-4" data-purpose="gemstones-card">
@@ -725,16 +677,12 @@
                               <span class="text-[11px] font-medium text-emerald-400">Primary</span>
                             </label>
                             
-                            <div class="flex items-center gap-1">
-                              <span class="text-[10px] font-mono text-neutral-500">Ord:</span>
-                              <input 
-                                type="number" 
-                                name="{{ inline_form.prefix }}-order" 
-                                id="id_{{ inline_form.prefix }}-order" 
-                                value="{{ inline_form.order.value|default:0 }}" 
-                                class="glass-input w-12 text-center text-xs px-1 py-1 font-mono"
-                              >
-                            </div>
+                            <input 
+                              type="hidden" 
+                              name="{{ inline_form.prefix }}-order" 
+                              id="id_{{ inline_form.prefix }}-order" 
+                              value="{{ inline_form.order.value|default:0 }}" 
+                            >
 
                             {% if inline_form.instance.pk %}
                               <label class="inline-flex items-center gap-1 text-[11px] text-red-400 hover:text-red-300 cursor-pointer ml-1">
@@ -1838,16 +1786,12 @@ function addNewImageRow(imgUrl = '', altText = '', isPrimary = false) {
               <span class="text-[11px] font-medium text-emerald-400">Primary</span>
             </label>
             
-            <div class="flex items-center gap-1">
-              <span class="text-[10px] font-mono text-neutral-500">Ord:</span>
-              <input 
-                type="number" 
-                name="${prefix}-order" 
-                id="id_${prefix}-order" 
-                value="${index}" 
-                class="glass-input w-12 text-center text-xs px-1 py-1 font-mono"
-              >
-            </div>
+            <input 
+              type="hidden" 
+              name="${prefix}-order" 
+              id="id_${prefix}-order" 
+              value="${index}" 
+            >
 
             <button type="button" onclick="removeImageInlineRow('${prefix}')" class="p-1.5 text-neutral-400 hover:text-red-400 hover:bg-red-500/10 rounded transition-colors cursor-pointer" title="Delete Image">
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
