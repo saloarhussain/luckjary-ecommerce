@@ -84,6 +84,9 @@ class ProductAdminForm(forms.ModelForm):
             self.fields['sku'].required = False
         if 'description' in self.fields:
             self.fields['description'].required = False
+        if 'style' in self.fields:
+            self.fields['style'].required = False
+            self.fields['style'].initial = 'classic'
 
     def clean(self):
         cleaned_data = super().clean()
@@ -92,6 +95,8 @@ class ProductAdminForm(forms.ModelForm):
         cleaned_data['karat_metal'] = '925 Sterling Silver'
         cleaned_data['carat_weight'] = ''
         cleaned_data['dimensions'] = ''
+        if not cleaned_data.get('style'):
+            cleaned_data['style'] = 'classic'
         if not cleaned_data.get('certification'):
             cleaned_data['certification'] = 'Luckjary 925 Hallmark & Authenticity Guarantee'
         if not cleaned_data.get('sku'):
@@ -102,7 +107,7 @@ class ProductAdminForm(forms.ModelForm):
 
 class ProductImageInline(admin.TabularInline):
     model = ProductImage
-    extra = 1
+    extra = 0
 
 class ProductReviewInline(admin.StackedInline):
     model = ProductReview

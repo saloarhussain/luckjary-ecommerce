@@ -355,6 +355,21 @@
                 <li><strong>{{ field.label }}:</strong> {{ error }}</li>
               {% endfor %}
             {% endfor %}
+            {% for inline_admin_formset in inline_admin_formsets %}
+              {% for error in inline_admin_formset.formset.non_form_errors %}
+                <li><strong>{{ inline_admin_formset.opts.verbose_name_plural|capfirst }}:</strong> {{ error }}</li>
+              {% endfor %}
+              {% for inline_form in inline_admin_formset.formset.forms %}
+                {% for field in inline_form %}
+                  {% for error in field.errors %}
+                    <li><strong>{{ inline_admin_formset.opts.verbose_name|capfirst }} #{{ forloop.parentloop.counter }} ({{ field.label }}):</strong> {{ error }}</li>
+                  {% endfor %}
+                {% endfor %}
+                {% for error in inline_form.non_field_errors %}
+                  <li><strong>{{ inline_admin_formset.opts.verbose_name|capfirst }} #{{ forloop.counter }}:</strong> {{ error }}</li>
+                {% endfor %}
+              {% endfor %}
+            {% endfor %}
           </ul>
         </div>
       </div>
@@ -1560,9 +1575,82 @@ function updateImagePreview(prefix, url) {
 function updateImageCounter() {
   const badge = document.getElementById('imageCounterBadge');
   const rows = document.querySelectorAll('#imagesFormsetList .image-inline-row:not([style*="display: none"])');
+  let validCount = 0;
+  rows.forEach(row => {
+    const urlInput = row.querySelector('input[name$="-image_url"]');
+    if (urlInput && urlInput.value.trim()) {
+      validCount++;
+    }
+  });
   if (badge) {
-    badge.textContent = `${rows.length} Image${rows.length === 1 ? '' : 's'} Attached`;
+    badge.textContent = `${validCount} Image${validCount === 1 ? '' : 's'} Attached`;
   }
+}
+
+function reindexImageRows() {
+  const container = document.getElementById('imagesFormsetList');
+  if (!container) return;
+
+  const totalFormsInput = document.getElementById('id_images-TOTAL_FORMS');
+  const rows = container.querySelectorAll('.image-inline-row');
+  let validIndex = 0;
+
+  rows.forEach((row) => {
+    const idField = row.querySelector('input[name$="-id"]');
+    const isSaved = idField && idField.value;
+
+    // Prune rows that were hidden without being saved in the database
+    if (row.style.display === 'none' && !isSaved) {
+      row.remove();
+      return;
+    }
+
+    const newPrefix = `images-${validIndex}`;
+
+    // Update row id
+    row.id = `image_row_${newPrefix}`;
+
+    // Update preview img id
+    const previewImg = row.querySelector('img[id^="preview_"]');
+    if (previewImg) {
+      previewImg.id = `preview_${newPrefix}`;
+    }
+
+    // Update all input names and IDs
+    row.querySelectorAll('input, select, textarea').forEach((input) => {
+      if (input.name) {
+        input.name = input.name.replace(/images-\d+-/, `${newPrefix}-`);
+      }
+      if (input.id) {
+        input.id = input.id.replace(/id_images-\d+-/, `id_${newPrefix}-`);
+      }
+    });
+
+    // Update oninput for image_url
+    const urlInput = row.querySelector(`input[name="${newPrefix}-image_url"]`);
+    if (urlInput) {
+      urlInput.setAttribute('oninput', `updateImagePreview('${newPrefix}', this.value)`);
+    }
+
+    // Update order input
+    const orderInput = row.querySelector(`input[name="${newPrefix}-order"]`);
+    if (orderInput) {
+      orderInput.value = validIndex;
+    }
+
+    // Update delete button onclick
+    const delBtn = row.querySelector('button[onclick*="removeImageInlineRow"]');
+    if (delBtn) {
+      delBtn.setAttribute('onclick', `removeImageInlineRow('${newPrefix}')`);
+    }
+
+    validIndex++;
+  });
+
+  if (totalFormsInput) {
+    totalFormsInput.value = validIndex;
+  }
+  updateImageCounter();
 }
 
 function optimizeImageToDataUrl(file, maxWidth = 1400, maxHeight = 1400, quality = 0.85) {
@@ -1628,13 +1716,12 @@ function fillImageRow(row, dataUrl, altText, isPrimary) {
 }
 
 function addNewImageRow(imgUrl = '', altText = '', isPrimary = false) {
-  const totalFormsInput = document.getElementById('id_images-TOTAL_FORMS');
-  if (!totalFormsInput) return;
-
-  const index = parseInt(totalFormsInput.value) || 0;
-  const prefix = `images-${index}`;
   const container = document.getElementById('imagesFormsetList');
   if (!container) return;
+
+  const rows = container.querySelectorAll('.image-inline-row');
+  const index = rows.length;
+  const prefix = `images-${index}`;
 
   const previewSrc = imgUrl || 'https://images.unsplash.com/photo-1603561591411-07134e71a2a9?auto=format&fit=crop&w=400&q=80';
 
@@ -1711,8 +1798,7 @@ function addNewImageRow(imgUrl = '', altText = '', isPrimary = false) {
   `;
 
   container.insertAdjacentHTML('beforeend', rowHtml);
-  totalFormsInput.value = index + 1;
-  updateImageCounter();
+  reindexImageRows();
 }
 
 function removeImageInlineRow(prefix) {
@@ -1726,9 +1812,8 @@ function removeImageInlineRow(prefix) {
     if (deleteCheckbox) deleteCheckbox.checked = true;
     row.style.display = 'none';
   } else {
-    const urlInput = row.querySelector('input[name$="-image_url"]');
-    if (urlInput) urlInput.value = '';
     row.remove();
+    reindexImageRows();
   }
   updateImageCounter();
 }
@@ -1751,6 +1836,7 @@ async function handleProductImageUploads(files) {
       addNewImageRow(dataUrl, file.name.replace(/\.[^/.]+$/, ''), isFirst);
     }
   }
+  reindexImageRows();
   updateImageCounter();
 }
 
@@ -1764,7 +1850,34 @@ document.addEventListener('DOMContentLoaded', () => {
   renderRingChips();
   calculateValuation();
   updateSeoPreview();
-  updateImageCounter();
+  reindexImageRows();
+
+  // Form submit listener: prune any unsaved empty image rows and sanitize indices
+  const productForm = document.getElementById('{{ opts.model_name }}_form');
+  if (productForm) {
+    productForm.addEventListener('submit', function() {
+      const container = document.getElementById('imagesFormsetList');
+      if (container) {
+        const rows = container.querySelectorAll('.image-inline-row');
+        rows.forEach(row => {
+          const idField = row.querySelector('input[name$="-id"]');
+          const isSaved = idField && idField.value;
+          const urlInput = row.querySelector('input[name$="-image_url"]');
+          if (!isSaved && (!urlInput || !urlInput.value.trim())) {
+            row.remove();
+          }
+        });
+        reindexImageRows();
+
+        // Ensure at least one image is marked Primary if images exist
+        const primaryInputs = container.querySelectorAll('input[name$="-is_primary"]');
+        const anyPrimaryChecked = Array.from(primaryInputs).some(cb => cb.checked);
+        if (!anyPrimaryChecked && primaryInputs.length > 0) {
+          primaryInputs[0].checked = true;
+        }
+      }
+    });
+  }
 });
 </script>
 {% endblock %}
