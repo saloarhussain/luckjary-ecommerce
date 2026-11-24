@@ -400,9 +400,10 @@ class ProductAdmin(admin.ModelAdmin):
             url = (data.get('url') or '').strip()
             raw_html = (data.get('raw_html') or '').strip()
             raw_json = (data.get('raw_json') or '').strip()
+            raw_csv = (data.get('raw_csv') or '').strip()
 
             from .scraper import scrape_ecommerce_product
-            scraped = scrape_ecommerce_product(url=url, raw_html=raw_html, raw_json=raw_json)
+            scraped = scrape_ecommerce_product(url=url, raw_html=raw_html, raw_json=raw_json, raw_csv=raw_csv)
 
             if not scraped or not scraped.get('success'):
                 return JsonResponse({

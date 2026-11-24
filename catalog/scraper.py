@@ -594,15 +594,100 @@ def parse_opengraph_fallback(meta_tags, images_found, title_found, source_url):
     }
 
 
-def scrape_ecommerce_product(url=None, raw_html=None, raw_json=None):
+def parse_shopify_csv(csv_text, source_name='Shopify Export CSV'):
+    """
+    Parses a standard Shopify Products export CSV into a full Luckjary collection
+    with all products, options, high-resolution images, and EXACT raw SKUs.
+    """
+    import csv, io
+    reader = csv.DictReader(io.StringIO(csv_text))
+    products_map = {}
+    ordered_handles = []
+
+    for row in reader:
+        handle = (row.get('Handle') or '').strip()
+        if not handle:
+            continue
+        
+        title = (row.get('Title') or '').strip()
+        body_html = (row.get('Body (HTML)') or '').strip()
+        vendor = (row.get('Vendor') or '').strip()
+        img_src = (row.get('Image Src') or '').strip()
+        v_sku = str(row.get('Variant SKU') or '').strip()
+        v_price = clean_price(row.get('Variant Price'))
+        v_comp = clean_price(row.get('Variant Compare At Price'))
+        
+        opt1_val = (row.get('Option1 Value') or '').strip()
+        opt2_val = (row.get('Option2 Value') or '').strip()
+        opt3_val = (row.get('Option3 Value') or '').strip()
+        opt_parts = [p for p in (opt1_val, opt2_val, opt3_val) if p and p.lower() != 'default title']
+        v_title = " / ".join(opt_parts) if opt_parts else (opt1_val or 'Default Option')
+
+        if handle not in products_map:
+            ordered_handles.append(handle)
+            products_map[handle] = {
+                'title': title or handle.replace('-', ' ').title(),
+                'handle': handle,
+                'vendor': vendor,
+                'description': clean_html_text(body_html),
+                'variants': [],
+                'images': []
+            }
+        
+        # If row has variant data
+        if v_sku or v_price is not None or opt1_val:
+            products_map[handle]['variants'].append({
+                'title': v_title,
+                'sku': v_sku,
+                'price': v_price if v_price is not None else 0.0,
+                'compare_at_price': v_comp,
+                'available': True,
+                'option1': opt1_val,
+                'option2': opt2_val,
+                'option3': opt3_val
+            })
+        
+        # If row has image
+        if img_src and not any(im['src'] == img_src for im in products_map[handle]['images']):
+            products_map[handle]['images'].append({
+                'src': img_src,
+                'alt': row.get('Image Alt Text') or products_map[handle]['title']
+            })
+
+    if not products_map:
+        return {'success': False, 'error': 'No products could be parsed from the provided CSV.'}
+
+    # Convert to Shopify product dict format and use parse_shopify_collection
+    raw_prods = []
+    for h in ordered_handles:
+        p = products_map[h]
+        raw_prods.append({
+            'title': p['title'],
+            'handle': p['handle'],
+            'body_html': p['description'],
+            'vendor': p['vendor'],
+            'variants': p['variants'] or [{'title': 'Default', 'sku': '', 'price': 0.0}],
+            'images': p['images']
+        })
+
+    return parse_shopify_collection(raw_prods, 'shopify-csv-export', source_name, 'Shopify Admin Export')
+
+
+def scrape_ecommerce_product(url=None, raw_html=None, raw_json=None, raw_csv=None):
     """
     Main entry point for scraping an e-commerce product or collection.
     Accepts:
     - url: Live website product/collection URL
     - raw_html: User-pasted HTML source
     - raw_json: User-pasted JSON (e.g. Shopify .json format or Schema.org)
+    - raw_csv: User-pasted or uploaded Shopify products export CSV
     """
     url = (url or '').strip()
+
+    # 0. Check for CSV input (explicit or embedded in raw_html/raw_json)
+    candidate_text = raw_csv or raw_html or raw_json or ""
+    if candidate_text and ('Variant SKU' in candidate_text or ('Handle,' in candidate_text and 'Title,' in candidate_text)):
+        return parse_shopify_csv(candidate_text, url or 'Shopify Export CSV')
 
     # 1. If raw JSON is provided directly
     if raw_json and raw_json.strip():

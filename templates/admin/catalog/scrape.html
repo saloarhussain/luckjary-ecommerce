@@ -236,9 +236,14 @@ a, a *, a:hover, a:hover *, a:focus, a:active, button, button * {
         <div id="advancedSourceContainer" class="hidden flex-col gap-3 pt-3 border-t border-white/[0.06]">
           <div class="flex items-center justify-between text-xs">
             <span class="text-neutral-300 font-medium">Direct Page Source Inspector (bypass anti-bot protections):</span>
-            <div class="flex items-center gap-2">
+            <div class="flex items-center gap-2 flex-wrap">
               <button type="button" onclick="setPasteMode('html')" id="tabPasteHtml" class="px-2.5 py-1 rounded bg-[#171920] text-emerald-400 border border-emerald-500/30 font-mono text-[11px] cursor-pointer">HTML</button>
               <button type="button" onclick="setPasteMode('json')" id="tabPasteJson" class="px-2.5 py-1 rounded bg-[#111317] text-neutral-400 hover:text-white border border-[#21242d] font-mono text-[11px] cursor-pointer">JSON</button>
+              <button type="button" onclick="setPasteMode('csv')" id="tabPasteCsv" class="px-2.5 py-1 rounded bg-[#111317] text-neutral-400 hover:text-white border border-[#21242d] font-mono text-[11px] cursor-pointer">Shopify CSV</button>
+              <label class="px-2.5 py-1 rounded bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 font-mono text-[11px] cursor-pointer flex items-center gap-1 transition-colors" title="Select Shopify Products Export CSV, JSON, or HTML file">
+                <span>📁 Upload File</span>
+                <input type="file" id="sourceFileInput" accept=".csv,.json,.html" class="hidden" onchange="handleSourceFileUpload(this)">
+              </label>
             </div>
           </div>
           <textarea id="rawSourceInput" rows="5" placeholder="Paste raw page source HTML (<html...> or <script type='application/ld+json'>) or Shopify product .json payload here..." class="luxury-input w-full p-3 rounded-xl font-mono text-xs placeholder-neutral-600"></textarea>
@@ -729,16 +734,39 @@ if (toggleBtn && advContainer) {
 function setPasteMode(mode) {
   const htmlBtn = document.getElementById('tabPasteHtml');
   const jsonBtn = document.getElementById('tabPasteJson');
+  const csvBtn = document.getElementById('tabPasteCsv');
   const input = document.getElementById('rawSourceInput');
-  if (mode === 'html') {
+
+  [htmlBtn, jsonBtn, csvBtn].forEach(b => {
+    if (b) b.className = 'px-2.5 py-1 rounded bg-[#111317] text-neutral-400 hover:text-white border border-[#21242d] font-mono text-[11px] cursor-pointer';
+  });
+
+  if (mode === 'html' && htmlBtn) {
     htmlBtn.className = 'px-2.5 py-1 rounded bg-[#171920] text-emerald-400 border border-emerald-500/30 font-mono text-[11px] cursor-pointer';
-    jsonBtn.className = 'px-2.5 py-1 rounded bg-[#111317] text-neutral-400 hover:text-white border border-[#21242d] font-mono text-[11px] cursor-pointer';
     input.placeholder = 'Paste raw page source HTML (<html...> or <script type="application/ld+json">)...';
-  } else {
+  } else if (mode === 'json' && jsonBtn) {
     jsonBtn.className = 'px-2.5 py-1 rounded bg-[#171920] text-emerald-400 border border-emerald-500/30 font-mono text-[11px] cursor-pointer';
-    htmlBtn.className = 'px-2.5 py-1 rounded bg-[#111317] text-neutral-400 hover:text-white border border-[#21242d] font-mono text-[11px] cursor-pointer';
     input.placeholder = 'Paste Shopify product .json or Schema.org product JSON payload...';
+  } else if (mode === 'csv' && csvBtn) {
+    csvBtn.className = 'px-2.5 py-1 rounded bg-[#171920] text-emerald-400 border border-emerald-500/30 font-mono text-[11px] cursor-pointer';
+    input.placeholder = 'Paste Shopify Products Export CSV data here (Handle, Title, Variant SKU, Variant Price...)... or click Upload File.';
   }
+}
+
+function handleSourceFileUpload(inputEl) {
+  const file = inputEl.files && inputEl.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    document.getElementById('rawSourceInput').value = e.target.result;
+    if (file.name.endsWith('.csv')) {
+      setPasteMode('csv');
+    } else if (file.name.endsWith('.json')) {
+      setPasteMode('json');
+    }
+    handleRawSourceScrape();
+  };
+  reader.readAsText(file);
 }
 
 // Show Feedback Alert
@@ -809,6 +837,8 @@ async function handleRawSourceScrape() {
     const payload = {};
     if (source.startsWith('{') || source.startsWith('[')) {
       payload.raw_json = source;
+    } else if (source.includes('Variant SKU') || (source.includes('Handle,') && source.includes('Title,'))) {
+      payload.raw_csv = source;
     } else {
       payload.raw_html = source;
     }
