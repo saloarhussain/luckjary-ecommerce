@@ -120,7 +120,7 @@ class OrderItem(models.Model):
     product = models.ForeignKey(Product, on_delete=models.SET_NULL, null=True, blank=True)
     product_name = models.CharField(max_length=220)
     product_sku = models.CharField(max_length=60, blank=True)
-    product_image = models.URLField(max_length=600, blank=True)
+    product_image = models.TextField(blank=True, default='')
     selected_size = models.CharField(max_length=60, default='Standard / US 7')
     selected_material = models.CharField(max_length=100, default='18K Solid Yellow Gold')
     unit_price = models.DecimalField(max_digits=10, decimal_places=2)
