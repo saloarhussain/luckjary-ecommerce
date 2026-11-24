@@ -154,13 +154,58 @@ class Product(models.Model):
         ordering = ['-is_featured', '-created_at']
 
     def save(self, *args, **kwargs):
+        # Guarantee unique slug
         if not self.slug:
-            self.slug = slugify(self.title)
+            base_slug = slugify(self.title) or 'jewelry-piece'
+            slug = base_slug
+            counter = 1
+            while Product.objects.filter(slug=slug).exclude(pk=self.pk).exists():
+                slug = f"{base_slug}-{counter}"
+                counter += 1
+            self.slug = slug
+        elif Product.objects.filter(slug=self.slug).exclude(pk=self.pk).exists():
+            base_slug = self.slug
+            counter = 1
+            while Product.objects.filter(slug=f"{base_slug}-{counter}").exclude(pk=self.pk).exists():
+                counter += 1
+            self.slug = f"{base_slug}-{counter}"
+
+        # Guarantee unique SKU
+        if not self.sku:
+            import random
+            base_sku = f"LUK-SIL-JW-{random.randint(100, 999)}"
+            sku = base_sku
+            counter = 1
+            while Product.objects.filter(sku=sku).exclude(pk=self.pk).exists():
+                sku = f"{base_sku}-{counter}"
+                counter += 1
+            self.sku = sku
+        elif Product.objects.filter(sku=self.sku).exclude(pk=self.pk).exists():
+            base_sku = self.sku
+            counter = 1
+            while Product.objects.filter(sku=f"{base_sku}-{counter}").exclude(pk=self.pk).exists():
+                counter += 1
+            self.sku = f"{base_sku}-{counter}"
+
         if not self.meta_title:
             self.meta_title = f"{self.title} | Luxury Jewelry - Luckjary"
         if not self.meta_description:
             self.meta_description = f"Discover the {self.title} by Luckjary. Crafted in {self.karat_metal} with {self.gemstone or 'flawless finish'}. Enjoy complimentary insured worldwide delivery & gift packaging."
-        super().save(*args, **kwargs)
+
+        try:
+            super().save(*args, **kwargs)
+        except Exception as e:
+            err_str = str(e)
+            if 'catalog_product_pkey' in err_str or 'duplicate key value' in err_str:
+                from django.db import connection
+                try:
+                    with connection.cursor() as cursor:
+                        cursor.execute("SELECT setval(pg_get_serial_sequence('\"catalog_product\"', 'id'), coalesce(max(id), 0)) FROM catalog_product;")
+                except Exception:
+                    pass
+                super().save(*args, **kwargs)
+            else:
+                raise
 
     def get_absolute_url(self):
         return reverse('catalog:product_detail', kwargs={'slug': self.slug})
@@ -309,6 +354,22 @@ class ProductImage(models.Model):
 
     def __str__(self):
         return f"Image for {self.product.title} (Order: {self.order})"
+
+    def save(self, *args, **kwargs):
+        try:
+            super().save(*args, **kwargs)
+        except Exception as e:
+            err_str = str(e)
+            if 'catalog_productimage_pkey' in err_str or 'duplicate key value' in err_str:
+                from django.db import connection
+                try:
+                    with connection.cursor() as cursor:
+                        cursor.execute("SELECT setval(pg_get_serial_sequence('\"catalog_productimage\"', 'id'), coalesce(max(id), 0)) FROM catalog_productimage;")
+                except Exception:
+                    pass
+                super().save(*args, **kwargs)
+            else:
+                raise
 
 
 class ProductReview(models.Model):
