@@ -400,22 +400,32 @@
                 {% endif %}
               </div>
 
-              <!-- Subtitle Field -->
+              <!-- Product URL Slug / Handle (Replaced Subtitle for Maximum SEO) -->
               <div class="space-y-1.5">
                 <div class="flex items-center justify-between">
-                  <label class="block text-xs font-medium text-neutral-300" for="id_subtitle">
-                    Subtitle &amp; Material Tagline
+                  <label class="block text-xs font-medium text-neutral-300" for="id_slug">
+                    Product URL Handle (Slug) <span class="text-emerald-400 font-mono text-[10px]">&bull; High-Priority Google SEO</span>
                   </label>
-                  <span class="text-[10px] font-mono text-neutral-500">Storefront Subtext</span>
+                  <span class="text-[10px] font-mono text-neutral-500">Auto-generated from Title</span>
                 </div>
-                <input 
-                  type="text" 
-                  name="subtitle" 
-                  id="id_subtitle" 
-                  value="{{ adminform.form.subtitle.value|default:'' }}" 
-                  class="glass-input w-full text-xs px-3.5 py-2" 
-                  placeholder="e.g. Handcrafted in 925 Solid Sterling Silver &amp; Flawless Cubic Zirconia Stones"
-                >
+                <div class="relative flex items-center">
+                  <span class="inline-flex items-center px-3 py-2 rounded-l-lg border border-r-0 border-obsidian-700 bg-obsidian-900 text-neutral-400 text-xs font-mono select-none">
+                    luckjary.com/products/
+                  </span>
+                  <input 
+                    type="text" 
+                    name="slug" 
+                    id="id_slug" 
+                    value="{{ adminform.form.slug.value|default:'' }}" 
+                    class="glass-input w-full text-xs font-mono px-3.5 py-2 text-emerald-400 rounded-l-none" 
+                    placeholder="e.g. seraphina-pave-solitaire-ring"
+                    oninput="this.dataset.manual='true'; updateSeoPreview();"
+                  >
+                </div>
+                <p class="text-[11px] text-neutral-400">
+                  Clean keyword-rich URLs help Google rank your piece higher for search queries.
+                </p>
+                <input type="hidden" name="subtitle" id="id_subtitle" value="{{ adminform.form.subtitle.value|default:'' }}">
               </div>
 
               <!-- Description Field -->
@@ -784,19 +794,6 @@
                   value="{{ adminform.form.meta_title.value|default:'' }}" 
                   class="glass-input w-full text-xs px-3.5 py-2" 
                   placeholder="e.g. Seraphina Pavé Solitaire Ring in 925 Sterling Silver | Luckjary"
-                  oninput="updateSeoPreview()"
-                >
-              </div>
-
-              <div class="space-y-1">
-                <label class="block text-xs font-medium text-neutral-300" for="id_slug">URL Slug <span class="text-emerald-400 font-mono text-[10px]">(Auto-generated from title)</span></label>
-                <input 
-                  type="text" 
-                  name="slug" 
-                  id="id_slug" 
-                  value="{{ adminform.form.slug.value|default:'' }}" 
-                  class="glass-input w-full text-xs font-mono px-3.5 py-2 text-emerald-400" 
-                  placeholder="e.g. seraphina-pave-solitaire-ring"
                   oninput="updateSeoPreview()"
                 >
               </div>
