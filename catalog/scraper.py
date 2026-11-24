@@ -319,10 +319,14 @@ def parse_shopify_product_dict(prod, source_url):
     max_price = None
     compare_at_price = None
 
-    for v in prod.get('variants', []):
+    slug_part = prod.get('handle') or re.sub(r'[^A-Za-z0-9]', '', title)[:8].upper()
+    atelier_sku = f"LCK-SCR-{slug_part.upper().replace('_', '-')[:14]}"
+
+    for i, v in enumerate(prod.get('variants', [])):
         v_price = clean_price(v.get('price'))
         v_comp = clean_price(v.get('compare_at_price'))
-        v_sku = v.get('sku') or ''
+        # Extract raw Shopify variant SKU accurately (preserving model numbers, warehouse codes, slashes, etc.)
+        v_sku = str(v.get('sku') or '').strip()
         v_title = v.get('title') or ''
         v_avail = v.get('available', True)
 
@@ -337,7 +341,7 @@ def parse_shopify_product_dict(prod, source_url):
 
         variants.append({
             'title': v_title,
-            'sku': v_sku or f"SKU-{len(variants)+1}",
+            'sku': v_sku if v_sku else f"{atelier_sku}-V{i+1}",
             'price': v_price,
             'compare_at_price': v_comp,
             'available': v_avail,
@@ -366,30 +370,20 @@ def parse_shopify_product_dict(prod, source_url):
             'values': opt.get('values', [])
         })
 
-    # Primary SKU: Use clean atelier SKU if raw variant SKU contains stock bin notes, slashes or spaces
-    first_sku = variants[0]['sku'] if variants and variants[0]['sku'] else ''
-    slug_part = prod.get('handle') or re.sub(r'[^A-Za-z0-9]', '', title)[:8].upper()
-    atelier_sku = f"LCK-SCR-{slug_part.upper().replace('_', '-')[:14]}"
-    if not first_sku or first_sku.startswith('SKU-') or '/' in first_sku or ' ' in first_sku or len(first_sku) < 4:
+    # Primary SKU: Use raw variant SKU from Shopify if available; otherwise use atelier SKU
+    first_sku = ''
+    for v in variants:
+        if v.get('sku') and not v['sku'].startswith(atelier_sku):
+            first_sku = v['sku']
+            break
+    if not first_sku and variants and variants[0].get('sku'):
+        first_sku = variants[0]['sku']
+    if not first_sku:
         first_sku = atelier_sku
 
     # Featured primary price: match the live store's featured variant price (e.g. Display)
     first_var_price = variants[0]['price'] if (variants and variants[0].get('price') is not None) else None
     primary_price = first_var_price if first_var_price is not None else (min_price or 0.0)
-
-    # Clean variant SKUs so internal warehouse codes (like 'Frame', 'Back Panel', 'A13 4G/23/M33') don't pollute data
-    for i, v in enumerate(variants):
-        v_sku_val = (v.get('sku') or '').strip()
-        is_suspicious = (
-            not v_sku_val
-            or v_sku_val.startswith('SKU-')
-            or '/' in v_sku_val
-            or ' ' in v_sku_val
-            or len(v_sku_val) < 4
-            or not any(ch.isdigit() for ch in v_sku_val)
-        )
-        if is_suspicious:
-            v['sku'] = f"{atelier_sku}-V{i+1}"
 
     is_inr = ('.in' in source_url or 'sparelelo' in source_url or 'india' in source_url)
     currency = 'INR' if is_inr else 'USD'

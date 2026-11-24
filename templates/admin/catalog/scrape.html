@@ -858,7 +858,7 @@ function loadScrapedDataIntoStudio(product) {
   currentVariants = Array.isArray(product.variants) && product.variants.length > 0
     ? product.variants.map((v, i) => {
         let skuVal = (v.sku || '').trim();
-        if (!skuVal || skuVal.startsWith('SKU-') || skuVal.includes('/') || skuVal.includes(' ') || skuVal.length < 4) {
+        if (!skuVal) {
           skuVal = `${baseSku}-V${i + 1}`;
         }
         return {
@@ -1062,7 +1062,10 @@ function renderCollectionTable(filterText = '') {
           <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 max-h-52 overflow-y-auto pr-1">
             ${(p.variants || []).map(v => `
               <div class="p-2.5 rounded-xl bg-[#0e1014] border border-[#21242d] hover:border-emerald-500/30 transition-colors flex items-center justify-between text-xs">
-                <span class="text-neutral-200 font-sans font-medium truncate pr-2" title="${escapeHtml(v.title || 'Standard')}">${escapeHtml(v.title || 'Standard')}</span>
+                <div class="min-w-0 pr-2">
+                  <span class="text-neutral-200 font-sans font-medium truncate block" title="${escapeHtml(v.title || 'Standard')}">${escapeHtml(v.title || 'Standard')}</span>
+                  ${v.sku ? `<span class="text-[10px] text-amber-300 font-mono block mt-0.5 tracking-wide">SKU: ${escapeHtml(v.sku)}</span>` : ''}
+                </div>
                 <span class="text-emerald-400 font-bold shrink-0 font-mono">₹${p.currency === 'INR' ? Math.round(v.price || 0).toLocaleString('en-IN') : Math.round((v.price || 0) * INR_RATE).toLocaleString('en-IN')}</span>
               </div>
             `).join('')}
