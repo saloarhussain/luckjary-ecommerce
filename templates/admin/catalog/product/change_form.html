@@ -448,7 +448,126 @@
             </div>
           </div>
 
-          <!-- 2. PRODUCT MEDIA & IMAGES -->
+
+
+          <!-- 3. GEMSTONES & SPECIALTY MATERIALS -->
+          <div class="card-surface rounded-xl p-4 sm:p-6 space-y-4" data-purpose="gemstones-card">
+            <div class="flex items-center justify-between pb-3 border-b border-obsidian-700/60">
+              <div class="flex items-center gap-2">
+                <span class="text-base">💎</span>
+                <h2 class="text-sm font-semibold text-white tracking-wide">Gemstones &amp; Settings</h2>
+              </div>
+              <span class="px-2 py-0.5 rounded text-[10px] font-mono text-champagne-400 bg-champagne-500/10 border border-champagne-500/20 whitespace-nowrap">
+                Hand-Set Facets
+              </span>
+            </div>
+
+            <div class="space-y-3.5">
+              <!-- Gemstone Field -->
+              <div class="space-y-1.5">
+                <div class="flex items-center justify-between">
+                  <label class="block text-xs font-medium text-neutral-300" for="id_gemstone">
+                    Featured Gemstone Specification
+                  </label>
+                  <span class="text-[10px] font-mono text-neutral-500">Diamond Simulant / Stone</span>
+                </div>
+                <input 
+                  type="text" 
+                  name="gemstone" 
+                  id="id_gemstone" 
+                  value="{{ adminform.form.gemstone.value|default:'5A Flawless Cubic Zirconia (CZ)' }}" 
+                  class="glass-input w-full text-xs font-medium px-3.5 py-2" 
+                  placeholder="e.g. 5A Flawless Cubic Zirconia (CZ)"
+                >
+                <!-- Quick Preset Chips -->
+                <div class="flex flex-wrap items-center gap-1.5 pt-1">
+                  <span class="text-[10px] font-mono text-neutral-500 uppercase">Quick Presets:</span>
+                  <button type="button" class="atelier-chip" onclick="setGemstonePreset('5A Flawless Cubic Zirconia (CZ)')">✦ 5A Flawless CZ</button>
+                  <button type="button" class="atelier-chip" onclick="setGemstonePreset('Micro-Pavé Diamond Simulants')">✦ Micro-Pavé CZ</button>
+                  <button type="button" class="atelier-chip" onclick="setGemstonePreset('Solitaire Cushion-Cut CZ')">✦ Solitaire Cushion</button>
+                  <button type="button" class="atelier-chip" onclick="setGemstonePreset('Baguette Cut CZ Accents')">✦ Baguette Accents</button>
+                </div>
+              </div>
+
+              <!-- Carat Weight & Dimensions Row -->
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div class="space-y-1.5">
+                  <label class="block text-xs font-medium text-neutral-300" for="id_carat_weight">
+                    Carat Weight / Diamond Equiv. (Optional)
+                  </label>
+                  <input 
+                    type="text" 
+                    name="carat_weight" 
+                    id="id_carat_weight" 
+                    value="{{ adminform.form.carat_weight.value|default:'' }}" 
+                    class="glass-input w-full text-xs px-3.5 py-2" 
+                    placeholder="e.g. 2.50 ctw DEW"
+                  >
+                </div>
+                <div class="space-y-1.5">
+                  <label class="block text-xs font-medium text-neutral-300" for="id_dimensions">
+                    Band Width / Profile (Optional)
+                  </label>
+                  <input 
+                    type="text" 
+                    name="dimensions" 
+                    id="id_dimensions" 
+                    value="{{ adminform.form.dimensions.value|default:'' }}" 
+                    class="glass-input w-full text-xs px-3.5 py-2" 
+                    placeholder="e.g. 2.0mm Comfort Band Width"
+                  >
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 4. SIZING & VARIATIONS (CLEAN 2-BOX BUILDER) -->
+          <div class="card-surface rounded-xl p-4 sm:p-6 space-y-4" data-purpose="sizing-card">
+            <div class="flex items-center justify-between pb-3 border-b border-obsidian-700/60">
+              <div class="flex items-center gap-2">
+                <span class="text-base">📏</span>
+                <h2 class="text-sm font-semibold text-white tracking-wide">Size Variations</h2>
+              </div>
+              <span id="variationsCountBadge" class="px-2 py-0.5 rounded text-[10px] font-mono text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 whitespace-nowrap">
+                1 Size Variation
+              </span>
+            </div>
+
+            <div class="space-y-3">
+              <!-- Dynamic Rows Container -->
+              <div id="variationRowsList" class="space-y-2">
+                <!-- Injected via JavaScript -->
+              </div>
+
+              <!-- Action Toolbar & Storefront Preview -->
+              <div class="flex flex-wrap items-center justify-between gap-2 pt-1.5">
+                <div class="flex items-center gap-2">
+                  <button type="button" onclick="addVariationRow()" class="flex items-center gap-1.5 bg-[#171920] hover:bg-[#1c1f28] text-emerald-300 hover:text-white border border-emerald-500/35 hover:border-emerald-500 text-xs font-semibold px-3.5 py-2 rounded-lg transition-all cursor-pointer shadow-xs" style="text-decoration: none !important;">
+                    <svg class="w-3.5 h-3.5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4"/></svg>
+                    <span>+ Add Size Variation</span>
+                  </button>
+                  <button type="button" onclick="clearAllVariations()" class="text-xs text-neutral-400 hover:text-red-400 px-2 py-1.5 rounded transition-colors cursor-pointer" style="text-decoration: none !important;">
+                    Reset All
+                  </button>
+                </div>
+
+                <!-- Live Storefront Preview -->
+                <div class="flex items-center gap-2 text-xs">
+                  <span class="text-[11px] font-mono text-neutral-400 uppercase">Storefront Dropdown:</span>
+                  <span id="variationsLivePreview" class="font-mono text-emerald-300 bg-emerald-500/10 px-2.5 py-1 rounded border border-emerald-500/20 text-xs font-medium">
+                    7 Inches
+                  </span>
+                </div>
+              </div>
+
+              <!-- Clean Hidden Form Fields (Preserves 100% backend form handling) -->
+              <input type="hidden" name="size_category" id="id_size_category" value="{{ adminform.form.size_category.value|default:'bracelet' }}">
+              <input type="hidden" name="chain_length_or_size" id="id_chain_length_or_size" value="{{ adminform.form.chain_length_or_size.value|default:'' }}">
+              <textarea name="available_sizes" id="id_available_sizes" class="hidden">{{ adminform.form.available_sizes.value|default:'' }}</textarea>
+            </div>
+          </div>
+
+          <!-- 5. PRODUCT MEDIA & IMAGES -->
           <div class="card-surface rounded-xl p-4 sm:p-6 space-y-4" data-purpose="media-gallery-card">
             <div class="flex items-center justify-between pb-3 border-b border-obsidian-700/60">
               <div class="flex items-center gap-2">
@@ -585,281 +704,6 @@
             {% endfor %}
           </div>
 
-          <!-- 3. FINANCIAL LOGIC, PRICING & INVENTORY -->
-          <div class="card-surface rounded-xl p-4 sm:p-6 space-y-4" data-purpose="pricing-inventory-card">
-            <div class="flex items-center justify-between pb-3 border-b border-obsidian-700/60">
-              <div class="flex items-center gap-2">
-                <span class="text-base">₹</span>
-                <h2 class="text-sm font-semibold text-white tracking-wide">Pricing &amp; Inventory</h2>
-              </div>
-              <span class="px-2 py-0.5 rounded text-[10px] font-mono text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 whitespace-nowrap">
-                Stock &amp; Commercials
-              </span>
-            </div>
-
-            <!-- Pricing Grid -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <!-- Price Field (INR) -->
-              <div class="space-y-1.5">
-                <div class="flex items-center justify-between">
-                  <label class="block text-xs font-medium text-neutral-300" for="id_price">
-                    Client Price (INR ₹) <span class="text-emerald-400">*</span>
-                  </label>
-                  <span class="text-[10px] font-mono text-neutral-400" id="usdEquivalent">≈ $0.00 USD</span>
-                </div>
-                <div class="relative flex items-center">
-                  <span class="absolute left-3.5 text-neutral-400 font-mono text-sm">₹</span>
-                  <input 
-                    type="number" 
-                    step="0.01" 
-                    name="price" 
-                    id="id_price" 
-                    value="{{ adminform.form.price.value|default:'' }}" 
-                    required 
-                    class="glass-input w-full text-sm font-mono font-semibold pl-8 pr-3.5 py-2.5 text-white" 
-                    placeholder="3780.00"
-                    oninput="calculateValuation()"
-                  >
-                </div>
-                {% if adminform.form.price.errors %}
-                  <p class="text-red-400 text-xs mt-1">{{ adminform.form.price.errors.0 }}</p>
-                {% endif %}
-              </div>
-
-              <!-- Compare-At Price -->
-              <div class="space-y-1.5">
-                <div class="flex items-center justify-between">
-                  <label class="block text-xs font-medium text-neutral-300" for="id_compare_at_price">
-                    Compare-At Retail Price (INR ₹)
-                  </label>
-                  <span class="text-[10px] font-mono text-neutral-500">MSRP / Original Price</span>
-                </div>
-                <div class="relative flex items-center">
-                  <span class="absolute left-3.5 text-neutral-400 font-mono text-sm">₹</span>
-                  <input 
-                    type="number" 
-                    step="0.01" 
-                    name="compare_at_price" 
-                    id="id_compare_at_price" 
-                    value="{{ adminform.form.compare_at_price.value|default:'' }}" 
-                    class="glass-input w-full text-xs font-mono pl-8 pr-3.5 py-2.5 text-neutral-300" 
-                    placeholder="4200.00"
-                    oninput="calculateValuation()"
-                  >
-                </div>
-              </div>
-            </div>
-
-            <!-- Live Savings & Margin Badge -->
-            <div id="savingsBadgeContainer" class="p-3 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs flex items-center justify-between" style="display:none;">
-              <span class="flex items-center gap-1.5">
-                <span>🏷️</span> <strong id="savingsText">Client Savings: ₹0 (0% OFF)</strong>
-              </span>
-              <span class="text-[10px] font-mono text-emerald-300">Optimal Promotion</span>
-            </div>
-
-            <div class="border-t border-obsidian-700/60 pt-2"></div>
-
-            <!-- Inventory Grid -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <!-- SKU Field -->
-              <div class="space-y-1.5">
-                <div class="flex items-center justify-between">
-                  <label class="block text-xs font-medium text-neutral-300" for="id_sku">
-                    Atelier SKU Identifier
-                  </label>
-                  <button type="button" onclick="autoGenerateSku()" class="text-[10px] font-mono text-emerald-400 hover:text-emerald-300 transition cursor-pointer">
-                    ✦ Auto-Generate SKU
-                  </button>
-                </div>
-                <input 
-                  type="text" 
-                  name="sku" 
-                  id="id_sku" 
-                  value="{{ adminform.form.sku.value|default:'' }}" 
-                  class="glass-input w-full text-xs font-mono font-semibold px-3.5 py-2.5 text-emerald-400 tracking-wider" 
-                  placeholder="e.g. LUK-SIL-RG-001"
-                >
-              </div>
-
-              <!-- Inventory Units -->
-              <div class="space-y-1.5">
-                <div class="flex items-center justify-between">
-                  <label class="block text-xs font-medium text-neutral-300" for="id_inventory">
-                    Available Stock Units <span class="text-emerald-400">*</span>
-                  </label>
-                  <span class="text-[10px] font-mono text-neutral-400" id="stockStatusLabel">Optimal Reserve</span>
-                </div>
-                <input 
-                  type="number" 
-                  name="inventory" 
-                  id="id_inventory" 
-                  value="{{ adminform.form.inventory.value|default:25 }}" 
-                  required 
-                  class="glass-input w-full text-sm font-mono font-semibold px-3.5 py-2.5 text-white" 
-                  placeholder="25"
-                  oninput="handleInventoryChange(this.value)"
-                >
-              </div>
-            </div>
-          </div>
-
-          <!-- 4. SIZING & VARIATIONS (CLEAN 2-BOX BUILDER) -->
-          <div class="card-surface rounded-xl p-4 sm:p-6 space-y-4" data-purpose="sizing-card">
-            <div class="flex items-center justify-between pb-3 border-b border-obsidian-700/60">
-              <div class="flex items-center gap-2">
-                <span class="text-base">📏</span>
-                <h2 class="text-sm font-semibold text-white tracking-wide">Size Variations</h2>
-              </div>
-              <span id="variationsCountBadge" class="px-2 py-0.5 rounded text-[10px] font-mono text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 whitespace-nowrap">
-                1 Size Variation
-              </span>
-            </div>
-
-            <div class="space-y-3">
-              <!-- Dynamic Rows Container -->
-              <div id="variationRowsList" class="space-y-2">
-                <!-- Injected via JavaScript -->
-              </div>
-
-              <!-- Action Toolbar & Storefront Preview -->
-              <div class="flex flex-wrap items-center justify-between gap-2 pt-1.5">
-                <div class="flex items-center gap-2">
-                  <button type="button" onclick="addVariationRow()" class="flex items-center gap-1.5 bg-[#171920] hover:bg-[#1c1f28] text-emerald-300 hover:text-white border border-emerald-500/35 hover:border-emerald-500 text-xs font-semibold px-3.5 py-2 rounded-lg transition-all cursor-pointer shadow-xs" style="text-decoration: none !important;">
-                    <svg class="w-3.5 h-3.5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4"/></svg>
-                    <span>+ Add Size Variation</span>
-                  </button>
-                  <button type="button" onclick="clearAllVariations()" class="text-xs text-neutral-400 hover:text-red-400 px-2 py-1.5 rounded transition-colors cursor-pointer" style="text-decoration: none !important;">
-                    Reset All
-                  </button>
-                </div>
-
-                <!-- Live Storefront Preview -->
-                <div class="flex items-center gap-2 text-xs">
-                  <span class="text-[11px] font-mono text-neutral-400 uppercase">Storefront Dropdown:</span>
-                  <span id="variationsLivePreview" class="font-mono text-emerald-300 bg-emerald-500/10 px-2.5 py-1 rounded border border-emerald-500/20 text-xs font-medium">
-                    7 Inches
-                  </span>
-                </div>
-              </div>
-
-              <!-- Clean Hidden Form Fields (Preserves 100% backend form handling) -->
-              <input type="hidden" name="size_category" id="id_size_category" value="{{ adminform.form.size_category.value|default:'bracelet' }}">
-              <input type="hidden" name="chain_length_or_size" id="id_chain_length_or_size" value="{{ adminform.form.chain_length_or_size.value|default:'' }}">
-              <textarea name="available_sizes" id="id_available_sizes" class="hidden">{{ adminform.form.available_sizes.value|default:'' }}</textarea>
-            </div>
-          </div>
-
-          <!-- 5. GEMSTONES & SPECIALTY MATERIALS -->
-          <div class="card-surface rounded-xl p-4 sm:p-6 space-y-4" data-purpose="gemstones-card">
-            <div class="flex items-center justify-between pb-3 border-b border-obsidian-700/60">
-              <div class="flex items-center gap-2">
-                <span class="text-base">💎</span>
-                <h2 class="text-sm font-semibold text-white tracking-wide">Gemstones &amp; Settings</h2>
-              </div>
-              <span class="px-2 py-0.5 rounded text-[10px] font-mono text-champagne-400 bg-champagne-500/10 border border-champagne-500/20 whitespace-nowrap">
-                Hand-Set Facets
-              </span>
-            </div>
-
-            <div class="space-y-3.5">
-              <!-- Gemstone Field -->
-              <div class="space-y-1.5">
-                <div class="flex items-center justify-between">
-                  <label class="block text-xs font-medium text-neutral-300" for="id_gemstone">
-                    Featured Gemstone Specification
-                  </label>
-                  <span class="text-[10px] font-mono text-neutral-500">Diamond Simulant / Stone</span>
-                </div>
-                <input 
-                  type="text" 
-                  name="gemstone" 
-                  id="id_gemstone" 
-                  value="{{ adminform.form.gemstone.value|default:'5A Flawless Cubic Zirconia (CZ)' }}" 
-                  class="glass-input w-full text-xs font-medium px-3.5 py-2" 
-                  placeholder="e.g. 5A Flawless Cubic Zirconia (CZ)"
-                >
-                <!-- Quick Preset Chips -->
-                <div class="flex flex-wrap items-center gap-1.5 pt-1">
-                  <span class="text-[10px] font-mono text-neutral-500 uppercase">Quick Presets:</span>
-                  <button type="button" class="atelier-chip" onclick="setGemstonePreset('5A Flawless Cubic Zirconia (CZ)')">✦ 5A Flawless CZ</button>
-                  <button type="button" class="atelier-chip" onclick="setGemstonePreset('Micro-Pavé Diamond Simulants')">✦ Micro-Pavé CZ</button>
-                  <button type="button" class="atelier-chip" onclick="setGemstonePreset('Solitaire Cushion-Cut CZ')">✦ Solitaire Cushion</button>
-                  <button type="button" class="atelier-chip" onclick="setGemstonePreset('Baguette Cut CZ Accents')">✦ Baguette Accents</button>
-                </div>
-              </div>
-
-              <!-- Carat Weight & Dimensions Row -->
-              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                <div class="space-y-1.5">
-                  <label class="block text-xs font-medium text-neutral-300" for="id_carat_weight">
-                    Carat Weight / Diamond Equiv. (Optional)
-                  </label>
-                  <input 
-                    type="text" 
-                    name="carat_weight" 
-                    id="id_carat_weight" 
-                    value="{{ adminform.form.carat_weight.value|default:'' }}" 
-                    class="glass-input w-full text-xs px-3.5 py-2" 
-                    placeholder="e.g. 2.50 ctw DEW"
-                  >
-                </div>
-                <div class="space-y-1.5">
-                  <label class="block text-xs font-medium text-neutral-300" for="id_dimensions">
-                    Band Width / Profile (Optional)
-                  </label>
-                  <input 
-                    type="text" 
-                    name="dimensions" 
-                    id="id_dimensions" 
-                    value="{{ adminform.form.dimensions.value|default:'' }}" 
-                    class="glass-input w-full text-xs px-3.5 py-2" 
-                    placeholder="e.g. 2.0mm Comfort Band Width"
-                  >
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- 6. HAUTE CRAFTSMANSHIP & CARE DIRECTIVES -->
-          <div class="card-surface rounded-xl p-4 sm:p-6 space-y-4" data-purpose="craftsmanship-card">
-            <div class="flex items-center justify-between pb-3 border-b border-obsidian-700/60">
-              <div class="flex items-center gap-2">
-                <span class="text-base">🏛️</span>
-                <h2 class="text-sm font-semibold text-white tracking-wide">Haute Craftsmanship &amp; Care Directives</h2>
-              </div>
-              <span class="px-2 py-0.5 rounded text-[10px] font-mono text-champagne-400 bg-champagne-500/10 border border-champagne-500/20 whitespace-nowrap">
-                Atelier Heritage
-              </span>
-            </div>
-
-            <div class="space-y-3.5">
-              <div class="space-y-1.5">
-                <label class="block text-xs font-medium text-neutral-300" for="id_craftsmanship_details">
-                  Master Silversmith Craftsmanship Statement
-                </label>
-                <textarea 
-                  name="craftsmanship_details" 
-                  id="id_craftsmanship_details" 
-                  rows="3" 
-                  class="glass-input w-full text-xs px-3.5 py-2.5 leading-relaxed"
-                >{{ adminform.form.craftsmanship_details.value|default:"Hand-forged by master jewellers using certified recycled precious metals and conflict-free gemstones. Every piece undergoes rigorous 5-stage microscopic inspection." }}</textarea>
-              </div>
-
-              <div class="space-y-1.5">
-                <label class="block text-xs font-medium text-neutral-300" for="id_care_instructions">
-                  Patron Care &amp; Longevity Instructions
-                </label>
-                <textarea 
-                  name="care_instructions" 
-                  id="id_care_instructions" 
-                  rows="3" 
-                  class="glass-input w-full text-xs px-3.5 py-2.5 leading-relaxed"
-                >{{ adminform.form.care_instructions.value|default:"Store in the provided velvet Luckjary lockbox. Avoid perfumes, lotion, and chlorine. Gently polish with the included microfiber jeweler cloth." }}</textarea>
-              </div>
-            </div>
-          </div>
-
           <!-- 7. SEARCH ENGINE LISTING PREVIEW (SEO) -->
           <div class="card-surface rounded-xl p-4 sm:p-6 space-y-4" data-purpose="seo-card">
             <div class="flex items-center justify-between pb-3 border-b border-obsidian-700/60">
@@ -923,8 +767,6 @@
               </div>
             </div>
           </div>
-
-        </div>
 
         </div>
         <!-- END: Left Column -->
@@ -1060,7 +902,135 @@
             </div>
           </div>
 
-          <!-- 2. ATELIER TAXONOMY & CLASSIFICATION -->
+          <!-- 2. FINANCIAL TELEMETRY & PRICING -->
+          <div class="card-surface rounded-xl p-4 sm:p-6 space-y-4" data-purpose="pricing-card">
+            <div class="flex items-center justify-between pb-3 border-b border-obsidian-700/60">
+              <div class="flex items-center gap-2">
+                <span class="text-base">₹</span>
+                <h2 class="text-sm font-semibold text-white tracking-wide">Financial Logic &amp; Pricing</h2>
+              </div>
+              <span class="px-2 py-0.5 rounded text-[10px] font-mono text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 whitespace-nowrap">
+                Receivable
+              </span>
+            </div>
+
+            <div class="space-y-3.5">
+              <!-- Price Field (INR) -->
+              <div class="space-y-1.5">
+                <div class="flex items-center justify-between">
+                  <label class="block text-xs font-medium text-neutral-300" for="id_price">
+                    Client Price (INR ₹) <span class="text-emerald-400">*</span>
+                  </label>
+                  <span class="text-[10px] font-mono text-neutral-400" id="usdEquivalent">≈ $0.00 USD</span>
+                </div>
+                <div class="relative flex items-center">
+                  <span class="absolute left-3.5 text-neutral-400 font-mono text-sm">₹</span>
+                  <input 
+                    type="number" 
+                    step="0.01" 
+                    name="price" 
+                    id="id_price" 
+                    value="{{ adminform.form.price.value|default:'' }}" 
+                    required 
+                    class="glass-input w-full text-sm font-mono font-semibold pl-8 pr-3.5 py-2.5 text-white" 
+                    placeholder="3780.00"
+                    oninput="calculateValuation()"
+                  >
+                </div>
+                {% if adminform.form.price.errors %}
+                  <p class="text-red-400 text-xs mt-1">{{ adminform.form.price.errors.0 }}</p>
+                {% endif %}
+              </div>
+
+              <!-- Compare-At Price -->
+              <div class="space-y-1.5">
+                <div class="flex items-center justify-between">
+                  <label class="block text-xs font-medium text-neutral-300" for="id_compare_at_price">
+                    Compare-At Retail Price (INR ₹)
+                  </label>
+                  <span class="text-[10px] font-mono text-neutral-500">MSRP / Original</span>
+                </div>
+                <div class="relative flex items-center">
+                  <span class="absolute left-3.5 text-neutral-400 font-mono text-sm">₹</span>
+                  <input 
+                    type="number" 
+                    step="0.01" 
+                    name="compare_at_price" 
+                    id="id_compare_at_price" 
+                    value="{{ adminform.form.compare_at_price.value|default:'' }}" 
+                    class="glass-input w-full text-xs font-mono pl-8 pr-3.5 py-2 text-neutral-300" 
+                    placeholder="4200.00"
+                    oninput="calculateValuation()"
+                  >
+                </div>
+              </div>
+
+              <!-- Live Savings & Margin Badge -->
+              <div id="savingsBadgeContainer" class="p-3 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs flex items-center justify-between" style="display:none;">
+                <span class="flex items-center gap-1.5">
+                  <span>🏷️</span> <strong id="savingsText">Client Savings: ₹0 (0% OFF)</strong>
+                </span>
+                <span class="text-[10px] font-mono text-emerald-300">Optimal Promotion</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- 3. INVENTORY & SKU VAULT -->
+          <div class="card-surface rounded-xl p-4 sm:p-6 space-y-4" data-purpose="inventory-card">
+            <div class="flex items-center justify-between pb-3 border-b border-obsidian-700/60">
+              <div class="flex items-center gap-2">
+                <svg class="w-4 h-4 text-neutral-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"></path></svg>
+                <h2 class="text-sm font-semibold text-white tracking-wide">Inventory &amp; SKU Vault</h2>
+              </div>
+              <span class="px-2 py-0.5 rounded text-[10px] font-mono text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 whitespace-nowrap">
+                Stock Tracked
+              </span>
+            </div>
+
+            <div class="space-y-3.5">
+              <!-- SKU Field -->
+              <div class="space-y-1.5">
+                <div class="flex items-center justify-between">
+                  <label class="block text-xs font-medium text-neutral-300" for="id_sku">
+                    Atelier SKU Identifier
+                  </label>
+                  <button type="button" onclick="autoGenerateSku()" class="text-[10px] font-mono text-emerald-400 hover:text-emerald-300 transition cursor-pointer">
+                    ✦ Auto-Generate SKU
+                  </button>
+                </div>
+                <input 
+                  type="text" 
+                  name="sku" 
+                  id="id_sku" 
+                  value="{{ adminform.form.sku.value|default:'' }}" 
+                  class="glass-input w-full text-xs font-mono font-semibold px-3.5 py-2 text-emerald-400 tracking-wider" 
+                  placeholder="e.g. LUK-SIL-RG-001"
+                >
+              </div>
+
+              <!-- Inventory Units -->
+              <div class="space-y-1.5">
+                <div class="flex items-center justify-between">
+                  <label class="block text-xs font-medium text-neutral-300" for="id_inventory">
+                    Available Stock Units <span class="text-emerald-400">*</span>
+                  </label>
+                  <span class="text-[10px] font-mono text-neutral-400" id="stockStatusLabel">Optimal Reserve</span>
+                </div>
+                <input 
+                  type="number" 
+                  name="inventory" 
+                  id="id_inventory" 
+                  value="{{ adminform.form.inventory.value|default:25 }}" 
+                  required 
+                  class="glass-input w-full text-sm font-mono font-semibold px-3.5 py-2 text-white" 
+                  placeholder="25"
+                  oninput="handleInventoryChange(this.value)"
+                >
+              </div>
+            </div>
+          </div>
+
+          <!-- 4. ATELIER TAXONOMY & CLASSIFICATION -->
           <div class="card-surface rounded-xl p-4 sm:p-6 space-y-4" data-purpose="taxonomy-card">
             <div class="flex items-center justify-between pb-3 border-b border-obsidian-700/60">
               <h2 class="text-sm font-semibold text-white tracking-wide">Product Organization &amp; Taxonomy</h2>
@@ -1107,7 +1077,7 @@
             </div>
           </div>
 
-          <!-- 3. STICKY ACTION BUTTONS PANEL -->
+          <!-- 5. STICKY ACTION BUTTONS PANEL -->
           <div class="card-surface rounded-xl p-4 space-y-2.5">
             <button type="submit" name="_save" class="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-obsidian-950 font-semibold text-xs tracking-wide transition shadow-lg glow-emerald cursor-pointer" style="color: #07080a !important; text-decoration: none !important;">
               <svg class="w-4 h-4 text-[#07080a]" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round"></path></svg>
@@ -1123,7 +1093,46 @@
             </div>
           </div>
 
-        </div>
+
+
+          <!-- 6. HAUTE CRAFTSMANSHIP & CARE DIRECTIVES -->
+          <div class="card-surface rounded-xl p-4 sm:p-6 space-y-4" data-purpose="craftsmanship-card">
+            <div class="flex items-center justify-between pb-3 border-b border-obsidian-700/60">
+              <div class="flex items-center gap-2">
+                <span class="text-base">🏛️</span>
+                <h2 class="text-sm font-semibold text-white tracking-wide">Haute Craftsmanship &amp; Care Directives</h2>
+              </div>
+              <span class="px-2 py-0.5 rounded text-[10px] font-mono text-champagne-400 bg-champagne-500/10 border border-champagne-500/20 whitespace-nowrap">
+                Atelier Heritage
+              </span>
+            </div>
+
+            <div class="space-y-3.5">
+              <div class="space-y-1.5">
+                <label class="block text-xs font-medium text-neutral-300" for="id_craftsmanship_details">
+                  Master Silversmith Craftsmanship Statement
+                </label>
+                <textarea 
+                  name="craftsmanship_details" 
+                  id="id_craftsmanship_details" 
+                  rows="3" 
+                  class="glass-input w-full text-xs px-3.5 py-2.5 leading-relaxed"
+                >{{ adminform.form.craftsmanship_details.value|default:"Hand-forged by master jewellers using certified recycled precious metals and conflict-free gemstones. Every piece undergoes rigorous 5-stage microscopic inspection." }}</textarea>
+              </div>
+
+              <div class="space-y-1.5">
+                <label class="block text-xs font-medium text-neutral-300" for="id_care_instructions">
+                  Patron Care &amp; Longevity Instructions
+                </label>
+                <textarea 
+                  name="care_instructions" 
+                  id="id_care_instructions" 
+                  rows="3" 
+                  class="glass-input w-full text-xs px-3.5 py-2.5 leading-relaxed"
+                >{{ adminform.form.care_instructions.value|default:"Store in the provided velvet Luckjary lockbox. Avoid perfumes, lotion, and chlorine. Gently polish with the included microfiber jeweler cloth." }}</textarea>
+              </div>
+            </div>
+          </div>
 
         </div>
         <!-- END: Right Column -->
