@@ -218,6 +218,28 @@ class Product(models.Model):
                 'US Size 13 (69.7mm circumference)',
                 'Custom Bespoke Sizing (Concierge will contact you)',
             ]
+        elif size_type == 'bracelet' or 'bracelet' in cat_slug:
+            if self.chain_length_or_size:
+                return [self.chain_length_or_size]
+            return [
+                '6.5" (Petite Fit)',
+                '7.0" (Standard Fit - Most Popular)',
+                '7.5" (Relaxed Fit)',
+                '8.0" (Comfort Fit)',
+            ]
+        elif size_type == 'necklace' or 'necklace' in cat_slug:
+            if self.chain_length_or_size:
+                return [self.chain_length_or_size]
+            return [
+                '16" (Choker / Collar)',
+                '18" (Standard Princess)',
+                '20" (Matinee)',
+                '24" (Opera)',
+            ]
+        elif size_type == 'earring' or 'earring' in cat_slug:
+            return [self.chain_length_or_size or 'Standard Friction Push Backing']
+        elif size_type == 'universal':
+            return [self.chain_length_or_size or 'Universal Luxury Fit (One Size)']
         return []
 
     @property

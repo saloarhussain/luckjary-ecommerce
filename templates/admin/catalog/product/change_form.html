@@ -623,6 +623,22 @@
                   <button type="button" class="atelier-chip text-red-400 hover:text-red-300" onclick="clearSizes()">✕ Reset to Auto</button>
                 </div>
 
+                <!-- Quick Suites Bar for Bracelets -->
+                <div class="flex flex-wrap items-center gap-1.5 pb-1" id="braceletQuickSuites" style="display: none;">
+                  <span class="text-[10px] font-mono text-neutral-500 uppercase">Bracelet Presets:</span>
+                  <button type="button" class="atelier-chip text-emerald-400 border-emerald-500/30" onclick="applyCustomSize('7.0&quot; (Standard Fit)')">★ Single Size: 7.0&quot; Standard</button>
+                  <button type="button" class="atelier-chip" onclick="applyCustomSize('6.5&quot;, 7.0&quot;, 7.5&quot;')">★ Multi-Size (6.5&quot;, 7.0&quot;, 7.5&quot;)</button>
+                  <button type="button" class="atelier-chip text-red-400 hover:text-red-300" onclick="clearSizes()">✕ Reset</button>
+                </div>
+
+                <!-- Quick Suites Bar for Necklaces -->
+                <div class="flex flex-wrap items-center gap-1.5 pb-1" id="necklaceQuickSuites" style="display: none;">
+                  <span class="text-[10px] font-mono text-neutral-500 uppercase">Necklace Presets:</span>
+                  <button type="button" class="atelier-chip text-emerald-400 border-emerald-500/30" onclick="applyCustomSize('18&quot; (Standard Princess)')">★ 18&quot; Standard</button>
+                  <button type="button" class="atelier-chip" onclick="applyCustomSize('16&quot;, 18&quot;, 20&quot;')">★ Multi-Length (16&quot;, 18&quot;, 20&quot;)</button>
+                  <button type="button" class="atelier-chip text-red-400 hover:text-red-300" onclick="clearSizes()">✕ Reset</button>
+                </div>
+
                 <textarea 
                   name="available_sizes" 
                   id="id_available_sizes" 
@@ -1313,6 +1329,13 @@ function clearSizes() {
   renderRingChips();
 }
 
+function applyCustomSize(val) {
+  const input = document.getElementById('id_available_sizes');
+  if (input) {
+    input.value = val;
+  }
+}
+
 function updateSizeChips() {
   renderRingChips();
 }
@@ -1465,24 +1488,22 @@ function handleStyleChange(select) {
 
 function handleSizeCategoryChange(val) {
   const ringSuites = document.getElementById('ringQuickSuites');
+  const braceletSuites = document.getElementById('braceletQuickSuites');
+  const necklaceSuites = document.getElementById('necklaceQuickSuites');
   const chipsContainer = document.getElementById('interactiveChipsContainer');
   const specInput = document.getElementById('id_chain_length_or_size');
   
+  if (ringSuites) ringSuites.style.display = (val === 'ring') ? 'flex' : 'none';
+  if (braceletSuites) braceletSuites.style.display = (val === 'bracelet') ? 'flex' : 'none';
+  if (necklaceSuites) necklaceSuites.style.display = (val === 'necklace') ? 'flex' : 'none';
+  if (chipsContainer) chipsContainer.style.display = (val === 'ring') ? 'block' : 'none';
+
   if (val === 'ring') {
-    if (ringSuites) ringSuites.style.display = 'flex';
-    if (chipsContainer) chipsContainer.style.display = 'block';
     if (specInput && !specInput.value) specInput.placeholder = 'e.g. 2.0mm Classic Comfort Band';
   } else if (val === 'necklace') {
-    if (ringSuites) ringSuites.style.display = 'none';
-    if (chipsContainer) chipsContainer.style.display = 'none';
     if (specInput && !specInput.value) specInput.value = 'Universal 18" with 2" Extender';
   } else if (val === 'bracelet') {
-    if (ringSuites) ringSuites.style.display = 'none';
-    if (chipsContainer) chipsContainer.style.display = 'none';
     if (specInput && !specInput.value) specInput.value = 'Universal 7.0" Luxury Fit';
-  } else {
-    if (ringSuites) ringSuites.style.display = 'none';
-    if (chipsContainer) chipsContainer.style.display = 'none';
   }
 }
 
@@ -1495,6 +1516,10 @@ function updateImagePreview(prefix, url) {
 
 // Initial script execution on DOM ready
 document.addEventListener('DOMContentLoaded', () => {
+  const catSelect = document.getElementById('id_size_category');
+  if (catSelect) {
+    handleSizeCategoryChange(catSelect.value);
+  }
   renderRingChips();
   calculateValuation();
   updateSeoPreview();
