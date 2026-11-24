@@ -192,7 +192,12 @@ class Product(models.Model):
             if custom_list:
                 return custom_list
 
-        cat_slug = self.category.slug.lower() if self.category else ''
+        cat_slug = ''
+        try:
+            if self.category_id and self.category:
+                cat_slug = self.category.slug.lower()
+        except Exception:
+            cat_slug = ''
         size_type = self.size_category or ('ring' if 'ring' in cat_slug else 'universal')
 
         if size_type == 'ring' or 'ring' in cat_slug:

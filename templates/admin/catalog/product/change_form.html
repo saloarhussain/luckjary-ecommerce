@@ -559,20 +559,20 @@
             </div>
           </div>
 
-          <!-- 4. SIZING FRAMEWORK & AVAILABLE SIZES -->
+          <!-- 4. SIZING FRAMEWORK & AVAILABLE SIZES (2-BOX DYNAMIC VARIATION BUILDER) -->
           <div class="card-surface rounded-xl p-4 sm:p-6 space-y-4" data-purpose="sizing-card">
             <div class="flex items-center justify-between pb-3 border-b border-obsidian-700/60">
               <div class="flex items-center gap-2">
                 <span class="text-base">📏</span>
-                <h2 class="text-sm font-semibold text-white tracking-wide">Sizing Framework &amp; Sizing Range</h2>
+                <h2 class="text-sm font-semibold text-white tracking-wide">Sizing Framework &amp; Size Variations</h2>
               </div>
-              <span class="px-2 py-0.5 rounded text-[10px] font-mono text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 whitespace-nowrap">
-                Storefront Sizing Suite
+              <span id="variationsCountBadge" class="px-2 py-0.5 rounded text-[10px] font-mono text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 whitespace-nowrap">
+                1 Size Variation
               </span>
             </div>
 
-            <div class="space-y-3.5">
-              <!-- Sizing Framework Category -->
+            <div class="space-y-4">
+              <!-- Category & Technical Spec -->
               <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div class="space-y-1.5">
                   <label class="block text-xs font-medium text-neutral-300" for="id_size_category">
@@ -600,66 +600,78 @@
                     id="id_chain_length_or_size" 
                     value="{{ adminform.form.chain_length_or_size.value|default:'' }}" 
                     class="glass-input w-full text-xs px-3.5 py-2" 
-                    placeholder="e.g. 2.0mm Classic Comfort Band (or 18'' with 2'' Extender)"
+                    placeholder="e.g. Universal 7.0&quot; Luxury Fit"
                   >
                 </div>
               </div>
 
-              <!-- Available Sizes Textarea & Quick Suites -->
-              <div class="space-y-2 pt-1">
+              <!-- 2-BOX DYNAMIC VARIATION BUILDER -->
+              <div class="space-y-3 pt-1">
                 <div class="flex items-center justify-between">
-                  <label class="block text-xs font-medium text-neutral-300" for="id_available_sizes">
-                    Available Custom Sizing Suite
-                  </label>
-                  <span class="text-[10px] font-mono text-emerald-400">Blank = Full Standard Range</span>
-                </div>
-
-                <!-- Quick Suites Bar for Rings -->
-                <div class="flex flex-wrap items-center gap-1.5 pb-1" id="ringQuickSuites">
-                  <span class="text-[10px] font-mono text-neutral-500 uppercase">Quick Suites:</span>
-                  <button type="button" class="atelier-chip" onclick="applyQuickSuite('women')">★ Women's Standard (5 - 9)</button>
-                  <button type="button" class="atelier-chip" onclick="applyQuickSuite('men')">★ Men's Standard (8 - 12)</button>
-                  <button type="button" class="atelier-chip" onclick="applyQuickSuite('full')">★ Full US Range (4 - 13)</button>
-                  <button type="button" class="atelier-chip text-red-400 hover:text-red-300" onclick="clearSizes()">✕ Reset to Auto</button>
-                </div>
-
-                <!-- Quick Suites Bar for Bracelets -->
-                <div class="flex flex-wrap items-center gap-1.5 pb-1" id="braceletQuickSuites" style="display: none;">
-                  <span class="text-[10px] font-mono text-neutral-500 uppercase">Bracelet Presets:</span>
-                  <button type="button" class="atelier-chip text-emerald-400 border-emerald-500/30" onclick="applyCustomSize('7.0&quot; (Standard Fit)')">★ Single Size: 7.0&quot; Standard</button>
-                  <button type="button" class="atelier-chip" onclick="applyCustomSize('6.5&quot;, 7.0&quot;, 7.5&quot;')">★ Multi-Size (6.5&quot;, 7.0&quot;, 7.5&quot;)</button>
-                  <button type="button" class="atelier-chip text-red-400 hover:text-red-300" onclick="clearSizes()">✕ Reset</button>
-                </div>
-
-                <!-- Quick Suites Bar for Necklaces -->
-                <div class="flex flex-wrap items-center gap-1.5 pb-1" id="necklaceQuickSuites" style="display: none;">
-                  <span class="text-[10px] font-mono text-neutral-500 uppercase">Necklace Presets:</span>
-                  <button type="button" class="atelier-chip text-emerald-400 border-emerald-500/30" onclick="applyCustomSize('18&quot; (Standard Princess)')">★ 18&quot; Standard</button>
-                  <button type="button" class="atelier-chip" onclick="applyCustomSize('16&quot;, 18&quot;, 20&quot;')">★ Multi-Length (16&quot;, 18&quot;, 20&quot;)</button>
-                  <button type="button" class="atelier-chip text-red-400 hover:text-red-300" onclick="clearSizes()">✕ Reset</button>
-                </div>
-
-                <textarea 
-                  name="available_sizes" 
-                  id="id_available_sizes" 
-                  rows="3" 
-                  class="glass-input w-full text-xs px-3.5 py-2 font-mono" 
-                  placeholder="Leave blank to automatically provide the complete standard size range for this jewelry piece (e.g. US 4 through 13 with half-sizes for rings), or enter custom sizes separated by commas."
-                  oninput="updateSizeChips()"
-                >{{ adminform.form.available_sizes.value|default:'' }}</textarea>
-
-                <!-- Interactive Size Chips Grid (Rings US 4 to 13) -->
-                <div class="pt-1.5" id="interactiveChipsContainer">
-                  <div class="text-[11px] font-medium text-neutral-400 mb-1.5">Interactive Size Selector (Click to toggle sizes):</div>
-                  <div class="flex flex-wrap gap-1.5" id="ringChipsGrid">
-                    <!-- Populated by JS -->
+                  <div>
+                    <label class="block text-xs font-semibold text-white tracking-wide">
+                      Size Variations (Box 1: Type / Unit &bull; Box 2: Size Value)
+                    </label>
+                    <p class="text-[11px] text-neutral-400 mt-0.5">
+                      Select unit (<span class="text-neutral-300 font-mono">Inch, cm, mm</span>) and enter the size (<span class="text-neutral-300 font-mono">e.g. 7</span>). Click &ldquo;+ Add Size Variation&rdquo; to add as many sizes as you carry.
+                    </p>
                   </div>
                 </div>
 
-                <div class="p-3 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-emerald-300 text-xs flex items-center gap-2">
-                  <span>✨</span>
-                  <span><strong>Intelligent Default:</strong> Leaving available sizes blank automatically offers the complete standard atelier suite on the online boutique.</span>
+                <!-- Dynamic Rows Container -->
+                <div id="variationRowsList" class="space-y-2">
+                  <!-- Injected via JavaScript -->
                 </div>
+
+                <!-- Action Toolbar & Storefront Preview -->
+                <div class="flex flex-wrap items-center justify-between gap-2 pt-1.5">
+                  <div class="flex items-center gap-2">
+                    <button type="button" onclick="addVariationRow()" class="flex items-center gap-1.5 bg-[#171920] hover:bg-[#1c1f28] text-emerald-300 hover:text-white border border-emerald-500/35 hover:border-emerald-500 text-xs font-semibold px-3.5 py-2 rounded-lg transition-all cursor-pointer shadow-xs" style="text-decoration: none !important;">
+                      <svg class="w-3.5 h-3.5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4"/></svg>
+                      <span>+ Add Size Variation</span>
+                    </button>
+                    <button type="button" onclick="clearAllVariations()" class="text-xs text-neutral-400 hover:text-red-400 px-2 py-1.5 rounded transition-colors cursor-pointer" style="text-decoration: none !important;">
+                      Reset All
+                    </button>
+                  </div>
+
+                  <!-- Live Storefront Preview -->
+                  <div class="flex items-center gap-2 text-xs">
+                    <span class="text-[11px] font-mono text-neutral-400 uppercase">Storefront Dropdown:</span>
+                    <span id="variationsLivePreview" class="font-mono text-emerald-300 bg-emerald-500/10 px-2.5 py-1 rounded border border-emerald-500/20 text-xs font-medium">
+                      7 Inches
+                    </span>
+                  </div>
+                </div>
+
+                <!-- Hidden sync textarea (preserves 100% Django form compatibility) -->
+                <textarea 
+                  name="available_sizes" 
+                  id="id_available_sizes" 
+                  class="hidden"
+                >{{ adminform.form.available_sizes.value|default:'' }}</textarea>
+
+                <!-- Advanced Presets Accordion (for quick ring ranges) -->
+                <details class="group mt-3 pt-2.5 border-t border-obsidian-700/50">
+                  <summary class="text-[11px] font-mono text-neutral-400 hover:text-neutral-200 cursor-pointer flex items-center gap-1 select-none py-1">
+                    <svg class="w-3.5 h-3.5 transition-transform group-open:rotate-90 text-neutral-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                    <span>Advanced Quick Sizing Presets (US Ring Suites)</span>
+                  </summary>
+                  
+                  <div class="pt-2.5 space-y-2">
+                    <div class="flex flex-wrap items-center gap-1.5" id="ringQuickSuites">
+                      <span class="text-[10px] font-mono text-neutral-500 uppercase">Ring Suites:</span>
+                      <button type="button" class="atelier-chip" onclick="applyQuickSuite('women')">★ Women's Standard (5 - 9)</button>
+                      <button type="button" class="atelier-chip" onclick="applyQuickSuite('men')">★ Men's Standard (8 - 12)</button>
+                      <button type="button" class="atelier-chip" onclick="applyQuickSuite('full')">★ Full US Range (4 - 13)</button>
+                    </div>
+
+                    <div id="interactiveChipsContainer" class="pt-1">
+                      <div class="flex flex-wrap gap-1.5" id="ringChipsGrid"></div>
+                    </div>
+                  </div>
+                </details>
+
               </div>
             </div>
           </div>
@@ -1313,26 +1325,256 @@ function toggleSize(size) {
     current.push(size);
   }
   input.value = current.join(', ');
-  renderRingChips();
+  initVariationsFromTextarea();
 }
 
 function applyQuickSuite(key) {
   const input = document.getElementById('id_available_sizes');
   if (SUITES[key]) {
     input.value = SUITES[key].join(', ');
-    renderRingChips();
+    initVariationsFromTextarea();
   }
 }
 
 function clearSizes() {
   document.getElementById('id_available_sizes').value = '';
+  initVariationsFromTextarea();
+}
+
+// --- 2-BOX DYNAMIC SIZE VARIATIONS BUILDER ---
+let variationRowCounter = 0;
+
+function formatVariationPreview(unit, val) {
+  val = (val || '').trim();
+  if (!val) return '';
+  if (unit === 'in') {
+    const clean = val.replace(/\s*(inches|inch|"|'')\s*$/i, '').trim();
+    return clean ? `${clean} Inches` : val;
+  } else if (unit === 'quote') {
+    const clean = val.replace(/\s*(inches|inch|"|'')\s*$/i, '').trim();
+    return clean ? `${clean}"` : val;
+  } else if (unit === 'cm') {
+    const clean = val.replace(/\s*cm\s*$/i, '').trim();
+    return clean ? `${clean} cm` : val;
+  } else if (unit === 'mm') {
+    const clean = val.replace(/\s*mm\s*$/i, '').trim();
+    return clean ? `${clean} mm` : val;
+  } else if (unit === 'us') {
+    const clean = val.replace(/^US\s*(Size\s*)?/i, '').trim();
+    return clean ? `US Size ${clean}` : val;
+  }
+  return val;
+}
+
+function escapeHtml(text) {
+  if (!text) return '';
+  return text.toString()
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+}
+
+function createVariationRowHtml(rowId, unit = 'in', val = '') {
+  const preview = formatVariationPreview(unit, val) || 'Enter size';
+  return `
+    <div class="variation-row flex items-center gap-2 sm:gap-3 p-2.5 rounded-lg bg-[#111318] border border-[#21242d] hover:border-obsidian-600 transition-colors" id="var_row_${rowId}" data-row-id="${rowId}">
+      <!-- Box 1: Size Type / Unit -->
+      <div class="w-36 sm:w-48 shrink-0">
+        <label class="block text-[10px] font-mono text-neutral-400 mb-1">Box 1: Size Type</label>
+        <div class="relative">
+          <select class="var-unit glass-input atelier-select w-full appearance-none rounded-lg text-xs px-3 py-2 pr-8 cursor-pointer font-medium" onchange="handleVariationChange()">
+            <option value="in" ${unit === 'in' ? 'selected' : ''}>Inch (Inches)</option>
+            <option value="quote" ${unit === 'quote' ? 'selected' : ''}>Inch (")</option>
+            <option value="cm" ${unit === 'cm' ? 'selected' : ''}>Centimeter (cm)</option>
+            <option value="mm" ${unit === 'mm' ? 'selected' : ''}>Millimeter (mm)</option>
+            <option value="us" ${unit === 'us' ? 'selected' : ''}>US Ring Size</option>
+            <option value="custom" ${unit === 'custom' ? 'selected' : ''}>Custom / Free Text</option>
+          </select>
+          <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2.5 text-neutral-400">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+          </div>
+        </div>
+      </div>
+
+      <!-- Box 2: Size Value -->
+      <div class="flex-1">
+        <label class="block text-[10px] font-mono text-neutral-400 mb-1">Box 2: Size Value</label>
+        <input 
+          type="text" 
+          class="var-val glass-input w-full text-xs px-3.5 py-2 font-mono text-white placeholder-neutral-500" 
+          placeholder="e.g. 7" 
+          value="${escapeHtml(val)}" 
+          oninput="handleVariationChange()"
+        >
+      </div>
+
+      <!-- Live Preview Badge -->
+      <div class="shrink-0 hidden sm:flex flex-col items-start min-w-[90px]">
+        <span class="text-[10px] font-mono text-neutral-500 mb-1">Storefront Badge:</span>
+        <span class="var-badge text-xs font-mono text-emerald-400 bg-emerald-500/10 px-2.5 py-1 rounded border border-emerald-500/20 whitespace-nowrap text-center">
+          ${preview}
+        </span>
+      </div>
+
+      <!-- Delete Button -->
+      <div class="shrink-0 flex items-end">
+        <button type="button" onclick="removeVariationRow(${rowId})" class="p-2 text-neutral-400 hover:text-red-400 hover:bg-red-500/10 rounded-lg transition-colors cursor-pointer" title="Remove this variation" style="text-decoration: none !important;">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+        </button>
+      </div>
+    </div>
+  `;
+}
+
+function handleVariationChange() {
+  const rows = document.querySelectorAll('#variationRowsList .variation-row');
+  const sizeList = [];
+  
+  rows.forEach(row => {
+    const unitSelect = row.querySelector('.var-unit');
+    const valInput = row.querySelector('.var-val');
+    const badge = row.querySelector('.var-badge');
+    
+    const unit = unitSelect ? unitSelect.value : 'in';
+    const val = valInput ? valInput.value.trim() : '';
+    const formatted = formatVariationPreview(unit, val);
+    
+    if (badge) {
+      badge.textContent = formatted || 'Enter size';
+    }
+    if (formatted) {
+      sizeList.push(formatted);
+    }
+  });
+
+  // Update hidden/advanced textarea for Django form submission
+  const textarea = document.getElementById('id_available_sizes');
+  if (textarea) {
+    textarea.value = sizeList.join(', ');
+  }
+
+  // Update count badge & live preview
+  const countBadge = document.getElementById('variationsCountBadge');
+  if (countBadge) {
+    countBadge.textContent = `${rows.length} Size Variation${rows.length === 1 ? '' : 's'}`;
+  }
+  const previewSpan = document.getElementById('variationsLivePreview');
+  if (previewSpan) {
+    previewSpan.textContent = sizeList.length ? sizeList.join(' • ') : 'No sizes specified';
+  }
   renderRingChips();
 }
 
-function applyCustomSize(val) {
-  const input = document.getElementById('id_available_sizes');
-  if (input) {
-    input.value = val;
+function addVariationRow(unit, val) {
+  const container = document.getElementById('variationRowsList');
+  if (!container) return;
+
+  if (!unit) {
+    const lastRow = container.querySelector('.variation-row:last-child');
+    if (lastRow) {
+      unit = lastRow.querySelector('.var-unit')?.value || 'in';
+    } else {
+      const cat = document.getElementById('id_size_category')?.value;
+      unit = (cat === 'bracelet' || cat === 'necklace') ? 'in' : ((cat === 'ring') ? 'us' : 'in');
+    }
+  }
+
+  variationRowCounter++;
+  const html = createVariationRowHtml(variationRowCounter, unit, val || '');
+  container.insertAdjacentHTML('beforeend', html);
+  handleVariationChange();
+
+  if (val === undefined || val === '') {
+    const newRow = document.getElementById(`var_row_${variationRowCounter}`);
+    if (newRow) {
+      const input = newRow.querySelector('.var-val');
+      if (input) input.focus();
+    }
+  }
+}
+
+function removeVariationRow(rowId) {
+  const row = document.getElementById(`var_row_${rowId}`);
+  if (row) {
+    row.remove();
+    const container = document.getElementById('variationRowsList');
+    if (container && container.children.length === 0) {
+      addVariationRow();
+    } else {
+      handleVariationChange();
+    }
+  }
+}
+
+function clearAllVariations() {
+  const container = document.getElementById('variationRowsList');
+  if (container) {
+    container.innerHTML = '';
+    const cat = document.getElementById('id_size_category')?.value;
+    const defaultUnit = (cat === 'bracelet' || cat === 'necklace') ? 'in' : ((cat === 'ring') ? 'us' : 'in');
+    addVariationRow(defaultUnit, '');
+    handleVariationChange();
+  }
+}
+
+function parseSizeToUnitAndValue(str) {
+  str = (str || '').trim();
+  if (!str) return { unit: 'in', val: '' };
+  
+  if (/\bcm\b/i.test(str)) {
+    return { unit: 'cm', val: str.replace(/\s*cm\s*/i, '').trim() };
+  }
+  if (/\bmm\b/i.test(str)) {
+    return { unit: 'mm', val: str.replace(/\s*mm\s*/i, '').trim() };
+  }
+  if (/\binches?\b/i.test(str)) {
+    return { unit: 'in', val: str.replace(/\s*inches?\s*/i, '').trim() };
+  }
+  if (/"/.test(str)) {
+    return { unit: 'quote', val: str.replace(/"/g, '').trim() };
+  }
+  if (/^US/i.test(str)) {
+    return { unit: 'us', val: str.replace(/^US\s*(Size\s*)?/i, '').replace(/\s*\(.*\)/, '').trim() };
+  }
+  if (/^[\d\.\/]+$/.test(str)) {
+    const cat = document.getElementById('id_size_category')?.value;
+    const defaultUnit = (cat === 'bracelet' || cat === 'necklace') ? 'in' : 'us';
+    return { unit: defaultUnit, val: str };
+  }
+  return { unit: 'custom', val: str };
+}
+
+function initVariationsFromTextarea() {
+  const container = document.getElementById('variationRowsList');
+  if (!container) return;
+  container.innerHTML = '';
+
+  const textarea = document.getElementById('id_available_sizes');
+  const rawText = textarea ? textarea.value.trim() : '';
+
+  if (rawText) {
+    const items = rawText.replace(/\n/g, ',').split(',').map(s => s.trim()).filter(Boolean);
+    if (items.length > 0) {
+      items.forEach(item => {
+        const parsed = parseSizeToUnitAndValue(item);
+        addVariationRow(parsed.unit, parsed.val);
+      });
+      return;
+    }
+  }
+
+  // If blank, check size_category
+  const cat = document.getElementById('id_size_category')?.value;
+  if (cat === 'bracelet') {
+    addVariationRow('in', '7');
+  } else if (cat === 'necklace') {
+    addVariationRow('in', '18');
+  } else if (cat === 'ring') {
+    addVariationRow('us', '7');
+  } else {
+    addVariationRow('in', '7');
   }
 }
 
@@ -1488,14 +1730,10 @@ function handleStyleChange(select) {
 
 function handleSizeCategoryChange(val) {
   const ringSuites = document.getElementById('ringQuickSuites');
-  const braceletSuites = document.getElementById('braceletQuickSuites');
-  const necklaceSuites = document.getElementById('necklaceQuickSuites');
   const chipsContainer = document.getElementById('interactiveChipsContainer');
   const specInput = document.getElementById('id_chain_length_or_size');
   
   if (ringSuites) ringSuites.style.display = (val === 'ring') ? 'flex' : 'none';
-  if (braceletSuites) braceletSuites.style.display = (val === 'bracelet') ? 'flex' : 'none';
-  if (necklaceSuites) necklaceSuites.style.display = (val === 'necklace') ? 'flex' : 'none';
   if (chipsContainer) chipsContainer.style.display = (val === 'ring') ? 'block' : 'none';
 
   if (val === 'ring') {
@@ -1520,6 +1758,7 @@ document.addEventListener('DOMContentLoaded', () => {
   if (catSelect) {
     handleSizeCategoryChange(catSelect.value);
   }
+  initVariationsFromTextarea();
   renderRingChips();
   calculateValuation();
   updateSeoPreview();
