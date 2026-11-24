@@ -559,120 +559,49 @@
             </div>
           </div>
 
-          <!-- 4. SIZING FRAMEWORK & AVAILABLE SIZES (2-BOX DYNAMIC VARIATION BUILDER) -->
+          <!-- 4. SIZING & VARIATIONS (CLEAN 2-BOX BUILDER) -->
           <div class="card-surface rounded-xl p-4 sm:p-6 space-y-4" data-purpose="sizing-card">
             <div class="flex items-center justify-between pb-3 border-b border-obsidian-700/60">
               <div class="flex items-center gap-2">
                 <span class="text-base">📏</span>
-                <h2 class="text-sm font-semibold text-white tracking-wide">Sizing Framework &amp; Size Variations</h2>
+                <h2 class="text-sm font-semibold text-white tracking-wide">Size Variations</h2>
               </div>
               <span id="variationsCountBadge" class="px-2 py-0.5 rounded text-[10px] font-mono text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 whitespace-nowrap">
                 1 Size Variation
               </span>
             </div>
 
-            <div class="space-y-4">
-              <!-- Category & Technical Spec -->
-              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                <div class="space-y-1.5">
-                  <label class="block text-xs font-medium text-neutral-300" for="id_size_category">
-                    Sizing Framework Category
-                  </label>
-                  <div class="relative">
-                    <select class="glass-input atelier-select w-full appearance-none rounded-lg text-xs px-3.5 pr-10 cursor-pointer" id="id_size_category" name="size_category" onchange="handleSizeCategoryChange(this.value)">
-                      {% for val, label in adminform.form.size_category.field.choices %}
-                        <option value="{{ val }}" {% if adminform.form.size_category.value|stringformat:"s" == val|stringformat:"s" %}selected{% endif %}>{{ label }}</option>
-                      {% endfor %}
-                    </select>
-                    <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-neutral-400">
-                      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"></path></svg>
-                    </div>
-                  </div>
+            <div class="space-y-3">
+              <!-- Dynamic Rows Container -->
+              <div id="variationRowsList" class="space-y-2">
+                <!-- Injected via JavaScript -->
+              </div>
+
+              <!-- Action Toolbar & Storefront Preview -->
+              <div class="flex flex-wrap items-center justify-between gap-2 pt-1.5">
+                <div class="flex items-center gap-2">
+                  <button type="button" onclick="addVariationRow()" class="flex items-center gap-1.5 bg-[#171920] hover:bg-[#1c1f28] text-emerald-300 hover:text-white border border-emerald-500/35 hover:border-emerald-500 text-xs font-semibold px-3.5 py-2 rounded-lg transition-all cursor-pointer shadow-xs" style="text-decoration: none !important;">
+                    <svg class="w-3.5 h-3.5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4"/></svg>
+                    <span>+ Add Size Variation</span>
+                  </button>
+                  <button type="button" onclick="clearAllVariations()" class="text-xs text-neutral-400 hover:text-red-400 px-2 py-1.5 rounded transition-colors cursor-pointer" style="text-decoration: none !important;">
+                    Reset All
+                  </button>
                 </div>
 
-                <div class="space-y-1.5">
-                  <label class="block text-xs font-medium text-neutral-300" for="id_chain_length_or_size">
-                    Band Profile or Chain Length Spec
-                  </label>
-                  <input 
-                    type="text" 
-                    name="chain_length_or_size" 
-                    id="id_chain_length_or_size" 
-                    value="{{ adminform.form.chain_length_or_size.value|default:'' }}" 
-                    class="glass-input w-full text-xs px-3.5 py-2" 
-                    placeholder="e.g. Universal 7.0&quot; Luxury Fit"
-                  >
+                <!-- Live Storefront Preview -->
+                <div class="flex items-center gap-2 text-xs">
+                  <span class="text-[11px] font-mono text-neutral-400 uppercase">Storefront Dropdown:</span>
+                  <span id="variationsLivePreview" class="font-mono text-emerald-300 bg-emerald-500/10 px-2.5 py-1 rounded border border-emerald-500/20 text-xs font-medium">
+                    7 Inches
+                  </span>
                 </div>
               </div>
 
-              <!-- 2-BOX DYNAMIC VARIATION BUILDER -->
-              <div class="space-y-3 pt-1">
-                <div class="flex items-center justify-between">
-                  <div>
-                    <label class="block text-xs font-semibold text-white tracking-wide">
-                      Size Variations (Box 1: Type / Unit &bull; Box 2: Size Value)
-                    </label>
-                    <p class="text-[11px] text-neutral-400 mt-0.5">
-                      Select unit (<span class="text-neutral-300 font-mono">Inch, cm, mm</span>) and enter the size (<span class="text-neutral-300 font-mono">e.g. 7</span>). Click &ldquo;+ Add Size Variation&rdquo; to add as many sizes as you carry.
-                    </p>
-                  </div>
-                </div>
-
-                <!-- Dynamic Rows Container -->
-                <div id="variationRowsList" class="space-y-2">
-                  <!-- Injected via JavaScript -->
-                </div>
-
-                <!-- Action Toolbar & Storefront Preview -->
-                <div class="flex flex-wrap items-center justify-between gap-2 pt-1.5">
-                  <div class="flex items-center gap-2">
-                    <button type="button" onclick="addVariationRow()" class="flex items-center gap-1.5 bg-[#171920] hover:bg-[#1c1f28] text-emerald-300 hover:text-white border border-emerald-500/35 hover:border-emerald-500 text-xs font-semibold px-3.5 py-2 rounded-lg transition-all cursor-pointer shadow-xs" style="text-decoration: none !important;">
-                      <svg class="w-3.5 h-3.5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4"/></svg>
-                      <span>+ Add Size Variation</span>
-                    </button>
-                    <button type="button" onclick="clearAllVariations()" class="text-xs text-neutral-400 hover:text-red-400 px-2 py-1.5 rounded transition-colors cursor-pointer" style="text-decoration: none !important;">
-                      Reset All
-                    </button>
-                  </div>
-
-                  <!-- Live Storefront Preview -->
-                  <div class="flex items-center gap-2 text-xs">
-                    <span class="text-[11px] font-mono text-neutral-400 uppercase">Storefront Dropdown:</span>
-                    <span id="variationsLivePreview" class="font-mono text-emerald-300 bg-emerald-500/10 px-2.5 py-1 rounded border border-emerald-500/20 text-xs font-medium">
-                      7 Inches
-                    </span>
-                  </div>
-                </div>
-
-                <!-- Hidden sync textarea (preserves 100% Django form compatibility) -->
-                <textarea 
-                  name="available_sizes" 
-                  id="id_available_sizes" 
-                  class="hidden"
-                >{{ adminform.form.available_sizes.value|default:'' }}</textarea>
-
-                <!-- Advanced Presets Accordion (for quick ring ranges) -->
-                <details class="group mt-3 pt-2.5 border-t border-obsidian-700/50">
-                  <summary class="text-[11px] font-mono text-neutral-400 hover:text-neutral-200 cursor-pointer flex items-center gap-1 select-none py-1">
-                    <svg class="w-3.5 h-3.5 transition-transform group-open:rotate-90 text-neutral-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
-                    <span>Advanced Quick Sizing Presets (US Ring Suites)</span>
-                  </summary>
-                  
-                  <div class="pt-2.5 space-y-2">
-                    <div class="flex flex-wrap items-center gap-1.5" id="ringQuickSuites">
-                      <span class="text-[10px] font-mono text-neutral-500 uppercase">Ring Suites:</span>
-                      <button type="button" class="atelier-chip" onclick="applyQuickSuite('women')">★ Women's Standard (5 - 9)</button>
-                      <button type="button" class="atelier-chip" onclick="applyQuickSuite('men')">★ Men's Standard (8 - 12)</button>
-                      <button type="button" class="atelier-chip" onclick="applyQuickSuite('full')">★ Full US Range (4 - 13)</button>
-                    </div>
-
-                    <div id="interactiveChipsContainer" class="pt-1">
-                      <div class="flex flex-wrap gap-1.5" id="ringChipsGrid"></div>
-                    </div>
-                  </div>
-                </details>
-
-              </div>
+              <!-- Clean Hidden Form Fields (Preserves 100% backend form handling) -->
+              <input type="hidden" name="size_category" id="id_size_category" value="{{ adminform.form.size_category.value|default:'bracelet' }}">
+              <input type="hidden" name="chain_length_or_size" id="id_chain_length_or_size" value="{{ adminform.form.chain_length_or_size.value|default:'' }}">
+              <textarea name="available_sizes" id="id_available_sizes" class="hidden">{{ adminform.form.available_sizes.value|default:'' }}</textarea>
             </div>
           </div>
 
