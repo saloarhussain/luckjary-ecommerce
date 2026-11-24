@@ -750,64 +750,50 @@
 
 
 
-            <!-- Merchandising Badges -->
-            <div class="space-y-2 pt-2 border-t border-obsidian-700/60">
+            <!-- Merchandising Badge Dropdown -->
+            <div class="space-y-1.5 pt-2 border-t border-obsidian-700/60">
               <div class="flex items-center justify-between text-[11px] font-mono text-neutral-400 uppercase tracking-wider">
-                <span>Showroom Merchandising</span>
-                <span>Badges</span>
+                <label for="merchandisingBadgeSelect">Showroom Badge</label>
+                <span class="text-neutral-500 text-[10px]">Merchandising</span>
               </div>
 
-              <div class="space-y-2">
-                <!-- Featured -->
-                <label class="p-2.5 rounded-lg bg-obsidian-900/80 border border-obsidian-700/70 flex items-start gap-3 cursor-pointer hover:border-obsidian-600 transition">
-                  <input 
-                    type="checkbox" 
-                    name="is_featured" 
-                    id="id_is_featured" 
-                    class="atelier-checkbox mt-0.5" 
-                    {% if original.is_featured %}checked{% endif %}
-                  >
-                  <div>
-                    <div class="text-xs font-semibold text-neutral-200 flex items-center gap-1.5">
-                      <span>★</span> Featured Creation
-                    </div>
-                    <div class="text-[11px] text-neutral-400">Highlight prominently on Boutique Homepage</div>
-                  </div>
-                </label>
+              <!-- Hidden Checkboxes for Formset & Model Compatibility -->
+              <input 
+                type="checkbox" 
+                name="is_featured" 
+                id="id_is_featured" 
+                style="display:none;" 
+                {% if original.is_featured %}checked{% endif %}
+              >
+              <input 
+                type="checkbox" 
+                name="is_bestseller" 
+                id="id_is_bestseller" 
+                style="display:none;" 
+                {% if original.is_bestseller %}checked{% endif %}
+              >
+              <input 
+                type="checkbox" 
+                name="is_new_arrival" 
+                id="id_new_arrival" 
+                style="display:none;" 
+                {% if original.is_new_arrival %}checked{% endif %}
+              >
 
-                <!-- Bestseller -->
-                <label class="p-2.5 rounded-lg bg-obsidian-900/80 border border-obsidian-700/70 flex items-start gap-3 cursor-pointer hover:border-obsidian-600 transition">
-                  <input 
-                    type="checkbox" 
-                    name="is_bestseller" 
-                    id="id_is_bestseller" 
-                    class="atelier-checkbox mt-0.5" 
-                    {% if original.is_bestseller %}checked{% endif %}
-                  >
-                  <div>
-                    <div class="text-xs font-semibold text-neutral-200 flex items-center gap-1.5">
-                      <span>💎</span> Bestseller
-                    </div>
-                    <div class="text-[11px] text-neutral-400">Tag as Top Client Favorite</div>
-                  </div>
-                </label>
-
-                <!-- New Arrival -->
-                <label class="p-2.5 rounded-lg bg-obsidian-900/80 border border-obsidian-700/70 flex items-start gap-3 cursor-pointer hover:border-obsidian-600 transition">
-                  <input 
-                    type="checkbox" 
-                    name="is_new_arrival" 
-                    id="id_new_arrival" 
-                    class="atelier-checkbox mt-0.5" 
-                    {% if original.is_new_arrival %}checked{% endif %}
-                  >
-                  <div>
-                    <div class="text-xs font-semibold text-neutral-200 flex items-center gap-1.5">
-                      <span>✨</span> New Arrival
-                    </div>
-                    <div class="text-[11px] text-neutral-400">Showcase in Latest Seasonal Drops</div>
-                  </div>
-                </label>
+              <div class="relative">
+                <select 
+                  id="merchandisingBadgeSelect" 
+                  class="glass-input atelier-select w-full appearance-none rounded-lg text-xs px-3.5 pr-10 py-2.5 cursor-pointer text-neutral-200"
+                  onchange="handleMerchandisingBadgeChange(this.value)"
+                >
+                  <option value="none">None (Standard Listing)</option>
+                  <option value="featured" {% if original.is_featured %}selected{% endif %}>★ Featured Creation (Homepage)</option>
+                  <option value="bestseller" {% if original.is_bestseller %}selected{% endif %}>💎 Bestseller (Client Favorite)</option>
+                  <option value="new_arrival" {% if original.is_new_arrival %}selected{% endif %}>✨ New Arrival (Latest Drop)</option>
+                </select>
+                <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-neutral-400">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"></path></svg>
+                </div>
               </div>
             </div>
           </div>
@@ -1502,6 +1488,16 @@ function setProductStatus(isActive) {
     btnActive.className = 'py-2 px-3 rounded-md text-xs font-semibold text-center transition-all cursor-pointer text-neutral-400 hover:text-white';
     btnDraft.className = 'py-2 px-3 rounded-md text-xs font-semibold text-center transition-all cursor-pointer bg-obsidian-700 text-white shadow-sm';
   }
+}
+
+function handleMerchandisingBadgeChange(val) {
+  const chkFeatured = document.getElementById('id_is_featured');
+  const chkBestseller = document.getElementById('id_is_bestseller');
+  const chkNewArrival = document.getElementById('id_new_arrival');
+
+  if (chkFeatured) chkFeatured.checked = (val === 'featured');
+  if (chkBestseller) chkBestseller.checked = (val === 'bestseller');
+  if (chkNewArrival) chkNewArrival.checked = (val === 'new_arrival');
 }
 
 function autoGenerateSku() {
