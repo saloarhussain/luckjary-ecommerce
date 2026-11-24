@@ -286,6 +286,9 @@
     <input type="hidden" name="available_metals" id="id_available_metals" value="925 Sterling Silver">
     <input type="checkbox" name="metal_presets" value="925 Sterling Silver" checked style="display:none;">
     <input type="hidden" name="certification" id="id_certification" value="{{ adminform.form.certification.value|default:'Luckjary 925 Hallmark & Authenticity Guarantee' }}">
+    <input type="hidden" name="gemstone" id="id_gemstone" value="{{ adminform.form.gemstone.value|default:'5A Flawless Cubic Zirconia (CZ)' }}">
+    <input type="hidden" name="carat_weight" id="id_carat_weight" value="{{ adminform.form.carat_weight.value|default:'' }}">
+    <input type="hidden" name="dimensions" id="id_dimensions" value="{{ adminform.form.dimensions.value|default:'' }}">
 
     <!-- BEGIN: Main Content Area matching Atelier Design System -->
     <main class="flex-1 p-4 sm:p-6 md:p-8 space-y-5 sm:space-y-6 md:space-y-7 max-w-[1720px] mx-auto w-full">
@@ -450,76 +453,7 @@
 
 
 
-          <!-- 3. GEMSTONES & SPECIALTY MATERIALS -->
-          <div class="card-surface rounded-xl p-4 sm:p-6 space-y-4" data-purpose="gemstones-card">
-            <div class="flex items-center justify-between pb-3 border-b border-obsidian-700/60">
-              <div class="flex items-center gap-2">
-                <span class="text-base">💎</span>
-                <h2 class="text-sm font-semibold text-white tracking-wide">Gemstones &amp; Settings</h2>
-              </div>
-              <span class="px-2 py-0.5 rounded text-[10px] font-mono text-champagne-400 bg-champagne-500/10 border border-champagne-500/20 whitespace-nowrap">
-                Hand-Set Facets
-              </span>
-            </div>
 
-            <div class="space-y-3.5">
-              <!-- Gemstone Field -->
-              <div class="space-y-1.5">
-                <div class="flex items-center justify-between">
-                  <label class="block text-xs font-medium text-neutral-300" for="id_gemstone">
-                    Featured Gemstone Specification
-                  </label>
-                  <span class="text-[10px] font-mono text-neutral-500">Diamond Simulant / Stone</span>
-                </div>
-                <input 
-                  type="text" 
-                  name="gemstone" 
-                  id="id_gemstone" 
-                  value="{{ adminform.form.gemstone.value|default:'5A Flawless Cubic Zirconia (CZ)' }}" 
-                  class="glass-input w-full text-xs font-medium px-3.5 py-2" 
-                  placeholder="e.g. 5A Flawless Cubic Zirconia (CZ)"
-                >
-                <!-- Quick Preset Chips -->
-                <div class="flex flex-wrap items-center gap-1.5 pt-1">
-                  <span class="text-[10px] font-mono text-neutral-500 uppercase">Quick Presets:</span>
-                  <button type="button" class="atelier-chip" onclick="setGemstonePreset('5A Flawless Cubic Zirconia (CZ)')">✦ 5A Flawless CZ</button>
-                  <button type="button" class="atelier-chip" onclick="setGemstonePreset('Micro-Pavé Diamond Simulants')">✦ Micro-Pavé CZ</button>
-                  <button type="button" class="atelier-chip" onclick="setGemstonePreset('Solitaire Cushion-Cut CZ')">✦ Solitaire Cushion</button>
-                  <button type="button" class="atelier-chip" onclick="setGemstonePreset('Baguette Cut CZ Accents')">✦ Baguette Accents</button>
-                </div>
-              </div>
-
-              <!-- Carat Weight & Dimensions Row -->
-              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                <div class="space-y-1.5">
-                  <label class="block text-xs font-medium text-neutral-300" for="id_carat_weight">
-                    Carat Weight / Diamond Equiv. (Optional)
-                  </label>
-                  <input 
-                    type="text" 
-                    name="carat_weight" 
-                    id="id_carat_weight" 
-                    value="{{ adminform.form.carat_weight.value|default:'' }}" 
-                    class="glass-input w-full text-xs px-3.5 py-2" 
-                    placeholder="e.g. 2.50 ctw DEW"
-                  >
-                </div>
-                <div class="space-y-1.5">
-                  <label class="block text-xs font-medium text-neutral-300" for="id_dimensions">
-                    Band Width / Profile (Optional)
-                  </label>
-                  <input 
-                    type="text" 
-                    name="dimensions" 
-                    id="id_dimensions" 
-                    value="{{ adminform.form.dimensions.value|default:'' }}" 
-                    class="glass-input w-full text-xs px-3.5 py-2" 
-                    placeholder="e.g. 2.0mm Comfort Band Width"
-                  >
-                </div>
-              </div>
-            </div>
-          </div>
 
           <!-- 4. SIZING & VARIATIONS (CLEAN 2-BOX BUILDER) -->
           <div class="card-surface rounded-xl p-4 sm:p-6 space-y-4" data-purpose="sizing-card">
