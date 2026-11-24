@@ -615,16 +615,51 @@
             </div>
           </div>
 
-          <!-- 5. PRODUCT MEDIA & CAD GALLERY -->
+          <!-- 5. PRODUCT MEDIA & IMAGES -->
           <div class="card-surface rounded-xl p-4 sm:p-6 space-y-4" data-purpose="media-gallery-card">
             <div class="flex items-center justify-between pb-3 border-b border-obsidian-700/60">
               <div class="flex items-center gap-2">
                 <span class="text-base">📷</span>
-                <h2 class="text-sm font-semibold text-white tracking-wide">Product Media &amp; CAD Gallery</h2>
+                <h2 class="text-sm font-semibold text-white tracking-wide">Product Media &amp; Images</h2>
               </div>
-              <span class="px-2 py-0.5 rounded text-[10px] font-mono text-neutral-400 bg-obsidian-800 border border-obsidian-700 whitespace-nowrap">
-                High-Res Atelier Assets
+              <span id="imageCounterBadge" class="px-2 py-0.5 rounded text-[10px] font-mono text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 whitespace-nowrap">
+                0 Images Attached
               </span>
+            </div>
+
+            <!-- Upload Dropzone (Click to Upload or Drag & Drop) -->
+            <div 
+              class="border-2 border-dashed border-[#262936] hover:border-emerald-500/60 rounded-xl p-6 text-center transition-all bg-[#0d0f14]/80 hover:bg-[#12151e] cursor-pointer group select-none" 
+              onclick="document.getElementById('productImageFileInput').click()"
+              ondragover="event.preventDefault(); this.classList.add('border-emerald-500');"
+              ondragleave="this.classList.remove('border-emerald-500');"
+              ondrop="event.preventDefault(); this.classList.remove('border-emerald-500'); handleProductImageUploads(event.dataTransfer.files);"
+            >
+              <input type="file" id="productImageFileInput" accept="image/*" multiple class="hidden" onchange="handleProductImageUploads(this.files)">
+              <div class="flex flex-col items-center justify-center space-y-2">
+                <div class="w-12 h-12 rounded-full bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 group-hover:scale-110 transition-transform">
+                  <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
+                </div>
+                <div class="text-xs font-semibold text-white">
+                  <span class="text-emerald-400 group-hover:underline">Click to browse photos</span> or drag &amp; drop image files here
+                </div>
+                <p class="text-[11px] text-neutral-400">
+                  Select JPG, PNG, or WEBP photos from your device. You can also paste image URLs directly.
+                </p>
+              </div>
+            </div>
+
+            <!-- Action Toolbar -->
+            <div class="flex items-center justify-between pt-1">
+              <div class="flex items-center gap-2">
+                <button type="button" onclick="document.getElementById('productImageFileInput').click()" class="flex items-center gap-1.5 bg-[#171920] hover:bg-[#1c1f28] text-emerald-300 hover:text-white border border-emerald-500/35 hover:border-emerald-500 text-xs font-semibold px-3.5 py-2 rounded-lg transition-all cursor-pointer shadow-xs" style="text-decoration: none !important;">
+                  <svg class="w-3.5 h-3.5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
+                  <span>Upload from Device</span>
+                </button>
+                <button type="button" onclick="addNewImageRow('', '', false)" class="flex items-center gap-1.5 bg-[#171920] hover:bg-[#1c1f28] text-[#e5e5e5] hover:text-white border border-[#21242d] hover:border-emerald-500/40 text-xs font-medium px-3.5 py-2 rounded-lg transition-all cursor-pointer" style="text-decoration: none !important;">
+                  <span>+ Add Image via URL</span>
+                </button>
+              </div>
             </div>
 
             <!-- Image Inlines Container -->
@@ -632,7 +667,7 @@
               {% if inline_admin_formset.formset.prefix == 'images' %}
                 <div class="space-y-3" id="imagesFormsetList">
                   {% for inline_form in inline_admin_formset.formset.forms %}
-                    <div class="p-3.5 sm:p-4 rounded-lg bg-obsidian-850/80 border border-obsidian-700/70 flex flex-col sm:flex-row items-start gap-4 image-inline-row">
+                    <div class="p-3.5 sm:p-4 rounded-lg bg-obsidian-850/80 border border-obsidian-700/70 flex flex-col sm:flex-row items-start gap-4 image-inline-row" id="image_row_{{ inline_form.prefix }}">
                       <!-- Live Thumbnail Preview -->
                       <div class="relative w-20 h-20 sm:w-24 sm:h-24 rounded-lg bg-obsidian-900 border border-obsidian-700 p-1 shrink-0 overflow-hidden flex items-center justify-center">
                         <img 
@@ -651,14 +686,17 @@
                         {{ inline_form.product }}
 
                         <div class="space-y-1">
-                          <label class="block text-[10px] font-mono text-neutral-400 uppercase">Image Asset URL *</label>
+                          <div class="flex items-center justify-between">
+                            <label class="block text-[10px] font-mono text-neutral-400 uppercase">Image Asset URL / Source *</label>
+                            <span class="text-[10px] font-mono text-emerald-400">Direct File or Web Link</span>
+                          </div>
                           <input 
-                            type="url" 
+                            type="text" 
                             name="{{ inline_form.prefix }}-image_url" 
                             id="id_{{ inline_form.prefix }}-image_url" 
                             value="{{ inline_form.image_url.value|default:'' }}" 
-                            class="glass-input w-full text-xs px-3 py-1.5 font-mono" 
-                            placeholder="https://images.unsplash.com/... or Google Cloud Storage URL"
+                            class="glass-input w-full text-xs px-3 py-1.5 font-mono text-neutral-200" 
+                            placeholder="Upload file above or paste image URL here"
                             oninput="updateImagePreview('{{ inline_form.prefix }}', this.value)"
                           >
                         </div>
@@ -684,7 +722,7 @@
                                 class="atelier-checkbox" 
                                 {% if inline_form.is_primary.value %}checked{% endif %}
                               >
-                              <span class="text-[11px] font-medium">Primary</span>
+                              <span class="text-[11px] font-medium text-emerald-400">Primary</span>
                             </label>
                             
                             <div class="flex items-center gap-1">
@@ -703,16 +741,14 @@
                                 <input type="checkbox" name="{{ inline_form.prefix }}-DELETE" id="id_{{ inline_form.prefix }}-DELETE" class="atelier-checkbox">
                                 <span>Delete</span>
                               </label>
+                            {% else %}
+                              <button type="button" onclick="removeImageInlineRow('{{ inline_form.prefix }}')" class="p-1.5 text-neutral-400 hover:text-red-400 hover:bg-red-500/10 rounded transition-colors cursor-pointer" title="Delete Image">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                              </button>
                             {% endif %}
                           </div>
                         </div>
                       </div>
-                    </div>
-                  {% empty %}
-                    <div class="p-6 rounded-lg bg-obsidian-900 border border-obsidian-750 text-center space-y-2">
-                      <div class="text-2xl">📸</div>
-                      <div class="text-xs text-neutral-300 font-medium">No initial media attached to this fine piece.</div>
-                      <div class="text-[11px] text-neutral-500">You can upload images or link high-resolution CDN assets below.</div>
                     </div>
                   {% endfor %}
                 </div>
@@ -1110,10 +1146,10 @@
                 </div>
               </div>
 
-              <!-- Collection Field -->
+              <!-- Collection Field (Renamed from Atelier Collection) -->
               <div class="space-y-1.5">
                 <label class="block text-xs font-medium text-neutral-300" for="id_collection">
-                  Atelier Collection (Optional)
+                  Collection
                 </label>
                 <div class="relative">
                   <select class="glass-input atelier-select w-full appearance-none rounded-lg text-xs px-3.5 pr-10 cursor-pointer" id="id_collection" name="collection">
@@ -1127,22 +1163,8 @@
                 </div>
               </div>
 
-              <!-- Style Field -->
-              <div class="space-y-1.5">
-                <label class="block text-xs font-medium text-neutral-300" for="id_style">
-                  Aesthetic Style
-                </label>
-                <div class="relative">
-                  <select class="glass-input atelier-select w-full appearance-none rounded-lg text-xs px-3.5 pr-10 cursor-pointer" id="id_style" name="style" onchange="handleStyleChange(this)">
-                    {% for val, label in adminform.form.style.field.choices %}
-                      <option value="{{ val }}" {% if adminform.form.style.value|stringformat:"s" == val|stringformat:"s" %}selected{% endif %}>{{ label }}</option>
-                    {% endfor %}
-                  </select>
-                  <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-neutral-400">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"></path></svg>
-                  </div>
-                </div>
-              </div>
+              <!-- Style Field (Removed from visible UI per patron request; preserved as hidden) -->
+              <input type="hidden" name="style" id="id_style" value="{{ adminform.form.style.value|default:'classic' }}">
             </div>
           </div>
 
@@ -1678,6 +1700,208 @@ function updateImagePreview(prefix, url) {
   }
 }
 
+// --- DYNAMIC IMAGE INLINES & DEVICE UPLOADER ---
+function updateImageCounter() {
+  const badge = document.getElementById('imageCounterBadge');
+  const rows = document.querySelectorAll('#imagesFormsetList .image-inline-row:not([style*="display: none"])');
+  if (badge) {
+    badge.textContent = `${rows.length} Image${rows.length === 1 ? '' : 's'} Attached`;
+  }
+}
+
+function optimizeImageToDataUrl(file, maxWidth = 1400, maxHeight = 1400, quality = 0.85) {
+  return new Promise((resolve) => {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const img = new Image();
+      img.onload = () => {
+        let w = img.width;
+        let h = img.height;
+        if (w > maxWidth || h > maxHeight) {
+          if (w / h > maxWidth / maxHeight) {
+            h = Math.round((h * maxWidth) / w);
+            w = maxWidth;
+          } else {
+            w = Math.round((w * maxHeight) / h);
+            h = maxHeight;
+          }
+        }
+        const canvas = document.createElement('canvas');
+        canvas.width = w;
+        canvas.height = h;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, w, h);
+        resolve(canvas.toDataURL('image/jpeg', quality));
+      };
+      img.onerror = () => resolve(e.target.result);
+      img.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
+function findEmptyImageRow() {
+  const rows = document.querySelectorAll('#imagesFormsetList .image-inline-row:not([style*="display: none"])');
+  for (let row of rows) {
+    const urlInput = row.querySelector('input[name$="-image_url"]');
+    if (urlInput && !urlInput.value.trim()) {
+      return row;
+    }
+  }
+  return null;
+}
+
+function fillImageRow(row, dataUrl, altText, isPrimary) {
+  const urlInput = row.querySelector('input[name$="-image_url"]');
+  const altInput = row.querySelector('input[name$="-alt_text"]');
+  const primaryCheck = row.querySelector('input[name$="-is_primary"]');
+  const img = row.querySelector('img[id^="preview_"]');
+
+  if (urlInput) {
+    urlInput.value = dataUrl;
+  }
+  if (altInput && !altInput.value) {
+    altInput.value = altText || '';
+  }
+  if (primaryCheck && isPrimary) {
+    primaryCheck.checked = true;
+  }
+  if (img) {
+    img.src = dataUrl;
+  }
+}
+
+function addNewImageRow(imgUrl = '', altText = '', isPrimary = false) {
+  const totalFormsInput = document.getElementById('id_images-TOTAL_FORMS');
+  if (!totalFormsInput) return;
+
+  const index = parseInt(totalFormsInput.value) || 0;
+  const prefix = `images-${index}`;
+  const container = document.getElementById('imagesFormsetList');
+  if (!container) return;
+
+  const previewSrc = imgUrl || 'https://images.unsplash.com/photo-1603561591411-07134e71a2a9?auto=format&fit=crop&w=400&q=80';
+
+  const rowHtml = `
+    <div class="p-3.5 sm:p-4 rounded-lg bg-obsidian-850/80 border border-obsidian-700/70 flex flex-col sm:flex-row items-start gap-4 image-inline-row" id="image_row_${prefix}">
+      <div class="relative w-20 h-20 sm:w-24 sm:h-24 rounded-lg bg-obsidian-900 border border-obsidian-700 p-1 shrink-0 overflow-hidden flex items-center justify-center">
+        <img 
+          id="preview_${prefix}" 
+          src="${previewSrc}" 
+          onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1603561591411-07134e71a2a9?auto=format&fit=crop&w=400&q=80';"
+          alt="Piece preview" 
+          class="w-full h-full object-cover rounded"
+        >
+      </div>
+
+      <div class="flex-1 space-y-2.5 w-full min-w-0">
+        <input type="hidden" name="${prefix}-id" id="id_${prefix}-id">
+        <input type="hidden" name="${prefix}-product" id="id_${prefix}-product">
+
+        <div class="space-y-1">
+          <div class="flex items-center justify-between">
+            <label class="block text-[10px] font-mono text-neutral-400 uppercase">Image Asset URL / Source *</label>
+            <span class="text-[10px] font-mono text-emerald-400">Direct Upload or Web Link</span>
+          </div>
+          <input 
+            type="text" 
+            name="${prefix}-image_url" 
+            id="id_${prefix}-image_url" 
+            value="${escapeHtml(imgUrl)}" 
+            class="glass-input w-full text-xs px-3 py-1.5 font-mono text-neutral-200" 
+            placeholder="Upload file above or paste image URL here"
+            oninput="updateImagePreview('${prefix}', this.value)"
+          >
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 items-center">
+          <div class="sm:col-span-2 space-y-1">
+            <label class="block text-[10px] font-mono text-neutral-400 uppercase">Alt Description</label>
+            <input 
+              type="text" 
+              name="${prefix}-alt_text" 
+              id="id_${prefix}-alt_text" 
+              value="${escapeHtml(altText)}" 
+              class="glass-input w-full text-xs px-2.5 py-1" 
+              placeholder="e.g. Ring top angle view"
+            >
+          </div>
+          <div class="flex items-center justify-between sm:justify-end gap-3 pt-3 sm:pt-0">
+            <label class="inline-flex items-center gap-1.5 text-xs text-neutral-300 cursor-pointer">
+              <input 
+                type="checkbox" 
+                name="${prefix}-is_primary" 
+                id="id_${prefix}-is_primary" 
+                class="atelier-checkbox" 
+                ${isPrimary ? 'checked' : ''}
+              >
+              <span class="text-[11px] font-medium text-emerald-400">Primary</span>
+            </label>
+            
+            <div class="flex items-center gap-1">
+              <span class="text-[10px] font-mono text-neutral-500">Ord:</span>
+              <input 
+                type="number" 
+                name="${prefix}-order" 
+                id="id_${prefix}-order" 
+                value="${index}" 
+                class="glass-input w-12 text-center text-xs px-1 py-1 font-mono"
+              >
+            </div>
+
+            <button type="button" onclick="removeImageInlineRow('${prefix}')" class="p-1.5 text-neutral-400 hover:text-red-400 hover:bg-red-500/10 rounded transition-colors cursor-pointer" title="Delete Image">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+
+  container.insertAdjacentHTML('beforeend', rowHtml);
+  totalFormsInput.value = index + 1;
+  updateImageCounter();
+}
+
+function removeImageInlineRow(prefix) {
+  const row = document.getElementById(`image_row_${prefix}`);
+  if (!row) return;
+
+  const idField = document.getElementById(`id_${prefix}-id`);
+  const deleteCheckbox = document.getElementById(`id_${prefix}-DELETE`);
+
+  if (idField && idField.value) {
+    if (deleteCheckbox) deleteCheckbox.checked = true;
+    row.style.display = 'none';
+  } else {
+    const urlInput = row.querySelector('input[name$="-image_url"]');
+    if (urlInput) urlInput.value = '';
+    row.remove();
+  }
+  updateImageCounter();
+}
+
+async function handleProductImageUploads(files) {
+  if (!files || !files.length) return;
+  
+  for (let i = 0; i < files.length; i++) {
+    const file = files[i];
+    if (!file.type.startsWith('image/')) continue;
+    
+    const dataUrl = await optimizeImageToDataUrl(file);
+    const existingRows = document.querySelectorAll('#imagesFormsetList .image-inline-row');
+    const isFirst = (existingRows.length === 0 || (existingRows.length === 1 && !existingRows[0].querySelector('input[name$="-image_url"]')?.value));
+    
+    const emptyRow = findEmptyImageRow();
+    if (emptyRow) {
+      fillImageRow(emptyRow, dataUrl, file.name.replace(/\.[^/.]+$/, ''), isFirst);
+    } else {
+      addNewImageRow(dataUrl, file.name.replace(/\.[^/.]+$/, ''), isFirst);
+    }
+  }
+  updateImageCounter();
+}
+
 // Initial script execution on DOM ready
 document.addEventListener('DOMContentLoaded', () => {
   const catSelect = document.getElementById('id_size_category');
@@ -1688,6 +1912,7 @@ document.addEventListener('DOMContentLoaded', () => {
   renderRingChips();
   calculateValuation();
   updateSeoPreview();
+  updateImageCounter();
 });
 </script>
 {% endblock %}

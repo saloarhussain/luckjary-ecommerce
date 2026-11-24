@@ -102,7 +102,7 @@ class ProductAdminForm(forms.ModelForm):
 
 class ProductImageInline(admin.TabularInline):
     model = ProductImage
-    extra = 0
+    extra = 1
 
 class ProductReviewInline(admin.StackedInline):
     model = ProductReview
