@@ -244,6 +244,32 @@ def try_shopify_endpoints(target_url):
                     return parse_shopify_product_dict(data['product'], target_url)
                 elif 'products' in data and data['products']:
                     return parse_shopify_collection(data['products'], 'collection', target_url, netloc)
+
+        # Case 4: Shopify Admin URL (e.g. admin.shopify.com/store/repairindi/... or repairindi.myshopify.com/admin/...)
+        admin_match = re.search(r'admin\.shopify\.com/store/([^/?#]+)', target_url) or re.search(r'([^/?#]+)\.myshopify\.com/admin', target_url)
+        if admin_match:
+            store_handle = admin_match.group(1)
+            # Attempt to resolve via public myshopify endpoint
+            public_candidates = [
+                f"https://{store_handle}.myshopify.com/collections/all/products.json?limit=250",
+                f"https://{store_handle}.myshopify.com/products.json?limit=250",
+            ]
+            for cand_url in public_candidates:
+                body, code = http_get(cand_url)
+                if code == 200 and body:
+                    try:
+                        data = json.loads(body)
+                        prods = data.get('products', [])
+                        if prods:
+                            return parse_shopify_collection(prods, 'all', target_url, f"{store_handle}.myshopify.com")
+                    except Exception:
+                        pass
+            
+            # If public endpoint could not be reached, return an explicit helpful error
+            return {
+                'success': False,
+                'error': f"The URL entered is a private Shopify Admin URL ('admin.shopify.com/store/{store_handle}'). External scrapers cannot access password-protected merchant dashboards. Please use the public storefront URL (e.g. https://{store_handle}.myshopify.com/products or your public storefront domain), or click 'Advanced: Paste HTML / JSON Source'."
+            }
     except Exception:
         pass
     return None
@@ -600,8 +626,11 @@ def scrape_ecommerce_product(url=None, raw_html=None, raw_json=None):
     # 2. If URL is provided, try direct Shopify endpoints (Product or Collection)
     if url and not raw_html:
         shopify_res = try_shopify_endpoints(url)
-        if shopify_res and shopify_res.get('title'):
-            return shopify_res
+        if shopify_res:
+            if shopify_res.get('title'):
+                return shopify_res
+            if not shopify_res.get('success', True) and shopify_res.get('error'):
+                return shopify_res
 
     # 3. Fetch HTML if URL provided, or use raw_html
     html = raw_html or ""
