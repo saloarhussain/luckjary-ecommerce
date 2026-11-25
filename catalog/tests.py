@@ -192,3 +192,48 @@ class ScraperPaginationTests(SimpleTestCase):
 
         rendered = Template('{{ total_products|default_if_none:0 }}|{{ total_orders|default_if_none:0 }}').render(Context(ctx))
         self.assertEqual(rendered, '0|0')
+
+    def test_live_telemetry_handles_empty_database_with_zero_metrics(self):
+        from core.telemetry import format_indian_number, get_atelier_live_telemetry, get_order_counts
+        from luckjary_project.urls import admin_live_telemetry_api
+        from django.db.models.query import QuerySet
+
+        self.assertEqual(format_indian_number(0), '0')
+        self.assertEqual(format_indian_number(928399), '9,28,399')
+        self.assertEqual(format_indian_number(232100), '2,32,100')
+
+        rf = RequestFactory()
+        req = rf.get('/admin/api/live-telemetry/')
+
+        with patch('orders.models.Order.objects.aggregate', return_value={
+            'rev': None, 'total_orders': 0, 'pending': 0, 'processing': 0, 'shipped': 0, 'delivered': 0
+        }), \
+             patch('catalog.models.Product.objects.count', return_value=0), \
+             patch('accounts.models.CustomUser.objects.count', return_value=0), \
+             patch('orders.models.Coupon.objects.filter') as mock_coupon_filter, \
+             patch('orders.models.Order.objects.select_related') as mock_ord_sel, \
+             patch('django.contrib.admin.models.LogEntry.objects.select_related') as mock_log_sel:
+            mock_coupon_filter.return_value.count.return_value = 0
+            mock_ord_sel.return_value.prefetch_related.return_value.order_by.return_value.__getitem__.return_value = []
+            mock_log_sel.return_value.order_by.return_value.__getitem__.return_value = []
+
+            resp = admin_live_telemetry_api(req)
+            self.assertEqual(resp.status_code, 200)
+            payload = json.loads(resp.content.decode('utf-8'))
+            self.assertEqual(payload['status'], 'ok')
+            self.assertEqual(payload['total_revenue_inr'], '0')
+            self.assertEqual(payload['total_revenue'], '0.00')
+            self.assertEqual(payload['total_orders'], 0)
+            self.assertEqual(payload['pending_count'], 0)
+            self.assertEqual(payload['avg_aov_inr'], '0')
+            self.assertEqual(payload['total_products'], 0)
+            self.assertEqual(payload['total_customers'], 0)
+            self.assertEqual(payload['recent_orders'], [])
+            self.assertEqual(payload['recent_activity'], [])
+
+        with patch('orders.models.Order.objects.aggregate', return_value={
+            'all_count': 0, 'unfulfilled': 0, 'qc': 0, 'transit': 0, 'delivered': 0, 'cancelled': 0
+        }):
+            counts = get_order_counts()
+            self.assertEqual(counts['all'], 0)
+            self.assertEqual(counts['unfulfilled'], 0)

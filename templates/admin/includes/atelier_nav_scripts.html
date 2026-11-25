@@ -90,5 +90,33 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     }
   });
+
+  // Realtime Sidebar Badge Sync (polls summary counts every 15s while tab is active)
+  if (!window.__atelierSidebarPollerStarted) {
+    window.__atelierSidebarPollerStarted = true;
+    const syncSidebarBadges = async () => {
+      if (document.hidden) return;
+      try {
+        const res = await fetch('/admin/api/live-telemetry/?summary=1', {
+          headers: { 'X-Requested-With': 'XMLHttpRequest' },
+          cache: 'no-store'
+        });
+        if (!res.ok) return;
+        const data = await res.json();
+        if (data.status !== 'ok') return;
+        if (typeof data.total_products === 'number') {
+          document.querySelectorAll('.sidebar-products-count').forEach(el => {
+            el.textContent = data.total_products;
+          });
+        }
+        if (typeof data.total_orders === 'number') {
+          document.querySelectorAll('.sidebar-orders-count').forEach(el => {
+            el.textContent = data.total_orders;
+          });
+        }
+      } catch (err) {}
+    };
+    setInterval(syncSidebarBadges, 15000);
+  }
 });
 </script>

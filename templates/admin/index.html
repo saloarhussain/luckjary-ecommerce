@@ -190,18 +190,19 @@
 <div class="card-surface p-4 sm:p-5 rounded-xl flex flex-col justify-between relative overflow-hidden group">
 <div class="flex items-start justify-between">
 <span class="text-[11px] font-mono uppercase tracking-wider text-neutral-400">Total Sales</span>
-<span class="px-2 py-0.5 rounded-full text-[10px] font-mono font-semibold bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 whitespace-nowrap">
-              +14.2%
-            </span>
+<span class="px-2 py-0.5 rounded-full text-[10px] font-mono font-semibold bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 whitespace-nowrap inline-flex items-center gap-1">
+  <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+  LIVE
+</span>
 </div>
 <div class="mt-3 sm:mt-4 mb-3">
 <div class="text-2xl sm:text-3xl font-mono font-semibold text-white tracking-tight break-words">
-              ₹{{ total_revenue_inr|default:"9,28,400" }} <span class="text-xs sm:text-sm font-sans font-normal text-neutral-400">(${{ total_revenue|default:"11,165.00" }})</span>
+              ₹<span id="dashTotalSalesInr">{{ total_revenue_inr|default:"0" }}</span> <span class="text-xs sm:text-sm font-sans font-normal text-neutral-400">($<span id="dashTotalSalesUsd">{{ total_revenue|default:"0.00" }}</span>)</span>
 </div>
 </div>
 <div class="flex items-center gap-1.5 text-[11px] text-emerald-400/90 font-medium pt-2 border-t border-obsidian-700/50">
 <svg class="w-3.5 h-3.5 text-emerald-400 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path clip-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" fill-rule="evenodd"></path></svg>
-<span class="truncate">Stripe Luxury Payments Captured</span>
+<span class="truncate">Live Order Revenue</span>
 </div>
 </div>
 <!-- Metric Card 2: Total Orders -->
@@ -211,7 +212,7 @@
 <span class="text-[10px] font-mono text-neutral-500 tracking-wider whitespace-nowrap">ALL-TIME</span>
 </div>
 <div class="mt-3 sm:mt-4 mb-3">
-<div class="text-2xl sm:text-3xl font-mono font-semibold text-white tracking-tight">{{ total_orders|default_if_none:0 }}</div>
+<div id="dashTotalOrders" class="text-2xl sm:text-3xl font-mono font-semibold text-white tracking-tight">{{ total_orders|default_if_none:0 }}</div>
 </div>
 <div class="pt-2 border-t border-obsidian-700/50">
 <a class="text-[11px] text-neutral-400 hover:text-champagne-300 inline-flex items-center gap-1 transition whitespace-nowrap" href="{% url 'admin:orders_order_changelist' %}" style="text-decoration: none !important;">
@@ -228,7 +229,7 @@
             </span>
 </div>
 <div class="mt-3 sm:mt-4 mb-3">
-<div class="text-2xl sm:text-3xl font-mono font-bold text-champagne-200 tracking-tight">1</div>
+<div id="dashOrdersToFulfill" class="text-2xl sm:text-3xl font-mono font-bold text-champagne-200 tracking-tight">{{ pending_count|default_if_none:0 }}</div>
 </div>
 <div class="pt-2 border-t border-obsidian-700/50">
 <a class="text-[11px] text-amber-300/90 hover:text-amber-200 inline-flex items-center gap-1 transition whitespace-nowrap" href="{% url 'admin:orders_order_changelist' %}?status__exact=PENDING" style="text-decoration: none !important;">
@@ -244,11 +245,11 @@
 </div>
 <div class="mt-3 sm:mt-4 mb-3">
 <div class="text-2xl sm:text-3xl font-mono font-semibold text-white tracking-tight break-words">
-              ₹2,32,100 <span class="text-xs font-sans text-neutral-400">($2,791.25)</span>
+              ₹<span id="dashAovInr">{{ avg_aov_inr|default:"0" }}</span> <span class="text-xs font-sans text-neutral-400">($<span id="dashAovUsd">{{ avg_aov|default:"0.00" }}</span>)</span>
 </div>
 </div>
 <div class="pt-2 border-t border-obsidian-700/50 text-[11px] text-neutral-400">
-            Fine 925 jewelry cart average
+            Average cart settlement
           </div>
 </div>
 </section>
@@ -263,7 +264,7 @@
 <h2 class="text-sm font-semibold text-white tracking-wide">Things to do</h2>
 </div>
 <span class="px-2.5 py-0.5 rounded-full text-[10px] font-mono font-semibold bg-amber-500/15 text-amber-300 border border-amber-500/30 whitespace-nowrap inline-flex items-center">
-              {{ unfulfilled_count|default:"1" }} pending
+              <span id="dashPendingPillCount">{{ unfulfilled_count|default_if_none:0 }}</span>&nbsp;pending
             </span>
 </div>
 <!-- Pending Item 1: Orders awaiting Jeweler QA -->
@@ -273,8 +274,8 @@
 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m4 10v4m8-4v4" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"></path></svg>
 </div>
 <div class="min-w-0">
-<h3 class="text-xs font-semibold text-neutral-100">{{ unfulfilled_count|default:"1" }} Orders to Fulfill</h3>
-<p class="text-[11px] text-neutral-400 mt-0.5 leading-relaxed">Orders awaiting sterling silver jeweler QA &amp; bespoke dispatch.</p>
+<h3 class="text-xs font-semibold text-neutral-100"><span id="dashUnfulfilledHeadingCount">{{ unfulfilled_count|default_if_none:0 }}</span> Orders to Fulfill</h3>
+<p class="text-[11px] text-neutral-400 mt-0.5 leading-relaxed">Orders awaiting quality assurance &amp; dispatch.</p>
 </div>
 </div>
 <button onclick="window.location.href='{% url 'admin:orders_order_changelist' %}?status__exact=PENDING'" class="w-full sm:w-auto px-3.5 py-1.5 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-obsidian-950 font-semibold text-xs tracking-wide transition text-center whitespace-nowrap glow-emerald flex-shrink-0 cursor-pointer" style="color: #07080a !important;">
@@ -289,7 +290,7 @@
 </div>
 <div class="min-w-0">
 <h3 class="text-xs font-semibold text-neutral-100">Courier Logistics Sync</h3>
-<p class="text-[11px] text-neutral-400 mt-0.5 leading-relaxed">Live FedEx Luxury &amp; armored courier dispatch telemetry active.</p>
+<p class="text-[11px] text-neutral-400 mt-0.5 leading-relaxed">Live dispatch telemetry &amp; order fulfillment workspace.</p>
 </div>
 </div>
 <button onclick="window.location.href='{% url 'orders:oms_dashboard' %}'" class="w-full sm:w-auto px-3.5 py-1.5 rounded-lg bg-obsidian-800 hover:bg-obsidian-700 text-neutral-200 border border-obsidian-700 text-xs font-medium transition text-center whitespace-nowrap flex-shrink-0 cursor-pointer">
@@ -346,7 +347,7 @@
 </div>
 <div class="pt-2 border-t border-obsidian-700/40 text-[10px] font-mono text-neutral-500 flex justify-between items-center">
 <span class="whitespace-nowrap">Security Layer 1.3 TLS</span>
-<span class="whitespace-nowrap">Uptime 99.99%</span>
+<span id="dashLiveSyncStamp" class="whitespace-nowrap">Realtime Sync Active</span>
 </div>
 </div>
 </section>
@@ -361,7 +362,7 @@
 <div class="flex items-center gap-2 sm:gap-3 min-w-0">
 <h2 class="text-sm font-semibold text-white tracking-wide whitespace-nowrap">Recent Orders</h2>
 <span class="whitespace-nowrap shrink-0 inline-flex items-center px-2 py-0.5 rounded text-[10px] font-mono bg-obsidian-850 text-neutral-400 border border-obsidian-700">
-<span class="w-1.5 h-1.5 rounded-full bg-emerald-400 mr-1.5"></span>Live Orders Vault
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse mr-1.5"></span>Live Orders
 </span>
 </div>
 <a class="text-xs text-neutral-400 hover:text-champagne-300 font-medium inline-flex items-center gap-1.5 transition whitespace-nowrap shrink-0" href="{% url 'admin:orders_order_changelist' %}" style="text-decoration: none !important;">
@@ -381,367 +382,123 @@
 <th class="py-3.5 px-4 font-semibold text-right">TOTAL</th>
 </tr>
 </thead>
-<tbody class="divide-y divide-white/[0.04] text-zinc-200">
-<!-- Row 1: Julian Stewart -->
+<tbody id="recentOrdersTableBody" class="divide-y divide-white/[0.04] text-zinc-200">
+{% for order in recent_orders %}
 <tr class="hover:bg-white/[0.025] transition-colors group">
 <td class="py-3.5 px-4 whitespace-nowrap">
-<a href="/admin/orders/order/1/change/" class="inline-flex items-center gap-1.5 font-mono font-bold text-xs text-neutral-300 bg-obsidian-800 hover:bg-obsidian-750 border border-obsidian-700 px-3 py-1 rounded-lg transition-colors cursor-pointer shadow-sm" style="text-decoration: none !important;" title="View Order #LCK-202611-304918">
-<span>#LCK-202611-304918</span>
+<a href="{{ order.edit_url }}" class="inline-flex items-center gap-1.5 font-mono font-bold text-xs text-neutral-300 bg-obsidian-800 hover:bg-obsidian-750 border border-obsidian-700 px-3 py-1 rounded-lg transition-colors cursor-pointer shadow-sm" style="text-decoration: none !important;" title="View Order #{{ order.order_number }}">
+<span>#{{ order.order_number }}</span>
 </a>
 </td>
-<td class="py-3.5 px-4 text-neutral-400 font-mono text-xs whitespace-nowrap">Nov 12, 2026</td>
+<td class="py-3.5 px-4 text-neutral-400 font-mono text-xs whitespace-nowrap">{{ order.date_display }}</td>
 <td class="py-3.5 px-4">
 <div class="flex flex-col">
-<span class="font-bold text-white text-xs hover:text-emerald-400 transition-colors">Julian Stewart</span>
-<span class="text-[11px] text-neutral-400 font-sans">julian.stewart@icloud.com</span>
+<span class="font-bold text-white text-xs hover:text-emerald-400 transition-colors">{{ order.full_name }}</span>
+<span class="text-[11px] text-neutral-400 font-sans">{{ order.email }}</span>
 </div>
 </td>
 <td class="py-3.5 px-4 whitespace-nowrap">
+{% if order.payment_status == 'PAID' %}
 <span class="inline-flex items-center gap-1.5 text-xs font-medium px-3 py-1 rounded-full bg-[#0d2822] text-[#34d399] border border-[#10b981]/35">
-<span class="w-1.5 h-1.5 rounded-full bg-[#10b981]"></span>Paid
+<span class="w-1.5 h-1.5 rounded-full bg-[#10b981]"></span>{{ order.payment_label }}
 </span>
-</td>
-<td class="py-3.5 px-4 whitespace-nowrap">
+{% elif order.payment_status == 'PENDING' %}
 <span class="inline-flex items-center gap-1.5 text-xs font-medium px-3 py-1 rounded-full bg-[#2d1e16] text-[#fbbf24] border border-[#d97706]/35">
-<span class="w-1.5 h-1.5 rounded-full bg-[#f59e0b]"></span>Unfulfilled
+<span class="w-1.5 h-1.5 rounded-full bg-[#f59e0b]"></span>{{ order.payment_label }}
 </span>
-</td>
-<td class="py-3.5 px-4 text-right whitespace-nowrap">
-<span class="font-bold text-white font-sans text-sm tracking-tight">₹2,86,350</span>
-<span class="text-[10px] text-neutral-400 block font-mono">($3,450.00)</span>
-</td>
-</tr>
-<!-- Row 2: Charlotte Dupré -->
-<tr class="hover:bg-white/[0.025] transition-colors group">
-<td class="py-3.5 px-4 whitespace-nowrap">
-<a href="/admin/orders/order/2/change/" class="inline-flex items-center gap-1.5 font-mono font-bold text-xs text-neutral-300 bg-obsidian-800 hover:bg-obsidian-750 border border-obsidian-700 px-3 py-1 rounded-lg transition-colors cursor-pointer shadow-sm" style="text-decoration: none !important;" title="View Order #LCK-202611-194056">
-<span>#LCK-202611-194056</span>
-</a>
-</td>
-<td class="py-3.5 px-4 text-neutral-400 font-mono text-xs whitespace-nowrap">Nov 12, 2026</td>
-<td class="py-3.5 px-4">
-<div class="flex flex-col">
-<span class="font-bold text-white text-xs hover:text-emerald-400 transition-colors">Charlotte Dupré</span>
-<span class="text-[11px] text-neutral-400 font-sans">charlotte.dupre@gmail.com</span>
-</div>
-</td>
-<td class="py-3.5 px-4 whitespace-nowrap">
-<span class="inline-flex items-center gap-1.5 text-xs font-medium px-3 py-1 rounded-full bg-[#0d2822] text-[#34d399] border border-[#10b981]/35">
-<span class="w-1.5 h-1.5 rounded-full bg-[#10b981]"></span>Paid
+{% else %}
+<span class="inline-flex items-center gap-1.5 text-xs font-medium px-3 py-1 rounded-full bg-rose-500/10 text-rose-400 border border-rose-500/30">
+<span class="w-1.5 h-1.5 rounded-full bg-rose-400"></span>{{ order.payment_label }}
 </span>
+{% endif %}
 </td>
 <td class="py-3.5 px-4 whitespace-nowrap">
+{% if order.status == 'PENDING' %}
+<span class="inline-flex items-center gap-1.5 text-xs font-medium px-3 py-1 rounded-full bg-[#2d1e16] text-[#fbbf24] border border-[#d97706]/35">
+<span class="w-1.5 h-1.5 rounded-full bg-[#f59e0b]"></span>{{ order.status_label }}
+</span>
+{% elif order.status == 'PROCESSING' %}
 <span class="inline-flex items-center gap-1.5 text-xs font-medium px-3 py-1 rounded-full bg-[#241a38] text-[#c084fc] border border-[#a855f7]/35">
-<span class="w-1.5 h-1.5 rounded-full bg-[#a855f7]"></span>In Atelier QC
+<span class="w-1.5 h-1.5 rounded-full bg-[#a855f7]"></span>{{ order.status_label }}
 </span>
-</td>
-<td class="py-3.5 px-4 text-right whitespace-nowrap">
-<span class="font-bold text-white font-sans text-sm tracking-tight">₹1,23,255</span>
-<span class="text-[10px] text-neutral-400 block font-mono">($1,485.00)</span>
-</td>
-</tr>
-<!-- Row 3: Isabella Vance -->
-<tr class="hover:bg-white/[0.025] transition-colors group">
-<td class="py-3.5 px-4 whitespace-nowrap">
-<a href="/admin/orders/order/3/change/" class="inline-flex items-center gap-1.5 font-mono font-bold text-xs text-neutral-300 bg-obsidian-800 hover:bg-obsidian-750 border border-obsidian-700 px-3 py-1 rounded-lg transition-colors cursor-pointer shadow-sm" style="text-decoration: none !important;" title="View Order #LCK-202611-739201">
-<span>#LCK-202611-739201</span>
-</a>
-</td>
-<td class="py-3.5 px-4 text-neutral-400 font-mono text-xs whitespace-nowrap">Nov 12, 2026</td>
-<td class="py-3.5 px-4">
-<div class="flex flex-col">
-<span class="font-bold text-white text-xs hover:text-emerald-400 transition-colors">Isabella Vance</span>
-<span class="text-[11px] text-neutral-400 font-sans">isabella.vance@example.com</span>
-</div>
-</td>
-<td class="py-3.5 px-4 whitespace-nowrap">
-<span class="inline-flex items-center gap-1.5 text-xs font-medium px-3 py-1 rounded-full bg-[#0d2822] text-[#34d399] border border-[#10b981]/35">
-<span class="w-1.5 h-1.5 rounded-full bg-[#10b981]"></span>Paid
-</span>
-</td>
-<td class="py-3.5 px-4 whitespace-nowrap">
-<span class="inline-flex items-center gap-1.5 text-xs font-medium px-3 py-1 rounded-full bg-[#0e272b] text-[#2dd4bf] border border-[#14b8a6]/35">
-<span class="w-1.5 h-1.5 rounded-full bg-[#14b8a6]"></span>Delivered
-</span>
-</td>
-<td class="py-3.5 px-4 text-right whitespace-nowrap">
-<span class="font-bold text-white font-sans text-sm tracking-tight">₹2,03,350</span>
-<span class="text-[10px] text-neutral-400 block font-mono">($2,450.00)</span>
-</td>
-</tr>
-<!-- Row 4: Isabella Vance -->
-<tr class="hover:bg-white/[0.025] transition-colors group">
-<td class="py-3.5 px-4 whitespace-nowrap">
-<a href="/admin/orders/order/4/change/" class="inline-flex items-center gap-1.5 font-mono font-bold text-xs text-neutral-300 bg-obsidian-800 hover:bg-obsidian-750 border border-obsidian-700 px-3 py-1 rounded-lg transition-colors cursor-pointer shadow-sm" style="text-decoration: none !important;" title="View Order #LCK-202611-884102">
-<span>#LCK-202611-884102</span>
-</a>
-</td>
-<td class="py-3.5 px-4 text-neutral-400 font-mono text-xs whitespace-nowrap">Nov 12, 2026</td>
-<td class="py-3.5 px-4">
-<div class="flex flex-col">
-<span class="font-bold text-white text-xs hover:text-emerald-400 transition-colors">Isabella Vance</span>
-<span class="text-[11px] text-neutral-400 font-sans">isabella.vance@example.com</span>
-</div>
-</td>
-<td class="py-3.5 px-4 whitespace-nowrap">
-<span class="inline-flex items-center gap-1.5 text-xs font-medium px-3 py-1 rounded-full bg-[#0d2822] text-[#34d399] border border-[#10b981]/35">
-<span class="w-1.5 h-1.5 rounded-full bg-[#10b981]"></span>Paid
-</span>
-</td>
-<td class="py-3.5 px-4 whitespace-nowrap">
+{% elif order.status == 'SHIPPED' %}
 <span class="inline-flex items-center gap-1.5 text-xs font-medium px-3 py-1 rounded-full bg-[#14233c] text-[#60a5fa] border border-[#3b82f6]/35">
-<span class="w-1.5 h-1.5 rounded-full bg-[#3b82f6]"></span>In Transit
+<span class="w-1.5 h-1.5 rounded-full bg-[#3b82f6]"></span>{{ order.status_label }}
 </span>
+{% elif order.status == 'DELIVERED' %}
+<span class="inline-flex items-center gap-1.5 text-xs font-medium px-3 py-1 rounded-full bg-[#0e272b] text-[#2dd4bf] border border-[#14b8a6]/35">
+<span class="w-1.5 h-1.5 rounded-full bg-[#14b8a6]"></span>{{ order.status_label }}
+</span>
+{% else %}
+<span class="inline-flex items-center gap-1.5 text-xs font-medium px-3 py-1 rounded-full bg-rose-500/10 text-rose-400 border border-rose-500/30">
+<span class="w-1.5 h-1.5 rounded-full bg-rose-400"></span>{{ order.status_label }}
+</span>
+{% endif %}
 </td>
 <td class="py-3.5 px-4 text-right whitespace-nowrap">
-<span class="font-bold text-white font-sans text-sm tracking-tight">₹3,13,740</span>
-<span class="text-[10px] text-neutral-400 block font-mono">($3,780.00)</span>
+<span class="font-bold text-white font-sans text-sm tracking-tight">₹{{ order.total_inr }}</span>
+<span class="text-[10px] text-neutral-400 block font-mono">(${{ order.total_usd }})</span>
 </td>
 </tr>
+{% empty %}
+<tr>
+<td colspan="6" class="py-10 text-center text-neutral-400 font-sans text-xs">No orders recorded yet.</td>
+</tr>
+{% endfor %}
 </tbody>
 </table>
 </div>
-<!-- Mobile Recent Order Cards & Status Filter Chips (Visible only on mobile < md) -->
+<!-- Mobile Recent Order Cards (Visible only on mobile < md) -->
 <div class="block md:hidden space-y-3.5 pt-1">
-<!-- Horizontal Filter Chips -->
-<div class="overflow-x-auto -mx-4 px-4 flex items-center gap-2 pb-1 no-scrollbar">
-<button class="px-3 py-1 rounded-lg text-xs font-medium bg-neutral-200 text-obsidian-950 font-sans whitespace-nowrap shrink-0 shadow-sm">
-All <span class="ml-1 font-mono text-[10px]">4</span>
-</button>
-<button class="px-3 py-1 rounded-lg text-xs font-medium bg-obsidian-850 text-amber-300 border border-amber-500/30 whitespace-nowrap shrink-0 flex items-center gap-1.5">
-<span class="w-1.5 h-1.5 rounded-full bg-[#f59e0b] shrink-0"></span> Unfulfilled <span class="ml-0.5 font-mono text-[10px] text-[#8e92a8]">1</span>
-</button>
-<button class="px-3 py-1 rounded-lg text-xs font-medium bg-obsidian-850 text-purple-300 border border-purple-500/30 whitespace-nowrap shrink-0 flex items-center gap-1.5">
-<span class="w-1.5 h-1.5 rounded-full bg-[#a855f7] shrink-0"></span> In Atelier QC <span class="ml-0.5 font-mono text-[10px] text-[#8e92a8]">1</span>
-</button>
-<button class="px-3 py-1 rounded-lg text-xs font-medium bg-obsidian-850 text-blue-300 border border-blue-500/30 whitespace-nowrap shrink-0 flex items-center gap-1.5">
-<span class="w-1.5 h-1.5 rounded-full bg-[#3b82f6] shrink-0"></span> In Transit <span class="ml-0.5 font-mono text-[10px] text-[#8e92a8]">1</span>
-</button>
-</div>
-<!-- Cards List -->
-<div class="space-y-3">
-<!-- CARD 1 -->
+<div id="recentOrdersMobileList" class="space-y-3">
+{% for order in recent_orders %}
 <div class="bg-obsidian-900/80 border border-white/[0.06] rounded-xl p-3.5 space-y-3 shadow-md">
 <div class="flex items-start justify-between gap-2">
 <div class="space-y-1.5 min-w-0">
-<div>
-<a href="/admin/orders/order/1/change/" class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-obsidian-800 hover:bg-obsidian-750 border border-obsidian-700 text-neutral-300 font-mono text-xs font-bold tracking-tight whitespace-nowrap shrink-0 shadow-sm" style="text-decoration: none !important;">
-<span>#LCK-202611-304918</span>
-<svg class="w-3 h-3 text-neutral-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><rect height="13" rx="2" ry="2" width="13" x="9" y="9"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+<a href="{{ order.edit_url }}" class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-obsidian-800 hover:bg-obsidian-750 border border-obsidian-700 text-neutral-300 font-mono text-xs font-bold tracking-tight whitespace-nowrap shrink-0 shadow-sm" style="text-decoration: none !important;">
+<span>#{{ order.order_number }}</span>
 </a>
-</div>
 <div class="text-[11px] text-[#8e92a8] flex items-center gap-1.5 font-sans whitespace-nowrap">
-<svg class="w-3 h-3 text-[#8e92a8] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><rect height="18" rx="2" ry="2" width="18" x="3" y="4"></rect><line x1="16" x2="16" y1="2" y2="6"></line><line x1="8" x2="8" y1="2" y2="6"></line><line x1="3" x2="21" y1="10" y2="10"></line></svg>
-<span>Nov 12, 2026</span>
+<span>{{ order.date_display }}</span>
 <span>•</span>
-<span class="font-mono text-[10px]">16:18</span>
+<span class="font-mono text-[10px]">{{ order.time_display }}</span>
 </div>
 </div>
 <div class="text-right shrink-0">
-<div class="font-mono font-semibold text-white tracking-tight whitespace-nowrap">₹2,86,350</div>
-<span class="text-[9px] uppercase tracking-wider text-[#8e92a8] font-medium whitespace-nowrap block">925 SILVER PIECE</span>
+<div class="font-mono font-semibold text-white tracking-tight whitespace-nowrap">₹{{ order.total_inr }}</div>
+<span class="text-[9px] uppercase tracking-wider text-[#8e92a8] font-medium whitespace-nowrap block truncate max-w-[120px]">{{ order.primary_item_title }}</span>
 </div>
 </div>
 <div class="h-px bg-white/[0.06]"></div>
 <div class="flex items-center justify-between gap-2">
 <div class="flex items-center gap-2.5 min-w-0">
-<div class="w-8 h-8 rounded-full bg-obsidian-850 border border-obsidian-700 flex items-center justify-center font-mono text-xs font-semibold text-neutral-300 shrink-0">
-JS
-</div>
+<div class="w-8 h-8 rounded-full bg-obsidian-850 border border-obsidian-700 flex items-center justify-center font-mono text-xs font-semibold text-neutral-300 shrink-0">{{ order.initials }}</div>
 <div class="min-w-0 overflow-hidden">
-<p class="text-xs font-bold text-white leading-tight truncate">Julian Stewart</p>
-<p class="text-[10px] text-[#8e92a8] font-sans truncate">julian.stewart@icloud.com</p>
+<p class="text-xs font-bold text-white leading-tight truncate">{{ order.full_name }}</p>
+<p class="text-[10px] text-[#8e92a8] font-sans truncate">{{ order.email }}</p>
 </div>
-</div>
-<div class="w-7 h-7 rounded-lg border border-obsidian-700 bg-obsidian-850 flex items-center justify-center text-champagne-400 shrink-0">
-<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 2l2.4 7.4H22l-6 4.6 2.3 7-6.3-4.6-6.3 4.6 2.3-7-6-4.6h7.6z"></path></svg>
 </div>
 </div>
 <div class="pt-1 flex items-center justify-between flex-wrap gap-2">
 <div class="flex items-center gap-1.5 flex-wrap">
-<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-medium bg-[#0d2822] text-[#34d399] border border-[#10b981]/35 whitespace-nowrap">
-<span class="w-1.5 h-1.5 rounded-full bg-[#10b981] shrink-0"></span> Paid
-</span>
-<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-medium bg-[#2d1e16] text-[#fbbf24] border border-[#d97706]/35 whitespace-nowrap">
-<span class="w-1.5 h-1.5 rounded-full bg-[#f59e0b] shrink-0"></span> Unfulfilled
-</span>
+<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-medium bg-[#0d2822] text-[#34d399] border border-[#10b981]/35 whitespace-nowrap">{{ order.payment_label }}</span>
+<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-medium bg-obsidian-800 text-neutral-200 border border-obsidian-700 whitespace-nowrap">{{ order.status_label }}</span>
 </div>
-<div class="flex items-center gap-2 shrink-0 ml-auto">
-<a href="/admin/orders/order/1/change/" class="px-3 py-1 text-[11px] font-semibold text-neutral-300 hover:text-white bg-obsidian-850 hover:bg-obsidian-750 border border-obsidian-700 rounded-lg transition-all flex items-center gap-1 whitespace-nowrap shadow-sm" style="text-decoration: none !important;">
+<a href="{{ order.edit_url }}" class="px-3 py-1 text-[11px] font-semibold text-neutral-300 hover:text-white bg-obsidian-850 hover:bg-obsidian-750 border border-obsidian-700 rounded-lg transition-all flex items-center gap-1 whitespace-nowrap shadow-sm ml-auto" style="text-decoration: none !important;">
 Edit <span>→</span>
 </a>
 </div>
 </div>
-</div>
-<!-- CARD 2 -->
-<div class="bg-obsidian-900/80 border border-white/[0.06] rounded-xl p-3.5 space-y-3 shadow-md">
-<div class="flex items-start justify-between gap-2">
-<div class="space-y-1.5 min-w-0">
-<div>
-<a href="/admin/orders/order/2/change/" class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-obsidian-800 hover:bg-obsidian-750 border border-obsidian-700 text-neutral-300 font-mono text-xs font-bold tracking-tight whitespace-nowrap shrink-0 shadow-sm" style="text-decoration: none !important;">
-<span>#LCK-202611-194056</span>
-<svg class="w-3 h-3 text-neutral-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><rect height="13" rx="2" ry="2" width="13" x="9" y="9"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-</a>
-</div>
-<div class="text-[11px] text-[#8e92a8] flex items-center gap-1.5 font-sans whitespace-nowrap">
-<svg class="w-3 h-3 text-[#8e92a8] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><rect height="18" rx="2" ry="2" width="18" x="3" y="4"></rect><line x1="16" x2="16" y1="2" y2="6"></line><line x1="8" x2="8" y1="2" y2="6"></line><line x1="3" x2="21" y1="10" y2="10"></line></svg>
-<span>Nov 12, 2026</span>
-<span>•</span>
-<span class="font-mono text-[10px]">13:10</span>
-</div>
-</div>
-<div class="text-right shrink-0">
-<div class="font-mono font-semibold text-white tracking-tight whitespace-nowrap">₹1,23,255</div>
-<span class="text-[9px] uppercase tracking-wider text-[#8e92a8] font-medium whitespace-nowrap block">TENNIS CHAIN</span>
-</div>
-</div>
-<div class="h-px bg-white/[0.06]"></div>
-<div class="flex items-center justify-between gap-2">
-<div class="flex items-center gap-2.5 min-w-0">
-<div class="w-8 h-8 rounded-full bg-obsidian-850 border border-obsidian-700 flex items-center justify-center font-mono text-xs font-semibold text-neutral-300 shrink-0">
-CD
-</div>
-<div class="min-w-0 overflow-hidden">
-<p class="text-xs font-bold text-white leading-tight truncate">Charlotte Dupré</p>
-<p class="text-[10px] text-[#8e92a8] font-sans truncate">charlotte.dupre@gmail.com</p>
-</div>
-</div>
-<div class="w-7 h-7 rounded-lg border border-obsidian-700 bg-obsidian-850 flex items-center justify-center text-champagne-400 shrink-0">
-<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
-</div>
-</div>
-<div class="pt-1 flex items-center justify-between flex-wrap gap-2">
-<div class="flex items-center gap-1.5 flex-wrap">
-<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-medium bg-[#0d2822] text-[#34d399] border border-[#10b981]/35 whitespace-nowrap">
-<span class="w-1.5 h-1.5 rounded-full bg-[#10b981] shrink-0"></span> Paid
-</span>
-<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-medium bg-[#241a38] text-[#c084fc] border border-[#a855f7]/35 whitespace-nowrap">
-<span class="w-1.5 h-1.5 rounded-full bg-[#a855f7] shrink-0"></span> In Atelier QC
-</span>
-</div>
-<div class="flex items-center gap-2 shrink-0 ml-auto">
-<a href="/admin/orders/order/2/change/" class="px-3 py-1 text-[11px] font-semibold text-neutral-300 hover:text-white bg-obsidian-850 hover:bg-obsidian-750 border border-obsidian-700 rounded-lg transition-all flex items-center gap-1 whitespace-nowrap shadow-sm" style="text-decoration: none !important;">
-Edit <span>→</span>
-</a>
-</div>
-</div>
-</div>
-<!-- CARD 3 -->
-<div class="bg-obsidian-900/80 border border-white/[0.06] rounded-xl p-3.5 space-y-3 shadow-md">
-<div class="flex items-start justify-between gap-2">
-<div class="space-y-1.5 min-w-0">
-<div>
-<a href="/admin/orders/order/3/change/" class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-obsidian-800 hover:bg-obsidian-750 border border-obsidian-700 text-neutral-300 font-mono text-xs font-bold tracking-tight whitespace-nowrap shrink-0 shadow-sm" style="text-decoration: none !important;">
-<span>#LCK-202611-739201</span>
-<svg class="w-3 h-3 text-neutral-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><rect height="13" rx="2" ry="2" width="13" x="9" y="9"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-</a>
-</div>
-<div class="text-[11px] text-[#8e92a8] flex items-center gap-1.5 font-sans whitespace-nowrap">
-<svg class="w-3 h-3 text-[#8e92a8] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><rect height="18" rx="2" ry="2" width="18" x="3" y="4"></rect><line x1="16" x2="16" y1="2" y2="6"></line><line x1="8" x2="8" y1="2" y2="6"></line><line x1="3" x2="21" y1="10" y2="10"></line></svg>
-<span>Nov 12, 2026</span>
-<span>•</span>
-<span class="font-mono text-[10px]">10:45</span>
-</div>
-</div>
-<div class="text-right shrink-0">
-<div class="font-mono font-semibold text-white tracking-tight whitespace-nowrap">₹2,03,350</div>
-<span class="text-[9px] uppercase tracking-wider text-[#8e92a8] font-medium whitespace-nowrap block">SOLITAIRE PENDANT</span>
-</div>
-</div>
-<div class="h-px bg-white/[0.06]"></div>
-<div class="flex items-center justify-between gap-2">
-<div class="flex items-center gap-2.5 min-w-0">
-<div class="w-8 h-8 rounded-full bg-obsidian-850 border border-obsidian-700 flex items-center justify-center font-mono text-xs font-semibold text-neutral-300 shrink-0">
-IV
-</div>
-<div class="min-w-0 overflow-hidden">
-<p class="text-xs font-bold text-white leading-tight truncate">Isabella Vance</p>
-<p class="text-[10px] text-[#8e92a8] font-sans truncate">isabella.vance@example.com</p>
-</div>
-</div>
-<div class="w-7 h-7 rounded-lg border border-obsidian-700 bg-obsidian-850 flex items-center justify-center text-champagne-400 shrink-0">
-<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"></path></svg>
-</div>
-</div>
-<div class="pt-1 flex items-center justify-between flex-wrap gap-2">
-<div class="flex items-center gap-1.5 flex-wrap">
-<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-medium bg-[#0d2822] text-[#34d399] border border-[#10b981]/35 whitespace-nowrap">
-<span class="w-1.5 h-1.5 rounded-full bg-[#10b981] shrink-0"></span> Paid
-</span>
-<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-medium bg-[#0e272b] text-[#2dd4bf] border border-[#14b8a6]/35 whitespace-nowrap">
-<span class="w-1.5 h-1.5 rounded-full bg-[#14b8a6] shrink-0"></span> Delivered
-</span>
-</div>
-<div class="flex items-center gap-2 shrink-0 ml-auto">
-<a href="/admin/orders/order/3/change/" class="px-3 py-1 text-[11px] font-semibold text-neutral-300 hover:text-white bg-obsidian-850 hover:bg-obsidian-750 border border-obsidian-700 rounded-lg transition-all flex items-center gap-1 whitespace-nowrap shadow-sm" style="text-decoration: none !important;">
-Edit <span>→</span>
-</a>
-</div>
-</div>
-</div>
-<!-- CARD 4 -->
-<div class="bg-obsidian-900/80 border border-white/[0.06] rounded-xl p-3.5 space-y-3 shadow-md">
-<div class="flex items-start justify-between gap-2">
-<div class="space-y-1.5 min-w-0">
-<div>
-<a href="/admin/orders/order/4/change/" class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-obsidian-800 hover:bg-obsidian-750 border border-obsidian-700 text-neutral-300 font-mono text-xs font-bold tracking-tight whitespace-nowrap shrink-0 shadow-sm" style="text-decoration: none !important;">
-<span>#LCK-202611-884102</span>
-<svg class="w-3 h-3 text-neutral-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><rect height="13" rx="2" ry="2" width="13" x="9" y="9"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-</a>
-</div>
-<div class="text-[11px] text-[#8e92a8] flex items-center gap-1.5 font-sans whitespace-nowrap">
-<svg class="w-3 h-3 text-[#8e92a8] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><rect height="18" rx="2" ry="2" width="18" x="3" y="4"></rect><line x1="16" x2="16" y1="2" y2="6"></line><line x1="8" x2="8" y1="2" y2="6"></line><line x1="3" x2="21" y1="10" y2="10"></line></svg>
-<span>Nov 12, 2026</span>
-<span>•</span>
-<span class="font-mono text-[10px]">09:20</span>
-</div>
-</div>
-<div class="text-right shrink-0">
-<div class="font-mono font-semibold text-white tracking-tight whitespace-nowrap">₹3,13,740</div>
-<span class="text-[9px] uppercase tracking-wider text-[#8e92a8] font-medium whitespace-nowrap block">BESPOKE CUFF</span>
-</div>
-</div>
-<div class="h-px bg-white/[0.06]"></div>
-<div class="flex items-center justify-between gap-2">
-<div class="flex items-center gap-2.5 min-w-0">
-<div class="w-8 h-8 rounded-full bg-obsidian-850 border border-obsidian-700 flex items-center justify-center font-mono text-xs font-semibold text-neutral-300 shrink-0">
-IV
-</div>
-<div class="min-w-0 overflow-hidden">
-<p class="text-xs font-bold text-white leading-tight truncate">Isabella Vance</p>
-<p class="text-[10px] text-[#8e92a8] font-sans truncate">isabella.vance@example.com</p>
-</div>
-</div>
-<div class="w-7 h-7 rounded-lg border border-obsidian-700 bg-obsidian-850 flex items-center justify-center text-champagne-400 shrink-0">
-<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><rect height="13" rx="2" width="16" x="1" y="3"></rect><polygon points="16 8 20 8 23 11 23 16 16 16 8"></polygon><circle cx="5.5" cy="18.5" r="2.5"></circle><circle cx="18.5" cy="18.5" r="2.5"></circle></svg>
-</div>
-</div>
-<div class="pt-1 flex items-center justify-between flex-wrap gap-2">
-<div class="flex items-center gap-1.5 flex-wrap">
-<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-medium bg-[#0d2822] text-[#34d399] border border-[#10b981]/35 whitespace-nowrap">
-<span class="w-1.5 h-1.5 rounded-full bg-[#10b981] shrink-0"></span> Paid
-</span>
-<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-medium bg-[#14233c] text-[#60a5fa] border border-[#3b82f6]/35 whitespace-nowrap">
-<span class="w-1.5 h-1.5 rounded-full bg-[#3b82f6] shrink-0"></span> In Transit
-</span>
-</div>
-<div class="flex items-center gap-2 shrink-0 ml-auto">
-<a href="/admin/orders/order/4/change/" class="px-3 py-1 text-[11px] font-semibold text-neutral-300 hover:text-white bg-obsidian-850 hover:bg-obsidian-750 border border-obsidian-700 rounded-lg transition-all flex items-center gap-1 whitespace-nowrap shadow-sm" style="text-decoration: none !important;">
-Edit <span>→</span>
-</a>
-</div>
-</div>
-</div>
+{% empty %}
+<div class="p-6 text-center text-xs text-neutral-400 bg-obsidian-900/60 border border-white/[0.06] rounded-xl">No orders recorded yet.</div>
+{% endfor %}
 </div>
 </div>
 </div>
 <!-- Table Bottom Note -->
 <div class="pt-4 border-t border-white/[0.06] flex flex-wrap items-center justify-between gap-2 text-[11px] text-neutral-400 font-mono mt-2">
-<span class="whitespace-nowrap">Showing recent 4 fine jewelry orders</span>
-<div class="flex gap-2">
-<button class="px-2.5 py-1 rounded-lg bg-obsidian-850 border border-obsidian-700 text-neutral-400 hover:text-white disabled:opacity-50 whitespace-nowrap" disabled="">Previous</button>
-<button class="px-2.5 py-1 rounded-lg bg-obsidian-850 border border-obsidian-700 text-neutral-300 hover:text-white whitespace-nowrap">Next</button>
-</div>
+<span id="recentOrdersFooterCount" class="whitespace-nowrap">Showing latest {{ recent_orders|length }} of {{ total_orders|default_if_none:0 }} orders</span>
+<a href="{% url 'admin:orders_order_changelist' %}" class="px-2.5 py-1 rounded-lg bg-obsidian-850 border border-obsidian-700 text-neutral-300 hover:text-white whitespace-nowrap" style="text-decoration: none !important;">Manage All Orders →</a>
 </div>
 </div>
 <!-- Right: Management Quicklinks & Activity Timeline (4 Cols on xl, 2-col on md) -->
@@ -752,15 +509,15 @@ Edit <span>→</span>
               Management Quicklinks
             </h2>
 <div class="space-y-2">
-<!-- Quicklink 1: Jewelry Catalog -->
+<!-- Quicklink 1: Products Catalog -->
 <a class="flex items-center justify-between p-2.5 rounded-lg hover:bg-obsidian-800/80 transition group border border-transparent hover:border-obsidian-700" href="{% url 'admin:catalog_product_changelist' %}" style="text-decoration: none !important;">
 <div class="flex items-center gap-3 min-w-0">
 <div class="w-8 h-8 rounded-lg bg-champagne-400/10 border border-champagne-400/20 flex items-center justify-center text-champagne-300 flex-shrink-0">
 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
 </div>
 <div class="min-w-0">
-<div class="text-xs font-medium text-neutral-200 group-hover:text-champagne-300 transition truncate">Jewelry Catalog</div>
-<div class="text-[10px] text-neutral-400 truncate">14 active sterling creations</div>
+<div class="text-xs font-medium text-neutral-200 group-hover:text-champagne-300 transition truncate">Products Catalog</div>
+<div class="text-[10px] text-neutral-400 truncate"><span id="quicklinkProductsCount">{{ total_products|default_if_none:0 }}</span> active products</div>
 </div>
 </div>
 <svg class="w-4 h-4 text-neutral-500 group-hover:text-neutral-200 group-hover:translate-x-0.5 transition flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
@@ -773,7 +530,7 @@ Edit <span>→</span>
 </div>
 <div class="min-w-0">
 <div class="text-xs font-medium text-neutral-200 group-hover:text-emerald-400 transition truncate">Customers</div>
-<div class="text-[10px] text-neutral-400 truncate">3 registered patrons</div>
+<div class="text-[10px] text-neutral-400 truncate"><span id="quicklinkCustomersCount">{{ total_customers|default_if_none:0 }}</span> registered patrons</div>
 </div>
 </div>
 <svg class="w-4 h-4 text-neutral-500 group-hover:text-neutral-200 group-hover:translate-x-0.5 transition flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
@@ -786,7 +543,7 @@ Edit <span>→</span>
 </div>
 <div class="min-w-0">
 <div class="text-xs font-medium text-neutral-200 group-hover:text-amber-400 transition truncate">Discounts &amp; Codes</div>
-<div class="text-[10px] text-neutral-400 truncate">Active promotional campaigns</div>
+<div class="text-[10px] text-neutral-400 truncate"><span id="quicklinkCouponsCount">{{ active_coupons|default_if_none:0 }}</span> active campaigns</div>
 </div>
 </div>
 <svg class="w-4 h-4 text-neutral-500 group-hover:text-neutral-200 group-hover:translate-x-0.5 transition flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
@@ -811,37 +568,20 @@ Edit <span>→</span>
 <h2 class="text-xs font-semibold uppercase tracking-wider text-neutral-400 font-mono pb-3 border-b border-obsidian-700/60 mb-3 whitespace-nowrap">
               Recent Activity
             </h2>
-<div class="space-y-4">
-<!-- Activity 1 -->
+<div id="recentActivityList" class="space-y-4">
+{% for entry in recent_activity %}
 <div class="flex items-start gap-2.5 text-xs">
-<span class="w-1.5 h-1.5 rounded-full bg-champagne-400 mt-1.5 flex-shrink-0"></span>
+<span class="w-1.5 h-1.5 rounded-full {% if entry.action_flag == 1 %}bg-emerald-400{% elif entry.action_flag == 3 %}bg-rose-400{% else %}bg-champagne-400{% endif %} mt-1.5 flex-shrink-0"></span>
 <div class="space-y-0.5 min-w-0">
 <p class="text-neutral-300 leading-snug">
-<strong class="text-white font-medium">Eleanor</strong> removed <span class="text-champagne-300 font-medium">Aura Textured Dome Ring in 925 Sterling Silver</span>
+<strong class="text-white font-medium">{{ entry.actor }}</strong> {{ entry.verb }} {{ entry.model_label }} <span class="text-champagne-300 font-medium">{{ entry.object_repr }}</span>
 </p>
-<span class="text-[10px] font-mono text-neutral-400 block">1 day, 8 hours ago</span>
+<span class="text-[10px] font-mono text-neutral-400 block">{{ entry.time_ago }}</span>
 </div>
 </div>
-<!-- Activity 2 -->
-<div class="flex items-start gap-2.5 text-xs">
-<span class="w-1.5 h-1.5 rounded-full bg-emerald-400 mt-1.5 flex-shrink-0"></span>
-<div class="space-y-0.5 min-w-0">
-<p class="text-neutral-300 leading-snug">
-<strong class="text-white font-medium">Eleanor</strong> modified order <span class="font-mono text-[#60a5fa] whitespace-nowrap">LCK-202611-304918</span> for Julian Stewart (₹2,86,350)
-</p>
-<span class="text-[10px] font-mono text-neutral-400 block">2 days, 6 hours ago</span>
-</div>
-</div>
-<!-- Activity 3 -->
-<div class="flex items-start gap-2.5 text-xs">
-<span class="w-1.5 h-1.5 rounded-full bg-neutral-500 mt-1.5 flex-shrink-0"></span>
-<div class="space-y-0.5 min-w-0">
-<p class="text-neutral-300 leading-snug">
-<strong class="text-white font-medium">Eleanor</strong> modified <span class="text-champagne-300 font-medium">Celeste Herringbone Chain in 925 Silver</span>
-</p>
-<span class="text-[10px] font-mono text-neutral-400 block">5 days, 21 hours ago</span>
-</div>
-</div>
+{% empty %}
+<div class="text-xs text-neutral-400 font-sans">No recent activity recorded yet.</div>
+{% endfor %}
 </div>
 </div>
 </div>
@@ -887,7 +627,7 @@ Edit <span>→</span>
 
   // Universal Hotkey Ctrl+K / Cmd+K to focus search
   document.addEventListener('keydown', (e) => {
-    if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
+  if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
       const searchInput = document.getElementById('universalHeaderSearch');
       if (searchInput) {
         e.preventDefault();
@@ -896,6 +636,164 @@ Edit <span>→</span>
       }
     }
   });
+
+  // Realtime Dashboard Telemetry Poller (every 10s while tab is active)
+  function escapeDashboardHtml(str) {
+    return String(str ?? '').replace(/[&<>"']/g, m => ({
+      '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+    }[m]));
+  }
+
+  function paymentBadgeHtml(o) {
+    if (o.payment_status === 'PAID') {
+      return `<span class="inline-flex items-center gap-1.5 text-xs font-medium px-3 py-1 rounded-full bg-[#0d2822] text-[#34d399] border border-[#10b981]/35"><span class="w-1.5 h-1.5 rounded-full bg-[#10b981]"></span>${escapeDashboardHtml(o.payment_label)}</span>`;
+    }
+    if (o.payment_status === 'PENDING') {
+      return `<span class="inline-flex items-center gap-1.5 text-xs font-medium px-3 py-1 rounded-full bg-[#2d1e16] text-[#fbbf24] border border-[#d97706]/35"><span class="w-1.5 h-1.5 rounded-full bg-[#f59e0b]"></span>${escapeDashboardHtml(o.payment_label)}</span>`;
+    }
+    return `<span class="inline-flex items-center gap-1.5 text-xs font-medium px-3 py-1 rounded-full bg-rose-500/10 text-rose-400 border border-rose-500/30"><span class="w-1.5 h-1.5 rounded-full bg-rose-400"></span>${escapeDashboardHtml(o.payment_label)}</span>`;
+  }
+
+  function statusBadgeHtml(o) {
+    const map = {
+      PENDING: 'bg-[#2d1e16] text-[#fbbf24] border-[#d97706]/35|#f59e0b',
+      PROCESSING: 'bg-[#241a38] text-[#c084fc] border-[#a855f7]/35|#a855f7',
+      SHIPPED: 'bg-[#14233c] text-[#60a5fa] border-[#3b82f6]/35|#3b82f6',
+      DELIVERED: 'bg-[#0e272b] text-[#2dd4bf] border-[#14b8a6]/35|#14b8a6',
+    };
+    const [cls, dot] = (map[o.status] || 'bg-rose-500/10 text-rose-400 border-rose-500/30|#fb7185').split('|');
+    return `<span class="inline-flex items-center gap-1.5 text-xs font-medium px-3 py-1 rounded-full ${cls} border"><span class="w-1.5 h-1.5 rounded-full" style="background-color:${dot}"></span>${escapeDashboardHtml(o.status_label)}</span>`;
+  }
+
+  async function refreshDashboardTelemetry() {
+    if (document.hidden) return;
+    try {
+      const res = await fetch('/admin/api/live-telemetry/', {
+        headers: { 'X-Requested-With': 'XMLHttpRequest' },
+        cache: 'no-store'
+      });
+      if (!res.ok) return;
+      const d = await res.json();
+      if (d.status !== 'ok') return;
+
+      const setTxt = (id, val) => {
+        const el = document.getElementById(id);
+        if (el && val !== undefined && val !== null) el.textContent = val;
+      };
+
+      setTxt('dashTotalSalesInr', d.total_revenue_inr);
+      setTxt('dashTotalSalesUsd', d.total_revenue);
+      setTxt('dashTotalOrders', d.total_orders);
+      setTxt('dashOrdersToFulfill', d.pending_count);
+      setTxt('dashAovInr', d.avg_aov_inr);
+      setTxt('dashAovUsd', d.avg_aov);
+      setTxt('dashPendingPillCount', d.unfulfilled_count);
+      setTxt('dashUnfulfilledHeadingCount', d.unfulfilled_count);
+      setTxt('quicklinkProductsCount', d.total_products);
+      setTxt('quicklinkCustomersCount', d.total_customers);
+      setTxt('quicklinkCouponsCount', d.active_coupons);
+
+      document.querySelectorAll('.sidebar-products-count').forEach(el => { el.textContent = d.total_products; });
+      document.querySelectorAll('.sidebar-orders-count').forEach(el => { el.textContent = d.total_orders; });
+
+      const stamp = document.getElementById('dashLiveSyncStamp');
+      if (stamp) stamp.textContent = `Synced ${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' })}`;
+
+      const tbody = document.getElementById('recentOrdersTableBody');
+      if (tbody && Array.isArray(d.recent_orders)) {
+        tbody.innerHTML = d.recent_orders.length === 0
+          ? '<tr><td colspan="6" class="py-10 text-center text-neutral-400 font-sans text-xs">No orders recorded yet.</td></tr>'
+          : d.recent_orders.map(o => `
+            <tr class="hover:bg-white/[0.025] transition-colors group">
+              <td class="py-3.5 px-4 whitespace-nowrap">
+                <a href="${escapeDashboardHtml(o.edit_url)}" class="inline-flex items-center gap-1.5 font-mono font-bold text-xs text-neutral-300 bg-obsidian-800 hover:bg-obsidian-750 border border-obsidian-700 px-3 py-1 rounded-lg transition-colors cursor-pointer shadow-sm" style="text-decoration: none !important;">
+                  <span>#${escapeDashboardHtml(o.order_number)}</span>
+                </a>
+              </td>
+              <td class="py-3.5 px-4 text-neutral-400 font-mono text-xs whitespace-nowrap">${escapeDashboardHtml(o.date_display)}</td>
+              <td class="py-3.5 px-4">
+                <div class="flex flex-col">
+                  <span class="font-bold text-white text-xs hover:text-emerald-400 transition-colors">${escapeDashboardHtml(o.full_name)}</span>
+                  <span class="text-[11px] text-neutral-400 font-sans">${escapeDashboardHtml(o.email)}</span>
+                </div>
+              </td>
+              <td class="py-3.5 px-4 whitespace-nowrap">${paymentBadgeHtml(o)}</td>
+              <td class="py-3.5 px-4 whitespace-nowrap">${statusBadgeHtml(o)}</td>
+              <td class="py-3.5 px-4 text-right whitespace-nowrap">
+                <span class="font-bold text-white font-sans text-sm tracking-tight">₹${escapeDashboardHtml(o.total_inr)}</span>
+                <span class="text-[10px] text-neutral-400 block font-mono">($${escapeDashboardHtml(o.total_usd)})</span>
+              </td>
+            </tr>
+          `).join('');
+      }
+
+      const mobileList = document.getElementById('recentOrdersMobileList');
+      if (mobileList && Array.isArray(d.recent_orders)) {
+        mobileList.innerHTML = d.recent_orders.length === 0
+          ? '<div class="p-6 text-center text-xs text-neutral-400 bg-obsidian-900/60 border border-white/[0.06] rounded-xl">No orders recorded yet.</div>'
+          : d.recent_orders.map(o => `
+            <div class="bg-obsidian-900/80 border border-white/[0.06] rounded-xl p-3.5 space-y-3 shadow-md">
+              <div class="flex items-start justify-between gap-2">
+                <div class="space-y-1.5 min-w-0">
+                  <a href="${escapeDashboardHtml(o.edit_url)}" class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-obsidian-800 hover:bg-obsidian-750 border border-obsidian-700 text-neutral-300 font-mono text-xs font-bold tracking-tight whitespace-nowrap shrink-0 shadow-sm" style="text-decoration: none !important;">
+                    <span>#${escapeDashboardHtml(o.order_number)}</span>
+                  </a>
+                  <div class="text-[11px] text-[#8e92a8] flex items-center gap-1.5 font-sans whitespace-nowrap">
+                    <span>${escapeDashboardHtml(o.date_display)}</span><span>•</span><span class="font-mono text-[10px]">${escapeDashboardHtml(o.time_display)}</span>
+                  </div>
+                </div>
+                <div class="text-right shrink-0">
+                  <div class="font-mono font-semibold text-white tracking-tight whitespace-nowrap">₹${escapeDashboardHtml(o.total_inr)}</div>
+                  <span class="text-[9px] uppercase tracking-wider text-[#8e92a8] font-medium whitespace-nowrap block truncate max-w-[120px]">${escapeDashboardHtml(o.primary_item_title)}</span>
+                </div>
+              </div>
+              <div class="h-px bg-white/[0.06]"></div>
+              <div class="flex items-center gap-2.5 min-w-0">
+                <div class="w-8 h-8 rounded-full bg-obsidian-850 border border-obsidian-700 flex items-center justify-center font-mono text-xs font-semibold text-neutral-300 shrink-0">${escapeDashboardHtml(o.initials)}</div>
+                <div class="min-w-0 overflow-hidden">
+                  <p class="text-xs font-bold text-white leading-tight truncate">${escapeDashboardHtml(o.full_name)}</p>
+                  <p class="text-[10px] text-[#8e92a8] font-sans truncate">${escapeDashboardHtml(o.email)}</p>
+                </div>
+              </div>
+              <div class="pt-1 flex items-center justify-between flex-wrap gap-2">
+                <div class="flex items-center gap-1.5 flex-wrap">
+                  <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-medium bg-[#0d2822] text-[#34d399] border border-[#10b981]/35 whitespace-nowrap">${escapeDashboardHtml(o.payment_label)}</span>
+                  <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-medium bg-obsidian-800 text-neutral-200 border border-obsidian-700 whitespace-nowrap">${escapeDashboardHtml(o.status_label)}</span>
+                </div>
+                <a href="${escapeDashboardHtml(o.edit_url)}" class="px-3 py-1 text-[11px] font-semibold text-neutral-300 hover:text-white bg-obsidian-850 hover:bg-obsidian-750 border border-obsidian-700 rounded-lg transition-all flex items-center gap-1 whitespace-nowrap shadow-sm ml-auto" style="text-decoration: none !important;">Edit <span>→</span></a>
+              </div>
+            </div>
+          `).join('');
+      }
+
+      const footerCount = document.getElementById('recentOrdersFooterCount');
+      if (footerCount && Array.isArray(d.recent_orders)) {
+        footerCount.textContent = `Showing latest ${d.recent_orders.length} of ${d.total_orders} orders`;
+      }
+
+      const actList = document.getElementById('recentActivityList');
+      if (actList && Array.isArray(d.recent_activity)) {
+        actList.innerHTML = d.recent_activity.length === 0
+          ? '<div class="text-xs text-neutral-400 font-sans">No recent activity recorded yet.</div>'
+          : d.recent_activity.map(entry => {
+            const dotCls = entry.action_flag === 1 ? 'bg-emerald-400' : (entry.action_flag === 3 ? 'bg-rose-400' : 'bg-champagne-400');
+            return `
+              <div class="flex items-start gap-2.5 text-xs">
+                <span class="w-1.5 h-1.5 rounded-full ${dotCls} mt-1.5 flex-shrink-0"></span>
+                <div class="space-y-0.5 min-w-0">
+                  <p class="text-neutral-300 leading-snug">
+                    <strong class="text-white font-medium">${escapeDashboardHtml(entry.actor)}</strong> ${escapeDashboardHtml(entry.verb)} ${escapeDashboardHtml(entry.model_label)} <span class="text-champagne-300 font-medium">${escapeDashboardHtml(entry.object_repr)}</span>
+                  </p>
+                  <span class="text-[10px] font-mono text-neutral-400 block">${escapeDashboardHtml(entry.time_ago)}</span>
+                </div>
+              </div>
+            `;
+          }).join('');
+      }
+    } catch (e) {}
+  }
+
+  setInterval(refreshDashboardTelemetry, 10000);
 </script>
 <!-- END: Simple Mobile Drawer Toggle Script -->
 

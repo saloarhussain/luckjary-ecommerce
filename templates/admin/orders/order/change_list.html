@@ -235,23 +235,23 @@
         <div class="flex items-center gap-2 overflow-x-auto no-scrollbar pt-2 pb-1 text-xs border-y border-[#232732]" id="statusFilterTabs">
           <button data-filter="all" class="status-tab active whitespace-nowrap px-4 py-1.5 rounded-full font-semibold bg-emerald-500 text-[#0d0e10] shadow-sm flex items-center gap-1.5 transition-all" type="button">
             <span>All Orders</span>
-            <span class="opacity-90 font-mono text-[11px] font-bold">4</span>
+            <span id="orderCountAll" class="opacity-90 font-mono text-[11px] font-bold">{{ order_counts.all|default_if_none:0 }}</span>
           </button>
           <button data-filter="unfulfilled" class="status-tab whitespace-nowrap px-4 py-1.5 rounded-full font-medium bg-[#14161c] border border-[#232732] text-zinc-400 hover:text-zinc-100 hover:border-zinc-700 flex items-center gap-1.5 transition-colors" type="button">
             <span>Unfulfilled</span>
-            <span class="text-amber-400 font-mono text-[11px] font-semibold">1</span>
+            <span id="orderCountUnfulfilled" class="text-amber-400 font-mono text-[11px] font-semibold">{{ order_counts.unfulfilled|default_if_none:0 }}</span>
           </button>
           <button data-filter="qc" class="status-tab whitespace-nowrap px-4 py-1.5 rounded-full font-medium bg-[#14161c] border border-[#232732] text-zinc-400 hover:text-zinc-100 hover:border-zinc-700 flex items-center gap-1.5 transition-colors" type="button">
             <span>QC Review</span>
-            <span class="text-indigo-400 font-mono text-[11px] font-semibold">1</span>
+            <span id="orderCountQc" class="text-indigo-400 font-mono text-[11px] font-semibold">{{ order_counts.qc|default_if_none:0 }}</span>
           </button>
           <button data-filter="transit" class="status-tab whitespace-nowrap px-4 py-1.5 rounded-full font-medium bg-[#14161c] border border-[#232732] text-zinc-400 hover:text-zinc-100 hover:border-zinc-700 flex items-center gap-1.5 transition-colors" type="button">
             <span>In Transit</span>
-            <span class="text-cyan-400 font-mono text-[11px] font-semibold">1</span>
+            <span id="orderCountTransit" class="text-cyan-400 font-mono text-[11px] font-semibold">{{ order_counts.transit|default_if_none:0 }}</span>
           </button>
           <button data-filter="delivered" class="status-tab whitespace-nowrap px-4 py-1.5 rounded-full font-medium bg-[#14161c] border border-[#232732] text-zinc-400 hover:text-zinc-100 hover:border-zinc-700 flex items-center gap-1.5 transition-colors" type="button">
             <span>Delivered</span>
-            <span class="text-emerald-400 font-mono text-[11px] font-semibold">1</span>
+            <span id="orderCountDelivered" class="text-emerald-400 font-mono text-[11px] font-semibold">{{ order_counts.delivered|default_if_none:0 }}</span>
           </button>
         </div>
       </section>
@@ -265,7 +265,7 @@
             <label class="cursor-pointer text-xs font-semibold text-zinc-300 select-none" for="selectAll">Select All</label>
           </div>
           <span id="batchCountBadge" class="text-[11px] font-medium text-emerald-400 font-mono bg-emerald-500/10 px-2.5 py-0.5 rounded border border-emerald-500/20">
-            0 of 4 selected
+            0 of {{ orders_list|length }} selected
           </span>
         </div>
         <div class="flex items-center gap-2.5 w-full sm:w-auto">
@@ -314,466 +314,139 @@
                   <th class="py-3.5 px-4 font-semibold text-center w-24">ACTION</th>
                 </tr>
               </thead>
-              <tbody class="divide-y divide-white/[0.04] text-zinc-200">
-                <!-- ROW 1: Julian Stewart -->
-                <tr class="order-table-row hover:bg-white/[0.025] transition-colors group" data-order-id="1" data-status="unfulfilled" data-search="julian stewart julian.stewart@icloud.com lck-304918 lck-202611-304918 fine rings aura textured dome ring">
+              <tbody id="ordersTableBody" class="divide-y divide-white/[0.04] text-zinc-200">
+                {% for order in orders_list %}
+                <tr class="order-table-row hover:bg-white/[0.025] transition-colors group" data-order-id="{{ order.id }}" data-status="{{ order.filter_key }}" data-search="{{ order.search_blob }}">
                   <td class="py-3.5 px-4 text-center">
-                    <input class="order-checkbox w-4 h-4 rounded border-obsidian-700 bg-obsidian-900 text-emerald-500 focus:ring-emerald-500 cursor-pointer" data-order-id="1" type="checkbox">
+                    <input class="order-checkbox w-4 h-4 rounded border-obsidian-700 bg-obsidian-900 text-emerald-500 focus:ring-emerald-500 cursor-pointer" data-order-id="{{ order.id }}" type="checkbox">
                   </td>
                   <td class="py-3.5 px-4 whitespace-nowrap">
-                    <button type="button" class="copy-ref-btn order-link inline-flex items-center gap-1.5 font-mono font-bold text-xs text-neutral-300 bg-obsidian-800 hover:bg-obsidian-750 border border-obsidian-700 px-3 py-1 rounded-lg transition-colors cursor-pointer shadow-sm" data-ref="LCK-202611-304918" title="Copy Reference ID">
-                      <span>#LCK-202611-304918</span>
+                    <button type="button" class="copy-ref-btn order-link inline-flex items-center gap-1.5 font-mono font-bold text-xs text-neutral-300 bg-obsidian-800 hover:bg-obsidian-750 border border-obsidian-700 px-3 py-1 rounded-lg transition-colors cursor-pointer shadow-sm" data-ref="{{ order.order_number }}" title="Copy Reference ID">
+                      <span>#{{ order.order_number }}</span>
                     </button>
                   </td>
                   <td class="py-3.5 px-4 text-[#9ca3af] font-sans text-xs whitespace-nowrap">
-                    Nov 12, 2026
+                    {{ order.date_display }}
                   </td>
                   <td class="py-3.5 px-4">
                     <div class="flex flex-col">
-                      <span class="font-bold text-white text-xs hover:text-emerald-400 transition-colors">Julian Stewart</span>
-                      <span class="text-[11px] text-[#8e92a8] font-sans">julian.stewart@icloud.com</span>
+                      <span class="font-bold text-white text-xs hover:text-emerald-400 transition-colors">{{ order.full_name }}</span>
+                      <span class="text-[11px] text-[#8e92a8] font-sans">{{ order.email }}</span>
                     </div>
                   </td>
                   <td class="py-3.5 px-4 whitespace-nowrap">
+                    {% if order.payment_status == 'PAID' %}
                     <span class="inline-flex items-center gap-1.5 text-xs font-medium px-3 py-1 rounded-full bg-[#0d2822] text-[#34d399] border border-[#10b981]/35">
-                      <span class="w-1.5 h-1.5 rounded-full bg-[#10b981]"></span>Paid
+                      <span class="w-1.5 h-1.5 rounded-full bg-[#10b981]"></span>{{ order.payment_label }}
                     </span>
-                  </td>
-                  <td class="py-3.5 px-4 whitespace-nowrap">
+                    {% elif order.payment_status == 'PENDING' %}
                     <span class="inline-flex items-center gap-1.5 text-xs font-medium px-3 py-1 rounded-full bg-[#2d1e16] text-[#fbbf24] border border-[#d97706]/35">
-                      <span class="w-1.5 h-1.5 rounded-full bg-[#f59e0b]"></span>Unfulfilled
+                      <span class="w-1.5 h-1.5 rounded-full bg-[#f59e0b]"></span>{{ order.payment_label }}
                     </span>
-                  </td>
-                  <td class="py-3.5 px-4 text-right whitespace-nowrap">
-                    <span class="final-price font-bold text-white font-sans text-sm tracking-tight" data-inr="3450" data-usd="3450.00" data-eur="3210.00" data-gbp="2760.00" data-aed="12670.00">₹3,450</span>
-                  </td>
-                  <td class="py-3.5 px-4 text-center whitespace-nowrap">
-                    <a href="/admin/orders/order/1/change/" class="table-action-link inline-flex items-center justify-center px-4 py-1.5 rounded-lg bg-[#171920] hover:bg-[#21242d] border border-[#21242d] text-xs font-semibold text-[#e5e5e5] hover:text-white transition-all shadow-sm" style="text-decoration: none !important;">
-                      Edit
-                    </a>
-                  </td>
-                </tr>
-
-                <!-- ROW 2: Charlotte Dupré -->
-                <tr class="order-table-row hover:bg-white/[0.025] transition-colors group" data-order-id="2" data-status="qc" data-search="charlotte dupré charlotte.dupre@gmail.com lck-194056 lck-202611-194056 necklaces celeste herringbone chain">
-                  <td class="py-3.5 px-4 text-center">
-                    <input class="order-checkbox w-4 h-4 rounded border-obsidian-700 bg-obsidian-900 text-emerald-500 focus:ring-emerald-500 cursor-pointer" data-order-id="2" type="checkbox">
-                  </td>
-                  <td class="py-3.5 px-4 whitespace-nowrap">
-                    <button type="button" class="copy-ref-btn order-link inline-flex items-center gap-1.5 font-mono font-bold text-xs text-neutral-300 bg-obsidian-800 hover:bg-obsidian-750 border border-obsidian-700 px-3 py-1 rounded-lg transition-colors cursor-pointer shadow-sm" data-ref="LCK-202611-194056" title="Copy Reference ID">
-                      <span>#LCK-202611-194056</span>
-                    </button>
-                  </td>
-                  <td class="py-3.5 px-4 text-[#9ca3af] font-sans text-xs whitespace-nowrap">
-                    Nov 12, 2026
-                  </td>
-                  <td class="py-3.5 px-4">
-                    <div class="flex flex-col">
-                      <span class="font-bold text-white text-xs hover:text-emerald-400 transition-colors">Charlotte Dupré</span>
-                      <span class="text-[11px] text-[#8e92a8] font-sans">charlotte.dupre@gmail.com</span>
-                    </div>
-                  </td>
-                  <td class="py-3.5 px-4 whitespace-nowrap">
-                    <span class="inline-flex items-center gap-1.5 text-xs font-medium px-3 py-1 rounded-full bg-[#0d2822] text-[#34d399] border border-[#10b981]/35">
-                      <span class="w-1.5 h-1.5 rounded-full bg-[#10b981]"></span>Paid
+                    {% else %}
+                    <span class="inline-flex items-center gap-1.5 text-xs font-medium px-3 py-1 rounded-full bg-rose-500/10 text-rose-400 border border-rose-500/30">
+                      <span class="w-1.5 h-1.5 rounded-full bg-rose-400"></span>{{ order.payment_label }}
                     </span>
+                    {% endif %}
                   </td>
                   <td class="py-3.5 px-4 whitespace-nowrap">
-                    <span class="inline-flex items-center gap-1.5 text-xs font-medium px-3 py-1 rounded-full bg-[#261536] text-[#c084fc] border border-[#9333ea]/35">
-                      <span class="w-1.5 h-1.5 rounded-full bg-[#a855f7]"></span>In Atelier QC
+                    {% if order.status == 'PENDING' %}
+                    <span class="inline-flex items-center gap-1.5 text-xs font-medium px-3 py-1 rounded-full bg-[#2d1e16] text-[#fbbf24] border border-[#d97706]/35">
+                      <span class="w-1.5 h-1.5 rounded-full bg-[#f59e0b]"></span>{{ order.status_label }}
                     </span>
-                  </td>
-                  <td class="py-3.5 px-4 text-right whitespace-nowrap">
-                    <span class="final-price font-bold text-white font-sans text-sm tracking-tight" data-inr="1485" data-usd="1485.00" data-eur="1380.00" data-gbp="1190.00" data-aed="5450.00">₹1,485</span>
-                  </td>
-                  <td class="py-3.5 px-4 text-center whitespace-nowrap">
-                    <a href="/admin/orders/order/2/change/" class="table-action-link inline-flex items-center justify-center px-4 py-1.5 rounded-lg bg-[#171920] hover:bg-[#21242d] border border-[#21242d] text-xs font-semibold text-[#e5e5e5] hover:text-white transition-all shadow-sm" style="text-decoration: none !important;">
-                      Edit
-                    </a>
-                  </td>
-                </tr>
-
-                <!-- ROW 3: Isabella Vance (Delivered) -->
-                <tr class="order-table-row hover:bg-white/[0.025] transition-colors group" data-order-id="3" data-status="delivered" data-search="isabella vance isabella.vance@example.com lck-739201 lck-202611-739201 bracelets elysian radiant tennis">
-                  <td class="py-3.5 px-4 text-center">
-                    <input class="order-checkbox w-4 h-4 rounded border-obsidian-700 bg-obsidian-900 text-emerald-500 focus:ring-emerald-500 cursor-pointer" data-order-id="3" type="checkbox">
-                  </td>
-                  <td class="py-3.5 px-4 whitespace-nowrap">
-                    <button type="button" class="copy-ref-btn order-link inline-flex items-center gap-1.5 font-mono font-bold text-xs text-neutral-300 bg-obsidian-800 hover:bg-obsidian-750 border border-obsidian-700 px-3 py-1 rounded-lg transition-colors cursor-pointer shadow-sm" data-ref="LCK-202611-739201" title="Copy Reference ID">
-                      <span>#LCK-202611-739201</span>
-                    </button>
-                  </td>
-                  <td class="py-3.5 px-4 text-[#9ca3af] font-sans text-xs whitespace-nowrap">
-                    Nov 12, 2026
-                  </td>
-                  <td class="py-3.5 px-4">
-                    <div class="flex flex-col">
-                      <span class="font-bold text-white text-xs hover:text-emerald-400 transition-colors">Isabella Vance</span>
-                      <span class="text-[11px] text-[#8e92a8] font-sans">isabella.vance@example.com</span>
-                    </div>
-                  </td>
-                  <td class="py-3.5 px-4 whitespace-nowrap">
-                    <span class="inline-flex items-center gap-1.5 text-xs font-medium px-3 py-1 rounded-full bg-[#0d2822] text-[#34d399] border border-[#10b981]/35">
-                      <span class="w-1.5 h-1.5 rounded-full bg-[#10b981]"></span>Paid
+                    {% elif order.status == 'PROCESSING' %}
+                    <span class="inline-flex items-center gap-1.5 text-xs font-medium px-3 py-1 rounded-full bg-[#241a38] text-[#c084fc] border border-[#a855f7]/35">
+                      <span class="w-1.5 h-1.5 rounded-full bg-[#a855f7]"></span>{{ order.status_label }}
                     </span>
-                  </td>
-                  <td class="py-3.5 px-4 whitespace-nowrap">
-                    <span class="inline-flex items-center gap-1.5 text-xs font-medium px-3 py-1 rounded-full bg-[#0f2c29] text-[#2dd4bf] border border-[#0d9488]/35">
-                      <span class="w-1.5 h-1.5 rounded-full bg-[#14b8a6]"></span>Delivered
-                    </span>
-                  </td>
-                  <td class="py-3.5 px-4 text-right whitespace-nowrap">
-                    <span class="final-price font-bold text-white font-sans text-sm tracking-tight" data-inr="2450" data-usd="2450.00" data-eur="2280.00" data-gbp="1960.00" data-aed="8990.00">₹2,450</span>
-                  </td>
-                  <td class="py-3.5 px-4 text-center whitespace-nowrap">
-                    <a href="/admin/orders/order/3/change/" class="table-action-link inline-flex items-center justify-center px-4 py-1.5 rounded-lg bg-[#171920] hover:bg-[#21242d] border border-[#21242d] text-xs font-semibold text-[#e5e5e5] hover:text-white transition-all shadow-sm" style="text-decoration: none !important;">
-                      Edit
-                    </a>
-                  </td>
-                </tr>
-
-                <!-- ROW 4: Isabella Vance (In Transit) -->
-                <tr class="order-table-row hover:bg-white/[0.025] transition-colors group" data-order-id="4" data-status="transit" data-search="isabella vance isabella.vance@example.com lck-884102 lck-202611-884102 atelier sets solitaire cabochon luna">
-                  <td class="py-3.5 px-4 text-center">
-                    <input class="order-checkbox w-4 h-4 rounded border-obsidian-700 bg-obsidian-900 text-emerald-500 focus:ring-emerald-500 cursor-pointer" data-order-id="4" type="checkbox">
-                  </td>
-                  <td class="py-3.5 px-4 whitespace-nowrap">
-                    <button type="button" class="copy-ref-btn order-link inline-flex items-center gap-1.5 font-mono font-bold text-xs text-neutral-300 bg-obsidian-800 hover:bg-obsidian-750 border border-obsidian-700 px-3 py-1 rounded-lg transition-colors cursor-pointer shadow-sm" data-ref="LCK-202611-884102" title="Copy Reference ID">
-                      <span>#LCK-202611-884102</span>
-                    </button>
-                  </td>
-                  <td class="py-3.5 px-4 text-[#9ca3af] font-sans text-xs whitespace-nowrap">
-                    Nov 12, 2026
-                  </td>
-                  <td class="py-3.5 px-4">
-                    <div class="flex flex-col">
-                      <span class="font-bold text-white text-xs hover:text-emerald-400 transition-colors">Isabella Vance</span>
-                      <span class="text-[11px] text-[#8e92a8] font-sans">isabella.vance@example.com</span>
-                    </div>
-                  </td>
-                  <td class="py-3.5 px-4 whitespace-nowrap">
-                    <span class="inline-flex items-center gap-1.5 text-xs font-medium px-3 py-1 rounded-full bg-[#0d2822] text-[#34d399] border border-[#10b981]/35">
-                      <span class="w-1.5 h-1.5 rounded-full bg-[#10b981]"></span>Paid
-                    </span>
-                  </td>
-                  <td class="py-3.5 px-4 whitespace-nowrap">
+                    {% elif order.status == 'SHIPPED' %}
                     <span class="inline-flex items-center gap-1.5 text-xs font-medium px-3 py-1 rounded-full bg-[#13223d] text-[#60a5fa] border border-[#2563eb]/35">
-                      <span class="w-1.5 h-1.5 rounded-full bg-[#3b82f6]"></span>In Transit
+                      <span class="w-1.5 h-1.5 rounded-full bg-[#3b82f6]"></span>{{ order.status_label }}
                     </span>
+                    {% elif order.status == 'DELIVERED' %}
+                    <span class="inline-flex items-center gap-1.5 text-xs font-medium px-3 py-1 rounded-full bg-[#0f2c29] text-[#2dd4bf] border border-[#0d9488]/35">
+                      <span class="w-1.5 h-1.5 rounded-full bg-[#14b8a6]"></span>{{ order.status_label }}
+                    </span>
+                    {% else %}
+                    <span class="inline-flex items-center gap-1.5 text-xs font-medium px-3 py-1 rounded-full bg-rose-500/10 text-rose-400 border border-rose-500/30">
+                      <span class="w-1.5 h-1.5 rounded-full bg-rose-400"></span>{{ order.status_label }}
+                    </span>
+                    {% endif %}
                   </td>
                   <td class="py-3.5 px-4 text-right whitespace-nowrap">
-                    <span class="final-price font-bold text-white font-sans text-sm tracking-tight" data-inr="3780" data-usd="3780.00" data-eur="3510.00" data-gbp="3020.00" data-aed="13880.00">₹3,780</span>
+                    <span class="final-price font-bold text-white font-sans text-sm tracking-tight" data-inr="{{ order.total_inr_num }}" data-usd="{{ order.total_usd }}">₹{{ order.total_inr }}</span>
+                    <span class="text-[10px] text-neutral-400 block font-mono">(${{ order.total_usd }})</span>
                   </td>
                   <td class="py-3.5 px-4 text-center whitespace-nowrap">
-                    <a href="/admin/orders/order/4/change/" class="table-action-link inline-flex items-center justify-center px-4 py-1.5 rounded-lg bg-[#171920] hover:bg-[#21242d] border border-[#21242d] text-xs font-semibold text-[#e5e5e5] hover:text-white transition-all shadow-sm" style="text-decoration: none !important;">
+                    <a href="{{ order.edit_url }}" class="table-action-link inline-flex items-center justify-center px-4 py-1.5 rounded-lg bg-[#171920] hover:bg-[#21242d] border border-[#21242d] text-xs font-semibold text-[#e5e5e5] hover:text-white transition-all shadow-sm" style="text-decoration: none !important;">
                       Edit
                     </a>
                   </td>
                 </tr>
+                {% empty %}
+                <tr>
+                  <td colspan="8" class="py-12 text-center text-neutral-400 font-sans text-xs">No orders found.</td>
+                </tr>
+                {% endfor %}
               </tbody>
             </table>
           </div>
         </div>
-<div class="block md:hidden space-y-6">
-          <!-- MOBILE ORDER 1 -->
-          <article class="order-mobile-card card-surface rounded-2xl p-4 sm:p-5 transition-all hover:border-emerald-500/30 shadow-xl border border-white/[0.08]" data-order-id="1" data-status="unfulfilled" data-search="julian stewart julian.stewart@icloud.com lck-304918 lck-202611-304918 fine rings aura textured dome ring">
+        <div id="ordersMobileList" class="block md:hidden space-y-6">
+          {% for order in orders_list %}
+          <article class="order-mobile-card card-surface rounded-2xl p-4 sm:p-5 transition-all hover:border-emerald-500/30 shadow-xl border border-white/[0.08]" data-order-id="{{ order.id }}" data-status="{{ order.filter_key }}" data-search="{{ order.search_blob }}">
             <div class="flex md:hidden flex-col gap-3.5">
-              <!-- Header: Ref Badge, Date/Time & Order Status Badges -->
               <div class="pb-3 border-b border-white/[0.06] space-y-2.5">
                 <div class="flex items-center justify-between gap-2">
                   <div class="flex items-center gap-2 min-w-0">
-                    <input data-order-id="1" class="order-checkbox w-4 h-4 rounded border-obsidian-700 bg-obsidian-900 text-emerald-500 focus:ring-emerald-500 cursor-pointer shrink-0" type="checkbox">
-                    <button type="button" class="copy-ref-btn order-link inline-flex items-center gap-1.5 font-mono font-bold text-xs text-neutral-300 bg-obsidian-800 hover:bg-obsidian-750 border border-obsidian-700 px-2.5 py-1 rounded-lg transition-colors cursor-pointer shadow-sm truncate" data-ref="LCK-202611-304918" title="Copy Reference ID">
-                      <span>#LCK-202611-304918</span>
-                      <svg class="w-3 h-3 text-neutral-400 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect height="13" rx="2" ry="2" width="13" x="9" y="9"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                    <input data-order-id="{{ order.id }}" class="order-checkbox w-4 h-4 rounded border-obsidian-700 bg-obsidian-900 text-emerald-500 focus:ring-emerald-500 cursor-pointer shrink-0" type="checkbox">
+                    <button type="button" class="copy-ref-btn order-link inline-flex items-center gap-1.5 font-mono font-bold text-xs text-neutral-300 bg-obsidian-800 hover:bg-obsidian-750 border border-obsidian-700 px-2.5 py-1 rounded-lg transition-colors cursor-pointer shadow-sm truncate" data-ref="{{ order.order_number }}" title="Copy Reference ID">
+                      <span>#{{ order.order_number }}</span>
                     </button>
                   </div>
                   <div class="text-right text-[11px] text-zinc-400 font-mono shrink-0">
-                    <span>Apr 24, 2026</span>
-                    <span class="text-zinc-500 block text-[10px]">• 14:32</span>
+                    <span>{{ order.date_display }}</span>
+                    <span class="text-zinc-500 block text-[10px]">• {{ order.time_display }}</span>
                   </div>
                 </div>
-
-                <!-- Status Badges: Payment & Fulfillment -->
                 <div class="flex items-center gap-2 flex-wrap">
                   <span class="inline-flex items-center gap-1.5 text-[11px] font-medium px-2.5 py-0.5 rounded-full bg-[#0d2822] text-[#34d399] border border-[#10b981]/35">
-                    <span class="w-1.5 h-1.5 rounded-full bg-[#10b981]"></span>Paid
+                    <span class="w-1.5 h-1.5 rounded-full bg-[#10b981]"></span>{{ order.payment_label }}
                   </span>
-                  <span class="inline-flex items-center gap-1.5 text-[11px] font-medium px-2.5 py-0.5 rounded-full bg-[#2d1e16] text-[#fbbf24] border border-[#d97706]/35">
-                    <span class="w-1.5 h-1.5 rounded-full bg-[#f59e0b]"></span>Unfulfilled
+                  <span class="inline-flex items-center gap-1.5 text-[11px] font-medium px-2.5 py-0.5 rounded-full bg-obsidian-800 text-neutral-200 border border-obsidian-700">
+                    {{ order.status_label }}
                   </span>
                 </div>
               </div>
-
-              <!-- Patron Row -->
               <div class="flex items-center justify-between gap-3">
                 <div class="flex items-center gap-2.5 min-w-0">
-                  <div class="w-8 h-8 rounded-full bg-[#181a22] border border-[#2d3240] flex items-center justify-center text-xs font-bold text-zinc-200 font-mono shrink-0">JS</div>
+                  <div class="w-8 h-8 rounded-full bg-[#181a22] border border-[#2d3240] flex items-center justify-center text-xs font-bold text-zinc-200 font-mono shrink-0">{{ order.initials }}</div>
                   <div class="min-w-0">
-                    <div class="text-xs font-bold text-white font-sans truncate">Julian Stewart</div>
-                    <div class="text-[11px] text-[#8e92a8] font-sans truncate">julian.stewart@icloud.com</div>
+                    <div class="text-xs font-bold text-white font-sans truncate">{{ order.full_name }}</div>
+                    <div class="text-[11px] text-[#8e92a8] font-sans truncate">{{ order.email }}</div>
                   </div>
                 </div>
-                <a class="p-2 rounded-xl bg-[#171920] hover:bg-[#21242d] text-[#ebd38d] hover:text-amber-300 border border-[#21242d] inline-flex items-center justify-center shrink-0 transition-colors" href="tel:+13109024819" title="Call Patron">
-                  <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M6.62 10.79a15.053 15.053 0 006.59 6.59l2.2-2.2a1 1 0 011.02-.24c1.12.37 2.33.57 3.57.57a1 1 0 011 1V20a1 1 0 01-1 1h3.5a1 1 0 011 1c0 1.25.2 2.45.57 3.57a1 1 0 01-.24 1.02l-2.21 2.2z"></path></svg>
-                </a>
               </div>
-
-              <!-- Product Summary Box -->
-              <div class="bg-obsidian-900/60 rounded-xl p-3 border border-white/[0.05] flex items-center gap-3">
-                <div class="w-10 h-10 rounded-lg bg-[#21242e] border border-[#2d3240] flex items-center justify-center shrink-0 text-amber-300">
-                  <svg class="w-5 h-5 text-[#ebd38d]" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"></circle><circle cx="12" cy="12" r="4"></circle></svg>
-                </div>
+              <div class="bg-obsidian-900/60 rounded-xl p-3 border border-white/[0.05] flex items-center justify-between gap-3">
                 <div class="min-w-0 flex-1">
-                  <span class="text-[10px] font-bold uppercase tracking-wider text-amber-300 block font-mono">Fine Rings</span>
-                  <p class="text-xs text-white font-bold uppercase truncate font-sans tracking-tight">Aura Textured Dome Ring</p>
-                  <p class="text-[11px] text-zinc-400 font-sans truncate">18K Demifine Vermeil • Size 7 (US)</p>
+                  <p class="text-xs text-white font-bold truncate font-sans tracking-tight">{{ order.primary_item_title }}</p>
+                  <p class="text-[11px] text-zinc-400 font-mono truncate">{{ order.item_count }} item(s) • {{ order.carrier }}</p>
                 </div>
               </div>
-
-              <!-- DEDICATED TOTAL SETTLEMENT & PRIMARY ACTION FOOTER -->
               <div class="pt-3.5 border-t border-white/[0.06] flex items-center justify-between gap-3">
-                <!-- Settlement Amount -->
                 <div class="flex flex-col min-w-0">
                   <span class="text-[9px] font-bold tracking-[0.14em] uppercase text-zinc-400 font-mono mb-0.5">TOTAL SETTLEMENT</span>
-                  <div class="flex items-baseline gap-2 flex-wrap">
-                    <span class="final-price text-2xl font-bold text-white font-mono tracking-tight leading-none" data-inr="3450" data-usd="42" data-eur="39" data-gbp="33" data-aed="154">₹3,450</span>
-                    <span class="text-[10px] font-bold text-emerald-400 bg-emerald-500/10 px-1.5 py-0.5 rounded font-mono border border-emerald-500/25">-18%</span>
-                  </div>
+                  <span class="final-price text-2xl font-bold text-white font-mono tracking-tight leading-none" data-inr="{{ order.total_inr_num }}" data-usd="{{ order.total_usd }}">₹{{ order.total_inr }}</span>
                 </div>
-                <!-- Primary Action Button: Luckjary Design System Standard -->
-                <a href="/admin/orders/order/1/change/" class="btn-primary glow-emerald inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg text-xs font-semibold bg-emerald-500 hover:bg-emerald-400 transition-all cursor-pointer shrink-0 shadow-lg" style="color: #07080a !important; text-decoration: none !important;">
+                <a href="{{ order.edit_url }}" class="btn-primary glow-emerald inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg text-xs font-semibold bg-emerald-500 hover:bg-emerald-400 transition-all cursor-pointer shrink-0 shadow-lg" style="color: #07080a !important; text-decoration: none !important;">
                   <span>Manage Order</span>
                   <svg class="w-3.5 h-3.5" fill="none" stroke="#07080a" stroke-width="2.5" viewBox="0 0 24 24"><line x1="5" x2="19" y1="12" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
                 </a>
               </div>
             </div>
           </article>
-
-          <!-- MOBILE ORDER 2 -->
-          <article class="order-mobile-card card-surface rounded-2xl p-4 sm:p-5 transition-all hover:border-emerald-500/30 shadow-xl border border-white/[0.08]" data-order-id="2" data-status="qc" data-search="charlotte dupré charlotte.dupre@gmail.com lck-194056 lck-202611-194056 necklaces celeste herringbone chain">
-            <div class="flex md:hidden flex-col gap-3.5">
-              <!-- Header: Ref Badge, Date/Time & Order Status Badges -->
-              <div class="pb-3 border-b border-white/[0.06] space-y-2.5">
-                <div class="flex items-center justify-between gap-2">
-                  <div class="flex items-center gap-2 min-w-0">
-                    <input data-order-id="2" class="order-checkbox w-4 h-4 rounded border-obsidian-700 bg-obsidian-900 text-emerald-500 focus:ring-emerald-500 cursor-pointer shrink-0" type="checkbox">
-                    <button type="button" class="copy-ref-btn order-link inline-flex items-center gap-1.5 font-mono font-bold text-xs text-neutral-300 bg-obsidian-800 hover:bg-obsidian-750 border border-obsidian-700 px-2.5 py-1 rounded-lg transition-colors cursor-pointer shadow-sm truncate" data-ref="LCK-202611-194056" title="Copy Reference ID">
-                      <span>#LCK-202611-194056</span>
-                      <svg class="w-3 h-3 text-neutral-400 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect height="13" rx="2" ry="2" width="13" x="9" y="9"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-                    </button>
-                  </div>
-                  <div class="text-right text-[11px] text-zinc-400 font-mono shrink-0">
-                    <span>Apr 24, 2026</span>
-                    <span class="text-zinc-500 block text-[10px]">• 13:10</span>
-                  </div>
-                </div>
-
-                <!-- Status Badges: Payment & Fulfillment -->
-                <div class="flex items-center gap-2 flex-wrap">
-                  <span class="inline-flex items-center gap-1.5 text-[11px] font-medium px-2.5 py-0.5 rounded-full bg-[#0d2822] text-[#34d399] border border-[#10b981]/35">
-                    <span class="w-1.5 h-1.5 rounded-full bg-[#10b981]"></span>Paid
-                  </span>
-                  <span class="inline-flex items-center gap-1.5 text-[11px] font-medium px-2.5 py-0.5 rounded-full bg-[#261536] text-[#c084fc] border border-[#9333ea]/35">
-                    <span class="w-1.5 h-1.5 rounded-full bg-[#a855f7]"></span>In Atelier QC
-                  </span>
-                </div>
-              </div>
-
-              <!-- Patron Row -->
-              <div class="flex items-center justify-between gap-3">
-                <div class="flex items-center gap-2.5 min-w-0">
-                  <div class="w-8 h-8 rounded-full bg-[#181a22] border border-[#2d3240] flex items-center justify-center text-xs font-bold text-zinc-200 font-mono shrink-0">CD</div>
-                  <div class="min-w-0">
-                    <div class="text-xs font-bold text-white font-sans truncate">Charlotte Dupré</div>
-                    <div class="text-[11px] text-[#8e92a8] font-sans truncate">charlotte.dupre@gmail.com</div>
-                  </div>
-                </div>
-                <a class="p-2 rounded-xl bg-[#171920] hover:bg-[#21242d] text-[#ebd38d] hover:text-amber-300 border border-[#21242d] inline-flex items-center justify-center shrink-0 transition-colors" href="tel:+14158829104" title="Call Patron">
-                  <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M6.62 10.79a15.053 15.053 0 006.59 6.59l2.2-2.2a1 1 0 011.02-.24c1.12.37 2.33.57 3.57.57a1 1 0 011 1V20a1 1 0 01-.24 1.02l-2.21 2.2z"></path></svg>
-                </a>
-              </div>
-
-              <!-- Product Summary Box -->
-              <div class="bg-obsidian-900/60 rounded-xl p-3 border border-white/[0.05] flex items-center gap-3">
-                <div class="w-10 h-10 rounded-lg bg-[#21242e] border border-[#2d3240] flex items-center justify-center shrink-0 text-amber-300">
-                  <svg class="w-5 h-5 text-[#ebd38d]" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M4 10a8 8 0 1 0 16 0 8 8 0 1 0-16 0"></path><path d="M12 2v4"></path><path d="M12 18v4"></path></svg>
-                </div>
-                <div class="min-w-0 flex-1">
-                  <span class="text-[10px] font-bold uppercase tracking-wider text-amber-300 block font-mono">Necklaces</span>
-                  <p class="text-xs text-white font-bold uppercase truncate font-sans tracking-tight">Celeste Herringbone Chain</p>
-                  <p class="text-[11px] text-zinc-400 font-sans truncate">18K Yellow Gold Vermeil • 18" Length</p>
-                </div>
-              </div>
-
-              <!-- DEDICATED TOTAL SETTLEMENT & PRIMARY ACTION FOOTER -->
-              <div class="pt-3.5 border-t border-white/[0.06] flex items-center justify-between gap-3">
-                <!-- Settlement Amount -->
-                <div class="flex flex-col min-w-0">
-                  <span class="text-[9px] font-bold tracking-[0.14em] uppercase text-zinc-400 font-mono mb-0.5">TOTAL SETTLEMENT</span>
-                  <div class="flex items-baseline gap-2 flex-wrap">
-                    <span class="final-price text-2xl font-bold text-white font-mono tracking-tight leading-none" data-inr="1485" data-usd="18" data-eur="17" data-gbp="14" data-aed="66">₹1,485</span>
-                    <span class="text-[10px] font-bold text-emerald-400 bg-emerald-500/10 px-1.5 py-0.5 rounded font-mono border border-emerald-500/25">-20%</span>
-                  </div>
-                </div>
-                <!-- Primary Action Button: Luckjary Design System Standard -->
-                <a href="/admin/orders/order/2/change/" class="btn-primary glow-emerald inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg text-xs font-semibold bg-emerald-500 hover:bg-emerald-400 transition-all cursor-pointer shrink-0 shadow-lg" style="color: #07080a !important; text-decoration: none !important;">
-                  <span>Manage Order</span>
-                  <svg class="w-3.5 h-3.5" fill="none" stroke="#07080a" stroke-width="2.5" viewBox="0 0 24 24"><line x1="5" x2="19" y1="12" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
-                </a>
-              </div>
-            </div>
-          </article>
-
-          <!-- MOBILE ORDER 3 -->
-          <article class="order-mobile-card card-surface rounded-2xl p-4 sm:p-5 transition-all hover:border-emerald-500/30 shadow-xl border border-white/[0.08]" data-order-id="3" data-status="delivered" data-search="isabella vance isabella.vance@example.com lck-739201 lck-202611-739201 bracelets elysian radiant tennis">
-            <div class="flex md:hidden flex-col gap-3.5">
-              <!-- Header: Ref Badge, Date/Time & Order Status Badges -->
-              <div class="pb-3 border-b border-white/[0.06] space-y-2.5">
-                <div class="flex items-center justify-between gap-2">
-                  <div class="flex items-center gap-2 min-w-0">
-                    <input data-order-id="3" class="order-checkbox w-4 h-4 rounded border-obsidian-700 bg-obsidian-900 text-emerald-500 focus:ring-emerald-500 cursor-pointer shrink-0" type="checkbox">
-                    <button type="button" class="copy-ref-btn order-link inline-flex items-center gap-1.5 font-mono font-bold text-xs text-neutral-300 bg-obsidian-800 hover:bg-obsidian-750 border border-obsidian-700 px-2.5 py-1 rounded-lg transition-colors cursor-pointer shadow-sm truncate" data-ref="LCK-202611-739201" title="Copy Reference ID">
-                      <span>#LCK-202611-739201</span>
-                      <svg class="w-3 h-3 text-neutral-400 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect height="13" rx="2" ry="2" width="13" x="9" y="9"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-                    </button>
-                  </div>
-                  <div class="text-right text-[11px] text-zinc-400 font-mono shrink-0">
-                    <span>Apr 23, 2026</span>
-                    <span class="text-zinc-500 block text-[10px]">• 18:45</span>
-                  </div>
-                </div>
-
-                <!-- Status Badges: Payment & Fulfillment -->
-                <div class="flex items-center gap-2 flex-wrap">
-                  <span class="inline-flex items-center gap-1.5 text-[11px] font-medium px-2.5 py-0.5 rounded-full bg-[#0d2822] text-[#34d399] border border-[#10b981]/35">
-                    <span class="w-1.5 h-1.5 rounded-full bg-[#10b981]"></span>Paid
-                  </span>
-                  <span class="inline-flex items-center gap-1.5 text-[11px] font-medium px-2.5 py-0.5 rounded-full bg-[#0f2c29] text-[#2dd4bf] border border-[#0d9488]/35">
-                    <span class="w-1.5 h-1.5 rounded-full bg-[#14b8a6]"></span>Delivered
-                  </span>
-                </div>
-              </div>
-
-              <!-- Patron Row -->
-              <div class="flex items-center justify-between gap-3">
-                <div class="flex items-center gap-2.5 min-w-0">
-                  <div class="w-8 h-8 rounded-full bg-[#181a22] border border-[#2d3240] flex items-center justify-center text-xs font-bold text-zinc-200 font-mono shrink-0">IV</div>
-                  <div class="min-w-0">
-                    <div class="text-xs font-bold text-white font-sans truncate">Isabella Vance</div>
-                    <div class="text-[11px] text-[#8e92a8] font-sans truncate">isabella.vance@example.com</div>
-                  </div>
-                </div>
-                <a class="p-2 rounded-xl bg-[#171920] hover:bg-[#21242d] text-[#ebd38d] hover:text-amber-300 border border-[#21242d] inline-flex items-center justify-center shrink-0 transition-colors" href="tel:+12125550143" title="Call Patron">
-                  <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M6.62 10.79a15.053 15.053 0 006.59 6.59l2.2-2.2a1 1 0 011.02-.24c1.12.37 2.33.57 3.57.57a1 1 0 011 1V20a1 1 0 01-1 1h3.5a1 1 0 011 1c0 1.25.2 2.45.57 3.57a1 1 0 01-.24 1.02l-2.21 2.2z"></path></svg>
-                </a>
-              </div>
-
-              <!-- Product Summary Box -->
-              <div class="bg-obsidian-900/60 rounded-xl p-3 border border-white/[0.05] flex items-center gap-3">
-                <div class="w-10 h-10 rounded-lg bg-[#21242e] border border-[#2d3240] flex items-center justify-center shrink-0 text-amber-300">
-                  <svg class="w-5 h-5 text-[#ebd38d]" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="12" r="3"></circle><line x1="9" x2="15" y1="12" y2="12"></line></svg>
-                </div>
-                <div class="min-w-0 flex-1">
-                  <span class="text-[10px] font-bold uppercase tracking-wider text-amber-300 block font-mono">Bracelets</span>
-                  <p class="text-xs text-white font-bold uppercase truncate font-sans tracking-tight">Elysian Radiant Tennis</p>
-                  <p class="text-[11px] text-zinc-400 font-sans truncate">925 Sterling Silver • Dual Clasp</p>
-                </div>
-              </div>
-
-              <!-- DEDICATED TOTAL SETTLEMENT & PRIMARY ACTION FOOTER -->
-              <div class="pt-3.5 border-t border-white/[0.06] flex items-center justify-between gap-3">
-                <!-- Settlement Amount -->
-                <div class="flex flex-col min-w-0">
-                  <span class="text-[9px] font-bold tracking-[0.14em] uppercase text-zinc-400 font-mono mb-0.5">TOTAL SETTLEMENT</span>
-                  <div class="flex items-baseline gap-2 flex-wrap">
-                    <span class="final-price text-2xl font-bold text-white font-mono tracking-tight leading-none" data-inr="2450" data-usd="30" data-eur="28" data-gbp="24" data-aed="110">₹2,450</span>
-                    <span class="text-[10px] font-bold text-emerald-400 bg-emerald-500/10 px-1.5 py-0.5 rounded font-mono border border-emerald-500/25">-21%</span>
-                  </div>
-                </div>
-                <!-- Primary Action Button: Luckjary Design System Standard -->
-                <a href="/admin/orders/order/3/change/" class="btn-primary glow-emerald inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg text-xs font-semibold bg-emerald-500 hover:bg-emerald-400 transition-all cursor-pointer shrink-0 shadow-lg" style="color: #07080a !important; text-decoration: none !important;">
-                  <span>Manage Order</span>
-                  <svg class="w-3.5 h-3.5" fill="none" stroke="#07080a" stroke-width="2.5" viewBox="0 0 24 24"><line x1="5" x2="19" y1="12" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
-                </a>
-              </div>
-            </div>
-          </article>
-
-          <!-- MOBILE ORDER 4 -->
-          <article class="order-mobile-card card-surface rounded-2xl p-4 sm:p-5 transition-all hover:border-emerald-500/30 shadow-xl border border-white/[0.08]" data-order-id="4" data-status="transit" data-search="isabella vance isabella.vance@example.com lck-884102 lck-202611-884102 atelier sets solitaire cabochon luna">
-            <div class="flex md:hidden flex-col gap-3.5">
-              <!-- Header: Ref Badge, Date/Time & Order Status Badges -->
-              <div class="pb-3 border-b border-white/[0.06] space-y-2.5">
-                <div class="flex items-center justify-between gap-2">
-                  <div class="flex items-center gap-2 min-w-0">
-                    <input data-order-id="4" class="order-checkbox w-4 h-4 rounded border-obsidian-700 bg-obsidian-900 text-emerald-500 focus:ring-emerald-500 cursor-pointer shrink-0" type="checkbox">
-                    <button type="button" class="copy-ref-btn order-link inline-flex items-center gap-1.5 font-mono font-bold text-xs text-neutral-300 bg-obsidian-800 hover:bg-obsidian-750 border border-obsidian-700 px-2.5 py-1 rounded-lg transition-colors cursor-pointer shadow-sm truncate" data-ref="LCK-202611-884102" title="Copy Reference ID">
-                      <span>#LCK-202611-884102</span>
-                      <svg class="w-3 h-3 text-neutral-400 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect height="13" rx="2" ry="2" width="13" x="9" y="9"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-                    </button>
-                  </div>
-                  <div class="text-right text-[11px] text-zinc-400 font-mono shrink-0">
-                    <span>Apr 22, 2026</span>
-                    <span class="text-zinc-500 block text-[10px]">• 11:05</span>
-                  </div>
-                </div>
-
-                <!-- Status Badges: Payment & Fulfillment -->
-                <div class="flex items-center gap-2 flex-wrap">
-                  <span class="inline-flex items-center gap-1.5 text-[11px] font-medium px-2.5 py-0.5 rounded-full bg-[#0d2822] text-[#34d399] border border-[#10b981]/35">
-                    <span class="w-1.5 h-1.5 rounded-full bg-[#10b981]"></span>Paid
-                  </span>
-                  <span class="inline-flex items-center gap-1.5 text-[11px] font-medium px-2.5 py-0.5 rounded-full bg-[#13223d] text-[#60a5fa] border border-[#2563eb]/35">
-                    <span class="w-1.5 h-1.5 rounded-full bg-[#3b82f6]"></span>In Transit
-                  </span>
-                </div>
-              </div>
-
-              <!-- Patron Row -->
-              <div class="flex items-center justify-between gap-3">
-                <div class="flex items-center gap-2.5 min-w-0">
-                  <div class="w-8 h-8 rounded-full bg-[#181a22] border border-[#2d3240] flex items-center justify-center text-xs font-bold text-zinc-200 font-mono shrink-0">IV</div>
-                  <div class="min-w-0">
-                    <div class="text-xs font-bold text-white font-sans truncate">Isabella Vance</div>
-                    <div class="text-[11px] text-[#8e92a8] font-sans truncate">isabella.vance@example.com</div>
-                  </div>
-                </div>
-                <a class="p-2 rounded-xl bg-[#171920] hover:bg-[#21242d] text-[#ebd38d] hover:text-amber-300 border border-[#21242d] inline-flex items-center justify-center shrink-0 transition-colors" href="tel:+12125550143" title="Call Patron">
-                  <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M6.62 10.79a15.053 15.053 0 006.59 6.59l2.2-2.2a1 1 0 011.02-.24c1.12.37 2.33.57 3.57.57a1 1 0 011 1V20a1 1 0 01-1 1h3.5a1 1 0 011 1c0 1.25.2 2.45.57 3.57a1 1 0 01-.24 1.02l-2.21 2.2z"></path></svg>
-                </a>
-              </div>
-
-              <!-- Product Summary Box -->
-              <div class="bg-obsidian-900/60 rounded-xl p-3 border border-white/[0.05] flex items-center gap-3">
-                <div class="w-10 h-10 rounded-lg bg-[#21242e] border border-[#2d3240] flex items-center justify-center shrink-0 text-amber-300">
-                  <svg class="w-5 h-5 text-[#ebd38d]" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
-                </div>
-                <div class="min-w-0 flex-1">
-                  <span class="text-[10px] font-bold uppercase tracking-wider text-amber-300 block font-mono">Atelier Sets</span>
-                  <p class="text-xs text-white font-bold uppercase truncate font-sans tracking-tight">Solitaire Cabochon &amp; Luna</p>
-                  <p class="text-[11px] text-zinc-400 font-sans truncate">925 Sterling Silver • Tahitian Inlay</p>
-                </div>
-              </div>
-
-              <!-- DEDICATED TOTAL SETTLEMENT & PRIMARY ACTION FOOTER -->
-              <div class="pt-3.5 border-t border-white/[0.06] flex items-center justify-between gap-3">
-                <!-- Settlement Amount -->
-                <div class="flex flex-col min-w-0">
-                  <span class="text-[9px] font-bold tracking-[0.14em] uppercase text-zinc-400 font-mono mb-0.5">TOTAL SETTLEMENT</span>
-                  <div class="flex items-baseline gap-2 flex-wrap">
-                    <span class="final-price text-2xl font-bold text-white font-mono tracking-tight leading-none" data-inr="3780" data-usd="46" data-eur="42" data-gbp="36" data-aed="168">₹3,780</span>
-                    <span class="text-[10px] font-bold text-emerald-400 bg-emerald-500/10 px-1.5 py-0.5 rounded font-mono border border-emerald-500/25">-16%</span>
-                  </div>
-                </div>
-                <!-- Primary Action Button: Luckjary Design System Standard -->
-                <a href="/admin/orders/order/4/change/" class="btn-primary glow-emerald inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg text-xs font-semibold bg-emerald-500 hover:bg-emerald-400 transition-all cursor-pointer shrink-0 shadow-lg" style="color: #07080a !important; text-decoration: none !important;">
-                  <span>Manage Order</span>
-                  <svg class="w-3.5 h-3.5" fill="none" stroke="#07080a" stroke-width="2.5" viewBox="0 0 24 24"><line x1="5" x2="19" y1="12" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
-                </a>
-              </div>
-            </div>
-          </article>
+          {% empty %}
+          <div class="p-8 text-center text-xs text-neutral-400 bg-[#14161c] border border-[#232732] rounded-2xl">No orders found.</div>
+          {% endfor %}
         </div>
 
       </div>
@@ -794,7 +467,7 @@
       <!-- BEGIN: Luxury Pagination Controls -->
       <footer class="mt-8 pt-5 border-t border-[#232732] flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-sans" data-purpose="pagination-footer">
         <span class="text-zinc-400 font-mono text-xs" id="paginationInfo">
-          Showing <span class="text-zinc-200 font-semibold" id="visibleCountText">1 - 4</span> of 4 orders in current filter
+          Showing <span class="text-zinc-200 font-semibold" id="visibleCountText">{% if orders_list %}1 - {{ orders_list|length }}{% else %}0{% endif %}</span> of <span id="totalFilteredOrdersCount">{{ order_counts.all|default_if_none:0 }}</span> orders in current filter
         </span>
         <div class="flex items-center gap-2">
           <button class="px-3 py-1.5 rounded-lg bg-[#14161c] text-zinc-600 border border-[#232732] cursor-not-allowed text-xs flex items-center gap-1.5" disabled="" type="button">
@@ -1823,17 +1496,29 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // 3. Status Tabs Filtering (Supports Desktop Table Rows and Mobile Cards)
   const statusTabs = document.querySelectorAll('.status-tab');
-  const desktopRows = document.querySelectorAll('.order-table-row');
-  const mobileCards = document.querySelectorAll('.order-mobile-card');
   const noOrdersState = document.getElementById('noOrdersState');
   const visibleCountText = document.getElementById('visibleCountText');
+  const totalFilteredOrdersCount = document.getElementById('totalFilteredOrdersCount');
   let currentFilter = 'all';
+  let liveOrdersData = [];
+
+  function escapeOrderHtml(str) {
+    return String(str ?? '').replace(/[&<>"']/g, m => ({
+      '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+    }[m]));
+  }
+
+  function getCsrfCookie() {
+    const m = document.cookie.match(/csrftoken=([^;]+)/);
+    return m ? m[1] : '';
+  }
 
   function applyFilters() {
     const searchVal = (document.getElementById('ordersSearchInput')?.value || '').trim().toLowerCase();
+    const desktopRows = document.querySelectorAll('.order-table-row');
+    const mobileCards = document.querySelectorAll('.order-mobile-card');
     let visibleCount = 0;
 
-    // Filter desktop table rows
     desktopRows.forEach(row => {
       const status = row.dataset.status;
       const searchData = (row.dataset.search || '').toLowerCase();
@@ -1848,25 +1533,22 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
 
-    // Filter mobile cards in parallel
     mobileCards.forEach(card => {
       const status = card.dataset.status;
       const searchData = (card.dataset.search || '').toLowerCase();
       const matchesStatus = (currentFilter === 'all') || (status === currentFilter);
       const matchesSearch = !searchVal || searchData.includes(searchVal);
-
-      if (matchesStatus && matchesSearch) {
-        card.style.display = '';
-      } else {
-        card.style.display = 'none';
-      }
+      card.style.display = (matchesStatus && matchesSearch) ? '' : 'none';
     });
 
     if (noOrdersState) {
-      noOrdersState.classList.toggle('hidden', visibleCount > 0);
+      noOrdersState.classList.toggle('hidden', visibleCount > 0 || desktopRows.length === 0);
     }
     if (visibleCountText) {
       visibleCountText.textContent = visibleCount > 0 ? `1 - ${visibleCount}` : '0';
+    }
+    if (totalFilteredOrdersCount) {
+      totalFilteredOrdersCount.textContent = visibleCount;
     }
   }
 
@@ -1904,35 +1586,25 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // 5. Copy Reference ID to Clipboard
-  document.querySelectorAll('.copy-ref-btn').forEach(btn => {
-    btn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      const ref = btn.dataset.ref;
-      if (ref && navigator.clipboard) {
-        navigator.clipboard.writeText(ref).then(() => {
-          showToast(`Copied ${ref} to clipboard`);
-        }).catch(() => {
-          showToast(`Order reference: ${ref}`);
-        });
-      }
-    });
-  });
-
-  // 6. Batch Actions & Select All
-  // 6. Checkbox Selection & Batch Action Counter (Synced Desktop + Mobile)
+  // 5 & 6. Dynamic Event Binding for Copy & Checkboxes
   const selectAll = document.getElementById('selectAll');
   const desktopSelectAll = document.getElementById('desktopSelectAll');
   const batchCountBadge = document.getElementById('batchCountBadge');
-  const allCardCheckboxes = document.querySelectorAll('.order-checkbox');
 
-  function updateBatchCount() {
+  function getSelectedOrderIds() {
     const checkedIds = new Set();
     document.querySelectorAll('.order-checkbox:checked').forEach(cb => {
       if (cb.dataset.orderId) checkedIds.add(cb.dataset.orderId);
     });
-    const checked = checkedIds.size;
-    const total = 4;
+    return Array.from(checkedIds);
+  }
+
+  function updateBatchCount() {
+    const uniqueIds = new Set(
+      Array.from(document.querySelectorAll('.order-checkbox')).map(cb => cb.dataset.orderId).filter(Boolean)
+    );
+    const total = uniqueIds.size;
+    const checked = getSelectedOrderIds().length;
     if (batchCountBadge) {
       batchCountBadge.textContent = `${checked} of ${total} selected`;
       if (checked > 0) {
@@ -1947,7 +1619,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function setAllCheckboxes(checked) {
-    allCardCheckboxes.forEach(cb => {
+    document.querySelectorAll('.order-checkbox').forEach(cb => {
       cb.checked = checked;
     });
     updateBatchCount();
@@ -1960,45 +1632,252 @@ document.addEventListener('DOMContentLoaded', () => {
     desktopSelectAll.addEventListener('change', (e) => setAllCheckboxes(e.target.checked));
   }
 
-  allCardCheckboxes.forEach(cb => {
-    cb.addEventListener('change', () => {
-      const orderId = cb.dataset.orderId;
-      if (orderId) {
-        document.querySelectorAll(`.order-checkbox[data-order-id="${orderId}"]`).forEach(other => {
-          other.checked = cb.checked;
-        });
-      }
-      updateBatchCount();
+  function bindOrderRowEvents() {
+    document.querySelectorAll('.copy-ref-btn').forEach(btn => {
+      btn.onclick = (e) => {
+        e.stopPropagation();
+        const ref = btn.dataset.ref;
+        if (ref && navigator.clipboard) {
+          navigator.clipboard.writeText(ref).then(() => {
+            showToast(`Copied ${ref} to clipboard`);
+          }).catch(() => {
+            showToast(`Order reference: ${ref}`);
+          });
+        }
+      };
     });
-  });
 
-  // 7. Run Batch Action
+    document.querySelectorAll('.order-checkbox').forEach(cb => {
+      cb.onchange = () => {
+        const orderId = cb.dataset.orderId;
+        if (orderId) {
+          document.querySelectorAll(`.order-checkbox[data-order-id="${orderId}"]`).forEach(other => {
+            other.checked = cb.checked;
+          });
+        }
+        updateBatchCount();
+      };
+    });
+  }
+
+  function renderOrderPaymentBadge(o) {
+    if (o.payment_status === 'PAID') {
+      return `<span class="inline-flex items-center gap-1.5 text-xs font-medium px-3 py-1 rounded-full bg-[#0d2822] text-[#34d399] border border-[#10b981]/35"><span class="w-1.5 h-1.5 rounded-full bg-[#10b981]"></span>${escapeOrderHtml(o.payment_label)}</span>`;
+    }
+    if (o.payment_status === 'PENDING') {
+      return `<span class="inline-flex items-center gap-1.5 text-xs font-medium px-3 py-1 rounded-full bg-[#2d1e16] text-[#fbbf24] border border-[#d97706]/35"><span class="w-1.5 h-1.5 rounded-full bg-[#f59e0b]"></span>${escapeOrderHtml(o.payment_label)}</span>`;
+    }
+    return `<span class="inline-flex items-center gap-1.5 text-xs font-medium px-3 py-1 rounded-full bg-rose-500/10 text-rose-400 border border-rose-500/30"><span class="w-1.5 h-1.5 rounded-full bg-rose-400"></span>${escapeOrderHtml(o.payment_label)}</span>`;
+  }
+
+  function renderOrderFulfillmentBadge(o) {
+    const styles = {
+      PENDING: 'bg-[#2d1e16] text-[#fbbf24] border-[#d97706]/35|#f59e0b',
+      PROCESSING: 'bg-[#241a38] text-[#c084fc] border-[#a855f7]/35|#a855f7',
+      SHIPPED: 'bg-[#13223d] text-[#60a5fa] border-[#2563eb]/35|#3b82f6',
+      DELIVERED: 'bg-[#0f2c29] text-[#2dd4bf] border-[#0d9488]/35|#14b8a6',
+    };
+    const [cls, dot] = (styles[o.status] || 'bg-rose-500/10 text-rose-400 border-rose-500/30|#fb7185').split('|');
+    return `<span class="inline-flex items-center gap-1.5 text-xs font-medium px-3 py-1 rounded-full ${cls} border"><span class="w-1.5 h-1.5 rounded-full" style="background-color:${dot}"></span>${escapeOrderHtml(o.status_label)}</span>`;
+  }
+
+  function renderOrdersSnapshot(payload) {
+    if (!payload) return;
+    if (payload.order_counts) {
+      const c = payload.order_counts;
+      const setC = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
+      setC('orderCountAll', c.all);
+      setC('orderCountUnfulfilled', c.unfulfilled);
+      setC('orderCountQc', c.qc);
+      setC('orderCountTransit', c.transit);
+      setC('orderCountDelivered', c.delivered);
+      document.querySelectorAll('.sidebar-orders-count').forEach(el => { el.textContent = c.all; });
+    }
+    if (!Array.isArray(payload.orders)) return;
+    liveOrdersData = payload.orders;
+
+    const tbody = document.getElementById('ordersTableBody');
+    if (tbody) {
+      tbody.innerHTML = liveOrdersData.length === 0
+        ? '<tr><td colspan="8" class="py-12 text-center text-neutral-400 font-sans text-xs">No orders found.</td></tr>'
+        : liveOrdersData.map(o => `
+          <tr class="order-table-row hover:bg-white/[0.025] transition-colors group" data-order-id="${o.id}" data-status="${escapeOrderHtml(o.filter_key)}" data-search="${escapeOrderHtml(o.search_blob)}">
+            <td class="py-3.5 px-4 text-center">
+              <input class="order-checkbox w-4 h-4 rounded border-obsidian-700 bg-obsidian-900 text-emerald-500 focus:ring-emerald-500 cursor-pointer" data-order-id="${o.id}" type="checkbox">
+            </td>
+            <td class="py-3.5 px-4 whitespace-nowrap">
+              <button type="button" class="copy-ref-btn order-link inline-flex items-center gap-1.5 font-mono font-bold text-xs text-neutral-300 bg-obsidian-800 hover:bg-obsidian-750 border border-obsidian-700 px-3 py-1 rounded-lg transition-colors cursor-pointer shadow-sm" data-ref="${escapeOrderHtml(o.order_number)}" title="Copy Reference ID">
+                <span>#${escapeOrderHtml(o.order_number)}</span>
+              </button>
+            </td>
+            <td class="py-3.5 px-4 text-[#9ca3af] font-sans text-xs whitespace-nowrap">${escapeOrderHtml(o.date_display)}</td>
+            <td class="py-3.5 px-4">
+              <div class="flex flex-col">
+                <span class="font-bold text-white text-xs hover:text-emerald-400 transition-colors">${escapeOrderHtml(o.full_name)}</span>
+                <span class="text-[11px] text-[#8e92a8] font-sans">${escapeOrderHtml(o.email)}</span>
+              </div>
+            </td>
+            <td class="py-3.5 px-4 whitespace-nowrap">${renderOrderPaymentBadge(o)}</td>
+            <td class="py-3.5 px-4 whitespace-nowrap">${renderOrderFulfillmentBadge(o)}</td>
+            <td class="py-3.5 px-4 text-right whitespace-nowrap">
+              <span class="final-price font-bold text-white font-sans text-sm tracking-tight" data-inr="${o.total_inr_num}" data-usd="${escapeOrderHtml(o.total_usd)}">₹${escapeOrderHtml(o.total_inr)}</span>
+              <span class="text-[10px] text-neutral-400 block font-mono">($${escapeOrderHtml(o.total_usd)})</span>
+            </td>
+            <td class="py-3.5 px-4 text-center whitespace-nowrap">
+              <a href="${escapeOrderHtml(o.edit_url)}" class="table-action-link inline-flex items-center justify-center px-4 py-1.5 rounded-lg bg-[#171920] hover:bg-[#21242d] border border-[#21242d] text-xs font-semibold text-[#e5e5e5] hover:text-white transition-all shadow-sm" style="text-decoration: none !important;">Edit</a>
+            </td>
+          </tr>
+        `).join('');
+    }
+
+    const mobileList = document.getElementById('ordersMobileList');
+    if (mobileList) {
+      mobileList.innerHTML = liveOrdersData.length === 0
+        ? '<div class="p-8 text-center text-xs text-neutral-400 bg-[#14161c] border border-[#232732] rounded-2xl">No orders found.</div>'
+        : liveOrdersData.map(o => `
+          <article class="order-mobile-card card-surface rounded-2xl p-4 sm:p-5 transition-all hover:border-emerald-500/30 shadow-xl border border-white/[0.08]" data-order-id="${o.id}" data-status="${escapeOrderHtml(o.filter_key)}" data-search="${escapeOrderHtml(o.search_blob)}">
+            <div class="flex md:hidden flex-col gap-3.5">
+              <div class="pb-3 border-b border-white/[0.06] space-y-2.5">
+                <div class="flex items-center justify-between gap-2">
+                  <div class="flex items-center gap-2 min-w-0">
+                    <input data-order-id="${o.id}" class="order-checkbox w-4 h-4 rounded border-obsidian-700 bg-obsidian-900 text-emerald-500 focus:ring-emerald-500 cursor-pointer shrink-0" type="checkbox">
+                    <button type="button" class="copy-ref-btn order-link inline-flex items-center gap-1.5 font-mono font-bold text-xs text-neutral-300 bg-obsidian-800 hover:bg-obsidian-750 border border-obsidian-700 px-2.5 py-1 rounded-lg transition-colors cursor-pointer shadow-sm truncate" data-ref="${escapeOrderHtml(o.order_number)}">
+                      <span>#${escapeOrderHtml(o.order_number)}</span>
+                    </button>
+                  </div>
+                  <div class="text-right text-[11px] text-zinc-400 font-mono shrink-0">
+                    <span>${escapeOrderHtml(o.date_display)}</span>
+                    <span class="text-zinc-500 block text-[10px]">• ${escapeOrderHtml(o.time_display)}</span>
+                  </div>
+                </div>
+                <div class="flex items-center gap-2 flex-wrap">
+                  <span class="inline-flex items-center gap-1.5 text-[11px] font-medium px-2.5 py-0.5 rounded-full bg-[#0d2822] text-[#34d399] border border-[#10b981]/35">${escapeOrderHtml(o.payment_label)}</span>
+                  <span class="inline-flex items-center gap-1.5 text-[11px] font-medium px-2.5 py-0.5 rounded-full bg-obsidian-800 text-neutral-200 border border-obsidian-700">${escapeOrderHtml(o.status_label)}</span>
+                </div>
+              </div>
+              <div class="flex items-center gap-2.5 min-w-0">
+                <div class="w-8 h-8 rounded-full bg-[#181a22] border border-[#2d3240] flex items-center justify-center text-xs font-bold text-zinc-200 font-mono shrink-0">${escapeOrderHtml(o.initials)}</div>
+                <div class="min-w-0">
+                  <div class="text-xs font-bold text-white font-sans truncate">${escapeOrderHtml(o.full_name)}</div>
+                  <div class="text-[11px] text-[#8e92a8] font-sans truncate">${escapeOrderHtml(o.email)}</div>
+                </div>
+              </div>
+              <div class="bg-obsidian-900/60 rounded-xl p-3 border border-white/[0.05]">
+                <p class="text-xs text-white font-bold truncate font-sans tracking-tight">${escapeOrderHtml(o.primary_item_title)}</p>
+                <p class="text-[11px] text-zinc-400 font-mono truncate">${o.item_count} item(s) • ${escapeOrderHtml(o.carrier)}</p>
+              </div>
+              <div class="pt-3.5 border-t border-white/[0.06] flex items-center justify-between gap-3">
+                <div class="flex flex-col min-w-0">
+                  <span class="text-[9px] font-bold tracking-[0.14em] uppercase text-zinc-400 font-mono mb-0.5">TOTAL SETTLEMENT</span>
+                  <span class="final-price text-2xl font-bold text-white font-mono tracking-tight leading-none" data-inr="${o.total_inr_num}" data-usd="${escapeOrderHtml(o.total_usd)}">₹${escapeOrderHtml(o.total_inr)}</span>
+                </div>
+                <a href="${escapeOrderHtml(o.edit_url)}" class="btn-primary glow-emerald inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg text-xs font-semibold bg-emerald-500 hover:bg-emerald-400 transition-all cursor-pointer shrink-0 shadow-lg" style="color: #07080a !important; text-decoration: none !important;">Manage Order →</a>
+              </div>
+            </div>
+          </article>
+        `).join('');
+    }
+
+    bindOrderRowEvents();
+    applyFilters();
+    updateBatchCount();
+  }
+
+  bindOrderRowEvents();
+  applyFilters();
+  updateBatchCount();
+
+  // 7. Run Batch Action against live database
   const runBtn = document.getElementById('runBatchActionBtn');
   const batchSelect = document.getElementById('batchActionSelect');
   if (runBtn && batchSelect) {
-    runBtn.addEventListener('click', () => {
+    runBtn.addEventListener('click', async () => {
       const selectedAction = batchSelect.value;
-      const checkedCount = document.querySelectorAll('.order-checkbox:checked').length;
+      const selectedIds = getSelectedOrderIds();
       if (!selectedAction) {
         showToast('Please select a batch action first');
         return;
       }
-      if (checkedCount === 0) {
+      if (selectedIds.length === 0) {
         showToast('No orders selected for batch processing');
         return;
       }
-      const actionName = batchSelect.options[batchSelect.selectedIndex].text;
-      showToast(`Ran "${actionName}" on ${checkedCount} order(s)`);
+      if (selectedAction === 'export_invoices') {
+        document.getElementById('exportOrdersBtn')?.click();
+        return;
+      }
+      runBtn.disabled = true;
+      try {
+        const res = await fetch('/admin/orders/order/api/batch-action/', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': getCsrfCookie(),
+            'X-Requested-With': 'XMLHttpRequest'
+          },
+          body: JSON.stringify({ action: selectedAction, ids: selectedIds })
+        });
+        const data = await res.json();
+        if (res.ok && data.status === 'ok') {
+          renderOrdersSnapshot(data);
+          showToast(`Updated ${data.updated_count} order(s)`);
+        } else {
+          showToast(data.message || 'Batch action failed');
+        }
+      } catch (err) {
+        showToast('Network error running batch action');
+      } finally {
+        runBtn.disabled = false;
+      }
     });
   }
 
-  // 8. Export Orders Button
+  // 8. Export Visible Orders CSV
   const exportBtn = document.getElementById('exportOrdersBtn');
   if (exportBtn) {
     exportBtn.addEventListener('click', () => {
-      showToast('Exporting 4 orders to CSV/PDF consignment report...');
+      const rows = Array.from(document.querySelectorAll('.order-table-row')).filter(r => r.style.display !== 'none');
+      if (rows.length === 0) {
+        showToast('No visible orders to export');
+        return;
+      }
+      let csv = 'OrderNumber,Date,Customer,Email,Payment,Fulfillment,Total_INR\n';
+      rows.forEach(r => {
+        const ref = r.querySelector('.copy-ref-btn')?.dataset.ref || '';
+        const cols = r.querySelectorAll('td');
+        const date = cols[2]?.textContent.trim() || '';
+        const name = cols[3]?.querySelector('span:first-child')?.textContent.trim() || '';
+        const email = cols[3]?.querySelector('span:last-child')?.textContent.trim() || '';
+        const pay = cols[4]?.textContent.trim() || '';
+        const ful = cols[5]?.textContent.trim() || '';
+        const tot = cols[6]?.querySelector('.final-price')?.textContent.trim() || '';
+        const esc = v => `"${String(v).replace(/"/g, '""')}"`;
+        csv += [ref, date, name, email, pay, ful, tot].map(esc).join(',') + '\n';
+      });
+      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'luckjary-orders.csv';
+      a.click();
+      showToast(`Exported ${rows.length} order(s) to CSV`);
     });
   }
+
+  // Realtime Orders Polling (every 10s when tab is active and no selection is pending)
+  setInterval(async () => {
+    if (document.hidden || getSelectedOrderIds().length > 0) return;
+    try {
+      const res = await fetch('/admin/orders/order/api/live-orders/', {
+        headers: { 'X-Requested-With': 'XMLHttpRequest' },
+        cache: 'no-store'
+      });
+      if (!res.ok) return;
+      const data = await res.json();
+      if (data.status === 'ok') {
+        renderOrdersSnapshot(data);
+      }
+    } catch (e) {}
+  }, 10000);
 
   // 9. View Switcher between Orders Changelist and Shopify-Style Settings View
   const ordersMainView = document.getElementById('ordersMainView');

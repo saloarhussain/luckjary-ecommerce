@@ -1,7 +1,9 @@
 from django.contrib import admin
+from django.http import JsonResponse
 from django.utils.html import format_html
 from django.utils.safestring import mark_safe
-from django.urls import reverse
+from django.urls import path, reverse
+import json
 from .models import Order, OrderItem, OrderStatusUpdate, Coupon
 
 class OrderItemInline(admin.TabularInline):
@@ -90,6 +92,77 @@ class OrderAdmin(admin.ModelAdmin):
     search_fields = ('order_number', 'full_name', 'email', 'tracking_number', 'shipping_street', 'shipping_city')
     inlines = [OrderItemInline, OrderStatusUpdateInline]
     actions = ['mark_as_processing', 'mark_as_shipped', 'mark_as_delivered']
+
+    def get_queryset(self, request):
+        return super().get_queryset(request).select_related('user').prefetch_related('items')
+
+    def get_urls(self):
+        urls = super().get_urls()
+        custom_urls = [
+            path('api/live-orders/', self.admin_site.admin_view(self.api_live_orders_view), name='orders_order_api_live'),
+            path('api/batch-action/', self.admin_site.admin_view(self.api_batch_action_view), name='orders_order_api_batch'),
+        ]
+        return custom_urls + urls
+
+    def changelist_view(self, request, extra_context=None):
+        from core.telemetry import get_order_counts, serialize_order_summary
+        extra_context = extra_context or {}
+        orders_qs = self.get_queryset(request).order_by('-created_at')
+        extra_context['order_counts'] = get_order_counts()
+        extra_context['orders_list'] = [serialize_order_summary(o) for o in orders_qs[:100]]
+        extra_context['active_nav'] = 'orders'
+        return super().changelist_view(request, extra_context=extra_context)
+
+    def api_live_orders_view(self, request):
+        from core.telemetry import get_order_counts, serialize_order_summary
+        orders_qs = self.get_queryset(request).order_by('-created_at')[:100]
+        return JsonResponse({
+            'status': 'ok',
+            'order_counts': get_order_counts(),
+            'orders': [serialize_order_summary(o) for o in orders_qs],
+        })
+
+    def api_batch_action_view(self, request):
+        if request.method != 'POST':
+            return JsonResponse({'status': 'error', 'message': 'POST required'}, status=405)
+        try:
+            data = json.loads(request.body.decode('utf-8'))
+            action = (data.get('action') or '').strip()
+            raw_ids = data.get('ids') or []
+            clean_ids = [int(i) for i in raw_ids if str(i).isdigit()]
+            if not clean_ids:
+                return JsonResponse({'status': 'error', 'message': 'No orders selected.'}, status=400)
+
+            qs = Order.objects.filter(id__in=clean_ids)
+            if action == 'mark_transit':
+                self.mark_as_shipped(request, qs)
+            elif action == 'mark_qc':
+                self.mark_as_processing(request, qs)
+            elif action == 'mark_delivered':
+                self.mark_as_delivered(request, qs)
+            elif action == 'archive_orders':
+                qs.update(status='CANCELLED')
+                for order in qs:
+                    OrderStatusUpdate.objects.create(
+                        order=order,
+                        status='CANCELLED',
+                        title='Order Cancelled',
+                        description='Order cancelled via Atelier Console batch action.',
+                        location='Luckjary Atelier Console',
+                    )
+            else:
+                return JsonResponse({'status': 'error', 'message': 'Unsupported batch action.'}, status=400)
+
+            from core.telemetry import get_order_counts, serialize_order_summary
+            orders_qs = self.get_queryset(request).order_by('-created_at')[:100]
+            return JsonResponse({
+                'status': 'ok',
+                'updated_count': qs.count(),
+                'order_counts': get_order_counts(),
+                'orders': [serialize_order_summary(o) for o in orders_qs],
+            })
+        except Exception as e:
+            return JsonResponse({'status': 'error', 'message': str(e)}, status=500)
 
     def get_fieldsets(self, request, obj=None):
         if obj:
