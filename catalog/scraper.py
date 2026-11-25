@@ -189,87 +189,201 @@ def absolute_url(base_url, link):
     return link
 
 
-def try_shopify_endpoints(target_url):
+def _build_shopify_paginated_url(base_url, page_num=1, limit=250):
+    """Normalizes a Shopify JSON endpoint URL with limit=250 and page={page_num}."""
+    parsed = urllib.parse.urlparse(base_url)
+    query_params = urllib.parse.parse_qs(parsed.query, keep_blank_values=True)
+    query_params['limit'] = [str(limit)]
+    query_params['page'] = [str(page_num)]
+    new_query = urllib.parse.urlencode(query_params, doseq=True)
+    return urllib.parse.urlunparse(parsed._replace(query=new_query))
+
+
+def _http_get_json_with_retry(url, timeout=12):
+    """Fetches JSON with a brief backoff retry on 429 rate-limiting."""
+    import time
+    for attempt in range(2):
+        body, code = http_get(url, timeout=timeout)
+        if code == 200 and body:
+            try:
+                return json.loads(body), 200
+            except Exception:
+                return None, code
+        if code == 429 and attempt == 0:
+            time.sleep(1.0)
+            continue
+        return None, code
+    return None, 500
+
+
+def _fetch_shopify_collection_page(base_json_url, col_handle, target_url, domain, page_num=1):
+    """Fetches a single page (up to 250 items) of a Shopify products/collection JSON endpoint."""
+    paged_url = _build_shopify_paginated_url(base_json_url, page_num=page_num, limit=250)
+    data, code = _http_get_json_with_retry(paged_url)
+    if code != 200 or not isinstance(data, dict) or 'products' not in data:
+        return None
+
+    prods = data.get('products') or []
+    if not prods:
+        if page_num > 1:
+            col_name = col_handle.replace('-', ' ').title()
+            return {
+                'success': True,
+                'is_collection': True,
+                'title': col_name,
+                'collection_title': col_name,
+                'collection_handle': col_handle,
+                'collection_total': 0,
+                'total_variants_count': 0,
+                'collection_products': [],
+                'has_more': False,
+                'next_page': None,
+                'page': page_num,
+            }
+        return None
+
+    res = parse_shopify_collection(prods, col_handle, target_url, domain)
+    has_more = len(prods) >= 250
+    res['has_more'] = has_more
+    res['next_page'] = page_num + 1 if has_more else None
+    res['page'] = page_num
+    return res
+
+
+def _fetch_all_shopify_pages(base_json_url, col_handle, target_url, domain, max_pages=100):
+    """Fetches all available pages from a Shopify collection/store JSON endpoint."""
+    all_products = []
+    seen_keys = set()
+    curr_page = 1
+
+    while curr_page <= max_pages:
+        paged_url = _build_shopify_paginated_url(base_json_url, page_num=curr_page, limit=250)
+        data, code = _http_get_json_with_retry(paged_url)
+        if code != 200 or not isinstance(data, dict):
+            break
+        prods = data.get('products') or []
+        if not prods:
+            break
+
+        new_added = 0
+        for p in prods:
+            key = p.get('id') or p.get('handle') or p.get('title')
+            if key is not None and key in seen_keys:
+                continue
+            if key is not None:
+                seen_keys.add(key)
+            all_products.append(p)
+            new_added += 1
+
+        if new_added == 0 or len(prods) < 250:
+            break
+        curr_page += 1
+
+    if all_products:
+        res = parse_shopify_collection(all_products, col_handle, target_url, domain)
+        res['has_more'] = False
+        res['next_page'] = None
+        res['page'] = 1
+        return res
+    return None
+
+
+def try_shopify_endpoints(target_url, page=None):
     """
     Detects and extracts from Shopify store endpoints:
-    1. Product URLs (/products/{handle}) -> {domain}/products/{handle}.json
-    2. Collection URLs (/collections/{handle}) -> {domain}/collections/{handle}/products.json
+    1. Collection URLs (/collections/{handle} or /collections) -> {domain}/collections/{handle}/products.json
+    2. Product URLs (/products/{handle}) -> {domain}/products/{handle}.json
+    3. Direct JSON URLs (/products.json, /collections/.../products.json)
+    4. Storefront catalog/root URLs (/, /products) -> {domain}/products.json
+    5. Shopify Admin URLs (admin.shopify.com/store/{handle} or {handle}.myshopify.com/admin)
+
+    When `page` is an integer (>= 1), fetches only that single 250-item page and returns
+    `has_more`/`next_page` metadata so the caller can auto-paginate across all products
+    without hitting serverless timeouts or payload size limits.
     """
     try:
         parsed = urllib.parse.urlparse(target_url)
         netloc = parsed.netloc
         scheme = parsed.scheme or 'https'
-        path = parsed.path
+        path = parsed.path or ''
+        trimmed_path = path.rstrip('/')
 
-        # Case 1: Collection URL (e.g. /collections/samsung-repair)
+        def fetch_collection(base_json_url, col_handle, domain):
+            if page is not None:
+                return _fetch_shopify_collection_page(base_json_url, col_handle, target_url, domain, page_num=page)
+            return _fetch_all_shopify_pages(base_json_url, col_handle, target_url, domain)
+
+        # Case 1: Collection URL (e.g. /collections/samsung-repair or /collections)
         col_match = re.search(r'/collections/([^/?#]+)', path)
-        if col_match:
+        if col_match and not path.endswith('.json'):
             col_handle = col_match.group(1)
-            all_products = []
-            page = 1
-            while page <= 4:
-                col_json_url = f"{scheme}://{netloc}/collections/{col_handle}/products.json?limit=250&page={page}"
-                body, code = http_get(col_json_url)
-                if code == 200 and body:
-                    data = json.loads(body)
-                    prods = data.get('products', [])
-                    if not prods:
-                        break
-                    all_products.extend(prods)
-                    if len(prods) < 250:
-                        break
-                    page += 1
-                else:
-                    break
-            if all_products:
-                return parse_shopify_collection(all_products, col_handle, target_url, netloc)
+            col_json_url = f"{scheme}://{netloc}/collections/{col_handle}/products.json"
+            res = fetch_collection(col_json_url, col_handle, netloc)
+            if res:
+                return res
 
-        # Case 2: Product URL (e.g. /products/ring-name)
+        # Case 2: Single Product URL (e.g. /products/ring-name)
         prod_match = re.search(r'/products/([^/?#]+)', path)
-        if prod_match:
-            prod_handle = prod_match.group(1).replace('.json', '')
+        if prod_match and not path.endswith('.json'):
+            prod_handle = prod_match.group(1)
             prod_json_url = f"{scheme}://{netloc}/products/{prod_handle}.json"
-            body, code = http_get(prod_json_url)
-            if code == 200 and body:
-                data = json.loads(body)
-                if 'product' in data:
-                    return parse_shopify_product_dict(data['product'], target_url)
+            data, code = _http_get_json_with_retry(prod_json_url)
+            if code == 200 and isinstance(data, dict) and 'product' in data:
+                res = parse_shopify_product_dict(data['product'], target_url)
+                res['has_more'] = False
+                return res
 
-        # Case 3: Direct JSON URL
+        # Case 3: Direct JSON URL (e.g. /products.json or /collections/all/products.json)
         if path.endswith('.json'):
-            body, code = http_get(target_url)
-            if code == 200 and body:
-                data = json.loads(body)
-                if 'product' in data:
-                    return parse_shopify_product_dict(data['product'], target_url)
-                elif 'products' in data and data['products']:
-                    return parse_shopify_collection(data['products'], 'collection', target_url, netloc)
+            col_from_json = re.search(r'/collections/([^/]+)/products\.json', path)
+            col_handle = col_from_json.group(1) if col_from_json else 'all'
+            if path.endswith('/products.json'):
+                res = fetch_collection(target_url, col_handle, netloc)
+                if res:
+                    return res
+            else:
+                data, code = _http_get_json_with_retry(target_url)
+                if code == 200 and isinstance(data, dict):
+                    if 'product' in data:
+                        res = parse_shopify_product_dict(data['product'], target_url)
+                        res['has_more'] = False
+                        return res
+                    elif 'products' in data:
+                        res = fetch_collection(target_url, 'collection', netloc)
+                        if res:
+                            return res
 
         # Case 4: Shopify Admin URL (e.g. admin.shopify.com/store/repairindi/... or repairindi.myshopify.com/admin/...)
         admin_match = re.search(r'admin\.shopify\.com/store/([^/?#]+)', target_url) or re.search(r'([^/?#]+)\.myshopify\.com/admin', target_url)
         if admin_match:
             store_handle = admin_match.group(1)
-            # Attempt to resolve via public myshopify endpoint
+            store_domain = f"{store_handle}.myshopify.com"
             public_candidates = [
-                f"https://{store_handle}.myshopify.com/collections/all/products.json?limit=250",
-                f"https://{store_handle}.myshopify.com/products.json?limit=250",
+                f"https://{store_domain}/collections/all/products.json",
+                f"https://{store_domain}/products.json",
             ]
             for cand_url in public_candidates:
-                body, code = http_get(cand_url)
-                if code == 200 and body:
-                    try:
-                        data = json.loads(body)
-                        prods = data.get('products', [])
-                        if prods:
-                            return parse_shopify_collection(prods, 'all', target_url, f"{store_handle}.myshopify.com")
-                    except Exception:
-                        pass
-            
-            # If public endpoint could not be reached, return an explicit helpful error
-            return {
-                'success': False,
-                'error': f"The URL entered is a private Shopify Admin URL ('admin.shopify.com/store/{store_handle}'). External scrapers cannot access password-protected merchant dashboards. Please use the public storefront URL (e.g. https://{store_handle}.myshopify.com/products or your public storefront domain), or click 'Advanced: Paste HTML / JSON Source'."
-            }
+                res = fetch_collection(cand_url, 'all', store_domain)
+                if res:
+                    return res
+
+            if page is None or page <= 1:
+                return {
+                    'success': False,
+                    'error': f"The URL entered is a private Shopify Admin URL ('admin.shopify.com/store/{store_handle}'). External scrapers cannot access password-protected merchant dashboards. Please use the public storefront URL (e.g. https://{store_handle}.myshopify.com/products or your public storefront domain), or click 'Advanced: Paste HTML / JSON Source'."
+                }
+            return None
+
+        # Case 5: Storefront root (/, /products, /collections) -> try Shopify store catalog endpoints
+        if trimmed_path in ('', '/products', '/collections'):
+            store_candidates = [
+                f"{scheme}://{netloc}/products.json",
+                f"{scheme}://{netloc}/collections/all/products.json",
+            ]
+            for cand_url in store_candidates:
+                res = fetch_collection(cand_url, 'all', netloc)
+                if res:
+                    return res
     except Exception:
         pass
     return None
@@ -673,7 +787,7 @@ def parse_shopify_csv(csv_text, source_name='Shopify Export CSV'):
     return parse_shopify_collection(raw_prods, 'shopify-csv-export', source_name, 'Shopify Admin Export')
 
 
-def scrape_ecommerce_product(url=None, raw_html=None, raw_json=None, raw_csv=None):
+def scrape_ecommerce_product(url=None, raw_html=None, raw_json=None, raw_csv=None, page=None):
     """
     Main entry point for scraping an e-commerce product or collection.
     Accepts:
@@ -681,6 +795,7 @@ def scrape_ecommerce_product(url=None, raw_html=None, raw_json=None, raw_csv=Non
     - raw_html: User-pasted HTML source
     - raw_json: User-pasted JSON (e.g. Shopify .json format or Schema.org)
     - raw_csv: User-pasted or uploaded Shopify products export CSV
+    - page: Optional 1-indexed page number for chunked collection pagination
     """
     url = (url or '').strip()
 
@@ -704,12 +819,24 @@ def scrape_ecommerce_product(url=None, raw_html=None, raw_json=None, raw_csv=Non
 
     # 2. If URL is provided, try direct Shopify endpoints (Product or Collection)
     if url and not raw_html:
-        shopify_res = try_shopify_endpoints(url)
+        shopify_res = try_shopify_endpoints(url, page=page)
         if shopify_res:
-            if shopify_res.get('title'):
+            if shopify_res.get('title') or (shopify_res.get('success') and shopify_res.get('is_collection')):
                 return shopify_res
             if not shopify_res.get('success', True) and shopify_res.get('error'):
                 return shopify_res
+        if page is not None and page > 1:
+            return {
+                'success': True,
+                'is_collection': True,
+                'title': 'Collection Complete',
+                'collection_products': [],
+                'collection_total': 0,
+                'total_variants_count': 0,
+                'has_more': False,
+                'next_page': None,
+                'page': page,
+            }
 
     # 3. Fetch HTML if URL provided, or use raw_html
     html = raw_html or ""

@@ -406,9 +406,16 @@ class ProductAdmin(admin.ModelAdmin):
             raw_html = (data.get('raw_html') or '').strip()
             raw_json = (data.get('raw_json') or '').strip()
             raw_csv = (data.get('raw_csv') or '').strip()
+            raw_page = data.get('page')
+            page = None
+            if raw_page is not None and str(raw_page).strip() != '':
+                try:
+                    page = max(1, int(raw_page))
+                except (TypeError, ValueError):
+                    page = None
 
             from .scraper import scrape_ecommerce_product
-            scraped = scrape_ecommerce_product(url=url, raw_html=raw_html, raw_json=raw_json, raw_csv=raw_csv)
+            scraped = scrape_ecommerce_product(url=url, raw_html=raw_html, raw_json=raw_json, raw_csv=raw_csv, page=page)
 
             if not scraped or not scraped.get('success'):
                 return JsonResponse({

@@ -224,13 +224,29 @@ a, a *, a:hover, a:hover *, a:focus, a:active, button, button * {
             <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3.5 text-neutral-400">
               <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"></path></svg>
             </div>
-            <input id="targetUrlInput" type="url" placeholder="Paste e-commerce product URL (e.g. https://boutique.com/products/diamond-ring)" class="luxury-input w-full pl-10 pr-4 py-3 rounded-xl font-sans placeholder-neutral-500" required>
+            <input id="targetUrlInput" type="url" placeholder="Paste product, collection, or Shopify store URL (e.g. https://boutique.com/collections/all)" class="luxury-input w-full pl-10 pr-4 py-3 rounded-xl font-sans placeholder-neutral-500" required>
           </div>
           <button id="scrapeSubmitBtn" type="submit" class="btn-primary px-6 py-3 rounded-xl flex items-center justify-center gap-2 cursor-pointer font-sans whitespace-nowrap">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" /></svg>
-            <span id="scrapeBtnText">Scrape Product</span>
+            <span id="scrapeBtnText">Scrape All</span>
           </button>
         </form>
+
+        <!-- Live Multi-Page Scrape Progress Bar -->
+        <div id="scrapeProgressBanner" class="hidden flex-col gap-2 p-3.5 rounded-xl bg-[#0c0d10] border border-emerald-500/30">
+          <div class="flex items-center justify-between gap-3 text-xs font-mono">
+            <span class="text-neutral-200 flex items-center gap-2">
+              <span class="inline-block animate-spin text-emerald-400">↻</span>
+              <span id="scrapeProgressText">Fetching page 1...</span>
+            </span>
+            <div class="flex items-center gap-3">
+              <span id="scrapeProgressCount" class="text-emerald-400 font-bold">0 products</span>
+              <button id="stopScrapeBtn" type="button" onclick="stopMultiPageScrape()" class="btn-secondary px-2.5 py-1 rounded-lg text-[11px] font-sans cursor-pointer">
+                Stop &amp; Keep
+              </button>
+            </div>
+          </div>
+        </div>
 
         <!-- Advanced Accordion: Raw HTML / Raw JSON Paste -->
         <div id="advancedSourceContainer" class="hidden flex-col gap-3 pt-3 border-t border-white/[0.06]">
@@ -408,6 +424,15 @@ a, a *, a:hover, a:hover *, a:focus, a:active, button, button * {
                 <!-- Populated dynamically by JS -->
               </tbody>
             </table>
+          </div>
+          <!-- Client-Side Pagination Footer for Large Collections -->
+          <div id="collectionPaginationBar" class="hidden flex-wrap items-center justify-between gap-3 px-4 py-3 border-t border-[#21242d] bg-[#0c0d10]/70 text-xs font-mono text-neutral-400">
+            <span id="collectionPageInfo">Showing 1–100 of 0 pieces</span>
+            <div class="flex items-center gap-2">
+              <button type="button" id="collectionPrevPageBtn" onclick="changeCollectionPage(-1)" class="btn-secondary px-3 py-1.5 rounded-lg text-xs cursor-pointer disabled:opacity-40">← Prev</button>
+              <span id="collectionPageNumber" class="px-2 text-neutral-200">Page 1 / 1</span>
+              <button type="button" id="collectionNextPageBtn" onclick="changeCollectionPage(1)" class="btn-secondary px-3 py-1.5 rounded-lg text-xs cursor-pointer disabled:opacity-40">Next →</button>
+            </div>
           </div>
         </div>
 
@@ -692,6 +717,10 @@ let scrapeHistory = [];
 let collectionProducts = [];
 let selectedBulkIndices = new Set();
 let currentCollectionMode = 'bulk';
+let collectionCurrentPage = 1;
+const COLLECTION_PAGE_SIZE = 100;
+let scrapeCancelled = false;
+let scrapeAbortController = null;
 const INR_RATE = 83.1527;
 
 // Load History from localStorage on init
@@ -788,36 +817,166 @@ function showFeedback(message, isError = false) {
   }
 }
 
-// Handle Scrape Submit
+function stopMultiPageScrape() {
+  scrapeCancelled = true;
+  if (scrapeAbortController) {
+    try { scrapeAbortController.abort(); } catch (e) {}
+  }
+  const stopBtn = document.getElementById('stopScrapeBtn');
+  if (stopBtn) {
+    stopBtn.disabled = true;
+    stopBtn.textContent = 'Stopping...';
+  }
+}
+
+function setScrapeProgress(visible, text = '', count = 0) {
+  const banner = document.getElementById('scrapeProgressBanner');
+  const txt = document.getElementById('scrapeProgressText');
+  const cnt = document.getElementById('scrapeProgressCount');
+  const stopBtn = document.getElementById('stopScrapeBtn');
+  if (!banner) return;
+  if (visible) {
+    banner.classList.remove('hidden');
+    banner.classList.add('flex');
+    if (txt) txt.textContent = text;
+    if (cnt) cnt.textContent = `${count.toLocaleString()} products`;
+    if (stopBtn) {
+      stopBtn.disabled = false;
+      stopBtn.textContent = 'Stop & Keep';
+    }
+  } else {
+    banner.classList.add('hidden');
+    banner.classList.remove('flex');
+  }
+}
+
+// Handle Scrape Submit (auto-paginates across ALL pages of a collection or store)
 async function handleScrapeSubmit(e) {
   e.preventDefault();
   const url = document.getElementById('targetUrlInput').value.trim();
   if (!url) return;
 
+  scrapeCancelled = false;
   setScrapingLoading(true);
+  setScrapeProgress(true, 'Connecting to store endpoint (page 1)...', 0);
+
+  const csrfToken = getCsrfToken();
+  const accumulatedProducts = [];
+  const seenKeys = new Set();
+  let firstProductPayload = null;
+  let page = 1;
+  let pagesFetched = 0;
+  let partialError = null;
 
   try {
-    const csrfToken = getCsrfToken();
-    const res = await fetch('/admin/catalog/product/api/scrape/', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-CSRFToken': csrfToken
-      },
-      body: JSON.stringify({ url: url })
-    });
+    while (!scrapeCancelled) {
+      scrapeAbortController = new AbortController();
+      setScrapeProgress(
+        true,
+        `Scraping page ${page}... (${accumulatedProducts.length.toLocaleString()} products extracted)`,
+        accumulatedProducts.length
+      );
 
-    const data = await res.json();
-    if (res.ok && data.status === 'ok') {
-      showFeedback(`Product "${data.product.title}" extracted successfully!`);
-      loadScrapedDataIntoStudio(data.product);
-      saveToHistory(data.product);
+      let res;
+      let data;
+      try {
+        res = await fetch('/admin/catalog/product/api/scrape/', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': csrfToken
+          },
+          body: JSON.stringify({ url: url, page: page }),
+          signal: scrapeAbortController.signal
+        });
+        data = await res.json();
+      } catch (fetchErr) {
+        if (fetchErr.name === 'AbortError' || scrapeCancelled) {
+          break;
+        }
+        if (page > 1 && accumulatedProducts.length > 0) {
+          partialError = fetchErr.message;
+          break;
+        }
+        throw fetchErr;
+      }
+
+      if (!res.ok || data.status !== 'ok') {
+        if (page > 1 && accumulatedProducts.length > 0) {
+          partialError = data.message || `Stopped on page ${page}`;
+          break;
+        }
+        showFeedback(data.message || 'Scraping failed. Try pasting the page HTML directly in the Advanced tab.', true);
+        return;
+      }
+
+      const prod = data.product;
+
+      // Single-product URL: load immediately and finish
+      if (!prod.is_collection) {
+        showFeedback(`Product "${prod.title}" extracted successfully!`);
+        loadScrapedDataIntoStudio(prod);
+        saveToHistory(prod);
+        return;
+      }
+
+      if (!firstProductPayload) {
+        firstProductPayload = { ...prod };
+      }
+
+      const incoming = Array.isArray(prod.collection_products) ? prod.collection_products : [];
+      let newAdded = 0;
+      for (const item of incoming) {
+        const dedupeKey = item.id != null ? `id:${item.id}` : (item.handle ? `h:${item.handle}` : `t:${item.title}`);
+        if (seenKeys.has(dedupeKey)) continue;
+        seenKeys.add(dedupeKey);
+        accumulatedProducts.push(item);
+        newAdded++;
+      }
+
+      if (incoming.length > 0) {
+        pagesFetched++;
+      }
+
+      setScrapeProgress(
+        true,
+        `Extracted page ${page} (${accumulatedProducts.length.toLocaleString()} total products)`,
+        accumulatedProducts.length
+      );
+
+      if (!prod.has_more || newAdded === 0 || scrapeCancelled) {
+        break;
+      }
+
+      page = prod.next_page || (page + 1);
+    }
+
+    if (accumulatedProducts.length > 0 && firstProductPayload) {
+      const totalVariants = accumulatedProducts.reduce((sum, item) => sum + (item.variants ? item.variants.length : 0), 0);
+      firstProductPayload.is_collection = true;
+      firstProductPayload.collection_products = accumulatedProducts;
+      firstProductPayload.collection_total = accumulatedProducts.length;
+      firstProductPayload.total_variants_count = totalVariants;
+      firstProductPayload.source_type = `Shopify Collection (${accumulatedProducts.length} items, ${totalVariants} variants)`;
+
+      if (scrapeCancelled) {
+        showFeedback(`Scraping paused by user at page ${page}. Kept ${accumulatedProducts.length.toLocaleString()} extracted products (${totalVariants.toLocaleString()} variants).`);
+      } else if (partialError) {
+        showFeedback(`Scraped ${accumulatedProducts.length.toLocaleString()} products across ${pagesFetched} page(s) before server notice: ${partialError}`);
+      } else {
+        showFeedback(`Extracted all ${accumulatedProducts.length.toLocaleString()} products (${totalVariants.toLocaleString()} variants) across ${pagesFetched} page(s)!`);
+      }
+
+      loadScrapedDataIntoStudio(firstProductPayload);
+      saveToHistory(firstProductPayload);
     } else {
-      showFeedback(data.message || 'Scraping failed. Try pasting the page HTML directly in the Advanced tab.', true);
+      showFeedback('No products could be extracted from the provided URL.', true);
     }
   } catch (err) {
     showFeedback(`Network error during scraping: ${err.message}. Try pasting raw HTML.`, true);
   } finally {
+    scrapeAbortController = null;
+    setScrapeProgress(false);
     setScrapingLoading(false);
   }
 }
@@ -877,7 +1036,7 @@ function setScrapingLoading(isLoading) {
   } else {
     btn.disabled = false;
     btn.classList.remove('opacity-75');
-    txt.textContent = 'Scrape Product';
+    txt.textContent = 'Scrape All';
   }
 }
 
@@ -960,13 +1119,14 @@ function loadScrapedDataIntoStudio(product) {
   if (product.is_collection && Array.isArray(product.collection_products) && product.collection_products.length > 0) {
     collectionProducts = product.collection_products;
     selectedBulkIndices = new Set(collectionProducts.map((_, i) => i));
+    collectionCurrentPage = 1;
 
     tabsBar.classList.remove('hidden');
     tabsBar.classList.add('flex');
-    document.getElementById('tabBulkCount').textContent = collectionProducts.length;
+    document.getElementById('tabBulkCount').textContent = collectionProducts.length.toLocaleString();
     document.getElementById('headerTotalVariants').textContent = (product.total_variants_count || collectionProducts.reduce((sum, p) => sum + (p.variants ? p.variants.length : 0), 0)).toLocaleString();
     document.getElementById('bulkCollectionTitle').textContent = product.collection_title || 'Collection';
-    document.getElementById('bulkTotalBadge').textContent = `${collectionProducts.length} PIECES`;
+    document.getElementById('bulkTotalBadge').textContent = `${collectionProducts.length.toLocaleString()} PIECES`;
 
     renderCollectionTable();
     switchCollectionTab('bulk');
@@ -1011,9 +1171,10 @@ function switchCollectionTab(tab) {
   }
 }
 
-// Render Collection Table
+// Render Collection Table (paginated at 100 items/page with lazy variant rendering)
 function renderCollectionTable(filterText = '') {
   const tbody = document.getElementById('collectionTableBody');
+  const pagBar = document.getElementById('collectionPaginationBar');
   if (!tbody) return;
   tbody.innerHTML = '';
 
@@ -1021,16 +1182,42 @@ function renderCollectionTable(filterText = '') {
   const filtered = collectionProducts.map((p, idx) => ({ ...p, origIndex: idx }))
     .filter(p => !q || (p.title || '').toLowerCase().includes(q) || (p.sku || '').toLowerCase().includes(q) || (p.handle || '').toLowerCase().includes(q));
 
-  document.getElementById('bulkSelectionStatus').textContent = `${selectedBulkIndices.size} of ${collectionProducts.length} Selected`;
-  document.getElementById('bulkSelectedCount').textContent = selectedBulkIndices.size;
-  document.getElementById('bulkSelectAllCount').textContent = collectionProducts.length;
+  document.getElementById('bulkSelectionStatus').textContent = `${selectedBulkIndices.size.toLocaleString()} of ${collectionProducts.length.toLocaleString()} Selected`;
+  document.getElementById('bulkSelectedCount').textContent = selectedBulkIndices.size.toLocaleString();
+  document.getElementById('bulkSelectAllCount').textContent = collectionProducts.length.toLocaleString();
 
   if (filtered.length === 0) {
+    if (pagBar) {
+      pagBar.classList.add('hidden');
+      pagBar.classList.remove('flex');
+    }
     tbody.innerHTML = `<tr><td colspan="7" class="py-8 text-center text-neutral-500 font-sans text-xs">No pieces found matching "${escapeHtml(filterText)}"</td></tr>`;
     return;
   }
 
-  filtered.forEach(p => {
+  const totalPages = Math.max(1, Math.ceil(filtered.length / COLLECTION_PAGE_SIZE));
+  if (collectionCurrentPage > totalPages) collectionCurrentPage = totalPages;
+  if (collectionCurrentPage < 1) collectionCurrentPage = 1;
+
+  const startIdx = (collectionCurrentPage - 1) * COLLECTION_PAGE_SIZE;
+  const endIdx = Math.min(startIdx + COLLECTION_PAGE_SIZE, filtered.length);
+  const pageSlice = filtered.slice(startIdx, endIdx);
+
+  if (pagBar) {
+    if (filtered.length > COLLECTION_PAGE_SIZE) {
+      pagBar.classList.remove('hidden');
+      pagBar.classList.add('flex');
+      document.getElementById('collectionPageInfo').textContent = `Showing ${(startIdx + 1).toLocaleString()}–${endIdx.toLocaleString()} of ${filtered.length.toLocaleString()} pieces`;
+      document.getElementById('collectionPageNumber').textContent = `Page ${collectionCurrentPage} / ${totalPages}`;
+      document.getElementById('collectionPrevPageBtn').disabled = collectionCurrentPage <= 1;
+      document.getElementById('collectionNextPageBtn').disabled = collectionCurrentPage >= totalPages;
+    } else {
+      pagBar.classList.add('hidden');
+      pagBar.classList.remove('flex');
+    }
+  }
+
+  pageSlice.forEach(p => {
     const idx = p.origIndex;
     const isSelected = selectedBulkIndices.has(idx);
     const thumb = p.images && p.images.length > 0 ? (p.images[0].src || p.images[0]) : 'https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?auto=format&fit=crop&w=200&q=80';
@@ -1078,40 +1265,54 @@ function renderCollectionTable(filterText = '') {
     `;
     tbody.appendChild(tr);
 
-    // Collapsible sub-row showing the complete list of variants for this item
+    // Collapsible sub-row placeholder (populated lazily when expanded)
     const subTr = document.createElement('tr');
     subTr.id = `variants-sub-${idx}`;
+    subTr.dataset.loaded = '0';
     subTr.className = 'hidden bg-[#0c0d10] border-b border-[#21242d]';
-    subTr.innerHTML = `
-      <td colspan="7" class="p-3 pl-16">
-        <div class="p-3.5 rounded-xl bg-[#111317] border border-[#21242d] flex flex-col gap-2.5">
-          <div class="flex items-center justify-between text-[11px] font-sans font-semibold text-neutral-300">
-            <span>Detected Variant Specifications for "${escapeHtml(p.title)}":</span>
-            <span class="font-mono text-amber-300">${varCount} Total Options</span>
-          </div>
-          <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 max-h-52 overflow-y-auto pr-1">
-            ${(p.variants || []).map(v => `
-              <div class="p-2.5 rounded-xl bg-[#0e1014] border border-[#21242d] hover:border-emerald-500/30 transition-colors flex items-center justify-between text-xs">
-                <div class="min-w-0 pr-2">
-                  <span class="text-neutral-200 font-sans font-medium truncate block" title="${escapeHtml(v.title || 'Standard')}">${escapeHtml(v.title || 'Standard')}</span>
-                  ${v.sku ? `<span class="text-[10px] text-amber-300 font-mono block mt-0.5 tracking-wide">SKU: ${escapeHtml(v.sku)}</span>` : ''}
-                </div>
-                <span class="text-emerald-400 font-bold shrink-0 font-mono">₹${p.currency === 'INR' ? Math.round(v.price || 0).toLocaleString('en-IN') : Math.round((v.price || 0) * INR_RATE).toLocaleString('en-IN')}</span>
-              </div>
-            `).join('')}
-          </div>
-        </div>
-      </td>
-    `;
     tbody.appendChild(subTr);
   });
 }
 
+function changeCollectionPage(delta) {
+  collectionCurrentPage += delta;
+  renderCollectionTable(document.getElementById('filterCollectionInput').value);
+  const bulkSection = document.getElementById('collectionBulkSection');
+  if (bulkSection) bulkSection.scrollIntoView({ behavior: 'smooth' });
+}
+
 function toggleVariantsDropdown(idx) {
   const row = document.getElementById(`variants-sub-${idx}`);
-  if (row) {
-    row.classList.toggle('hidden');
+  if (!row) return;
+  if (row.dataset.loaded !== '1') {
+    const p = collectionProducts[idx];
+    if (p) {
+      const varCount = p.variants ? p.variants.length : 1;
+      row.innerHTML = `
+        <td colspan="7" class="p-3 pl-16">
+          <div class="p-3.5 rounded-xl bg-[#111317] border border-[#21242d] flex flex-col gap-2.5">
+            <div class="flex items-center justify-between text-[11px] font-sans font-semibold text-neutral-300">
+              <span>Detected Variant Specifications for "${escapeHtml(p.title)}":</span>
+              <span class="font-mono text-amber-300">${varCount} Total Options</span>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 max-h-52 overflow-y-auto pr-1">
+              ${(p.variants || []).map(v => `
+                <div class="p-2.5 rounded-xl bg-[#0e1014] border border-[#21242d] hover:border-emerald-500/30 transition-colors flex items-center justify-between text-xs">
+                  <div class="min-w-0 pr-2">
+                    <span class="text-neutral-200 font-sans font-medium truncate block" title="${escapeHtml(v.title || 'Standard')}">${escapeHtml(v.title || 'Standard')}</span>
+                    ${v.sku ? `<span class="text-[10px] text-amber-300 font-mono block mt-0.5 tracking-wide">SKU: ${escapeHtml(v.sku)}</span>` : ''}
+                  </div>
+                  <span class="text-emerald-400 font-bold shrink-0 font-mono">₹${p.currency === 'INR' ? Math.round(v.price || 0).toLocaleString('en-IN') : Math.round((v.price || 0) * INR_RATE).toLocaleString('en-IN')}</span>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+        </td>
+      `;
+      row.dataset.loaded = '1';
+    }
   }
+  row.classList.toggle('hidden');
 }
 
 function toggleBulkRow(idx, checked) {
@@ -1143,6 +1344,7 @@ function toggleSelectAllBulk(checked) {
 }
 
 function filterCollectionItems(val) {
+  collectionCurrentPage = 1;
   renderCollectionTable(val);
 }
 
@@ -1578,7 +1780,15 @@ function saveToHistory(product) {
   scrapeHistory.unshift(product);
   if (scrapeHistory.length > 8) scrapeHistory.pop();
   try {
-    localStorage.setItem('luckjary_scrape_history', JSON.stringify(scrapeHistory));
+    // Keep localStorage under quota by skipping massive collection_products payloads (>100 items)
+    const compactHistory = scrapeHistory.map(item => {
+      if (item && item.is_collection && Array.isArray(item.collection_products) && item.collection_products.length > 100) {
+        const { collection_products, ...rest } = item;
+        return { ...rest, is_collection: false, collection_products: [] };
+      }
+      return item;
+    });
+    localStorage.setItem('luckjary_scrape_history', JSON.stringify(compactHistory));
   } catch (e) {}
   renderHistoryGrid();
 }
