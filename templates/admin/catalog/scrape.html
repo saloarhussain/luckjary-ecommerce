@@ -666,6 +666,11 @@ a, a *, a:hover, a:hover *, a:focus, a:active, button, button * {
                 </button>
               </div>
 
+              <!-- Back to Collection (shown when inspecting from a collection) -->
+              <button id="backToCollectionCardBtn" type="button" onclick="backToCollectionList()" class="hidden btn-secondary w-full py-2.5 px-3 rounded-xl text-xs font-semibold items-center justify-center gap-1.5 cursor-pointer font-sans">
+                <span>← Back to All Collection Pieces</span>
+              </button>
+
               <!-- Reset / Scrape Another -->
               <button type="button" onclick="resetScraperWorkspace()" class="text-xs text-neutral-400 hover:text-white py-1 transition-colors text-center cursor-pointer font-sans">
                 Clear &amp; Scrape Another Product
@@ -1083,7 +1088,9 @@ function loadScrapedDataIntoStudio(product, options = {}) {
   const studio = document.getElementById('scrapedStudioSection');
   studio.classList.remove('hidden');
   studio.classList.add('flex');
-  studio.scrollIntoView({ behavior: 'smooth' });
+  if (!(options && options.preserveCollection)) {
+    studio.scrollIntoView({ behavior: 'smooth' });
+  }
 
   // Update Telemetry Header
   document.getElementById('badgeSourceType').textContent = product.source_type || 'E-Commerce Extractor';
@@ -1168,6 +1175,17 @@ function loadScrapedDataIntoStudio(product, options = {}) {
   // Handle Multi-Product Collection Mode
   const tabsBar = document.getElementById('collectionTabsBar');
   const backBtn = document.getElementById('backToCollectionBtn');
+  const backCardBtn = document.getElementById('backToCollectionCardBtn');
+  const setBackButtonsVisible = (visible) => {
+    if (backBtn) {
+      backBtn.classList.toggle('hidden', !visible);
+      backBtn.classList.toggle('inline-flex', visible);
+    }
+    if (backCardBtn) {
+      backCardBtn.classList.toggle('hidden', !visible);
+      backCardBtn.classList.toggle('flex', visible);
+    }
+  };
   if (product.is_collection && Array.isArray(product.collection_products) && product.collection_products.length > 0) {
     collectionProducts = product.collection_products;
     selectedBulkIndices = new Set(collectionProducts.map((_, i) => i));
@@ -1175,10 +1193,7 @@ function loadScrapedDataIntoStudio(product, options = {}) {
 
     tabsBar.classList.remove('hidden');
     tabsBar.classList.add('flex');
-    if (backBtn) {
-      backBtn.classList.remove('hidden');
-      backBtn.classList.add('inline-flex');
-    }
+    setBackButtonsVisible(true);
     document.getElementById('tabBulkCount').textContent = collectionProducts.length.toLocaleString();
     document.getElementById('headerTotalVariants').textContent = (product.total_variants_count || collectionProducts.reduce((sum, p) => sum + (p.variants ? p.variants.length : 0), 0)).toLocaleString();
     document.getElementById('bulkCollectionTitle').textContent = product.collection_title || 'Collection';
@@ -1189,19 +1204,13 @@ function loadScrapedDataIntoStudio(product, options = {}) {
   } else if (options && options.preserveCollection && collectionProducts.length > 0) {
     tabsBar.classList.remove('hidden');
     tabsBar.classList.add('flex');
-    if (backBtn) {
-      backBtn.classList.remove('hidden');
-      backBtn.classList.add('inline-flex');
-    }
+    setBackButtonsVisible(true);
     switchCollectionTab('single');
   } else {
     collectionProducts = [];
     tabsBar.classList.add('hidden');
     tabsBar.classList.remove('flex');
-    if (backBtn) {
-      backBtn.classList.add('hidden');
-      backBtn.classList.remove('inline-flex');
-    }
+    setBackButtonsVisible(false);
     switchCollectionTab('single');
   }
 
@@ -1421,7 +1430,12 @@ function inspectSinglePiece(idx) {
   const p = collectionProducts[idx];
   if (!p) return;
   loadScrapedDataIntoStudio(p, { preserveCollection: true });
-  document.getElementById('scrapedStudioSection').scrollIntoView({ behavior: 'smooth' });
+  const tabsBar = document.getElementById('collectionTabsBar');
+  if (tabsBar && !tabsBar.classList.contains('hidden')) {
+    tabsBar.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  } else {
+    document.getElementById('scrapedStudioSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
 }
 
 function backToCollectionList() {
@@ -1862,6 +1876,11 @@ function resetScraperWorkspace() {
   if (backBtn) {
     backBtn.classList.add('hidden');
     backBtn.classList.remove('inline-flex');
+  }
+  const backCardBtn = document.getElementById('backToCollectionCardBtn');
+  if (backCardBtn) {
+    backCardBtn.classList.add('hidden');
+    backCardBtn.classList.remove('flex');
   }
   document.getElementById('scrapeFeedbackBanner').classList.add('hidden');
   window.scrollTo({ top: 0, behavior: 'smooth' });
