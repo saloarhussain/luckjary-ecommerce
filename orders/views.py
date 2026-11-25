@@ -348,9 +348,9 @@ def oms_dashboard(request):
             Q(tracking_number__icontains=search_q)
         )
 
-    # Metrics
+    # Metrics (exclude cancelled orders from paid revenue)
     total_orders = Order.objects.count()
-    total_revenue = Order.objects.filter(payment_status='PAID').aggregate(Sum('total_amount'))['total_amount__sum'] or 0.00
+    total_revenue = Order.objects.filter(payment_status='PAID').exclude(status='CANCELLED').aggregate(Sum('total_amount'))['total_amount__sum'] or 0.00
     pending_count = Order.objects.filter(status='PENDING').count()
     processing_count = Order.objects.filter(status='PROCESSING').count()
     shipped_count = Order.objects.filter(status='SHIPPED').count()

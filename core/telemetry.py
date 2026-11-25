@@ -122,8 +122,10 @@ def get_atelier_live_telemetry(summary_only=False):
     from catalog.models import Product
     from orders.models import Coupon, Order
 
+    valid_paid_q = Q(payment_status='PAID') & ~Q(status='CANCELLED')
     order_stats = Order.objects.aggregate(
-        rev=Sum('total_amount'),
+        rev=Sum('total_amount', filter=valid_paid_q),
+        paid_orders=Count('id', filter=valid_paid_q),
         total_orders=Count('id'),
         pending=Count('id', filter=Q(status='PENDING')),
         processing=Count('id', filter=Q(status='PROCESSING')),
@@ -143,12 +145,13 @@ def get_atelier_live_telemetry(summary_only=False):
     active_coupons = Coupon.objects.filter(active=True).count()
 
     rev = float(order_stats['rev'] or 0)
+    paid_orders = order_stats['paid_orders'] or 0
     pending = order_stats['pending'] or 0
     processing = order_stats['processing'] or 0
     shipped = order_stats['shipped'] or 0
     delivered = order_stats['delivered'] or 0
 
-    avg_aov = (rev / total_orders) if total_orders > 0 else 0.0
+    avg_aov = (rev / paid_orders) if paid_orders > 0 else 0.0
     rev_inr = int(round(rev * USD_TO_INR))
     avg_aov_inr = int(round(avg_aov * USD_TO_INR))
 
