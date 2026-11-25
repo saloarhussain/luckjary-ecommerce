@@ -425,26 +425,32 @@
             {% for item in original.items.all %}
             <div class="flex flex-col sm:flex-row items-start gap-4 {% if not forloop.last %}pb-4 border-b border-obsidian-700/50{% endif %}">
               <div class="w-20 h-20 rounded-lg bg-obsidian-900 border border-obsidian-700/80 flex flex-col items-center justify-center p-2 text-center shrink-0 overflow-hidden relative">
-                {% if item.product_image or item.product.primary_image %}
-                <img src="{{ item.product_image|default:item.product.primary_image }}" alt="{{ item.product_name|default:item.product.title }}" class="w-full h-full object-cover rounded-md" onerror="this.classList.add('hidden'); this.nextElementSibling.classList.remove('hidden');">
+                {% if item.product_image %}
+                <img src="{{ item.product_image }}" alt="{{ item.product_name|default:'Order Piece' }}" class="w-full h-full object-cover rounded-md" onerror="this.classList.add('hidden'); this.nextElementSibling.classList.remove('hidden');">
+                {% elif item.product and item.product.primary_image %}
+                <img src="{{ item.product.primary_image }}" alt="{% if item.product_name %}{{ item.product_name }}{% else %}{{ item.product.title }}{% endif %}" class="w-full h-full object-cover rounded-md" onerror="this.classList.add('hidden'); this.nextElementSibling.classList.remove('hidden');">
                 {% endif %}
-                <div class="{% if item.product_image or item.product.primary_image %}hidden {% endif %}flex flex-col items-center justify-center text-center w-full h-full">
+                <div class="{% if item.product_image or item.product and item.product.primary_image %}hidden {% endif %}flex flex-col items-center justify-center text-center w-full h-full">
                   <span class="text-[9px] font-mono tracking-widest text-neutral-400 uppercase">PIECE</span>
-                  <span class="text-[11px] font-serif text-white font-medium mt-0.5 leading-tight">Tennis 925</span>
-                  <span class="text-[9px] font-mono text-champagne-300 mt-1">LCK-001</span>
+                  <span class="text-[11px] font-serif text-white font-medium mt-0.5 leading-tight truncate w-full">{{ item.product_name|default:"Piece"|truncatechars:14 }}</span>
+                  <span class="text-[9px] font-mono text-champagne-300 mt-1 truncate w-full">{{ item.product_sku|default:"N/A" }}</span>
                 </div>
               </div>
               <div class="flex-1 space-y-3 w-full">
                 <div class="flex flex-wrap items-center justify-between gap-2">
                   <div>
                     <div class="flex items-center gap-2 flex-wrap">
-                      <span class="text-[10px] font-mono text-neutral-400 bg-obsidian-850 border border-obsidian-700/70 px-2 py-0.5 rounded-md">SKU: {{ item.product_sku|default:item.product.sku|default:"LCK-BRC-001" }}</span>
-                      <a class="inline-flex items-center gap-1 text-[10px] font-mono text-neutral-300 hover:text-white bg-obsidian-850 hover:bg-obsidian-800 border border-obsidian-700/70 px-2 py-0.5 rounded-md transition-all cursor-pointer" href="{% if item.product %}{% url 'catalog:product_detail' item.product.slug %}{% else %}https://luckjary-ecommerce.vercel.app/products/sovereign-diamond-tennis-bracelet{% endif %}" target="_blank" rel="noopener noreferrer">
+                      <span class="text-[10px] font-mono text-neutral-400 bg-obsidian-850 border border-obsidian-700/70 px-2 py-0.5 rounded-md">SKU: {% if item.product_sku %}{{ item.product_sku }}{% elif item.product and item.product.sku %}{{ item.product.sku }}{% else %}N/A{% endif %}</span>
+                      {% if item.product %}
+                      <a class="inline-flex items-center gap-1 text-[10px] font-mono text-neutral-300 hover:text-white bg-obsidian-850 hover:bg-obsidian-800 border border-obsidian-700/70 px-2 py-0.5 rounded-md transition-all cursor-pointer" href="{% url 'catalog:product_detail' item.product.slug %}" target="_blank" rel="noopener noreferrer">
                         <span>View in Storefront</span>
                         <svg class="w-3 h-3 text-neutral-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75"></path></svg>
                       </a>
+                      {% else %}
+                      <span class="inline-flex items-center gap-1 text-[10px] font-mono text-neutral-500 bg-obsidian-850 border border-obsidian-700/60 px-2 py-0.5 rounded-md">Catalog Item Archived</span>
+                      {% endif %}
                     </div>
-                    <h4 class="text-base font-serif font-medium text-white mt-1">{{ item.product_name|default:item.product.title|default:"The Sovereign Diamond Tennis Bracelet" }}</h4>
+                    <h4 class="text-base font-serif font-medium text-white mt-1">{% if item.product_name %}{{ item.product_name }}{% elif item.product and item.product.title %}{{ item.product.title }}{% else %}Order Piece{% endif %}</h4>
                   </div>
                   <div class="text-right">
                     <span class="text-base font-mono font-semibold text-white">₹{{ item.line_total|floatformat:2|default:"3,780.00" }}</span>
