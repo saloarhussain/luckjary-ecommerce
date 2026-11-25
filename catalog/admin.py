@@ -805,9 +805,12 @@ class ProductAdmin(admin.ModelAdmin):
             deleted_count, _ = Product.objects.filter(id__in=clean_ids).delete()
             
             if request.headers.get('x-requested-with') == 'XMLHttpRequest' or request.content_type == 'application/json':
+                counts_payload = self._get_vault_counts()
                 return JsonResponse({
                     'status': 'ok',
                     'deleted_count': deleted_count,
+                    'total_products': counts_payload['total_products'],
+                    'category_counts': counts_payload['category_counts'],
                     'message': f'{deleted_count} piece(s) successfully deleted from the Atelier Vault.'
                 })
             try:
@@ -829,7 +832,14 @@ class ProductAdmin(admin.ModelAdmin):
             title = product.title
             product.delete()
             if request.headers.get('x-requested-with') == 'XMLHttpRequest':
-                return JsonResponse({'status': 'ok', 'id': product_id, 'message': f'"{title}" deleted.'})
+                counts_payload = self._get_vault_counts()
+                return JsonResponse({
+                    'status': 'ok',
+                    'id': product_id,
+                    'total_products': counts_payload['total_products'],
+                    'category_counts': counts_payload['category_counts'],
+                    'message': f'"{title}" deleted.',
+                })
             try:
                 from django.contrib import messages
                 messages.success(request, f'Piece "{title}" was deleted from Atelier Vault.', fail_silently=True)
@@ -839,8 +849,7 @@ class ProductAdmin(admin.ModelAdmin):
         except Exception as e:
             return JsonResponse({'status': 'error', 'message': str(e)}, status=500)
 
-    def changelist_view(self, request, extra_context=None):
-        extra_context = extra_context or {}
+    def _get_vault_counts(self):
         total_count = Product.objects.count()
         in_stock_count = Product.objects.filter(inventory__gt=5).count()
         low_stock_count = Product.objects.filter(inventory__gt=0, inventory__lte=5).count()
@@ -850,25 +859,35 @@ class ProductAdmin(admin.ModelAdmin):
         bestseller_count = Product.objects.filter(is_bestseller=True).count()
         vault_val = Product.objects.aggregate(total=Sum('price'))['total'] or 0
 
-        extra_context['catalog_stats'] = {
-            'total': total_count,
-            'in_stock': in_stock_count,
-            'low_stock': low_stock_count,
-            'sold_out': sold_out_count,
-            'featured': featured_count,
-            'available': available_count,
-            'bestsellers': bestseller_count,
-            'vault_value': f"${vault_val:,.2f}",
+        return {
+            'total_products': total_count,
+            'catalog_stats': {
+                'total': total_count,
+                'in_stock': in_stock_count,
+                'low_stock': low_stock_count,
+                'sold_out': sold_out_count,
+                'featured': featured_count,
+                'available': available_count,
+                'bestsellers': bestseller_count,
+                'vault_value': f"${vault_val:,.2f}",
+            },
+            'category_counts': {
+                'all': total_count,
+                'rings': Product.objects.filter(Q(category__slug='rings') | Q(title__icontains='Ring')).count(),
+                'necklaces': Product.objects.filter(Q(category__slug='necklaces') | Q(title__icontains='Necklace') | Q(title__icontains='Chain') | Q(title__icontains='Pendant')).count(),
+                'bracelets': Product.objects.filter(Q(category__slug='bracelets') | Q(title__icontains='Bracelet') | Q(title__icontains='Bangle')).count(),
+                'earrings': Product.objects.filter(Q(category__slug='earrings') | Q(title__icontains='Earring') | Q(title__icontains='Huggies')).count(),
+                'high_jewelry': featured_count,
+                'low_stock': low_stock_count,
+            },
         }
-        extra_context['category_counts'] = {
-            'all': total_count,
-            'rings': Product.objects.filter(Q(category__slug='rings') | Q(title__icontains='Ring')).count(),
-            'necklaces': Product.objects.filter(Q(category__slug='necklaces') | Q(title__icontains='Necklace') | Q(title__icontains='Chain') | Q(title__icontains='Pendant')).count(),
-            'bracelets': Product.objects.filter(Q(category__slug='bracelets') | Q(title__icontains='Bracelet') | Q(title__icontains='Bangle')).count(),
-            'earrings': Product.objects.filter(Q(category__slug='earrings') | Q(title__icontains='Earring') | Q(title__icontains='Huggies')).count(),
-            'high_jewelry': Product.objects.filter(is_featured=True).count(),
-            'low_stock': low_stock_count,
-        }
+
+    def changelist_view(self, request, extra_context=None):
+        extra_context = extra_context or {}
+        counts_payload = self._get_vault_counts()
+        extra_context['total_products'] = counts_payload['total_products']
+        extra_context['catalog_stats'] = counts_payload['catalog_stats']
+        extra_context['category_counts'] = counts_payload['category_counts']
         extra_context['categories_list'] = Category.objects.all()
         return super().changelist_view(request, extra_context=extra_context)
 

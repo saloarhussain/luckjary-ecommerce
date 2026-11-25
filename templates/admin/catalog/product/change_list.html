@@ -301,32 +301,32 @@ button, button *, button:hover, button:focus {
       <div class="flex items-center gap-2 overflow-x-auto no-scrollbar pt-2 pb-1 text-xs border-y border-white/[0.06]" id="categoryChips">
         <button class="category-chip active whitespace-nowrap px-4 py-1.5 rounded-full font-bold bg-emerald-500 text-obsidian-950 shadow-sm flex items-center gap-1.5 transition-all cursor-pointer font-sans glow-emerald" style="color: #07080a !important;" type="button">
           <span>All Vault</span>
-          <span class="opacity-90 font-mono text-[11px] font-bold">{{ cl.result_count }}</span>
+          <span id="chipAllCount" class="opacity-90 font-mono text-[11px] font-bold">{{ category_counts.all|default_if_none:cl.result_count }}</span>
         </button>
         <button class="category-chip whitespace-nowrap px-4 py-1.5 rounded-full font-medium bg-obsidian-800 border border-obsidian-700 text-neutral-300 hover:text-white hover:border-neutral-500 flex items-center gap-1.5 transition-all cursor-pointer font-sans" type="button">
           <span>Rings</span>
-          <span class="opacity-90 font-mono text-[11px]">{{ category_counts.rings|default:5 }}</span>
+          <span id="chipRingsCount" class="opacity-90 font-mono text-[11px]">{{ category_counts.rings|default_if_none:0 }}</span>
         </button>
         <button class="category-chip whitespace-nowrap px-4 py-1.5 rounded-full font-medium bg-obsidian-800 border border-obsidian-700 text-neutral-300 hover:text-white hover:border-neutral-500 flex items-center gap-1.5 transition-all cursor-pointer font-sans" type="button">
           <span>Necklaces</span>
-          <span class="opacity-90 font-mono text-[11px]">{{ category_counts.necklaces|default:4 }}</span>
+          <span id="chipNecklacesCount" class="opacity-90 font-mono text-[11px]">{{ category_counts.necklaces|default_if_none:0 }}</span>
         </button>
         <button class="category-chip whitespace-nowrap px-4 py-1.5 rounded-full font-medium bg-obsidian-800 border border-obsidian-700 text-neutral-300 hover:text-white hover:border-neutral-500 flex items-center gap-1.5 transition-all cursor-pointer font-sans" type="button">
           <span>Bracelets</span>
-          <span class="opacity-90 font-mono text-[11px]">{{ category_counts.bracelets|default:3 }}</span>
+          <span id="chipBraceletsCount" class="opacity-90 font-mono text-[11px]">{{ category_counts.bracelets|default_if_none:0 }}</span>
         </button>
         <button class="category-chip whitespace-nowrap px-4 py-1.5 rounded-full font-medium bg-obsidian-800 border border-obsidian-700 text-neutral-300 hover:text-white hover:border-neutral-500 flex items-center gap-1.5 transition-all cursor-pointer font-sans" type="button">
           <span>Earrings</span>
-          <span class="opacity-90 font-mono text-[11px]">{{ category_counts.earrings|default:5 }}</span>
+          <span id="chipEarringsCount" class="opacity-90 font-mono text-[11px]">{{ category_counts.earrings|default_if_none:0 }}</span>
         </button>
         <button class="category-chip whitespace-nowrap px-4 py-1.5 rounded-full font-medium bg-obsidian-800 border border-obsidian-700 text-neutral-300 hover:text-white hover:border-neutral-500 flex items-center gap-1.5 transition-all cursor-pointer font-sans" type="button">
           <span>High Jewelry</span>
-          <span class="opacity-90 font-mono text-[11px]">{{ category_counts.high_jewelry|default:2 }}</span>
+          <span id="chipHighJewelryCount" class="opacity-90 font-mono text-[11px]">{{ category_counts.high_jewelry|default_if_none:0 }}</span>
         </button>
         <button class="category-chip whitespace-nowrap px-4 py-1.5 rounded-full font-medium bg-obsidian-800 border border-amber-500/40 text-amber-300 hover:border-amber-400 flex items-center gap-1.5 transition-all ml-auto cursor-pointer font-sans" type="button">
           <span class="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse"></span>
           <span>Low Stock Alert</span>
-          <span class="font-mono text-[11px] font-bold bg-amber-500/15 px-1.5 py-0.2 rounded text-amber-300">{{ category_counts.low_stock|default:2 }}</span>
+          <span id="chipLowStockCount" class="font-mono text-[11px] font-bold bg-amber-500/15 px-1.5 py-0.2 rounded text-amber-300">{{ category_counts.low_stock|default_if_none:0 }}</span>
         </button>
       </div>
 
@@ -902,13 +902,38 @@ button, button *, button:hover, button:focus {
       return Array.from(getCheckboxes()).filter(cb => cb.checked);
     }
 
-    function updateTotalVaultCounts() {
-      const remainingItems = document.querySelectorAll('.product-item');
-      const count = remainingItems.length;
+    function updateTotalVaultCounts(serverData) {
+      const uniqueVisibleIds = new Set(
+        Array.from(document.querySelectorAll('.product-item')).map(el => el.getAttribute('data-id')).filter(Boolean)
+      );
+      const fallbackCount = uniqueVisibleIds.size;
+      const totalCount = serverData && typeof serverData.total_products === 'number' ? serverData.total_products : fallbackCount;
+
       const vaultPiecesCount = document.getElementById('vaultPiecesCount');
-      if (vaultPiecesCount) vaultPiecesCount.textContent = count;
+      if (vaultPiecesCount) vaultPiecesCount.textContent = totalCount;
       const totalSelectedCount = document.getElementById('totalSelectedCount');
-      if (totalSelectedCount) totalSelectedCount.textContent = count;
+      if (totalSelectedCount) totalSelectedCount.textContent = fallbackCount;
+
+      document.querySelectorAll('.sidebar-products-count').forEach(el => {
+        el.textContent = totalCount;
+      });
+
+      if (serverData && serverData.category_counts) {
+        const cc = serverData.category_counts;
+        const map = {
+          chipAllCount: cc.all,
+          chipRingsCount: cc.rings,
+          chipNecklacesCount: cc.necklaces,
+          chipBraceletsCount: cc.bracelets,
+          chipEarringsCount: cc.earrings,
+          chipHighJewelryCount: cc.high_jewelry,
+          chipLowStockCount: cc.low_stock,
+        };
+        Object.entries(map).forEach(([id, val]) => {
+          const el = document.getElementById(id);
+          if (el && typeof val === 'number') el.textContent = val;
+        });
+      }
     }
 
     function updateSelectionState() {
@@ -1298,11 +1323,12 @@ button, button *, button:hover, button:focus {
               card.style.transform = 'scale(0.95)';
               setTimeout(() => {
                 card.remove();
-                updateTotalVaultCounts();
+                updateTotalVaultCounts(data);
                 updateSelectionState();
               }, 300);
             }
           });
+          updateTotalVaultCounts(data);
           closeBulkDeleteModal();
           showToast(`Deleted ${data.deleted_count || count} piece(s) from Atelier Vault`, 'delete');
         } else {
@@ -1344,10 +1370,11 @@ button, button *, button:hover, button:focus {
             card.style.transform = 'scale(0.95)';
             setTimeout(() => {
               card.remove();
-              updateTotalVaultCounts();
+              updateTotalVaultCounts(data);
               updateSelectionState();
             }, 300);
           }
+          updateTotalVaultCounts(data);
           showToast(`"${productTitle}" removed from Atelier Vault`, 'delete');
         } else {
           showToast(data.message || 'Error deleting piece', 'error');

@@ -187,7 +187,7 @@ a, a *, a:hover, a:hover *, a:focus, a:active, button, button * {
           <a href="{% url 'admin:catalog_product_changelist' %}" class="btn-secondary flex items-center gap-2 text-xs font-semibold px-3.5 py-2.5 rounded-xl cursor-pointer">
             <svg class="w-4 h-4 text-neutral-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M12 2l8 4.5v11L12 22 4 17.5v-11L12 2z"></path></svg>
             <span>Vault Products</span>
-            <span class="font-mono text-[10px] px-1.5 py-0.2 bg-[#111317] rounded text-neutral-400">{{ total_products|default:"17" }}</span>
+            <span class="font-mono text-[10px] px-1.5 py-0.2 bg-[#111317] rounded text-neutral-400">{{ total_products|default_if_none:0 }}</span>
           </a>
           <div class="flex items-center gap-2 px-3.5 py-2.5 rounded-xl bg-[#171920] border border-emerald-500/40 text-emerald-400 text-xs font-semibold shadow-sm">
             <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" /></svg>

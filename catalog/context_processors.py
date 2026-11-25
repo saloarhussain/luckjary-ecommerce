@@ -49,8 +49,23 @@ def catalog_context(request):
 
     active_currency = SUPPORTED_CURRENCIES[currency_code]
 
-    # For admin requests, skip querying storefront categories/materials/collections to maximize speed
+    # For admin requests, skip storefront categories/materials/collections; provide live sidebar counts for HTML pages
     if hasattr(request, 'path') and request.path.startswith('/admin/'):
+        is_api = '/api/' in request.path or request.headers.get('x-requested-with') == 'XMLHttpRequest'
+        total_products = 0
+        total_orders = 0
+        if not is_api:
+            try:
+                from .models import Product
+                total_products = Product.objects.count()
+            except Exception:
+                total_products = 0
+            try:
+                from orders.models import Order
+                total_orders = Order.objects.count()
+            except Exception:
+                total_orders = 0
+
         return {
             'wishlist_count': 0,
             'site_name': 'Luckjary',
@@ -60,6 +75,8 @@ def catalog_context(request):
             'currency_symbol': active_currency['symbol'],
             'active_currency': active_currency,
             'supported_currencies': SUPPORTED_CURRENCIES,
+            'total_products': total_products,
+            'total_orders': total_orders,
         }
 
     return {

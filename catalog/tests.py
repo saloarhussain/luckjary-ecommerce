@@ -176,3 +176,19 @@ class ScraperPaginationTests(SimpleTestCase):
             self.assertEqual(len(payload['product']['collection_products']), 15)
             self.assertFalse(payload['product']['has_more'])
             self.assertEqual(payload['product']['page'], 2)
+
+    def test_admin_context_and_zero_counts_render_zero_not_hardcoded_defaults(self):
+        from django.template import Context, Template
+        from catalog.context_processors import catalog_context
+
+        rf = RequestFactory()
+        req = rf.get('/admin/catalog/product/')
+        with patch('catalog.models.Product.objects.count', return_value=0), \
+             patch('orders.models.Order.objects.count', return_value=0):
+            ctx = catalog_context(req)
+
+        self.assertEqual(ctx['total_products'], 0)
+        self.assertEqual(ctx['total_orders'], 0)
+
+        rendered = Template('{{ total_products|default_if_none:0 }}|{{ total_orders|default_if_none:0 }}').render(Context(ctx))
+        self.assertEqual(rendered, '0|0')
