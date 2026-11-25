@@ -443,7 +443,10 @@ a, a *, a:hover, a:hover *, a:focus, a:active, button, button * {
 
         <!-- Top Telemetry & Source Bar -->
         <div class="card-surface p-4 rounded-2xl flex flex-wrap items-center justify-between gap-3 text-xs font-sans">
-          <div class="flex items-center gap-3">
+          <div class="flex flex-wrap items-center gap-3">
+            <button id="backToCollectionBtn" type="button" onclick="backToCollectionList()" class="hidden btn-secondary px-3 py-1.5 rounded-xl text-xs font-semibold items-center gap-1.5 cursor-pointer">
+              <span>← Back to Collection</span>
+            </button>
             <span class="px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 font-mono font-semibold flex items-center gap-1.5">
               <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
               <span id="badgeSourceType">Shopify JSON</span>
@@ -1041,7 +1044,7 @@ function setScrapingLoading(isLoading) {
 }
 
 // Load Scraped Data into Studio
-function loadScrapedDataIntoStudio(product) {
+function loadScrapedDataIntoStudio(product, options = {}) {
   currentProduct = product;
   const baseSku = product.sku || generateSkuString(product.title);
   currentVariants = Array.isArray(product.variants) && product.variants.length > 0
@@ -1164,6 +1167,7 @@ function loadScrapedDataIntoStudio(product) {
 
   // Handle Multi-Product Collection Mode
   const tabsBar = document.getElementById('collectionTabsBar');
+  const backBtn = document.getElementById('backToCollectionBtn');
   if (product.is_collection && Array.isArray(product.collection_products) && product.collection_products.length > 0) {
     collectionProducts = product.collection_products;
     selectedBulkIndices = new Set(collectionProducts.map((_, i) => i));
@@ -1171,6 +1175,10 @@ function loadScrapedDataIntoStudio(product) {
 
     tabsBar.classList.remove('hidden');
     tabsBar.classList.add('flex');
+    if (backBtn) {
+      backBtn.classList.remove('hidden');
+      backBtn.classList.add('inline-flex');
+    }
     document.getElementById('tabBulkCount').textContent = collectionProducts.length.toLocaleString();
     document.getElementById('headerTotalVariants').textContent = (product.total_variants_count || collectionProducts.reduce((sum, p) => sum + (p.variants ? p.variants.length : 0), 0)).toLocaleString();
     document.getElementById('bulkCollectionTitle').textContent = product.collection_title || 'Collection';
@@ -1178,9 +1186,22 @@ function loadScrapedDataIntoStudio(product) {
 
     renderCollectionTable();
     switchCollectionTab('bulk');
+  } else if (options && options.preserveCollection && collectionProducts.length > 0) {
+    tabsBar.classList.remove('hidden');
+    tabsBar.classList.add('flex');
+    if (backBtn) {
+      backBtn.classList.remove('hidden');
+      backBtn.classList.add('inline-flex');
+    }
+    switchCollectionTab('single');
   } else {
+    collectionProducts = [];
     tabsBar.classList.add('hidden');
     tabsBar.classList.remove('flex');
+    if (backBtn) {
+      backBtn.classList.add('hidden');
+      backBtn.classList.remove('inline-flex');
+    }
     switchCollectionTab('single');
   }
 
@@ -1399,9 +1420,16 @@ function filterCollectionItems(val) {
 function inspectSinglePiece(idx) {
   const p = collectionProducts[idx];
   if (!p) return;
-  loadScrapedDataIntoStudio(p);
-  switchCollectionTab('single');
+  loadScrapedDataIntoStudio(p, { preserveCollection: true });
   document.getElementById('scrapedStudioSection').scrollIntoView({ behavior: 'smooth' });
+}
+
+function backToCollectionList() {
+  switchCollectionTab('bulk');
+  const tabsBar = document.getElementById('collectionTabsBar');
+  if (tabsBar) {
+    tabsBar.scrollIntoView({ behavior: 'smooth' });
+  }
 }
 
 // Bulk Import Execution
@@ -1821,10 +1849,20 @@ function resetScraperWorkspace() {
   currentProduct = null;
   currentVariants = [];
   currentImages = [];
+  collectionProducts = [];
   document.getElementById('targetUrlInput').value = '';
   document.getElementById('rawSourceInput').value = '';
   document.getElementById('scrapedStudioSection').classList.add('hidden');
   document.getElementById('scrapedStudioSection').classList.remove('flex');
+  document.getElementById('collectionBulkSection').classList.add('hidden');
+  document.getElementById('collectionBulkSection').classList.remove('flex');
+  document.getElementById('collectionTabsBar').classList.add('hidden');
+  document.getElementById('collectionTabsBar').classList.remove('flex');
+  const backBtn = document.getElementById('backToCollectionBtn');
+  if (backBtn) {
+    backBtn.classList.add('hidden');
+    backBtn.classList.remove('inline-flex');
+  }
   document.getElementById('scrapeFeedbackBanner').classList.add('hidden');
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
