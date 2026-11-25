@@ -214,12 +214,17 @@ button, button *, button:hover, button:focus {
         </div>
         <!-- Top Actions adhering strictly to Primary Emerald & Secondary Obsidian tokens -->
         <div class="flex items-center gap-2.5 self-start md:self-auto flex-wrap">
-          <!-- Import Shopify CSV Button -->
-          <label class="flex items-center gap-2 bg-[#171920] hover:bg-[#1c1f28] text-emerald-300 hover:text-white border border-emerald-500/35 hover:border-emerald-500 font-semibold text-xs sm:text-[13px] px-3.5 py-2.5 rounded-lg shadow-sm transition-all cursor-pointer" title="Directly import Shopify Products export CSV with all SKUs">
+          <!-- Import CSV Button -->
+          <label class="flex items-center gap-2 bg-[#171920] hover:bg-[#1c1f28] text-emerald-300 hover:text-white border border-emerald-500/35 hover:border-emerald-500 font-semibold text-xs sm:text-[13px] px-3.5 py-2.5 rounded-lg shadow-sm transition-all cursor-pointer" title="Directly import Products CSV with variants and SKUs">
             <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" /></svg>
-            <span>Import Shopify CSV</span>
+            <span>Import CSV</span>
             <input type="file" accept=".csv" class="hidden" onchange="handleShopifyCsvChangelist(this)">
           </label>
+          <!-- Export Sample CSV Button -->
+          <button type="button" onclick="downloadSampleCsv()" class="flex items-center gap-2 bg-[#171920] hover:bg-[#1c1f28] text-[#e5e5e5] hover:text-white border border-[#21242d] hover:border-emerald-500/40 font-semibold text-xs sm:text-[13px] px-3.5 py-2.5 rounded-lg shadow-sm transition-all cursor-pointer" title="Download a sample CSV template formatted for Import CSV" style="text-decoration: none !important;">
+            <svg class="w-4 h-4 text-champagne-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
+            <span>Export Sample CSV</span>
+          </button>
           <!-- Scrape Products Action Button -->
           <a href="{% url 'admin:catalog_product_scrape' %}" class="flex items-center gap-2 bg-[#171920] hover:bg-[#1c1f28] text-[#e5e5e5] hover:text-white border border-[#21242d] hover:border-emerald-500/40 font-semibold text-xs sm:text-[13px] px-3.5 py-2.5 rounded-lg shadow-sm transition-all cursor-pointer" style="text-decoration: none !important;">
             <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" /></svg>
@@ -1536,17 +1541,98 @@ button, button *, button:hover, button:focus {
       }
     };
 
-    // --- Shopify CSV 1-Click Uploader ---
+    // --- CSV 1-Click Uploader ---
     window.handleShopifyCsvChangelist = function(input) {
       const file = input.files && input.files[0];
       if (!file) return;
-      showToast('Reading Shopify Products CSV...', 'upload_file');
+      showToast('Reading Products CSV...', 'upload_file');
       const reader = new FileReader();
       reader.onload = function(e) {
         sessionStorage.setItem('luckjary_pasted_csv', e.target.result);
         window.location.href = "{% url 'admin:catalog_product_scrape' %}?autoload=csv";
       };
       reader.readAsText(file);
+    };
+
+    // --- Export Sample CSV Template ---
+    window.downloadSampleCsv = function() {
+      const headers = [
+        'Handle',
+        'Title',
+        'Body (HTML)',
+        'Vendor',
+        'Option1 Name',
+        'Option1 Value',
+        'Option2 Name',
+        'Option2 Value',
+        'Variant SKU',
+        'Variant Price',
+        'Variant Compare At Price',
+        'Image Src',
+        'Image Alt Text'
+      ];
+      const rows = [
+        [
+          'seraphina-pave-ring',
+          'Seraphina Pavé Solitaire Ring',
+          '<p>Handcrafted in 925 Solid Sterling Silver with 5A Flawless Cubic Zirconia.</p>',
+          'Luckjary Atelier',
+          'Size',
+          'US 6',
+          'Finish',
+          '925 Sterling Silver',
+          'LCK-RNG-084-6',
+          '2499.00',
+          '3200.00',
+          'https://images.unsplash.com/photo-1605100804763-247f67b3557e?auto=format&fit=crop&w=1000&q=80',
+          'Seraphina Pavé Solitaire Ring Front'
+        ],
+        [
+          'seraphina-pave-ring',
+          '',
+          '',
+          '',
+          'Size',
+          'US 7',
+          'Finish',
+          '925 Sterling Silver',
+          'LCK-RNG-084-7',
+          '2499.00',
+          '3200.00',
+          'https://images.unsplash.com/photo-1603561591411-07134e71a2a9?auto=format&fit=crop&w=1000&q=80',
+          'Seraphina Pavé Solitaire Ring Detail'
+        ],
+        [
+          'celeste-sapphire-pendant',
+          'Celeste Starburst Sapphire Pendant',
+          '<p>Fine 925 sterling silver starburst medallion with simulated blue sapphire.</p>',
+          'Luckjary Atelier',
+          'Chain Length',
+          '18 Inch',
+          'Finish',
+          '925 Sterling Silver',
+          'LCK-PND-192-18',
+          '3499.00',
+          '4299.00',
+          'https://images.unsplash.com/photo-1599643477877-530eb83abc8e?auto=format&fit=crop&w=1000&q=80',
+          'Celeste Starburst Sapphire Pendant'
+        ]
+      ];
+      const csvEscape = (val) => `"${String(val ?? '').replace(/"/g, '""')}"`;
+      const csvLines = [
+        headers.map(csvEscape).join(','),
+        ...rows.map(row => row.map(csvEscape).join(','))
+      ];
+      const blob = new Blob([csvLines.join('\n')], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = 'luckjary-sample-products.csv';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+      showToast('Sample CSV downloaded (luckjary-sample-products.csv)', 'file_download');
     };
 
   })();
