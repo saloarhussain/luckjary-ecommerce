@@ -297,7 +297,7 @@
       <nav aria-label="Breadcrumb" class="flex items-center gap-2 text-xs font-mono text-zinc-400 tracking-wide">
         <a href="{% url 'admin:index' %}" class="text-zinc-500 hover:text-white transition-colors cursor-pointer">Home</a>
         <span class="text-zinc-600">›</span>
-        <a href="{% url opts|admin_urlname:'changelist' %}" class="text-zinc-500 hover:text-white transition-colors cursor-pointer">Vault Products</a>
+        <a href="{% url opts|admin_urlname:'changelist' %}" class="text-zinc-500 hover:text-white transition-colors cursor-pointer">Products</a>
         <span class="text-zinc-600">›</span>
         <span class="text-zinc-200 font-medium font-mono">{% if original.title %}{{ original.title|truncatechars:40 }}{% else %}Add Piece{% endif %}</span>
       </nav>

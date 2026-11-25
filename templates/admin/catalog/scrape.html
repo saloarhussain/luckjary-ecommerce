@@ -186,7 +186,7 @@ a, a *, a:hover, a:hover *, a:focus, a:active, button, button * {
         <div class="flex items-center gap-2 self-start md:self-auto">
           <a href="{% url 'admin:catalog_product_changelist' %}" class="btn-secondary flex items-center gap-2 text-xs font-semibold px-3.5 py-2.5 rounded-xl cursor-pointer">
             <svg class="w-4 h-4 text-neutral-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M12 2l8 4.5v11L12 22 4 17.5v-11L12 2z"></path></svg>
-            <span>Vault Products</span>
+            <span>Products</span>
             <span class="font-mono text-[10px] px-1.5 py-0.2 bg-[#111317] rounded text-neutral-400">{{ total_products|default_if_none:0 }}</span>
           </a>
           <div class="flex items-center gap-2 px-3.5 py-2.5 rounded-xl bg-[#171920] border border-emerald-500/40 text-emerald-400 text-xs font-semibold shadow-sm">
@@ -648,7 +648,7 @@ a, a *, a:hover, a:hover *, a:focus, a:active, button, button * {
               <!-- Primary Action Button -->
               <button id="importToVaultBtn" onclick="handleImportToVault()" type="button" class="btn-primary w-full py-3.5 px-4 rounded-xl flex items-center justify-center gap-2 text-sm font-semibold cursor-pointer font-sans shadow-lg glow-emerald">
                 <svg class="w-4 h-4 text-[#07080a]" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"></path></svg>
-                <span id="importBtnText">Import to Vault Products</span>
+                <span id="importBtnText">Import to Products</span>
               </button>
 
               <!-- Secondary Action Buttons -->
@@ -1709,7 +1709,7 @@ async function handleImportToVault() {
     showFeedback(`Import error: ${err.message}`, true);
   } finally {
     importBtn.disabled = false;
-    importBtnText.textContent = 'Import to Vault Products';
+    importBtnText.textContent = 'Import to Products';
   }
 }
 

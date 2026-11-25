@@ -201,7 +201,7 @@ button, button *, button:hover, button:focus {
       <nav aria-label="Breadcrumb" class="flex items-center gap-2 text-xs font-mono text-zinc-400 tracking-wide">
         <a href="{% url 'admin:index' %}" class="text-zinc-500 hover:text-zinc-300 transition-colors cursor-pointer">Home</a>
         <span class="text-zinc-600">›</span>
-        <span class="text-zinc-200 font-medium">Vault Products</span>
+        <span class="text-zinc-200 font-medium">Products</span>
       </nav>
 
       <!-- Top Catalog Overview Banner / Page Header -->
@@ -494,21 +494,15 @@ button, button *, button:hover, button:focus {
           </div>
         </div>
         {% empty %}
-        <div class="p-12 text-center card-surface rounded-2xl flex flex-col items-center justify-center gap-4">
-          <div class="w-16 h-16 rounded-full bg-obsidian-800 border border-obsidian-700 flex items-center justify-center text-neutral-400">
-            <span class="material-symbols-outlined text-3xl text-champagne-400">diamond</span>
-          </div>
-          <div>
-            <h3 class="font-serif text-xl text-white font-normal">Atelier Vault is Empty</h3>
-            <p class="text-xs text-neutral-400 mt-1 max-w-sm">No fine jewelry pieces found in this vault query. Create your first creation below.</p>
-          </div>
+        <div class="p-10 text-center card-surface rounded-2xl flex flex-col items-center justify-center gap-3.5">
+          <h3 class="font-serif text-xl text-white font-normal">No products yet</h3>
           <a href="{% url 'admin:catalog_product_add' %}" class="flex items-center gap-2 bg-emerald-500 hover:bg-emerald-400 text-obsidian-950 font-semibold text-xs px-4 py-2.5 rounded-lg shadow-lg glow-emerald transition-all cursor-pointer" style="color: #07080a !important; text-decoration: none !important;">
             <svg class="w-4 h-4 text-[#07080a]" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
               <circle cx="12" cy="12" r="10"></circle>
               <line x1="12" y1="8" x2="12" y2="16"></line>
               <line x1="8" y1="12" x2="16" y2="12"></line>
             </svg>
-            <span>Add First Piece</span>
+            <span>Add Product</span>
           </a>
         </div>
         {% endfor %}
