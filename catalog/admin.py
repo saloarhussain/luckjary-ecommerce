@@ -5,7 +5,9 @@ from django.utils.safestring import mark_safe
 from django.urls import path
 from django.http import JsonResponse, HttpResponseRedirect
 from django.db.models import Q, Sum
+from django.utils.text import slugify
 import json
+import re
 import uuid
 from .models import Category, Material, Collection, Product, ProductImage, ProductReview
 
@@ -431,20 +433,32 @@ class ProductAdmin(admin.ModelAdmin):
                 inr_val = int(float(price_num) * 83.1527)
             scraped['price_inr'] = inr_val
 
-            # Best match category
-            cat_suggestion = 'rings'
-            title_lower = (scraped.get('title') or '').lower()
-            if 'necklace' in title_lower or 'pendant' in title_lower or 'chain' in title_lower:
-                cat_suggestion = 'necklaces'
-            elif 'bracelet' in title_lower or 'bangle' in title_lower:
-                cat_suggestion = 'bracelets'
-            elif 'earring' in title_lower or 'stud' in title_lower or 'huggie' in title_lower:
-                cat_suggestion = 'earrings'
-            elif 'ring' in title_lower or 'band' in title_lower or 'solitaire' in title_lower:
-                cat_suggestion = 'rings'
-            
-            matched_cat = Category.objects.filter(slug__icontains=cat_suggestion).first()
-            scraped['suggested_category_id'] = matched_cat.id if matched_cat else (Category.objects.first().id if Category.objects.exists() else None)
+            # Best match category based on scraped product classification
+            cat_name = (scraped.get('category_name') or '').strip()
+            if not cat_name:
+                title_lower = (scraped.get('title') or '').lower()
+                if 'necklace' in title_lower or 'pendant' in title_lower or 'chain' in title_lower:
+                    cat_name = 'Necklaces'
+                elif 'bracelet' in title_lower or 'bangle' in title_lower:
+                    cat_name = 'Bracelets'
+                elif 'earring' in title_lower or 'stud' in title_lower or 'huggie' in title_lower:
+                    cat_name = 'Earrings'
+                elif scraped.get('is_jewelry', True):
+                    cat_name = 'Rings'
+                else:
+                    cat_name = 'General Merchandise'
+
+            cat_slug = slugify(cat_name)
+            matched_cat = (
+                Category.objects.filter(slug__iexact=cat_slug).first()
+                or Category.objects.filter(name__iexact=cat_name).first()
+            )
+            if not matched_cat and cat_slug:
+                matched_cat = Category.objects.filter(slug__icontains=cat_slug).first()
+
+            scraped['suggested_category_id'] = matched_cat.id if matched_cat else None
+            scraped['suggested_category_name'] = matched_cat.name if matched_cat else cat_name
+            scraped['is_new_category'] = matched_cat is None
 
             return JsonResponse({
                 'status': 'ok',
@@ -452,6 +466,34 @@ class ProductAdmin(admin.ModelAdmin):
             })
         except Exception as e:
             return JsonResponse({'status': 'error', 'message': str(e)}, status=500)
+
+    def _resolve_or_create_category(self, raw_category, fallback_name=None):
+        raw_str = str(raw_category or '').strip()
+        if raw_str.startswith('new:'):
+            cat_name = raw_str[4:].strip() or (fallback_name or 'General Merchandise')
+        elif raw_str.isdigit():
+            found = Category.objects.filter(id=int(raw_str)).first()
+            if found:
+                return found
+            cat_name = (fallback_name or '').strip()
+        else:
+            cat_name = raw_str or (fallback_name or '').strip()
+
+        if cat_name:
+            cat_slug = slugify(cat_name)[:120] or 'general'
+            existing = (
+                Category.objects.filter(slug__iexact=cat_slug).first()
+                or Category.objects.filter(name__iexact=cat_name[:100]).first()
+            )
+            if existing:
+                return existing
+            cat_obj, _ = Category.objects.get_or_create(
+                slug=cat_slug,
+                defaults={'name': cat_name[:100]}
+            )
+            return cat_obj
+
+        return Category.objects.first()
 
     def api_import_scraped_view(self, request):
         if request.method != 'POST':
@@ -485,21 +527,32 @@ class ProductAdmin(admin.ModelAdmin):
             else:
                 compare_price = None
 
-            category_id = data.get('category')
-            category = None
-            if category_id:
-                category = Category.objects.filter(id=category_id).first()
-            if not category:
-                category = Category.objects.first()
+            category = self._resolve_or_create_category(
+                data.get('category'),
+                fallback_name=data.get('category_name')
+            )
 
             sku = (data.get('sku') or '').strip()
             if not sku:
                 sku = f"LCK-SCR-{uuid.uuid4().hex[:6].upper()}"
 
-            description = (data.get('description') or '').strip() or f"Handcrafted {title} in authentic 925 Solid Sterling Silver with conflict-free handset stones and signature Luckjary hallmark guarantee."
-            karat_metal = (data.get('karat_metal') or '925 Sterling Silver').strip()
-            available_metals = (data.get('available_metals') or '925 Sterling Silver').strip()
-            gemstone = (data.get('gemstone') or '5A Flawless Cubic Zirconia (CZ)').strip()
+            is_jewelry = data.get('is_jewelry')
+            if is_jewelry is None:
+                is_jewelry = True
+
+            default_desc = (
+                f"Handcrafted {title} in authentic 925 Solid Sterling Silver with conflict-free handset stones and signature Luckjary hallmark guarantee."
+                if is_jewelry
+                else f"{title} — {category.name if category else 'Catalog Product'}."
+            )
+            description = (data.get('description') or '').strip() or default_desc
+
+            default_metal = '925 Sterling Silver' if is_jewelry else (category.name if category else 'Standard')
+            default_gem = '5A Flawless Cubic Zirconia (CZ)' if is_jewelry else ''
+
+            karat_metal = (data.get('karat_metal') if data.get('karat_metal') is not None else default_metal).strip()[:120]
+            available_metals = (data.get('available_metals') if data.get('available_metals') is not None else karat_metal).strip()[:400]
+            gemstone = (data.get('gemstone') if data.get('gemstone') is not None else default_gem).strip()[:150]
             size_category = data.get('size_category') or 'universal'
             available_sizes = (data.get('available_sizes') or '').strip()
             inventory = int(data.get('inventory') or 20)
@@ -522,18 +575,19 @@ class ProductAdmin(admin.ModelAdmin):
                 available_sizes=available_sizes,
                 gemstone=gemstone,
                 description=description,
-                karat_metal=karat_metal,
+                karat_metal=karat_metal or 'Standard',
                 available_metals=available_metals,
                 is_available=True,
                 is_featured=False
             )
 
-            # Ensure 925 silver material linked
-            silver_mat, _ = Material.objects.get_or_create(
-                slug='925-sterling-silver',
-                defaults={'name': '925 Sterling Silver', 'badge_label': '925 Silver'}
-            )
-            product.materials.add(silver_mat)
+            # Link 925 silver material only when applicable
+            if is_jewelry or 'silver' in karat_metal.lower() or '925' in karat_metal.lower():
+                silver_mat, _ = Material.objects.get_or_create(
+                    slug='925-sterling-silver',
+                    defaults={'name': '925 Sterling Silver', 'badge_label': '925 Silver'}
+                )
+                product.materials.add(silver_mat)
 
             # Images
             images = data.get('images', [])
@@ -585,23 +639,21 @@ class ProductAdmin(admin.ModelAdmin):
             if not items:
                 return JsonResponse({'status': 'error', 'message': 'No products provided for bulk import.'}, status=400)
 
-            default_category = Category.objects.first()
-            category_id = data.get('category_id')
-            if category_id:
-                target_category = Category.objects.filter(id=category_id).first() or default_category
-            else:
-                target_category = default_category
+            raw_category_id = data.get('category_id')
+            fallback_bulk_cat_name = data.get('category_name') or (items[0].get('category_name') if isinstance(items[0], dict) else None)
+            target_category = self._resolve_or_create_category(raw_category_id, fallback_name=fallback_bulk_cat_name)
 
-            silver_mat, _ = Material.objects.get_or_create(
-                slug='925-sterling-silver',
-                defaults={'name': '925 Sterling Silver', 'badge_label': '925 Silver'}
-            )
+            silver_mat = None
 
             created_products = []
             for item in items:
                 title = (item.get('title') or '').strip()
                 if not title:
                     continue
+
+                item_cat = target_category
+                if not raw_category_id and item.get('category_name'):
+                    item_cat = self._resolve_or_create_category(None, fallback_name=item.get('category_name'))
 
                 sku = (item.get('sku') or '').strip()
                 if not sku:
@@ -628,17 +680,29 @@ class ProductAdmin(admin.ModelAdmin):
                     except ValueError:
                         comp = None
 
-                description = (item.get('description') or '').strip() or f"Handcrafted {title} with fine precision and authentic Luckjary hallmark guarantee."
-                karat_metal = item.get('karat_metal') or '925 Sterling Silver'
-                available_metals = item.get('available_metals') or '925 Sterling Silver'
-                gemstone = item.get('gemstone') or '5A Flawless Cubic Zirconia (CZ)'
+                item_is_jewelry = item.get('is_jewelry')
+                if item_is_jewelry is None:
+                    item_is_jewelry = True
+
+                default_desc = (
+                    f"Handcrafted {title} with fine precision and authentic Luckjary hallmark guarantee."
+                    if item_is_jewelry
+                    else f"{title} — {item_cat.name if item_cat else 'Catalog Product'}."
+                )
+                description = (item.get('description') or '').strip() or default_desc
+                default_metal = '925 Sterling Silver' if item_is_jewelry else (item.get('product_type') or (item_cat.name if item_cat else 'Standard'))
+                default_gem = '5A Flawless Cubic Zirconia (CZ)' if item_is_jewelry else ''
+
+                karat_metal = (item.get('karat_metal') or item.get('material_primary') or default_metal)[:120]
+                available_metals = (item.get('available_metals') or karat_metal)[:400]
+                gemstone = (item.get('gemstone') if item.get('gemstone') is not None else item.get('material_secondary', default_gem))[:150]
 
                 variants = item.get('variants', [])
                 size_list = ', '.join([v.get('title', '') for v in variants if v.get('title')]) if variants else ''
 
                 product = Product.objects.create(
                     title=title,
-                    category=target_category,
+                    category=item_cat,
                     price=price,
                     compare_at_price=comp,
                     inventory=25,
@@ -647,12 +711,18 @@ class ProductAdmin(admin.ModelAdmin):
                     available_sizes=size_list,
                     gemstone=gemstone,
                     description=description,
-                    karat_metal=karat_metal,
+                    karat_metal=karat_metal or 'Standard',
                     available_metals=available_metals,
                     is_available=True,
                     is_featured=False
                 )
-                product.materials.add(silver_mat)
+                if item_is_jewelry or 'silver' in karat_metal.lower() or '925' in karat_metal.lower():
+                    if silver_mat is None:
+                        silver_mat, _ = Material.objects.get_or_create(
+                            slug='925-sterling-silver',
+                            defaults={'name': '925 Sterling Silver', 'badge_label': '925 Silver'}
+                        )
+                    product.materials.add(silver_mat)
 
                 # Images
                 images = item.get('images', [])

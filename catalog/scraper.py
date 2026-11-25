@@ -189,6 +189,174 @@ def absolute_url(base_url, link):
     return link
 
 
+JEWELRY_KEYWORDS_RE = re.compile(
+    r'\b(rings?|necklaces?|pendants?|chains?|bracelets?|bangles?|cuffs?|earrings?|studs?|huggies?|hoops?|'
+    r'chokers?|anklets?|jewelry|jewellery|joaillerie|solitaire|pav[eé]|bridal|wedding\s*band|'
+    r'sterling\s*silver|925\s*silver|karat|14k|18k|22k|24k|vermeil|platinum|diamond|moissanite|'
+    r'cubic\s*zirconia|zirconia|sapphire|emerald|ruby|amethyst|opal|pearl|topaz|garnet|carat)\b',
+    re.IGNORECASE,
+)
+
+NON_JEWELRY_KEYWORDS_RE = re.compile(
+    r'\b(mobile|phones?|smartphones?|spares?|spare\s*parts?|display|lcd|amoled|oled|touchscreen|'
+    r'touch\s*screen|digitizer|battery|batteries|charging\s*port|flex\s*cable|pcb|motherboard|'
+    r'logic\s*board|speaker|buzzer|ringer|earpiece|mic|microphone|sim\s*tray|back\s*panel|back\s*cover|'
+    r'housing|bezel|camera\s*lens|camera\s*module|fingerprint|repair|tools?|charger|adapter|cable|usb|'
+    r'type-c|power\s*bank|earbuds|headphones?|laptop|tablet|ipad|macbook|tempered\s*glass|screen\s*guard|'
+    r'vivo|samsung|oppo|realme|xiaomi|redmi|poco|iphone|oneplus|motorola|nokia|pixel|infinix|tecno|itel|'
+    r'all\s*parts|replacement\s*parts?)\b',
+    re.IGNORECASE,
+)
+
+
+def infer_product_classification(
+    title='',
+    product_type='',
+    tags=None,
+    description='',
+    brand='',
+    options=None,
+    variants=None,
+    source_url='',
+    raw_material='',
+):
+    """
+    Infers product domain (jewelry vs non-jewelry), category name, and appropriate
+    specification labels/values from scraped product metadata.
+    """
+    tags_list = tags if isinstance(tags, list) else ([tags] if tags else [])
+    tags_text = ' '.join(str(t) for t in tags_list)
+    primary_text = f"{title} {product_type} {tags_text} {source_url}".strip()
+    secondary_text = f"{primary_text} {description[:500]}".strip()
+
+    has_non_jewelry_primary = bool(NON_JEWELRY_KEYWORDS_RE.search(primary_text))
+    has_jewelry_primary = bool(JEWELRY_KEYWORDS_RE.search(primary_text))
+    has_non_jewelry_any = has_non_jewelry_primary or bool(NON_JEWELRY_KEYWORDS_RE.search(secondary_text))
+    has_jewelry_any = has_jewelry_primary or bool(JEWELRY_KEYWORDS_RE.search(secondary_text))
+
+    is_jewelry = has_jewelry_any and not has_non_jewelry_primary and not (has_non_jewelry_any and not has_jewelry_primary)
+
+    clean_prod_type = re.sub(r'\s+', ' ', str(product_type or '')).strip()
+    lower_primary = primary_text.lower()
+    lower_all = secondary_text.lower()
+
+    if is_jewelry:
+        if any(k in lower_primary for k in ('necklace', 'pendant', 'chain', 'choker')):
+            category_name = 'Necklaces'
+        elif any(k in lower_primary for k in ('bracelet', 'bangle', 'cuff', 'anklet')):
+            category_name = 'Bracelets'
+        elif any(k in lower_primary for k in ('earring', 'stud', 'huggie', 'hoop')):
+            category_name = 'Earrings'
+        elif any(k in lower_primary for k in ('ring', 'band', 'solitaire')):
+            category_name = 'Rings'
+        elif clean_prod_type:
+            category_name = clean_prod_type.title()
+        else:
+            category_name = 'Rings'
+
+        metal_source = f"{raw_material} {lower_all}"
+        if 'platinum' in metal_source:
+            material_primary = 'Platinum'
+        elif '18k' in metal_source and 'rose gold' in metal_source:
+            material_primary = '18K Rose Gold'
+        elif '18k' in metal_source and 'white gold' in metal_source:
+            material_primary = '18K White Gold'
+        elif '18k' in metal_source:
+            material_primary = '18K Solid Gold'
+        elif '14k' in metal_source and 'rose gold' in metal_source:
+            material_primary = '14K Rose Gold'
+        elif '14k' in metal_source and 'white gold' in metal_source:
+            material_primary = '14K White Gold'
+        elif '14k' in metal_source:
+            material_primary = '14K Solid Gold'
+        elif 'vermeil' in metal_source:
+            material_primary = '18K Gold Vermeil on 925 Silver'
+        elif 'titanium' in metal_source:
+            material_primary = 'Titanium'
+        elif 'stainless steel' in metal_source:
+            material_primary = 'Stainless Steel'
+        elif raw_material and str(raw_material).strip():
+            material_primary = str(raw_material).strip()[:120]
+        else:
+            material_primary = '925 Sterling Silver'
+
+        if 'moissanite' in lower_all:
+            material_secondary = 'Moissanite'
+        elif 'lab' in lower_all and 'diamond' in lower_all:
+            material_secondary = 'Lab-Grown Diamond'
+        elif 'diamond' in lower_all:
+            material_secondary = 'Diamond'
+        elif 'sapphire' in lower_all:
+            material_secondary = 'Sapphire'
+        elif 'emerald' in lower_all:
+            material_secondary = 'Emerald'
+        elif 'ruby' in lower_all:
+            material_secondary = 'Ruby'
+        elif 'pearl' in lower_all:
+            material_secondary = 'Freshwater Pearl'
+        elif 'opal' in lower_all:
+            material_secondary = 'Opal'
+        elif 'amethyst' in lower_all:
+            material_secondary = 'Amethyst'
+        else:
+            material_secondary = '5A Flawless Cubic Zirconia (CZ)'
+
+        spec_primary_label = 'Precious Metal'
+        spec_secondary_label = 'Gemstone Specification'
+    else:
+        if clean_prod_type:
+            category_name = clean_prod_type.title()
+        elif re.search(r'\b(case|cover|tempered\s*glass|screen\s*guard|charger|adapter|cable|earbuds|headphone|power\s*bank)\b', lower_all):
+            category_name = 'Mobile Accessories'
+        elif re.search(r'\b(mobile|phone|smartphone|spare|parts?|display|lcd|amoled|battery|flex|repair|vivo|samsung|oppo|realme|xiaomi|redmi|iphone|oneplus)\b', lower_all):
+            category_name = 'Mobile Parts'
+        elif re.search(r'\b(laptop|tablet|computer|electronics|pcb|motherboard)\b', lower_all):
+            category_name = 'Electronics'
+        else:
+            category_name = 'General Merchandise'
+
+        if clean_prod_type:
+            material_primary = clean_prod_type[:120]
+        elif brand:
+            material_primary = f"{brand} ({category_name})"[:120]
+        else:
+            material_primary = category_name[:120]
+
+        opt_summary = []
+        if isinstance(options, list):
+            for opt in options:
+                vals = opt.get('values') if isinstance(opt, dict) else None
+                if isinstance(vals, list) and vals:
+                    opt_summary.extend(str(v).strip() for v in vals[:4] if str(v).strip() and str(v).strip().lower() != 'default title')
+        if not opt_summary and isinstance(variants, list):
+            opt_summary = [
+                str(v.get('title')).strip()
+                for v in variants[:4]
+                if isinstance(v, dict) and v.get('title') and str(v.get('title')).strip().lower() != 'default title'
+            ]
+
+        if opt_summary:
+            deduped = list(dict.fromkeys(opt_summary))
+            spec_text = f"{title} — {', '.join(deduped[:4])}" if title else ', '.join(deduped[:4])
+            material_secondary = spec_text[:150]
+        elif title:
+            material_secondary = f"{title} Compatible"[:150]
+        else:
+            material_secondary = ''
+
+        spec_primary_label = 'Product Type / Build'
+        spec_secondary_label = 'Compatibility / Specs'
+
+    return {
+        'is_jewelry': is_jewelry,
+        'category_name': category_name,
+        'material_primary': material_primary,
+        'material_secondary': material_secondary,
+        'spec_primary_label': spec_primary_label,
+        'spec_secondary_label': spec_secondary_label,
+    }
+
+
 def _build_shopify_paginated_url(base_url, page_num=1, limit=250):
     """Normalizes a Shopify JSON endpoint URL with limit=250 and page={page_num}."""
     parsed = urllib.parse.urlparse(base_url)
@@ -502,14 +670,31 @@ def parse_shopify_product_dict(prod, source_url):
     is_inr = ('.in' in source_url or 'sparelelo' in source_url or 'india' in source_url)
     currency = 'INR' if is_inr else 'USD'
 
+    classification = infer_product_classification(
+        title=title,
+        product_type=product_type,
+        tags=tags,
+        description=description,
+        brand=vendor,
+        options=options,
+        variants=variants,
+        source_url=source_url,
+    )
+
+    default_desc = (
+        f"Exquisite handcrafted {title} featuring master gemstone setting and premium fine finishes."
+        if classification['is_jewelry']
+        else f"{title} — {classification['category_name']} sourced from {vendor or 'verified supplier'}."
+    )
+
     return {
         'source_type': 'Shopify Product API',
         'source_url': source_url,
         'id': prod.get('id'),
         'handle': prod.get('handle'),
         'title': title,
-        'subtitle': f"Curated from {vendor}" if vendor else "Haute Atelier Import",
-        'description': description or f"Exquisite handcrafted {title} featuring master gemstone setting and premium fine finishes.",
+        'subtitle': f"Curated from {vendor}" if vendor else ("Haute Atelier Import" if classification['is_jewelry'] else classification['category_name']),
+        'description': description or default_desc,
         'sku': first_sku,
         'price': primary_price,
         'min_price': min_price if min_price is not None else primary_price,
@@ -523,6 +708,7 @@ def parse_shopify_product_dict(prod, source_url):
         'variants': variants,
         'images': images,
         'available': any(v.get('available') for v in variants) if variants else True,
+        **classification,
         'success': True,
     }
 
@@ -625,12 +811,36 @@ def parse_json_ld_scripts(scripts_list, source_url):
     first_var_price = variants[0]['price'] if (variants and variants[0].get('price') is not None) else None
     primary_price = first_var_price if first_var_price is not None else (min_price or 0.0)
 
+    raw_cat = product_obj.get('category') or ''
+    if isinstance(raw_cat, dict):
+        raw_cat = raw_cat.get('name') or ''
+    raw_mat = product_obj.get('material') or ''
+
+    classification = infer_product_classification(
+        title=title,
+        product_type=str(raw_cat),
+        description=description,
+        brand=brand,
+        variants=variants,
+        source_url=source_url,
+        raw_material=str(raw_mat),
+    )
+
+    if currency == 'USD' and ('.in' in source_url or 'sparelelo' in source_url or 'india' in source_url):
+        currency = 'INR'
+
+    default_desc = (
+        f"Handcrafted {title} with precision metalwork and luxury stones."
+        if classification['is_jewelry']
+        else f"{title} — {classification['category_name']}."
+    )
+
     return {
         'source_type': 'Schema.org JSON-LD',
         'source_url': source_url,
         'title': title,
-        'subtitle': f"Curated from {brand}" if brand else "Haute Joaillerie Import",
-        'description': description or f"Handcrafted {title} with precision metalwork and luxury stones.",
+        'subtitle': f"Curated from {brand}" if brand else ("Haute Joaillerie Import" if classification['is_jewelry'] else classification['category_name']),
+        'description': description or default_desc,
         'sku': sku,
         'price': primary_price,
         'min_price': min_price if min_price is not None else primary_price,
@@ -638,9 +848,11 @@ def parse_json_ld_scripts(scripts_list, source_url):
         'compare_at_price': compare_at_price,
         'currency': currency,
         'brand': brand,
+        'product_type': str(raw_cat),
         'variants': variants,
         'images': images,
         'available': any(v.get('available') for v in variants) if variants else True,
+        **classification,
         'success': True,
     }
 
@@ -681,29 +893,48 @@ def parse_opengraph_fallback(meta_tags, images_found, title_found, source_url):
 
     sku_gen = f"LCK-SCR-{re.sub(r'[^A-Za-z0-9]', '', title)[:8].upper()}"
 
+    classification = infer_product_classification(
+        title=title,
+        product_type=meta_tags.get('product:category') or '',
+        description=description,
+        brand=brand,
+        source_url=source_url,
+    )
+
+    if currency == 'USD' and ('.in' in source_url or 'sparelelo' in source_url or 'india' in source_url):
+        currency = 'INR'
+
     variants = [{
-        'title': 'Standard Luxury Specification',
+        'title': 'Standard Luxury Specification' if classification['is_jewelry'] else 'Standard Specification',
         'sku': sku_gen,
         'price': price,
         'compare_at_price': None,
         'available': True,
-        'option1': '925 Sterling Silver',
+        'option1': classification['material_primary'],
     }]
+
+    default_desc = (
+        f"Fine handcrafted {title} finished with signature Luckjary hallmark."
+        if classification['is_jewelry']
+        else f"{title} — {classification['category_name']}."
+    )
 
     return {
         'source_type': 'OpenGraph & Meta Tags',
         'source_url': source_url,
         'title': title,
-        'subtitle': f"Curated from {brand}" if brand else "Atelier Import",
-        'description': description or f"Fine handcrafted {title} finished with signature Luckjary hallmark.",
+        'subtitle': f"Curated from {brand}" if brand else ("Atelier Import" if classification['is_jewelry'] else classification['category_name']),
+        'description': description or default_desc,
         'sku': sku_gen,
         'price': price or 0.0,
         'compare_at_price': None,
         'currency': currency,
         'brand': brand,
+        'product_type': meta_tags.get('product:category') or '',
         'variants': variants,
         'images': images,
         'available': True,
+        **classification,
         'success': bool(title),
     }
 
@@ -743,6 +974,8 @@ def parse_shopify_csv(csv_text, source_name='Shopify Export CSV'):
                 'title': title or handle.replace('-', ' ').title(),
                 'handle': handle,
                 'vendor': vendor,
+                'product_type': (row.get('Type') or '').strip(),
+                'tags': (row.get('Tags') or '').strip(),
                 'description': clean_html_text(body_html),
                 'variants': [],
                 'images': []
@@ -780,6 +1013,8 @@ def parse_shopify_csv(csv_text, source_name='Shopify Export CSV'):
             'handle': p['handle'],
             'body_html': p['description'],
             'vendor': p['vendor'],
+            'product_type': p.get('product_type', ''),
+            'tags': p.get('tags', ''),
             'variants': p['variants'] or [{'title': 'Default', 'sku': '', 'price': 0.0}],
             'images': p['images']
         })
@@ -886,26 +1121,36 @@ def scrape_ecommerce_product(url=None, raw_html=None, raw_json=None, raw_csv=Non
         clean_name = clean_html_text(parser.h1 or parser.title)
         clean_name = re.sub(r'\s+[\|\-–—]\s+.*$', '', clean_name).strip()
         sku_cand = f"LCK-SCR-{re.sub(r'[^A-Za-z0-9]', '', clean_name)[:8].upper()}"
+        classification = infer_product_classification(
+            title=clean_name,
+            source_url=url,
+        )
+        is_inr = ('.in' in url or 'sparelelo' in url or 'india' in url)
         return {
             'source_type': 'Standard HTML Parser',
             'source_url': url,
             'title': clean_name,
-            'subtitle': 'Atelier Curated Piece',
-            'description': f"Handcrafted {clean_name} fashioned in premium 925 Solid Sterling Silver with luxury finish.",
+            'subtitle': 'Atelier Curated Piece' if classification['is_jewelry'] else classification['category_name'],
+            'description': (
+                f"Handcrafted {clean_name} fashioned in premium 925 Solid Sterling Silver with luxury finish."
+                if classification['is_jewelry']
+                else f"{clean_name} — {classification['category_name']}."
+            ),
             'sku': sku_cand,
             'price': 149.0,
             'compare_at_price': 199.0,
-            'currency': 'USD',
+            'currency': 'INR' if is_inr else 'USD',
             'brand': 'Curated',
             'variants': [{
-                'title': 'Default Size & Specification',
+                'title': 'Default Size & Specification' if classification['is_jewelry'] else 'Standard Specification',
                 'sku': sku_cand,
                 'price': 149.0,
                 'available': True,
-                'option1': '925 Sterling Silver',
+                'option1': classification['material_primary'],
             }],
             'images': [{'src': absolute_url(url, im['src']), 'alt': clean_name} for im in parser.images[:8]],
             'available': True,
+            **classification,
             'success': True,
         }
 
