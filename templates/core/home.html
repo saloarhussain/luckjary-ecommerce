@@ -175,12 +175,12 @@
     </div>
 </section>
 
-<!-- Collection Spotlight Editorial (3-Card Asymmetric Bento Grid) -->
+<!-- Collection Spotlight Editorial (3-Card Full-Width Bento Grid) -->
 {% if spotlight_bento.enabled %}
-<section class="py-12 sm:py-16 max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
-    <div class="grid grid-cols-1 lg:grid-cols-12 gap-3.5 sm:gap-4">
+<section class="py-6 sm:py-10 w-full px-2.5 sm:px-4">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-3 sm:gap-4">
         <!-- Left Tall Featured Card -->
-        <a href="{{ spotlight_bento.left.link_url }}" class="lg:col-span-6 group relative block overflow-hidden rounded-2xl bg-[#16131c] min-h-[340px] sm:min-h-[430px] lg:min-h-[520px] shadow-lg">
+        <a href="{{ spotlight_bento.left.link_url }}" class="lg:col-span-6 group relative block overflow-hidden rounded-2xl bg-[#16131c] min-h-[360px] sm:min-h-[450px] lg:min-h-[560px] shadow-lg">
             <img src="{{ spotlight_bento.left.image_url }}"
                  alt="{{ spotlight_bento.left.title }}"
                  class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105">
@@ -210,9 +210,9 @@
         </a>
 
         <!-- Right Column: 2 Stacked Horizontal Cards -->
-        <div class="lg:col-span-6 grid grid-rows-2 gap-3.5 sm:gap-4">
+        <div class="lg:col-span-6 grid grid-rows-2 gap-3 sm:gap-4">
             <!-- Top Right Card -->
-            <a href="{{ spotlight_bento.top_right.link_url }}" class="group relative block overflow-hidden rounded-2xl bg-[#1a1423] min-h-[210px] sm:min-h-[250px] shadow-lg">
+            <a href="{{ spotlight_bento.top_right.link_url }}" class="group relative block overflow-hidden rounded-2xl bg-[#1a1423] min-h-[210px] sm:min-h-[272px] shadow-lg">
                 <img src="{{ spotlight_bento.top_right.image_url }}"
                      alt="{{ spotlight_bento.top_right.title }}"
                      class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105">
@@ -236,7 +236,7 @@
             </a>
 
             <!-- Bottom Right Card -->
-            <a href="{{ spotlight_bento.bottom_right.link_url }}" class="group relative block overflow-hidden rounded-2xl bg-[#1c1614] min-h-[210px] sm:min-h-[250px] shadow-lg">
+            <a href="{{ spotlight_bento.bottom_right.link_url }}" class="group relative block overflow-hidden rounded-2xl bg-[#1c1614] min-h-[210px] sm:min-h-[272px] shadow-lg">
                 <img src="{{ spotlight_bento.bottom_right.image_url }}"
                      alt="{{ spotlight_bento.bottom_right.title }}"
                      class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105">
