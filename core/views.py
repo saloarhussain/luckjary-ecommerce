@@ -6,10 +6,17 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse, JsonResponse
 from django.contrib import messages
 from django.views.decorators.http import require_http_methods
-from catalog.models import Product, Category, Collection
-from .models import NewsletterSubscriber, ContactInquiry, StorefrontThemeSettings
-
+from django.db import OperationalError, ProgrammingError
 from django.db.models import Q
+from catalog.models import Product, Category, Collection
+from .models import (
+    NewsletterSubscriber,
+    ContactInquiry,
+    StorefrontThemeSettings,
+    HeroVideoAsset,
+    HeroVideoChunk,
+    ensure_core_migrated,
+)
 
 def home(request):
     all_featured = Product.objects.filter(is_available=True, is_featured=True)
@@ -182,79 +189,16 @@ def _clamp_float(val, low, high, default):
         return default
 
 
-@require_http_methods(["GET", "POST"])
-def admin_theme_customize_api(request):
-    """Read, update, upload hero render video, or reset StorefrontThemeSettings."""
-    theme = StorefrontThemeSettings.get_solo()
-
-    if request.method == 'GET':
-        return JsonResponse({'status': 'ok', 'settings': theme.to_dict()})
-
-    if request.content_type and 'application/json' in request.content_type:
-        try:
-            payload = json.loads(request.body.decode('utf-8') or '{}')
-        except json.JSONDecodeError:
-            return JsonResponse({'status': 'error', 'message': 'Invalid JSON payload.'}, status=400)
-    else:
-        payload = request.POST.dict()
-        if 'payload' in payload:
-            try:
-                payload = {**payload, **json.loads(payload['payload'])}
-            except json.JSONDecodeError:
-                pass
-
-    if payload.get('action') == 'reset':
-        theme.delete()
-        fresh = StorefrontThemeSettings.get_solo()
-        return JsonResponse({'status': 'ok', 'message': 'Theme settings reset to Luckjary defaults.', 'settings': fresh.to_dict()})
-
-    # Handle direct video upload when running on writable filesystem
-    uploaded_video = request.FILES.get('hero_video_file')
-    if uploaded_video:
-        ext = os.path.splitext(uploaded_video.name)[1].lower()
-        if ext not in ('.mp4', '.webm', '.mov'):
-            return JsonResponse(
-                {'status': 'error', 'message': 'Unsupported video format. Please upload .mp4, .webm, or .mov.'},
-                status=400,
-            )
-        if os.environ.get('VERCEL'):
-            return JsonResponse(
-                {
-                    'status': 'error',
-                    'message': 'Direct file upload is disabled on Vercel read-only serverless runtime. Paste a hosted video URL (Vercel Blob / Cloudinary / S3) or upload locally before deploying.',
-                },
-                status=400,
-            )
-
-        target_name = f"hero-render{ext}"
-        static_videos_dir = Path(settings.BASE_DIR) / 'static' / 'videos'
-        static_videos_dir.mkdir(parents=True, exist_ok=True)
-        static_file_path = static_videos_dir / target_name
-        with open(static_file_path, 'wb+') as dest:
-            for chunk in uploaded_video.chunks():
-                dest.write(chunk)
-
-        # Keep staticfiles/ synced as well for WhiteNoise / Vercel deploys
-        staticfiles_videos_dir = Path(settings.STATIC_ROOT) / 'videos'
-        staticfiles_videos_dir.mkdir(parents=True, exist_ok=True)
-        staticfiles_file_path = staticfiles_videos_dir / target_name
-        with open(static_file_path, 'rb') as src, open(staticfiles_file_path, 'wb') as dst:
-            dst.write(src.read())
-
-        served_url = f"/static/videos/{target_name}"
-        if ext == '.webm':
-            theme.hero_video_webm_url = served_url
-        else:
-            theme.hero_video_url = served_url
-
+def _apply_theme_payload(theme, payload, preserve_video_urls=False):
     if 'hero_video_enabled' in payload:
         theme.hero_video_enabled = _to_bool(payload.get('hero_video_enabled'), theme.hero_video_enabled)
     if 'hero_video_mode' in payload and payload.get('hero_video_mode') in ('scrub', 'autoplay'):
         theme.hero_video_mode = payload['hero_video_mode']
-    if 'hero_video_url' in payload and not uploaded_video:
-        theme.hero_video_url = str(payload.get('hero_video_url', '')).strip()[:500]
-    if 'hero_video_webm_url' in payload and not (uploaded_video and uploaded_video.name.lower().endswith('.webm')):
-        theme.hero_video_webm_url = str(payload.get('hero_video_webm_url', '')).strip()[:500]
+    if not preserve_video_urls:
+        if 'hero_video_url' in payload:
+            theme.hero_video_url = str(payload.get('hero_video_url', '')).strip()[:500]
+        if 'hero_video_webm_url' in payload:
+            theme.hero_video_webm_url = str(payload.get('hero_video_webm_url', '')).strip()[:500]
     if 'hero_poster_url' in payload:
         theme.hero_poster_url = str(payload.get('hero_poster_url', '')).strip()[:500]
 
@@ -291,11 +235,267 @@ def admin_theme_customize_api(request):
     if 'design_tokens' in payload and isinstance(payload['design_tokens'], dict):
         theme.design_tokens_json = payload['design_tokens']
 
+
+@require_http_methods(["GET", "POST"])
+def admin_theme_customize_api(request):
+    """Read, update, upload hero render video, or reset StorefrontThemeSettings."""
+    theme = StorefrontThemeSettings.get_solo()
+
+    if request.method == 'GET':
+        return JsonResponse({'status': 'ok', 'settings': theme.to_dict()})
+
+    if request.content_type and 'application/json' in request.content_type:
+        try:
+            payload = json.loads(request.body.decode('utf-8') or '{}')
+        except json.JSONDecodeError:
+            return JsonResponse({'status': 'error', 'message': 'Invalid JSON payload.'}, status=400)
+    else:
+        payload = request.POST.dict()
+        if 'payload' in payload:
+            try:
+                payload = {**payload, **json.loads(payload['payload'])}
+            except json.JSONDecodeError:
+                pass
+
+    if payload.get('action') == 'reset':
+        theme.delete()
+        fresh = StorefrontThemeSettings.get_solo()
+        return JsonResponse({'status': 'ok', 'message': 'Theme settings reset to Luckjary defaults.', 'settings': fresh.to_dict()})
+
+    # Legacy single-request upload fallback for small files (< 4 MB)
+    uploaded_video = request.FILES.get('hero_video_file')
+    if uploaded_video:
+        ext = os.path.splitext(uploaded_video.name)[1].lower()
+        if ext not in ('.mp4', '.webm', '.mov'):
+            return JsonResponse(
+                {'status': 'error', 'message': 'Unsupported video format. Please upload .mp4, .webm, or .mov.'},
+                status=400,
+            )
+        raw_bytes = uploaded_video.read()
+        mime = uploaded_video.content_type or ('video/webm' if ext == '.webm' else 'video/mp4')
+        try:
+            asset = HeroVideoAsset.objects.create(
+                filename=uploaded_video.name[:255],
+                content_type=mime,
+                total_size=len(raw_bytes),
+                total_chunks=1,
+                is_complete=True,
+            )
+        except (ProgrammingError, OperationalError):
+            ensure_core_migrated()
+            asset = HeroVideoAsset.objects.create(
+                filename=uploaded_video.name[:255],
+                content_type=mime,
+                total_size=len(raw_bytes),
+                total_chunks=1,
+                is_complete=True,
+            )
+        HeroVideoChunk.objects.create(asset=asset, index=0, data=raw_bytes)
+        HeroVideoAsset.objects.exclude(pk=asset.pk).delete()
+        served_url = f"/hero-video/{asset.id}/"
+        if ext == '.webm':
+            theme.hero_video_webm_url = served_url
+        else:
+            theme.hero_video_url = served_url
+            if theme.hero_video_webm_url == '/static/videos/hero-render.webm':
+                theme.hero_video_webm_url = ''
+
+    _apply_theme_payload(theme, payload, preserve_video_urls=bool(uploaded_video))
     theme.save()
     return JsonResponse({
         'status': 'ok',
         'message': 'Theme Customize settings saved & published to homepage.',
         'settings': theme.to_dict(),
     })
+
+
+@require_http_methods(["POST"])
+def admin_hero_video_upload_init(request):
+    """Initialize a chunked hero video upload (supports large files on Vercel)."""
+    try:
+        payload = json.loads(request.body.decode('utf-8') or '{}')
+    except json.JSONDecodeError:
+        return JsonResponse({'status': 'error', 'message': 'Invalid JSON payload.'}, status=400)
+
+    filename = str(payload.get('filename', 'hero-render.mp4')).strip()[:255]
+    ext = os.path.splitext(filename)[1].lower()
+    if ext not in ('.mp4', '.webm', '.mov'):
+        return JsonResponse(
+            {'status': 'error', 'message': 'Unsupported video format. Use .mp4, .webm, or .mov.'},
+            status=400,
+        )
+
+    total_size = _clamp_int(payload.get('total_size'), 1, 80 * 1024 * 1024, 0)
+    total_chunks = _clamp_int(payload.get('total_chunks'), 1, 200, 0)
+    if total_size <= 0 or total_chunks <= 0:
+        return JsonResponse(
+            {'status': 'error', 'message': 'Video must be between 1 byte and 80 MB.'},
+            status=400,
+        )
+
+    default_mime = 'video/webm' if ext == '.webm' else ('video/quicktime' if ext == '.mov' else 'video/mp4')
+    content_type = str(payload.get('content_type') or default_mime).strip()[:100]
+
+    try:
+        asset = HeroVideoAsset.objects.create(
+            filename=filename,
+            content_type=content_type,
+            total_size=total_size,
+            total_chunks=total_chunks,
+            is_complete=False,
+        )
+    except (ProgrammingError, OperationalError):
+        ensure_core_migrated()
+        asset = HeroVideoAsset.objects.create(
+            filename=filename,
+            content_type=content_type,
+            total_size=total_size,
+            total_chunks=total_chunks,
+            is_complete=False,
+        )
+
+    return JsonResponse({'status': 'ok', 'asset_id': asset.id})
+
+
+@require_http_methods(["POST"])
+def admin_hero_video_upload_chunk(request):
+    """Store one binary chunk (<= 1.5 MiB) of a HeroVideoAsset."""
+    asset_id = request.POST.get('asset_id')
+    index = request.POST.get('index')
+    chunk_file = request.FILES.get('chunk')
+    if not asset_id or index is None or not chunk_file:
+        return JsonResponse({'status': 'error', 'message': 'Missing chunk parameters.'}, status=400)
+
+    asset = get_object_or_404(HeroVideoAsset, pk=asset_id)
+    idx = _clamp_int(index, 0, asset.total_chunks - 1, -1)
+    if idx < 0:
+        return JsonResponse({'status': 'error', 'message': 'Invalid chunk index.'}, status=400)
+
+    HeroVideoChunk.objects.update_or_create(
+        asset=asset,
+        index=idx,
+        defaults={'data': chunk_file.read()},
+    )
+    return JsonResponse({'status': 'ok', 'index': idx})
+
+
+@require_http_methods(["POST"])
+def admin_hero_video_upload_complete(request):
+    """Finalize chunked upload, prune older video assets, and publish to StorefrontThemeSettings."""
+    try:
+        payload = json.loads(request.body.decode('utf-8') or '{}')
+    except json.JSONDecodeError:
+        return JsonResponse({'status': 'error', 'message': 'Invalid JSON payload.'}, status=400)
+
+    asset_id = payload.get('asset_id')
+    asset = get_object_or_404(HeroVideoAsset, pk=asset_id)
+    received = asset.chunks.count()
+    if received < asset.total_chunks:
+        return JsonResponse(
+            {'status': 'error', 'message': f'Upload incomplete ({received}/{asset.total_chunks} chunks).'},
+            status=400,
+        )
+
+    asset.is_complete = True
+    asset.save(update_fields=['is_complete'])
+    HeroVideoAsset.objects.exclude(pk=asset.pk).delete()
+
+    theme = StorefrontThemeSettings.get_solo()
+    served_url = f"/hero-video/{asset.id}/"
+    ext = os.path.splitext(asset.filename)[1].lower()
+    if ext == '.webm':
+        theme.hero_video_webm_url = served_url
+    else:
+        theme.hero_video_url = served_url
+        if theme.hero_video_webm_url == '/static/videos/hero-render.webm':
+            theme.hero_video_webm_url = ''
+    theme.hero_video_enabled = True
+
+    if isinstance(payload.get('theme_payload'), dict):
+        _apply_theme_payload(theme, payload['theme_payload'], preserve_video_urls=True)
+    theme.save()
+
+    return JsonResponse({
+        'status': 'ok',
+        'message': 'Render video uploaded & published to homepage!',
+        'settings': theme.to_dict(),
+    })
+
+
+@require_http_methods(["GET", "HEAD"])
+def serve_hero_video(request, asset_id):
+    """Stream DB-stored HeroVideoAsset with HTTP 206 Partial Content byte-ranges (<= 2 MiB per response)."""
+    try:
+        asset = get_object_or_404(HeroVideoAsset, pk=asset_id, is_complete=True)
+    except (ProgrammingError, OperationalError):
+        ensure_core_migrated()
+        asset = get_object_or_404(HeroVideoAsset, pk=asset_id, is_complete=True)
+
+    total = int(asset.total_size)
+    if total <= 0:
+        return HttpResponse(status=404)
+
+    if request.method == 'HEAD':
+        resp = HttpResponse(status=200, content_type=asset.content_type)
+        resp['Content-Length'] = str(total)
+        resp['Accept-Ranges'] = 'bytes'
+        resp['Cache-Control'] = 'public, max-age=86400'
+        return resp
+
+    max_slice = 2 * 1024 * 1024  # 2 MiB cap keeps every response well under Vercel's 4.5 MB limit
+    range_header = request.headers.get('Range', '').strip()
+
+    start = 0
+    end = min(total - 1, max_slice - 1)
+    status_code = 206 if (range_header or total > max_slice) else 200
+
+    if range_header.startswith('bytes='):
+        spec = range_header[6:].split(',')[0].strip()
+        start_str, _, end_str = spec.partition('-')
+        try:
+            if start_str == '':
+                suffix_len = int(end_str)
+                start = max(0, total - suffix_len)
+                end = total - 1
+            else:
+                start = int(start_str)
+                end = int(end_str) if end_str else total - 1
+        except ValueError:
+            return HttpResponse(status=416)
+
+        if start >= total or start < 0 or end < start:
+            resp = HttpResponse(status=416)
+            resp['Content-Range'] = f'bytes */{total}'
+            return resp
+
+        end = min(end, total - 1, start + max_slice - 1)
+        status_code = 206
+
+    chunk_size = HeroVideoAsset.CHUNK_SIZE
+    first_idx = start // chunk_size
+    last_idx = end // chunk_size
+    chunks = HeroVideoChunk.objects.filter(
+        asset=asset,
+        index__gte=first_idx,
+        index__lte=last_idx,
+    ).order_by('index')
+
+    parts = []
+    for c in chunks:
+        c_start = c.index * chunk_size
+        raw = bytes(c.data)
+        slice_start = max(0, start - c_start)
+        slice_end = min(len(raw), end - c_start + 1)
+        if slice_start < slice_end:
+            parts.append(raw[slice_start:slice_end])
+
+    body = b''.join(parts)
+    resp = HttpResponse(body, status=status_code, content_type=asset.content_type)
+    resp['Accept-Ranges'] = 'bytes'
+    resp['Content-Length'] = str(len(body))
+    resp['Cache-Control'] = 'public, max-age=86400'
+    if status_code == 206:
+        resp['Content-Range'] = f'bytes {start}-{start + len(body) - 1}/{total}'
+    return resp
 
 

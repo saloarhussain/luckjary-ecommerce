@@ -14,4 +14,5 @@ urlpatterns = [
     path('robots.txt', views.robots_txt, name='robots_txt'),
     path('sitemap.xml', views.sitemap_xml, name='sitemap_xml'),
     path('set-currency/', views.set_currency, name='set_currency'),
+    path('hero-video/<int:asset_id>/', views.serve_hero_video, name='serve_hero_video'),
 ]

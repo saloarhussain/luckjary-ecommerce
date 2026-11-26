@@ -24,6 +24,47 @@ class ContactInquiry(models.Model):
         return f"{self.subject} from {self.name}"
 
 
+def ensure_core_migrated():
+    """Ensure core migrations are applied (needed on Vercel where build skips migrate)."""
+    from django.db import connection
+    from django.core.management import call_command
+
+    if getattr(connection, 'needs_rollback', False):
+        connection.rollback()
+    call_command('migrate', 'core', verbosity=0, interactive=False)
+
+
+class HeroVideoAsset(models.Model):
+    """Stores metadata for an uploaded hero render video persisted in DB."""
+
+    CHUNK_SIZE = 1536 * 1024  # 1.5 MiB (safely below Vercel 4.5 MB payload limit)
+
+    filename = models.CharField(max_length=255)
+    content_type = models.CharField(max_length=100, default='video/mp4')
+    total_size = models.PositiveBigIntegerField(default=0)
+    total_chunks = models.PositiveIntegerField(default=0)
+    is_complete = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['-created_at']
+
+    def __str__(self):
+        return f"{self.filename} ({self.total_size} bytes)"
+
+
+class HeroVideoChunk(models.Model):
+    """Binary slice of a HeroVideoAsset."""
+
+    asset = models.ForeignKey(HeroVideoAsset, on_delete=models.CASCADE, related_name='chunks')
+    index = models.PositiveIntegerField()
+    data = models.BinaryField()
+
+    class Meta:
+        unique_together = ('asset', 'index')
+        ordering = ['index']
+
+
 class StorefrontThemeSettings(models.Model):
     """Singleton configuration for homepage scroll-video hero and storefront theme customization."""
 
@@ -81,12 +122,7 @@ class StorefrontThemeSettings(models.Model):
             return obj
         except (ProgrammingError, OperationalError):
             try:
-                from django.db import connection
-                from django.core.management import call_command
-
-                if getattr(connection, 'needs_rollback', False):
-                    connection.rollback()
-                call_command('migrate', 'core', verbosity=0, interactive=False)
+                ensure_core_migrated()
                 obj, _ = cls.objects.get_or_create(pk=1)
                 return obj
             except Exception:

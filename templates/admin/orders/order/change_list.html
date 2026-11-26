@@ -1061,7 +1061,7 @@
                     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b border-[#21242d]">
                       <div>
                         <span class="text-xs font-semibold text-white font-sans block">Upload Render Video (.mp4 / .webm / .mov)</span>
-                        <span class="text-[11px] text-[#9ca3af] font-sans">Uploads directly into <code class="font-mono text-emerald-400">/static/videos/</code> locally, or paste a hosted CDN URL below.</span>
+                        <span class="text-[11px] text-[#9ca3af] font-sans">Uploads in 1.5 MB chunks directly to your database (works live on Vercel, up to 80 MB), or paste a CDN URL below.</span>
                       </div>
                       <label class="btn-secondary inline-flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-lg text-xs font-medium font-sans text-neutral-200 cursor-pointer shrink-0">
                         <svg class="w-3.5 h-3.5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
@@ -1861,33 +1861,118 @@ document.addEventListener('DOMContentLoaded', () => {
     syncHeroCustomizerPreview();
   };
 
+  async function parseJsonSafe(resp) {
+    const raw = await resp.text();
+    try {
+      return JSON.parse(raw);
+    } catch (e) {
+      return { status: 'error', message: `Server returned HTTP ${resp.status}` };
+    }
+  }
+
   window.uploadHeroRenderVideo = async function(input) {
     if (!input || !input.files || !input.files[0]) return;
     const file = input.files[0];
     const lbl = document.getElementById('tcUploadBtnLabel');
-    if (lbl) lbl.textContent = 'Uploading...';
+    const statusBadge = document.getElementById('tcPreviewStatusBadge');
 
-    const formData = new FormData();
-    formData.append('hero_video_file', file);
-    formData.append('payload', JSON.stringify({ ...readHeroCustomizerFromDOM(), design_tokens: currentTokens }));
+    const maxBytes = 80 * 1024 * 1024;
+    if (file.size > maxBytes) {
+      showToast('Video exceeds 80 MB limit. Compress it or paste a CDN URL.');
+      input.value = '';
+      return;
+    }
+
+    // Immediate local blob preview while uploading
+    const pv = document.getElementById('tcPreviewVideo');
+    let objectUrl = '';
+    if (pv) {
+      objectUrl = URL.createObjectURL(file);
+      lastPreviewVideoSrc = objectUrl;
+      pv.src = objectUrl;
+      pv.load();
+      pv.style.opacity = ((parseInt(document.getElementById('tcVideoOpacity')?.value || '90', 10)) / 100).toFixed(2);
+    }
+
+    const CHUNK_SIZE = 1536 * 1024; // 1.5 MiB per request (safely under Vercel 4.5 MB limit)
+    const totalChunks = Math.max(1, Math.ceil(file.size / CHUNK_SIZE));
+    const csrf = getCsrfToken();
 
     try {
-      const resp = await fetch('/admin/api/theme-customize/', {
+      if (lbl) lbl.textContent = 'Starting upload...';
+      if (statusBadge) statusBadge.textContent = 'Uploading 0%';
+
+      const initResp = await fetch('/admin/api/theme-customize/upload-init/', {
         method: 'POST',
-        headers: { 'X-CSRFToken': getCsrfToken() },
-        body: formData
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRFToken': csrf
+        },
+        body: JSON.stringify({
+          filename: file.name,
+          content_type: file.type || 'video/mp4',
+          total_size: file.size,
+          total_chunks: totalChunks
+        })
       });
-      const data = await resp.json();
-      if (!resp.ok || data.status !== 'ok') {
-        showToast(data.message || 'Video upload failed');
-      } else {
-        heroThemeState = { ...defaultHeroTheme, ...data.settings };
-        populateHeroCustomizer(heroThemeState);
-        showToast('Render video uploaded & published to homepage!');
+      const initData = await parseJsonSafe(initResp);
+      if (!initResp.ok || initData.status !== 'ok') {
+        showToast(initData.message || 'Could not start video upload');
+        return;
       }
+
+      const assetId = initData.asset_id;
+      for (let i = 0; i < totalChunks; i++) {
+        const start = i * CHUNK_SIZE;
+        const end = Math.min(file.size, start + CHUNK_SIZE);
+        const blob = file.slice(start, end);
+
+        const fd = new FormData();
+        fd.append('asset_id', String(assetId));
+        fd.append('index', String(i));
+        fd.append('chunk', blob, `${file.name}.part${i}`);
+
+        const chunkResp = await fetch('/admin/api/theme-customize/upload-chunk/', {
+          method: 'POST',
+          headers: { 'X-CSRFToken': csrf },
+          body: fd
+        });
+        const chunkData = await parseJsonSafe(chunkResp);
+        if (!chunkResp.ok || chunkData.status !== 'ok') {
+          showToast(chunkData.message || `Failed uploading chunk ${i + 1}/${totalChunks}`);
+          return;
+        }
+
+        const pct = Math.round(((i + 1) / totalChunks) * 100);
+        if (lbl) lbl.textContent = `Uploading ${pct}%...`;
+        if (statusBadge) statusBadge.textContent = `Uploading ${pct}%`;
+      }
+
+      if (lbl) lbl.textContent = 'Publishing...';
+      const completeResp = await fetch('/admin/api/theme-customize/upload-complete/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRFToken': csrf
+        },
+        body: JSON.stringify({
+          asset_id: assetId,
+          theme_payload: { ...readHeroCustomizerFromDOM(), design_tokens: currentTokens }
+        })
+      });
+      const completeData = await parseJsonSafe(completeResp);
+      if (!completeResp.ok || completeData.status !== 'ok') {
+        showToast(completeData.message || 'Failed to publish uploaded video');
+        return;
+      }
+
+      heroThemeState = { ...defaultHeroTheme, ...completeData.settings };
+      populateHeroCustomizer(heroThemeState);
+      showToast('Render video uploaded & published to homepage!');
     } catch (err) {
-      showToast('Network error while uploading video');
+      showToast(`Upload failed: ${err && err.message ? err.message : 'Network error'}`);
     } finally {
+      if (objectUrl) URL.revokeObjectURL(objectUrl);
       if (lbl) lbl.textContent = 'Choose & Upload Video';
       input.value = '';
     }
