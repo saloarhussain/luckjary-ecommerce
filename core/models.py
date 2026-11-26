@@ -1,4 +1,4 @@
-from django.db import models
+from django.db import models, OperationalError, ProgrammingError
 
 class NewsletterSubscriber(models.Model):
     email = models.EmailField(unique=True)
@@ -76,8 +76,21 @@ class StorefrontThemeSettings(models.Model):
 
     @classmethod
     def get_solo(cls):
-        obj, _ = cls.objects.get_or_create(pk=1)
-        return obj
+        try:
+            obj, _ = cls.objects.get_or_create(pk=1)
+            return obj
+        except (ProgrammingError, OperationalError):
+            try:
+                from django.db import connection
+                from django.core.management import call_command
+
+                if getattr(connection, 'needs_rollback', False):
+                    connection.rollback()
+                call_command('migrate', 'core', verbosity=0, interactive=False)
+                obj, _ = cls.objects.get_or_create(pk=1)
+                return obj
+            except Exception:
+                return cls()
 
     def hero_vignette_alpha(self):
         return f"{self.hero_vignette_strength / 100:.2f}"
