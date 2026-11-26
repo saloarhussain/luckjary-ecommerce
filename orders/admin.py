@@ -106,10 +106,12 @@ class OrderAdmin(admin.ModelAdmin):
 
     def changelist_view(self, request, extra_context=None):
         from core.telemetry import get_order_counts, serialize_order_summary
+        from core.models import StorefrontThemeSettings
         extra_context = extra_context or {}
         orders_qs = self.get_queryset(request).order_by('-created_at')
         extra_context['order_counts'] = get_order_counts()
         extra_context['orders_list'] = [serialize_order_summary(o) for o in orders_qs[:100]]
+        extra_context['storefront_theme'] = StorefrontThemeSettings.get_solo().to_dict()
         extra_context['active_nav'] = 'orders'
         return super().changelist_view(request, extra_context=extra_context)
 

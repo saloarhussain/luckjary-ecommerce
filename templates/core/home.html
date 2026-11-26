@@ -2,40 +2,97 @@
 {% load static %}
 
 {% block content %}
-<!-- Hero Section -->
-<section class="relative bg-[#0F0F0F] text-white min-h-[75vh] sm:min-h-[85vh] flex items-center justify-center overflow-hidden">
-    <div class="absolute inset-0 z-0">
-        <img src="https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?auto=format&fit=crop&w=2000&q=85" 
-             alt="Luckjary High Jewelry Diamond Ring Collection" 
-             class="w-full h-full object-cover opacity-35 transform scale-105 transition-transform duration-1000 ease-out">
-        <div class="absolute inset-0 bg-gradient-to-t from-[#0F0F0F] via-transparent to-black/60"></div>
-    </div>
+<!-- Hero Section: Configurable Scroll-Scrubbed Render Showcase -->
+<section id="heroScrollTrack"
+         class="hero-scroll-track bg-[#0F0F0F] text-white"
+         data-enabled="{% if theme_settings.hero_video_enabled %}true{% else %}false{% endif %}"
+         data-mode="{{ theme_settings.hero_video_mode|default:'scrub' }}"
+         data-smoothing="{{ theme_settings.hero_scrub_smoothing|default:'0.16' }}"
+         data-fade-overlay="{% if theme_settings.hero_fade_overlay_on_scroll %}true{% else %}false{% endif %}"
+         data-fade-start="{{ theme_settings.hero_overlay_fade_start|default:'70' }}"
+         style="{% if theme_settings.hero_video_enabled and theme_settings.hero_video_mode == 'scrub' %}height: {{ theme_settings.hero_scroll_height_vh|default:280 }}vh;{% else %}min-height: 82vh;{% endif %}">
+    <div id="heroStickyStage"
+         class="{% if theme_settings.hero_video_enabled and theme_settings.hero_video_mode == 'scrub' %}hero-sticky-stage{% else %}relative min-h-[82vh] w-full overflow-hidden bg-[#0F0F0F]{% endif %} flex items-center justify-center">
+        <!-- Media Layer: Poster Fallback + Scroll-Scrubbed Render Canvas -->
+        <div class="absolute inset-0 z-0">
+            <img id="heroFallbackImg"
+                 src="{{ theme_settings.hero_poster_url|default:'https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?auto=format&fit=crop&w=2000&q=85' }}"
+                 alt="Luckjary High Jewelry Collection"
+                 class="w-full h-full object-cover opacity-35 transform scale-105 transition-opacity duration-700 ease-out">
 
-    <div class="relative z-10 max-w-4xl mx-auto text-center px-3 sm:px-6 py-14 sm:py-20 space-y-4 sm:space-y-6">
-        <div class="inline-flex items-center space-x-2 border border-[#C5A059]/40 bg-black/40 backdrop-blur-sm px-3.5 sm:px-4 py-1 sm:py-1.5 rounded-full">
-            <span class="w-1.5 sm:w-2 h-1.5 sm:h-2 rounded-full bg-[#C5A059]"></span>
-            <span class="text-[10px] sm:text-xs font-display tracking-[0.2em] sm:tracking-[0.25em] text-[#C5A059] uppercase">
-                The 925 Sterling Silver Heirlooms
-            </span>
+            {% if theme_settings.hero_video_enabled %}
+            <canvas id="heroRenderCanvas"
+                    class="hero-render-canvas"
+                    style="--hero-video-opacity: {{ theme_settings.hero_video_opacity|default:90 }};"
+                    aria-hidden="true"></canvas>
+
+            <!-- Hidden off-screen video decoder (kept non-display:none for iOS/Safari frame decoding) -->
+            <video id="heroRenderVideo"
+                   class="absolute w-px h-px opacity-0 pointer-events-none"
+                   muted
+                   playsinline
+                   preload="auto"
+                   crossorigin="anonymous"
+                   disablepictureinpicture
+                   aria-hidden="true">
+                {% if theme_settings.hero_video_webm_url %}
+                <source src="{{ theme_settings.hero_video_webm_url }}" type="video/webm">
+                {% endif %}
+                {% if theme_settings.hero_video_url %}
+                <source src="{{ theme_settings.hero_video_url }}" type="video/mp4">
+                {% endif %}
+            </video>
+            {% endif %}
+
+            <!-- Configurable Dark Vignette Overlay -->
+            <div class="absolute inset-0 pointer-events-none"
+                 style="background: linear-gradient(to top, rgba(15, 15, 15, 0.92) 0%, rgba(15, 15, 15, {{ theme_settings.hero_vignette_alpha|default:'0.45' }}) 45%, rgba(0, 0, 0, 0.65) 100%);"></div>
         </div>
 
-        <h1 class="font-sans text-2xl sm:text-5xl md:text-6xl font-bold tracking-tight leading-tight text-[#FAF9F6]">
-            Lustrous Silver.<br>
-            <span class="font-bold gold-gradient-text">Radiant for Every Moment.</span>
-        </h1>
+        <!-- Editorial Foreground Content -->
+        <div id="heroOverlayContent" class="relative z-10 max-w-4xl mx-auto text-center px-3 sm:px-6 pt-16 sm:pt-24 pb-16 space-y-4 sm:space-y-6 will-change-transform">
+            {% if theme_settings.hero_badge_text %}
+            <div class="inline-flex items-center space-x-2 border border-[#C5A059]/40 bg-black/40 backdrop-blur-sm px-3.5 sm:px-4 py-1 sm:py-1.5 rounded-full">
+                <span class="w-1.5 sm:w-2 h-1.5 sm:h-2 rounded-full bg-[#C5A059]"></span>
+                <span class="text-[10px] sm:text-xs font-display tracking-[0.2em] sm:tracking-[0.25em] text-[#C5A059] uppercase">
+                    {{ theme_settings.hero_badge_text }}
+                </span>
+            </div>
+            {% endif %}
 
-        <p class="max-w-2xl mx-auto text-xs sm:text-base text-neutral-300 font-light leading-relaxed px-2">
-            Discover handcrafted 925 solid sterling silver heirlooms treated with a microscopic rhodium anti-tarnish barrier and certified brilliant stones.
-        </p>
+            <h1 class="font-sans text-2xl sm:text-5xl md:text-6xl font-bold tracking-tight leading-tight text-[#FAF9F6]">
+                {{ theme_settings.hero_title_line1|default:'Lustrous Silver.' }}<br>
+                <span class="font-bold gold-gradient-text">{{ theme_settings.hero_title_line2|default:'Radiant for Every Moment.' }}</span>
+            </h1>
 
-        <div class="pt-4 sm:pt-6 flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4">
-            <a href="{% url 'catalog:product_list' %}" class="w-full sm:w-auto btn-gold px-6 sm:px-8 py-3 sm:py-3.5 text-xs font-display font-semibold tracking-[0.16em] sm:tracking-[0.18em] uppercase rounded-sm shadow-xl">
-                Explore The Collection
-            </a>
-            <a href="{% url 'catalog:category_products' 'bridal-high-jewelry' %}" class="w-full sm:w-auto px-6 sm:px-8 py-3 sm:py-3.5 border border-[#C5A059] text-white hover:bg-[#C5A059]/10 text-xs font-display tracking-[0.16em] sm:tracking-[0.18em] uppercase rounded-sm transition">
-                The Bridal Atelier
-            </a>
+            <p class="max-w-2xl mx-auto text-xs sm:text-base text-neutral-300 font-light leading-relaxed px-2">
+                {{ theme_settings.hero_subtitle }}
+            </p>
+
+            <div class="pt-4 sm:pt-6 flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4">
+                <a href="{% url 'catalog:product_list' %}" class="w-full sm:w-auto btn-gold px-6 sm:px-8 py-3 sm:py-3.5 text-xs font-display font-semibold tracking-[0.16em] sm:tracking-[0.18em] uppercase rounded-sm shadow-xl">
+                    {{ theme_settings.hero_primary_cta_text|default:'Explore The Collection' }}
+                </a>
+                <a href="{% url 'catalog:category_products' 'bridal-high-jewelry' %}" class="w-full sm:w-auto px-6 sm:px-8 py-3 sm:py-3.5 border border-[#C5A059] text-white hover:bg-[#C5A059]/10 text-xs font-display tracking-[0.16em] sm:tracking-[0.18em] uppercase rounded-sm transition">
+                    {{ theme_settings.hero_secondary_cta_text|default:'The Bridal Atelier' }}
+                </a>
+            </div>
         </div>
+
+        {% if theme_settings.hero_video_enabled and theme_settings.hero_video_mode == 'scrub' and theme_settings.hero_show_scroll_cue %}
+        <!-- Scroll Cue -->
+        <div id="heroScrollCue" class="absolute bottom-6 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center gap-2 pointer-events-none">
+            <span class="text-[9px] sm:text-[10px] font-display tracking-[0.25em] uppercase text-[#C5A059]/90">Scroll to Reveal</span>
+            <span class="hero-scroll-cue-line"></span>
+        </div>
+        {% endif %}
+
+        {% if theme_settings.hero_video_enabled and theme_settings.hero_video_mode == 'scrub' and theme_settings.hero_show_progress_bar %}
+        <!-- Subtle Gold Scroll Progress Hairline -->
+        <div class="absolute bottom-0 inset-x-0 h-[2px] bg-white/10 z-20 pointer-events-none">
+            <div id="heroScrollProgress" class="h-full bg-gradient-to-r from-[#B38F46] via-[#D4AF37] to-[#C5A059] origin-left scale-x-0"></div>
+        </div>
+        {% endif %}
     </div>
 </section>
 
@@ -201,4 +258,8 @@
         </div>
     </div>
 </section>
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="{% static 'js/scroll-video.js' %}"></script>
 {% endblock %}

@@ -874,7 +874,7 @@ div.breadcrumbs a:hover {
 }
 
 .metric-footer a:hover {
-    text-decoration: underline;
+    text-decoration: none;
 }
 
 .text-emerald {
@@ -929,7 +929,7 @@ div.breadcrumbs a:hover {
 }
 
 .card-link:hover {
-    text-decoration: underline;
+    text-decoration: none;
 }
 
 /* Action Items (Things to Do) */
@@ -1134,7 +1134,7 @@ div.breadcrumbs a:hover {
 }
 
 .table-action-link:hover {
-    text-decoration: underline;
+    text-decoration: none;
 }
 
 /* ==========================================================================
@@ -2223,15 +2223,14 @@ div.breadcrumbs a:hover {
 .object-tools a.addlink:visited {
     background: #10B981 !important;
     background-image: none !important;
-    color: #FFFFFF !important;
+    color: #07080a !important;
     border-radius: 8px !important;
     padding: 0.55rem 1.15rem !important;
-    font-size: 0.8rem !important;
-    font-weight: 700 !important;
-    letter-spacing: 0.04em !important;
-    text-transform: uppercase !important;
-    border: 1px solid #059669 !important;
-    box-shadow: 0 2px 10px rgba(16, 185, 129, 0.28) !important;
+    font-size: 0.75rem !important;
+    font-weight: 600 !important;
+    letter-spacing: 0.025em !important;
+    border: 1px solid rgba(16, 185, 129, 0.3) !important;
+    box-shadow: 0 0 20px -3px rgba(16, 185, 129, 0.25) !important;
     text-decoration: none !important;
     display: inline-flex !important;
     align-items: center !important;
@@ -2873,8 +2872,9 @@ select option,
 .submit-row input[type="submit"],
 .submit-row input.default {
     background: #10B981 !important;
-    border: 1px solid #059669 !important;
-    color: #FFFFFF !important;
+    border: 1px solid rgba(16, 185, 129, 0.3) !important;
+    color: #07080a !important;
+    box-shadow: 0 0 20px -3px rgba(16, 185, 129, 0.25) !important;
     border-radius: 6px !important;
     padding: 0.5rem 1.15rem !important;
     font-size: 0.8rem !important;
@@ -3103,7 +3103,7 @@ ul.messagelist li.error {
 
 .storefront-link:hover {
     color: #FFFFFF;
-    text-decoration: underline;
+    text-decoration: none;
 }
 
 .shopify-alert.error {
@@ -4884,3 +4884,58 @@ body.filter-drawer-open {
     margin-top: 6px !important;
     margin-bottom: 18px !important;
 }
+
+/* ========================================================
+   UNIVERSAL LUXURY ATELIER DARK INPUTS & AUTOFILL OVERRIDES
+   ======================================================== */
+input[type="text"],
+input[type="search"],
+input[type="email"],
+input[type="password"],
+input[type="number"],
+input[type="url"],
+input[type="tel"],
+select,
+textarea,
+.glass-input,
+.search-field-wrapper input {
+    background-color: #111317 !important;
+    background: #111317 !important;
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    color: #f3f4f6 !important;
+    color-scheme: dark !important;
+}
+
+input[type="text"]:focus,
+input[type="search"]:focus,
+input[type="email"]:focus,
+input[type="password"]:focus,
+input[type="number"]:focus,
+select:focus,
+textarea:focus,
+.glass-input:focus,
+.search-field-wrapper input:focus {
+    background-color: #111317 !important;
+    background: #111317 !important;
+    border-color: rgba(16, 185, 129, 0.6) !important;
+    box-shadow: 0 0 0 1px rgba(16, 185, 129, 0.4) !important;
+    color: #ffffff !important;
+    outline: none !important;
+}
+
+input::placeholder,
+textarea::placeholder {
+    color: #9ca3af !important;
+    opacity: 1 !important;
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover, 
+input:-webkit-autofill:focus, 
+input:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0 50px #111317 inset !important;
+    -webkit-text-fill-color: #f3f4f6 !important;
+    caret-color: #f3f4f6 !important;
+    transition: background-color 5000s ease-in-out 0s;
+}
+

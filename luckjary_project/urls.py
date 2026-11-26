@@ -3,7 +3,7 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 from django.http import HttpResponseRedirect, JsonResponse
-from core.views import set_currency
+from core.views import set_currency, admin_theme_customize_api
 
 # Customize Django Admin Header & Title
 admin.site.site_header = "Luckjary Haute Joaillerie Administration"
@@ -37,6 +37,7 @@ admin.site.index = atelier_admin_index
 
 urlpatterns = [
     path('admin/api/live-telemetry/', admin.site.admin_view(admin_live_telemetry_api), name='admin_live_telemetry'),
+    path('admin/api/theme-customize/', admin.site.admin_view(admin_theme_customize_api), name='admin_theme_customize'),
     path('admin/scrape/', lambda request: HttpResponseRedirect('/admin/catalog/product/scrape/'), name='admin_scrape'),
     path('admin/settings/', lambda request: HttpResponseRedirect('/admin/orders/order/#settings'), name='admin_settings'),
     path('admin/set-currency/', set_currency, name='admin_set_currency'),
