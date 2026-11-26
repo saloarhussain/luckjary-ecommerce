@@ -190,16 +190,6 @@ def _clamp_float(val, low, high, default):
 
 
 def _apply_theme_payload(theme, payload, preserve_video_urls=False):
-    if 'hero_engine' in payload and payload.get('hero_engine') in ('sequence', 'video_scrub', 'video_autoplay'):
-        theme.hero_engine = payload['hero_engine']
-        if payload['hero_engine'] == 'video_autoplay':
-            theme.hero_video_mode = 'autoplay'
-        elif payload['hero_engine'] == 'video_scrub':
-            theme.hero_video_mode = 'scrub'
-    if 'hero_total_frames' in payload:
-        theme.hero_total_frames = _clamp_int(payload.get('hero_total_frames'), 10, 600, theme.hero_total_frames)
-    if 'hero_scroll_distance' in payload:
-        theme.hero_scroll_distance = _clamp_int(payload.get('hero_scroll_distance'), 1200, 7000, theme.hero_scroll_distance)
     if 'hero_video_enabled' in payload:
         theme.hero_video_enabled = _to_bool(payload.get('hero_video_enabled'), theme.hero_video_enabled)
     if 'hero_video_mode' in payload and payload.get('hero_video_mode') in ('scrub', 'autoplay'):
@@ -268,9 +258,12 @@ def admin_theme_customize_api(request):
                 pass
 
     if payload.get('action') == 'reset':
-        theme.delete()
-        fresh = StorefrontThemeSettings.get_solo()
-        return JsonResponse({'status': 'ok', 'message': 'Theme settings reset to Luckjary defaults.', 'settings': fresh.to_dict()})
+        defaults = StorefrontThemeSettings()
+        for field in StorefrontThemeSettings._meta.concrete_fields:
+            if not field.primary_key and field.name != 'updated_at':
+                setattr(theme, field.name, getattr(defaults, field.name))
+        theme.save()
+        return JsonResponse({'status': 'ok', 'message': 'Theme settings reset to Luckjary defaults.', 'settings': theme.to_dict()})
 
     # Legacy single-request upload fallback for small files (< 4 MB)
     uploaded_video = request.FILES.get('hero_video_file')

@@ -2,225 +2,7 @@
 {% load static %}
 
 {% block content %}
-{% if theme_settings.hero_engine == 'sequence' or not theme_settings.hero_engine %}
-<!-- Hero Section: Approach A — Canvas Image Sequence + GSAP ScrollTrigger + Lenis Scrollytelling -->
-<section id="heroScrollytelling"
-         class="relative w-full h-screen overflow-hidden bg-[#121214] text-white select-none"
-         data-total-frames="{{ theme_settings.hero_total_frames|default:120 }}"
-         data-scroll-distance="{{ theme_settings.hero_scroll_distance|default:3500 }}">
-
-    <!-- Full-Viewport Retina HTML5 Canvas -->
-    <canvas id="scrollyRingCanvas"
-            class="absolute inset-0 h-screen w-full block z-0 pointer-events-none"
-            aria-label="925 Sterling Silver Solitaire Ring 3D Showcase"></canvas>
-
-    <!-- Subtle Luxury Vignette -->
-    <div class="absolute inset-0 z-[1] pointer-events-none"
-         style="background: radial-gradient(circle at 70% 45%, rgba(212, 175, 55, 0.06) 0%, rgba(18, 18, 20, 0.45) 55%, rgba(12, 12, 14, 0.85) 100%);"></div>
-
-    <!-- Phase 1 (0% -> 55%): Left-Aligned Luxury Hero Typography -->
-    <div class="relative z-10 h-full max-w-7xl mx-auto px-5 sm:px-8 lg:px-12 flex items-center pt-16 sm:pt-20 pb-16">
-        <div id="scrollyHeroCopy" class="max-w-xl space-y-5 sm:space-y-6 will-change-transform">
-            <div class="inline-flex items-center gap-2.5 border border-[#D4AF37]/40 bg-black/45 backdrop-blur-md px-3.5 py-1.5 rounded-full">
-                <span class="w-1.5 h-1.5 rounded-full bg-[#D4AF37] shadow-[0_0_8px_#D4AF37]"></span>
-                <span class="scrolly-mono text-[10px] sm:text-[11px] tracking-[0.22em] text-[#D4AF37] uppercase font-medium">
-                    {{ theme_settings.hero_badge_text|default:'925 STERLING SILVER HEIRLOOMS' }}
-                </span>
-            </div>
-
-            <h1 class="scrolly-serif text-4xl sm:text-6xl lg:text-7xl font-semibold tracking-tight leading-[1.03] text-[#FAF9F6]">
-                {{ theme_settings.hero_title_line1|default:'Lustrous Silver.' }}<br>
-                <span class="text-[#D4AF37] italic font-medium">{{ theme_settings.hero_title_line2|default:'Radiant for Every Moment.' }}</span>
-            </h1>
-
-            <p class="max-w-lg text-xs sm:text-base text-neutral-300 font-light leading-relaxed">
-                {{ theme_settings.hero_subtitle|default:'Discover handcrafted 925 solid sterling silver heirlooms treated with a microscopic rhodium anti-tarnish barrier and certified brilliant stones.' }}
-            </p>
-
-            <div class="pt-2 flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4">
-                <a href="{% url 'catalog:product_list' %}" class="inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-sm bg-[#D4AF37] hover:bg-[#c49b28] text-[#121214] text-xs font-semibold tracking-[0.18em] uppercase transition shadow-[0_8px_28px_rgba(212,175,55,0.28)]">
-                    {{ theme_settings.hero_primary_cta_text|default:'Explore The Collection' }}
-                </a>
-                <a href="{% url 'catalog:category_products' 'bridal-high-jewelry' %}" class="inline-flex items-center justify-center px-7 py-3.5 rounded-sm border border-[#D4AF37]/60 bg-black/30 backdrop-blur-sm text-white hover:bg-[#D4AF37]/15 text-xs font-medium tracking-[0.18em] uppercase transition">
-                    {{ theme_settings.hero_secondary_cta_text|default:'The Bridal Atelier' }}
-                </a>
-            </div>
-        </div>
-    </div>
-
-    <!-- Phase 2 (45% -> 100%): Horizontal Glassmorphic Product Cards Sliding Right-to-Left -->
-    <div id="scrollyCardsWrapper" class="absolute inset-x-0 bottom-10 sm:bottom-12 z-20 pointer-events-none">
-        <div id="scrollyShowcaseLabel" class="max-w-7xl mx-auto px-5 sm:px-8 lg:px-12 mb-4 flex items-center justify-between">
-            <div>
-                <span class="scrolly-mono text-[10px] tracking-[0.25em] uppercase text-[#D4AF37] block">ATELIER SIGNATURES</span>
-                <h2 class="scrolly-serif text-xl sm:text-2xl text-white font-medium tracking-wide">Curated 925 Sterling Creations</h2>
-            </div>
-            <a href="{% url 'catalog:product_list' %}" class="pointer-events-auto scrolly-mono text-[11px] uppercase tracking-widest text-[#D4AF37] hover:text-white transition hidden sm:inline-flex items-center gap-1.5">
-                View Full Vault <span>&rarr;</span>
-            </a>
-        </div>
-
-        <div id="scrollyCardsTrack" class="flex items-stretch gap-4 sm:gap-6 px-5 sm:px-8 will-change-transform w-max pointer-events-auto">
-            <!-- Card 1 -->
-            <article class="w-[78vw] sm:w-[300px] md:w-[320px] flex-shrink-0 rounded-2xl bg-white/[0.06] backdrop-blur-md border border-white/15 p-4 flex flex-col justify-between shadow-[0_20px_50px_rgba(0,0,0,0.45)] group hover:border-[#D4AF37]/50 transition">
-                <div class="relative aspect-[4/3] rounded-xl overflow-hidden bg-black/40 mb-3.5">
-                    <img src="https://images.unsplash.com/photo-1605100804763-247f67b3557e?auto=format&fit=crop&w=700&q=85" alt="Étoile Solitaire Ring" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
-                    <span class="absolute top-2.5 left-2.5 scrolly-mono text-[9px] uppercase tracking-widest px-2 py-0.5 rounded-full bg-black/60 backdrop-blur-sm border border-[#D4AF37]/40 text-[#D4AF37]">925 Sterling</span>
-                </div>
-                <div class="space-y-2">
-                    <h3 class="scrolly-serif text-lg sm:text-xl text-white font-semibold tracking-wide">Étoile Solitaire Ring</h3>
-                    <div class="flex items-center justify-between pt-1">
-                        <span class="scrolly-mono text-sm font-semibold text-[#D4AF37]">₹18,500</span>
-                        <button type="button"
-                                class="scrolly-quick-view-btn px-3.5 py-1.5 rounded-lg bg-white/10 hover:bg-[#D4AF37] hover:text-[#121214] border border-white/15 text-[11px] font-medium tracking-wider uppercase text-white transition cursor-pointer"
-                                data-title="Étoile Solitaire Ring"
-                                data-category="925 Sterling Silver • Cathedral Setting"
-                                data-price="₹18,500"
-                                data-image="https://images.unsplash.com/photo-1605100804763-247f67b3557e?auto=format&fit=crop&w=900&q=85"
-                                data-desc="Hand-forged solid 925 sterling silver solitaire ring finished in anti-tarnish rhodium with a certified VVS brilliant-cut centerpiece.">
-                            Quick View
-                        </button>
-                    </div>
-                </div>
-            </article>
-
-            <!-- Card 2 -->
-            <article class="w-[78vw] sm:w-[300px] md:w-[320px] flex-shrink-0 rounded-2xl bg-white/[0.06] backdrop-blur-md border border-white/15 p-4 flex flex-col justify-between shadow-[0_20px_50px_rgba(0,0,0,0.45)] group hover:border-[#D4AF37]/50 transition">
-                <div class="relative aspect-[4/3] rounded-xl overflow-hidden bg-black/40 mb-3.5">
-                    <img src="https://images.unsplash.com/photo-1611591437281-460bfbe1220a?auto=format&fit=crop&w=700&q=85" alt="Lumière Tennis Bracelet" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
-                    <span class="absolute top-2.5 left-2.5 scrolly-mono text-[9px] uppercase tracking-widest px-2 py-0.5 rounded-full bg-black/60 backdrop-blur-sm border border-[#D4AF37]/40 text-[#D4AF37]">925 Sterling</span>
-                </div>
-                <div class="space-y-2">
-                    <h3 class="scrolly-serif text-lg sm:text-xl text-white font-semibold tracking-wide">Lumière Tennis Bracelet</h3>
-                    <div class="flex items-center justify-between pt-1">
-                        <span class="scrolly-mono text-sm font-semibold text-[#D4AF37]">₹34,200</span>
-                        <button type="button"
-                                class="scrolly-quick-view-btn px-3.5 py-1.5 rounded-lg bg-white/10 hover:bg-[#D4AF37] hover:text-[#121214] border border-white/15 text-[11px] font-medium tracking-wider uppercase text-white transition cursor-pointer"
-                                data-title="Lumière Tennis Bracelet"
-                                data-category="925 Sterling Silver • Hidden Clasp"
-                                data-price="₹34,200"
-                                data-image="https://images.unsplash.com/photo-1611591437281-460bfbe1220a?auto=format&fit=crop&w=900&q=85"
-                                data-desc="Fluid articulated 925 sterling silver tennis bracelet featuring 42 hand-calibrated stones and a concealed double-safety box clasp.">
-                            Quick View
-                        </button>
-                    </div>
-                </div>
-            </article>
-
-            <!-- Card 3 -->
-            <article class="w-[78vw] sm:w-[300px] md:w-[320px] flex-shrink-0 rounded-2xl bg-white/[0.06] backdrop-blur-md border border-white/15 p-4 flex flex-col justify-between shadow-[0_20px_50px_rgba(0,0,0,0.45)] group hover:border-[#D4AF37]/50 transition">
-                <div class="relative aspect-[4/3] rounded-xl overflow-hidden bg-black/40 mb-3.5">
-                    <img src="https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?auto=format&fit=crop&w=700&q=85" alt="Celeste Pearl Choker" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
-                    <span class="absolute top-2.5 left-2.5 scrolly-mono text-[9px] uppercase tracking-widest px-2 py-0.5 rounded-full bg-black/60 backdrop-blur-sm border border-[#D4AF37]/40 text-[#D4AF37]">Heirloom</span>
-                </div>
-                <div class="space-y-2">
-                    <h3 class="scrolly-serif text-lg sm:text-xl text-white font-semibold tracking-wide">Celeste Pearl Choker</h3>
-                    <div class="flex items-center justify-between pt-1">
-                        <span class="scrolly-mono text-sm font-semibold text-[#D4AF37]">₹26,800</span>
-                        <button type="button"
-                                class="scrolly-quick-view-btn px-3.5 py-1.5 rounded-lg bg-white/10 hover:bg-[#D4AF37] hover:text-[#121214] border border-white/15 text-[11px] font-medium tracking-wider uppercase text-white transition cursor-pointer"
-                                data-title="Celeste Pearl Choker"
-                                data-category="925 Sterling Silver • Freshwater Pearl"
-                                data-price="₹26,800"
-                                data-image="https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?auto=format&fit=crop&w=900&q=85"
-                                data-desc="Luminous matched pearls knotted on silk and anchored by an ornate pavé-set 925 sterling silver rose-cut clasp.">
-                            Quick View
-                        </button>
-                    </div>
-                </div>
-            </article>
-
-            <!-- Card 4 -->
-            <article class="w-[78vw] sm:w-[300px] md:w-[320px] flex-shrink-0 rounded-2xl bg-white/[0.06] backdrop-blur-md border border-white/15 p-4 flex flex-col justify-between shadow-[0_20px_50px_rgba(0,0,0,0.45)] group hover:border-[#D4AF37]/50 transition">
-                <div class="relative aspect-[4/3] rounded-xl overflow-hidden bg-black/40 mb-3.5">
-                    <img src="https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?auto=format&fit=crop&w=700&q=85" alt="Aurelia Halo Studs" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
-                    <span class="absolute top-2.5 left-2.5 scrolly-mono text-[9px] uppercase tracking-widest px-2 py-0.5 rounded-full bg-black/60 backdrop-blur-sm border border-[#D4AF37]/40 text-[#D4AF37]">925 Sterling</span>
-                </div>
-                <div class="space-y-2">
-                    <h3 class="scrolly-serif text-lg sm:text-xl text-white font-semibold tracking-wide">Aurelia Halo Studs</h3>
-                    <div class="flex items-center justify-between pt-1">
-                        <span class="scrolly-mono text-sm font-semibold text-[#D4AF37]">₹14,900</span>
-                        <button type="button"
-                                class="scrolly-quick-view-btn px-3.5 py-1.5 rounded-lg bg-white/10 hover:bg-[#D4AF37] hover:text-[#121214] border border-white/15 text-[11px] font-medium tracking-wider uppercase text-white transition cursor-pointer"
-                                data-title="Aurelia Halo Studs"
-                                data-category="925 Sterling Silver • Micro-Pavé Halo"
-                                data-price="₹14,900"
-                                data-image="https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?auto=format&fit=crop&w=900&q=85"
-                                data-desc="Everyday brilliance framed in a whisper-thin 925 sterling silver micro-pavé halo with screw-back atelier security posts.">
-                            Quick View
-                        </button>
-                    </div>
-                </div>
-            </article>
-
-            <!-- Card 5 -->
-            <article class="w-[78vw] sm:w-[300px] md:w-[320px] flex-shrink-0 rounded-2xl bg-white/[0.06] backdrop-blur-md border border-white/15 p-4 flex flex-col justify-between shadow-[0_20px_50px_rgba(0,0,0,0.45)] group hover:border-[#D4AF37]/50 transition">
-                <div class="relative aspect-[4/3] rounded-xl overflow-hidden bg-black/40 mb-3.5">
-                    <img src="https://images.unsplash.com/photo-1617038260897-41a1f14a8ca0?auto=format&fit=crop&w=700&q=85" alt="Sovereign Pavé Band" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
-                    <span class="absolute top-2.5 left-2.5 scrolly-mono text-[9px] uppercase tracking-widest px-2 py-0.5 rounded-full bg-black/60 backdrop-blur-sm border border-[#D4AF37]/40 text-[#D4AF37]">Signature</span>
-                </div>
-                <div class="space-y-2">
-                    <h3 class="scrolly-serif text-lg sm:text-xl text-white font-semibold tracking-wide">Sovereign Pavé Band</h3>
-                    <div class="flex items-center justify-between pt-1">
-                        <span class="scrolly-mono text-sm font-semibold text-[#D4AF37]">₹21,400</span>
-                        <button type="button"
-                                class="scrolly-quick-view-btn px-3.5 py-1.5 rounded-lg bg-white/10 hover:bg-[#D4AF37] hover:text-[#121214] border border-white/15 text-[11px] font-medium tracking-wider uppercase text-white transition cursor-pointer"
-                                data-title="Sovereign Pavé Band"
-                                data-category="925 Sterling Silver • Eternity Profile"
-                                data-price="₹21,400"
-                                data-image="https://images.unsplash.com/photo-1617038260897-41a1f14a8ca0?auto=format&fit=crop&w=900&q=85"
-                                data-desc="Full-eternity 925 sterling silver band engineered for stacking or solo architectural statement, sealed against tarnishing.">
-                            Quick View
-                        </button>
-                    </div>
-                </div>
-            </article>
-        </div>
-    </div>
-
-    <!-- Scroll Cue -->
-    {% if theme_settings.hero_show_scroll_cue %}
-    <div id="scrollyScrollCue" class="absolute bottom-6 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center gap-2 pointer-events-none">
-        <span class="scrolly-mono text-[9px] sm:text-[10px] tracking-[0.25em] uppercase text-[#D4AF37]/90">Scroll to Reveal</span>
-        <span class="hero-scroll-cue-line"></span>
-    </div>
-    {% endif %}
-
-    <!-- Subtle Gold Scroll Progress Hairline -->
-    {% if theme_settings.hero_show_progress_bar %}
-    <div class="absolute bottom-0 inset-x-0 h-[2px] bg-white/10 z-30 pointer-events-none">
-        <div id="scrollyProgressBar" class="h-full bg-gradient-to-r from-[#B38F46] via-[#D4AF37] to-[#F5E0A3] origin-left scale-x-0"></div>
-    </div>
-    {% endif %}
-</section>
-
-<!-- Glassmorphic Quick View Modal for Scrollytelling Cards -->
-<div id="scrollyQuickViewModal" class="fixed inset-0 z-50 hidden items-center justify-center p-4" role="dialog" aria-modal="true" aria-labelledby="qvTitle">
-    <div id="qvBackdrop" class="absolute inset-0 bg-black/80 backdrop-blur-md"></div>
-    <div class="relative z-10 w-full max-w-lg rounded-2xl bg-[#16161a]/95 border border-white/15 shadow-2xl overflow-hidden text-white">
-        <button id="qvCloseBtn" type="button" aria-label="Close quick view" class="absolute top-3.5 right-3.5 z-20 w-8 h-8 rounded-full bg-black/60 border border-white/15 text-neutral-300 hover:text-white flex items-center justify-center cursor-pointer">
-            &times;
-        </button>
-        <div class="aspect-[16/10] bg-black/50 overflow-hidden">
-            <img id="qvImage" src="" alt="" class="w-full h-full object-cover">
-        </div>
-        <div class="p-6 space-y-3">
-            <span id="qvCategory" class="scrolly-mono text-[10px] uppercase tracking-[0.2em] text-[#D4AF37] block"></span>
-            <div class="flex items-baseline justify-between gap-4">
-                <h3 id="qvTitle" class="scrolly-serif text-2xl font-semibold text-white"></h3>
-                <span id="qvPrice" class="scrolly-mono text-lg font-semibold text-[#D4AF37]"></span>
-            </div>
-            <p id="qvDescription" class="text-xs sm:text-sm text-neutral-300 leading-relaxed"></p>
-            <div class="pt-3 flex items-center gap-3">
-                <a href="{% url 'catalog:product_list' %}" class="flex-1 text-center py-3 rounded-lg bg-[#D4AF37] hover:bg-[#c49b28] text-[#121214] text-xs font-semibold uppercase tracking-[0.16em] transition">
-                    Explore Full Collection
-                </a>
-            </div>
-        </div>
-    </div>
-</div>
-{% else %}
-<!-- Hero Section: Configurable Uploaded Video Render Showcase -->
+<!-- Hero Section: Configurable Scroll-Scrubbed Render Showcase -->
 <section id="heroScrollTrack"
          class="hero-scroll-track bg-[#0F0F0F] text-white"
          data-enabled="{% if theme_settings.hero_video_enabled %}true{% else %}false{% endif %}"
@@ -244,6 +26,7 @@
                     style="--hero-video-opacity: {{ theme_settings.hero_video_opacity|default:90 }};"
                     aria-hidden="true"></canvas>
 
+            <!-- Hidden off-screen video decoder (kept non-display:none for iOS/Safari frame decoding) -->
             <video id="heroRenderVideo"
                    class="absolute w-px h-px opacity-0 pointer-events-none"
                    muted
@@ -261,10 +44,12 @@
             </video>
             {% endif %}
 
+            <!-- Configurable Dark Vignette Overlay -->
             <div class="absolute inset-0 pointer-events-none"
                  style="background: linear-gradient(to top, rgba(15, 15, 15, 0.92) 0%, rgba(15, 15, 15, {{ theme_settings.hero_vignette_alpha|default:'0.45' }}) 45%, rgba(0, 0, 0, 0.65) 100%);"></div>
         </div>
 
+        <!-- Editorial Foreground Content -->
         <div id="heroOverlayContent" class="relative z-10 max-w-4xl mx-auto text-center px-3 sm:px-6 pt-16 sm:pt-24 pb-16 space-y-4 sm:space-y-6 will-change-transform">
             {% if theme_settings.hero_badge_text %}
             <div class="inline-flex items-center space-x-2 border border-[#C5A059]/40 bg-black/40 backdrop-blur-sm px-3.5 sm:px-4 py-1 sm:py-1.5 rounded-full">
@@ -295,6 +80,7 @@
         </div>
 
         {% if theme_settings.hero_video_enabled and theme_settings.hero_video_mode == 'scrub' and theme_settings.hero_show_scroll_cue %}
+        <!-- Scroll Cue -->
         <div id="heroScrollCue" class="absolute bottom-6 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center gap-2 pointer-events-none">
             <span class="text-[9px] sm:text-[10px] font-display tracking-[0.25em] uppercase text-[#C5A059]/90">Scroll to Reveal</span>
             <span class="hero-scroll-cue-line"></span>
@@ -302,13 +88,13 @@
         {% endif %}
 
         {% if theme_settings.hero_video_enabled and theme_settings.hero_video_mode == 'scrub' and theme_settings.hero_show_progress_bar %}
+        <!-- Subtle Gold Scroll Progress Hairline -->
         <div class="absolute bottom-0 inset-x-0 h-[2px] bg-white/10 z-20 pointer-events-none">
             <div id="heroScrollProgress" class="h-full bg-gradient-to-r from-[#B38F46] via-[#D4AF37] to-[#C5A059] origin-left scale-x-0"></div>
         </div>
         {% endif %}
     </div>
 </section>
-{% endif %}
 
 <!-- Brand Pillars / Trust Bar -->
 <section class="bg-white border-y border-[#EBE6DF] py-8">
@@ -475,9 +261,5 @@
 {% endblock %}
 
 {% block extra_scripts %}
-{% if theme_settings.hero_engine == 'sequence' or not theme_settings.hero_engine %}
-<script src="{% static 'js/hero-scrollytelling.js' %}"></script>
-{% else %}
 <script src="{% static 'js/scroll-video.js' %}"></script>
-{% endif %}
 {% endblock %}
