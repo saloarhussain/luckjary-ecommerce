@@ -190,6 +190,16 @@ def _clamp_float(val, low, high, default):
 
 
 def _apply_theme_payload(theme, payload, preserve_video_urls=False):
+    if 'hero_engine' in payload and payload.get('hero_engine') in ('sequence', 'video_scrub', 'video_autoplay'):
+        theme.hero_engine = payload['hero_engine']
+        if payload['hero_engine'] == 'video_autoplay':
+            theme.hero_video_mode = 'autoplay'
+        elif payload['hero_engine'] == 'video_scrub':
+            theme.hero_video_mode = 'scrub'
+    if 'hero_total_frames' in payload:
+        theme.hero_total_frames = _clamp_int(payload.get('hero_total_frames'), 10, 600, theme.hero_total_frames)
+    if 'hero_scroll_distance' in payload:
+        theme.hero_scroll_distance = _clamp_int(payload.get('hero_scroll_distance'), 1200, 7000, theme.hero_scroll_distance)
     if 'hero_video_enabled' in payload:
         theme.hero_video_enabled = _to_bool(payload.get('hero_video_enabled'), theme.hero_video_enabled)
     if 'hero_video_mode' in payload and payload.get('hero_video_mode') in ('scrub', 'autoplay'):

@@ -1038,22 +1038,43 @@
               <div class="grid grid-cols-1 lg:grid-cols-12 gap-5">
                 <!-- Left 7 cols: Source & Playback -->
                 <div class="lg:col-span-7 space-y-4">
-                  <!-- Playback Mode Cards -->
-                  <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                    <button type="button" onclick="setHeroVideoMode('scrub')" id="tcModeScrubBtn" class="p-3.5 rounded-xl bg-[#171920] border-2 border-emerald-500/80 text-left transition-all cursor-pointer">
+                  <!-- Hero Experience Engine Cards -->
+                  <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+                    <button type="button" onclick="setHeroEngine('sequence')" id="tcEngineSequenceBtn" class="p-3 rounded-xl bg-[#171920] border-2 border-emerald-500/80 text-left transition-all cursor-pointer">
                       <div class="flex items-center justify-between mb-1">
-                        <span class="text-xs font-semibold text-white font-sans">Scroll Scrub (Apple Style)</span>
-                        <span class="text-[9px] font-mono px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300 uppercase">Recommended</span>
+                        <span class="text-xs font-semibold text-white font-sans">Canvas Sequence + Cards</span>
+                        <span class="text-[9px] font-mono px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300 uppercase">Approach A</span>
                       </div>
-                      <p class="text-[11px] text-[#9ca3af] font-sans">Video frames scrub forward &amp; backward synced to user scroll.</p>
+                      <p class="text-[11px] text-[#9ca3af] font-sans">GSAP ScrollTrigger + Lenis + 120 WebP frames + Phase 2 sliding cards.</p>
                     </button>
-                    <button type="button" onclick="setHeroVideoMode('autoplay')" id="tcModeAutoplayBtn" class="p-3.5 rounded-xl bg-[#171920] border border-[#21242d] text-left transition-all cursor-pointer hover:border-[#383A43]">
+                    <button type="button" onclick="setHeroEngine('video_scrub')" id="tcEngineVideoScrubBtn" class="p-3 rounded-xl bg-[#171920] border border-[#21242d] text-left transition-all cursor-pointer hover:border-[#383A43]">
                       <div class="flex items-center justify-between mb-1">
-                        <span class="text-xs font-semibold text-neutral-200 font-sans">Autoplay While Visible</span>
+                        <span class="text-xs font-semibold text-neutral-200 font-sans">Video Scrub</span>
+                        <span class="text-[9px] font-mono px-1.5 py-0.5 rounded bg-white/5 text-[#9ca3af] uppercase">MP4</span>
+                      </div>
+                      <p class="text-[11px] text-[#9ca3af] font-sans">Uploaded MP4/WebM frames scrubbed synced to scroll.</p>
+                    </button>
+                    <button type="button" onclick="setHeroEngine('video_autoplay')" id="tcEngineVideoAutoBtn" class="p-3 rounded-xl bg-[#171920] border border-[#21242d] text-left transition-all cursor-pointer hover:border-[#383A43]">
+                      <div class="flex items-center justify-between mb-1">
+                        <span class="text-xs font-semibold text-neutral-200 font-sans">Video Autoplay</span>
                         <span class="text-[9px] font-mono px-1.5 py-0.5 rounded bg-white/5 text-[#9ca3af] uppercase">Loop</span>
                       </div>
-                      <p class="text-[11px] text-[#9ca3af] font-sans">Loops smoothly on screen and auto-pauses when scrolled past.</p>
+                      <p class="text-[11px] text-[#9ca3af] font-sans">Loops uploaded MP4 smoothly when visible on screen.</p>
                     </button>
+                  </div>
+
+                  <!-- Approach A: WebP Image Sequence Settings -->
+                  <div class="p-4 rounded-xl bg-[#171920] border border-[#21242d] grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                      <label for="tcTotalFrames" class="block text-[11px] font-mono uppercase tracking-wider text-[#9ca3af] mb-1">WebP Frame Count (TOTAL_FRAMES)</label>
+                      <input type="number" id="tcTotalFrames" min="10" max="600" step="1" oninput="syncHeroCustomizerPreview()" class="w-full px-3 py-2 rounded-lg bg-[#0d0e10] border border-[#21242d] text-white text-xs font-mono focus:border-emerald-500 focus:outline-none">
+                      <span class="text-[10px] text-[#9ca3af] font-sans mt-1 block">Reads <code class="text-emerald-400 font-mono">/static/ring-frames/frame_0001.webp</code> (procedural ring fallback if empty).</span>
+                    </div>
+                    <div>
+                      <label for="tcScrollDistance" class="block text-[11px] font-mono uppercase tracking-wider text-[#9ca3af] mb-1">GSAP Pin Scroll Distance (px)</label>
+                      <input type="number" id="tcScrollDistance" min="1200" max="7000" step="100" oninput="syncHeroCustomizerPreview()" class="w-full px-3 py-2 rounded-lg bg-[#0d0e10] border border-[#21242d] text-white text-xs font-mono focus:border-emerald-500 focus:outline-none">
+                      <span class="text-[10px] text-[#9ca3af] font-sans mt-1 block">Default <code class="text-emerald-400 font-mono">3500</code> px on desktop (<code class="font-mono">+=3500</code>).</span>
+                    </div>
                   </div>
 
                   <!-- Upload Video File + Source Paths -->
@@ -1651,6 +1672,9 @@ document.addEventListener('DOMContentLoaded', () => {
   // STOREFRONT HERO VIDEO & THEME CUSTOMIZE ENGINE
   // ==========================================
   const defaultHeroTheme = {
+    hero_engine: 'sequence',
+    hero_total_frames: 120,
+    hero_scroll_distance: 3500,
     hero_video_enabled: true,
     hero_video_mode: 'scrub',
     hero_video_url: '/static/videos/hero-render.mp4',
@@ -1689,25 +1713,38 @@ document.addEventListener('DOMContentLoaded', () => {
     return match ? decodeURIComponent(match[1]) : '';
   }
 
-  function updateModeButtonsUI(mode) {
-    const scrubBtn = document.getElementById('tcModeScrubBtn');
-    const autoBtn = document.getElementById('tcModeAutoplayBtn');
-    if (!scrubBtn || !autoBtn) return;
-    if (mode === 'autoplay') {
-      autoBtn.className = 'p-3.5 rounded-xl bg-[#171920] border-2 border-emerald-500/80 text-left transition-all cursor-pointer';
-      scrubBtn.className = 'p-3.5 rounded-xl bg-[#171920] border border-[#21242d] text-left transition-all cursor-pointer hover:border-[#383A43]';
-    } else {
-      scrubBtn.className = 'p-3.5 rounded-xl bg-[#171920] border-2 border-emerald-500/80 text-left transition-all cursor-pointer';
-      autoBtn.className = 'p-3.5 rounded-xl bg-[#171920] border border-[#21242d] text-left transition-all cursor-pointer hover:border-[#383A43]';
-    }
+  function updateModeButtonsUI(engine) {
+    const seqBtn = document.getElementById('tcEngineSequenceBtn');
+    const scrubBtn = document.getElementById('tcEngineVideoScrubBtn');
+    const autoBtn = document.getElementById('tcEngineVideoAutoBtn');
+    if (!seqBtn || !scrubBtn || !autoBtn) return;
+
+    const activeCls = 'p-3 rounded-xl bg-[#171920] border-2 border-emerald-500/80 text-left transition-all cursor-pointer';
+    const inactiveCls = 'p-3 rounded-xl bg-[#171920] border border-[#21242d] text-left transition-all cursor-pointer hover:border-[#383A43]';
+    seqBtn.className = engine === 'sequence' ? activeCls : inactiveCls;
+    scrubBtn.className = engine === 'video_scrub' ? activeCls : inactiveCls;
+    autoBtn.className = engine === 'video_autoplay' ? activeCls : inactiveCls;
   }
+
+  window.setHeroEngine = function(engine) {
+    heroThemeState.hero_engine = engine;
+    if (engine === 'video_autoplay') {
+      heroThemeState.hero_video_mode = 'autoplay';
+    } else if (engine === 'video_scrub') {
+      heroThemeState.hero_video_mode = 'scrub';
+    }
+    updateModeButtonsUI(engine);
+    syncHeroCustomizerPreview();
+  };
 
   function populateHeroCustomizer(state) {
     const setVal = (id, v) => { const el = document.getElementById(id); if (el) el.value = v ?? ''; };
     const setChk = (id, v) => { const el = document.getElementById(id); if (el) el.checked = Boolean(v); };
 
     setChk('tcHeroVideoEnabled', state.hero_video_enabled);
-    updateModeButtonsUI(state.hero_video_mode || 'scrub');
+    updateModeButtonsUI(state.hero_engine || 'sequence');
+    setVal('tcTotalFrames', state.hero_total_frames || 120);
+    setVal('tcScrollDistance', state.hero_scroll_distance || 3500);
     setVal('tcHeroVideoUrl', state.hero_video_url);
     setVal('tcHeroVideoWebmUrl', state.hero_video_webm_url);
     setVal('tcHeroPosterUrl', state.hero_poster_url);
@@ -1735,6 +1772,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const getChk = (id, fb) => { const el = document.getElementById(id); return el ? el.checked : fb; };
 
     heroThemeState.hero_video_enabled = getChk('tcHeroVideoEnabled', true);
+    heroThemeState.hero_total_frames = parseInt(getVal('tcTotalFrames', 120), 10) || 120;
+    heroThemeState.hero_scroll_distance = parseInt(getVal('tcScrollDistance', 3500), 10) || 3500;
     heroThemeState.hero_video_url = getVal('tcHeroVideoUrl', '').trim();
     heroThemeState.hero_video_webm_url = getVal('tcHeroVideoWebmUrl', '').trim();
     heroThemeState.hero_poster_url = getVal('tcHeroPosterUrl', '').trim();

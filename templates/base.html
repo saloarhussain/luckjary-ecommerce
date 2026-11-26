@@ -1,6 +1,6 @@
 {% load static %}
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -25,10 +25,10 @@
     <meta name="twitter:description" content="{% block twitter_description %}{{ meta_description|default:'Fine jewelry crafted with conflict-free gemstones and solid 18k gold.' }}{% endblock %}">
     <meta name="twitter:image" content="{% block twitter_image %}{{ og_image|default:'https://images.unsplash.com/photo-1605100804763-247f67b3557e?auto=format&fit=crop&w=1200&q=85' }}{% endblock %}">
 
-    <!-- Google Fonts Preconnect & High-Legibility Modern Sans Fonts -->
+    <!-- Google Fonts Preconnect & High-Legibility Modern Sans + Luxury Serif Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,600..800;1,6..96,600..800&family=Cinzel:wght@600;700;800&family=Inter:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,600..800;1,6..96,600..800&family=Cinzel:wght@600;700;800&family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -57,15 +57,18 @@
                     },
                     fontFamily: {
                         serif: ['"Plus Jakarta Sans"', 'Inter', 'system-ui', 'sans-serif'],
+                        luxurySerif: ['"Cormorant Garamond"', '"Bodoni Moda"', 'Georgia', 'serif'],
                         display: ['"Plus Jakarta Sans"', 'Inter', 'system-ui', 'sans-serif'],
                         sans: ['"Plus Jakarta Sans"', 'Inter', 'system-ui', '-apple-system', 'sans-serif'],
+                        mono: ['"JetBrains Mono"', 'monospace'],
                     }
                 }
             }
         }
     </script>
 
-    <!-- Custom CSS -->
+    <!-- Custom CSS & Lenis Smooth Scroll -->
+    <link rel="stylesheet" href="{% static 'css/lenis.css' %}">
     <link rel="stylesheet" href="{% static 'css/custom.css' %}">
 
     <!-- JSON-LD Organization Schema -->
@@ -634,7 +637,11 @@
         </div>
     </footer>
 
-    <!-- Interactive Scripts -->
+    <!-- Interactive Scripts & Unified GSAP + Lenis SmoothScrollProvider -->
+    <script src="{% static 'js/vendor/gsap.min.js' %}"></script>
+    <script src="{% static 'js/vendor/ScrollTrigger.min.js' %}"></script>
+    <script src="{% static 'js/vendor/lenis.min.js' %}"></script>
+    <script src="{% static 'js/smooth-scroll.js' %}"></script>
     <script src="{% static 'js/main.js' %}"></script>
     {% block extra_scripts %}{% endblock %}
 </body>

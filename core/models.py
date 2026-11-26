@@ -66,14 +66,23 @@ class HeroVideoChunk(models.Model):
 
 
 class StorefrontThemeSettings(models.Model):
-    """Singleton configuration for homepage scroll-video hero and storefront theme customization."""
+    """Singleton configuration for homepage scrollytelling hero and storefront theme customization."""
+
+    HERO_ENGINE_CHOICES = [
+        ('sequence', 'Approach A: Canvas Image Sequence + Scrollytelling Cards'),
+        ('video_scrub', 'Uploaded Render Video (Scroll Scrub)'),
+        ('video_autoplay', 'Uploaded Render Video (Autoplay)'),
+    ]
 
     PLAYBACK_MODE_CHOICES = [
         ('scrub', 'Apple-Style Scroll Scrub'),
         ('autoplay', 'Autoplay While Visible'),
     ]
 
-    # Hero Video & Scroll Playback
+    # Hero Engine & Image Sequence / Video Controls
+    hero_engine = models.CharField(max_length=24, choices=HERO_ENGINE_CHOICES, default='sequence')
+    hero_total_frames = models.PositiveIntegerField(default=120)
+    hero_scroll_distance = models.PositiveIntegerField(default=3500)
     hero_video_enabled = models.BooleanField(default=True)
     hero_video_mode = models.CharField(max_length=20, choices=PLAYBACK_MODE_CHOICES, default='scrub')
     hero_video_url = models.CharField(max_length=500, blank=True, default='/static/videos/hero-render.mp4')
@@ -119,6 +128,8 @@ class StorefrontThemeSettings(models.Model):
     def get_solo(cls):
         try:
             obj, _ = cls.objects.get_or_create(pk=1)
+            # Trigger column check in case a newly added migration column is missing on Vercel
+            _ = obj.hero_engine
             return obj
         except (ProgrammingError, OperationalError):
             try:
@@ -133,6 +144,9 @@ class StorefrontThemeSettings(models.Model):
 
     def to_dict(self):
         return {
+            'hero_engine': self.hero_engine,
+            'hero_total_frames': self.hero_total_frames,
+            'hero_scroll_distance': self.hero_scroll_distance,
             'hero_video_enabled': self.hero_video_enabled,
             'hero_video_mode': self.hero_video_mode,
             'hero_video_url': self.hero_video_url,

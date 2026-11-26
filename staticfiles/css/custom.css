@@ -363,5 +363,27 @@ h1, h2, h3, h4, h5, h6, .font-serif, .font-display {
     }
 }
 
+/* Approach A: GSAP + Lenis Scrollytelling Hero Helpers */
+.scrolly-serif {
+    font-family: 'Cormorant Garamond', 'Bodoni Moda', Georgia, serif !important;
+}
+
+.scrolly-mono {
+    font-family: 'JetBrains Mono', monospace !important;
+}
+
+.scrolly-cards-static {
+    position: relative !important;
+    inset: auto !important;
+    padding: 2rem 1rem 3rem !important;
+    background: #121214;
+}
+
+.scrolly-cards-static #scrollyCardsTrack {
+    flex-wrap: wrap;
+    justify-content: center;
+    transform: none !important;
+}
+
 
 
