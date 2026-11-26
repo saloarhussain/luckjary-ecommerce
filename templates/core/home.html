@@ -175,44 +175,93 @@
     </div>
 </section>
 
-<!-- Collection Spotlight Editorial -->
-<section class="py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="bg-white border border-[#E8DFD0] rounded-sm overflow-hidden shadow-lg grid grid-cols-1 lg:grid-cols-2">
-        <div class="relative aspect-[4/3] lg:aspect-auto">
-            <img src="https://images.unsplash.com/photo-1599643477877-530eb83abc8e?auto=format&fit=crop&w=1200&q=85" 
-                 alt="The Solstice Fine Jewelry Atelier Collection" 
-                 class="w-full h-full object-cover">
-        </div>
-        <div class="p-8 sm:p-14 flex flex-col justify-center space-y-6 bg-[#FAF9F6]">
-            <span class="text-[11px] sm:text-xs font-sans tracking-[0.2em] text-[#C5A059] uppercase font-bold">Atelier Spotlight</span>
-            <h2 class="font-sans text-2xl sm:text-4xl font-bold text-neutral-900 leading-tight tracking-tight">
-                The Solstice Heritage<br>Collection
-            </h2>
-            <p class="text-xs sm:text-sm text-neutral-600 font-light leading-relaxed">
-                Sculpted from luminous 925 solid sterling silver with a rhodium anti-tarnish finish, the Solstice Heritage series celebrates balance and celestial luminosity. Every stone is handset with microscopic precision to capture and bend light.
-            </p>
-            <div class="space-y-2 text-xs text-neutral-700">
-                <div class="flex items-center space-x-2">
-                    <span class="text-[#C5A059]">✦</span>
-                    <span>Individually hallmarked with 925 Sterling Silver Authenticity</span>
+<!-- Collection Spotlight Editorial (3-Card Asymmetric Bento Grid) -->
+{% if spotlight_bento.enabled %}
+<section class="py-12 sm:py-16 max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-3.5 sm:gap-4">
+        <!-- Left Tall Featured Card -->
+        <a href="{{ spotlight_bento.left.link_url }}" class="lg:col-span-6 group relative block overflow-hidden rounded-2xl bg-[#16131c] min-h-[340px] sm:min-h-[430px] lg:min-h-[520px] shadow-lg">
+            <img src="{{ spotlight_bento.left.image_url }}"
+                 alt="{{ spotlight_bento.left.title }}"
+                 class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105">
+            <div class="absolute inset-0 bg-gradient-to-b from-black/75 via-black/30 to-black/75"></div>
+            <div class="relative z-10 h-full p-6 sm:p-10 flex flex-col justify-between text-white">
+                <div class="max-w-md space-y-2.5">
+                    {% if spotlight_bento.left.eyebrow %}
+                    <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-black/45 backdrop-blur-sm border border-[#C5A059]/45 text-[10px] font-display tracking-[0.2em] uppercase text-[#E7D7BE]">
+                        <span class="w-1.5 h-1.5 rounded-full bg-[#C5A059]"></span>
+                        {{ spotlight_bento.left.eyebrow }}
+                    </span>
+                    {% endif %}
+                    <h2 class="font-sans text-2xl sm:text-4xl font-bold tracking-tight leading-tight text-white">
+                        {{ spotlight_bento.left.title }}
+                    </h2>
+                    <p class="text-xs sm:text-sm text-neutral-200/90 font-light leading-relaxed">
+                        {{ spotlight_bento.left.subtitle }}
+                    </p>
                 </div>
-                <div class="flex items-center space-x-2">
-                    <span class="text-[#C5A059]">✦</span>
-                    <span>Accompanied by an IGI Gemological Dossier</span>
-                </div>
-                <div class="flex items-center space-x-2">
-                    <span class="text-[#C5A059]">✦</span>
-                    <span>Delivered in hand-stitched emerald velvet travel case</span>
+                <div>
+                    <span class="inline-flex items-center gap-2 px-5 py-2.5 rounded-sm bg-[#C5A059] group-hover:bg-[#B08B44] text-white text-[11px] font-display font-semibold tracking-[0.16em] uppercase transition shadow-lg">
+                        {{ spotlight_bento.left.cta|default:'Explore Collection' }}
+                        <span class="transition-transform group-hover:translate-x-1">&rarr;</span>
+                    </span>
                 </div>
             </div>
-            <div class="pt-2">
-                <a href="{% url 'catalog:product_list' %}?collection=solstice-heritage" class="btn-gold inline-block px-8 py-3.5 text-xs font-display tracking-widest uppercase font-semibold rounded-sm">
-                    View The Editorial Pieces
-                </a>
-            </div>
+        </a>
+
+        <!-- Right Column: 2 Stacked Horizontal Cards -->
+        <div class="lg:col-span-6 grid grid-rows-2 gap-3.5 sm:gap-4">
+            <!-- Top Right Card -->
+            <a href="{{ spotlight_bento.top_right.link_url }}" class="group relative block overflow-hidden rounded-2xl bg-[#1a1423] min-h-[210px] sm:min-h-[250px] shadow-lg">
+                <img src="{{ spotlight_bento.top_right.image_url }}"
+                     alt="{{ spotlight_bento.top_right.title }}"
+                     class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105">
+                <div class="absolute inset-0 bg-gradient-to-r from-black/80 via-black/45 to-transparent"></div>
+                <div class="relative z-10 h-full p-6 sm:p-8 flex flex-col justify-center max-w-sm space-y-2 text-white">
+                    {% if spotlight_bento.top_right.eyebrow %}
+                    <span class="text-[10px] font-display tracking-[0.2em] uppercase text-[#C5A059] font-semibold">
+                        {{ spotlight_bento.top_right.eyebrow }}
+                    </span>
+                    {% endif %}
+                    <h3 class="font-sans text-xl sm:text-2xl font-bold tracking-tight text-white leading-snug group-hover:text-[#E7D7BE] transition-colors">
+                        {{ spotlight_bento.top_right.title }}
+                    </h3>
+                    <p class="text-xs text-neutral-200/90 font-light leading-relaxed">
+                        {{ spotlight_bento.top_right.subtitle }}
+                    </p>
+                    <span class="pt-1 inline-flex items-center gap-1.5 text-[11px] font-display uppercase tracking-[0.16em] text-[#C5A059] font-semibold">
+                        Shop Styles <span class="transition-transform group-hover:translate-x-1">&rarr;</span>
+                    </span>
+                </div>
+            </a>
+
+            <!-- Bottom Right Card -->
+            <a href="{{ spotlight_bento.bottom_right.link_url }}" class="group relative block overflow-hidden rounded-2xl bg-[#1c1614] min-h-[210px] sm:min-h-[250px] shadow-lg">
+                <img src="{{ spotlight_bento.bottom_right.image_url }}"
+                     alt="{{ spotlight_bento.bottom_right.title }}"
+                     class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105">
+                <div class="absolute inset-0 bg-gradient-to-r from-black/80 via-black/45 to-transparent"></div>
+                <div class="relative z-10 h-full p-6 sm:p-8 flex flex-col justify-center max-w-sm space-y-2 text-white">
+                    {% if spotlight_bento.bottom_right.eyebrow %}
+                    <span class="text-[10px] font-display tracking-[0.2em] uppercase text-[#C5A059] font-semibold">
+                        {{ spotlight_bento.bottom_right.eyebrow }}
+                    </span>
+                    {% endif %}
+                    <h3 class="font-sans text-xl sm:text-2xl font-bold tracking-tight text-white leading-snug group-hover:text-[#E7D7BE] transition-colors">
+                        {{ spotlight_bento.bottom_right.title }}
+                    </h3>
+                    <p class="text-xs text-neutral-200/90 font-light leading-relaxed">
+                        {{ spotlight_bento.bottom_right.subtitle }}
+                    </p>
+                    <span class="pt-1 inline-flex items-center gap-1.5 text-[11px] font-display uppercase tracking-[0.16em] text-[#C5A059] font-semibold">
+                        Explore Collection <span class="transition-transform group-hover:translate-x-1">&rarr;</span>
+                    </span>
+                </div>
+            </a>
         </div>
     </div>
 </section>
+{% endif %}
 
 <!-- Client Testimonials -->
 <section class="py-20 bg-[#141414] text-white">

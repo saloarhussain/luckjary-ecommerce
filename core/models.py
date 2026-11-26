@@ -104,9 +104,35 @@ class StorefrontThemeSettings(models.Model):
     hero_primary_cta_text = models.CharField(max_length=80, default='Explore The Collection')
     hero_secondary_cta_text = models.CharField(max_length=80, default='The Bridal Atelier')
 
-    # Design Tokens JSON (accent, typography, radius)
+    # Design Tokens JSON (accent, typography, radius, spotlight_bento)
     design_tokens_json = models.JSONField(default=dict, blank=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    DEFAULT_SPOTLIGHT_BENTO = {
+        'enabled': True,
+        'left': {
+            'eyebrow': 'LUCKJARY • ATELIER SPOTLIGHT',
+            'title': 'The Solstice Heritage',
+            'subtitle': 'Handcrafted 925 sterling silver heirlooms with rhodium anti-tarnish seal & certified stones.',
+            'cta': 'Explore Collection',
+            'image_url': 'https://images.unsplash.com/photo-1599643477877-530eb83abc8e?auto=format&fit=crop&w=1200&q=85',
+            'link_url': '/products/?collection=solstice-heritage',
+        },
+        'top_right': {
+            'eyebrow': 'NEW ARRIVALS',
+            'title': 'Sculpted Silver Designs',
+            'subtitle': 'New & Most-Loved Styles for Every Occasion',
+            'image_url': 'https://images.unsplash.com/photo-1611591437281-460bfbe1220a?auto=format&fit=crop&w=1200&q=85',
+            'link_url': '/products/?category=necklaces',
+        },
+        'bottom_right': {
+            'eyebrow': 'FOR THE FINEST IN 925 SILVER',
+            'title': 'Everyday Radiance',
+            'subtitle': 'Timeless rhodium-sealed rings & bracelets crafted for daily brilliance.',
+            'image_url': 'https://images.unsplash.com/photo-1605100804763-247f67b3557e?auto=format&fit=crop&w=1200&q=85',
+            'link_url': '/products/?category=rings',
+        },
+    }
 
     class Meta:
         verbose_name = "Storefront Theme Customize"
@@ -131,7 +157,22 @@ class StorefrontThemeSettings(models.Model):
     def hero_vignette_alpha(self):
         return f"{self.hero_vignette_strength / 100:.2f}"
 
+    def get_spotlight_bento(self):
+        saved = (self.design_tokens_json or {}).get('spotlight_bento')
+        merged = {}
+        for slot in ('left', 'top_right', 'bottom_right'):
+            base = dict(self.DEFAULT_SPOTLIGHT_BENTO[slot])
+            if isinstance(saved, dict) and isinstance(saved.get(slot), dict):
+                for k, v in saved[slot].items():
+                    if v is not None and str(v).strip() != '':
+                        base[k] = str(v).strip()
+            merged[slot] = base
+        merged['enabled'] = bool(saved.get('enabled', True)) if isinstance(saved, dict) else True
+        return merged
+
     def to_dict(self):
+        tokens = dict(self.design_tokens_json or {})
+        tokens.pop('spotlight_bento', None)
         return {
             'hero_video_enabled': self.hero_video_enabled,
             'hero_video_mode': self.hero_video_mode,
@@ -153,5 +194,6 @@ class StorefrontThemeSettings(models.Model):
             'hero_subtitle': self.hero_subtitle,
             'hero_primary_cta_text': self.hero_primary_cta_text,
             'hero_secondary_cta_text': self.hero_secondary_cta_text,
-            'design_tokens': self.design_tokens_json or {},
+            'spotlight_bento': self.get_spotlight_bento(),
+            'design_tokens': tokens,
         }

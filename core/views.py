@@ -41,6 +41,7 @@ def home(request):
         'categories': categories,
         'collections': collections,
         'theme_settings': theme_settings,
+        'spotlight_bento': theme_settings.get_spotlight_bento(),
         'active_metal': 'silver',
         'meta_title': 'Luckjary | Handcrafted 925 Sterling Silver Jewellery',
         'meta_description': 'Discover exquisite handcrafted 925 sterling silver jewelry at Luckjary. Explore sterling silver rings, necklaces, bracelets, and earrings treated with rhodium anti-tarnish finish.',
@@ -232,8 +233,17 @@ def _apply_theme_payload(theme, payload, preserve_video_urls=False):
     if 'hero_secondary_cta_text' in payload:
         theme.hero_secondary_cta_text = str(payload.get('hero_secondary_cta_text', '')).strip()[:80]
 
+    existing_tokens = dict(theme.design_tokens_json or {})
     if 'design_tokens' in payload and isinstance(payload['design_tokens'], dict):
-        theme.design_tokens_json = payload['design_tokens']
+        saved_bento = existing_tokens.get('spotlight_bento')
+        existing_tokens = dict(payload['design_tokens'])
+        if saved_bento is not None:
+            existing_tokens['spotlight_bento'] = saved_bento
+
+    if 'spotlight_bento' in payload and isinstance(payload['spotlight_bento'], dict):
+        existing_tokens['spotlight_bento'] = payload['spotlight_bento']
+
+    theme.design_tokens_json = existing_tokens
 
 
 @require_http_methods(["GET", "POST"])

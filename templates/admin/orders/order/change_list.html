@@ -1225,6 +1225,116 @@
               </div>
             </div>
 
+            <!-- Section 7: Atelier Bento Spotlight (3-Card Showcase) -->
+            <div class="pt-5 border-t border-[#21242d] space-y-4" id="bentoSpotlightCustomizer">
+              <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div>
+                  <label class="block text-xs font-mono uppercase tracking-[0.16em] text-[#9ca3af] font-semibold">
+                    7. ATELIER BENTO SPOTLIGHT (3-CARD SHOWCASE)
+                  </label>
+                  <p class="text-[11px] text-[#9ca3af] font-sans mt-0.5">
+                    Edit the 3-card asymmetric showcase grid (1 tall left feature + 2 stacked right banners) on your homepage.
+                  </p>
+                </div>
+                <label class="inline-flex items-center gap-2.5 px-3.5 py-2 rounded-lg bg-[#171920] border border-[#21242d] cursor-pointer select-none">
+                  <input type="checkbox" id="tcBentoEnabled" class="accent-emerald-500 w-4 h-4 cursor-pointer" checked>
+                  <span class="text-xs font-medium text-neutral-200 font-sans">Show Bento Spotlight</span>
+                </label>
+              </div>
+
+              <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+                <!-- Card 1: Left Tall Card -->
+                <div class="p-4 rounded-xl bg-[#171920] border border-[#21242d] space-y-2.5">
+                  <div class="flex items-center justify-between border-b border-[#21242d] pb-2">
+                    <span class="text-xs font-semibold text-white font-sans">1. Left Tall Feature Card</span>
+                    <span class="text-[9px] font-mono px-1.5 py-0.5 rounded bg-emerald-500/15 text-emerald-300 uppercase">Primary</span>
+                  </div>
+                  <div>
+                    <label for="tcBentoLeftEyebrow" class="block text-[10px] font-mono uppercase tracking-wider text-[#9ca3af] mb-1">Eyebrow Badge</label>
+                    <input type="text" id="tcBentoLeftEyebrow" class="w-full px-3 py-1.5 rounded-lg bg-[#0d0e10] border border-[#21242d] text-white text-xs font-sans focus:border-emerald-500 focus:outline-none">
+                  </div>
+                  <div>
+                    <label for="tcBentoLeftTitle" class="block text-[10px] font-mono uppercase tracking-wider text-[#9ca3af] mb-1">Title</label>
+                    <input type="text" id="tcBentoLeftTitle" class="w-full px-3 py-1.5 rounded-lg bg-[#0d0e10] border border-[#21242d] text-white text-xs font-sans focus:border-emerald-500 focus:outline-none">
+                  </div>
+                  <div>
+                    <label for="tcBentoLeftSubtitle" class="block text-[10px] font-mono uppercase tracking-wider text-[#9ca3af] mb-1">Subtitle</label>
+                    <textarea id="tcBentoLeftSubtitle" rows="2" class="w-full px-3 py-1.5 rounded-lg bg-[#0d0e10] border border-[#21242d] text-white text-xs font-sans focus:border-emerald-500 focus:outline-none"></textarea>
+                  </div>
+                  <div class="grid grid-cols-2 gap-2">
+                    <div>
+                      <label for="tcBentoLeftCta" class="block text-[10px] font-mono uppercase tracking-wider text-[#9ca3af] mb-1">Button Text</label>
+                      <input type="text" id="tcBentoLeftCta" class="w-full px-3 py-1.5 rounded-lg bg-[#0d0e10] border border-[#21242d] text-white text-xs font-sans focus:border-emerald-500 focus:outline-none">
+                    </div>
+                    <div>
+                      <label for="tcBentoLeftLink" class="block text-[10px] font-mono uppercase tracking-wider text-[#9ca3af] mb-1">Target URL</label>
+                      <input type="text" id="tcBentoLeftLink" class="w-full px-3 py-1.5 rounded-lg bg-[#0d0e10] border border-[#21242d] text-white text-xs font-mono focus:border-emerald-500 focus:outline-none">
+                    </div>
+                  </div>
+                  <div>
+                    <label for="tcBentoLeftImage" class="block text-[10px] font-mono uppercase tracking-wider text-[#9ca3af] mb-1">Image URL</label>
+                    <input type="text" id="tcBentoLeftImage" class="w-full px-3 py-1.5 rounded-lg bg-[#0d0e10] border border-[#21242d] text-white text-xs font-mono focus:border-emerald-500 focus:outline-none">
+                  </div>
+                </div>
+
+                <!-- Card 2: Top Right Card -->
+                <div class="p-4 rounded-xl bg-[#171920] border border-[#21242d] space-y-2.5">
+                  <div class="flex items-center justify-between border-b border-[#21242d] pb-2">
+                    <span class="text-xs font-semibold text-white font-sans">2. Top Right Card</span>
+                    <span class="text-[9px] font-mono px-1.5 py-0.5 rounded bg-white/5 text-[#9ca3af] uppercase">Wide</span>
+                  </div>
+                  <div>
+                    <label for="tcBentoTopEyebrow" class="block text-[10px] font-mono uppercase tracking-wider text-[#9ca3af] mb-1">Eyebrow Label</label>
+                    <input type="text" id="tcBentoTopEyebrow" class="w-full px-3 py-1.5 rounded-lg bg-[#0d0e10] border border-[#21242d] text-white text-xs font-sans focus:border-emerald-500 focus:outline-none">
+                  </div>
+                  <div>
+                    <label for="tcBentoTopTitle" class="block text-[10px] font-mono uppercase tracking-wider text-[#9ca3af] mb-1">Title</label>
+                    <input type="text" id="tcBentoTopTitle" class="w-full px-3 py-1.5 rounded-lg bg-[#0d0e10] border border-[#21242d] text-white text-xs font-sans focus:border-emerald-500 focus:outline-none">
+                  </div>
+                  <div>
+                    <label for="tcBentoTopSubtitle" class="block text-[10px] font-mono uppercase tracking-wider text-[#9ca3af] mb-1">Subtitle</label>
+                    <textarea id="tcBentoTopSubtitle" rows="2" class="w-full px-3 py-1.5 rounded-lg bg-[#0d0e10] border border-[#21242d] text-white text-xs font-sans focus:border-emerald-500 focus:outline-none"></textarea>
+                  </div>
+                  <div>
+                    <label for="tcBentoTopLink" class="block text-[10px] font-mono uppercase tracking-wider text-[#9ca3af] mb-1">Target URL</label>
+                    <input type="text" id="tcBentoTopLink" class="w-full px-3 py-1.5 rounded-lg bg-[#0d0e10] border border-[#21242d] text-white text-xs font-mono focus:border-emerald-500 focus:outline-none">
+                  </div>
+                  <div>
+                    <label for="tcBentoTopImage" class="block text-[10px] font-mono uppercase tracking-wider text-[#9ca3af] mb-1">Image URL</label>
+                    <input type="text" id="tcBentoTopImage" class="w-full px-3 py-1.5 rounded-lg bg-[#0d0e10] border border-[#21242d] text-white text-xs font-mono focus:border-emerald-500 focus:outline-none">
+                  </div>
+                </div>
+
+                <!-- Card 3: Bottom Right Card -->
+                <div class="p-4 rounded-xl bg-[#171920] border border-[#21242d] space-y-2.5">
+                  <div class="flex items-center justify-between border-b border-[#21242d] pb-2">
+                    <span class="text-xs font-semibold text-white font-sans">3. Bottom Right Card</span>
+                    <span class="text-[9px] font-mono px-1.5 py-0.5 rounded bg-white/5 text-[#9ca3af] uppercase">Wide</span>
+                  </div>
+                  <div>
+                    <label for="tcBentoBotEyebrow" class="block text-[10px] font-mono uppercase tracking-wider text-[#9ca3af] mb-1">Eyebrow Label</label>
+                    <input type="text" id="tcBentoBotEyebrow" class="w-full px-3 py-1.5 rounded-lg bg-[#0d0e10] border border-[#21242d] text-white text-xs font-sans focus:border-emerald-500 focus:outline-none">
+                  </div>
+                  <div>
+                    <label for="tcBentoBotTitle" class="block text-[10px] font-mono uppercase tracking-wider text-[#9ca3af] mb-1">Title</label>
+                    <input type="text" id="tcBentoBotTitle" class="w-full px-3 py-1.5 rounded-lg bg-[#0d0e10] border border-[#21242d] text-white text-xs font-sans focus:border-emerald-500 focus:outline-none">
+                  </div>
+                  <div>
+                    <label for="tcBentoBotSubtitle" class="block text-[10px] font-mono uppercase tracking-wider text-[#9ca3af] mb-1">Subtitle</label>
+                    <textarea id="tcBentoBotSubtitle" rows="2" class="w-full px-3 py-1.5 rounded-lg bg-[#0d0e10] border border-[#21242d] text-white text-xs font-sans focus:border-emerald-500 focus:outline-none"></textarea>
+                  </div>
+                  <div>
+                    <label for="tcBentoBotLink" class="block text-[10px] font-mono uppercase tracking-wider text-[#9ca3af] mb-1">Target URL</label>
+                    <input type="text" id="tcBentoBotLink" class="w-full px-3 py-1.5 rounded-lg bg-[#0d0e10] border border-[#21242d] text-white text-xs font-mono focus:border-emerald-500 focus:outline-none">
+                  </div>
+                  <div>
+                    <label for="tcBentoBotImage" class="block text-[10px] font-mono uppercase tracking-wider text-[#9ca3af] mb-1">Image URL</label>
+                    <input type="text" id="tcBentoBotImage" class="w-full px-3 py-1.5 rounded-lg bg-[#0d0e10] border border-[#21242d] text-white text-xs font-mono focus:border-emerald-500 focus:outline-none">
+                  </div>
+                </div>
+              </div>
+            </div>
+
             <!-- Bottom Action Controls: Save & Reset -->
             <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-between pt-5 border-t border-[#21242d] gap-3">
               <div class="flex flex-wrap items-center gap-2.5">
@@ -1727,6 +1837,31 @@ document.addEventListener('DOMContentLoaded', () => {
     setVal('tcPrimaryCta', state.hero_primary_cta_text);
     setVal('tcSecondaryCta', state.hero_secondary_cta_text);
 
+    const b = state.spotlight_bento || {};
+    setChk('tcBentoEnabled', b.enabled !== false);
+    if (b.left) {
+      setVal('tcBentoLeftEyebrow', b.left.eyebrow);
+      setVal('tcBentoLeftTitle', b.left.title);
+      setVal('tcBentoLeftSubtitle', b.left.subtitle);
+      setVal('tcBentoLeftCta', b.left.cta);
+      setVal('tcBentoLeftLink', b.left.link_url);
+      setVal('tcBentoLeftImage', b.left.image_url);
+    }
+    if (b.top_right) {
+      setVal('tcBentoTopEyebrow', b.top_right.eyebrow);
+      setVal('tcBentoTopTitle', b.top_right.title);
+      setVal('tcBentoTopSubtitle', b.top_right.subtitle);
+      setVal('tcBentoTopLink', b.top_right.link_url);
+      setVal('tcBentoTopImage', b.top_right.image_url);
+    }
+    if (b.bottom_right) {
+      setVal('tcBentoBotEyebrow', b.bottom_right.eyebrow);
+      setVal('tcBentoBotTitle', b.bottom_right.title);
+      setVal('tcBentoBotSubtitle', b.bottom_right.subtitle);
+      setVal('tcBentoBotLink', b.bottom_right.link_url);
+      setVal('tcBentoBotImage', b.bottom_right.image_url);
+    }
+
     syncHeroCustomizerPreview();
   }
 
@@ -1754,6 +1889,32 @@ document.addEventListener('DOMContentLoaded', () => {
     heroThemeState.hero_subtitle = getVal('tcHeroSubtitle', '');
     heroThemeState.hero_primary_cta_text = getVal('tcPrimaryCta', '');
     heroThemeState.hero_secondary_cta_text = getVal('tcSecondaryCta', '');
+
+    heroThemeState.spotlight_bento = {
+      enabled: getChk('tcBentoEnabled', true),
+      left: {
+        eyebrow: getVal('tcBentoLeftEyebrow', '').trim(),
+        title: getVal('tcBentoLeftTitle', '').trim(),
+        subtitle: getVal('tcBentoLeftSubtitle', '').trim(),
+        cta: getVal('tcBentoLeftCta', '').trim(),
+        link_url: getVal('tcBentoLeftLink', '').trim(),
+        image_url: getVal('tcBentoLeftImage', '').trim(),
+      },
+      top_right: {
+        eyebrow: getVal('tcBentoTopEyebrow', '').trim(),
+        title: getVal('tcBentoTopTitle', '').trim(),
+        subtitle: getVal('tcBentoTopSubtitle', '').trim(),
+        link_url: getVal('tcBentoTopLink', '').trim(),
+        image_url: getVal('tcBentoTopImage', '').trim(),
+      },
+      bottom_right: {
+        eyebrow: getVal('tcBentoBotEyebrow', '').trim(),
+        title: getVal('tcBentoBotTitle', '').trim(),
+        subtitle: getVal('tcBentoBotSubtitle', '').trim(),
+        link_url: getVal('tcBentoBotLink', '').trim(),
+        image_url: getVal('tcBentoBotImage', '').trim(),
+      }
+    };
     return heroThemeState;
   }
 
