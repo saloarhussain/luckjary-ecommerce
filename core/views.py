@@ -1,5 +1,7 @@
+import io
 import json
 import os
+import time
 from pathlib import Path
 from django.conf import settings
 from django.shortcuts import render, redirect, get_object_or_404
@@ -15,6 +17,7 @@ from .models import (
     StorefrontThemeSettings,
     HeroVideoAsset,
     HeroVideoChunk,
+    SiteImageAsset,
     ensure_core_migrated,
 )
 
@@ -515,6 +518,70 @@ def serve_hero_video(request, asset_id):
     resp['Cache-Control'] = 'public, max-age=86400'
     if status_code == 206:
         resp['Content-Range'] = f'bytes {start}-{start + len(body) - 1}/{total}'
+    return resp
+
+
+@require_http_methods(["POST"])
+def admin_upload_site_image(request):
+    """Optimize and store a storefront image (Bento card or Hero poster) in Postgres DB."""
+    from django.utils.text import slugify
+    from PIL import Image, ImageOps
+
+    key = slugify(request.POST.get('image_key', ''))[:80]
+    uploaded_file = request.FILES.get('image')
+    if not key or not uploaded_file:
+        return JsonResponse({'status': 'error', 'message': 'Missing image_key or image file.'}, status=400)
+    if uploaded_file.size > 4 * 1024 * 1024:
+        return JsonResponse({'status': 'error', 'message': 'Image must be under 4 MB.'}, status=400)
+
+    raw_bytes = uploaded_file.read()
+    content_type = uploaded_file.content_type or 'image/webp'
+    try:
+        img = Image.open(io.BytesIO(raw_bytes))
+        img = ImageOps.exif_transpose(img)
+        if img.mode not in ('RGB', 'RGBA'):
+            img = img.convert('RGB')
+        img.thumbnail((1600, 1600), Image.Resampling.LANCZOS)
+        out = io.BytesIO()
+        try:
+            img.save(out, format='WEBP', quality=86, method=4)
+            content_type = 'image/webp'
+        except Exception:
+            if img.mode == 'RGBA':
+                img = img.convert('RGB')
+            img.save(out, format='JPEG', quality=86, optimize=True)
+            content_type = 'image/jpeg'
+        final_bytes = out.getvalue()
+    except Exception:
+        final_bytes = raw_bytes
+
+    try:
+        SiteImageAsset.objects.update_or_create(
+            key=key,
+            defaults={'content_type': content_type, 'data': final_bytes},
+        )
+    except (ProgrammingError, OperationalError):
+        ensure_core_migrated()
+        SiteImageAsset.objects.update_or_create(
+            key=key,
+            defaults={'content_type': content_type, 'data': final_bytes},
+        )
+
+    image_url = f"/site-image/{key}/?v={int(time.time())}"
+    return JsonResponse({'status': 'ok', 'image_key': key, 'image_url': image_url})
+
+
+@require_http_methods(["GET"])
+def serve_site_image(request, image_key):
+    """Serve DB-stored storefront image asset cleanly."""
+    try:
+        asset = get_object_or_404(SiteImageAsset, key=image_key)
+    except (ProgrammingError, OperationalError):
+        ensure_core_migrated()
+        asset = get_object_or_404(SiteImageAsset, key=image_key)
+
+    resp = HttpResponse(bytes(asset.data), content_type=asset.content_type or 'image/webp')
+    resp['Cache-Control'] = 'public, max-age=86400'
     return resp
 
 

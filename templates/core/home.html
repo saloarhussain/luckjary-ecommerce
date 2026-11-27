@@ -177,14 +177,16 @@
 
 <!-- Collection Spotlight Editorial (3-Card Full-Width Bento Grid) -->
 {% if spotlight_bento.enabled %}
-<section class="py-6 sm:py-10 w-full px-2.5 sm:px-4">
-    <div class="grid grid-cols-1 lg:grid-cols-12 gap-3 sm:gap-4">
+<section class="py-6 sm:py-10 w-full px-2.5 sm:px-4"
+         style="--bento-h: {{ spotlight_bento.height_px|default:672 }}px; --bento-gap: {{ spotlight_bento.gap_px|default:16 }}px; --bento-radius: {{ spotlight_bento.radius_px|default:16 }}px;">
+    <div class="grid grid-cols-1 lg:grid-cols-12" style="gap: var(--bento-gap);">
         <!-- Left Tall Featured Card -->
-        <a href="{{ spotlight_bento.left.link_url }}" class="lg:col-span-6 group relative block overflow-hidden rounded-2xl bg-[#16131c] min-h-[360px] sm:min-h-[450px] lg:min-h-[560px] shadow-lg">
+        <a href="{{ spotlight_bento.left.link_url }}" class="bento-left-card lg:col-span-6 group relative block overflow-hidden bg-[#16131c] shadow-lg">
             <img src="{{ spotlight_bento.left.image_url }}"
                  alt="{{ spotlight_bento.left.title }}"
                  class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105">
-            <div class="absolute inset-0 bg-gradient-to-b from-black/75 via-black/30 to-black/75"></div>
+            <div class="absolute inset-0"
+                 style="background: linear-gradient(to bottom, rgba(0, 0, 0, {{ spotlight_bento.scrim_alpha|default:'0.75' }}) 0%, rgba(0, 0, 0, 0.25) 50%, rgba(0, 0, 0, {{ spotlight_bento.scrim_alpha|default:'0.75' }}) 100%);"></div>
             <div class="relative z-10 h-full p-6 sm:p-10 flex flex-col justify-between text-white">
                 <div class="max-w-md space-y-2.5">
                     {% if spotlight_bento.left.eyebrow %}
@@ -210,13 +212,14 @@
         </a>
 
         <!-- Right Column: 2 Stacked Horizontal Cards -->
-        <div class="lg:col-span-6 grid grid-rows-2 gap-3 sm:gap-4">
+        <div class="lg:col-span-6 grid grid-rows-2" style="gap: var(--bento-gap);">
             <!-- Top Right Card -->
-            <a href="{{ spotlight_bento.top_right.link_url }}" class="group relative block overflow-hidden rounded-2xl bg-[#1a1423] min-h-[210px] sm:min-h-[272px] shadow-lg">
+            <a href="{{ spotlight_bento.top_right.link_url }}" class="bento-right-card group relative block overflow-hidden bg-[#1a1423] shadow-lg">
                 <img src="{{ spotlight_bento.top_right.image_url }}"
                      alt="{{ spotlight_bento.top_right.title }}"
                      class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105">
-                <div class="absolute inset-0 bg-gradient-to-r from-black/80 via-black/45 to-transparent"></div>
+                <div class="absolute inset-0"
+                     style="background: linear-gradient(to right, rgba(0, 0, 0, {{ spotlight_bento.scrim_alpha|default:'0.75' }}) 0%, rgba(0, 0, 0, 0.35) 55%, rgba(0, 0, 0, 0) 100%);"></div>
                 <div class="relative z-10 h-full p-6 sm:p-8 flex flex-col justify-center max-w-sm space-y-2 text-white">
                     {% if spotlight_bento.top_right.eyebrow %}
                     <span class="text-[10px] font-display tracking-[0.2em] uppercase text-[#C5A059] font-semibold">
@@ -236,11 +239,12 @@
             </a>
 
             <!-- Bottom Right Card -->
-            <a href="{{ spotlight_bento.bottom_right.link_url }}" class="group relative block overflow-hidden rounded-2xl bg-[#1c1614] min-h-[210px] sm:min-h-[272px] shadow-lg">
+            <a href="{{ spotlight_bento.bottom_right.link_url }}" class="bento-right-card group relative block overflow-hidden bg-[#1c1614] shadow-lg">
                 <img src="{{ spotlight_bento.bottom_right.image_url }}"
                      alt="{{ spotlight_bento.bottom_right.title }}"
                      class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105">
-                <div class="absolute inset-0 bg-gradient-to-r from-black/80 via-black/45 to-transparent"></div>
+                <div class="absolute inset-0"
+                     style="background: linear-gradient(to right, rgba(0, 0, 0, {{ spotlight_bento.scrim_alpha|default:'0.75' }}) 0%, rgba(0, 0, 0, 0.35) 55%, rgba(0, 0, 0, 0) 100%);"></div>
                 <div class="relative z-10 h-full p-6 sm:p-8 flex flex-col justify-center max-w-sm space-y-2 text-white">
                     {% if spotlight_bento.bottom_right.eyebrow %}
                     <span class="text-[10px] font-display tracking-[0.2em] uppercase text-[#C5A059] font-semibold">

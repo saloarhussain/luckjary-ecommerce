@@ -65,6 +65,18 @@ class HeroVideoChunk(models.Model):
         ordering = ['index']
 
 
+class SiteImageAsset(models.Model):
+    """Stores uploaded storefront images (Bento cards, Hero poster) in DB for Vercel persistence."""
+
+    key = models.SlugField(max_length=80, unique=True)
+    content_type = models.CharField(max_length=80, default='image/webp')
+    data = models.BinaryField()
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.key
+
+
 class StorefrontThemeSettings(models.Model):
     """Singleton configuration for homepage scroll-video hero and storefront theme customization."""
 
@@ -110,6 +122,10 @@ class StorefrontThemeSettings(models.Model):
 
     DEFAULT_SPOTLIGHT_BENTO = {
         'enabled': True,
+        'height_px': 672,
+        'gap_px': 16,
+        'radius_px': 16,
+        'scrim_strength': 75,
         'left': {
             'eyebrow': 'LUCKJARY • ATELIER SPOTLIGHT',
             'title': 'The Solstice Heritage',
@@ -171,7 +187,27 @@ class StorefrontThemeSettings(models.Model):
                     if v is not None and str(v).strip() != '':
                         base[k] = str(v).strip()
             merged[slot] = base
+
+        def _int_val(key, lo, hi, default):
+            if not isinstance(saved, dict):
+                return default
+            try:
+                return max(lo, min(hi, int(saved.get(key, default))))
+            except (TypeError, ValueError):
+                return default
+
+        height_px = _int_val('height_px', 400, 950, self.DEFAULT_SPOTLIGHT_BENTO['height_px'])
+        gap_px = _int_val('gap_px', 8, 36, self.DEFAULT_SPOTLIGHT_BENTO['gap_px'])
+        radius_px = _int_val('radius_px', 0, 32, self.DEFAULT_SPOTLIGHT_BENTO['radius_px'])
+        scrim_strength = _int_val('scrim_strength', 0, 90, self.DEFAULT_SPOTLIGHT_BENTO['scrim_strength'])
+
         merged['enabled'] = bool(saved.get('enabled', True)) if isinstance(saved, dict) else True
+        merged['height_px'] = height_px
+        merged['gap_px'] = gap_px
+        merged['right_card_height_px'] = max(180, (height_px - gap_px) // 2)
+        merged['radius_px'] = radius_px
+        merged['scrim_strength'] = scrim_strength
+        merged['scrim_alpha'] = f"{scrim_strength / 100:.2f}"
         return merged
 
     def to_dict(self):

@@ -363,5 +363,25 @@ h1, h2, h3, h4, h5, h6, .font-serif, .font-display {
     }
 }
 
+/* Full-Width Bento Spotlight Dynamic Sizing */
+.bento-left-card {
+    min-height: 432px;
+    border-radius: var(--bento-radius, 16px);
+}
+
+.bento-right-card {
+    min-height: 252px;
+    border-radius: var(--bento-radius, 16px);
+}
+
+@media (min-width: 1024px) {
+    .bento-left-card {
+        min-height: var(--bento-h, 672px);
+    }
+    .bento-right-card {
+        min-height: calc((var(--bento-h, 672px) - var(--bento-gap, 16px)) / 2);
+    }
+}
+
 
 

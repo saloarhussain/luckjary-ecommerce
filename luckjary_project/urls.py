@@ -9,6 +9,7 @@ from core.views import (
     admin_hero_video_upload_init,
     admin_hero_video_upload_chunk,
     admin_hero_video_upload_complete,
+    admin_upload_site_image,
 )
 
 # Customize Django Admin Header & Title
@@ -47,6 +48,7 @@ urlpatterns = [
     path('admin/api/theme-customize/upload-init/', admin.site.admin_view(admin_hero_video_upload_init), name='admin_hero_video_upload_init'),
     path('admin/api/theme-customize/upload-chunk/', admin.site.admin_view(admin_hero_video_upload_chunk), name='admin_hero_video_upload_chunk'),
     path('admin/api/theme-customize/upload-complete/', admin.site.admin_view(admin_hero_video_upload_complete), name='admin_hero_video_upload_complete'),
+    path('admin/api/theme-customize/upload-image/', admin.site.admin_view(admin_upload_site_image), name='admin_upload_site_image'),
     path('admin/scrape/', lambda request: HttpResponseRedirect('/admin/catalog/product/scrape/'), name='admin_scrape'),
     path('admin/settings/', lambda request: HttpResponseRedirect('/admin/orders/order/#settings'), name='admin_settings'),
     path('admin/set-currency/', set_currency, name='admin_set_currency'),
