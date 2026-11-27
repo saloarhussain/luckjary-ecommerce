@@ -565,6 +565,7 @@
         {% endif %}
     </aside>
 
+    {% block footer %}
     <!-- Luxury Footer -->
     <footer class="bg-[#121212] text-[#E5E0D8] pt-16 pb-12 border-t border-[#262626]">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -635,6 +636,7 @@
             </div>
         </div>
     </footer>
+    {% endblock %}
 
     <!-- Interactive Scripts -->
     <script src="{% static 'js/main.js' %}"></script>

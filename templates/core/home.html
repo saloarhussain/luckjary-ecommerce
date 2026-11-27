@@ -1,434 +1,624 @@
 {% extends 'base.html' %}
 {% load static %}
 
+{% block extra_head %}
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=Spline+Sans+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=block" rel="stylesheet">
+<script>
+  (function () {
+    var existing = (window.tailwind && window.tailwind.config && window.tailwind.config.theme && window.tailwind.config.theme.extend) || {};
+    var existingColors = existing.colors || {};
+    var existingSpacing = existing.spacing || {};
+    var existingFontFamily = existing.fontFamily || {};
+    var existingFontSize = existing.fontSize || {};
+
+    window.tailwind.config = {
+      theme: {
+        extend: {
+          spacing: Object.assign({}, existingSpacing, {
+            'gutter-xs': '4px',
+            'gutter-sm': '8px',
+            'gutter-md': '16px',
+            'gutter-lg': '24px',
+            'gutter-xl': '32px',
+            'section-md': '64px',
+            'section-lg': '88px',
+            'page-margin': '32px',
+          }),
+          colors: Object.assign({}, existingColors, {
+            'burgundy': '#800020',
+            'burgundy-deep': '#5E0017',
+            'burgundy-rich': '#800020',
+            'cream-soft': '#FCF1E3',
+            'cream-warm': '#F5E4CF',
+            'white-pure': '#FFFFFF',
+            'champagne': '#FCF1E3',
+            'light-primary': '#800020',
+            'light-on-primary': '#FFFFFF',
+            'light-primary-container': '#5E0017',
+            'light-on-primary-container': '#FCF1E3',
+            'light-secondary': '#800020',
+            'light-on-secondary': '#FFFFFF',
+            'light-secondary-container': '#FCF1E3',
+            'light-on-secondary-container': '#5E0017',
+            'light-background': '#FCF1E3',
+            'light-on-background': '#1B1C1B',
+            'light-surface': '#FCF1E3',
+            'light-surface-container-lowest': '#FFFFFF',
+            'light-surface-container-low': '#FDF7EF',
+            'light-surface-container': '#FCF1E3',
+            'light-surface-container-high': '#F5E4CF',
+            'light-surface-container-highest': '#EAD3B8',
+            'light-on-surface': '#1B1C1B',
+            'light-on-surface-variant': '#4F3B3D',
+            'light-outline': '#7D6668',
+            'light-outline-variant': '#E6D5C3',
+            'dark-primary': '#FCF1E3',
+            'dark-on-primary': '#5E0017',
+            'dark-primary-container': '#800020',
+            'dark-on-primary-container': '#FFFFFF',
+            'dark-secondary': '#FCF1E3',
+            'dark-on-secondary': '#5E0017',
+            'dark-surface': '#800020',
+            'dark-surface-container-lowest': '#5E0017',
+            'dark-surface-container-low': '#6E001B',
+            'dark-surface-container': '#800020',
+            'dark-surface-container-high': '#960A2C',
+            'dark-surface-container-highest': '#AD1538',
+            'dark-on-surface': '#FFFFFF',
+            'dark-on-surface-variant': '#FCF1E3',
+            'dark-outline': '#E6C7CE',
+            'dark-outline-variant': '#A32A43',
+          }),
+          fontFamily: Object.assign({}, existingFontFamily, {
+            'siloar-display': ['"Instrument Sans"', 'sans-serif'],
+            'headline': ['"Instrument Sans"', 'sans-serif'],
+            'title': ['"Instrument Sans"', 'sans-serif'],
+            'body': ['"Instrument Sans"', 'sans-serif'],
+            'label': ['"Instrument Sans"', 'sans-serif'],
+            'mono': ['"Spline Sans Mono"', 'monospace'],
+          }),
+          fontSize: Object.assign({}, existingFontSize, {
+            'display-xl': ['56px', { lineHeight: '62px', letterSpacing: '-1.0px', fontWeight: '600' }],
+            'display-xl-mobile': ['32px', { lineHeight: '38px', letterSpacing: '-0.5px', fontWeight: '600' }],
+            'display-lg': ['42px', { lineHeight: '48px', letterSpacing: '-0.75px', fontWeight: '600' }],
+            'display-lg-mobile': ['28px', { lineHeight: '34px', letterSpacing: '-0.25px', fontWeight: '600' }],
+            'headline-lg': ['32px', { lineHeight: '40px', letterSpacing: '-0.5px', fontWeight: '600' }],
+            'headline-md': ['24px', { lineHeight: '32px', letterSpacing: '-0.25px', fontWeight: '600' }],
+            'headline-sm': ['20px', { lineHeight: '28px', letterSpacing: '0px', fontWeight: '600' }],
+            'title-lg': ['18px', { lineHeight: '26px', letterSpacing: '0px', fontWeight: '600' }],
+            'title-md': ['16px', { lineHeight: '24px', letterSpacing: '0px', fontWeight: '600' }],
+            'title-sm': ['14px', { lineHeight: '20px', letterSpacing: '0px', fontWeight: '600' }],
+            'body-lg': ['16px', { lineHeight: '26px', letterSpacing: '0px', fontWeight: '400' }],
+            'body-md': ['14px', { lineHeight: '22px', letterSpacing: '0px', fontWeight: '400' }],
+            'body-sm': ['12px', { lineHeight: '18px', letterSpacing: '0.1px', fontWeight: '400' }],
+            'label-lg': ['13px', { lineHeight: '18px', letterSpacing: '1.0px', fontWeight: '600' }],
+            'label-md': ['12px', { lineHeight: '16px', letterSpacing: '0.8px', fontWeight: '600' }],
+            'label-sm': ['12px', { lineHeight: '16px', letterSpacing: '0.6px', fontWeight: '500' }],
+            'mono-sm': ['12px', { lineHeight: '16px', letterSpacing: '0.4px', fontWeight: '500' }],
+          }),
+          transitionDuration: {
+            'state-change': '150ms',
+            'surface-enter': '300ms',
+            'image-hover': '400ms',
+          },
+          transitionTimingFunction: {
+            'state-change': 'ease-out',
+            'surface-enter': 'cubic-bezier(0.2, 0, 0, 1)',
+            'image-hover': 'cubic-bezier(0.2, 0, 0, 1)',
+          },
+        },
+      },
+    };
+  })();
+</script>
+<style>
+  .material-symbols-outlined {
+    display: inline-block;
+    width: 1em;
+    height: 1em;
+    line-height: 1 !important;
+    box-sizing: content-box;
+    overflow: hidden;
+    white-space: nowrap;
+    direction: ltr;
+    vertical-align: middle;
+  }
+  #siloar-storefront,
+  #siloar-storefront *,
+  #siloar-footer,
+  #siloar-footer * {
+    font-family: "Instrument Sans", sans-serif;
+  }
+  #siloar-storefront .font-mono,
+  #siloar-footer .font-mono {
+    font-family: "Spline Sans Mono", monospace;
+  }
+  #siloar-storefront .material-symbols-outlined,
+  #siloar-footer .material-symbols-outlined {
+    font-family: "Material Symbols Outlined";
+  }
+  #siloar-storefront a,
+  #siloar-storefront a:hover,
+  #siloar-storefront button,
+  #siloar-footer a,
+  #siloar-footer a:hover,
+  #siloar-footer button {
+    text-decoration: none !important;
+  }
+</style>
+{% endblock %}
+
 {% block content %}
-<!-- Hero Section: Configurable Scroll-Scrubbed Render Showcase -->
-<section id="heroScrollTrack"
-         class="hero-scroll-track bg-[#0F0F0F] text-white"
-         data-enabled="{% if theme_settings.hero_video_enabled %}true{% else %}false{% endif %}"
-         data-mode="{{ theme_settings.hero_video_mode|default:'scrub' }}"
-         data-pin="{% if hero_pin_on_scroll %}true{% else %}false{% endif %}"
-         data-smoothing="{{ theme_settings.hero_scrub_smoothing|default:'0.16' }}"
-         data-fade-overlay="{% if theme_settings.hero_fade_overlay_on_scroll %}true{% else %}false{% endif %}"
-         data-fade-start="{{ theme_settings.hero_overlay_fade_start|default:'70' }}"
-         style="{% if theme_settings.hero_video_enabled and theme_settings.hero_video_mode == 'scrub' and hero_pin_on_scroll %}height: {{ theme_settings.hero_scroll_height_vh|default:280 }}vh;{% else %}min-height: 82vh;{% endif %}">
-    <div id="heroStickyStage"
-         class="{% if theme_settings.hero_video_enabled and theme_settings.hero_video_mode == 'scrub' and hero_pin_on_scroll %}hero-sticky-stage{% else %}relative min-h-[82vh] w-full overflow-hidden bg-[#0F0F0F]{% endif %} flex items-center justify-center">
-        <!-- Media Layer: Poster Fallback + Scroll-Scrubbed Render Canvas -->
-        <div class="absolute inset-0 z-0">
-            <img id="heroFallbackImg"
-                 src="{{ theme_settings.hero_poster_url|default:'https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?auto=format&fit=crop&w=2000&q=85' }}"
-                 alt="Luckjary High Jewelry Collection"
-                 class="w-full h-full object-cover opacity-35 transform scale-105 transition-opacity duration-700 ease-out">
+<div id="siloar-storefront" class="bg-[#FCF1E3] text-[#1B1C1B] font-body antialiased selection:bg-[#800020] selection:text-[#FCF1E3] flex flex-col gap-gutter-xl pb-section-md">
 
-            {% if theme_settings.hero_video_enabled %}
-            <canvas id="heroRenderCanvas"
-                    class="hero-render-canvas"
-                    style="--hero-video-opacity: {{ theme_settings.hero_video_opacity|default:90 }};"
-                    aria-hidden="true"></canvas>
+  <!-- 1. Full-Bleed Burgundy Campaign Hero Banner (60% Burgundy + 30% White Offer Strip) -->
+  <section class="max-w-7xl w-full mx-auto px-gutter-md md:px-page-margin pt-gutter-lg">
+    <div class="relative rounded-[12px] overflow-hidden border border-dark-outline-variant bg-dark-surface-container-lowest">
+      <div class="relative min-h-[420px] flex items-center">
+        <img src="https://lh3.googleusercontent.com/aida/ALJJyrBtqfbmiZpZWRZM98UmMg-11N5bFLfCCNY61BvdSFKhww4mHauDVvKKh3wLjZjUhEGdFCx4DHnFM0teIO6vyPHHi57_6_3kz98ZD4M3bsoQ8N4WCP1htz5ALVU9ldXOATWK4lsefLAe2LXmdQSp72mAjFDrku96aDylV8UEyha3wnrFcO61s4siLp0Cgynpr_OsIjtv3IlOz5BWfaGOlnbMAhXQx6rhGGjI-K7EKLq9kTqvh8usoBPlvmU95wmW"
+             onerror="this.onerror=null; this.src='{{ theme_settings.hero_poster_url|default:"https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?auto=format&fit=crop&w=2000&q=85" }}';"
+             alt="Luckjary diamond necklace, ring, and bangle on burgundy velvet"
+             class="absolute inset-0 w-full h-full object-cover">
+        <div class="absolute inset-0 bg-gradient-to-r from-[#5E0017]/95 via-[#5E0017]/65 to-transparent" aria-hidden="true"></div>
 
-            <!-- Hidden off-screen video decoder (kept non-display:none for iOS/Safari frame decoding) -->
-            <video id="heroRenderVideo"
-                   class="absolute w-px h-px opacity-0 pointer-events-none"
-                   muted
-                   playsinline
-                   preload="auto"
-                   disablepictureinpicture
-                   aria-hidden="true">
-                {% if theme_settings.hero_video_webm_url %}
-                <source src="{{ theme_settings.hero_video_webm_url }}" type="video/webm">
-                {% endif %}
-                {% if theme_settings.hero_video_url %}
-                <source src="{{ theme_settings.hero_video_url }}" type="video/mp4">
-                {% endif %}
-            </video>
+        <!-- Overlaid Promotional / Editorial Offer -->
+        <div class="relative z-10 p-gutter-xl lg:p-12 flex flex-col items-start gap-gutter-md max-w-lg text-dark-on-surface">
+          <span class="font-label text-label-md uppercase text-champagne">LUCKJARY Atelier Event</span>
+          <h1 class="font-siloar-display text-display-lg-mobile md:text-display-lg text-dark-on-surface text-balance">
+            Golden Atelier Days
+          </h1>
+          <div class="border border-champagne rounded-[12px] px-gutter-lg py-gutter-md bg-[#5E0017]/85 flex flex-col gap-gutter-xs w-full max-w-xs">
+            <span class="font-label text-label-sm uppercase bg-cream-soft text-burgundy-deep px-2.5 py-0.5 rounded-[4px] w-fit">Exclusive Offer</span>
+            <span class="font-siloar-display text-display-lg-mobile md:text-display-lg text-champagne tabular-nums">50% Off</span>
+            <span class="font-body text-body-sm text-dark-on-surface-variant">On Making Charges · All Diamond &amp; 925 Designs</span>
+          </div>
+          <a href="{% url 'catalog:product_list' %}" class="inline-flex items-center gap-gutter-sm bg-cream-soft text-burgundy-deep px-6 py-3 rounded-[4px] uppercase tracking-wider hover:bg-white-pure transition-colors duration-state-change">
+            <span class="font-label text-label-lg">Shop the Event</span>
+            <span class="material-symbols-outlined text-title-md" aria-hidden="true">arrow_forward</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Clean Offer Strip Below Hero (White) -->
+      <div class="relative z-10 bg-white-pure border-t border-light-outline-variant px-gutter-md md:px-gutter-xl py-gutter-md flex flex-wrap items-center justify-center gap-gutter-md md:gap-gutter-lg text-center">
+        <div class="flex items-center gap-gutter-sm">
+          <span class="material-symbols-outlined text-light-primary text-title-md" aria-hidden="true">credit_card</span>
+          <span class="font-body text-body-sm text-light-on-surface">10% Instant Bank Savings up to $75 on Fine Solitaires</span>
+        </div>
+        <span class="text-light-outline-variant hidden sm:inline">|</span>
+        <span class="font-body text-body-sm text-light-on-surface-variant">Complimentary Insured Shipping · Easy 15-Day Returns</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2. Full-Bleed Promo Image with Overlaid White Product Carousel -->
+  <section id="silver-carousel" class="max-w-7xl w-full mx-auto px-gutter-md md:px-page-margin">
+    <div class="relative rounded-[12px] overflow-hidden border border-dark-outline-variant bg-dark-surface-container-lowest">
+      <img src="https://lh3.googleusercontent.com/aida/ALJJyrCToo3zgWPm7mi2QODaY2dBwihfxQ0g8pB2pyIwe3RpIDucsgRZo36w1TXZROtEdeVce2DFen8Mt4yPi3GSfOYFRA-aCA4OR1eMGwDWOY3EgINN9ZsR9chGAuxVE0hbcT831yRJqOsxAdJVIkvj3emAJp2kx4nNNyQ1X_dxjiGW2OplqM8Fai1wbLFW3VNW-kr-vL_QUPwqO9lZRmaY4EXn2ZfcgsERab6t454-t2ov77bdVO8USWTio_67FX3WjA"
+           onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1599643477877-530eb83abc8e?auto=format&fit=crop&w=1600&q=85';"
+           alt="Natural diamonds set in 925 sterling silver"
+           class="absolute inset-0 w-full h-full object-cover">
+      <div class="absolute inset-0 bg-gradient-to-r from-[#5E0017]/95 via-[#5E0017]/75 to-[#5E0017]/45" aria-hidden="true"></div>
+
+      <div class="relative z-10 grid grid-cols-1 lg:grid-cols-12 items-end">
+        <!-- Left Editorial Copy -->
+        <div class="lg:col-span-6 min-h-[260px] lg:min-h-[340px] flex flex-col justify-end p-gutter-lg md:p-gutter-xl">
+          <div class="flex items-end justify-between gap-gutter-md text-dark-on-surface">
+            <div class="flex flex-col gap-gutter-xs">
+              <span class="font-label text-label-sm uppercase text-champagne">LUCKJARY 925 Diamonds</span>
+              <h2 class="font-headline text-headline-md text-dark-on-surface">Flat 20% Off Natural Diamonds in 925 Silver</h2>
+              <p class="font-body text-body-sm text-dark-on-surface-variant tabular-nums">Handcrafted Sterling Silver &amp; Certified Stones</p>
+            </div>
+            <a href="{% url 'catalog:product_list' %}" class="shrink-0 inline-flex items-center gap-gutter-xs font-label text-label-md uppercase text-champagne hover:opacity-80 transition-opacity">
+              <span class="font-label text-label-md">Shop Now</span>
+              <span class="material-symbols-outlined text-title-md" aria-hidden="true">arrow_right</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- Right Overlaid White Product Carousel -->
+        <div class="lg:col-span-6 p-gutter-lg flex flex-col justify-between gap-gutter-lg">
+          <div id="carousel-track" class="grid grid-cols-1 sm:grid-cols-3 gap-gutter-md items-stretch">
+            {% if featured_products %}
+              {% for prod in featured_products %}
+              <a href="{{ prod.get_absolute_url }}"
+                 class="carousel-card {% if forloop.counter0 >= 3 %}hidden{% endif %} h-full bg-white-pure rounded-[4px] border border-light-outline-variant p-gutter-sm flex flex-col justify-between gap-gutter-sm hover:border-light-primary transition-colors duration-state-change">
+                <div class="aspect-square bg-light-surface-container-low rounded-[4px] overflow-hidden">
+                  <img src="{{ prod.primary_image }}"
+                       onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1599643477877-530eb83abc8e?auto=format&fit=crop&w=800&q=80';"
+                       alt="{{ prod.title }}"
+                       class="w-full h-full object-cover">
+                </div>
+                <div class="flex flex-col gap-gutter-xs px-1">
+                  <div class="flex items-baseline gap-gutter-xs">
+                    <span class="font-title text-title-sm text-light-on-surface tabular-nums">${{ prod.price|floatformat:0 }}</span>
+                    {% if prod.compare_at_price %}
+                    <span class="font-body text-body-sm text-light-on-surface-variant line-through tabular-nums">${{ prod.compare_at_price|floatformat:0 }}</span>
+                    {% endif %}
+                  </div>
+                  <h3 class="font-body text-body-sm text-light-on-surface-variant line-clamp-1">{{ prod.title }}</h3>
+                </div>
+              </a>
+              {% endfor %}
+            {% else %}
+              <a href="{% url 'catalog:category_products' 'rings' %}" class="carousel-card h-full bg-white-pure rounded-[4px] border border-light-outline-variant p-gutter-sm flex flex-col justify-between gap-gutter-sm">
+                <div class="aspect-square bg-light-surface-container-low rounded-[4px] overflow-hidden">
+                  <img src="https://lh3.googleusercontent.com/aida/ALJJyrCjbhsSorM7Qp6-L5feydmQQVJlC-PhW8b2ugauC8c1RLZQOyR8EgO0ZbukbUQXIZjgYuEJgpXUH1SO88an6Qq8bBdHg_MYL9T9uVNOyg3BYk057GlYBi0wDgsGf_GsFiZW2T0s2zugvweVpeEUXCXVCPswOR0Vp8TtDt9j86UXej2I7bMJNBWJI6FfmgqszWD4Ejg0YTpnpDkUu71XsuCZZ3PWtcfJTdI1CbprNhEX4QcUx_n7xRKQ-YG1" alt="Anchor 925 Silver Band" class="w-full h-full object-cover">
+                </div>
+                <div class="flex flex-col gap-gutter-xs px-1">
+                  <div class="flex items-baseline gap-gutter-xs">
+                    <span class="font-title text-title-sm text-light-on-surface tabular-nums">$120</span>
+                    <span class="font-body text-body-sm text-light-on-surface-variant line-through tabular-nums">$150</span>
+                  </div>
+                  <h3 class="font-body text-body-sm text-light-on-surface-variant">Anchor 925 Silver Band</h3>
+                </div>
+              </a>
+              <a href="{% url 'catalog:category_products' 'bracelets' %}" class="carousel-card h-full bg-white-pure rounded-[4px] border border-light-outline-variant p-gutter-sm flex flex-col justify-between gap-gutter-sm">
+                <div class="aspect-square bg-light-surface-container-low rounded-[4px] overflow-hidden">
+                  <img src="https://lh3.googleusercontent.com/aida/ALJJyrCYw8Gviu40Rm80-l1jI7PVPGgrllhuiNz6S00c28x7MNitC3Psb9ENuBniBCL4rpJJVLVnX_aBgZ7oReUVCwm--LkGSD2LDyKWNjlFZutpbH2tWss5K7zNoy3LjDEmSBcj1n6f-xcvtGDMgZCqVcwXvUeEIUwKP2y2fs0qJ5S9Ed0NmnenQfpu-yltiA3wtCI0ffScsDB1-HnSBVartQykTnfFWdbnv1fOZ67pSq1CNLDyqqFXkpqwl8aBHBDV" alt="Alex Vermeil Cuff" class="w-full h-full object-cover">
+                </div>
+                <div class="flex flex-col gap-gutter-xs px-1">
+                  <div class="flex items-baseline gap-gutter-xs">
+                    <span class="font-title text-title-sm text-light-on-surface tabular-nums">$165</span>
+                    <span class="font-body text-body-sm text-light-on-surface-variant line-through tabular-nums">$205</span>
+                  </div>
+                  <h3 class="font-body text-body-sm text-light-on-surface-variant">Alex Vermeil Cuff</h3>
+                </div>
+              </a>
+              <a href="{% url 'catalog:category_products' 'earrings' %}" class="carousel-card h-full bg-white-pure rounded-[4px] border border-light-outline-variant p-gutter-sm flex flex-col justify-between gap-gutter-sm">
+                <div class="aspect-square bg-light-surface-container-low rounded-[4px] overflow-hidden">
+                  <img src="https://lh3.googleusercontent.com/aida/ALJJyrBDlwUghqOynp1jMRnTnULjdha2cC2sllvu_4dj-VDiNfsIW4jbHLX8ZlSTetHyqWb3z8sjxprz51ke0s06pV2lCmwnbHW3cx3qvBxFlgHES3f8gSdFaoEqmv91wamSSQc2hjRciYJmRVCdFA0uFj2XVXSUiqVYOORh31HPlIrWVz_AiXCFnoXC6-ZKIusZYXY3gHq9qEUJosEknP9IJH7H74rknID6hAUtrnB9JYgMpG-TBm0BMiKfh39i0W_w" alt="Knot Sterling Hoops" class="w-full h-full object-cover">
+                </div>
+                <div class="flex flex-col gap-gutter-xs px-1">
+                  <div class="flex items-baseline gap-gutter-xs">
+                    <span class="font-title text-title-sm text-light-on-surface tabular-nums">$190</span>
+                    <span class="font-body text-body-sm text-light-on-surface-variant line-through tabular-nums">$240</span>
+                  </div>
+                  <h3 class="font-body text-body-sm text-light-on-surface-variant">Knot Sterling Hoops</h3>
+                </div>
+              </a>
             {% endif %}
+          </div>
 
-            <!-- Configurable Dark Vignette Overlay -->
-            <div class="absolute inset-0 pointer-events-none"
-                 style="background: linear-gradient(to top, rgba(15, 15, 15, 0.92) 0%, rgba(15, 15, 15, {{ theme_settings.hero_vignette_alpha|default:'0.45' }}) 45%, rgba(0, 0, 0, 0.65) 100%);"></div>
-        </div>
-
-        <!-- Editorial Foreground Content -->
-        <div id="heroOverlayContent" class="relative z-10 max-w-4xl mx-auto text-center px-3 sm:px-6 pt-16 sm:pt-24 pb-16 space-y-4 sm:space-y-6 will-change-transform">
-            {% if theme_settings.hero_badge_text %}
-            <div class="inline-flex items-center space-x-2 border border-[#C5A059]/40 bg-black/40 backdrop-blur-sm px-3.5 sm:px-4 py-1 sm:py-1.5 rounded-full">
-                <span class="w-1.5 sm:w-2 h-1.5 sm:h-2 rounded-full bg-[#C5A059]"></span>
-                <span class="text-[10px] sm:text-xs font-display tracking-[0.2em] sm:tracking-[0.25em] text-[#C5A059] uppercase">
-                    {{ theme_settings.hero_badge_text }}
-                </span>
+          <!-- Carousel Controls + Shop Now Button -->
+          <div class="flex items-center justify-between gap-gutter-md">
+            <div class="flex items-center gap-gutter-sm">
+              <button id="prev-slide" type="button" aria-label="Previous items" class="w-9 h-9 rounded-full bg-white-pure text-light-on-surface border border-light-outline-variant inline-flex items-center justify-center hover:border-light-primary transition-colors duration-state-change">
+                <span class="material-symbols-outlined text-title-md" aria-hidden="true">arrow_back</span>
+              </button>
+              <button id="next-slide" type="button" aria-label="Next items" class="w-9 h-9 rounded-full bg-light-primary text-light-on-primary inline-flex items-center justify-center hover:bg-light-primary-container transition-colors duration-state-change">
+                <span class="material-symbols-outlined text-title-md" aria-hidden="true">arrow_forward</span>
+              </button>
             </div>
-            {% endif %}
-
-            <h1 class="font-sans text-2xl sm:text-5xl md:text-6xl font-bold tracking-tight leading-tight text-[#FAF9F6]">
-                {{ theme_settings.hero_title_line1|default:'Lustrous Silver.' }}<br>
-                <span class="font-bold gold-gradient-text">{{ theme_settings.hero_title_line2|default:'Radiant for Every Moment.' }}</span>
-            </h1>
-
-            <p class="max-w-2xl mx-auto text-xs sm:text-base text-neutral-300 font-light leading-relaxed px-2">
-                {{ theme_settings.hero_subtitle }}
-            </p>
-
-            <div class="pt-4 sm:pt-6 flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4">
-                <a href="{% url 'catalog:product_list' %}" class="w-full sm:w-auto btn-gold px-6 sm:px-8 py-3 sm:py-3.5 text-xs font-display font-semibold tracking-[0.16em] sm:tracking-[0.18em] uppercase rounded-sm shadow-xl">
-                    {{ theme_settings.hero_primary_cta_text|default:'Explore The Collection' }}
-                </a>
-                <a href="{% url 'catalog:category_products' 'bridal-high-jewelry' %}" class="w-full sm:w-auto px-6 sm:px-8 py-3 sm:py-3.5 border border-[#C5A059] text-white hover:bg-[#C5A059]/10 text-xs font-display tracking-[0.16em] sm:tracking-[0.18em] uppercase rounded-sm transition">
-                    {{ theme_settings.hero_secondary_cta_text|default:'The Bridal Atelier' }}
-                </a>
-            </div>
-        </div>
-
-        {% if theme_settings.hero_video_enabled and theme_settings.hero_video_mode == 'scrub' and theme_settings.hero_show_scroll_cue %}
-        <!-- Scroll Cue -->
-        <div id="heroScrollCue" class="absolute bottom-6 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center gap-2 pointer-events-none">
-            <span class="text-[9px] sm:text-[10px] font-display tracking-[0.25em] uppercase text-[#C5A059]/90">Scroll to Reveal</span>
-            <span class="hero-scroll-cue-line"></span>
-        </div>
-        {% endif %}
-
-        {% if theme_settings.hero_video_enabled and theme_settings.hero_video_mode == 'scrub' and theme_settings.hero_show_progress_bar %}
-        <!-- Subtle Gold Scroll Progress Hairline -->
-        <div class="absolute bottom-0 inset-x-0 h-[2px] bg-white/10 z-20 pointer-events-none">
-            <div id="heroScrollProgress" class="h-full bg-gradient-to-r from-[#B38F46] via-[#D4AF37] to-[#C5A059] origin-left scale-x-0"></div>
-        </div>
-        {% endif %}
-    </div>
-</section>
-
-<!-- Brand Pillars / Trust Bar -->
-<section class="bg-white border-y border-[#EBE6DF] py-8">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
-            <div class="space-y-1">
-                <span class="text-xl text-[#C5A059]">✦</span>
-                <h4 class="text-xs font-display uppercase tracking-widest text-neutral-900 font-bold">
-                    925 Sterling Silver
-                </h4>
-                <p class="text-[11px] text-neutral-500">
-                    Rhodium Anti-Tarnish Seal
-                </p>
-            </div>
-            <div class="space-y-1">
-                <span class="text-xl text-[#C5A059]">✦</span>
-                <h4 class="text-xs font-display uppercase tracking-widest text-neutral-900 font-bold">IGI & GIA Certified</h4>
-                <p class="text-[11px] text-neutral-500">Conflict-free VVS stones</p>
-            </div>
-            <div class="space-y-1">
-                <span class="text-xl text-[#C5A059]">✦</span>
-                <h4 class="text-xs font-display uppercase tracking-widest text-neutral-900 font-bold">White-Glove Courier</h4>
-                <p class="text-[11px] text-neutral-500">Fully insured overnight delivery</p>
-            </div>
-            <div class="space-y-1">
-                <span class="text-xl text-[#C5A059]">✦</span>
-                <h4 class="text-xs font-display uppercase tracking-widest text-neutral-900 font-bold">Lifetime Warranty</h4>
-                <p class="text-[11px] text-neutral-500">Complimentary cleaning & repair</p>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- Categories Grid -->
-<section class="py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="text-center max-w-xl mx-auto mb-14 space-y-2">
-        <span class="text-[11px] sm:text-xs font-bold tracking-[0.2em] text-[#C5A059] uppercase font-sans">Curation</span>
-        <h2 class="text-2xl sm:text-3xl lg:text-4xl font-bold text-neutral-900 tracking-tight font-sans">Explore by Category</h2>
-        <div class="w-12 h-0.5 bg-[#C5A059] mx-auto mt-2"></div>
-    </div>
-
-    <div class="grid grid-cols-2 md:grid-cols-5 gap-2.5 sm:gap-6">
-        {% for cat in categories %}
-        <a href="{% url 'catalog:category_products' cat.slug %}" class="group relative block overflow-hidden rounded-sm bg-neutral-100 aspect-[3/4] shadow-sm">
-            <img src="{{ cat.image_url }}" alt="{{ cat.name }}" class="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110">
-            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
-            <div class="absolute bottom-4 left-4 right-4 text-center">
-                <h3 class="font-sans text-sm tracking-wide text-white uppercase font-bold group-hover:text-[#C5A059] transition">{{ cat.name }}</h3>
-                <span class="text-[10px] text-neutral-300 uppercase tracking-widest font-sans inline-block mt-0.5">Explore &rarr;</span>
-            </div>
-        </a>
-        {% endfor %}
-    </div>
-</section>
-
-<!-- Shop by Price: 3 Curated Budget Cards (Under ₹999, ₹1,499, ₹2,499) -->
-{% if price_cards.enabled %}
-<section id="shop-by-price" class="pb-16 sm:pb-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="text-center max-w-xl mx-auto mb-10 sm:mb-12 space-y-2">
-        <span class="text-[11px] sm:text-xs font-bold tracking-[0.2em] text-[#C5A059] uppercase font-sans">{{ price_cards.eyebrow }}</span>
-        <h2 class="text-2xl sm:text-3xl lg:text-4xl font-bold text-neutral-900 tracking-tight font-sans">{{ price_cards.heading }}</h2>
-        <div class="w-12 h-0.5 bg-[#C5A059] mx-auto mt-2"></div>
-    </div>
-
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
-        {% for card in price_cards.cards %}
-        <a href="{{ card.link_url }}"
-           class="group relative overflow-hidden rounded-2xl border {% if forloop.counter == 2 %}border-[#C5A059]/60 bg-gradient-to-br from-[#171512] via-[#121110] to-[#1D1913] text-white shadow-xl{% else %}border-[#E6D9C5] bg-gradient-to-br from-[#FFFFFF] via-[#FAF7F0] to-[#F4ECE0] text-neutral-900 shadow-sm{% endif %} p-6 sm:p-8 flex flex-col justify-between transition-all duration-300 hover:-translate-y-1 hover:shadow-xl">
-            <div class="space-y-4">
-                <div class="flex items-center justify-between gap-2">
-                    <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-display font-bold uppercase tracking-[0.18em] {% if forloop.counter == 2 %}bg-[#C5A059]/20 text-[#E7D7BE] border border-[#C5A059]/40{% else %}bg-[#C5A059]/12 text-[#8E6F31] border border-[#C5A059]/30{% endif %}">
-                        <span class="w-1.5 h-1.5 rounded-full bg-[#C5A059]"></span>
-                        {{ card.badge }}
-                    </span>
-                    <span class="text-xs {% if forloop.counter == 2 %}text-[#C5A059]{% else %}text-[#B08B44]{% endif %}">✦</span>
-                </div>
-
-                <div>
-                    <div class="text-[11px] uppercase tracking-[0.2em] font-sans font-semibold {% if forloop.counter == 2 %}text-neutral-400{% else %}text-neutral-500{% endif %}">
-                        Pure 925 Silver
-                    </div>
-                    <h3 class="text-3xl sm:text-4xl font-extrabold tracking-tight mt-1 font-sans {% if forloop.counter == 2 %}text-white{% else %}text-neutral-900{% endif %}">
-                        {{ card.title }}
-                    </h3>
-                </div>
-
-                <p class="text-xs sm:text-sm leading-relaxed font-light {% if forloop.counter == 2 %}text-neutral-300{% else %}text-neutral-600{% endif %}">
-                    {{ card.subtitle }}
-                </p>
-            </div>
-
-            <div class="pt-6 mt-4 border-t {% if forloop.counter == 2 %}border-white/10{% else %}border-[#E6D9C5]/70{% endif %} flex items-center justify-between">
-                <span class="text-xs font-display font-bold uppercase tracking-[0.16em] {% if forloop.counter == 2 %}text-[#D4AF37]{% else %}text-[#8E6F31]{% endif %}">
-                    {{ card.cta }}
-                </span>
-                <span class="w-8 h-8 rounded-full flex items-center justify-center transition-transform duration-300 group-hover:translate-x-1 {% if forloop.counter == 2 %}bg-[#C5A059] text-[#121212]{% else %}bg-neutral-900 text-white group-hover:bg-[#C5A059]{% endif %}">
-                    &rarr;
-                </span>
-            </div>
-        </a>
-        {% endfor %}
-    </div>
-</section>
-{% endif %}
-
-<!-- Featured Bestsellers -->
-<section class="py-16 bg-[#F4F1EA] border-y border-[#EBE6DF]">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex flex-col md:flex-row md:items-end justify-between mb-12">
-            <div>
-                <span class="text-[11px] sm:text-xs font-bold tracking-[0.2em] text-[#C5A059] uppercase block font-sans">
-                    Sterling Silver Collection
-                </span>
-                <h2 class="text-2xl sm:text-3xl lg:text-4xl font-bold text-neutral-900 tracking-tight mt-1 font-sans">
-                    Handcrafted Silver Jewellery
-                </h2>
-            </div>
-            <a href="{% url 'catalog:product_list' %}" class="mt-4 md:mt-0 text-xs font-sans tracking-wider uppercase text-neutral-800 hover:text-gold-600 font-bold inline-flex items-center gap-1">
-                View Full Catalog &rarr;
+            <a href="{% url 'catalog:product_list' %}" class="bg-cream-soft text-burgundy-deep border border-light-outline-variant px-7 py-2.5 rounded-[4px] uppercase tracking-wider hover:bg-white-pure transition-colors duration-state-change inline-flex items-center justify-center">
+              <span class="font-label text-label-md">Shop Now</span>
             </a>
+          </div>
         </div>
-
-        <div class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-6">
-            {% for prod in featured_products %}
-                {% include 'includes/product_card.html' %}
-            {% endfor %}
-        </div>
+      </div>
     </div>
-</section>
+  </section>
 
-<!-- Collection Spotlight Editorial (3-Card Full-Width Bento Grid) -->
-{% if spotlight_bento.enabled %}
-<section class="py-6 sm:py-10 w-full px-2.5 sm:px-4"
-         style="--bento-h: {{ spotlight_bento.height_px|default:672 }}px; --bento-gap: {{ spotlight_bento.gap_px|default:16 }}px; --bento-radius: {{ spotlight_bento.radius_px|default:16 }}px;">
-    <div class="grid grid-cols-1 lg:grid-cols-12" style="gap: var(--bento-gap);">
-        <!-- Left Tall Featured Card -->
-        <a href="{{ spotlight_bento.left.link_url }}" class="bento-left-card lg:col-span-6 group relative block overflow-hidden bg-[#16131c] shadow-lg">
-            <img src="{{ spotlight_bento.left.image_url }}"
-                 alt="{{ spotlight_bento.left.title }}"
-                 class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105">
-            <div class="absolute inset-0"
-                 style="background: linear-gradient(to bottom, rgba(0, 0, 0, {{ spotlight_bento.scrim_alpha|default:'0.75' }}) 0%, rgba(0, 0, 0, 0.25) 50%, rgba(0, 0, 0, {{ spotlight_bento.scrim_alpha|default:'0.75' }}) 100%);"></div>
-            <div class="relative z-10 h-full p-6 sm:p-10 flex flex-col justify-between text-white">
-                <div class="max-w-md space-y-2.5">
-                    {% if spotlight_bento.left.eyebrow %}
-                    <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-black/45 backdrop-blur-sm border border-[#C5A059]/45 text-[10px] font-display tracking-[0.2em] uppercase text-[#E7D7BE]">
-                        <span class="w-1.5 h-1.5 rounded-full bg-[#C5A059]"></span>
-                        {{ spotlight_bento.left.eyebrow }}
-                    </span>
-                    {% endif %}
-                    <h2 class="font-sans text-2xl sm:text-4xl font-bold tracking-tight leading-tight text-white">
-                        {{ spotlight_bento.left.title }}
-                    </h2>
-                    <p class="text-xs sm:text-sm text-neutral-200/90 font-light leading-relaxed">
-                        {{ spotlight_bento.left.subtitle }}
-                    </p>
-                </div>
-                <div>
-                    <span class="inline-flex items-center gap-2 px-5 py-2.5 rounded-sm bg-[#C5A059] group-hover:bg-[#B08B44] text-white text-[11px] font-display font-semibold tracking-[0.16em] uppercase transition shadow-lg">
-                        {{ spotlight_bento.left.cta|default:'Explore Collection' }}
-                        <span class="transition-transform group-hover:translate-x-1">&rarr;</span>
-                    </span>
-                </div>
-            </div>
+  <!-- 3. Bento 3-Card Editorial Showcase Grid (Full-Bleed Image Overlays) -->
+  <section id="bento-grid" class="max-w-7xl w-full mx-auto px-gutter-md md:px-page-margin">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter-lg items-stretch">
+      <!-- Tall Left Portrait Card -->
+      <a href="{% url 'catalog:product_list' %}?material=925-sterling-silver" class="lg:col-span-6 group relative rounded-[12px] overflow-hidden border border-dark-outline-variant bg-dark-surface min-h-[480px] flex flex-col justify-between">
+        <img src="https://lh3.googleusercontent.com/aida/ALJJyrCmre7oRMBVhPOjfmUlkiILE4umPCXOvCgZMFLueCSp5Eei9gJngQuvWuvnwLx2FrWHTuf-KjRXkfco1bVllp1G9lHdPZ-1n0rVcLk_tgq_Ekq-sWEUTGd7ohC9zCwIJo9zH4CnJtLmvNSxsxOI7a9rd9o34hz_UPR0FVF2f7f4LkGmJTX3EMcAn5TyNBkGmROmKVT8Q4e2Qg-fwb3SKhj-u9GM2DLeVcNjzAhGpx6GRzgBiFNEUP21mHBLtw"
+             onerror="this.onerror=null; this.src='{{ spotlight_bento.left.image_url }}';"
+             alt="LUCKJARY 925 Sterling Silver Collection"
+             class="absolute inset-0 w-full h-full object-cover transition-transform duration-image-hover ease-image-hover group-hover:scale-105">
+        <div class="absolute inset-0 bg-gradient-to-t from-[#5E0017]/95 via-[#5E0017]/35 to-[#5E0017]/30" aria-hidden="true"></div>
+        <div class="relative z-10 p-gutter-lg md:p-gutter-xl flex flex-wrap items-center justify-between gap-gutter-sm">
+          <span class="font-label text-label-md uppercase text-dark-on-surface tracking-widest">LUCKJARY · 925</span>
+          <span class="font-label text-label-sm uppercase bg-[#5E0017]/80 text-champagne border border-champagne px-3 py-1 rounded-full">925 Sterling</span>
+        </div>
+        <div class="relative z-10 p-gutter-lg md:p-gutter-xl flex flex-col items-start sm:flex-row sm:items-end justify-between gap-gutter-md">
+          <div class="flex flex-col gap-gutter-xs">
+            <span class="font-label text-label-sm uppercase text-champagne">LUCKJARY 925 Sterling</span>
+            <h2 class="font-headline text-headline-md text-dark-on-surface">Crafted in Pure 925 Silver</h2>
+          </div>
+          <span class="font-label text-label-md uppercase bg-cream-soft text-burgundy-deep px-4 py-1.5 rounded-[4px] shrink-0">Flat 50% Off</span>
+        </div>
+      </a>
+
+      <!-- Right Stacked 2 Cards -->
+      <div class="lg:col-span-6 flex flex-col gap-gutter-lg">
+        <!-- Top Right Card -->
+        <a href="{% url 'catalog:product_list' %}?style=classic" class="group relative flex-1 rounded-[12px] overflow-hidden border border-dark-outline-variant bg-dark-surface-container-lowest text-dark-on-surface min-h-[230px] flex items-center">
+          <img src="https://lh3.googleusercontent.com/aida/ALJJyrAoHow3UlgvkA7fje3VUR-qqGVQNN3jeF50frcDWd6lulNnXwF6uvRQTrqF6DRpYtsCTd178u6gI5NkQOhBbLmJmtT4ZMxlh4_tuNWOPPfLA8uT7f9nocxC2VJqU4oYskm2ciQIJyWc-ZFD8iao2ORFW6XxcJJbbXGemzMN3XkPC00Hy7c-MwQaSTHV0Jxb6m1lyopfNr_wj6wdJmnYPolOUSHV2-gueuL75LEHVzIEMOAcRVSdYipvR-nxS7g"
+               onerror="this.onerror=null; this.src='{{ spotlight_bento.top_right.image_url }}';"
+               alt="Lumiere Solitaires"
+               class="absolute inset-0 w-full h-full object-cover transition-transform duration-image-hover ease-image-hover group-hover:scale-105">
+          <div class="absolute inset-0 bg-gradient-to-r from-[#5E0017]/95 via-[#5E0017]/75 to-transparent" aria-hidden="true"></div>
+          <div class="relative z-10 p-gutter-xl flex flex-col items-start gap-gutter-sm max-w-sm">
+            <span class="font-label text-label-sm uppercase text-champagne">73 Facets · By LUCKJARY</span>
+            <h3 class="font-headline text-headline-sm text-dark-on-surface">Lumiere Solitaires</h3>
+            <p class="font-body text-body-sm text-dark-on-surface-variant">Precision-cut diamonds for maximum fire and brilliance.</p>
+            <span class="inline-flex items-center gap-gutter-xs font-label text-label-md uppercase text-champagne pt-gutter-xs">
+              <span class="font-label text-label-md">Shop Now</span>
+              <span class="material-symbols-outlined text-title-sm" aria-hidden="true">arrow_right</span>
+            </span>
+          </div>
         </a>
 
-        <!-- Right Column: 2 Stacked Horizontal Cards -->
-        <div class="lg:col-span-6 grid grid-rows-2" style="gap: var(--bento-gap);">
-            <!-- Top Right Card -->
-            <a href="{{ spotlight_bento.top_right.link_url }}" class="bento-right-card group relative block overflow-hidden bg-[#1a1423] shadow-lg">
-                <img src="{{ spotlight_bento.top_right.image_url }}"
-                     alt="{{ spotlight_bento.top_right.title }}"
-                     class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105">
-                <div class="absolute inset-0"
-                     style="background: linear-gradient(to right, rgba(0, 0, 0, {{ spotlight_bento.scrim_alpha|default:'0.75' }}) 0%, rgba(0, 0, 0, 0.35) 55%, rgba(0, 0, 0, 0) 100%);"></div>
-                <div class="relative z-10 h-full p-6 sm:p-8 flex flex-col justify-center max-w-sm space-y-2 text-white">
-                    {% if spotlight_bento.top_right.eyebrow %}
-                    <span class="text-[10px] font-display tracking-[0.2em] uppercase text-[#C5A059] font-semibold">
-                        {{ spotlight_bento.top_right.eyebrow }}
-                    </span>
-                    {% endif %}
-                    <h3 class="font-sans text-xl sm:text-2xl font-bold tracking-tight text-white leading-snug group-hover:text-[#E7D7BE] transition-colors">
-                        {{ spotlight_bento.top_right.title }}
-                    </h3>
-                    <p class="text-xs text-neutral-200/90 font-light leading-relaxed">
-                        {{ spotlight_bento.top_right.subtitle }}
-                    </p>
-                    <span class="pt-1 inline-flex items-center gap-1.5 text-[11px] font-display uppercase tracking-[0.16em] text-[#C5A059] font-semibold">
-                        Shop Styles <span class="transition-transform group-hover:translate-x-1">&rarr;</span>
-                    </span>
-                </div>
-            </a>
-
-            <!-- Bottom Right Card -->
-            <a href="{{ spotlight_bento.bottom_right.link_url }}" class="bento-right-card group relative block overflow-hidden bg-[#1c1614] shadow-lg">
-                <img src="{{ spotlight_bento.bottom_right.image_url }}"
-                     alt="{{ spotlight_bento.bottom_right.title }}"
-                     class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105">
-                <div class="absolute inset-0"
-                     style="background: linear-gradient(to right, rgba(0, 0, 0, {{ spotlight_bento.scrim_alpha|default:'0.75' }}) 0%, rgba(0, 0, 0, 0.35) 55%, rgba(0, 0, 0, 0) 100%);"></div>
-                <div class="relative z-10 h-full p-6 sm:p-8 flex flex-col justify-center max-w-sm space-y-2 text-white">
-                    {% if spotlight_bento.bottom_right.eyebrow %}
-                    <span class="text-[10px] font-display tracking-[0.2em] uppercase text-[#C5A059] font-semibold">
-                        {{ spotlight_bento.bottom_right.eyebrow }}
-                    </span>
-                    {% endif %}
-                    <h3 class="font-sans text-xl sm:text-2xl font-bold tracking-tight text-white leading-snug group-hover:text-[#E7D7BE] transition-colors">
-                        {{ spotlight_bento.bottom_right.title }}
-                    </h3>
-                    <p class="text-xs text-neutral-200/90 font-light leading-relaxed">
-                        {{ spotlight_bento.bottom_right.subtitle }}
-                    </p>
-                    <span class="pt-1 inline-flex items-center gap-1.5 text-[11px] font-display uppercase tracking-[0.16em] text-[#C5A059] font-semibold">
-                        Explore Collection <span class="transition-transform group-hover:translate-x-1">&rarr;</span>
-                    </span>
-                </div>
-            </a>
-        </div>
+        <!-- Bottom Right Card -->
+        <a href="{% url 'catalog:category_products' 'rings' %}" class="group relative flex-1 rounded-[12px] overflow-hidden border border-dark-outline-variant bg-dark-surface-container-lowest text-dark-on-surface min-h-[230px] flex items-center">
+          <img src="https://lh3.googleusercontent.com/aida/ALJJyrCfPW96Hys0yHphB-fCQYB7HLdDTMbxBqsM7-VjOdLAB3lZFuueQtaO14zyCyaBMZIcZRbaaJVvMNF6qlxcYlxQcKEGwMWVKUlwKUC9gUZlmeA-1aZhydDlL6vaa0sjHqIhjwzUdLriPWhnSXemsYO5mb8S9wlzXXCd2c47YIBJptmTyzFjdzuhZEHJYA_FmyGi7uCaR1yB4yu89afENZRdgLsoWyIu90tVzRGsCdF9q3U_cx-zs8KtDdE4srINmg"
+               onerror="this.onerror=null; this.src='{{ spotlight_bento.bottom_right.image_url }}';"
+               alt="New Cocktail Rings"
+               class="absolute inset-0 w-full h-full object-cover transition-transform duration-image-hover ease-image-hover group-hover:scale-105">
+          <div class="absolute inset-0 bg-gradient-to-r from-[#5E0017]/95 via-[#5E0017]/75 to-transparent" aria-hidden="true"></div>
+          <div class="relative z-10 p-gutter-xl flex flex-col items-start gap-gutter-sm max-w-sm">
+            <span class="font-label text-label-sm uppercase text-champagne">Statement Edit</span>
+            <h3 class="font-headline text-headline-sm text-dark-on-surface">New Cocktail Rings</h3>
+            <p class="font-body text-body-sm text-dark-on-surface-variant">Sculptural silhouettes designed for evening occasions.</p>
+          </div>
+        </a>
+      </div>
     </div>
-</section>
-{% endif %}
+  </section>
 
-<!-- Personalised 925 Silver Jewellery Section -->
-{% if personalised_section.enabled %}
-<section id="personalised-atelier" class="py-12 sm:py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="relative overflow-hidden rounded-2xl border border-[#E6D9C5] bg-gradient-to-br from-[#FAF7F0] via-white to-[#F4ECE0] shadow-lg grid grid-cols-1 lg:grid-cols-12">
-        <div class="lg:col-span-7 p-7 sm:p-12 lg:p-14 flex flex-col justify-center space-y-5">
-            <div class="inline-flex items-center self-start gap-2 px-3 py-1 rounded-full bg-[#C5A059]/12 border border-[#C5A059]/35 text-[10px] sm:text-[11px] font-display font-bold tracking-[0.2em] uppercase text-[#8E6F31]">
-                <span class="w-1.5 h-1.5 rounded-full bg-[#C5A059]"></span>
-                {{ personalised_section.eyebrow }}
-            </div>
+  <!-- 4. Wrapped With Love Category Strip (Light Cream) -->
+  <section id="wrapped" class="max-w-7xl w-full mx-auto px-gutter-md md:px-page-margin flex flex-col gap-gutter-lg">
+    <div class="bg-cream-soft border border-light-outline-variant rounded-[12px] p-gutter-xl grid grid-cols-1 lg:grid-cols-12 items-center gap-gutter-lg">
+      <div class="lg:col-span-2 flex flex-col items-center text-center gap-gutter-sm">
+        <span class="w-14 h-14 rounded-full bg-white-pure text-light-primary border border-light-outline-variant inline-flex items-center justify-center">
+          <span class="material-symbols-outlined text-headline-md" aria-hidden="true">redeem</span>
+        </span>
+        <h2 class="font-title text-title-md text-light-primary">Wrapped with love</h2>
+      </div>
 
-            <h2 class="font-sans text-2xl sm:text-4xl font-bold text-neutral-900 tracking-tight leading-tight">
-                {{ personalised_section.title }}
-            </h2>
-
-            <p class="text-xs sm:text-sm text-neutral-600 font-light leading-relaxed max-w-xl">
-                {{ personalised_section.subtitle }}
-            </p>
-
-            <div class="flex flex-wrap gap-2.5 pt-1">
-                {% if personalised_section.tag1 %}
-                <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white border border-[#E6D9C5] text-[11px] font-medium text-neutral-800 shadow-sm">
-                    <span class="text-[#C5A059]">✦</span> {{ personalised_section.tag1 }}
-                </span>
-                {% endif %}
-                {% if personalised_section.tag2 %}
-                <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white border border-[#E6D9C5] text-[11px] font-medium text-neutral-800 shadow-sm">
-                    <span class="text-[#C5A059]">✦</span> {{ personalised_section.tag2 }}
-                </span>
-                {% endif %}
-                {% if personalised_section.tag3 %}
-                <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white border border-[#E6D9C5] text-[11px] font-medium text-neutral-800 shadow-sm">
-                    <span class="text-[#C5A059]">✦</span> {{ personalised_section.tag3 }}
-                </span>
-                {% endif %}
-            </div>
-
-            <div class="pt-3 flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
-                <a href="{{ personalised_section.cta_url }}" class="btn-gold inline-flex items-center justify-center gap-2 px-7 py-3.5 text-xs font-display font-semibold tracking-[0.16em] uppercase rounded-sm shadow-md">
-                    <span>{{ personalised_section.cta_text }}</span>
-                    <span>&rarr;</span>
-                </a>
-                {% if personalised_section.secondary_cta_text %}
-                <a href="{{ personalised_section.secondary_cta_url }}" class="btn-outline-gold inline-flex items-center justify-center px-6 py-3.5 text-xs font-display font-semibold tracking-[0.16em] uppercase rounded-sm">
-                    {{ personalised_section.secondary_cta_text }}
-                </a>
-                {% endif %}
-            </div>
-        </div>
-
-        <div class="lg:col-span-5 relative min-h-[280px] sm:min-h-[360px] lg:min-h-full overflow-hidden bg-[#16131c]">
-            <img src="{{ personalised_section.image_url }}"
-                 alt="{{ personalised_section.title }}"
-                 class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 hover:scale-105">
-            <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/15 to-transparent"></div>
-            <div class="absolute bottom-5 left-5 right-5 p-4 rounded-xl bg-black/55 backdrop-blur-md border border-white/15 text-white flex items-center justify-between gap-3">
-                <div>
-                    <span class="text-[9px] font-display tracking-[0.2em] uppercase text-[#D4AF37] block">Made to Order</span>
-                    <span class="text-xs sm:text-sm font-semibold">Complimentary Custom Engraving</span>
-                </div>
-                <span class="px-2.5 py-1 rounded-full bg-[#C5A059] text-white text-[10px] font-bold uppercase tracking-wider shrink-0">925 Silver</span>
-            </div>
-        </div>
+      <div class="lg:col-span-10 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-gutter-md">
+        <a href="{% url 'catalog:category_products' 'rings' %}" class="flex flex-col items-center gap-gutter-xs group">
+          <img src="https://lh3.googleusercontent.com/aida/ALJJyrCjbhsSorM7Qp6-L5feydmQQVJlC-PhW8b2ugauC8c1RLZQOyR8EgO0ZbukbUQXIZjgYuEJgpXUH1SO88an6Qq8bBdHg_MYL9T9uVNOyg3BYk057GlYBi0wDgsGf_GsFiZW2T0s2zugvweVpeEUXCXVCPswOR0Vp8TtDt9j86UXej2I7bMJNBWJI6FfmgqszWD4Ejg0YTpnpDkUu71XsuCZZ3PWtcfJTdI1CbprNhEX4QcUx_n7xRKQ-YG1"
+               onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1605100804763-247f67b3557e?auto=format&fit=crop&w=600&q=80';"
+               alt="New Rings"
+               class="w-full aspect-square rounded-[12px] object-cover border border-light-outline-variant group-hover:border-light-primary transition-colors duration-state-change">
+          <span class="font-label text-label-sm uppercase text-light-on-surface text-center">New Rings</span>
+        </a>
+        <a href="{% url 'catalog:category_products' 'bridal-high-jewelry' %}" class="flex flex-col items-center gap-gutter-xs group">
+          <img src="https://lh3.googleusercontent.com/aida/ALJJyrBA0bjRv83qCEOYMdLmZSJVgnLha5Yk1PCiFMiaDE86R0k3q5vBEY4vRpSNImay56cZIOO9QWpIzzAdGd6h8j-R91mtFFkxda_ywal4zTaDoD69jQn8nstXAqkM_54mySKaidOQY2kJbja_OhgZIt10Tec-MhQrrNcJO560OZ4c2iBZNTXdIvQqAL39HGkqzE68K9eiA4Pd1OgHteWPlNfNZJIHVgnltRp0y69YLg5jYd8qMCO7rqeIfFO4ORLTyg"
+               onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?auto=format&fit=crop&w=600&q=80';"
+               alt="Festive Styles"
+               class="w-full aspect-square rounded-[12px] object-cover border border-light-outline-variant group-hover:border-light-primary transition-colors duration-state-change">
+          <span class="font-label text-label-sm uppercase text-light-on-surface text-center">Festive Styles</span>
+        </a>
+        <a href="{% url 'catalog:category_products' 'earrings' %}" class="flex flex-col items-center gap-gutter-xs group">
+          <img src="https://lh3.googleusercontent.com/aida/ALJJyrDHGZiHeC86ec9VnTzChyJ-TGfu2w3-DtmXROisrYWPRrFiDBFFWiqYohh08pCPHl025IT0CYnWhOgT1Ktr8UwMCprbkosqUfb6qMgvxtBCWKg0Ymg5hKJE42jY0pqRVaL2-T50AUSlCSSeOYC65GbydQdjATTTk0NpcE-eXOzg4HckOpis0GQI5iCPEW6-AbLWMRXIobeLgaC8lzkCaMNFq7eq_ytd5z4A5pR_6RDNMOdXWs8Aua908z-gYdokUJY"
+               onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1630019852942-f89202989a59?auto=format&fit=crop&w=600&q=80';"
+               alt="Drop Earrings"
+               class="w-full aspect-square rounded-[12px] object-cover border border-light-outline-variant group-hover:border-light-primary transition-colors duration-state-change">
+          <span class="font-label text-label-sm uppercase text-light-on-surface text-center">Drop Earrings</span>
+        </a>
+        <a href="{% url 'catalog:category_products' 'bracelets' %}" class="flex flex-col items-center gap-gutter-xs group">
+          <img src="https://lh3.googleusercontent.com/aida/ALJJyrCYw8Gviu40Rm80-l1jI7PVPGgrllhuiNz6S00c28x7MNitC3Psb9ENuBniBCL4rpJJVLVnX_aBgZ7oReUVCwm--LkGSD2LDyKWNjlFZutpbH2tWss5K7zNoy3LjDEmSBcj1n6f-xcvtGDMgZCqVcwXvUeEIUwKP2y2fs0qJ5S9Ed0NmnenQfpu-yltiA3wtCI0ffScsDB1-HnSBVartQykTnfFWdbnv1fOZ67pSq1CNLDyqqFXkpqwl8aBHBDV"
+               onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1611591475870-760144f8ea56?auto=format&fit=crop&w=600&q=80';"
+               alt="Vermeil Cuffs"
+               class="w-full aspect-square rounded-[12px] object-cover border border-light-outline-variant group-hover:border-light-primary transition-colors duration-state-change">
+          <span class="font-label text-label-sm uppercase text-light-on-surface text-center">Vermeil Cuffs</span>
+        </a>
+        <a href="{% url 'catalog:category_products' 'necklaces' %}" class="flex flex-col items-center gap-gutter-xs group">
+          <img src="https://lh3.googleusercontent.com/aida/ALJJyrBDlwUghqOynp1jMRnTnULjdha2cC2sllvu_4dj-VDiNfsIW4jbHLX8ZlSTetHyqWb3z8sjxprz51ke0s06pV2lCmwnbHW3cx3qvBxFlgHES3f8gSdFaoEqmv91wamSSQc2hjRciYJmRVCdFA0uFj2XVXSUiqVYOORh31HPlIrWVz_AiXCFnoXC6-ZKIusZYXY3gHq9qEUJosEknP9IJH7H74rknID6hAUtrnB9JYgMpG-TBm0BMiKfh39i0W_w"
+               onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?auto=format&fit=crop&w=600&q=80';"
+               alt="Sculpted Hoops"
+               class="w-full aspect-square rounded-[12px] object-cover border border-light-outline-variant group-hover:border-light-primary transition-colors duration-state-change">
+          <span class="font-label text-label-sm uppercase text-light-on-surface text-center">Sculpted Hoops</span>
+        </a>
+        <a href="{% url 'catalog:product_list' %}?style=classic" class="flex flex-col items-center gap-gutter-xs group">
+          <img src="https://lh3.googleusercontent.com/aida/ALJJyrAoHow3UlgvkA7fje3VUR-qqGVQNN3jeF50frcDWd6lulNnXwF6uvRQTrqF6DRpYtsCTd178u6gI5NkQOhBbLmJmtT4ZMxlh4_tuNWOPPfLA8uT7f9nocxC2VJqU4oYskm2ciQIJyWc-ZFD8iao2ORFW6XxcJJbbXGemzMN3XkPC00Hy7c-MwQaSTHV0Jxb6m1lyopfNr_wj6wdJmnYPolOUSHV2-gueuL75LEHVzIEMOAcRVSdYipvR-nxS7g"
+               onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1605100804763-247f67b3557e?auto=format&fit=crop&w=600&q=80';"
+               alt="Solitaires"
+               class="w-full aspect-square rounded-[12px] object-cover border border-light-outline-variant group-hover:border-light-primary transition-colors duration-state-change">
+          <span class="font-label text-label-sm uppercase text-light-on-surface text-center">Solitaires</span>
+        </a>
+      </div>
     </div>
-</section>
-{% endif %}
+  </section>
 
-<!-- Client Testimonials -->
-<section class="py-20 bg-[#141414] text-white">
-    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-12">
-        <div class="space-y-2">
-            <span class="text-[11px] sm:text-xs font-bold tracking-[0.2em] text-[#C5A059] uppercase font-sans">Patron Stories</span>
-            <h2 class="text-2xl sm:text-3xl lg:text-4xl font-bold text-white tracking-tight font-sans">Loved by Connoisseurs Worldwide</h2>
+  <!-- 4b. Shop by Price (Under $1,000 & Under $2,000 - White) + Personalized Jewellery (Burgundy) -->
+  <section id="personalised-atelier" class="max-w-7xl w-full mx-auto px-gutter-md md:px-page-margin">
+    <div class="grid grid-cols-2 lg:grid-cols-12 gap-gutter-md lg:gap-gutter-lg items-stretch">
+      <!-- Under $1,000 Card -->
+      <a href="{% url 'catalog:product_list' %}?max_price=1000" class="col-span-1 lg:col-span-3 group bg-white-pure border border-light-outline-variant rounded-[12px] p-gutter-md lg:p-gutter-xl flex flex-col justify-between gap-gutter-md hover:border-light-primary transition-colors duration-state-change">
+        <div class="flex flex-col gap-gutter-sm">
+          <span class="font-label text-label-sm uppercase text-light-primary">Shop by Price</span>
+          <h2 class="font-headline text-headline-md text-light-on-surface tabular-nums">Under $1,000</h2>
         </div>
+        <span class="inline-flex items-center gap-gutter-xs font-label text-label-md uppercase text-light-primary">
+          <span class="font-label text-label-md">Explore</span>
+          <span class="material-symbols-outlined text-title-sm" aria-hidden="true">arrow_forward</span>
+        </span>
+      </a>
 
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-left">
-            <div class="bg-[#1C1C1C] border border-[#2B2B2B] p-6 rounded-sm space-y-4">
-                <div class="text-[#C5A059] text-sm">★★★★★</div>
-                <p class="text-xs text-neutral-300 leading-relaxed font-sans">
-                    "My fiancée was brought to tears when she opened the velvet box. The 1.8ct oval solitaire has extraordinary fire and scintillation. Cartier caliber at a thoughtful price."
-                </p>
-                <div>
-                    <h4 class="text-xs font-bold text-white font-sans">Marcus Sterling</h4>
-                    <p class="text-[10px] text-neutral-400 font-sans">Verified Client • Manhattan, NY</p>
-                </div>
-            </div>
-
-            <div class="bg-[#1C1C1C] border border-[#2B2B2B] p-6 rounded-sm space-y-4">
-                <div class="text-[#C5A059] text-sm">★★★★★</div>
-                <p class="text-xs text-neutral-300 leading-relaxed font-sans">
-                    "The Sovereign Tennis Bracelet has become my daily staple. The hidden security clasp is genius and it glides across my wrist like silk. Truly sublime craftsmanship."
-                </p>
-                <div>
-                    <h4 class="text-xs font-bold text-white font-sans">Camilla Althaus</h4>
-                    <p class="text-[10px] text-neutral-400 font-sans">Verified Client • London, UK</p>
-                </div>
-            </div>
-
-            <div class="bg-[#1C1C1C] border border-[#2B2B2B] p-6 rounded-sm space-y-4">
-                <div class="text-[#C5A059] text-sm">★★★★★</div>
-                <p class="text-xs text-neutral-300 leading-relaxed font-sans">
-                    "The real-time tracking portal gave us complete peace of mind. Watching each stage from master setting to insured courier arrival was a wonderful experience."
-                </p>
-                <div>
-                    <h4 class="text-xs font-bold text-white font-sans">David & Elena Chen</h4>
-                    <p class="text-[10px] text-neutral-400">Verified Client • San Francisco, CA</p>
-                </div>
-            </div>
+      <!-- Under $2,000 Card -->
+      <a href="{% url 'catalog:product_list' %}?max_price=2000" class="col-span-1 lg:col-span-3 group bg-white-pure border border-light-outline-variant rounded-[12px] p-gutter-md lg:p-gutter-xl flex flex-col justify-between gap-gutter-md hover:border-light-primary transition-colors duration-state-change">
+        <div class="flex flex-col gap-gutter-sm">
+          <span class="font-label text-label-sm uppercase text-light-primary">Shop by Price</span>
+          <h2 class="font-headline text-headline-md text-light-on-surface tabular-nums">Under $2,000</h2>
         </div>
+        <span class="inline-flex items-center gap-gutter-xs font-label text-label-md uppercase text-light-primary">
+          <span class="font-label text-label-md">Explore</span>
+          <span class="material-symbols-outlined text-title-sm" aria-hidden="true">arrow_forward</span>
+        </span>
+      </a>
+
+      <!-- Personalized Jewellery Card (Image Overlay) -->
+      <a href="{% url 'core:contact' %}?subject=personalised" class="col-span-2 lg:col-span-6 group relative rounded-[12px] overflow-hidden border border-dark-outline-variant bg-dark-surface-container-lowest text-dark-on-surface min-h-[220px] flex items-center p-gutter-xl">
+        <img src="https://lh3.googleusercontent.com/aida/ALJJyrDIBgsTKz9SQO8YHXAcKoExXM5gRC1YIfzJfnBpoQ3GmmAh0wVAAzH29EDBSzkDaHJRs2ennUwsfujj4Oul5exrAhCe7wrtyeiADdhDuOtuTvwQnqgSul4gThoKQH9zEWHXE56wxZHlm6EK3-Xj7du4yxR_OBSuBSFGtfSo8SVrNk5st_8AsreEspxPeLlWjtf2oP2LPf-2ZktENyrBoqIYmX_yjoUte-Du8mi41VhJ5P8k77570FS-RgW1A_Dxcg"
+             onerror="this.onerror=null; this.src='{{ personalised_section.image_url }}';"
+             alt="LUCKJARY Personalized Engraved Jewellery"
+             class="absolute inset-0 w-full h-full object-cover transition-transform duration-image-hover ease-image-hover group-hover:scale-105">
+        <div class="absolute inset-0 bg-gradient-to-r from-[#5E0017]/95 via-[#5E0017]/75 to-transparent" aria-hidden="true"></div>
+        <div class="relative z-10 flex flex-col items-start gap-gutter-sm max-w-sm">
+          <span class="font-label text-label-sm uppercase text-champagne">Bespoke Atelier</span>
+          <h2 class="font-headline text-headline-md text-dark-on-surface">Personalized Jewellery</h2>
+          <p class="font-body text-body-sm text-dark-on-surface-variant">Custom engravings, initials, and birthstones crafted to order.</p>
+          <span class="inline-flex items-center gap-gutter-xs bg-cream-soft text-burgundy-deep px-4 py-2 rounded-[4px] uppercase tracking-wider mt-gutter-xs">
+            <span class="font-label text-label-sm">Personalize Yours</span>
+            <span class="material-symbols-outlined text-title-sm" aria-hidden="true">arrow_forward</span>
+          </span>
+        </div>
+      </a>
     </div>
-</section>
+  </section>
+
+  <!-- 4c. 4 Trust Guarantees (White) -->
+  <section id="trust-guarantees" class="max-w-7xl w-full mx-auto px-gutter-md md:px-page-margin">
+    <div class="bg-white-pure border border-light-outline-variant rounded-[12px] overflow-hidden grid grid-cols-2 lg:grid-cols-4 lg:py-gutter-lg lg:px-gutter-xl lg:gap-gutter-lg">
+      <div class="py-gutter-md px-gutter-sm lg:p-0 border-r border-b border-light-outline-variant lg:border-0 flex flex-col lg:flex-row items-center justify-center text-center lg:text-left gap-gutter-xs lg:gap-gutter-sm">
+        <span class="w-10 h-10 rounded-full bg-cream-soft text-light-primary inline-flex items-center justify-center shrink-0">
+          <span class="material-symbols-outlined text-title-md" aria-hidden="true">verified</span>
+        </span>
+        <span class="font-title text-title-sm text-light-on-surface">100% Certified</span>
+      </div>
+      <div class="py-gutter-md px-gutter-sm lg:p-0 border-b border-light-outline-variant lg:border-0 flex flex-col lg:flex-row items-center justify-center text-center lg:text-left gap-gutter-xs lg:gap-gutter-sm">
+        <span class="w-10 h-10 rounded-full bg-cream-soft text-light-primary inline-flex items-center justify-center shrink-0">
+          <span class="material-symbols-outlined text-title-md" aria-hidden="true">event_repeat</span>
+        </span>
+        <span class="font-title text-title-sm text-light-on-surface">15 Day Exchange</span>
+      </div>
+      <div class="py-gutter-md px-gutter-sm lg:p-0 border-r border-light-outline-variant lg:border-0 flex flex-col lg:flex-row items-center justify-center text-center lg:text-left gap-gutter-xs lg:gap-gutter-sm">
+        <span class="w-10 h-10 rounded-full bg-cream-soft text-light-primary inline-flex items-center justify-center shrink-0">
+          <span class="material-symbols-outlined text-title-md" aria-hidden="true">autorenew</span>
+        </span>
+        <span class="font-title text-title-sm text-light-on-surface">Lifetime Exchange</span>
+      </div>
+      <div class="py-gutter-md px-gutter-sm lg:p-0 flex flex-col lg:flex-row items-center justify-center text-center lg:text-left gap-gutter-xs lg:gap-gutter-sm">
+        <span class="w-10 h-10 rounded-full bg-cream-soft text-light-primary inline-flex items-center justify-center shrink-0">
+          <span class="material-symbols-outlined text-title-md" aria-hidden="true">workspace_premium</span>
+        </span>
+        <span class="font-title text-title-sm text-light-on-surface">One Year Warranty</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. LUCKJARY Vault Plan & Atelier Bento (Image Overlays) -->
+  <section id="vault-plan" class="max-w-7xl w-full mx-auto px-gutter-md md:px-page-margin">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter-lg items-stretch">
+      <a href="{% url 'core:contact' %}?subject=vault-plan" class="lg:col-span-6 group relative rounded-[12px] overflow-hidden bg-dark-surface text-dark-on-surface border border-dark-outline-variant p-gutter-xl min-h-[360px] flex flex-col justify-end">
+        <img src="https://lh3.googleusercontent.com/aida/ALJJyrAsBOLEhKj84BuIbNTS0S8v3fEMtZ4WL1S-f-9WrbhRvVFa7J5VUq-xj6Skuw2499HoLXI0rA5ZbxOLJZf3xr_zIsbZHgjOaXnfP4NjTLlCi3yz93spviVBOrHBuPnQo0EdsX4CinvrB-Cvbgn-XF3J6NWGvVOM8ySY5zOipfq7Rq7oPq2RNog3M-OkcFWA5XTi8HgIXZiYXZcRzkaQv9GEUCd9r3daKPQg1PoCaGy0KbtrRF7Bn4vRJTFK5mSXPQ"
+             onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1598560917505-59a3ad559071?auto=format&fit=crop&w=1200&q=85';"
+             alt="LUCKJARY Vault Plan Craftsmanship"
+             class="absolute inset-0 w-full h-full object-cover transition-transform duration-image-hover ease-image-hover group-hover:scale-105">
+        <div class="absolute inset-0 bg-gradient-to-t from-[#5E0017]/95 via-[#5E0017]/65 to-[#5E0017]/30" aria-hidden="true"></div>
+        <div class="relative z-10 flex flex-col items-start gap-gutter-sm">
+          <span class="font-label text-label-md uppercase text-champagne">LUCKJARY Vault Plan</span>
+          <h2 class="font-headline text-headline-lg text-dark-on-surface">9=10 Monthly Saving Scheme</h2>
+          <p class="font-body text-body-md text-dark-on-surface-variant max-w-md">Pay 9 monthly instalments toward your next heirloom, and the 10th is on LUCKJARY.</p>
+        </div>
+      </a>
+
+      <div id="stores" class="lg:col-span-6 flex flex-col gap-gutter-lg">
+        <a href="{% url 'catalog:category_products' 'necklaces' %}" class="group relative flex-1 rounded-[12px] overflow-hidden bg-dark-surface text-dark-on-surface border border-dark-outline-variant p-gutter-lg md:p-gutter-xl min-h-[170px] flex items-center">
+          <img src="https://lh3.googleusercontent.com/aida/ALJJyrBA0bjRv83qCEOYMdLmZSJVgnLha5Yk1PCiFMiaDE86R0k3q5vBEY4vRpSNImay56cZIOO9QWpIzzAdGd6h8j-R91mtFFkxda_ywal4zTaDoD69jQn8nstXAqkM_54mySKaidOQY2kJbja_OhgZIt10Tec-MhQrrNcJO560OZ4c2iBZNTXdIvQqAL39HGkqzE68K9eiA4Pd1OgHteWPlNfNZJIHVgnltRp0y69YLg5jYd8qMCO7rqeIfFO4ORLTyg"
+               onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1611591437281-460bfbe1220a?auto=format&fit=crop&w=1200&q=85';"
+               alt="Minimalist Chains & Bands"
+               class="absolute inset-0 w-full h-full object-cover transition-transform duration-image-hover ease-image-hover group-hover:scale-105">
+          <div class="absolute inset-0 bg-gradient-to-r from-[#5E0017]/95 via-[#5E0017]/90 to-[#5E0017]/45" aria-hidden="true"></div>
+          <div class="relative z-10 flex flex-col gap-gutter-xs max-w-sm">
+            <span class="font-label text-label-sm uppercase text-champagne">Everyday 18k Vermeil</span>
+            <h3 class="font-headline text-headline-sm text-dark-on-surface">Minimalist Chains &amp; Bands</h3>
+            <p class="font-body text-body-sm text-dark-on-surface-variant">Lightweight pieces built for daily layering.</p>
+          </div>
+        </a>
+
+        <a href="{% url 'core:about' %}#boutiques" id="atelier" class="group relative flex-1 rounded-[12px] overflow-hidden bg-dark-surface text-dark-on-surface border border-dark-outline-variant p-gutter-lg md:p-gutter-xl min-h-[170px] flex items-center">
+          <img src="https://lh3.googleusercontent.com/aida/ALJJyrDHGZiHeC86ec9VnTzChyJ-TGfu2w3-DtmXROisrYWPRrFiDBFFWiqYohh08pCPHl025IT0CYnWhOgT1Ktr8UwMCprbkosqUfb6qMgvxtBCWKg0Ymg5hKJE42jY0pqRVaL2-T50AUSlCSSeOYC65GbydQdjATTTk0NpcE-eXOzg4HckOpis0GQI5iCPEW6-AbLWMRXIobeLgaC8lzkCaMNFq7eq_ytd5z4A5pR_6RDNMOdXWs8Aua908z-gYdokUJY"
+               onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1603561591411-07134e71a2a9?auto=format&fit=crop&w=1200&q=85';"
+               alt="LUCKJARY Boutique"
+               class="absolute inset-0 w-full h-full object-cover transition-transform duration-image-hover ease-image-hover group-hover:scale-105">
+          <div class="absolute inset-0 bg-gradient-to-r from-[#5E0017]/95 via-[#5E0017]/90 to-[#5E0017]/45" aria-hidden="true"></div>
+          <div class="relative z-10 flex flex-col gap-gutter-xs max-w-sm">
+            <span class="font-label text-label-sm uppercase text-champagne">Private Salons</span>
+            <h3 class="font-headline text-headline-sm text-dark-on-surface">Visit a LUCKJARY Boutique</h3>
+            <p class="font-body text-body-sm text-dark-on-surface-variant">Complimentary ultrasonic cleaning &amp; styling.</p>
+          </div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+</div>
+{% endblock %}
+
+{% block footer %}
+<!-- Deep Burgundy Footer -->
+<footer id="siloar-footer" class="bg-dark-surface-container-lowest text-dark-on-surface border-t border-dark-outline-variant py-section-md">
+  <div class="max-w-7xl mx-auto px-gutter-md md:px-page-margin grid grid-cols-1 md:grid-cols-12 gap-gutter-xl">
+    <div class="md:col-span-4 flex flex-col gap-gutter-sm">
+      <span class="font-headline text-headline-md tracking-widest text-dark-on-surface uppercase">LUCKJARY</span>
+      <p class="font-body text-body-md text-dark-on-surface-variant">
+        Hallmarked 925 sterling silver, natural diamonds, and 18k vermeil heirlooms.
+      </p>
+    </div>
+
+    <div class="md:col-span-2 flex flex-col gap-gutter-sm">
+      <h3 class="font-label text-label-md uppercase text-champagne">Know Your Jewelry</h3>
+      <a href="{% url 'core:faq' %}" class="font-body text-body-md text-dark-on-surface-variant hover:text-dark-on-surface transition-colors">Diamond Guide</a>
+      <a href="{% url 'core:about' %}" class="font-body text-body-md text-dark-on-surface-variant hover:text-dark-on-surface transition-colors">925 Silver Purity</a>
+      <a href="{% url 'core:faq' %}#sizing" class="font-body text-body-md text-dark-on-surface-variant hover:text-dark-on-surface transition-colors">Ring Size Guide</a>
+    </div>
+
+    <div class="md:col-span-2 flex flex-col gap-gutter-sm">
+      <h3 class="font-label text-label-md uppercase text-champagne">Customer Care</h3>
+      <a href="{% url 'core:faq' %}" class="font-body text-body-md text-dark-on-surface-variant hover:text-dark-on-surface transition-colors">15-Day Returns</a>
+      <a href="{% url 'orders:order_tracking' %}" class="font-body text-body-md text-dark-on-surface-variant hover:text-dark-on-surface transition-colors">Track Order</a>
+      <a href="{% url 'core:about' %}#boutiques" class="font-body text-body-md text-dark-on-surface-variant hover:text-dark-on-surface transition-colors">Find a Store</a>
+    </div>
+
+    <div class="md:col-span-4 flex flex-col gap-gutter-md">
+      <h3 class="font-label text-label-md uppercase text-champagne">Stay in Touch</h3>
+      <form action="{% url 'core:subscribe_newsletter' %}" method="POST" class="flex flex-col gap-gutter-sm">
+        {% csrf_token %}
+        <label class="flex flex-col gap-gutter-xs">
+          <span class="sr-only font-label text-label-md">Email address</span>
+          <input type="email" name="email" required placeholder="elena@example.com" class="w-full bg-dark-surface-container-low border border-dark-outline-variant rounded-[4px] px-4 py-2.5 font-body text-body-md text-dark-on-surface placeholder:text-dark-outline focus:border-champagne focus:outline-none focus:ring-1 focus:ring-champagne">
+        </label>
+        <button type="submit" class="bg-cream-soft text-burgundy-deep px-5 py-2.5 rounded-[4px] uppercase tracking-wider hover:bg-white-pure transition-colors duration-state-change">
+          <span class="font-label text-label-md">Subscribe</span>
+        </button>
+        <p class="font-body text-body-sm text-dark-on-surface-variant">Receive private previews and atelier offers.</p>
+      </form>
+    </div>
+  </div>
+</footer>
 {% endblock %}
 
 {% block extra_scripts %}
-<script src="{% static 'js/scroll-video.js' %}"></script>
+<script>
+  (function () {
+    var cards = Array.prototype.slice.call(document.querySelectorAll('#carousel-track .carousel-card'));
+    var prevBtn = document.getElementById('prev-slide');
+    var nextBtn = document.getElementById('next-slide');
+    var pageSize = 3;
+    var offset = 0;
+
+    function renderSlide() {
+      if (cards.length <= pageSize) return;
+      cards.forEach(function (card, idx) {
+        var visible = false;
+        for (var i = 0; i < pageSize; i++) {
+          if ((offset + i) % cards.length === idx) {
+            visible = true;
+            break;
+          }
+        }
+        card.classList.toggle('hidden', !visible);
+      });
+    }
+
+    if (prevBtn && nextBtn && cards.length > pageSize) {
+      prevBtn.addEventListener('click', function () {
+        offset = (offset - pageSize + cards.length) % cards.length;
+        renderSlide();
+      });
+      nextBtn.addEventListener('click', function () {
+        offset = (offset + pageSize) % cards.length;
+        renderSlide();
+      });
+    }
+  })();
+</script>
 {% endblock %}
