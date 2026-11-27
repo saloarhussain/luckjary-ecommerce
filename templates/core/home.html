@@ -153,9 +153,9 @@
 <div id="siloar-storefront" class="bg-[#FCF1E3] text-[#1B1C1B] font-body antialiased selection:bg-[#800020] selection:text-[#FCF1E3] flex flex-col gap-gutter-xl pb-section-md">
 
   <!-- 1. Full-Bleed Burgundy Campaign Hero Banner (60% Burgundy + 30% White Offer Strip) -->
-  <section class="max-w-7xl w-full mx-auto px-gutter-md md:px-page-margin pt-gutter-lg">
-    <div class="relative rounded-[12px] overflow-hidden border border-dark-outline-variant bg-dark-surface-container-lowest">
-      <div class="relative min-h-[420px] flex items-center">
+  <section class="w-full">
+    <div class="relative overflow-hidden border-b border-dark-outline-variant bg-dark-surface-container-lowest">
+      <div class="relative min-h-[460px] lg:min-h-[520px] flex items-center">
         <img src="https://lh3.googleusercontent.com/aida/ALJJyrBtqfbmiZpZWRZM98UmMg-11N5bFLfCCNY61BvdSFKhww4mHauDVvKKh3wLjZjUhEGdFCx4DHnFM0teIO6vyPHHi57_6_3kz98ZD4M3bsoQ8N4WCP1htz5ALVU9ldXOATWK4lsefLAe2LXmdQSp72mAjFDrku96aDylV8UEyha3wnrFcO61s4siLp0Cgynpr_OsIjtv3IlOz5BWfaGOlnbMAhXQx6rhGGjI-K7EKLq9kTqvh8usoBPlvmU95wmW"
              onerror="this.onerror=null; this.src='{{ theme_settings.hero_poster_url|default:"https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?auto=format&fit=crop&w=2000&q=85" }}';"
              alt="Luckjary diamond necklace, ring, and bangle on burgundy velvet"
@@ -163,7 +163,7 @@
         <div class="absolute inset-0 bg-gradient-to-r from-[#5E0017]/95 via-[#5E0017]/65 to-transparent" aria-hidden="true"></div>
 
         <!-- Overlaid Promotional / Editorial Offer -->
-        <div class="relative z-10 p-gutter-xl lg:p-12 flex flex-col items-start gap-gutter-md max-w-lg text-dark-on-surface">
+        <div class="relative z-10 px-4 sm:px-8 lg:px-14 py-gutter-xl flex flex-col items-start gap-gutter-md max-w-xl text-dark-on-surface">
           <span class="font-label text-label-md uppercase text-champagne">LUCKJARY Atelier Event</span>
           <h1 class="font-siloar-display text-display-lg-mobile md:text-display-lg text-dark-on-surface text-balance">
             Golden Atelier Days
@@ -181,7 +181,7 @@
       </div>
 
       <!-- Clean Offer Strip Below Hero (White) -->
-      <div class="relative z-10 bg-white-pure border-t border-light-outline-variant px-gutter-md md:px-gutter-xl py-gutter-md flex flex-wrap items-center justify-center gap-gutter-md md:gap-gutter-lg text-center">
+      <div class="relative z-10 bg-white-pure border-t border-light-outline-variant px-gutter-md md:px-10 py-gutter-md flex flex-wrap items-center justify-center gap-gutter-md md:gap-gutter-lg text-center">
         <div class="flex items-center gap-gutter-sm">
           <span class="material-symbols-outlined text-light-primary text-title-md" aria-hidden="true">credit_card</span>
           <span class="font-body text-body-sm text-light-on-surface">10% Instant Bank Savings up to $75 on Fine Solitaires</span>
@@ -193,7 +193,7 @@
   </section>
 
   <!-- 2. Full-Bleed Promo Image with Overlaid White Product Carousel -->
-  <section id="silver-carousel" class="max-w-7xl w-full mx-auto px-gutter-md md:px-page-margin">
+  <section id="silver-carousel" class="w-full px-3 sm:px-6 lg:px-10">
     <div class="relative rounded-[12px] overflow-hidden border border-dark-outline-variant bg-dark-surface-container-lowest">
       <img src="https://lh3.googleusercontent.com/aida/ALJJyrCToo3zgWPm7mi2QODaY2dBwihfxQ0g8pB2pyIwe3RpIDucsgRZo36w1TXZROtEdeVce2DFen8Mt4yPi3GSfOYFRA-aCA4OR1eMGwDWOY3EgINN9ZsR9chGAuxVE0hbcT831yRJqOsxAdJVIkvj3emAJp2kx4nNNyQ1X_dxjiGW2OplqM8Fai1wbLFW3VNW-kr-vL_QUPwqO9lZRmaY4EXn2ZfcgsERab6t454-t2ov77bdVO8USWTio_67FX3WjA"
            onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1599643477877-530eb83abc8e?auto=format&fit=crop&w=1600&q=85';"
@@ -301,7 +301,7 @@
   </section>
 
   <!-- 3. Bento 3-Card Editorial Showcase Grid (Full-Bleed Image Overlays) -->
-  <section id="bento-grid" class="max-w-7xl w-full mx-auto px-gutter-md md:px-page-margin">
+  <section id="bento-grid" class="w-full px-3 sm:px-6 lg:px-10">
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter-lg items-stretch">
       <!-- Tall Left Portrait Card -->
       <a href="{% url 'catalog:product_list' %}?material=925-sterling-silver" class="lg:col-span-6 group relative rounded-[12px] overflow-hidden border border-dark-outline-variant bg-dark-surface min-h-[480px] flex flex-col justify-between">
@@ -361,7 +361,7 @@
   </section>
 
   <!-- 4. Wrapped With Love Category Strip (Light Cream) -->
-  <section id="wrapped" class="max-w-7xl w-full mx-auto px-gutter-md md:px-page-margin flex flex-col gap-gutter-lg">
+  <section id="wrapped" class="w-full px-3 sm:px-6 lg:px-10 flex flex-col gap-gutter-lg">
     <div class="bg-cream-soft border border-light-outline-variant rounded-[12px] p-gutter-xl grid grid-cols-1 lg:grid-cols-12 items-center gap-gutter-lg">
       <div class="lg:col-span-2 flex flex-col items-center text-center gap-gutter-sm">
         <span class="w-14 h-14 rounded-full bg-white-pure text-light-primary border border-light-outline-variant inline-flex items-center justify-center">
@@ -418,7 +418,7 @@
   </section>
 
   <!-- 4b. Shop by Price (Under $1,000 & Under $2,000 - White) + Personalized Jewellery (Burgundy) -->
-  <section id="personalised-atelier" class="max-w-7xl w-full mx-auto px-gutter-md md:px-page-margin">
+  <section id="personalised-atelier" class="w-full px-3 sm:px-6 lg:px-10">
     <div class="grid grid-cols-2 lg:grid-cols-12 gap-gutter-md lg:gap-gutter-lg items-stretch">
       <!-- Under $1,000 Card -->
       <a href="{% url 'catalog:product_list' %}?max_price=1000" class="col-span-1 lg:col-span-3 group bg-white-pure border border-light-outline-variant rounded-[12px] p-gutter-md lg:p-gutter-xl flex flex-col justify-between gap-gutter-md hover:border-light-primary transition-colors duration-state-change">
@@ -465,7 +465,7 @@
   </section>
 
   <!-- 4c. 4 Trust Guarantees (White) -->
-  <section id="trust-guarantees" class="max-w-7xl w-full mx-auto px-gutter-md md:px-page-margin">
+  <section id="trust-guarantees" class="w-full px-3 sm:px-6 lg:px-10">
     <div class="bg-white-pure border border-light-outline-variant rounded-[12px] overflow-hidden grid grid-cols-2 lg:grid-cols-4 lg:py-gutter-lg lg:px-gutter-xl lg:gap-gutter-lg">
       <div class="py-gutter-md px-gutter-sm lg:p-0 border-r border-b border-light-outline-variant lg:border-0 flex flex-col lg:flex-row items-center justify-center text-center lg:text-left gap-gutter-xs lg:gap-gutter-sm">
         <span class="w-10 h-10 rounded-full bg-cream-soft text-light-primary inline-flex items-center justify-center shrink-0">
@@ -495,7 +495,7 @@
   </section>
 
   <!-- 5. LUCKJARY Vault Plan & Atelier Bento (Image Overlays) -->
-  <section id="vault-plan" class="max-w-7xl w-full mx-auto px-gutter-md md:px-page-margin">
+  <section id="vault-plan" class="w-full px-3 sm:px-6 lg:px-10">
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter-lg items-stretch">
       <a href="{% url 'core:contact' %}?subject=vault-plan" class="lg:col-span-6 group relative rounded-[12px] overflow-hidden bg-dark-surface text-dark-on-surface border border-dark-outline-variant p-gutter-xl min-h-[360px] flex flex-col justify-end">
         <img src="https://lh3.googleusercontent.com/aida/ALJJyrAsBOLEhKj84BuIbNTS0S8v3fEMtZ4WL1S-f-9WrbhRvVFa7J5VUq-xj6Skuw2499HoLXI0rA5ZbxOLJZf3xr_zIsbZHgjOaXnfP4NjTLlCi3yz93spviVBOrHBuPnQo0EdsX4CinvrB-Cvbgn-XF3J6NWGvVOM8ySY5zOipfq7Rq7oPq2RNog3M-OkcFWA5XTi8HgIXZiYXZcRzkaQv9GEUCd9r3daKPQg1PoCaGy0KbtrRF7Bn4vRJTFK5mSXPQ"
@@ -546,7 +546,7 @@
 {% block footer %}
 <!-- Deep Burgundy Footer -->
 <footer id="siloar-footer" class="bg-dark-surface-container-lowest text-dark-on-surface border-t border-dark-outline-variant py-section-md">
-  <div class="max-w-7xl mx-auto px-gutter-md md:px-page-margin grid grid-cols-1 md:grid-cols-12 gap-gutter-xl">
+  <div class="w-full px-3 sm:px-6 lg:px-10 grid grid-cols-1 md:grid-cols-12 gap-gutter-xl">
     <div class="md:col-span-4 flex flex-col gap-gutter-sm">
       <span class="font-headline text-headline-md tracking-widest text-dark-on-surface uppercase">LUCKJARY</span>
       <p class="font-body text-body-md text-dark-on-surface-variant">
