@@ -41,6 +41,7 @@ def home(request):
         'categories': categories,
         'collections': collections,
         'theme_settings': theme_settings,
+        'hero_pin_on_scroll': theme_settings.get_hero_pin_on_scroll(),
         'spotlight_bento': theme_settings.get_spotlight_bento(),
         'active_metal': 'silver',
         'meta_title': 'Luckjary | Handcrafted 925 Sterling Silver Jewellery',
@@ -236,12 +237,17 @@ def _apply_theme_payload(theme, payload, preserve_video_urls=False):
     existing_tokens = dict(theme.design_tokens_json or {})
     if 'design_tokens' in payload and isinstance(payload['design_tokens'], dict):
         saved_bento = existing_tokens.get('spotlight_bento')
+        saved_pin = existing_tokens.get('hero_pin_on_scroll')
         existing_tokens = dict(payload['design_tokens'])
         if saved_bento is not None:
             existing_tokens['spotlight_bento'] = saved_bento
+        if saved_pin is not None:
+            existing_tokens['hero_pin_on_scroll'] = saved_pin
 
     if 'spotlight_bento' in payload and isinstance(payload['spotlight_bento'], dict):
         existing_tokens['spotlight_bento'] = payload['spotlight_bento']
+    if 'hero_pin_on_scroll' in payload:
+        existing_tokens['hero_pin_on_scroll'] = _to_bool(payload.get('hero_pin_on_scroll'), False)
 
     theme.design_tokens_json = existing_tokens
 

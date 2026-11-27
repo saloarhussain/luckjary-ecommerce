@@ -1129,7 +1129,11 @@
                       </div>
                     </div>
 
-                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2 border-t border-[#21242d]">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 pt-2 border-t border-[#21242d]">
+                      <label class="flex items-center gap-2 text-[11px] text-neutral-300 font-sans cursor-pointer">
+                        <input type="checkbox" id="tcHeroPinOnScroll" class="accent-emerald-500 w-3.5 h-3.5" onchange="syncHeroCustomizerPreview()">
+                        <span>Pin Screen While Scrubbing</span>
+                      </label>
                       <label class="flex items-center gap-2 text-[11px] text-neutral-300 font-sans cursor-pointer">
                         <input type="checkbox" id="tcFadeOverlay" class="accent-emerald-500 w-3.5 h-3.5" onchange="syncHeroCustomizerPreview()">
                         <span>Fade Text Near End</span>
@@ -1774,6 +1778,7 @@ document.addEventListener('DOMContentLoaded', () => {
     hero_overlay_fade_start: 70,
     hero_show_scroll_cue: true,
     hero_show_progress_bar: true,
+    hero_pin_on_scroll: false,
     hero_badge_text: 'The 925 Sterling Silver Heirlooms',
     hero_title_line1: 'Lustrous Silver.',
     hero_title_line2: 'Radiant for Every Moment.',
@@ -1829,6 +1834,7 @@ document.addEventListener('DOMContentLoaded', () => {
     setVal('tcFadeStart', state.hero_overlay_fade_start);
     setChk('tcShowScrollCue', state.hero_show_scroll_cue);
     setChk('tcShowProgressBar', state.hero_show_progress_bar);
+    setChk('tcHeroPinOnScroll', Boolean(state.hero_pin_on_scroll));
 
     setVal('tcHeroBadge', state.hero_badge_text);
     setVal('tcHeroTitle1', state.hero_title_line1);
@@ -1882,6 +1888,7 @@ document.addEventListener('DOMContentLoaded', () => {
     heroThemeState.hero_overlay_fade_start = parseInt(getVal('tcFadeStart', 70), 10) || 70;
     heroThemeState.hero_show_scroll_cue = getChk('tcShowScrollCue', true);
     heroThemeState.hero_show_progress_bar = getChk('tcShowProgressBar', true);
+    heroThemeState.hero_pin_on_scroll = getChk('tcHeroPinOnScroll', false);
 
     heroThemeState.hero_badge_text = getVal('tcHeroBadge', '');
     heroThemeState.hero_title_line1 = getVal('tcHeroTitle1', '');

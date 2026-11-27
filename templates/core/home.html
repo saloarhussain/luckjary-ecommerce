@@ -7,12 +7,13 @@
          class="hero-scroll-track bg-[#0F0F0F] text-white"
          data-enabled="{% if theme_settings.hero_video_enabled %}true{% else %}false{% endif %}"
          data-mode="{{ theme_settings.hero_video_mode|default:'scrub' }}"
+         data-pin="{% if hero_pin_on_scroll %}true{% else %}false{% endif %}"
          data-smoothing="{{ theme_settings.hero_scrub_smoothing|default:'0.16' }}"
          data-fade-overlay="{% if theme_settings.hero_fade_overlay_on_scroll %}true{% else %}false{% endif %}"
          data-fade-start="{{ theme_settings.hero_overlay_fade_start|default:'70' }}"
-         style="{% if theme_settings.hero_video_enabled and theme_settings.hero_video_mode == 'scrub' %}height: {{ theme_settings.hero_scroll_height_vh|default:280 }}vh;{% else %}min-height: 82vh;{% endif %}">
+         style="{% if theme_settings.hero_video_enabled and theme_settings.hero_video_mode == 'scrub' and hero_pin_on_scroll %}height: {{ theme_settings.hero_scroll_height_vh|default:280 }}vh;{% else %}min-height: 82vh;{% endif %}">
     <div id="heroStickyStage"
-         class="{% if theme_settings.hero_video_enabled and theme_settings.hero_video_mode == 'scrub' %}hero-sticky-stage{% else %}relative min-h-[82vh] w-full overflow-hidden bg-[#0F0F0F]{% endif %} flex items-center justify-center">
+         class="{% if theme_settings.hero_video_enabled and theme_settings.hero_video_mode == 'scrub' and hero_pin_on_scroll %}hero-sticky-stage{% else %}relative min-h-[82vh] w-full overflow-hidden bg-[#0F0F0F]{% endif %} flex items-center justify-center">
         <!-- Media Layer: Poster Fallback + Scroll-Scrubbed Render Canvas -->
         <div class="absolute inset-0 z-0">
             <img id="heroFallbackImg"
@@ -32,7 +33,6 @@
                    muted
                    playsinline
                    preload="auto"
-                   crossorigin="anonymous"
                    disablepictureinpicture
                    aria-hidden="true">
                 {% if theme_settings.hero_video_webm_url %}

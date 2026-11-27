@@ -157,6 +157,10 @@ class StorefrontThemeSettings(models.Model):
     def hero_vignette_alpha(self):
         return f"{self.hero_vignette_strength / 100:.2f}"
 
+    def get_hero_pin_on_scroll(self):
+        saved = self.design_tokens_json or {}
+        return bool(saved.get('hero_pin_on_scroll', False))
+
     def get_spotlight_bento(self):
         saved = (self.design_tokens_json or {}).get('spotlight_bento')
         merged = {}
@@ -173,6 +177,7 @@ class StorefrontThemeSettings(models.Model):
     def to_dict(self):
         tokens = dict(self.design_tokens_json or {})
         tokens.pop('spotlight_bento', None)
+        tokens.pop('hero_pin_on_scroll', None)
         return {
             'hero_video_enabled': self.hero_video_enabled,
             'hero_video_mode': self.hero_video_mode,
@@ -188,6 +193,7 @@ class StorefrontThemeSettings(models.Model):
             'hero_overlay_fade_start': self.hero_overlay_fade_start,
             'hero_show_scroll_cue': self.hero_show_scroll_cue,
             'hero_show_progress_bar': self.hero_show_progress_bar,
+            'hero_pin_on_scroll': self.get_hero_pin_on_scroll(),
             'hero_badge_text': self.hero_badge_text,
             'hero_title_line1': self.hero_title_line1,
             'hero_title_line2': self.hero_title_line2,

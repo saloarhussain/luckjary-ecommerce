@@ -89,9 +89,21 @@
     function computeScrollProgress() {
         const rect = track.getBoundingClientRect();
         const scrollableDistance = track.offsetHeight - stage.offsetHeight;
-        if (scrollableDistance <= 0) return 0;
-        const scrolled = -rect.top;
-        return clamp(scrolled / scrollableDistance, 0, 1);
+        if (scrollableDistance > 20) {
+            return clamp(-rect.top / scrollableDistance, 0, 1);
+        }
+        // Unpinned normal scroll mode: scrub smoothly as the hero scrolls out of view
+        const normalTravel = Math.max(1, rect.height * 0.85);
+        return clamp(-rect.top / normalTravel, 0, 1);
+    }
+
+    function releaseStickyPinOnFallback() {
+        track.style.height = 'auto';
+        track.style.minHeight = '82vh';
+        stage.classList.remove('hero-sticky-stage');
+        stage.classList.add('relative', 'min-h-[82vh]', 'w-full', 'overflow-hidden', 'bg-[#0F0F0F]');
+        if (scrollCueEl) scrollCueEl.style.display = 'none';
+        if (progressEl && progressEl.parentElement) progressEl.parentElement.style.display = 'none';
     }
 
     function updateOverlayChoreography(progress) {
@@ -251,12 +263,31 @@
         }
     });
 
-    video.addEventListener('error', function () {
+    function handleVideoUnavailable() {
         canvas.classList.remove('is-ready');
         if (fallbackImg) {
             fallbackImg.style.opacity = '';
         }
-    });
+        releaseStickyPinOnFallback();
+    }
+
+    video.addEventListener('error', handleVideoUnavailable);
+
+    // Note: When <video> uses <source> children, HTTP 404 fires 'error' on the <source> tags (not <video>)
+    const sources = video.querySelectorAll('source');
+    if (sources.length === 0) {
+        handleVideoUnavailable();
+    } else {
+        let failedSources = 0;
+        sources.forEach(function (srcEl) {
+            srcEl.addEventListener('error', function () {
+                failedSources += 1;
+                if (failedSources >= sources.length || video.networkState === 3) {
+                    handleVideoUnavailable();
+                }
+            });
+        });
+    }
 
     window.addEventListener('scroll', scheduleTick, { passive: true });
     window.addEventListener(
