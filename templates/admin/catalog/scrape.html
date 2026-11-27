@@ -121,6 +121,14 @@ a, a *, a:hover, a:hover *, a:focus, a:active, button, button * {
   border-color: rgba(255, 255, 255, 0.15) !important;
   color: #ffffff !important;
 }
+.btn-secondary:disabled,
+.btn-secondary:disabled:hover {
+  background-color: #171920 !important;
+  border-color: #21242d !important;
+  color: #e5e5e5 !important;
+  opacity: 0.5;
+  cursor: not-allowed !important;
+}
 .luxury-input {
   background-color: #111317 !important;
   border: 1px solid #21242d !important;
@@ -360,12 +368,12 @@ a, a *, a:hover, a:hover *, a:focus, a:active, button, button * {
                 <span id="bulkImportBtnText">Bulk Import Selected (<span id="bulkSelectedCount">0</span>)</span>
               </button>
 
-              <!-- Exports -->
-              <button type="button" onclick="exportBulkCsv()" class="btn-secondary py-2 px-3 rounded-xl text-xs font-semibold flex items-center gap-1.5 cursor-pointer font-sans" title="Export all collection items to CSV">
+              <!-- Exports (currently disabled; buttons intentionally kept visible) -->
+              <button type="button" onclick="exportBulkCsv()" disabled aria-disabled="true" class="btn-secondary py-2 px-3 rounded-xl text-xs font-semibold flex items-center gap-1.5 cursor-not-allowed opacity-50 font-sans" title="CSV export is currently disabled">
                 <svg class="w-3.5 h-3.5 text-neutral-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
                 <span>CSV</span>
               </button>
-              <button type="button" onclick="exportBulkJson()" class="btn-secondary py-2 px-3 rounded-xl text-xs font-semibold flex items-center gap-1.5 cursor-pointer font-sans" title="Export all collection items to JSON">
+              <button type="button" onclick="exportBulkJson()" disabled aria-disabled="true" class="btn-secondary py-2 px-3 rounded-xl text-xs font-semibold flex items-center gap-1.5 cursor-not-allowed opacity-50 font-sans" title="JSON export is currently disabled">
                 <svg class="w-3.5 h-3.5 text-neutral-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
                 <span>JSON</span>
               </button>
@@ -654,13 +662,13 @@ a, a *, a:hover, a:hover *, a:focus, a:active, button, button * {
                 <span id="importBtnText">Import to Products</span>
               </button>
 
-              <!-- Secondary Action Buttons -->
+              <!-- Secondary Action Buttons (exports currently disabled; buttons intentionally kept visible) -->
               <div class="grid grid-cols-2 gap-2.5">
-                <button type="button" onclick="exportScrapedJson()" class="btn-secondary py-2.5 px-3 rounded-xl text-xs font-semibold flex items-center justify-center gap-1.5 cursor-pointer font-sans">
+                <button type="button" onclick="exportScrapedJson()" disabled aria-disabled="true" class="btn-secondary py-2.5 px-3 rounded-xl text-xs font-semibold flex items-center justify-center gap-1.5 cursor-not-allowed opacity-50 font-sans" title="JSON export is currently disabled">
                   <svg class="w-3.5 h-3.5 text-neutral-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
                   <span>Export JSON</span>
                 </button>
-                <button type="button" onclick="exportScrapedCsv()" class="btn-secondary py-2.5 px-3 rounded-xl text-xs font-semibold flex items-center justify-center gap-1.5 cursor-pointer font-sans">
+                <button type="button" onclick="exportScrapedCsv()" disabled aria-disabled="true" class="btn-secondary py-2.5 px-3 rounded-xl text-xs font-semibold flex items-center justify-center gap-1.5 cursor-not-allowed opacity-50 font-sans" title="CSV export is currently disabled">
                   <svg class="w-3.5 h-3.5 text-neutral-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
                   <span>Export CSV</span>
                 </button>
@@ -1510,6 +1518,7 @@ async function executeBulkImport() {
 
 // Export All Collection Products to CSV
 function exportBulkCsv() {
+  return; // CSV export temporarily disabled
   if (!collectionProducts || collectionProducts.length === 0) return;
   let csv = 'Title,Brand,Handle,Price_INR,Variants_Count,Variants_List,Images\n';
 
@@ -1535,6 +1544,7 @@ function exportBulkCsv() {
 
 // Export All Collection Products to JSON
 function exportBulkJson() {
+  return; // JSON export temporarily disabled
   if (!collectionProducts || collectionProducts.length === 0) return;
   const payload = {
     collection_title: currentProduct ? currentProduct.collection_title : 'Collection',
@@ -1811,6 +1821,7 @@ async function handleImportToVault() {
 
 // Export to JSON
 function exportScrapedJson() {
+  return; // JSON export temporarily disabled
   if (!currentProduct) return;
   const isDirectInr = currentProduct && currentProduct.currency === 'INR';
   const rawPrice = parseFloat(document.getElementById('fieldPrice').value) || 0;
@@ -1838,6 +1849,7 @@ function exportScrapedJson() {
 
 // Export to CSV
 function exportScrapedCsv() {
+  return; // CSV export temporarily disabled
   if (!currentProduct) return;
   const title = document.getElementById('fieldTitle').value.replace(/"/g, '""');
   const sku = document.getElementById('fieldSku').value;
