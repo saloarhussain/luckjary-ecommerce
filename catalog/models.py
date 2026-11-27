@@ -1,13 +1,22 @@
-from django.db import models
+from django.db import models, OperationalError, ProgrammingError
 from django.utils.text import slugify
 from django.urls import reverse
 from django.conf import settings
+
+def ensure_catalog_migrated():
+    """Ensure catalog migrations are applied (needed on Vercel where build skips migrate)."""
+    from django.db import connection
+    from django.core.management import call_command
+
+    if getattr(connection, 'needs_rollback', False):
+        connection.rollback()
+    call_command('migrate', 'catalog', verbosity=0, interactive=False)
 
 class Category(models.Model):
     name = models.CharField(max_length=100, unique=True)
     slug = models.SlugField(max_length=120, unique=True, blank=True)
     description = models.TextField(blank=True)
-    image_url = models.URLField(max_length=500, blank=True)
+    image_url = models.CharField(max_length=500, blank=True)
     meta_title = models.CharField(max_length=150, blank=True)
     meta_description = models.CharField(max_length=255, blank=True)
     is_featured = models.BooleanField(default=False)
@@ -31,6 +40,18 @@ class Category(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class CategoryThumbnail(models.Model):
+    """Stores uploaded category thumbnail image bytes in DB for serverless/Vercel persistence."""
+
+    category = models.OneToOneField(Category, on_delete=models.CASCADE, related_name='thumbnail_asset')
+    content_type = models.CharField(max_length=80, default='image/webp')
+    data = models.BinaryField()
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"Thumbnail for {self.category.name}"
 
 
 class Material(models.Model):

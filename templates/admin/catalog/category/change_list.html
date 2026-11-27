@@ -292,14 +292,14 @@ button, button *, button:hover, button:focus {
                     </td>
                     <td class="py-3.5 px-4 whitespace-nowrap">
                       <div class="flex items-center gap-3">
-                        <div class="w-8 h-8 rounded-lg bg-obsidian-800 border border-obsidian-700 flex items-center justify-center text-champagne-400 shrink-0">
-                          <span class="material-symbols-outlined text-[17px]">
-                            {% if 'ring' in category.name|lower %}diamond
-                            {% elif 'necklace' in category.name|lower %}auto_awesome
-                            {% elif 'earring' in category.name|lower %}adjust
-                            {% elif 'bracelet' in category.name|lower %}radio_button_checked
-                            {% else %}category{% endif %}
-                          </span>
+                        <div class="relative w-11 h-11 rounded-lg bg-obsidian-800 border border-obsidian-700 overflow-hidden flex items-center justify-center text-champagne-400 shrink-0 group/thumb">
+                          {% if category.image_url %}
+                          <img src="{{ category.image_url }}" alt="{{ category.name }}" id="cat-thumb-img-{{ category.pk }}" class="w-full h-full object-cover" onerror="this.classList.add('hidden'); this.nextElementSibling.classList.remove('hidden');">
+                          <span class="material-symbols-outlined text-[18px] hidden">image_not_supported</span>
+                          {% else %}
+                          <img src="" alt="{{ category.name }}" id="cat-thumb-img-{{ category.pk }}" class="w-full h-full object-cover hidden">
+                          <span class="material-symbols-outlined text-[18px]">category</span>
+                          {% endif %}
                         </div>
                         <div>
                           <a href="{% url 'admin:catalog_category_change' category.pk %}" class="font-bold text-white text-xs sm:text-sm hover:text-emerald-400 transition-colors inline-block" style="text-decoration: none !important;">
@@ -340,6 +340,11 @@ button, button *, button:hover, button:focus {
                     </td>
                     <td class="py-3.5 px-4 text-center whitespace-nowrap">
                       <div class="flex items-center justify-center gap-1.5">
+                        <label class="bg-obsidian-800 hover:bg-obsidian-750 border border-emerald-500/35 text-emerald-300 hover:text-white px-2.5 py-1 rounded-lg text-xs font-medium transition cursor-pointer inline-flex items-center gap-1" title="Upload Category Thumbnail">
+                          <span class="material-symbols-outlined text-[13px] text-emerald-400">upload</span>
+                          <span class="cat-upload-lbl-{{ category.pk }}">Thumb</span>
+                          <input type="file" accept="image/*" class="hidden" onchange="uploadCategoryThumb({{ category.pk }}, this)">
+                        </label>
                         <a href="{% url 'admin:catalog_category_change' category.pk %}" class="bg-obsidian-800 hover:bg-obsidian-750 border border-obsidian-700 text-neutral-200 hover:text-white px-2.5 py-1 rounded-lg text-xs font-medium transition cursor-pointer inline-flex items-center gap-1" style="text-decoration: none !important;">
                           <span class="material-symbols-outlined text-[13px] text-emerald-400">edit</span>
                           <span>Edit</span>
@@ -360,14 +365,14 @@ button, button *, button:hover, button:focus {
                     </td>
                     <td class="py-3.5 px-4 whitespace-nowrap">
                       <div class="flex items-center gap-3">
-                        <div class="w-8 h-8 rounded-lg bg-obsidian-800 border border-obsidian-700 flex items-center justify-center text-champagne-400 shrink-0">
-                          <span class="material-symbols-outlined text-[17px]">
-                            {% if 'ring' in category.name|lower %}diamond
-                            {% elif 'necklace' in category.name|lower %}auto_awesome
-                            {% elif 'earring' in category.name|lower %}adjust
-                            {% elif 'bracelet' in category.name|lower %}radio_button_checked
-                            {% else %}category{% endif %}
-                          </span>
+                        <div class="relative w-11 h-11 rounded-lg bg-obsidian-800 border border-obsidian-700 overflow-hidden flex items-center justify-center text-champagne-400 shrink-0 group/thumb">
+                          {% if category.image_url %}
+                          <img src="{{ category.image_url }}" alt="{{ category.name }}" id="cat-thumb-img-{{ category.pk }}" class="w-full h-full object-cover" onerror="this.classList.add('hidden'); this.nextElementSibling.classList.remove('hidden');">
+                          <span class="material-symbols-outlined text-[18px] hidden">image_not_supported</span>
+                          {% else %}
+                          <img src="" alt="{{ category.name }}" id="cat-thumb-img-{{ category.pk }}" class="w-full h-full object-cover hidden">
+                          <span class="material-symbols-outlined text-[18px]">category</span>
+                          {% endif %}
                         </div>
                         <div>
                           <a href="{% url 'admin:catalog_category_change' category.pk %}" class="font-bold text-white text-xs sm:text-sm hover:text-emerald-400 transition-colors inline-block" style="text-decoration: none !important;">
@@ -403,6 +408,11 @@ button, button *, button:hover, button:focus {
                     </td>
                     <td class="py-3.5 px-4 text-center whitespace-nowrap">
                       <div class="flex items-center justify-center gap-1.5">
+                        <label class="bg-obsidian-800 hover:bg-obsidian-750 border border-emerald-500/35 text-emerald-300 hover:text-white px-2.5 py-1 rounded-lg text-xs font-medium transition cursor-pointer inline-flex items-center gap-1" title="Upload Category Thumbnail">
+                          <span class="material-symbols-outlined text-[13px] text-emerald-400">upload</span>
+                          <span class="cat-upload-lbl-{{ category.pk }}">Thumb</span>
+                          <input type="file" accept="image/*" class="hidden" onchange="uploadCategoryThumb({{ category.pk }}, this)">
+                        </label>
                         <a href="{% url 'admin:catalog_category_change' category.pk %}" class="bg-obsidian-800 hover:bg-obsidian-750 border border-obsidian-700 text-neutral-200 hover:text-white px-2.5 py-1 rounded-lg text-xs font-medium transition cursor-pointer inline-flex items-center gap-1" style="text-decoration: none !important;">
                           <span class="material-symbols-outlined text-[13px] text-emerald-400">edit</span>
                           <span>Edit</span>
@@ -430,6 +440,15 @@ button, button *, button:hover, button:focus {
             <div class="flex items-start justify-between gap-3">
               <div class="flex items-center gap-3">
                 <input class="action-select w-4 h-4 rounded border-obsidian-700 bg-obsidian-900 text-emerald-500 focus:ring-emerald-500 cursor-pointer shrink-0 mt-0.5" type="checkbox" name="_selected_action" value="{{ category.pk }}">
+                <div class="w-10 h-10 rounded-lg bg-obsidian-800 border border-obsidian-700 overflow-hidden flex items-center justify-center text-champagne-400 shrink-0">
+                  {% if category.image_url %}
+                  <img src="{{ category.image_url }}" alt="{{ category.name }}" id="cat-thumb-mob-{{ category.pk }}" class="w-full h-full object-cover" onerror="this.classList.add('hidden'); this.nextElementSibling.classList.remove('hidden');">
+                  <span class="material-symbols-outlined text-[16px] hidden">image_not_supported</span>
+                  {% else %}
+                  <img src="" alt="{{ category.name }}" id="cat-thumb-mob-{{ category.pk }}" class="w-full h-full object-cover hidden">
+                  <span class="material-symbols-outlined text-[16px]">category</span>
+                  {% endif %}
+                </div>
                 <div>
                   <a href="{% url 'admin:catalog_category_change' category.pk %}" class="font-bold text-white text-sm hover:text-emerald-400 transition-colors" style="text-decoration: none !important;">
                     {{ category.name }}
@@ -454,6 +473,11 @@ button, button *, button:hover, button:focus {
             </div>
 
             <div class="pt-2 flex items-center justify-end gap-2 border-t border-white/[0.06]">
+              <label class="bg-obsidian-800 hover:bg-obsidian-750 border border-emerald-500/35 text-emerald-300 hover:text-white px-3 py-1.5 rounded-lg text-xs font-medium transition cursor-pointer inline-flex items-center gap-1.5">
+                <span class="material-symbols-outlined text-[14px] text-emerald-400">upload</span>
+                <span class="cat-upload-lbl-{{ category.pk }}">Upload Thumb</span>
+                <input type="file" accept="image/*" class="hidden" onchange="uploadCategoryThumb({{ category.pk }}, this)">
+              </label>
               <a href="{% url 'admin:catalog_category_change' category.pk %}" class="bg-obsidian-800 hover:bg-obsidian-750 border border-obsidian-700 text-neutral-200 hover:text-white px-3 py-1.5 rounded-lg text-xs font-medium transition cursor-pointer inline-flex items-center gap-1.5" style="text-decoration: none !important;">
                 <span class="material-symbols-outlined text-[14px] text-emerald-400">edit</span>
                 <span>Edit Category</span>
@@ -489,8 +513,90 @@ button, button *, button:hover, button:focus {
 
 </div>
 
+<!-- Toast Notification -->
+<div id="catToast" class="fixed bottom-6 right-6 z-50 transform translate-y-20 opacity-0 transition-all duration-300 pointer-events-none bg-[#181a22] border border-[#2d3240] text-zinc-100 px-4 py-2.5 rounded-xl shadow-2xl flex items-center gap-2.5 text-xs font-medium font-sans">
+  <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+  <span id="catToastMsg">Thumbnail updated</span>
+</div>
+
 <!-- Interactive JS Logic -->
 <script>
+function showCatToast(msg) {
+  const t = document.getElementById('catToast');
+  const m = document.getElementById('catToastMsg');
+  if (!t || !m) return;
+  m.textContent = msg;
+  t.classList.remove('translate-y-20', 'opacity-0');
+  clearTimeout(window._catToastTimer);
+  window._catToastTimer = setTimeout(() => {
+    t.classList.add('translate-y-20', 'opacity-0');
+  }, 2600);
+}
+
+function getCatCsrf() {
+  const m = document.cookie.match(/(?:^|;\s*)csrftoken=([^;]+)/);
+  return m ? decodeURIComponent(m[1]) : (document.querySelector('[name=csrfmiddlewaretoken]')?.value || '');
+}
+
+async function compressImageIfNeeded(file) {
+  if (file.size <= 2.5 * 1024 * 1024) return file;
+  return new Promise((resolve) => {
+    const img = new Image();
+    const url = URL.createObjectURL(file);
+    img.onload = () => {
+      URL.revokeObjectURL(url);
+      const maxW = 900, maxH = 1200;
+      const ratio = Math.min(maxW / img.width, maxH / img.height, 1);
+      const canvas = document.createElement('canvas');
+      canvas.width = Math.round(img.width * ratio);
+      canvas.height = Math.round(img.height * ratio);
+      canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height);
+      canvas.toBlob((blob) => resolve(blob || file), 'image/webp', 0.86);
+    };
+    img.onerror = () => { URL.revokeObjectURL(url); resolve(file); };
+    img.src = url;
+  });
+}
+
+window.uploadCategoryThumb = async function(catId, input) {
+  if (!input || !input.files || !input.files[0]) return;
+  const origFile = input.files[0];
+  const labels = document.querySelectorAll(`.cat-upload-lbl-${catId}`);
+  labels.forEach(l => { l.dataset.prev = l.textContent; l.textContent = 'Saving...'; });
+
+  try {
+    const readyBlob = await compressImageIfNeeded(origFile);
+    const fd = new FormData();
+    fd.append('category_id', String(catId));
+    fd.append('thumbnail', readyBlob, origFile.name || 'thumb.webp');
+
+    const resp = await fetch('/admin/catalog/category/api/upload-thumbnail/', {
+      method: 'POST',
+      headers: { 'X-CSRFToken': getCatCsrf() },
+      body: fd
+    });
+    const data = await resp.json();
+    if (!resp.ok || data.status !== 'ok') {
+      showCatToast(data.message || 'Thumbnail upload failed');
+    } else {
+      ['cat-thumb-img-', 'cat-thumb-mob-'].forEach(prefix => {
+        const imgEl = document.getElementById(`${prefix}${catId}`);
+        if (imgEl) {
+          imgEl.src = data.image_url;
+          imgEl.classList.remove('hidden');
+          if (imgEl.nextElementSibling) imgEl.nextElementSibling.classList.add('hidden');
+        }
+      });
+      showCatToast(data.message || 'Category thumbnail updated!');
+    }
+  } catch (err) {
+    showCatToast('Upload error. Please try a smaller image.');
+  } finally {
+    labels.forEach(l => { l.textContent = l.dataset.prev || 'Thumb'; });
+    input.value = '';
+  }
+};
+
 document.addEventListener('DOMContentLoaded', function() {
   const selectAll = document.getElementById('action-toggle');
   const rowCheckboxes = document.querySelectorAll('.action-select');

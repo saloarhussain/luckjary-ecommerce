@@ -1,8 +1,10 @@
 from django.shortcuts import render, get_object_or_404, redirect
+from django.http import HttpResponse
+from django.db import OperationalError, ProgrammingError
 from django.db.models import Q, Avg
 from django.contrib import messages
 from django.core.paginator import Paginator
-from .models import Product, Category, Material, Collection, ProductReview
+from .models import Product, Category, CategoryThumbnail, Material, Collection, ProductReview, ensure_catalog_migrated
 import json
 
 def product_list(request):
@@ -267,3 +269,16 @@ def product_detail(request, slug):
         'og_image': product.primary_image,
     }
     return render(request, 'catalog/product_detail.html', context)
+
+
+def serve_category_thumbnail(request, category_id):
+    """Serve DB-stored category thumbnail bytes cleanly for Vercel & local."""
+    try:
+        thumb = get_object_or_404(CategoryThumbnail, category_id=category_id)
+    except (ProgrammingError, OperationalError):
+        ensure_catalog_migrated()
+        thumb = get_object_or_404(CategoryThumbnail, category_id=category_id)
+
+    resp = HttpResponse(bytes(thumb.data), content_type=thumb.content_type or 'image/webp')
+    resp['Cache-Control'] = 'public, max-age=86400'
+    return resp

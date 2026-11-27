@@ -4,12 +4,15 @@ from django.utils.html import format_html
 from django.utils.safestring import mark_safe
 from django.urls import path
 from django.http import JsonResponse, HttpResponseRedirect
+from django.db import OperationalError, ProgrammingError
 from django.db.models import Q, Sum
 from django.utils.text import slugify
+import io
 import json
 import re
+import time
 import uuid
-from .models import Category, Material, Collection, Product, ProductImage, ProductReview
+from .models import Category, CategoryThumbnail, Material, Collection, Product, ProductImage, ProductReview, ensure_catalog_migrated
 
 class ProductAdminForm(forms.ModelForm):
     STANDARD_METALS = [
@@ -116,14 +119,111 @@ class ProductReviewInline(admin.StackedInline):
     extra = 0
     readonly_fields = ('created_at',)
 
+def _process_category_thumbnail(category, uploaded_file):
+    """Optimize and store a Category thumbnail in DB (works on local & Vercel)."""
+    from PIL import Image, ImageOps
+
+    raw_bytes = uploaded_file.read()
+    content_type = uploaded_file.content_type or 'image/jpeg'
+
+    try:
+        img = Image.open(io.BytesIO(raw_bytes))
+        img = ImageOps.exif_transpose(img)
+        if img.mode not in ('RGB', 'RGBA'):
+            img = img.convert('RGB')
+        img.thumbnail((900, 1200), Image.Resampling.LANCZOS)
+        out = io.BytesIO()
+        try:
+            img.save(out, format='WEBP', quality=86, method=4)
+            content_type = 'image/webp'
+        except Exception:
+            if img.mode == 'RGBA':
+                img = img.convert('RGB')
+            img.save(out, format='JPEG', quality=86, optimize=True)
+            content_type = 'image/jpeg'
+        final_bytes = out.getvalue()
+    except Exception:
+        final_bytes = raw_bytes
+
+    try:
+        CategoryThumbnail.objects.update_or_create(
+            category=category,
+            defaults={'content_type': content_type, 'data': final_bytes},
+        )
+    except (ProgrammingError, OperationalError):
+        ensure_catalog_migrated()
+        CategoryThumbnail.objects.update_or_create(
+            category=category,
+            defaults={'content_type': content_type, 'data': final_bytes},
+        )
+
+    thumb_url = f"/category-thumb/{category.pk}/?v={int(time.time())}"
+    category.image_url = thumb_url
+    category.save(update_fields=['image_url'])
+    return thumb_url
+
+
+class CategoryAdminForm(forms.ModelForm):
+    thumbnail_upload = forms.ImageField(
+        required=False,
+        label="Upload Category Thumbnail",
+        help_text="Upload a JPG, PNG, or WebP image directly (stored in database for live Vercel & local).",
+    )
+
+    class Meta:
+        model = Category
+        fields = '__all__'
+
+
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
+    form = CategoryAdminForm
     change_list_template = 'admin/catalog/category/change_list.html'
     list_display = ('name', 'slug', 'is_featured', 'order')
     prepopulated_fields = {'slug': ('name',)}
     list_editable = ('is_featured', 'order')
     search_fields = ('name', 'slug', 'description')
     actions = ['make_featured', 'remove_featured']
+
+    def get_urls(self):
+        urls = super().get_urls()
+        custom_urls = [
+            path(
+                'api/upload-thumbnail/',
+                self.admin_site.admin_view(self.api_upload_thumbnail_view),
+                name='catalog_category_upload_thumbnail',
+            ),
+        ]
+        return custom_urls + urls
+
+    def api_upload_thumbnail_view(self, request):
+        if request.method != 'POST':
+            return JsonResponse({'status': 'error', 'message': 'POST required.'}, status=405)
+        category_id = request.POST.get('category_id')
+        uploaded_file = request.FILES.get('thumbnail')
+        if not category_id or not uploaded_file:
+            return JsonResponse({'status': 'error', 'message': 'Missing category_id or thumbnail file.'}, status=400)
+        if uploaded_file.size > 4 * 1024 * 1024:
+            return JsonResponse({'status': 'error', 'message': 'Image must be under 4 MB.'}, status=400)
+
+        try:
+            category = Category.objects.get(pk=category_id)
+        except Category.DoesNotExist:
+            return JsonResponse({'status': 'error', 'message': 'Category not found.'}, status=404)
+
+        thumb_url = _process_category_thumbnail(category, uploaded_file)
+        return JsonResponse({
+            'status': 'ok',
+            'category_id': category.pk,
+            'image_url': thumb_url,
+            'message': f'Updated thumbnail for {category.name}.',
+        })
+
+    def save_model(self, request, obj, form, change):
+        super().save_model(request, obj, form, change)
+        uploaded_file = form.cleaned_data.get('thumbnail_upload') if hasattr(form, 'cleaned_data') else None
+        if uploaded_file:
+            _process_category_thumbnail(obj, uploaded_file)
 
     @admin.action(description="Feature selected categories on showroom")
     def make_featured(self, request, queryset):
