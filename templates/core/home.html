@@ -150,6 +150,56 @@
     </div>
 </section>
 
+<!-- Shop by Price: 3 Curated Budget Cards (Under ₹999, ₹1,499, ₹2,499) -->
+{% if price_cards.enabled %}
+<section id="shop-by-price" class="pb-16 sm:pb-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center max-w-xl mx-auto mb-10 sm:mb-12 space-y-2">
+        <span class="text-[11px] sm:text-xs font-bold tracking-[0.2em] text-[#C5A059] uppercase font-sans">{{ price_cards.eyebrow }}</span>
+        <h2 class="text-2xl sm:text-3xl lg:text-4xl font-bold text-neutral-900 tracking-tight font-sans">{{ price_cards.heading }}</h2>
+        <div class="w-12 h-0.5 bg-[#C5A059] mx-auto mt-2"></div>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
+        {% for card in price_cards.cards %}
+        <a href="{{ card.link_url }}"
+           class="group relative overflow-hidden rounded-2xl border {% if forloop.counter == 2 %}border-[#C5A059]/60 bg-gradient-to-br from-[#171512] via-[#121110] to-[#1D1913] text-white shadow-xl{% else %}border-[#E6D9C5] bg-gradient-to-br from-[#FFFFFF] via-[#FAF7F0] to-[#F4ECE0] text-neutral-900 shadow-sm{% endif %} p-6 sm:p-8 flex flex-col justify-between transition-all duration-300 hover:-translate-y-1 hover:shadow-xl">
+            <div class="space-y-4">
+                <div class="flex items-center justify-between gap-2">
+                    <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-display font-bold uppercase tracking-[0.18em] {% if forloop.counter == 2 %}bg-[#C5A059]/20 text-[#E7D7BE] border border-[#C5A059]/40{% else %}bg-[#C5A059]/12 text-[#8E6F31] border border-[#C5A059]/30{% endif %}">
+                        <span class="w-1.5 h-1.5 rounded-full bg-[#C5A059]"></span>
+                        {{ card.badge }}
+                    </span>
+                    <span class="text-xs {% if forloop.counter == 2 %}text-[#C5A059]{% else %}text-[#B08B44]{% endif %}">✦</span>
+                </div>
+
+                <div>
+                    <div class="text-[11px] uppercase tracking-[0.2em] font-sans font-semibold {% if forloop.counter == 2 %}text-neutral-400{% else %}text-neutral-500{% endif %}">
+                        Pure 925 Silver
+                    </div>
+                    <h3 class="text-3xl sm:text-4xl font-extrabold tracking-tight mt-1 font-sans {% if forloop.counter == 2 %}text-white{% else %}text-neutral-900{% endif %}">
+                        {{ card.title }}
+                    </h3>
+                </div>
+
+                <p class="text-xs sm:text-sm leading-relaxed font-light {% if forloop.counter == 2 %}text-neutral-300{% else %}text-neutral-600{% endif %}">
+                    {{ card.subtitle }}
+                </p>
+            </div>
+
+            <div class="pt-6 mt-4 border-t {% if forloop.counter == 2 %}border-white/10{% else %}border-[#E6D9C5]/70{% endif %} flex items-center justify-between">
+                <span class="text-xs font-display font-bold uppercase tracking-[0.16em] {% if forloop.counter == 2 %}text-[#D4AF37]{% else %}text-[#8E6F31]{% endif %}">
+                    {{ card.cta }}
+                </span>
+                <span class="w-8 h-8 rounded-full flex items-center justify-center transition-transform duration-300 group-hover:translate-x-1 {% if forloop.counter == 2 %}bg-[#C5A059] text-[#121212]{% else %}bg-neutral-900 text-white group-hover:bg-[#C5A059]{% endif %}">
+                    &rarr;
+                </span>
+            </div>
+        </a>
+        {% endfor %}
+    </div>
+</section>
+{% endif %}
+
 <!-- Featured Bestsellers -->
 <section class="py-16 bg-[#F4F1EA] border-y border-[#EBE6DF]">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -262,6 +312,72 @@
                     </span>
                 </div>
             </a>
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<!-- Personalised 925 Silver Jewellery Section -->
+{% if personalised_section.enabled %}
+<section id="personalised-atelier" class="py-12 sm:py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="relative overflow-hidden rounded-2xl border border-[#E6D9C5] bg-gradient-to-br from-[#FAF7F0] via-white to-[#F4ECE0] shadow-lg grid grid-cols-1 lg:grid-cols-12">
+        <div class="lg:col-span-7 p-7 sm:p-12 lg:p-14 flex flex-col justify-center space-y-5">
+            <div class="inline-flex items-center self-start gap-2 px-3 py-1 rounded-full bg-[#C5A059]/12 border border-[#C5A059]/35 text-[10px] sm:text-[11px] font-display font-bold tracking-[0.2em] uppercase text-[#8E6F31]">
+                <span class="w-1.5 h-1.5 rounded-full bg-[#C5A059]"></span>
+                {{ personalised_section.eyebrow }}
+            </div>
+
+            <h2 class="font-sans text-2xl sm:text-4xl font-bold text-neutral-900 tracking-tight leading-tight">
+                {{ personalised_section.title }}
+            </h2>
+
+            <p class="text-xs sm:text-sm text-neutral-600 font-light leading-relaxed max-w-xl">
+                {{ personalised_section.subtitle }}
+            </p>
+
+            <div class="flex flex-wrap gap-2.5 pt-1">
+                {% if personalised_section.tag1 %}
+                <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white border border-[#E6D9C5] text-[11px] font-medium text-neutral-800 shadow-sm">
+                    <span class="text-[#C5A059]">✦</span> {{ personalised_section.tag1 }}
+                </span>
+                {% endif %}
+                {% if personalised_section.tag2 %}
+                <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white border border-[#E6D9C5] text-[11px] font-medium text-neutral-800 shadow-sm">
+                    <span class="text-[#C5A059]">✦</span> {{ personalised_section.tag2 }}
+                </span>
+                {% endif %}
+                {% if personalised_section.tag3 %}
+                <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white border border-[#E6D9C5] text-[11px] font-medium text-neutral-800 shadow-sm">
+                    <span class="text-[#C5A059]">✦</span> {{ personalised_section.tag3 }}
+                </span>
+                {% endif %}
+            </div>
+
+            <div class="pt-3 flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+                <a href="{{ personalised_section.cta_url }}" class="btn-gold inline-flex items-center justify-center gap-2 px-7 py-3.5 text-xs font-display font-semibold tracking-[0.16em] uppercase rounded-sm shadow-md">
+                    <span>{{ personalised_section.cta_text }}</span>
+                    <span>&rarr;</span>
+                </a>
+                {% if personalised_section.secondary_cta_text %}
+                <a href="{{ personalised_section.secondary_cta_url }}" class="btn-outline-gold inline-flex items-center justify-center px-6 py-3.5 text-xs font-display font-semibold tracking-[0.16em] uppercase rounded-sm">
+                    {{ personalised_section.secondary_cta_text }}
+                </a>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="lg:col-span-5 relative min-h-[280px] sm:min-h-[360px] lg:min-h-full overflow-hidden bg-[#16131c]">
+            <img src="{{ personalised_section.image_url }}"
+                 alt="{{ personalised_section.title }}"
+                 class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 hover:scale-105">
+            <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/15 to-transparent"></div>
+            <div class="absolute bottom-5 left-5 right-5 p-4 rounded-xl bg-black/55 backdrop-blur-md border border-white/15 text-white flex items-center justify-between gap-3">
+                <div>
+                    <span class="text-[9px] font-display tracking-[0.2em] uppercase text-[#D4AF37] block">Made to Order</span>
+                    <span class="text-xs sm:text-sm font-semibold">Complimentary Custom Engraving</span>
+                </div>
+                <span class="px-2.5 py-1 rounded-full bg-[#C5A059] text-white text-[10px] font-bold uppercase tracking-wider shrink-0">925 Silver</span>
+            </div>
         </div>
     </div>
 </section>

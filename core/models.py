@@ -132,22 +132,69 @@ class StorefrontThemeSettings(models.Model):
             'subtitle': 'Handcrafted 925 sterling silver heirlooms with rhodium anti-tarnish seal & certified stones.',
             'cta': 'Explore Collection',
             'image_url': 'https://images.unsplash.com/photo-1599643477877-530eb83abc8e?auto=format&fit=crop&w=1200&q=85',
-            'link_url': '/products/?collection=solstice-heritage',
+            'link_url': '/shop/?collection=solstice-heritage',
         },
         'top_right': {
             'eyebrow': 'NEW ARRIVALS',
             'title': 'Sculpted Silver Designs',
             'subtitle': 'New & Most-Loved Styles for Every Occasion',
             'image_url': 'https://images.unsplash.com/photo-1611591437281-460bfbe1220a?auto=format&fit=crop&w=1200&q=85',
-            'link_url': '/products/?category=necklaces',
+            'link_url': '/shop/?category=necklaces',
         },
         'bottom_right': {
             'eyebrow': 'FOR THE FINEST IN 925 SILVER',
             'title': 'Everyday Radiance',
             'subtitle': 'Timeless rhodium-sealed rings & bracelets crafted for daily brilliance.',
             'image_url': 'https://images.unsplash.com/photo-1605100804763-247f67b3557e?auto=format&fit=crop&w=1200&q=85',
-            'link_url': '/products/?category=rings',
+            'link_url': '/shop/?category=rings',
         },
+    }
+
+    DEFAULT_PRICE_CARDS = {
+        'enabled': True,
+        'eyebrow': 'CURATED VALUE',
+        'heading': 'Shop by Price',
+        'cards': [
+            {
+                'badge': 'Everyday Silver',
+                'title': 'Under ₹999',
+                'price_cap': '999',
+                'subtitle': 'Minimalist 925 studs, charms & stacking rings for daily wear.',
+                'cta': 'Shop Under ₹999',
+                'link_url': '/shop/?max_price=999',
+            },
+            {
+                'badge': 'Gifting Edit',
+                'title': 'Under ₹1,499',
+                'price_cap': '1499',
+                'subtitle': 'Thoughtful pendants, chains & dainty bracelets in velvet gift boxes.',
+                'cta': 'Shop Under ₹1,499',
+                'link_url': '/shop/?max_price=1499',
+            },
+            {
+                'badge': 'Signature Pieces',
+                'title': 'Under ₹2,499',
+                'price_cap': '2499',
+                'subtitle': 'Certified brilliant-stone solitaires, tennis bracelets & statement sets.',
+                'cta': 'Shop Under ₹2,499',
+                'link_url': '/shop/?max_price=2499',
+            },
+        ],
+    }
+
+    DEFAULT_PERSONALISED_SECTION = {
+        'enabled': True,
+        'eyebrow': 'BESPOKE ATELIER • CUSTOM CRAFT',
+        'title': 'Personalised 925 Silver Jewellery',
+        'subtitle': 'Crafted exclusively to carry your story — custom name & initial pendants, secret inner-band engraving, zodiac talismans, and hand-set birthstones in solid 925 sterling silver.',
+        'tag1': 'Custom Name & Initials',
+        'tag2': 'Laser Inner-Band Engraving',
+        'tag3': 'Birthstone & Couple Sets',
+        'cta_text': 'Commission Personalised Piece',
+        'cta_url': '/contact/?subject=personalised',
+        'secondary_cta_text': 'Browse Ready Pieces',
+        'secondary_cta_url': '/shop/',
+        'image_url': 'https://images.unsplash.com/photo-1617038260897-41a1f14a8ca0?auto=format&fit=crop&w=1200&q=85',
     }
 
     class Meta:
@@ -210,10 +257,41 @@ class StorefrontThemeSettings(models.Model):
         merged['scrim_alpha'] = f"{scrim_strength / 100:.2f}"
         return merged
 
+    def get_price_cards(self):
+        saved = (self.design_tokens_json or {}).get('price_cards')
+        base = {
+            'enabled': bool(saved.get('enabled', True)) if isinstance(saved, dict) else True,
+            'eyebrow': str((saved or {}).get('eyebrow') or self.DEFAULT_PRICE_CARDS['eyebrow']).strip(),
+            'heading': str((saved or {}).get('heading') or self.DEFAULT_PRICE_CARDS['heading']).strip(),
+            'cards': [],
+        }
+        saved_cards = saved.get('cards') if isinstance(saved, dict) and isinstance(saved.get('cards'), list) else []
+        for idx, default_card in enumerate(self.DEFAULT_PRICE_CARDS['cards']):
+            merged_card = dict(default_card)
+            if idx < len(saved_cards) and isinstance(saved_cards[idx], dict):
+                for k, v in saved_cards[idx].items():
+                    if v is not None and str(v).strip() != '':
+                        merged_card[k] = str(v).strip()
+            base['cards'].append(merged_card)
+        return base
+
+    def get_personalised_section(self):
+        saved = (self.design_tokens_json or {}).get('personalised_section')
+        merged = dict(self.DEFAULT_PERSONALISED_SECTION)
+        if isinstance(saved, dict):
+            for k, v in saved.items():
+                if k == 'enabled':
+                    merged['enabled'] = bool(v)
+                elif v is not None and str(v).strip() != '':
+                    merged[k] = str(v).strip()
+        return merged
+
     def to_dict(self):
         tokens = dict(self.design_tokens_json or {})
         tokens.pop('spotlight_bento', None)
         tokens.pop('hero_pin_on_scroll', None)
+        tokens.pop('price_cards', None)
+        tokens.pop('personalised_section', None)
         return {
             'hero_video_enabled': self.hero_video_enabled,
             'hero_video_mode': self.hero_video_mode,
@@ -237,5 +315,7 @@ class StorefrontThemeSettings(models.Model):
             'hero_primary_cta_text': self.hero_primary_cta_text,
             'hero_secondary_cta_text': self.hero_secondary_cta_text,
             'spotlight_bento': self.get_spotlight_bento(),
+            'price_cards': self.get_price_cards(),
+            'personalised_section': self.get_personalised_section(),
             'design_tokens': tokens,
         }

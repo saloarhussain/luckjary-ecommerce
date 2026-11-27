@@ -46,6 +46,8 @@ def home(request):
         'theme_settings': theme_settings,
         'hero_pin_on_scroll': theme_settings.get_hero_pin_on_scroll(),
         'spotlight_bento': theme_settings.get_spotlight_bento(),
+        'price_cards': theme_settings.get_price_cards(),
+        'personalised_section': theme_settings.get_personalised_section(),
         'active_metal': 'silver',
         'meta_title': 'Luckjary | Handcrafted 925 Sterling Silver Jewellery',
         'meta_description': 'Discover exquisite handcrafted 925 sterling silver jewelry at Luckjary. Explore sterling silver rings, necklaces, bracelets, and earrings treated with rhodium anti-tarnish finish.',
@@ -239,18 +241,18 @@ def _apply_theme_payload(theme, payload, preserve_video_urls=False):
 
     existing_tokens = dict(theme.design_tokens_json or {})
     if 'design_tokens' in payload and isinstance(payload['design_tokens'], dict):
-        saved_bento = existing_tokens.get('spotlight_bento')
-        saved_pin = existing_tokens.get('hero_pin_on_scroll')
-        existing_tokens = dict(payload['design_tokens'])
-        if saved_bento is not None:
-            existing_tokens['spotlight_bento'] = saved_bento
-        if saved_pin is not None:
-            existing_tokens['hero_pin_on_scroll'] = saved_pin
+        preserved_keys = ('spotlight_bento', 'hero_pin_on_scroll', 'price_cards', 'personalised_section')
+        preserved = {k: existing_tokens[k] for k in preserved_keys if k in existing_tokens}
+        existing_tokens = {**dict(payload['design_tokens']), **preserved}
 
     if 'spotlight_bento' in payload and isinstance(payload['spotlight_bento'], dict):
         existing_tokens['spotlight_bento'] = payload['spotlight_bento']
     if 'hero_pin_on_scroll' in payload:
         existing_tokens['hero_pin_on_scroll'] = _to_bool(payload.get('hero_pin_on_scroll'), False)
+    if 'price_cards' in payload and isinstance(payload['price_cards'], dict):
+        existing_tokens['price_cards'] = payload['price_cards']
+    if 'personalised_section' in payload and isinstance(payload['personalised_section'], dict):
+        existing_tokens['personalised_section'] = payload['personalised_section']
 
     theme.design_tokens_json = existing_tokens
 

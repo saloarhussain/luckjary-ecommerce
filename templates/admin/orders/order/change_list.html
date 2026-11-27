@@ -1398,6 +1398,177 @@
               </div>
             </div>
 
+            <!-- Section 8: Shop by Price (3 Budget Cards) -->
+            <div class="pt-5 border-t border-[#21242d] space-y-4" id="priceCardsCustomizer">
+              <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div>
+                  <label class="block text-xs font-mono uppercase tracking-[0.16em] text-[#9ca3af] font-semibold">
+                    8. SHOP BY PRICE (3 BUDGET CARDS: ₹999 • ₹1,499 • ₹2,499)
+                  </label>
+                  <p class="text-[11px] text-[#9ca3af] font-sans mt-0.5">
+                    Edit the 3 price tier cards positioned below Explore by Category on your homepage.
+                  </p>
+                </div>
+                <label class="inline-flex items-center gap-2.5 px-3.5 py-2 rounded-lg bg-[#171920] border border-[#21242d] cursor-pointer select-none">
+                  <input type="checkbox" id="tcPriceCardsEnabled" class="accent-emerald-500 w-4 h-4 cursor-pointer" checked>
+                  <span class="text-xs font-medium text-neutral-200 font-sans">Show Price Cards</span>
+                </label>
+              </div>
+
+              <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+                <!-- Price Card 1 -->
+                <div class="p-4 rounded-xl bg-[#171920] border border-[#21242d] space-y-2.5">
+                  <span class="text-xs font-semibold text-white font-sans block border-b border-[#21242d] pb-2">Tier 1 Card (Under ₹999)</span>
+                  <div class="grid grid-cols-2 gap-2">
+                    <div>
+                      <label for="tcPrice1Badge" class="block text-[10px] font-mono uppercase text-[#9ca3af] mb-1">Badge</label>
+                      <input type="text" id="tcPrice1Badge" class="w-full px-3 py-1.5 rounded-lg bg-[#0d0e10] border border-[#21242d] text-white text-xs font-sans focus:border-emerald-500 focus:outline-none">
+                    </div>
+                    <div>
+                      <label for="tcPrice1Title" class="block text-[10px] font-mono uppercase text-[#9ca3af] mb-1">Title</label>
+                      <input type="text" id="tcPrice1Title" class="w-full px-3 py-1.5 rounded-lg bg-[#0d0e10] border border-[#21242d] text-white text-xs font-sans focus:border-emerald-500 focus:outline-none">
+                    </div>
+                  </div>
+                  <div>
+                    <label for="tcPrice1Subtitle" class="block text-[10px] font-mono uppercase text-[#9ca3af] mb-1">Subtitle</label>
+                    <textarea id="tcPrice1Subtitle" rows="2" class="w-full px-3 py-1.5 rounded-lg bg-[#0d0e10] border border-[#21242d] text-white text-xs font-sans focus:border-emerald-500 focus:outline-none"></textarea>
+                  </div>
+                  <div class="grid grid-cols-2 gap-2">
+                    <div>
+                      <label for="tcPrice1Cta" class="block text-[10px] font-mono uppercase text-[#9ca3af] mb-1">CTA Text</label>
+                      <input type="text" id="tcPrice1Cta" class="w-full px-3 py-1.5 rounded-lg bg-[#0d0e10] border border-[#21242d] text-white text-xs font-sans focus:border-emerald-500 focus:outline-none">
+                    </div>
+                    <div>
+                      <label for="tcPrice1Link" class="block text-[10px] font-mono uppercase text-[#9ca3af] mb-1">Link URL</label>
+                      <input type="text" id="tcPrice1Link" class="w-full px-3 py-1.5 rounded-lg bg-[#0d0e10] border border-[#21242d] text-white text-xs font-mono focus:border-emerald-500 focus:outline-none">
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Price Card 2 -->
+                <div class="p-4 rounded-xl bg-[#171920] border border-emerald-500/30 space-y-2.5">
+                  <span class="text-xs font-semibold text-white font-sans block border-b border-[#21242d] pb-2">Tier 2 Card (Under ₹1,499)</span>
+                  <div class="grid grid-cols-2 gap-2">
+                    <div>
+                      <label for="tcPrice2Badge" class="block text-[10px] font-mono uppercase text-[#9ca3af] mb-1">Badge</label>
+                      <input type="text" id="tcPrice2Badge" class="w-full px-3 py-1.5 rounded-lg bg-[#0d0e10] border border-[#21242d] text-white text-xs font-sans focus:border-emerald-500 focus:outline-none">
+                    </div>
+                    <div>
+                      <label for="tcPrice2Title" class="block text-[10px] font-mono uppercase text-[#9ca3af] mb-1">Title</label>
+                      <input type="text" id="tcPrice2Title" class="w-full px-3 py-1.5 rounded-lg bg-[#0d0e10] border border-[#21242d] text-white text-xs font-sans focus:border-emerald-500 focus:outline-none">
+                    </div>
+                  </div>
+                  <div>
+                    <label for="tcPrice2Subtitle" class="block text-[10px] font-mono uppercase text-[#9ca3af] mb-1">Subtitle</label>
+                    <textarea id="tcPrice2Subtitle" rows="2" class="w-full px-3 py-1.5 rounded-lg bg-[#0d0e10] border border-[#21242d] text-white text-xs font-sans focus:border-emerald-500 focus:outline-none"></textarea>
+                  </div>
+                  <div class="grid grid-cols-2 gap-2">
+                    <div>
+                      <label for="tcPrice2Cta" class="block text-[10px] font-mono uppercase text-[#9ca3af] mb-1">CTA Text</label>
+                      <input type="text" id="tcPrice2Cta" class="w-full px-3 py-1.5 rounded-lg bg-[#0d0e10] border border-[#21242d] text-white text-xs font-sans focus:border-emerald-500 focus:outline-none">
+                    </div>
+                    <div>
+                      <label for="tcPrice2Link" class="block text-[10px] font-mono uppercase text-[#9ca3af] mb-1">Link URL</label>
+                      <input type="text" id="tcPrice2Link" class="w-full px-3 py-1.5 rounded-lg bg-[#0d0e10] border border-[#21242d] text-white text-xs font-mono focus:border-emerald-500 focus:outline-none">
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Price Card 3 -->
+                <div class="p-4 rounded-xl bg-[#171920] border border-[#21242d] space-y-2.5">
+                  <span class="text-xs font-semibold text-white font-sans block border-b border-[#21242d] pb-2">Tier 3 Card (Under ₹2,499)</span>
+                  <div class="grid grid-cols-2 gap-2">
+                    <div>
+                      <label for="tcPrice3Badge" class="block text-[10px] font-mono uppercase text-[#9ca3af] mb-1">Badge</label>
+                      <input type="text" id="tcPrice3Badge" class="w-full px-3 py-1.5 rounded-lg bg-[#0d0e10] border border-[#21242d] text-white text-xs font-sans focus:border-emerald-500 focus:outline-none">
+                    </div>
+                    <div>
+                      <label for="tcPrice3Title" class="block text-[10px] font-mono uppercase text-[#9ca3af] mb-1">Title</label>
+                      <input type="text" id="tcPrice3Title" class="w-full px-3 py-1.5 rounded-lg bg-[#0d0e10] border border-[#21242d] text-white text-xs font-sans focus:border-emerald-500 focus:outline-none">
+                    </div>
+                  </div>
+                  <div>
+                    <label for="tcPrice3Subtitle" class="block text-[10px] font-mono uppercase text-[#9ca3af] mb-1">Subtitle</label>
+                    <textarea id="tcPrice3Subtitle" rows="2" class="w-full px-3 py-1.5 rounded-lg bg-[#0d0e10] border border-[#21242d] text-white text-xs font-sans focus:border-emerald-500 focus:outline-none"></textarea>
+                  </div>
+                  <div class="grid grid-cols-2 gap-2">
+                    <div>
+                      <label for="tcPrice3Cta" class="block text-[10px] font-mono uppercase text-[#9ca3af] mb-1">CTA Text</label>
+                      <input type="text" id="tcPrice3Cta" class="w-full px-3 py-1.5 rounded-lg bg-[#0d0e10] border border-[#21242d] text-white text-xs font-sans focus:border-emerald-500 focus:outline-none">
+                    </div>
+                    <div>
+                      <label for="tcPrice3Link" class="block text-[10px] font-mono uppercase text-[#9ca3af] mb-1">Link URL</label>
+                      <input type="text" id="tcPrice3Link" class="w-full px-3 py-1.5 rounded-lg bg-[#0d0e10] border border-[#21242d] text-white text-xs font-mono focus:border-emerald-500 focus:outline-none">
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Section 9: Personalised Jewellery Section -->
+            <div class="pt-5 border-t border-[#21242d] space-y-4" id="personalisedCustomizer">
+              <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div>
+                  <label class="block text-xs font-mono uppercase tracking-[0.16em] text-[#9ca3af] font-semibold">
+                    9. PERSONALISED JEWELLERY ATELIER SECTION
+                  </label>
+                  <p class="text-[11px] text-[#9ca3af] font-sans mt-0.5">
+                    Custom engraving, monogram &amp; birthstone banner positioned below the Bento Spotlight.
+                  </p>
+                </div>
+                <label class="inline-flex items-center gap-2.5 px-3.5 py-2 rounded-lg bg-[#171920] border border-[#21242d] cursor-pointer select-none">
+                  <input type="checkbox" id="tcPersonalisedEnabled" class="accent-emerald-500 w-4 h-4 cursor-pointer" checked>
+                  <span class="text-xs font-medium text-neutral-200 font-sans">Show Personalised Section</span>
+                </label>
+              </div>
+
+              <div class="p-4 rounded-xl bg-[#171920] border border-[#21242d] grid grid-cols-1 lg:grid-cols-2 gap-4">
+                <div class="space-y-2.5">
+                  <div class="grid grid-cols-2 gap-2.5">
+                    <div>
+                      <label for="tcPersEyebrow" class="block text-[10px] font-mono uppercase text-[#9ca3af] mb-1">Eyebrow</label>
+                      <input type="text" id="tcPersEyebrow" class="w-full px-3 py-1.5 rounded-lg bg-[#0d0e10] border border-[#21242d] text-white text-xs font-sans focus:border-emerald-500 focus:outline-none">
+                    </div>
+                    <div>
+                      <label for="tcPersTitle" class="block text-[10px] font-mono uppercase text-[#9ca3af] mb-1">Heading</label>
+                      <input type="text" id="tcPersTitle" class="w-full px-3 py-1.5 rounded-lg bg-[#0d0e10] border border-[#21242d] text-white text-xs font-sans focus:border-emerald-500 focus:outline-none">
+                    </div>
+                  </div>
+                  <div>
+                    <label for="tcPersSubtitle" class="block text-[10px] font-mono uppercase text-[#9ca3af] mb-1">Description</label>
+                    <textarea id="tcPersSubtitle" rows="2" class="w-full px-3 py-1.5 rounded-lg bg-[#0d0e10] border border-[#21242d] text-white text-xs font-sans focus:border-emerald-500 focus:outline-none"></textarea>
+                  </div>
+                  <div class="grid grid-cols-3 gap-2">
+                    <input type="text" id="tcPersTag1" placeholder="Tag 1" class="px-2.5 py-1.5 rounded-lg bg-[#0d0e10] border border-[#21242d] text-white text-xs font-sans focus:border-emerald-500 focus:outline-none">
+                    <input type="text" id="tcPersTag2" placeholder="Tag 2" class="px-2.5 py-1.5 rounded-lg bg-[#0d0e10] border border-[#21242d] text-white text-xs font-sans focus:border-emerald-500 focus:outline-none">
+                    <input type="text" id="tcPersTag3" placeholder="Tag 3" class="px-2.5 py-1.5 rounded-lg bg-[#0d0e10] border border-[#21242d] text-white text-xs font-sans focus:border-emerald-500 focus:outline-none">
+                  </div>
+                </div>
+                <div class="space-y-2.5">
+                  <div class="grid grid-cols-2 gap-2.5">
+                    <div>
+                      <label for="tcPersCtaText" class="block text-[10px] font-mono uppercase text-[#9ca3af] mb-1">Primary CTA Text</label>
+                      <input type="text" id="tcPersCtaText" class="w-full px-3 py-1.5 rounded-lg bg-[#0d0e10] border border-[#21242d] text-white text-xs font-sans focus:border-emerald-500 focus:outline-none">
+                    </div>
+                    <div>
+                      <label for="tcPersCtaUrl" class="block text-[10px] font-mono uppercase text-[#9ca3af] mb-1">Primary CTA URL</label>
+                      <input type="text" id="tcPersCtaUrl" class="w-full px-3 py-1.5 rounded-lg bg-[#0d0e10] border border-[#21242d] text-white text-xs font-mono focus:border-emerald-500 focus:outline-none">
+                    </div>
+                  </div>
+                  <div>
+                    <div class="flex items-center justify-between mb-1">
+                      <label for="tcPersImage" class="block text-[10px] font-mono uppercase text-[#9ca3af]">Showcase Image URL</label>
+                      <label class="text-[10px] font-mono text-emerald-400 hover:text-emerald-300 cursor-pointer">
+                        <span id="tcUploadPersLbl">+ Upload Image</span>
+                        <input type="file" accept="image/*" class="hidden" onchange="uploadBentoCardImage('personalised-hero', 'tcPersImage', 'tcUploadPersLbl', this)">
+                      </label>
+                    </div>
+                    <input type="text" id="tcPersImage" class="w-full px-3 py-1.5 rounded-lg bg-[#0d0e10] border border-[#21242d] text-white text-xs font-mono focus:border-emerald-500 focus:outline-none">
+                  </div>
+                </div>
+              </div>
+            </div>
+
             <!-- Bottom Action Controls: Save & Reset -->
             <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-between pt-5 border-t border-[#21242d] gap-3">
               <div class="flex flex-wrap items-center gap-2.5">
@@ -1931,6 +2102,32 @@ document.addEventListener('DOMContentLoaded', () => {
       setVal('tcBentoBotImage', b.bottom_right.image_url);
     }
 
+    const pc = state.price_cards || {};
+    setChk('tcPriceCardsEnabled', pc.enabled !== false);
+    if (Array.isArray(pc.cards)) {
+      [1, 2, 3].forEach((n, idx) => {
+        const card = pc.cards[idx];
+        if (!card) return;
+        setVal(`tcPrice${n}Badge`, card.badge);
+        setVal(`tcPrice${n}Title`, card.title);
+        setVal(`tcPrice${n}Subtitle`, card.subtitle);
+        setVal(`tcPrice${n}Cta`, card.cta);
+        setVal(`tcPrice${n}Link`, card.link_url);
+      });
+    }
+
+    const ps = state.personalised_section || {};
+    setChk('tcPersonalisedEnabled', ps.enabled !== false);
+    setVal('tcPersEyebrow', ps.eyebrow);
+    setVal('tcPersTitle', ps.title);
+    setVal('tcPersSubtitle', ps.subtitle);
+    setVal('tcPersTag1', ps.tag1);
+    setVal('tcPersTag2', ps.tag2);
+    setVal('tcPersTag3', ps.tag3);
+    setVal('tcPersCtaText', ps.cta_text);
+    setVal('tcPersCtaUrl', ps.cta_url);
+    setVal('tcPersImage', ps.image_url);
+
     syncHeroCustomizerPreview();
   }
 
@@ -1988,6 +2185,30 @@ document.addEventListener('DOMContentLoaded', () => {
         link_url: getVal('tcBentoBotLink', '').trim(),
         image_url: getVal('tcBentoBotImage', '').trim(),
       }
+    };
+
+    heroThemeState.price_cards = {
+      enabled: getChk('tcPriceCardsEnabled', true),
+      cards: [1, 2, 3].map((n) => ({
+        badge: getVal(`tcPrice${n}Badge`, '').trim(),
+        title: getVal(`tcPrice${n}Title`, '').trim(),
+        subtitle: getVal(`tcPrice${n}Subtitle`, '').trim(),
+        cta: getVal(`tcPrice${n}Cta`, '').trim(),
+        link_url: getVal(`tcPrice${n}Link`, '').trim(),
+      }))
+    };
+
+    heroThemeState.personalised_section = {
+      enabled: getChk('tcPersonalisedEnabled', true),
+      eyebrow: getVal('tcPersEyebrow', '').trim(),
+      title: getVal('tcPersTitle', '').trim(),
+      subtitle: getVal('tcPersSubtitle', '').trim(),
+      tag1: getVal('tcPersTag1', '').trim(),
+      tag2: getVal('tcPersTag2', '').trim(),
+      tag3: getVal('tcPersTag3', '').trim(),
+      cta_text: getVal('tcPersCtaText', '').trim(),
+      cta_url: getVal('tcPersCtaUrl', '').trim(),
+      image_url: getVal('tcPersImage', '').trim(),
     };
     return heroThemeState;
   }

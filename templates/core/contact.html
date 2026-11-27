@@ -33,6 +33,7 @@
                 <div>
                     <label class="block text-neutral-700 font-semibold mb-1">Subject of Consultation</label>
                     <select name="subject" class="w-full p-2.5 border border-neutral-300 rounded focus:outline-none focus:border-gold-500 bg-[#FAF9F6]">
+                        <option value="Personalised 925 Silver Jewellery Commission" {% if request.GET.subject == 'personalised' %}selected{% endif %}>Personalised 925 Silver Jewellery (Name / Engraving / Birthstone)</option>
                         <option value="Bespoke Engagement Ring Commission">Bespoke Engagement Ring Commission</option>
                         <option value="Fine Jewelry Inquiry">Fine Jewelry Inquiry</option>
                         <option value="Atelier Private Appointment">Atelier Private Appointment (New York)</option>

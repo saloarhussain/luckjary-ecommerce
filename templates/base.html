@@ -306,6 +306,8 @@
 
                     <a href="{% url 'catalog:product_list' %}?style=bridal" class="hover:text-[#366E63] transition py-1">Bridal Suite</a>
 
+                    <a href="/#personalised-atelier" class="hover:text-[#366E63] transition py-1">Personalised</a>
+
                     <!-- Shop by Price Dropdown -->
                     <div class="nav-dropdown-trigger relative py-1">
                         <span class="flex items-center hover:text-[#366E63] transition py-1 cursor-pointer">
@@ -317,20 +319,20 @@
                                 <div class="px-4 py-1.5 text-[10px] font-bold uppercase tracking-wider text-neutral-400 border-b border-neutral-100 mb-1">
                                     Curated Price Ranges
                                 </div>
-                                <a href="{% url 'catalog:product_list' %}?max_price=300" class="flex items-center justify-between px-4 py-2 hover:bg-[#FAF7F0] hover:text-[#366E63] text-neutral-700 transition font-medium">
-                                    <span>Under $300</span>
-                                    <span class="text-[10px] text-neutral-400">Affordable</span>
+                                <a href="{% url 'catalog:product_list' %}?max_price=999" class="flex items-center justify-between px-4 py-2 hover:bg-[#FAF7F0] hover:text-[#366E63] text-neutral-700 transition font-medium">
+                                    <span>Under ₹999</span>
+                                    <span class="text-[10px] text-neutral-400">Everyday</span>
                                 </a>
-                                <a href="{% url 'catalog:product_list' %}?min_price=300&max_price=600" class="flex items-center justify-between px-4 py-2 hover:bg-[#FAF7F0] hover:text-[#366E63] text-neutral-700 transition font-medium">
-                                    <span>$300 – $600</span>
+                                <a href="{% url 'catalog:product_list' %}?max_price=1499" class="flex items-center justify-between px-4 py-2 hover:bg-[#FAF7F0] hover:text-[#366E63] text-neutral-700 transition font-medium">
+                                    <span>Under ₹1,499</span>
+                                    <span class="text-[10px] text-neutral-400">Gifting</span>
+                                </a>
+                                <a href="{% url 'catalog:product_list' %}?max_price=2499" class="flex items-center justify-between px-4 py-2 hover:bg-[#FAF7F0] hover:text-[#366E63] text-neutral-700 transition font-medium">
+                                    <span>Under ₹2,499</span>
                                     <span class="text-[10px] text-neutral-400">Signature</span>
                                 </a>
-                                <a href="{% url 'catalog:product_list' %}?min_price=600&max_price=1200" class="flex items-center justify-between px-4 py-2 hover:bg-[#FAF7F0] hover:text-[#366E63] text-neutral-700 transition font-medium">
-                                    <span>$600 – $1,200</span>
-                                    <span class="text-[10px] text-neutral-400">Fine</span>
-                                </a>
-                                <a href="{% url 'catalog:product_list' %}?min_price=1200" class="flex items-center justify-between px-4 py-2 hover:bg-[#FAF7F0] hover:text-[#366E63] text-neutral-700 transition font-medium">
-                                    <span>Luxury $1,200+</span>
+                                <a href="{% url 'catalog:product_list' %}?min_price=2500" class="flex items-center justify-between px-4 py-2 hover:bg-[#FAF7F0] hover:text-[#366E63] text-neutral-700 transition font-medium">
+                                    <span>Luxury ₹2,500+</span>
                                     <span class="text-[10px] text-[#C5A059] font-bold">Haute</span>
                                 </a>
                                 <div class="border-t border-neutral-100 my-1"></div>
