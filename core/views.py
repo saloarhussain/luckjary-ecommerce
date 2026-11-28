@@ -8,6 +8,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse, JsonResponse
 from django.contrib import messages
 from django.views.decorators.http import require_http_methods
+from django.views.decorators.clickjacking import xframe_options_sameorigin
 from django.db import OperationalError, ProgrammingError
 from django.db.models import Q
 from catalog.models import Product, Category, Collection
@@ -21,6 +22,7 @@ from .models import (
     ensure_core_migrated,
 )
 
+@xframe_options_sameorigin
 def home(request):
     all_featured = Product.objects.filter(is_available=True, is_featured=True)
     featured_products = all_featured.filter(
@@ -48,6 +50,8 @@ def home(request):
         'spotlight_bento': theme_settings.get_spotlight_bento(),
         'price_cards': theme_settings.get_price_cards(),
         'personalised_section': theme_settings.get_personalised_section(),
+        'homepage_content': theme_settings.get_homepage_content(),
+        'is_builder_preview': request.GET.get('builder_preview') == '1',
         'active_metal': 'silver',
         'meta_title': 'Luckjary | Handcrafted 925 Sterling Silver Jewellery',
         'meta_description': 'Discover exquisite handcrafted 925 sterling silver jewelry at Luckjary. Explore sterling silver rings, necklaces, bracelets, and earrings treated with rhodium anti-tarnish finish.',
@@ -241,7 +245,7 @@ def _apply_theme_payload(theme, payload, preserve_video_urls=False):
 
     existing_tokens = dict(theme.design_tokens_json or {})
     if 'design_tokens' in payload and isinstance(payload['design_tokens'], dict):
-        preserved_keys = ('spotlight_bento', 'hero_pin_on_scroll', 'price_cards', 'personalised_section')
+        preserved_keys = ('spotlight_bento', 'hero_pin_on_scroll', 'price_cards', 'personalised_section', 'homepage_content')
         preserved = {k: existing_tokens[k] for k in preserved_keys if k in existing_tokens}
         existing_tokens = {**dict(payload['design_tokens']), **preserved}
 
@@ -253,6 +257,11 @@ def _apply_theme_payload(theme, payload, preserve_video_urls=False):
         existing_tokens['price_cards'] = payload['price_cards']
     if 'personalised_section' in payload and isinstance(payload['personalised_section'], dict):
         existing_tokens['personalised_section'] = payload['personalised_section']
+    if 'homepage_content' in payload and isinstance(payload['homepage_content'], dict):
+        existing_tokens['homepage_content'] = StorefrontThemeSettings._merge_homepage_node(
+            StorefrontThemeSettings.DEFAULT_HOMEPAGE_CONTENT,
+            payload['homepage_content'],
+        )
 
     theme.design_tokens_json = existing_tokens
 
@@ -277,6 +286,13 @@ def admin_theme_customize_api(request):
                 payload = {**payload, **json.loads(payload['payload'])}
             except json.JSONDecodeError:
                 pass
+
+    if payload.get('action') == 'reset_homepage':
+        tokens = dict(theme.design_tokens_json or {})
+        tokens.pop('homepage_content', None)
+        theme.design_tokens_json = tokens
+        theme.save()
+        return JsonResponse({'status': 'ok', 'message': 'Homepage content reset to defaults.', 'settings': theme.to_dict()})
 
     if payload.get('action') == 'reset':
         defaults = StorefrontThemeSettings()

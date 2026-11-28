@@ -197,6 +197,212 @@ class StorefrontThemeSettings(models.Model):
         'image_url': 'https://images.unsplash.com/photo-1617038260897-41a1f14a8ca0?auto=format&fit=crop&w=1200&q=85',
     }
 
+    DEFAULT_HOMEPAGE_CONTENT = {
+        'announcement': {
+            'enabled': True,
+            'text': 'Luckjary Festive Carnival is LIVE:',
+            'link_text': 'Shop Now!',
+            'link_url': '/shop/',
+            'secondary_text': 'Easy 15-Day Return Policy, No Questions Asked',
+            'brand_name': 'LUCKJARY',
+            'brand_sub': 'HAUTE JOAILLERIE',
+        },
+        'hero': {
+            'enabled': True,
+            'eyebrow': 'LUCKJARY Atelier Event',
+            'title': 'Golden Atelier Days',
+            'offer_badge': 'Exclusive Offer',
+            'offer_highlight': '50% Off',
+            'offer_subtitle': 'On Making Charges · All Diamond & 925 Designs',
+            'cta_text': 'Shop the Event',
+            'cta_url': '/shop/',
+            'image_url': 'https://lh3.googleusercontent.com/aida/ALJJyrDWj4ycR5DsdpR6vZpqQhlyYMhEDAfaYN7OSj4mVHivd4PpUrWhIlBtB73Qv00wVwSuF-Ipa5n44aEbo1RPI0MQ8mqSasAgJsmWUrgQ7V-E4dQDplRx3sSJFO9LDGu-o75xnqaFHAbq5G36EWrArKOus36HjAh9qc7TmHSiwWoGR6FxM3CeJMiRFq011WLcH7f9Qa-xjMp4YLe56VGviDUo7ZoiF8vCm1H73jC5Qd8KK9p66IOPm_rjATdM2vzt',
+            'strip_enabled': True,
+            'strip_icon': 'credit_card',
+            'strip_text_primary': '10% Instant Bank Savings up to $75 on Fine Solitaires',
+            'strip_text_secondary': 'Complimentary Insured Shipping · Valid through Nov 30',
+        },
+        'carousel': {
+            'enabled': True,
+            'eyebrow': 'LUCKJARY 925 Diamonds',
+            'title': 'Flat 20% Off Natural Diamonds in 925 Silver',
+            'subtitle': 'Starting at $120',
+            'header_cta_text': 'Shop Now',
+            'header_cta_url': '#bento-grid',
+            'bottom_cta_text': 'Shop Now',
+            'bottom_cta_url': '/shop/',
+            'bg_image_url': 'https://lh3.googleusercontent.com/aida/ALJJyrDP_IcnNfDkcpHWYDd3qpzHOQpmoq_CkZOYkEph9DmkCIUkbHDGfJkjCZQ3L6anZTpPGq5cWYMGMU2lhaV-NovnX_FrFwCzm0AZMfgQLR3djnaG87UVeN2GUbuRv8YMPInr-uKealgx98Wbqn-kBThiWaZzb7mP5IX9rgFlAmiuDC_nNPF1vhFlsvXJ9qRQEsvheKDjSnppDoZ-yIdFngSajia1L7OeGqdOH2M2M1KZiyJ1KcqDMgjFOKegx8a9tg',
+            'source_mode': 'auto',
+            'cards': [
+                {
+                    'title': 'Anchor 925 Silver Band',
+                    'price': '$120',
+                    'compare_price': '$150',
+                    'link_url': '/category/rings/',
+                    'image_url': 'https://lh3.googleusercontent.com/aida/ALJJyrCjbhsSorM7Qp6-L5feydmQQVJlC-PhW8b2ugauC8c1RLZQOyR8EgO0ZbukbUQXIZjgYuEJgpXUH1SO88an6Qq8bBdHg_MYL9T9uVNOyg3BYk057GlYBi0wDgsGf_GsFiZW2T0s2zugvweVpeEUXCXVCPswOR0Vp8TtDt9j86UXej2I7bMJNBWJI6FfmgqszWD4Ejg0YTpnpDkUu71XsuCZZ3PWtcfJTdI1CbprNhEX4QcUx_n7xRKQ-YG1',
+                },
+                {
+                    'title': 'Alex Vermeil Cuff',
+                    'price': '$165',
+                    'compare_price': '$205',
+                    'link_url': '/category/bracelets/',
+                    'image_url': 'https://lh3.googleusercontent.com/aida/ALJJyrCYw8Gviu40Rm80-l1jI7PVPGgrllhuiNz6S00c28x7MNitC3Psb9ENuBniBCL4rpJJVLVnX_aBgZ7oReUVCwm--LkGSD2LDyKWNjlFZutpbH2tWss5K7zNoy3LjDEmSBcj1n6f-xcvtGDMgZCqVcwXvUeEIUwKP2y2fs0qJ5S9Ed0NmnenQfpu-yltiA3wtCI0ffScsDB1-HnSBVartQykTnfFWdbnv1fOZ67pSq1CNLDyqqFXkpqwl8aBHBDV',
+                },
+                {
+                    'title': 'Knot Sterling Hoops',
+                    'price': '$190',
+                    'compare_price': '$240',
+                    'link_url': '/category/earrings/',
+                    'image_url': 'https://lh3.googleusercontent.com/aida/ALJJyrBWYmHm5OOMLtcaoD8sIIKeIuQ8AXkOBmCm6woTG7JOxpo6PKicjQyOBwy0ByTjbbSJ3upXnMYQXm7-tNVz1UME1i8wQSrhOY9Uj6oMz4yhfuW0LrDfZhBDefcHt0orBrFfL8VIgQJhXoDyUM9BeJrs5uBNAAvhsXZlyPTNpv7iAs4M0zLyHrwstXMmR-y4M8GOeBYV3MCP_iA9UP_P9Mh6Yzq9LX4R09N3CzSQT81GQlh1gC2K6m5C5zUuWlIm',
+                },
+            ],
+        },
+        'bento': {
+            'enabled': True,
+            'left': {
+                'brand_label': 'LUCKJARY · 925',
+                'pill_badge': '925 Sterling',
+                'eyebrow': 'LUCKJARY 925 Sterling',
+                'title': 'Crafted in Pure 925 Silver',
+                'cta_badge': 'Flat 50% Off',
+                'link_url': '/shop/?material=925-sterling-silver',
+                'image_url': 'https://lh3.googleusercontent.com/aida/ALJJyrCmre7oRMBVhPOjfmUlkiILE4umPCXOvCgZMFLueCSp5Eei9gJngQuvWuvnwLx2FrWHTuf-KjRXkfco1bVllp1G9lHdPZ-1n0rVcLk_tgq_Ekq-sWEUTGd7ohC9zCwIJo9zH4CnJtLmvNSxsxOI7a9rd9o34hz_UPR0FVF2f7f4LkGmJTX3EMcAn5TyNBkGmROmKVT8Q4e2Qg-fwb3SKhj-u9GM2DLeVcNjzAhGpx6GRzgBiFNEUP21mHBLtw',
+            },
+            'top_right': {
+                'eyebrow': '73 Facets · By LUCKJARY',
+                'title': 'Lumiere Solitaires',
+                'subtitle': 'Precision-cut diamonds for maximum fire and brilliance.',
+                'cta_text': 'Shop Now',
+                'link_url': '/shop/?style=classic',
+                'image_url': 'https://lh3.googleusercontent.com/aida/ALJJyrCvGEgzfNKcuOAwg-VjC-zWApMM97581vsBdrUmeJAO1VI0WSeniOYxqlTTeqckR9bZwhDG2OEspOhD70SOmzss6w33Mw8iVSKFR5yq5Z2tLm-WTVzRue8c3fswAzmxAOjn8HjzGKI9QxMq-fjMqWAtV0Uxay6ffFSERS7hwN15khorXJ_Ip_x4ehZlP6SdTBFODRyg2knZb34MH_54bjFiUPk6P4Morcg3ys9BHHYeZ1XdxvnhZ2KN_Wiz4z0',
+            },
+            'bottom_right': {
+                'eyebrow': 'Statement Edit',
+                'title': 'New Cocktail Rings',
+                'subtitle': 'Sculptural silhouettes designed for evening occasions.',
+                'link_url': '/category/rings/',
+                'image_url': 'https://lh3.googleusercontent.com/aida/ALJJyrCfPW96Hys0yHphB-fCQYB7HLdDTMbxBqsM7-VjOdLAB3lZFuueQtaO14zyCyaBMZIcZRbaaJVvMNF6qlxcYlxQcKEGwMWVKUlwKUC9gUZlmeA-1aZhydDlL6vaa0sjHqIhjwzUdLriPWhnSXemsYO5mb8S9wlzXXCd2c47YIBJptmTyzFjdzuhZEHJYA_FmyGi7uCaR1yB4yu89afENZRdgLsoWyIu90tVzRGsCdF9q3U_cx-zs8KtDdE4srINmg',
+            },
+        },
+        'wrapped': {
+            'enabled': True,
+            'icon': 'redeem',
+            'title': 'Wrapped with love',
+            'items': [
+                {
+                    'label': 'New Rings',
+                    'link_url': '/category/rings/',
+                    'image_url': 'https://lh3.googleusercontent.com/aida/ALJJyrCjbhsSorM7Qp6-L5feydmQQVJlC-PhW8b2ugauC8c1RLZQOyR8EgO0ZbukbUQXIZjgYuEJgpXUH1SO88an6Qq8bBdHg_MYL9T9uVNOyg3BYk057GlYBi0wDgsGf_GsFiZW2T0s2zugvweVpeEUXCXVCPswOR0Vp8TtDt9j86UXej2I7bMJNBWJI6FfmgqszWD4Ejg0YTpnpDkUu71XsuCZZ3PWtcfJTdI1CbprNhEX4QcUx_n7xRKQ-YG1',
+                },
+                {
+                    'label': 'Festive Styles',
+                    'link_url': '/category/bridal-high-jewelry/',
+                    'image_url': 'https://lh3.googleusercontent.com/aida/ALJJyrBA0bjRv83qCEOYMdLmZSJVgnLha5Yk1PCiFMiaDE86R0k3q5vBEY4vRpSNImay56cZIOO9QWpIzzAdGd6h8j-R91mtFFkxda_ywal4zTaDoD69jQn8nstXAqkM_54mySKaidOQY2kJbja_OhgZIt10Tec-MhQrrNcJO560OZ4c2iBZNTXdIvQqAL39HGkqzE68K9eiA4Pd1OgHteWPlNfNZJIHVgnltRp0y69YLg5jYd8qMCO7rqeIfFO4ORLTyg',
+                },
+                {
+                    'label': 'Drop Earrings',
+                    'link_url': '/category/earrings/',
+                    'image_url': 'https://lh3.googleusercontent.com/aida/ALJJyrDHGZiHeC86ec9VnTzChyJ-TGfu2w3-DtmXROisrYWPRrFiDBFFWiqYohh08pCPHl025IT0CYnWhOgT1Ktr8UwMCprbkosqUfb6qMgvxtBCWKg0Ymg5hKJE42jY0pqRVaL2-T50AUSlCSSeOYC65GbydQdjATTTk0NpcE-eXOzg4HckOpis0GQI5iCPEW6-AbLWMRXIobeLgaC8lzkCaMNFq7eq_ytd5z4A5pR_6RDNMOdXWs8Aua908z-gYdokUJY',
+                },
+                {
+                    'label': 'Vermeil Cuffs',
+                    'link_url': '/category/bracelets/',
+                    'image_url': 'https://lh3.googleusercontent.com/aida/ALJJyrCYw8Gviu40Rm80-l1jI7PVPGgrllhuiNz6S00c28x7MNitC3Psb9ENuBniBCL4rpJJVLVnX_aBgZ7oReUVCwm--LkGSD2LDyKWNjlFZutpbH2tWss5K7zNoy3LjDEmSBcj1n6f-xcvtGDMgZCqVcwXvUeEIUwKP2y2fs0qJ5S9Ed0NmnenQfpu-yltiA3wtCI0ffScsDB1-HnSBVartQykTnfFWdbnv1fOZ67pSq1CNLDyqqFXkpqwl8aBHBDV',
+                },
+                {
+                    'label': 'Sculpted Hoops',
+                    'link_url': '/category/necklaces/',
+                    'image_url': 'https://lh3.googleusercontent.com/aida/ALJJyrBWYmHm5OOMLtcaoD8sIIKeIuQ8AXkOBmCm6woTG7JOxpo6PKicjQyOBwy0ByTjbbSJ3upXnMYQXm7-tNVz1UME1i8wQSrhOY9Uj6oMz4yhfuW0LrDfZhBDefcHt0orBrFfL8VIgQJhXoDyUM9BeJrs5uBNAAvhsXZlyPTNpv7iAs4M0zLyHrwstXMmR-y4M8GOeBYV3MCP_iA9UP_P9Mh6Yzq9LX4R09N3CzSQT81GQlh1gC2K6m5C5zUuWlIm',
+                },
+                {
+                    'label': 'Solitaires',
+                    'link_url': '/shop/?style=classic',
+                    'image_url': 'https://lh3.googleusercontent.com/aida/ALJJyrCvGEgzfNKcuOAwg-VjC-zWApMM97581vsBdrUmeJAO1VI0WSeniOYxqlTTeqckR9bZwhDG2OEspOhD70SOmzss6w33Mw8iVSKFR5yq5Z2tLm-WTVzRue8c3fswAzmxAOjn8HjzGKI9QxMq-fjMqWAtV0Uxay6ffFSERS7hwN15khorXJ_Ip_x4ehZlP6SdTBFODRyg2knZb34MH_54bjFiUPk6P4Morcg3ys9BHHYeZ1XdxvnhZ2KN_Wiz4z0',
+                },
+            ],
+        },
+        'price_and_personalised': {
+            'enabled': True,
+            'price_cards': [
+                {
+                    'eyebrow': 'Shop by Price',
+                    'title': 'Under $1,000',
+                    'cta_text': 'Explore',
+                    'link_url': '/shop/?max_price=1000',
+                },
+                {
+                    'eyebrow': 'Shop by Price',
+                    'title': 'Under $2,000',
+                    'cta_text': 'Explore',
+                    'link_url': '/shop/?max_price=2000',
+                },
+            ],
+            'personalised': {
+                'enabled': True,
+                'eyebrow': 'Bespoke Atelier',
+                'title': 'Personalized Jewellery',
+                'subtitle': 'Custom engravings, initials, and birthstones crafted to order.',
+                'cta_text': 'Personalize Yours',
+                'link_url': '/contact/?subject=personalised',
+                'image_url': 'https://lh3.googleusercontent.com/aida/ALJJyrDziJVAl1Tv9RTD5IRGFAO7-OJ7UPnbN1evt40F_oe2QGmVjZaYzacca8qPYN7HxOwIsSG0G-w4dfRCarFPeAJN9dQAVP750_UoT0GKIbacnIaOTEgA7_PRLq8DuDfvHT5-TEKRiAiF5WJdM4BelWD0rHE8R5ZoY3sBsaqMYg8FqBFj2RviewocNgWhdWr0gqPFmEV_1hVslxLMISJFmtHNoIh50VYPgScno5v9aax_ofML9D3ZqMtPsdRhFtDO1A',
+            },
+        },
+        'trust_guarantees': {
+            'enabled': True,
+            'items': [
+                {'icon': 'verified', 'label': '100% Certified'},
+                {'icon': 'event_repeat', 'label': '15 Day Exchange'},
+                {'icon': 'autorenew', 'label': 'Lifetime Exchange'},
+                {'icon': 'workspace_premium', 'label': 'One Year Warranty'},
+            ],
+        },
+        'vault_atelier': {
+            'enabled': True,
+            'vault': {
+                'eyebrow': 'LUCKJARY Vault Plan',
+                'title': '9=10 Monthly Saving Scheme',
+                'subtitle': 'Pay 9 monthly instalments toward your next heirloom, and the 10th is on LUCKJARY.',
+                'link_url': '/contact/?subject=vault-plan',
+                'image_url': 'https://lh3.googleusercontent.com/aida/ALJJyrBayDAuFjshNXMyoDhcc8QiqUIJfHHC0rJuoa0C2rbv0QLPkrXEZLbihb7aGpFpRL6un7A82FQlD5pJlAnLlRUDEPij1aknV4eDIfqogih3H_FzUlF_gdRAdwERob3-oFMc1kf4yr2jvUEoZCIH0BkbSqX7VC56CJ3yOCdgE44opDYPx0hO39Tb8ABMabXFDO1b1CWGHZzNaMoUE5GsCcbphtQJxfDMFXiFde4NgVQpbUXXuwJAQK1OSetIV_mIUg',
+            },
+            'top_right': {
+                'eyebrow': 'Everyday 18k Vermeil',
+                'title': 'Minimalist Chains & Bands',
+                'subtitle': 'Lightweight pieces built for daily layering.',
+                'link_url': '/category/necklaces/',
+                'image_url': 'https://lh3.googleusercontent.com/aida/ALJJyrBA0bjRv83qCEOYMdLmZSJVgnLha5Yk1PCiFMiaDE86R0k3q5vBEY4vRpSNImay56cZIOO9QWpIzzAdGd6h8j-R91mtFFkxda_ywal4zTaDoD69jQn8nstXAqkM_54mySKaidOQY2kJbja_OhgZIt10Tec-MhQrrNcJO560OZ4c2iBZNTXdIvQqAL39HGkqzE68K9eiA4Pd1OgHteWPlNfNZJIHVgnltRp0y69YLg5jYd8qMCO7rqeIfFO4ORLTyg',
+            },
+            'bottom_right': {
+                'eyebrow': 'Private Salons',
+                'title': 'Visit a LUCKJARY Boutique',
+                'subtitle': 'Complimentary ultrasonic cleaning & styling.',
+                'link_url': '/about/#boutiques',
+                'image_url': 'https://lh3.googleusercontent.com/aida/ALJJyrDHGZiHeC86ec9VnTzChyJ-TGfu2w3-DtmXROisrYWPRrFiDBFFWiqYohh08pCPHl025IT0CYnWhOgT1Ktr8UwMCprbkosqUfb6qMgvxtBCWKg0Ymg5hKJE42jY0pqRVaL2-T50AUSlCSSeOYC65GbydQdjATTTk0NpcE-eXOzg4HckOpis0GQI5iCPEW6-AbLWMRXIobeLgaC8lzkCaMNFq7eq_ytd5z4A5pR_6RDNMOdXWs8Aua908z-gYdokUJY',
+            },
+        },
+        'footer': {
+            'enabled': True,
+            'brand_name': 'LUCKJARY',
+            'tagline': 'Hallmarked 925 sterling silver, natural diamonds, and 18k vermeil heirlooms.',
+            'col1_heading': 'Know Your Jewelry',
+            'col1_links': [
+                {'label': 'Diamond Guide', 'url': '/faq/'},
+                {'label': '925 Silver Purity', 'url': '/about/'},
+                {'label': 'Ring Size Guide', 'url': '/faq/#sizing'},
+            ],
+            'col2_heading': 'Customer Care',
+            'col2_links': [
+                {'label': '15-Day Returns', 'url': '/faq/'},
+                {'label': 'Track Order', 'url': '/track-order/'},
+                {'label': 'Find a Store', 'url': '/about/#boutiques'},
+            ],
+            'newsletter_heading': 'Stay in Touch',
+            'newsletter_placeholder': 'elena@example.com',
+            'newsletter_button': 'Subscribe',
+            'newsletter_note': 'Receive private previews and atelier offers.',
+        },
+    }
+
     class Meta:
         verbose_name = "Storefront Theme Customize"
         verbose_name_plural = "Storefront Theme Customize"
@@ -286,12 +492,41 @@ class StorefrontThemeSettings(models.Model):
                     merged[k] = str(v).strip()
         return merged
 
+    @classmethod
+    def _merge_homepage_node(cls, default_val, saved_val, key_name=''):
+        if isinstance(default_val, dict):
+            result = {}
+            saved_dict = saved_val if isinstance(saved_val, dict) else {}
+            for k, dv in default_val.items():
+                result[k] = cls._merge_homepage_node(dv, saved_dict.get(k), k)
+            return result
+        if isinstance(default_val, list):
+            saved_list = saved_val if isinstance(saved_val, list) else []
+            merged_list = []
+            for idx, dv in enumerate(default_val):
+                sv = saved_list[idx] if idx < len(saved_list) else None
+                merged_list.append(cls._merge_homepage_node(dv, sv, key_name))
+            return merged_list
+        if isinstance(default_val, bool):
+            return bool(saved_val) if isinstance(saved_val, bool) else default_val
+        if saved_val is None:
+            return default_val
+        text = str(saved_val).strip()
+        if text == '' and ('image_url' in key_name or key_name in ('link_url', 'cta_url', 'url', 'source_mode')):
+            return default_val
+        return text
+
+    def get_homepage_content(self):
+        saved = (self.design_tokens_json or {}).get('homepage_content')
+        return self._merge_homepage_node(self.DEFAULT_HOMEPAGE_CONTENT, saved)
+
     def to_dict(self):
         tokens = dict(self.design_tokens_json or {})
         tokens.pop('spotlight_bento', None)
         tokens.pop('hero_pin_on_scroll', None)
         tokens.pop('price_cards', None)
         tokens.pop('personalised_section', None)
+        tokens.pop('homepage_content', None)
         return {
             'hero_video_enabled': self.hero_video_enabled,
             'hero_video_mode': self.hero_video_mode,
@@ -317,5 +552,6 @@ class StorefrontThemeSettings(models.Model):
             'spotlight_bento': self.get_spotlight_bento(),
             'price_cards': self.get_price_cards(),
             'personalised_section': self.get_personalised_section(),
+            'homepage_content': self.get_homepage_content(),
             'design_tokens': tokens,
         }

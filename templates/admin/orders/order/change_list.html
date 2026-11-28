@@ -533,6 +533,13 @@
             </span>
             <span class="tab-title font-normal text-[#9ca3af]">Theme Customize</span>
           </button>
+          <!-- Tab 5: Homepage Builder (Elementor-Style) -->
+          <button class="tab-button relative px-3.5 sm:px-4 py-2 rounded-lg bg-transparent border border-transparent text-[#9ca3af] hover:text-white hover:bg-[#171920] font-medium text-xs tracking-wide flex items-center gap-2 sm:gap-2.5 transition-all whitespace-nowrap focus:outline-none flex-shrink-0 cursor-pointer" id="tab-btn-homepage" onclick="switchAtelierTab('homepage')" type="button">
+            <span class="tab-icon flex items-center text-[#75777F]">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6" d="M4 5a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM14 5a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 01-1-1V5zM4 15a1 1 0 011-1h14a1 1 0 011 1v4a1 1 0 01-1 1H5a1 1 0 01-1-1v-4z"></path></svg>
+            </span>
+            <span class="tab-title font-normal text-[#9ca3af]">Homepage Builder</span>
+          </button>
         </div>
       </div>
 
@@ -1588,6 +1595,76 @@
             </div>
           </section>
         </div>
+
+        <!-- Panel 5: Elementor-Style Homepage Content Builder -->
+        <div class="tab-panel hidden" data-purpose="homepage-builder-card" id="tab-panel-homepage">
+          <section class="card-surface rounded-xl p-4 sm:p-6 shadow-luxury-card space-y-5">
+            <!-- Top Builder Action Bar -->
+            <div class="flex flex-col xl:flex-row xl:items-center justify-between gap-4 pb-4 border-b border-[#21242d]">
+              <div>
+                <div class="flex items-center gap-2.5">
+                  <span class="px-2 py-0.5 rounded bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 text-[10px] font-mono uppercase tracking-wider font-semibold">Elementor Studio</span>
+                  <span id="hpSyncBadge" class="text-[11px] font-mono text-[#9ca3af]">Synced with live storefront</span>
+                </div>
+                <h2 class="text-xl sm:text-2xl font-normal text-white mt-1" style="font-family: 'Cormorant Garamond', Georgia, serif;">
+                  Homepage Content &amp; Section Builder
+                </h2>
+                <p class="text-xs text-[#9ca3af] font-sans mt-0.5">
+                  Edit every headline, badge, price, image, button, icon, link, and section visibility across your entire homepage with instant live preview.
+                </p>
+              </div>
+
+              <div class="flex flex-wrap items-center gap-2">
+                <!-- Device Preview Switcher -->
+                <div class="inline-flex items-center p-1 rounded-lg bg-[#0d0e10] border border-[#21242d]">
+                  <button type="button" onclick="setHpPreviewDevice('mobile')" id="hpDevMobile" class="hp-dev-btn px-2.5 py-1.5 rounded text-[11px] font-mono bg-[#171920] text-emerald-400 border border-emerald-500/35 cursor-pointer">Mobile</button>
+                  <button type="button" onclick="setHpPreviewDevice('tablet')" id="hpDevTablet" class="hp-dev-btn px-2.5 py-1.5 rounded text-[11px] font-mono text-[#9ca3af] hover:text-white border border-transparent cursor-pointer">Tablet</button>
+                  <button type="button" onclick="setHpPreviewDevice('desktop')" id="hpDevDesktop" class="hp-dev-btn px-2.5 py-1.5 rounded text-[11px] font-mono text-[#9ca3af] hover:text-white border border-transparent cursor-pointer">Desktop</button>
+                </div>
+
+                <button type="button" onclick="toggleAllHpSections(true)" class="btn-secondary px-3 py-2 rounded-lg text-[11px] font-medium text-neutral-300 hover:text-white cursor-pointer" style="text-decoration: none !important;">Expand All</button>
+                <button type="button" onclick="toggleAllHpSections(false)" class="btn-secondary px-3 py-2 rounded-lg text-[11px] font-medium text-neutral-300 hover:text-white cursor-pointer" style="text-decoration: none !important;">Collapse All</button>
+                <button type="button" onclick="resetHomepageContent()" class="btn-secondary px-3 py-2 rounded-lg text-[11px] font-medium text-neutral-300 hover:text-white cursor-pointer" style="text-decoration: none !important;">Reset Defaults</button>
+                <a href="/" target="_blank" class="btn-secondary inline-flex items-center gap-1 px-3 py-2 rounded-lg text-[11px] font-medium text-neutral-200 hover:text-white" style="text-decoration: none !important;">
+                  <span>Live Site</span>
+                  <span>↗</span>
+                </a>
+                <button type="button" onclick="saveHomepageContent()" id="saveHomepageContentBtn" class="btn-primary glow-emerald inline-flex items-center justify-center gap-2 px-5 py-2 rounded-lg text-xs font-semibold font-sans cursor-pointer border border-[#10b981]/40" style="background-color: #10b981; color: #07080a !important; text-decoration: none !important;">
+                  <svg class="w-3.5 h-3.5" fill="none" stroke="#07080a" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path></svg>
+                  <span style="color: #07080a !important; font-weight: 600;">Save &amp; Publish Homepage</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Elementor Split Canvas: Left Widget Inspector / Right Live Preview -->
+            <div class="grid grid-cols-1 xl:grid-cols-12 gap-5 items-start">
+              <!-- Left 6 cols: Accordion Widget Panels -->
+              <div class="xl:col-span-6 space-y-3" id="homepageBuilderSections"></div>
+
+              <!-- Right 6 cols: Sticky Interactive Storefront Preview -->
+              <div class="xl:col-span-6 xl:sticky xl:top-4">
+                <div class="rounded-xl bg-[#090a0d] border border-white/[0.08] p-3 sm:p-4 space-y-3 shadow-2xl">
+                  <div class="flex items-center justify-between gap-2 pb-2.5 border-b border-white/[0.06]">
+                    <div class="flex items-center gap-2">
+                      <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                      <span class="text-[11px] font-mono uppercase tracking-wider text-neutral-200">Live Storefront Canvas</span>
+                      <span id="hpPreviewWidthLabel" class="text-[10px] font-mono text-[#9ca3af] px-2 py-0.5 rounded bg-[#171920] border border-[#21242d]">390px Mobile</span>
+                    </div>
+                    <button type="button" onclick="reloadHpPreviewFrame()" class="btn-secondary inline-flex items-center gap-1 px-2.5 py-1 rounded text-[11px] font-mono text-neutral-300 hover:text-white cursor-pointer" style="text-decoration: none !important;">
+                      <span>↻ Refresh</span>
+                    </button>
+                  </div>
+
+                  <div class="w-full flex justify-center bg-[#07080a] rounded-lg border border-[#21242d] p-2 sm:p-3 overflow-x-auto">
+                    <div id="hpPreviewFrameWrap" class="w-[390px] max-w-full transition-all duration-300 rounded-lg overflow-hidden border border-white/10 bg-[#FCF1E3] shadow-2xl">
+                      <iframe id="homepagePreviewFrame" data-src="/?builder_preview=1" title="Luckjary Live Homepage Preview" class="w-full h-[680px] border-0 bg-[#FCF1E3]"></iframe>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
       </div>
     </section>
 
@@ -1712,16 +1789,17 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   window.switchAtelierTab = function(tabName) {
-    const tabs = ['currency', 'shipping', 'roles', 'design'];
+    const tabs = ['currency', 'shipping', 'roles', 'design', 'homepage'];
     const tabLabels = {
       'currency': 'Store Currency',
       'shipping': 'Shipping & Fulfillment',
       'roles': 'User Roles & Permissions',
-      'design': 'Design & Theme Style'
+      'design': 'Design & Theme Style',
+      'homepage': 'Homepage Builder'
     };
     const breadcrumbLabel = document.getElementById('settingsBreadcrumbActiveTab');
     if (breadcrumbLabel) {
-      breadcrumbLabel.textContent = 'Settings';
+      breadcrumbLabel.textContent = tabLabels[tabName] || 'Settings';
     }
 
     tabs.forEach(tab => {
@@ -1747,6 +1825,10 @@ document.addEventListener('DOMContentLoaded', () => {
         panel.classList.remove('block');
       }
     });
+
+    if (tabName === 'homepage' && typeof window.ensureHpPreviewLoaded === 'function') {
+      window.ensureHpPreviewLoaded();
+    }
   };
 
   // ==========================================
@@ -3095,6 +3177,15 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
+  document.querySelectorAll('.sidebar-homepage-builder-btn').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      showSettingsView();
+      window.location.hash = 'settings-homepage';
+      window.switchAtelierTab('homepage');
+    });
+  });
+
   if (backToOrdersBtn) {
     backToOrdersBtn.addEventListener('click', (e) => {
       e.preventDefault();
@@ -3106,7 +3197,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const hash = window.location.hash;
     if (hash.startsWith('#settings')) {
       showSettingsView();
-      if (hash === '#settings-design') {
+      if (hash === '#settings-homepage') {
+        window.switchAtelierTab('homepage');
+      } else if (hash === '#settings-design') {
         window.switchAtelierTab('design');
       } else if (hash === '#settings-shipping') {
         window.switchAtelierTab('shipping');
@@ -3119,6 +3212,604 @@ document.addEventListener('DOMContentLoaded', () => {
       showOrdersView();
     }
   }
+
+  // ==========================================
+  // ELEMENTOR-STYLE HOMEPAGE CONTENT BUILDER
+  // ==========================================
+  let homepageContentState = JSON.parse(JSON.stringify(heroThemeState.homepage_content || {}));
+  let hpOpenSections = new Set(['announcement', 'hero']);
+
+  const HP_SECTIONS_SCHEMA = [
+    {
+      key: 'announcement',
+      num: '01',
+      title: 'Announcement Bar & Header Brand',
+      subtitle: 'Top promotional strip, link, and header brand title',
+      hasToggle: true,
+      groups: [
+        {
+          title: 'Top Announcement Strip',
+          fields: [
+            { path: 'announcement.text', label: 'Announcement Text', type: 'text' },
+            { path: 'announcement.link_text', label: 'Link Label', type: 'text' },
+            { path: 'announcement.link_url', label: 'Link URL', type: 'url' },
+            { path: 'announcement.secondary_text', label: 'Secondary Notice (Desktop)', type: 'text', span: 2 },
+          ]
+        },
+        {
+          title: 'Header Brand Mark',
+          fields: [
+            { path: 'announcement.brand_name', label: 'Brand Title', type: 'text' },
+            { path: 'announcement.brand_sub', label: 'Brand Subtitle', type: 'text' },
+          ]
+        }
+      ]
+    },
+    {
+      key: 'hero',
+      num: '02',
+      title: 'Campaign Hero Banner & Offer Strip',
+      subtitle: 'Main burgundy banner, offer highlight card, CTA & bottom strip',
+      hasToggle: true,
+      groups: [
+        {
+          title: 'Hero Copy & Offer Card',
+          fields: [
+            { path: 'hero.eyebrow', label: 'Eyebrow Label', type: 'text' },
+            { path: 'hero.title', label: 'Main Headline', type: 'text' },
+            { path: 'hero.offer_badge', label: 'Offer Box Pill', type: 'text' },
+            { path: 'hero.offer_highlight', label: 'Offer Big Highlight', type: 'text' },
+            { path: 'hero.offer_subtitle', label: 'Offer Description', type: 'text', span: 2 },
+            { path: 'hero.cta_text', label: 'Button Label', type: 'text' },
+            { path: 'hero.cta_url', label: 'Button Target URL', type: 'url' },
+            { path: 'hero.image_url', label: 'Hero Background Image', type: 'image', imageKey: 'hp-hero-banner', span: 2 },
+          ]
+        },
+        {
+          title: 'Bottom White Offer Strip',
+          fields: [
+            { path: 'hero.strip_enabled', label: 'Show Offer Strip Below Hero', type: 'checkbox', span: 2 },
+            { path: 'hero.strip_icon', label: 'Material Icon Name', type: 'text' },
+            { path: 'hero.strip_text_primary', label: 'Primary Savings Text', type: 'text' },
+            { path: 'hero.strip_text_secondary', label: 'Validity / Shipping Note', type: 'text', span: 2 },
+          ]
+        }
+      ]
+    },
+    {
+      key: 'carousel',
+      num: '03',
+      title: '925 Diamonds Promo & Product Carousel',
+      subtitle: 'Promo banner copy, product source mode & 3 custom showcase cards',
+      hasToggle: true,
+      groups: [
+        {
+          title: 'Promo Banner & Controls',
+          fields: [
+            { path: 'carousel.eyebrow', label: 'Eyebrow Label', type: 'text' },
+            { path: 'carousel.title', label: 'Promo Headline', type: 'text' },
+            { path: 'carousel.subtitle', label: 'Starting Price Line', type: 'text' },
+            { path: 'carousel.source_mode', label: 'Product Cards Source', type: 'select', options: [
+              { value: 'auto', label: 'Auto (Featured 925 Silver Catalog Products)' },
+              { value: 'custom', label: 'Custom (Always Show 3 Manual Cards Below)' },
+            ]},
+            { path: 'carousel.header_cta_text', label: 'Top Link Text', type: 'text' },
+            { path: 'carousel.header_cta_url', label: 'Top Link URL', type: 'url' },
+            { path: 'carousel.bottom_cta_text', label: 'Bottom Button Text', type: 'text' },
+            { path: 'carousel.bottom_cta_url', label: 'Bottom Button URL', type: 'url' },
+            { path: 'carousel.bg_image_url', label: 'Section Background Image', type: 'image', imageKey: 'hp-carousel-bg', span: 2 },
+          ]
+        },
+        ...[0, 1, 2].map(i => ({
+          title: `Custom / Fallback Card #${i + 1}`,
+          fields: [
+            { path: `carousel.cards.${i}.title`, label: 'Product Title', type: 'text', span: 2 },
+            { path: `carousel.cards.${i}.price`, label: 'Sale Price', type: 'text' },
+            { path: `carousel.cards.${i}.compare_price`, label: 'Compare Price', type: 'text' },
+            { path: `carousel.cards.${i}.link_url`, label: 'Product / Category URL', type: 'url', span: 2 },
+            { path: `carousel.cards.${i}.image_url`, label: 'Card Image', type: 'image', imageKey: `hp-carousel-card-${i}`, span: 2 },
+          ]
+        }))
+      ]
+    },
+    {
+      key: 'bento',
+      num: '04',
+      title: 'Bento 3-Card Editorial Showcase',
+      subtitle: '1 tall left feature card + 2 stacked right editorial cards',
+      hasToggle: true,
+      groups: [
+        {
+          title: 'Left Tall Portrait Card',
+          fields: [
+            { path: 'bento.left.brand_label', label: 'Top Left Brand Label', type: 'text' },
+            { path: 'bento.left.pill_badge', label: 'Top Right Pill Badge', type: 'text' },
+            { path: 'bento.left.eyebrow', label: 'Bottom Eyebrow', type: 'text' },
+            { path: 'bento.left.title', label: 'Headline', type: 'text' },
+            { path: 'bento.left.cta_badge', label: 'Offer Badge', type: 'text' },
+            { path: 'bento.left.link_url', label: 'Target URL', type: 'url' },
+            { path: 'bento.left.image_url', label: 'Card Image', type: 'image', imageKey: 'hp-bento-left', span: 2 },
+          ]
+        },
+        {
+          title: 'Top Right Card',
+          fields: [
+            { path: 'bento.top_right.eyebrow', label: 'Eyebrow', type: 'text' },
+            { path: 'bento.top_right.title', label: 'Title', type: 'text' },
+            { path: 'bento.top_right.subtitle', label: 'Description', type: 'textarea', span: 2 },
+            { path: 'bento.top_right.cta_text', label: 'Action Label', type: 'text' },
+            { path: 'bento.top_right.link_url', label: 'Target URL', type: 'url' },
+            { path: 'bento.top_right.image_url', label: 'Card Image', type: 'image', imageKey: 'hp-bento-top-right', span: 2 },
+          ]
+        },
+        {
+          title: 'Bottom Right Card',
+          fields: [
+            { path: 'bento.bottom_right.eyebrow', label: 'Eyebrow', type: 'text' },
+            { path: 'bento.bottom_right.title', label: 'Title', type: 'text' },
+            { path: 'bento.bottom_right.subtitle', label: 'Description', type: 'textarea', span: 2 },
+            { path: 'bento.bottom_right.link_url', label: 'Target URL', type: 'url', span: 2 },
+            { path: 'bento.bottom_right.image_url', label: 'Card Image', type: 'image', imageKey: 'hp-bento-bottom-right', span: 2 },
+          ]
+        }
+      ]
+    },
+    {
+      key: 'wrapped',
+      num: '05',
+      title: 'Wrapped With Love (6 Category Tiles)',
+      subtitle: 'Cream gifting strip heading, icon, and 6 clickable tiles',
+      hasToggle: true,
+      groups: [
+        {
+          title: 'Strip Header',
+          fields: [
+            { path: 'wrapped.icon', label: 'Material Icon Name', type: 'text' },
+            { path: 'wrapped.title', label: 'Section Title', type: 'text' },
+          ]
+        },
+        ...[0, 1, 2, 3, 4, 5].map(i => ({
+          title: `Category Tile #${i + 1}`,
+          fields: [
+            { path: `wrapped.items.${i}.label`, label: 'Tile Label', type: 'text' },
+            { path: `wrapped.items.${i}.link_url`, label: 'Target URL', type: 'url' },
+            { path: `wrapped.items.${i}.image_url`, label: 'Tile Image', type: 'image', imageKey: `hp-wrapped-${i}`, span: 2 },
+          ]
+        }))
+      ]
+    },
+    {
+      key: 'price_and_personalised',
+      num: '06',
+      title: 'Shop by Price & Personalized Atelier',
+      subtitle: '2 budget cards (Under $1,000 / $2,000) + Bespoke Personalized card',
+      hasToggle: true,
+      groups: [
+        ...[0, 1].map(i => ({
+          title: `Price Card #${i + 1}`,
+          fields: [
+            { path: `price_and_personalised.price_cards.${i}.eyebrow`, label: 'Eyebrow', type: 'text' },
+            { path: `price_and_personalised.price_cards.${i}.title`, label: 'Price Heading', type: 'text' },
+            { path: `price_and_personalised.price_cards.${i}.cta_text`, label: 'Link Label', type: 'text' },
+            { path: `price_and_personalised.price_cards.${i}.link_url`, label: 'Filter URL', type: 'url' },
+          ]
+        })),
+        {
+          title: 'Personalized Jewellery Card',
+          fields: [
+            { path: 'price_and_personalised.personalised.enabled', label: 'Show Personalized Card', type: 'checkbox', span: 2 },
+            { path: 'price_and_personalised.personalised.eyebrow', label: 'Eyebrow', type: 'text' },
+            { path: 'price_and_personalised.personalised.title', label: 'Headline', type: 'text' },
+            { path: 'price_and_personalised.personalised.subtitle', label: 'Description', type: 'textarea', span: 2 },
+            { path: 'price_and_personalised.personalised.cta_text', label: 'Button Label', type: 'text' },
+            { path: 'price_and_personalised.personalised.link_url', label: 'Target URL', type: 'url' },
+            { path: 'price_and_personalised.personalised.image_url', label: 'Background Image', type: 'image', imageKey: 'hp-personalised', span: 2 },
+          ]
+        }
+      ]
+    },
+    {
+      key: 'trust_guarantees',
+      num: '07',
+      title: 'Trust Guarantees (4 Badges)',
+      subtitle: 'Certification, 15-Day Exchange, Lifetime Exchange & Warranty',
+      hasToggle: true,
+      groups: [0, 1, 2, 3].map(i => ({
+        title: `Trust Badge #${i + 1}`,
+        fields: [
+          { path: `trust_guarantees.items.${i}.icon`, label: 'Material Icon Name', type: 'text' },
+          { path: `trust_guarantees.items.${i}.label`, label: 'Badge Title', type: 'text' },
+        ]
+      }))
+    },
+    {
+      key: 'vault_atelier',
+      num: '08',
+      title: 'Vault Plan & Atelier Salons',
+      subtitle: '9=10 Saving Scheme, Minimalist Chains & Boutique Salon cards',
+      hasToggle: true,
+      groups: [
+        {
+          title: 'Left Vault Plan Card',
+          fields: [
+            { path: 'vault_atelier.vault.eyebrow', label: 'Eyebrow', type: 'text' },
+            { path: 'vault_atelier.vault.title', label: 'Headline', type: 'text' },
+            { path: 'vault_atelier.vault.subtitle', label: 'Description', type: 'textarea', span: 2 },
+            { path: 'vault_atelier.vault.link_url', label: 'Target URL', type: 'url', span: 2 },
+            { path: 'vault_atelier.vault.image_url', label: 'Background Image', type: 'image', imageKey: 'hp-vault-left', span: 2 },
+          ]
+        },
+        {
+          title: 'Top Right Card (Everyday Vermeil)',
+          fields: [
+            { path: 'vault_atelier.top_right.eyebrow', label: 'Eyebrow', type: 'text' },
+            { path: 'vault_atelier.top_right.title', label: 'Headline', type: 'text' },
+            { path: 'vault_atelier.top_right.subtitle', label: 'Description', type: 'textarea', span: 2 },
+            { path: 'vault_atelier.top_right.link_url', label: 'Target URL', type: 'url', span: 2 },
+            { path: 'vault_atelier.top_right.image_url', label: 'Background Image', type: 'image', imageKey: 'hp-vault-top', span: 2 },
+          ]
+        },
+        {
+          title: 'Bottom Right Card (Private Salons)',
+          fields: [
+            { path: 'vault_atelier.bottom_right.eyebrow', label: 'Eyebrow', type: 'text' },
+            { path: 'vault_atelier.bottom_right.title', label: 'Headline', type: 'text' },
+            { path: 'vault_atelier.bottom_right.subtitle', label: 'Description', type: 'textarea', span: 2 },
+            { path: 'vault_atelier.bottom_right.link_url', label: 'Target URL', type: 'url', span: 2 },
+            { path: 'vault_atelier.bottom_right.image_url', label: 'Background Image', type: 'image', imageKey: 'hp-vault-bottom', span: 2 },
+          ]
+        }
+      ]
+    },
+    {
+      key: 'footer',
+      num: '09',
+      title: 'Deep Burgundy Footer & Newsletter',
+      subtitle: 'Brand bio, navigation columns (6 links) & newsletter signup',
+      hasToggle: true,
+      groups: [
+        {
+          title: 'Footer Brand Summary',
+          fields: [
+            { path: 'footer.brand_name', label: 'Brand Title', type: 'text' },
+            { path: 'footer.tagline', label: 'Brand Tagline', type: 'textarea', span: 2 },
+          ]
+        },
+        {
+          title: 'Column 1 Links',
+          fields: [
+            { path: 'footer.col1_heading', label: 'Column 1 Heading', type: 'text', span: 2 },
+            { path: 'footer.col1_links.0.label', label: 'Link 1 Label', type: 'text' },
+            { path: 'footer.col1_links.0.url', label: 'Link 1 URL', type: 'url' },
+            { path: 'footer.col1_links.1.label', label: 'Link 2 Label', type: 'text' },
+            { path: 'footer.col1_links.1.url', label: 'Link 2 URL', type: 'url' },
+            { path: 'footer.col1_links.2.label', label: 'Link 3 Label', type: 'text' },
+            { path: 'footer.col1_links.2.url', label: 'Link 3 URL', type: 'url' },
+          ]
+        },
+        {
+          title: 'Column 2 Links',
+          fields: [
+            { path: 'footer.col2_heading', label: 'Column 2 Heading', type: 'text', span: 2 },
+            { path: 'footer.col2_links.0.label', label: 'Link 1 Label', type: 'text' },
+            { path: 'footer.col2_links.0.url', label: 'Link 1 URL', type: 'url' },
+            { path: 'footer.col2_links.1.label', label: 'Link 2 Label', type: 'text' },
+            { path: 'footer.col2_links.1.url', label: 'Link 2 URL', type: 'url' },
+            { path: 'footer.col2_links.2.label', label: 'Link 3 Label', type: 'text' },
+            { path: 'footer.col2_links.2.url', label: 'Link 3 URL', type: 'url' },
+          ]
+        },
+        {
+          title: 'Newsletter Box',
+          fields: [
+            { path: 'footer.newsletter_heading', label: 'Heading', type: 'text' },
+            { path: 'footer.newsletter_placeholder', label: 'Email Placeholder', type: 'text' },
+            { path: 'footer.newsletter_button', label: 'Submit Button Text', type: 'text' },
+            { path: 'footer.newsletter_note', label: 'Helper Note', type: 'text' },
+          ]
+        }
+      ]
+    }
+  ];
+
+  function getHpVal(path) {
+    return path.split('.').reduce((acc, part) => (acc !== undefined && acc !== null ? acc[part] : undefined), homepageContentState);
+  }
+
+  function setHpVal(path, val) {
+    const parts = path.split('.');
+    let cur = homepageContentState;
+    for (let i = 0; i < parts.length - 1; i++) {
+      const k = parts[i];
+      if (cur[k] === undefined || cur[k] === null) cur[k] = {};
+      cur = cur[k];
+    }
+    cur[parts[parts.length - 1]] = val;
+  }
+
+  function escapeHpAttr(str) {
+    return String(str ?? '').replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  }
+
+  function markHpUnsaved() {
+    const badge = document.getElementById('hpSyncBadge');
+    if (badge) {
+      badge.textContent = 'Unsaved edits (live in preview)';
+      badge.className = 'text-[11px] font-mono text-amber-300';
+    }
+  }
+
+  window.pushHomepageLivePreview = function() {
+    const frame = document.getElementById('homepagePreviewFrame');
+    if (frame && frame.contentWindow) {
+      frame.contentWindow.postMessage({ type: 'luckjary_homepage_preview', content: homepageContentState }, window.location.origin);
+    }
+  };
+
+  window.ensureHpPreviewLoaded = function() {
+    const frame = document.getElementById('homepagePreviewFrame');
+    if (frame && !frame.getAttribute('src') && frame.dataset.src) {
+      frame.setAttribute('src', frame.dataset.src);
+      frame.addEventListener('load', () => {
+        window.pushHomepageLivePreview();
+      }, { once: true });
+    }
+  };
+
+  window.reloadHpPreviewFrame = function() {
+    const frame = document.getElementById('homepagePreviewFrame');
+    if (!frame) return;
+    frame.setAttribute('src', `/?builder_preview=1&t=${Date.now()}`);
+    frame.addEventListener('load', () => {
+      window.pushHomepageLivePreview();
+    }, { once: true });
+  };
+
+  window.setHpPreviewDevice = function(device) {
+    const wrap = document.getElementById('hpPreviewFrameWrap');
+    const lbl = document.getElementById('hpPreviewWidthLabel');
+    const map = {
+      mobile: { w: '390px', text: '390px Mobile', btn: 'hpDevMobile' },
+      tablet: { w: '768px', text: '768px Tablet', btn: 'hpDevTablet' },
+      desktop: { w: '100%', text: 'Full Desktop', btn: 'hpDevDesktop' }
+    };
+    const cfg = map[device] || map.mobile;
+    if (wrap) wrap.style.width = cfg.w;
+    if (lbl) lbl.textContent = cfg.text;
+    document.querySelectorAll('.hp-dev-btn').forEach(b => {
+      if (b.id === cfg.btn) {
+        b.className = 'hp-dev-btn px-2.5 py-1.5 rounded text-[11px] font-mono bg-[#171920] text-emerald-400 border border-emerald-500/35 cursor-pointer';
+      } else {
+        b.className = 'hp-dev-btn px-2.5 py-1.5 rounded text-[11px] font-mono text-[#9ca3af] hover:text-white border border-transparent cursor-pointer';
+      }
+    });
+  };
+
+  window.toggleHpSectionOpen = function(sectionKey) {
+    if (hpOpenSections.has(sectionKey)) {
+      hpOpenSections.delete(sectionKey);
+    } else {
+      hpOpenSections.add(sectionKey);
+      const frame = document.getElementById('homepagePreviewFrame');
+      if (frame && frame.contentWindow) {
+        frame.contentWindow.postMessage({ type: 'luckjary_homepage_focus', section: sectionKey }, window.location.origin);
+      }
+    }
+    renderHomepageBuilder();
+  };
+
+  window.toggleAllHpSections = function(openAll) {
+    hpOpenSections = openAll ? new Set(HP_SECTIONS_SCHEMA.map(s => s.key)) : new Set();
+    renderHomepageBuilder();
+  };
+
+  window.onHpFieldChange = function(path, value) {
+    setHpVal(path, value);
+    if (path.endsWith('.image_url')) {
+      const thumb = document.querySelector(`[data-hp-thumb="${path}"]`);
+      if (thumb) thumb.src = value;
+    } else if (/^[^.]+\.enabled$/.test(path)) {
+      renderHomepageBuilder();
+    }
+    markHpUnsaved();
+    window.pushHomepageLivePreview();
+  };
+
+  window.uploadHpFieldImage = async function(imageKey, path, input) {
+    if (!input || !input.files || !input.files[0]) return;
+    const file = input.files[0];
+    const lbl = document.querySelector(`[data-hp-upload-lbl="${path}"]`);
+    if (lbl) lbl.textContent = 'Uploading...';
+    try {
+      const blob = await compressSiteImageIfNeeded(file);
+      const fd = new FormData();
+      fd.append('image_key', imageKey);
+      fd.append('image', blob, file.name || `${imageKey}.webp`);
+      const resp = await fetch('/admin/api/theme-customize/upload-image/', {
+        method: 'POST',
+        headers: { 'X-CSRFToken': getCsrfToken() },
+        body: fd
+      });
+      const data = await parseJsonSafe(resp);
+      if (!resp.ok || data.status !== 'ok') {
+        showToast(data.message || 'Image upload failed');
+      } else {
+        setHpVal(path, data.image_url);
+        const textInput = document.querySelector(`[data-hp-input="${path}"]`);
+        if (textInput) textInput.value = data.image_url;
+        const thumb = document.querySelector(`[data-hp-thumb="${path}"]`);
+        if (thumb) thumb.src = data.image_url;
+        markHpUnsaved();
+        window.pushHomepageLivePreview();
+        showToast('Image uploaded! Click Save & Publish to persist.');
+      }
+    } catch (err) {
+      showToast('Image upload failed');
+    } finally {
+      if (lbl) lbl.textContent = '+ Upload Image';
+      input.value = '';
+    }
+  };
+
+  function renderHpFieldHTML(field) {
+    const val = getHpVal(field.path);
+    const spanCls = field.span === 2 ? 'sm:col-span-2' : '';
+    const inputCls = 'w-full px-3 py-1.5 rounded-lg bg-[#0d0e10] border border-[#21242d] text-white text-xs font-sans focus:border-emerald-500 focus:outline-none';
+    const monoInputCls = 'w-full px-3 py-1.5 rounded-lg bg-[#0d0e10] border border-[#21242d] text-white text-xs font-mono focus:border-emerald-500 focus:outline-none';
+
+    if (field.type === 'checkbox') {
+      return `
+        <label class="${spanCls} flex items-center gap-2.5 p-2.5 rounded-lg bg-[#0d0e10] border border-[#21242d] cursor-pointer select-none">
+          <input type="checkbox" ${val ? 'checked' : ''} onchange="onHpFieldChange('${field.path}', this.checked)" class="accent-emerald-500 w-4 h-4 cursor-pointer">
+          <span class="text-xs text-neutral-200 font-sans">${field.label}</span>
+        </label>`;
+    }
+    if (field.type === 'textarea') {
+      return `
+        <div class="${spanCls}">
+          <label class="block text-[10px] font-mono uppercase tracking-wider text-[#9ca3af] mb-1">${field.label}</label>
+          <textarea rows="2" oninput="onHpFieldChange('${field.path}', this.value)" class="${inputCls}">${escapeHpAttr(val)}</textarea>
+        </div>`;
+    }
+    if (field.type === 'select') {
+      const opts = (field.options || []).map(o => `<option value="${o.value}" ${val === o.value ? 'selected' : ''}>${o.label}</option>`).join('');
+      return `
+        <div class="${spanCls}">
+          <label class="block text-[10px] font-mono uppercase tracking-wider text-[#9ca3af] mb-1">${field.label}</label>
+          <select onchange="onHpFieldChange('${field.path}', this.value)" class="${inputCls} cursor-pointer">${opts}</select>
+        </div>`;
+    }
+    if (field.type === 'image') {
+      return `
+        <div class="${spanCls} space-y-1.5">
+          <div class="flex items-center justify-between gap-2">
+            <label class="block text-[10px] font-mono uppercase tracking-wider text-[#9ca3af]">${field.label}</label>
+            <label class="text-[10px] font-mono text-emerald-400 hover:text-emerald-300 cursor-pointer">
+              <span data-hp-upload-lbl="${field.path}">+ Upload Image</span>
+              <input type="file" accept="image/*" class="hidden" onchange="uploadHpFieldImage('${field.imageKey}', '${field.path}', this)">
+            </label>
+          </div>
+          <div class="flex items-center gap-2.5">
+            <img data-hp-thumb="${field.path}" src="${escapeHpAttr(val)}" alt="" class="w-10 h-10 rounded-lg object-cover border border-[#21242d] bg-[#0d0e10] shrink-0">
+            <input type="text" data-hp-input="${field.path}" value="${escapeHpAttr(val)}" oninput="onHpFieldChange('${field.path}', this.value)" class="${monoInputCls}">
+          </div>
+        </div>`;
+    }
+    const cls = field.type === 'url' ? monoInputCls : inputCls;
+    return `
+      <div class="${spanCls}">
+        <label class="block text-[10px] font-mono uppercase tracking-wider text-[#9ca3af] mb-1">${field.label}</label>
+        <input type="text" value="${escapeHpAttr(val)}" oninput="onHpFieldChange('${field.path}', this.value)" class="${cls}">
+      </div>`;
+  }
+
+  function renderHomepageBuilder() {
+    const container = document.getElementById('homepageBuilderSections');
+    if (!container) return;
+
+    container.innerHTML = HP_SECTIONS_SCHEMA.map(sec => {
+      const isOpen = hpOpenSections.has(sec.key);
+      const secData = homepageContentState[sec.key] || {};
+      const isEnabled = secData.enabled !== false;
+
+      const groupsHtml = isOpen ? sec.groups.map(grp => `
+        <div class="p-3.5 rounded-xl bg-[#12141a] border border-[#21242d] space-y-3">
+          <div class="text-[11px] font-mono uppercase tracking-wider text-emerald-400/90 font-semibold border-b border-white/[0.05] pb-1.5">${grp.title}</div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            ${grp.fields.map(renderHpFieldHTML).join('')}
+          </div>
+        </div>
+      `).join('') : '';
+
+      return `
+        <div class="rounded-xl bg-[#171920] border ${isOpen ? 'border-emerald-500/45' : 'border-[#21242d]'} overflow-hidden transition-colors">
+          <div class="px-4 py-3 flex items-center justify-between gap-3 bg-[#171920] hover:bg-[#1b1e27] transition-colors">
+            <button type="button" onclick="toggleHpSectionOpen('${sec.key}')" class="flex-1 flex items-center gap-3 text-left bg-transparent border-0 p-0 cursor-pointer">
+              <span class="px-2 py-0.5 rounded bg-[#0d0e10] border border-[#21242d] text-[10px] font-mono text-emerald-400 font-semibold shrink-0">${sec.num}</span>
+              <div class="min-w-0">
+                <div class="text-xs sm:text-sm font-semibold text-white font-sans truncate">${sec.title}</div>
+                <div class="text-[11px] text-[#9ca3af] font-sans truncate">${sec.subtitle}</div>
+              </div>
+            </button>
+            <div class="flex items-center gap-3 shrink-0">
+              ${sec.hasToggle ? `
+                <label class="inline-flex items-center gap-1.5 px-2 py-1 rounded bg-[#0d0e10] border border-[#21242d] cursor-pointer select-none" title="Show/Hide Section">
+                  <input type="checkbox" ${isEnabled ? 'checked' : ''} onchange="onHpFieldChange('${sec.key}.enabled', this.checked)" class="accent-emerald-500 w-3.5 h-3.5 cursor-pointer">
+                  <span class="text-[10px] font-mono ${isEnabled ? 'text-emerald-300' : 'text-neutral-500'}">${isEnabled ? 'ON' : 'OFF'}</span>
+                </label>
+              ` : ''}
+              <button type="button" onclick="toggleHpSectionOpen('${sec.key}')" class="w-7 h-7 rounded-lg bg-[#0d0e10] border border-[#21242d] text-neutral-300 hover:text-white inline-flex items-center justify-center cursor-pointer text-xs font-mono">
+                ${isOpen ? '−' : '+'}
+              </button>
+            </div>
+          </div>
+          ${isOpen ? `<div class="p-3.5 pt-1 space-y-3 border-t border-[#21242d]/80 bg-[#0d0e10]/40">${groupsHtml}</div>` : ''}
+        </div>`;
+    }).join('');
+  }
+
+  window.saveHomepageContent = async function() {
+    const btn = document.getElementById('saveHomepageContentBtn');
+    const badge = document.getElementById('hpSyncBadge');
+    if (btn) btn.disabled = true;
+    try {
+      const resp = await fetch('/admin/api/theme-customize/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRFToken': getCsrfToken()
+        },
+        body: JSON.stringify({ homepage_content: homepageContentState })
+      });
+      const data = await parseJsonSafe(resp);
+      if (resp.ok && data.status === 'ok') {
+        if (data.settings && data.settings.homepage_content) {
+          homepageContentState = JSON.parse(JSON.stringify(data.settings.homepage_content));
+        }
+        if (badge) {
+          badge.textContent = 'Synced & published to live homepage';
+          badge.className = 'text-[11px] font-mono text-emerald-400';
+        }
+        window.reloadHpPreviewFrame();
+        showToast('Homepage content published live!');
+      } else {
+        showToast(data.message || 'Failed to save homepage content');
+      }
+    } catch (err) {
+      showToast('Could not reach server to save homepage');
+    } finally {
+      if (btn) btn.disabled = false;
+    }
+  };
+
+  window.resetHomepageContent = async function() {
+    try {
+      const resp = await fetch('/admin/api/theme-customize/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRFToken': getCsrfToken()
+        },
+        body: JSON.stringify({ action: 'reset_homepage' })
+      });
+      const data = await parseJsonSafe(resp);
+      if (resp.ok && data.status === 'ok' && data.settings && data.settings.homepage_content) {
+        homepageContentState = JSON.parse(JSON.stringify(data.settings.homepage_content));
+        renderHomepageBuilder();
+        window.reloadHpPreviewFrame();
+        const badge = document.getElementById('hpSyncBadge');
+        if (badge) {
+          badge.textContent = 'Reset to defaults & published';
+          badge.className = 'text-[11px] font-mono text-emerald-400';
+        }
+        showToast('Homepage content reset to defaults');
+      }
+    } catch (err) {
+      showToast('Failed to reset homepage content');
+    }
+  };
+
+  renderHomepageBuilder();
 
   // Hash change listener
   window.addEventListener('hashchange', handleRouteHash);

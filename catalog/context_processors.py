@@ -79,6 +79,13 @@ def catalog_context(request):
             'total_orders': total_orders,
         }
 
+    homepage_content = None
+    try:
+        from core.models import StorefrontThemeSettings
+        homepage_content = StorefrontThemeSettings.get_solo().get_homepage_content()
+    except Exception:
+        homepage_content = None
+
     return {
         'nav_categories': Category.objects.all(),
         'nav_materials': Material.objects.all()[:6],
@@ -91,4 +98,5 @@ def catalog_context(request):
         'currency_symbol': active_currency['symbol'],
         'active_currency': active_currency,
         'supported_currencies': SUPPORTED_CURRENCIES,
+        'homepage_content': homepage_content,
     }

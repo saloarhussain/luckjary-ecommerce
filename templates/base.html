@@ -95,14 +95,16 @@
 <body class="bg-[#FAF9F6] text-[#222222] min-h-screen flex flex-col antialiased selection:bg-[#C5A059] selection:text-white overflow-x-clip">
 
     <!-- Top Announcement Bar (GIVA Festive Style) -->
-    <aside class="py-2 px-4 text-center text-xs tracking-wider border-b border-[#E8DFD0] bg-[#F7EFE6] text-[#4A3B22]">
+    {% if not homepage_content or homepage_content.announcement.enabled %}
+    <aside data-hp-section="announcement" class="py-2 px-4 text-center text-xs tracking-wider border-b border-[#E8DFD0] bg-[#F7EFE6] text-[#4A3B22]">
         <div class="w-full mx-auto flex items-center justify-center gap-2 flex-wrap font-medium">
             <span class="inline-block w-1.5 h-1.5 rounded-full bg-[#C5A059] animate-pulse"></span>
-            <span>Luckjary Festive Carnival is LIVE: <a href="{% url 'catalog:product_list' %}" class="underline hover:text-[#366E63] font-bold">Shop Now!</a></span>
+            <span><span data-hp-field="announcement.text">{{ homepage_content.announcement.text|default:"Luckjary Festive Carnival is LIVE:" }}</span> <a href="{{ homepage_content.announcement.link_url|default:'/shop/' }}" data-hp-field="announcement.link_text" data-hp-href="announcement.link_url" class="underline hover:text-[#366E63] font-bold">{{ homepage_content.announcement.link_text|default:"Shop Now!" }}</a></span>
             <span class="hidden md:inline text-neutral-400">•</span>
-            <span class="hidden md:inline">Easy 15-Day Return Policy, No Questions Asked</span>
+            <span class="hidden md:inline" data-hp-field="announcement.secondary_text">{{ homepage_content.announcement.secondary_text|default:"Easy 15-Day Return Policy, No Questions Asked" }}</span>
         </div>
     </aside>
+    {% endif %}
 
     <!-- Main Navigation Header (GIVA Luxury E-Commerce Architecture) -->
     <header class="sticky top-0 z-40 bg-[#FAF9F6]/95 backdrop-blur-md border-b border-[#EBE6DF] transition-all">
@@ -120,11 +122,11 @@
 
                     <!-- Brand Logo (Left-Aligned Elegant & Stylish Luckjary) -->
                     <a href="{% url 'core:home' %}" class="inline-block flex-shrink-0 group py-0.5">
-                        <span class="luckjary-brand-logo text-lg sm:text-2xl lg:text-3xl tracking-[0.12em] sm:tracking-[0.16em] text-neutral-900 group-hover:text-[#C5A059] transition block">
-                            LUCKJARY
+                        <span data-hp-field="announcement.brand_name" class="luckjary-brand-logo text-lg sm:text-2xl lg:text-3xl tracking-[0.12em] sm:tracking-[0.16em] text-neutral-900 group-hover:text-[#C5A059] transition block">
+                            {{ homepage_content.announcement.brand_name|default:"LUCKJARY" }}
                         </span>
-                        <span class="luckjary-brand-sub text-[6px] sm:text-[7.5px]">
-                            HAUTE JOAILLERIE
+                        <span data-hp-field="announcement.brand_sub" class="luckjary-brand-sub text-[6px] sm:text-[7.5px]">
+                            {{ homepage_content.announcement.brand_sub|default:"HAUTE JOAILLERIE" }}
                         </span>
                     </a>
 

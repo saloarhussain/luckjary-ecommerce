@@ -219,51 +219,58 @@
 <div id="siloar-storefront" class="bg-cream-soft text-light-on-surface font-body antialiased selection:bg-burgundy selection:text-cream-soft flex flex-col gap-gutter-xl pb-section-md">
 
   <!-- 1. Full-Bleed Burgundy Campaign Hero Banner (60% Burgundy + 30% White Offer Strip) -->
-  <section class="w-full">
+  {% if is_builder_preview or homepage_content.hero.enabled %}
+  <section data-hp-section="hero" class="w-full {% if not homepage_content.hero.enabled %}hidden{% endif %}">
     <div class="relative overflow-hidden border-b border-dark-outline-variant bg-dark-surface-container-lowest">
       <div class="relative min-h-[420px] lg:min-h-[480px] flex items-center">
-        <img src="https://lh3.googleusercontent.com/aida/ALJJyrDWj4ycR5DsdpR6vZpqQhlyYMhEDAfaYN7OSj4mVHivd4PpUrWhIlBtB73Qv00wVwSuF-Ipa5n44aEbo1RPI0MQ8mqSasAgJsmWUrgQ7V-E4dQDplRx3sSJFO9LDGu-o75xnqaFHAbq5G36EWrArKOus36HjAh9qc7TmHSiwWoGR6FxM3CeJMiRFq011WLcH7f9Qa-xjMp4YLe56VGviDUo7ZoiF8vCm1H73jC5Qd8KK9p66IOPm_rjATdM2vzt"
+        <img src="{{ homepage_content.hero.image_url }}"
+             data-hp-src="hero.image_url"
              onerror="this.onerror=null; this.src='{{ theme_settings.hero_poster_url|default:"https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?auto=format&fit=crop&w=2000&q=85" }}';"
-             alt="LUCKJARY diamond necklace, ring, and bangle on burgundy velvet"
+             alt="{{ homepage_content.hero.title }}"
              class="absolute inset-0 w-full h-full object-cover">
         <div class="absolute inset-0 bg-gradient-to-r from-dark-surface-container-lowest/95 via-dark-surface-container-lowest/65 to-transparent" aria-hidden="true"></div>
 
         <!-- Overlaid Promotional / Editorial Offer -->
         <div class="relative z-10 px-4 sm:px-8 lg:px-14 py-gutter-xl flex flex-col items-start gap-gutter-md max-w-xl text-dark-on-surface">
-          <span data-design-text-token="label-md" class="font-label text-label-md uppercase text-champagne">LUCKJARY Atelier Event</span>
-          <h1 data-design-text-token="display-lg" class="font-display text-display-lg-mobile md:text-display-lg text-dark-on-surface text-balance">
-            Golden Atelier Days
+          <span data-design-text-token="label-md" data-hp-field="hero.eyebrow" class="font-label text-label-md uppercase text-champagne">{{ homepage_content.hero.eyebrow }}</span>
+          <h1 data-design-text-token="display-lg" data-hp-field="hero.title" class="font-display text-display-lg-mobile md:text-display-lg text-dark-on-surface text-balance">
+            {{ homepage_content.hero.title }}
           </h1>
           <div class="border border-champagne rounded-md px-gutter-lg py-gutter-md bg-dark-surface-container-lowest/85 flex flex-col gap-gutter-xs w-full max-w-xs">
-            <span data-design-text-token="label-sm" class="font-label text-label-sm uppercase bg-cream-soft text-burgundy-deep px-2.5 py-0.5 rounded-sm w-fit">Exclusive Offer</span>
-            <span data-design-text-token="display-lg" class="font-display text-display-lg-mobile md:text-display-lg text-champagne tabular-nums">50% Off</span>
-            <span data-design-text-token="body-sm" class="font-body text-body-sm text-dark-on-surface-variant">On Making Charges · All Diamond &amp; 925 Designs</span>
+            <span data-design-text-token="label-sm" data-hp-field="hero.offer_badge" class="font-label text-label-sm uppercase bg-cream-soft text-burgundy-deep px-2.5 py-0.5 rounded-sm w-fit">{{ homepage_content.hero.offer_badge }}</span>
+            <span data-design-text-token="display-lg" data-hp-field="hero.offer_highlight" class="font-display text-display-lg-mobile md:text-display-lg text-champagne tabular-nums">{{ homepage_content.hero.offer_highlight }}</span>
+            <span data-design-text-token="body-sm" data-hp-field="hero.offer_subtitle" class="font-body text-body-sm text-dark-on-surface-variant">{{ homepage_content.hero.offer_subtitle }}</span>
           </div>
-          <a href="{% url 'catalog:product_list' %}" data-component-id="button-secondary" data-component-type="button" data-component-variant="secondary" class="inline-flex items-center gap-gutter-sm bg-cream text-burgundy-deep px-6 py-3 rounded-sm uppercase tracking-wider hover:bg-white-pure transition-colors duration-state-change">
-            <span data-design-text-token="label-lg" class="font-label text-label-lg">Shop the Event</span>
+          <a href="{{ homepage_content.hero.cta_url }}" data-hp-href="hero.cta_url" data-component-id="button-secondary" data-component-type="button" data-component-variant="secondary" class="inline-flex items-center gap-gutter-sm bg-cream text-burgundy-deep px-6 py-3 rounded-sm uppercase tracking-wider hover:bg-white-pure transition-colors duration-state-change">
+            <span data-design-text-token="label-lg" data-hp-field="hero.cta_text" class="font-label text-label-lg">{{ homepage_content.hero.cta_text }}</span>
             <span class="material-symbols-outlined text-title-md" aria-hidden="true">arrow_forward</span>
           </a>
         </div>
       </div>
 
       <!-- Clean Offer Strip Below Hero (White) -->
-      <div class="relative z-10 bg-white-pure border-t border-light-outline-variant px-gutter-md md:px-10 py-gutter-md flex flex-wrap items-center justify-center gap-gutter-md md:gap-gutter-lg text-center">
+      {% if is_builder_preview or homepage_content.hero.strip_enabled %}
+      <div data-hp-section="hero.strip" class="relative z-10 bg-white-pure border-t border-light-outline-variant px-gutter-md md:px-10 py-gutter-md flex flex-wrap items-center justify-center gap-gutter-md md:gap-gutter-lg text-center {% if not homepage_content.hero.strip_enabled %}hidden{% endif %}">
         <div class="flex items-center gap-gutter-sm">
-          <span class="material-symbols-outlined text-light-primary text-title-md" aria-hidden="true">credit_card</span>
-          <span data-design-text-token="body-sm" class="font-body text-body-sm text-light-on-surface">10% Instant Bank Savings up to $75 on Fine Solitaires</span>
+          <span class="material-symbols-outlined text-light-primary text-title-md" data-hp-field="hero.strip_icon" aria-hidden="true">{{ homepage_content.hero.strip_icon }}</span>
+          <span data-design-text-token="body-sm" data-hp-field="hero.strip_text_primary" class="font-body text-body-sm text-light-on-surface">{{ homepage_content.hero.strip_text_primary }}</span>
         </div>
         <span class="text-light-outline-variant hidden sm:inline">|</span>
-        <span data-design-text-token="body-sm" class="font-body text-body-sm text-light-on-surface-variant">Complimentary Insured Shipping · Valid through Nov 30</span>
+        <span data-design-text-token="body-sm" data-hp-field="hero.strip_text_secondary" class="font-body text-body-sm text-light-on-surface-variant">{{ homepage_content.hero.strip_text_secondary }}</span>
       </div>
+      {% endif %}
     </div>
   </section>
+  {% endif %}
 
   <!-- 2. Full-Bleed Promo Image with Overlaid White Product Carousel -->
-  <section id="silver-carousel" class="w-full px-3 sm:px-6 lg:px-10">
+  {% if is_builder_preview or homepage_content.carousel.enabled %}
+  <section id="silver-carousel" data-hp-section="carousel" class="w-full px-3 sm:px-6 lg:px-10 {% if not homepage_content.carousel.enabled %}hidden{% endif %}">
     <div class="relative rounded-md overflow-hidden border border-dark-outline-variant bg-dark-surface-container-lowest">
-      <img src="https://lh3.googleusercontent.com/aida/ALJJyrDP_IcnNfDkcpHWYDd3qpzHOQpmoq_CkZOYkEph9DmkCIUkbHDGfJkjCZQ3L6anZTpPGq5cWYMGMU2lhaV-NovnX_FrFwCzm0AZMfgQLR3djnaG87UVeN2GUbuRv8YMPInr-uKealgx98Wbqn-kBThiWaZzb7mP5IX9rgFlAmiuDC_nNPF1vhFlsvXJ9qRQEsvheKDjSnppDoZ-yIdFngSajia1L7OeGqdOH2M2M1KZiyJ1KcqDMgjFOKegx8a9tg"
+      <img src="{{ homepage_content.carousel.bg_image_url }}"
+           data-hp-src="carousel.bg_image_url"
            onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1599643477877-530eb83abc8e?auto=format&fit=crop&w=1600&q=85';"
-           alt="Natural diamonds set in 925 sterling silver"
+           alt="{{ homepage_content.carousel.title }}"
            class="absolute inset-0 w-full h-full object-cover">
       <div class="absolute inset-0 bg-gradient-to-r from-dark-surface-container-lowest/95 via-dark-surface-container-lowest/75 to-dark-surface-container-lowest/45" aria-hidden="true"></div>
 
@@ -272,12 +279,12 @@
         <div class="lg:col-span-6 min-h-[160px] lg:min-h-[340px] flex flex-col justify-end p-gutter-md sm:p-gutter-lg md:p-gutter-xl">
           <div class="flex items-end justify-between gap-gutter-md text-dark-on-surface">
             <div class="flex flex-col gap-gutter-xs">
-              <span data-design-text-token="label-sm" class="font-label text-label-sm uppercase text-champagne">LUCKJARY 925 Diamonds</span>
-              <h2 data-design-text-token="headline-md" class="font-headline text-headline-md text-dark-on-surface">Flat 20% Off Natural Diamonds in 925 Silver</h2>
-              <p data-design-text-token="body-sm" class="font-body text-body-sm text-dark-on-surface-variant tabular-nums">Starting at $120</p>
+              <span data-design-text-token="label-sm" data-hp-field="carousel.eyebrow" class="font-label text-label-sm uppercase text-champagne">{{ homepage_content.carousel.eyebrow }}</span>
+              <h2 data-design-text-token="headline-md" data-hp-field="carousel.title" class="font-headline text-headline-md text-dark-on-surface">{{ homepage_content.carousel.title }}</h2>
+              <p data-design-text-token="body-sm" data-hp-field="carousel.subtitle" class="font-body text-body-sm text-dark-on-surface-variant tabular-nums">{{ homepage_content.carousel.subtitle }}</p>
             </div>
-            <a href="#bento-grid" class="shrink-0 inline-flex items-center gap-gutter-xs font-label text-label-md uppercase text-champagne">
-              <span data-design-text-token="label-md" class="font-label text-label-md">Shop Now</span>
+            <a href="{{ homepage_content.carousel.header_cta_url }}" data-hp-href="carousel.header_cta_url" class="shrink-0 inline-flex items-center gap-gutter-xs font-label text-label-md uppercase text-champagne">
+              <span data-design-text-token="label-md" data-hp-field="carousel.header_cta_text" class="font-label text-label-md">{{ homepage_content.carousel.header_cta_text }}</span>
               <span class="material-symbols-outlined text-title-md" aria-hidden="true">arrow_right</span>
             </a>
           </div>
@@ -286,7 +293,7 @@
         <!-- Right Overlaid White Product Carousel -->
         <div class="lg:col-span-6 p-gutter-md sm:p-gutter-lg flex flex-col justify-between gap-gutter-md sm:gap-gutter-lg">
           <div id="carousel-track" class="-mx-gutter-md px-gutter-md sm:mx-0 sm:px-0 flex sm:grid sm:grid-cols-3 gap-gutter-sm sm:gap-gutter-md items-stretch overflow-x-auto sm:overflow-visible snap-x snap-mandatory scroll-pl-gutter-md sm:scroll-pl-0 no-scrollbar">
-            {% if featured_products %}
+            {% if homepage_content.carousel.source_mode != 'custom' and featured_products %}
               {% for prod in featured_products %}
               <a href="{{ prod.get_absolute_url }}"
                  class="carousel-card {% if forloop.counter0 >= 3 %}sm:hidden{% endif %} w-52 shrink-0 snap-start sm:w-auto sm:shrink h-full bg-white-pure rounded-sm border border-light-outline-variant p-gutter-sm flex flex-col justify-between gap-gutter-sm hover:border-light-primary transition-colors duration-state-change">
@@ -308,47 +315,24 @@
               </a>
               {% endfor %}
             {% else %}
-              <!-- Carousel Item 1 -->
-              <a href="{% url 'catalog:category_products' 'rings' %}" class="carousel-card w-52 shrink-0 snap-start sm:w-auto sm:shrink h-full bg-white-pure rounded-sm border border-light-outline-variant p-gutter-sm flex flex-col justify-between gap-gutter-sm hover:border-light-primary transition-colors duration-state-change">
+              {% for card in homepage_content.carousel.cards %}
+              <a href="{{ card.link_url }}" data-hp-href="carousel.cards.{{ forloop.counter0 }}.link_url" class="carousel-card w-52 shrink-0 snap-start sm:w-auto sm:shrink h-full bg-white-pure rounded-sm border border-light-outline-variant p-gutter-sm flex flex-col justify-between gap-gutter-sm hover:border-light-primary transition-colors duration-state-change">
                 <div class="aspect-square bg-light-surface-container-low rounded-sm overflow-hidden">
-                  <img src="https://lh3.googleusercontent.com/aida/ALJJyrCjbhsSorM7Qp6-L5feydmQQVJlC-PhW8b2ugauC8c1RLZQOyR8EgO0ZbukbUQXIZjgYuEJgpXUH1SO88an6Qq8bBdHg_MYL9T9uVNOyg3BYk057GlYBi0wDgsGf_GsFiZW2T0s2zugvweVpeEUXCXVCPswOR0Vp8TtDt9j86UXej2I7bMJNBWJI6FfmgqszWD4Ejg0YTpnpDkUu71XsuCZZ3PWtcfJTdI1CbprNhEX4QcUx_n7xRKQ-YG1" alt="Anchor 925 Silver Ring" class="w-full h-full object-cover">
+                  <img src="{{ card.image_url }}"
+                       data-hp-src="carousel.cards.{{ forloop.counter0 }}.image_url"
+                       onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1599643477877-530eb83abc8e?auto=format&fit=crop&w=800&q=80';"
+                       alt="{{ card.title }}"
+                       class="w-full h-full object-cover">
                 </div>
                 <div class="flex flex-col gap-gutter-xs px-1">
                   <div class="flex items-baseline gap-gutter-xs">
-                    <span data-design-text-token="title-sm" class="font-title text-title-sm text-light-on-surface tabular-nums">$120</span>
-                    <span data-design-text-token="body-sm" class="font-body text-body-sm text-light-on-surface-variant line-through tabular-nums">$150</span>
+                    <span data-design-text-token="title-sm" data-hp-field="carousel.cards.{{ forloop.counter0 }}.price" class="font-title text-title-sm text-light-on-surface tabular-nums">{{ card.price }}</span>
+                    <span data-design-text-token="body-sm" data-hp-field="carousel.cards.{{ forloop.counter0 }}.compare_price" class="font-body text-body-sm text-light-on-surface-variant line-through tabular-nums">{{ card.compare_price }}</span>
                   </div>
-                  <h3 data-design-text-token="body-sm" class="font-body text-body-sm text-light-on-surface-variant">Anchor 925 Silver Band</h3>
+                  <h3 data-design-text-token="body-sm" data-hp-field="carousel.cards.{{ forloop.counter0 }}.title" class="font-body text-body-sm text-light-on-surface-variant line-clamp-1">{{ card.title }}</h3>
                 </div>
               </a>
-
-              <!-- Carousel Item 2 -->
-              <a href="{% url 'catalog:category_products' 'bracelets' %}" class="carousel-card w-52 shrink-0 snap-start sm:w-auto sm:shrink h-full bg-white-pure rounded-sm border border-light-outline-variant p-gutter-sm flex flex-col justify-between gap-gutter-sm hover:border-light-primary transition-colors duration-state-change">
-                <div class="aspect-square bg-light-surface-container-low rounded-sm overflow-hidden">
-                  <img src="https://lh3.googleusercontent.com/aida/ALJJyrCYw8Gviu40Rm80-l1jI7PVPGgrllhuiNz6S00c28x7MNitC3Psb9ENuBniBCL4rpJJVLVnX_aBgZ7oReUVCwm--LkGSD2LDyKWNjlFZutpbH2tWss5K7zNoy3LjDEmSBcj1n6f-xcvtGDMgZCqVcwXvUeEIUwKP2y2fs0qJ5S9Ed0NmnenQfpu-yltiA3wtCI0ffScsDB1-HnSBVartQykTnfFWdbnv1fOZ67pSq1CNLDyqqFXkpqwl8aBHBDV" alt="Alex 925 Gold-Plated Cuff" class="w-full h-full object-cover">
-                </div>
-                <div class="flex flex-col gap-gutter-xs px-1">
-                  <div class="flex items-baseline gap-gutter-xs">
-                    <span data-design-text-token="title-sm" class="font-title text-title-sm text-light-on-surface tabular-nums">$165</span>
-                    <span data-design-text-token="body-sm" class="font-body text-body-sm text-light-on-surface-variant line-through tabular-nums">$205</span>
-                  </div>
-                  <h3 data-design-text-token="body-sm" class="font-body text-body-sm text-light-on-surface-variant">Alex Vermeil Cuff</h3>
-                </div>
-              </a>
-
-              <!-- Carousel Item 3 -->
-              <a href="{% url 'catalog:category_products' 'earrings' %}" class="carousel-card w-52 shrink-0 snap-start sm:w-auto sm:shrink h-full bg-white-pure rounded-sm border border-light-outline-variant p-gutter-sm flex flex-col justify-between gap-gutter-sm hover:border-light-primary transition-colors duration-state-change">
-                <div class="aspect-square bg-light-surface-container-low rounded-sm overflow-hidden">
-                  <img src="https://lh3.googleusercontent.com/aida/ALJJyrBWYmHm5OOMLtcaoD8sIIKeIuQ8AXkOBmCm6woTG7JOxpo6PKicjQyOBwy0ByTjbbSJ3upXnMYQXm7-tNVz1UME1i8wQSrhOY9Uj6oMz4yhfuW0LrDfZhBDefcHt0orBrFfL8VIgQJhXoDyUM9BeJrs5uBNAAvhsXZlyPTNpv7iAs4M0zLyHrwstXMmR-y4M8GOeBYV3MCP_iA9UP_P9Mh6Yzq9LX4R09N3CzSQT81GQlh1gC2K6m5C5zUuWlIm" alt="Knot 925 Silver Hoops" class="w-full h-full object-cover">
-                </div>
-                <div class="flex flex-col gap-gutter-xs px-1">
-                  <div class="flex items-baseline gap-gutter-xs">
-                    <span data-design-text-token="title-sm" class="font-title text-title-sm text-light-on-surface tabular-nums">$190</span>
-                    <span data-design-text-token="body-sm" class="font-body text-body-sm text-light-on-surface-variant line-through tabular-nums">$240</span>
-                  </div>
-                  <h3 data-design-text-token="body-sm" class="font-body text-body-sm text-light-on-surface-variant">Knot Sterling Hoops</h3>
-                </div>
-              </a>
+              {% endfor %}
             {% endif %}
           </div>
 
@@ -362,301 +346,264 @@
                 <span class="material-symbols-outlined text-title-md" aria-hidden="true">arrow_forward</span>
               </button>
             </div>
-            <a href="{% url 'catalog:product_list' %}" class="bg-cream-soft text-burgundy-deep border border-light-outline-variant px-7 py-2.5 rounded-sm uppercase tracking-wider hover:bg-white-pure transition-colors duration-state-change inline-flex items-center justify-center">
-              <span data-design-text-token="label-md" class="font-label text-label-md">Shop Now</span>
+            <a href="{{ homepage_content.carousel.bottom_cta_url }}" data-hp-href="carousel.bottom_cta_url" class="bg-cream-soft text-burgundy-deep border border-light-outline-variant px-7 py-2.5 rounded-sm uppercase tracking-wider hover:bg-white-pure transition-colors duration-state-change inline-flex items-center justify-center">
+              <span data-design-text-token="label-md" data-hp-field="carousel.bottom_cta_text" class="font-label text-label-md">{{ homepage_content.carousel.bottom_cta_text }}</span>
             </a>
           </div>
         </div>
       </div>
     </div>
   </section>
+  {% endif %}
 
   <!-- 3. Bento 3-Card Editorial Showcase Grid (Full-Bleed Image Overlays) -->
-  <section id="bento-grid" class="w-full px-3 sm:px-6 lg:px-10">
+  {% if is_builder_preview or homepage_content.bento.enabled %}
+  <section id="bento-grid" data-hp-section="bento" class="w-full px-3 sm:px-6 lg:px-10 {% if not homepage_content.bento.enabled %}hidden{% endif %}">
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter-lg items-stretch">
       <!-- Tall Left Portrait Card -->
-      <a href="{% url 'catalog:product_list' %}?material=925-sterling-silver" class="lg:col-span-6 group relative rounded-md overflow-hidden border border-dark-outline-variant bg-dark-surface min-h-[480px] flex flex-col justify-between">
-        <img src="https://lh3.googleusercontent.com/aida/ALJJyrCmre7oRMBVhPOjfmUlkiILE4umPCXOvCgZMFLueCSp5Eei9gJngQuvWuvnwLx2FrWHTuf-KjRXkfco1bVllp1G9lHdPZ-1n0rVcLk_tgq_Ekq-sWEUTGd7ohC9zCwIJo9zH4CnJtLmvNSxsxOI7a9rd9o34hz_UPR0FVF2f7f4LkGmJTX3EMcAn5TyNBkGmROmKVT8Q4e2Qg-fwb3SKhj-u9GM2DLeVcNjzAhGpx6GRzgBiFNEUP21mHBLtw"
+      <a href="{{ homepage_content.bento.left.link_url }}" data-hp-href="bento.left.link_url" class="lg:col-span-6 group relative rounded-md overflow-hidden border border-dark-outline-variant bg-dark-surface min-h-[480px] flex flex-col justify-between">
+        <img src="{{ homepage_content.bento.left.image_url }}"
+             data-hp-src="bento.left.image_url"
              onerror="this.onerror=null; this.src='{{ spotlight_bento.left.image_url }}';"
-             alt="LUCKJARY 925 Sterling Silver Collection"
+             alt="{{ homepage_content.bento.left.title }}"
              class="absolute inset-0 w-full h-full object-cover transition-transform duration-image-hover ease-image-hover group-hover:scale-105">
         <div class="absolute inset-0 bg-gradient-to-t from-dark-surface-container-lowest/95 via-dark-surface-container-lowest/35 to-dark-surface-container-lowest/30" aria-hidden="true"></div>
         <div class="relative z-10 p-gutter-lg md:p-gutter-xl flex flex-wrap items-center justify-between gap-gutter-sm">
-          <span data-design-text-token="label-md" class="font-label text-label-md uppercase text-dark-on-surface tracking-widest">LUCKJARY · 925</span>
-          <span data-design-text-token="label-sm" class="font-label text-label-sm uppercase bg-dark-surface-container-lowest/80 text-champagne border border-champagne px-3 py-1 rounded-full">925 Sterling</span>
+          <span data-design-text-token="label-md" data-hp-field="bento.left.brand_label" class="font-label text-label-md uppercase text-dark-on-surface tracking-widest">{{ homepage_content.bento.left.brand_label }}</span>
+          <span data-design-text-token="label-sm" data-hp-field="bento.left.pill_badge" class="font-label text-label-sm uppercase bg-dark-surface-container-lowest/80 text-champagne border border-champagne px-3 py-1 rounded-full">{{ homepage_content.bento.left.pill_badge }}</span>
         </div>
         <div class="relative z-10 p-gutter-lg md:p-gutter-xl flex flex-col items-start sm:flex-row sm:items-end justify-between gap-gutter-md">
           <div class="flex flex-col gap-gutter-xs">
-            <span data-design-text-token="label-sm" class="font-label text-label-sm uppercase text-champagne">LUCKJARY 925 Sterling</span>
-            <h2 data-design-text-token="headline-md" class="font-headline text-headline-md text-dark-on-surface">Crafted in Pure 925 Silver</h2>
+            <span data-design-text-token="label-sm" data-hp-field="bento.left.eyebrow" class="font-label text-label-sm uppercase text-champagne">{{ homepage_content.bento.left.eyebrow }}</span>
+            <h2 data-design-text-token="headline-md" data-hp-field="bento.left.title" class="font-headline text-headline-md text-dark-on-surface">{{ homepage_content.bento.left.title }}</h2>
           </div>
-          <span data-design-text-token="label-md" class="font-label text-label-md uppercase bg-cream-soft text-burgundy-deep px-4 py-1.5 rounded-sm shrink-0">Flat 50% Off</span>
+          <span data-design-text-token="label-md" data-hp-field="bento.left.cta_badge" class="font-label text-label-md uppercase bg-cream-soft text-burgundy-deep px-4 py-1.5 rounded-sm shrink-0">{{ homepage_content.bento.left.cta_badge }}</span>
         </div>
       </a>
 
       <!-- Right Stacked 2 Cards -->
       <div class="lg:col-span-6 flex flex-col gap-gutter-lg">
         <!-- Top Right Card -->
-        <a href="{% url 'catalog:product_list' %}?style=classic" class="group relative flex-1 rounded-md overflow-hidden border border-dark-outline-variant bg-dark-surface-container-lowest text-dark-on-surface min-h-[230px] flex items-center">
-          <img src="https://lh3.googleusercontent.com/aida/ALJJyrCvGEgzfNKcuOAwg-VjC-zWApMM97581vsBdrUmeJAO1VI0WSeniOYxqlTTeqckR9bZwhDG2OEspOhD70SOmzss6w33Mw8iVSKFR5yq5Z2tLm-WTVzRue8c3fswAzmxAOjn8HjzGKI9QxMq-fjMqWAtV0Uxay6ffFSERS7hwN15khorXJ_Ip_x4ehZlP6SdTBFODRyg2knZb34MH_54bjFiUPk6P4Morcg3ys9BHHYeZ1XdxvnhZ2KN_Wiz4z0"
+        <a href="{{ homepage_content.bento.top_right.link_url }}" data-hp-href="bento.top_right.link_url" class="group relative flex-1 rounded-md overflow-hidden border border-dark-outline-variant bg-dark-surface-container-lowest text-dark-on-surface min-h-[230px] flex items-center">
+          <img src="{{ homepage_content.bento.top_right.image_url }}"
+               data-hp-src="bento.top_right.image_url"
                onerror="this.onerror=null; this.src='{{ spotlight_bento.top_right.image_url }}';"
-               alt="Lumiere Solitaires"
+               alt="{{ homepage_content.bento.top_right.title }}"
                class="absolute inset-0 w-full h-full object-cover transition-transform duration-image-hover ease-image-hover group-hover:scale-105">
           <div class="absolute inset-0 bg-gradient-to-r from-dark-surface-container-lowest/95 via-dark-surface-container-lowest/75 to-transparent" aria-hidden="true"></div>
           <div class="relative z-10 p-gutter-xl flex flex-col items-start gap-gutter-sm max-w-sm">
-            <span data-design-text-token="label-sm" class="font-label text-label-sm uppercase text-champagne">73 Facets · By LUCKJARY</span>
-            <h3 data-design-text-token="headline-sm" class="font-headline text-headline-sm text-dark-on-surface">Lumiere Solitaires</h3>
-            <p data-design-text-token="body-sm" class="font-body text-body-sm text-dark-on-surface-variant">Precision-cut diamonds for maximum fire and brilliance.</p>
+            <span data-design-text-token="label-sm" data-hp-field="bento.top_right.eyebrow" class="font-label text-label-sm uppercase text-champagne">{{ homepage_content.bento.top_right.eyebrow }}</span>
+            <h3 data-design-text-token="headline-sm" data-hp-field="bento.top_right.title" class="font-headline text-headline-sm text-dark-on-surface">{{ homepage_content.bento.top_right.title }}</h3>
+            <p data-design-text-token="body-sm" data-hp-field="bento.top_right.subtitle" class="font-body text-body-sm text-dark-on-surface-variant">{{ homepage_content.bento.top_right.subtitle }}</p>
             <span class="inline-flex items-center gap-gutter-xs font-label text-label-md uppercase text-champagne pt-gutter-xs">
-              <span data-design-text-token="label-md" class="font-label text-label-md">Shop Now</span>
+              <span data-design-text-token="label-md" data-hp-field="bento.top_right.cta_text" class="font-label text-label-md">{{ homepage_content.bento.top_right.cta_text }}</span>
               <span class="material-symbols-outlined text-title-sm" aria-hidden="true">arrow_right</span>
             </span>
           </div>
         </a>
 
         <!-- Bottom Right Card -->
-        <a href="{% url 'catalog:category_products' 'rings' %}" class="group relative flex-1 rounded-md overflow-hidden border border-dark-outline-variant bg-dark-surface-container-lowest text-dark-on-surface min-h-[230px] flex items-center">
-          <img src="https://lh3.googleusercontent.com/aida/ALJJyrCfPW96Hys0yHphB-fCQYB7HLdDTMbxBqsM7-VjOdLAB3lZFuueQtaO14zyCyaBMZIcZRbaaJVvMNF6qlxcYlxQcKEGwMWVKUlwKUC9gUZlmeA-1aZhydDlL6vaa0sjHqIhjwzUdLriPWhnSXemsYO5mb8S9wlzXXCd2c47YIBJptmTyzFjdzuhZEHJYA_FmyGi7uCaR1yB4yu89afENZRdgLsoWyIu90tVzRGsCdF9q3U_cx-zs8KtDdE4srINmg"
+        <a href="{{ homepage_content.bento.bottom_right.link_url }}" data-hp-href="bento.bottom_right.link_url" class="group relative flex-1 rounded-md overflow-hidden border border-dark-outline-variant bg-dark-surface-container-lowest text-dark-on-surface min-h-[230px] flex items-center">
+          <img src="{{ homepage_content.bento.bottom_right.image_url }}"
+               data-hp-src="bento.bottom_right.image_url"
                onerror="this.onerror=null; this.src='{{ spotlight_bento.bottom_right.image_url }}';"
-               alt="New Cocktail Rings"
+               alt="{{ homepage_content.bento.bottom_right.title }}"
                class="absolute inset-0 w-full h-full object-cover transition-transform duration-image-hover ease-image-hover group-hover:scale-105">
           <div class="absolute inset-0 bg-gradient-to-r from-dark-surface-container-lowest/95 via-dark-surface-container-lowest/75 to-transparent" aria-hidden="true"></div>
           <div class="relative z-10 p-gutter-xl flex flex-col items-start gap-gutter-sm max-w-sm">
-            <span data-design-text-token="label-sm" class="font-label text-label-sm uppercase text-champagne">Statement Edit</span>
-            <h3 data-design-text-token="headline-sm" class="font-headline text-headline-sm text-dark-on-surface">New Cocktail Rings</h3>
-            <p data-design-text-token="body-sm" class="font-body text-body-sm text-dark-on-surface-variant">Sculptural silhouettes designed for evening occasions.</p>
+            <span data-design-text-token="label-sm" data-hp-field="bento.bottom_right.eyebrow" class="font-label text-label-sm uppercase text-champagne">{{ homepage_content.bento.bottom_right.eyebrow }}</span>
+            <h3 data-design-text-token="headline-sm" data-hp-field="bento.bottom_right.title" class="font-headline text-headline-sm text-dark-on-surface">{{ homepage_content.bento.bottom_right.title }}</h3>
+            <p data-design-text-token="body-sm" data-hp-field="bento.bottom_right.subtitle" class="font-body text-body-sm text-dark-on-surface-variant">{{ homepage_content.bento.bottom_right.subtitle }}</p>
           </div>
         </a>
       </div>
     </div>
   </section>
+  {% endif %}
 
   <!-- 4. Wrapped With Love Category Strip (20% Light Cream) -->
-  <section id="wrapped" class="w-full px-3 sm:px-6 lg:px-10 flex flex-col gap-gutter-lg">
+  {% if is_builder_preview or homepage_content.wrapped.enabled %}
+  <section id="wrapped" data-hp-section="wrapped" class="w-full px-3 sm:px-6 lg:px-10 flex flex-col gap-gutter-lg {% if not homepage_content.wrapped.enabled %}hidden{% endif %}">
     <div class="bg-cream border border-light-outline-variant rounded-md p-gutter-xl grid grid-cols-1 lg:grid-cols-12 items-center gap-gutter-lg">
       <div class="lg:col-span-2 flex flex-col items-center text-center gap-gutter-sm">
         <span class="w-14 h-14 rounded-full bg-white-pure text-light-primary border border-light-outline-variant inline-flex items-center justify-center">
-          <span class="material-symbols-outlined text-headline-md" aria-hidden="true">redeem</span>
+          <span class="material-symbols-outlined text-headline-md" data-hp-field="wrapped.icon" aria-hidden="true">{{ homepage_content.wrapped.icon }}</span>
         </span>
-        <h2 data-design-text-token="title-md" class="font-title text-title-md text-light-primary">Wrapped with love</h2>
+        <h2 data-design-text-token="title-md" data-hp-field="wrapped.title" class="font-title text-title-md text-light-primary">{{ homepage_content.wrapped.title }}</h2>
       </div>
 
       <div class="lg:col-span-10 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-gutter-md">
-        <a href="{% url 'catalog:category_products' 'rings' %}" class="flex flex-col items-center gap-gutter-xs group">
-          <img src="https://lh3.googleusercontent.com/aida/ALJJyrCjbhsSorM7Qp6-L5feydmQQVJlC-PhW8b2ugauC8c1RLZQOyR8EgO0ZbukbUQXIZjgYuEJgpXUH1SO88an6Qq8bBdHg_MYL9T9uVNOyg3BYk057GlYBi0wDgsGf_GsFiZW2T0s2zugvweVpeEUXCXVCPswOR0Vp8TtDt9j86UXej2I7bMJNBWJI6FfmgqszWD4Ejg0YTpnpDkUu71XsuCZZ3PWtcfJTdI1CbprNhEX4QcUx_n7xRKQ-YG1"
+        {% for tile in homepage_content.wrapped.items %}
+        <a href="{{ tile.link_url }}" data-hp-href="wrapped.items.{{ forloop.counter0 }}.link_url" class="flex flex-col items-center gap-gutter-xs group">
+          <img src="{{ tile.image_url }}"
+               data-hp-src="wrapped.items.{{ forloop.counter0 }}.image_url"
                onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1605100804763-247f67b3557e?auto=format&fit=crop&w=600&q=80';"
-               alt="New Rings"
+               alt="{{ tile.label }}"
                class="w-full aspect-square rounded-md object-cover border border-light-outline-variant group-hover:border-light-primary transition-colors duration-state-change">
-          <span data-design-text-token="label-sm" class="font-label text-label-sm uppercase text-light-on-surface text-center">New Rings</span>
+          <span data-design-text-token="label-sm" data-hp-field="wrapped.items.{{ forloop.counter0 }}.label" class="font-label text-label-sm uppercase text-light-on-surface text-center">{{ tile.label }}</span>
         </a>
-        <a href="{% url 'catalog:category_products' 'bridal-high-jewelry' %}" class="flex flex-col items-center gap-gutter-xs group">
-          <img src="https://lh3.googleusercontent.com/aida/ALJJyrBA0bjRv83qCEOYMdLmZSJVgnLha5Yk1PCiFMiaDE86R0k3q5vBEY4vRpSNImay56cZIOO9QWpIzzAdGd6h8j-R91mtFFkxda_ywal4zTaDoD69jQn8nstXAqkM_54mySKaidOQY2kJbja_OhgZIt10Tec-MhQrrNcJO560OZ4c2iBZNTXdIvQqAL39HGkqzE68K9eiA4Pd1OgHteWPlNfNZJIHVgnltRp0y69YLg5jYd8qMCO7rqeIfFO4ORLTyg"
-               onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?auto=format&fit=crop&w=600&q=80';"
-               alt="Festive Styles"
-               class="w-full aspect-square rounded-md object-cover border border-light-outline-variant group-hover:border-light-primary transition-colors duration-state-change">
-          <span data-design-text-token="label-sm" class="font-label text-label-sm uppercase text-light-on-surface text-center">Festive Styles</span>
-        </a>
-        <a href="{% url 'catalog:category_products' 'earrings' %}" class="flex flex-col items-center gap-gutter-xs group">
-          <img src="https://lh3.googleusercontent.com/aida/ALJJyrDHGZiHeC86ec9VnTzChyJ-TGfu2w3-DtmXROisrYWPRrFiDBFFWiqYohh08pCPHl025IT0CYnWhOgT1Ktr8UwMCprbkosqUfb6qMgvxtBCWKg0Ymg5hKJE42jY0pqRVaL2-T50AUSlCSSeOYC65GbydQdjATTTk0NpcE-eXOzg4HckOpis0GQI5iCPEW6-AbLWMRXIobeLgaC8lzkCaMNFq7eq_ytd5z4A5pR_6RDNMOdXWs8Aua908z-gYdokUJY"
-               onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1630019852942-f89202989a59?auto=format&fit=crop&w=600&q=80';"
-               alt="Drop Earrings"
-               class="w-full aspect-square rounded-md object-cover border border-light-outline-variant group-hover:border-light-primary transition-colors duration-state-change">
-          <span data-design-text-token="label-sm" class="font-label text-label-sm uppercase text-light-on-surface text-center">Drop Earrings</span>
-        </a>
-        <a href="{% url 'catalog:category_products' 'bracelets' %}" class="flex flex-col items-center gap-gutter-xs group">
-          <img src="https://lh3.googleusercontent.com/aida/ALJJyrCYw8Gviu40Rm80-l1jI7PVPGgrllhuiNz6S00c28x7MNitC3Psb9ENuBniBCL4rpJJVLVnX_aBgZ7oReUVCwm--LkGSD2LDyKWNjlFZutpbH2tWss5K7zNoy3LjDEmSBcj1n6f-xcvtGDMgZCqVcwXvUeEIUwKP2y2fs0qJ5S9Ed0NmnenQfpu-yltiA3wtCI0ffScsDB1-HnSBVartQykTnfFWdbnv1fOZ67pSq1CNLDyqqFXkpqwl8aBHBDV"
-               onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1611591475870-760144f8ea56?auto=format&fit=crop&w=600&q=80';"
-               alt="Vermeil Cuffs"
-               class="w-full aspect-square rounded-md object-cover border border-light-outline-variant group-hover:border-light-primary transition-colors duration-state-change">
-          <span data-design-text-token="label-sm" class="font-label text-label-sm uppercase text-light-on-surface text-center">Vermeil Cuffs</span>
-        </a>
-        <a href="{% url 'catalog:category_products' 'necklaces' %}" class="flex flex-col items-center gap-gutter-xs group">
-          <img src="https://lh3.googleusercontent.com/aida/ALJJyrBWYmHm5OOMLtcaoD8sIIKeIuQ8AXkOBmCm6woTG7JOxpo6PKicjQyOBwy0ByTjbbSJ3upXnMYQXm7-tNVz1UME1i8wQSrhOY9Uj6oMz4yhfuW0LrDfZhBDefcHt0orBrFfL8VIgQJhXoDyUM9BeJrs5uBNAAvhsXZlyPTNpv7iAs4M0zLyHrwstXMmR-y4M8GOeBYV3MCP_iA9UP_P9Mh6Yzq9LX4R09N3CzSQT81GQlh1gC2K6m5C5zUuWlIm"
-               onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?auto=format&fit=crop&w=600&q=80';"
-               alt="Sculpted Hoops"
-               class="w-full aspect-square rounded-md object-cover border border-light-outline-variant group-hover:border-light-primary transition-colors duration-state-change">
-          <span data-design-text-token="label-sm" class="font-label text-label-sm uppercase text-light-on-surface text-center">Sculpted Hoops</span>
-        </a>
-        <a href="{% url 'catalog:product_list' %}?style=classic" class="flex flex-col items-center gap-gutter-xs group">
-          <img src="https://lh3.googleusercontent.com/aida/ALJJyrCvGEgzfNKcuOAwg-VjC-zWApMM97581vsBdrUmeJAO1VI0WSeniOYxqlTTeqckR9bZwhDG2OEspOhD70SOmzss6w33Mw8iVSKFR5yq5Z2tLm-WTVzRue8c3fswAzmxAOjn8HjzGKI9QxMq-fjMqWAtV0Uxay6ffFSERS7hwN15khorXJ_Ip_x4ehZlP6SdTBFODRyg2knZb34MH_54bjFiUPk6P4Morcg3ys9BHHYeZ1XdxvnhZ2KN_Wiz4z0"
-               onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1605100804763-247f67b3557e?auto=format&fit=crop&w=600&q=80';"
-               alt="Solitaires"
-               class="w-full aspect-square rounded-md object-cover border border-light-outline-variant group-hover:border-light-primary transition-colors duration-state-change">
-          <span data-design-text-token="label-sm" class="font-label text-label-sm uppercase text-light-on-surface text-center">Solitaires</span>
-        </a>
+        {% endfor %}
       </div>
     </div>
   </section>
+  {% endif %}
 
-  <!-- 4b. Shop by Price (Under $1,000 & Under $2,000 - White) + Personalized Jewellery (Burgundy) -->
-  <section id="personalised-atelier" class="w-full px-3 sm:px-6 lg:px-10">
+  <!-- 4b. Shop by Price (2 Cards - White) + Personalized Jewellery (Burgundy) -->
+  {% if is_builder_preview or homepage_content.price_and_personalised.enabled %}
+  <section id="personalised-atelier" data-hp-section="price_and_personalised" class="w-full px-3 sm:px-6 lg:px-10 {% if not homepage_content.price_and_personalised.enabled %}hidden{% endif %}">
     <div class="grid grid-cols-2 lg:grid-cols-12 gap-gutter-md lg:gap-gutter-lg items-stretch">
-      <!-- Under $1,000 Card -->
-      <a href="{% url 'catalog:product_list' %}?max_price=1000" class="col-span-1 lg:col-span-3 group bg-white-pure border border-light-outline-variant rounded-md p-gutter-md lg:p-gutter-xl flex flex-col justify-between gap-gutter-md hover:border-champagne transition-colors duration-state-change">
+      {% for pcard in homepage_content.price_and_personalised.price_cards %}
+      <a href="{{ pcard.link_url }}" data-hp-href="price_and_personalised.price_cards.{{ forloop.counter0 }}.link_url" class="col-span-1 lg:col-span-3 group bg-white-pure border border-light-outline-variant rounded-md p-gutter-md lg:p-gutter-xl flex flex-col justify-between gap-gutter-md hover:border-champagne transition-colors duration-state-change">
         <div class="flex flex-col gap-gutter-sm">
-          <span data-design-text-token="label-sm" class="font-label text-label-sm uppercase text-light-primary">Shop by Price</span>
-          <h2 data-design-text-token="headline-md" class="font-headline text-headline-md text-light-on-surface tabular-nums">Under $1,000</h2>
+          <span data-design-text-token="label-sm" data-hp-field="price_and_personalised.price_cards.{{ forloop.counter0 }}.eyebrow" class="font-label text-label-sm uppercase text-light-primary">{{ pcard.eyebrow }}</span>
+          <h2 data-design-text-token="headline-md" data-hp-field="price_and_personalised.price_cards.{{ forloop.counter0 }}.title" class="font-headline text-headline-md text-light-on-surface tabular-nums">{{ pcard.title }}</h2>
         </div>
         <span class="inline-flex items-center gap-gutter-xs font-label text-label-md uppercase text-light-primary">
-          <span data-design-text-token="label-md" class="font-label text-label-md">Explore</span>
+          <span data-design-text-token="label-md" data-hp-field="price_and_personalised.price_cards.{{ forloop.counter0 }}.cta_text" class="font-label text-label-md">{{ pcard.cta_text }}</span>
           <span class="material-symbols-outlined text-title-sm" aria-hidden="true">arrow_forward</span>
         </span>
       </a>
-
-      <!-- Under $2,000 Card -->
-      <a href="{% url 'catalog:product_list' %}?max_price=2000" class="col-span-1 lg:col-span-3 group bg-white-pure border border-light-outline-variant rounded-md p-gutter-md lg:p-gutter-xl flex flex-col justify-between gap-gutter-md hover:border-champagne transition-colors duration-state-change">
-        <div class="flex flex-col gap-gutter-sm">
-          <span data-design-text-token="label-sm" class="font-label text-label-sm uppercase text-light-primary">Shop by Price</span>
-          <h2 data-design-text-token="headline-md" class="font-headline text-headline-md text-light-on-surface tabular-nums">Under $2,000</h2>
-        </div>
-        <span class="inline-flex items-center gap-gutter-xs font-label text-label-md uppercase text-light-primary">
-          <span data-design-text-token="label-md" class="font-label text-label-md">Explore</span>
-          <span class="material-symbols-outlined text-title-sm" aria-hidden="true">arrow_forward</span>
-        </span>
-      </a>
+      {% endfor %}
 
       <!-- Personalized Jewellery Card (Image Overlay) -->
-      <a href="{% url 'core:contact' %}?subject=personalised" class="col-span-2 lg:col-span-6 group relative rounded-md overflow-hidden border border-dark-outline-variant bg-dark-surface-container-lowest text-dark-on-surface min-h-[220px] flex items-center p-gutter-xl">
-        <img src="https://lh3.googleusercontent.com/aida/ALJJyrDziJVAl1Tv9RTD5IRGFAO7-OJ7UPnbN1evt40F_oe2QGmVjZaYzacca8qPYN7HxOwIsSG0G-w4dfRCarFPeAJN9dQAVP750_UoT0GKIbacnIaOTEgA7_PRLq8DuDfvHT5-TEKRiAiF5WJdM4BelWD0rHE8R5ZoY3sBsaqMYg8FqBFj2RviewocNgWhdWr0gqPFmEV_1hVslxLMISJFmtHNoIh50VYPgScno5v9aax_ofML9D3ZqMtPsdRhFtDO1A"
+      {% if is_builder_preview or homepage_content.price_and_personalised.personalised.enabled %}
+      <a href="{{ homepage_content.price_and_personalised.personalised.link_url }}" data-hp-section="price_and_personalised.personalised" data-hp-href="price_and_personalised.personalised.link_url" class="col-span-2 lg:col-span-6 group relative rounded-md overflow-hidden border border-dark-outline-variant bg-dark-surface-container-lowest text-dark-on-surface min-h-[220px] flex items-center p-gutter-xl {% if not homepage_content.price_and_personalised.personalised.enabled %}hidden{% endif %}">
+        <img src="{{ homepage_content.price_and_personalised.personalised.image_url }}"
+             data-hp-src="price_and_personalised.personalised.image_url"
              onerror="this.onerror=null; this.src='{{ personalised_section.image_url }}';"
-             alt="LUCKJARY Personalized Engraved Jewellery"
+             alt="{{ homepage_content.price_and_personalised.personalised.title }}"
              class="absolute inset-0 w-full h-full object-cover transition-transform duration-image-hover ease-image-hover group-hover:scale-105">
         <div class="absolute inset-0 bg-gradient-to-r from-dark-surface-container-lowest/95 via-dark-surface-container-lowest/75 to-transparent" aria-hidden="true"></div>
         <div class="relative z-10 flex flex-col items-start gap-gutter-sm max-w-sm">
-          <span data-design-text-token="label-sm" class="font-label text-label-sm uppercase text-champagne">Bespoke Atelier</span>
-          <h2 data-design-text-token="headline-md" class="font-headline text-headline-md text-dark-on-surface">Personalized Jewellery</h2>
-          <p data-design-text-token="body-sm" class="font-body text-body-sm text-dark-on-surface-variant">Custom engravings, initials, and birthstones crafted to order.</p>
+          <span data-design-text-token="label-sm" data-hp-field="price_and_personalised.personalised.eyebrow" class="font-label text-label-sm uppercase text-champagne">{{ homepage_content.price_and_personalised.personalised.eyebrow }}</span>
+          <h2 data-design-text-token="headline-md" data-hp-field="price_and_personalised.personalised.title" class="font-headline text-headline-md text-dark-on-surface">{{ homepage_content.price_and_personalised.personalised.title }}</h2>
+          <p data-design-text-token="body-sm" data-hp-field="price_and_personalised.personalised.subtitle" class="font-body text-body-sm text-dark-on-surface-variant">{{ homepage_content.price_and_personalised.personalised.subtitle }}</p>
           <span class="inline-flex items-center gap-gutter-xs bg-cream text-burgundy-deep px-4 py-2 rounded-sm uppercase tracking-wider mt-gutter-xs">
-            <span data-design-text-token="label-sm" class="font-label text-label-sm">Personalize Yours</span>
+            <span data-design-text-token="label-sm" data-hp-field="price_and_personalised.personalised.cta_text" class="font-label text-label-sm">{{ homepage_content.price_and_personalised.personalised.cta_text }}</span>
             <span class="material-symbols-outlined text-title-sm" aria-hidden="true">arrow_forward</span>
           </span>
         </div>
       </a>
+      {% endif %}
     </div>
   </section>
+  {% endif %}
 
   <!-- 4c. 4 Trust Guarantees (White) -->
-  <section id="trust-guarantees" class="w-full px-3 sm:px-6 lg:px-10">
+  {% if is_builder_preview or homepage_content.trust_guarantees.enabled %}
+  <section id="trust-guarantees" data-hp-section="trust_guarantees" class="w-full px-3 sm:px-6 lg:px-10 {% if not homepage_content.trust_guarantees.enabled %}hidden{% endif %}">
     <div class="bg-white-pure border border-light-outline-variant rounded-md overflow-hidden grid grid-cols-2 lg:grid-cols-4 lg:py-gutter-lg lg:px-gutter-xl lg:gap-gutter-lg">
-      <div class="py-gutter-md px-gutter-sm lg:p-0 border-r border-b border-light-outline-variant lg:border-0 flex flex-col lg:flex-row items-center justify-center text-center lg:text-left gap-gutter-xs lg:gap-gutter-sm">
+      {% for badge in homepage_content.trust_guarantees.items %}
+      <div class="py-gutter-md px-gutter-sm lg:p-0 {% if forloop.counter == 1 %}border-r border-b{% elif forloop.counter == 2 %}border-b{% elif forloop.counter == 3 %}border-r{% endif %} border-light-outline-variant lg:border-0 flex flex-col lg:flex-row items-center justify-center text-center lg:text-left gap-gutter-xs lg:gap-gutter-sm">
         <span class="w-10 h-10 rounded-full bg-cream text-light-primary inline-flex items-center justify-center shrink-0">
-          <span class="material-symbols-outlined text-title-md" aria-hidden="true">verified</span>
+          <span class="material-symbols-outlined text-title-md" data-hp-field="trust_guarantees.items.{{ forloop.counter0 }}.icon" aria-hidden="true">{{ badge.icon }}</span>
         </span>
-        <span data-design-text-token="title-sm" class="font-title text-title-sm text-light-on-surface">100% Certified</span>
+        <span data-design-text-token="title-sm" data-hp-field="trust_guarantees.items.{{ forloop.counter0 }}.label" class="font-title text-title-sm text-light-on-surface">{{ badge.label }}</span>
       </div>
-      <div class="py-gutter-md px-gutter-sm lg:p-0 border-b border-light-outline-variant lg:border-0 flex flex-col lg:flex-row items-center justify-center text-center lg:text-left gap-gutter-xs lg:gap-gutter-sm">
-        <span class="w-10 h-10 rounded-full bg-cream text-light-primary inline-flex items-center justify-center shrink-0">
-          <span class="material-symbols-outlined text-title-md" aria-hidden="true">event_repeat</span>
-        </span>
-        <span data-design-text-token="title-sm" class="font-title text-title-sm text-light-on-surface">15 Day Exchange</span>
-      </div>
-      <div class="py-gutter-md px-gutter-sm lg:p-0 border-r border-light-outline-variant lg:border-0 flex flex-col lg:flex-row items-center justify-center text-center lg:text-left gap-gutter-xs lg:gap-gutter-sm">
-        <span class="w-10 h-10 rounded-full bg-cream text-light-primary inline-flex items-center justify-center shrink-0">
-          <span class="material-symbols-outlined text-title-md" aria-hidden="true">autorenew</span>
-        </span>
-        <span data-design-text-token="title-sm" class="font-title text-title-sm text-light-on-surface">Lifetime Exchange</span>
-      </div>
-      <div class="py-gutter-md px-gutter-sm lg:p-0 flex flex-col lg:flex-row items-center justify-center text-center lg:text-left gap-gutter-xs lg:gap-gutter-sm">
-        <span class="w-10 h-10 rounded-full bg-cream text-light-primary inline-flex items-center justify-center shrink-0">
-          <span class="material-symbols-outlined text-title-md" aria-hidden="true">workspace_premium</span>
-        </span>
-        <span data-design-text-token="title-sm" class="font-title text-title-sm text-light-on-surface">One Year Warranty</span>
-      </div>
+      {% endfor %}
     </div>
   </section>
+  {% endif %}
 
   <!-- 5. LUCKJARY Vault Plan & Atelier Bento (Image Overlays) -->
-  <section id="vault-plan" class="w-full px-3 sm:px-6 lg:px-10">
+  {% if is_builder_preview or homepage_content.vault_atelier.enabled %}
+  <section id="vault-plan" data-hp-section="vault_atelier" class="w-full px-3 sm:px-6 lg:px-10 {% if not homepage_content.vault_atelier.enabled %}hidden{% endif %}">
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter-lg items-stretch">
-      <a href="{% url 'core:contact' %}?subject=vault-plan" class="lg:col-span-6 group relative rounded-md overflow-hidden bg-dark-surface text-dark-on-surface border border-dark-outline-variant p-gutter-xl min-h-[360px] flex flex-col justify-end">
-        <img src="https://lh3.googleusercontent.com/aida/ALJJyrBayDAuFjshNXMyoDhcc8QiqUIJfHHC0rJuoa0C2rbv0QLPkrXEZLbihb7aGpFpRL6un7A82FQlD5pJlAnLlRUDEPij1aknV4eDIfqogih3H_FzUlF_gdRAdwERob3-oFMc1kf4yr2jvUEoZCIH0BkbSqX7VC56CJ3yOCdgE44opDYPx0hO39Tb8ABMabXFDO1b1CWGHZzNaMoUE5GsCcbphtQJxfDMFXiFde4NgVQpbUXXuwJAQK1OSetIV_mIUg"
+      <a href="{{ homepage_content.vault_atelier.vault.link_url }}" data-hp-href="vault_atelier.vault.link_url" class="lg:col-span-6 group relative rounded-md overflow-hidden bg-dark-surface text-dark-on-surface border border-dark-outline-variant p-gutter-xl min-h-[360px] flex flex-col justify-end">
+        <img src="{{ homepage_content.vault_atelier.vault.image_url }}"
+             data-hp-src="vault_atelier.vault.image_url"
              onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1598560917505-59a3ad559071?auto=format&fit=crop&w=1200&q=85';"
-             alt="LUCKJARY Vault Plan Craftsmanship"
+             alt="{{ homepage_content.vault_atelier.vault.title }}"
              class="absolute inset-0 w-full h-full object-cover transition-transform duration-image-hover ease-image-hover group-hover:scale-105">
         <div class="absolute inset-0 bg-gradient-to-t from-dark-surface-container-lowest/95 via-dark-surface-container-lowest/65 to-dark-surface-container-lowest/30" aria-hidden="true"></div>
         <div class="relative z-10 flex flex-col items-start gap-gutter-sm">
-          <span data-design-text-token="label-md" class="font-label text-label-md uppercase text-champagne">LUCKJARY Vault Plan</span>
-          <h2 data-design-text-token="headline-lg" class="font-headline text-headline-lg text-dark-on-surface">9=10 Monthly Saving Scheme</h2>
-          <p data-design-text-token="body-md" class="font-body text-body-md text-dark-on-surface-variant max-w-md">Pay 9 monthly instalments toward your next heirloom, and the 10th is on LUCKJARY.</p>
+          <span data-design-text-token="label-md" data-hp-field="vault_atelier.vault.eyebrow" class="font-label text-label-md uppercase text-champagne">{{ homepage_content.vault_atelier.vault.eyebrow }}</span>
+          <h2 data-design-text-token="headline-lg" data-hp-field="vault_atelier.vault.title" class="font-headline text-headline-lg text-dark-on-surface">{{ homepage_content.vault_atelier.vault.title }}</h2>
+          <p data-design-text-token="body-md" data-hp-field="vault_atelier.vault.subtitle" class="font-body text-body-md text-dark-on-surface-variant max-w-md">{{ homepage_content.vault_atelier.vault.subtitle }}</p>
         </div>
       </a>
 
       <div id="stores" class="lg:col-span-6 flex flex-col gap-gutter-lg">
-        <a href="{% url 'catalog:category_products' 'necklaces' %}" class="group relative flex-1 rounded-md overflow-hidden bg-dark-surface text-dark-on-surface border border-dark-outline-variant p-gutter-lg md:p-gutter-xl min-h-[170px] flex items-center">
-          <img src="https://lh3.googleusercontent.com/aida/ALJJyrBA0bjRv83qCEOYMdLmZSJVgnLha5Yk1PCiFMiaDE86R0k3q5vBEY4vRpSNImay56cZIOO9QWpIzzAdGd6h8j-R91mtFFkxda_ywal4zTaDoD69jQn8nstXAqkM_54mySKaidOQY2kJbja_OhgZIt10Tec-MhQrrNcJO560OZ4c2iBZNTXdIvQqAL39HGkqzE68K9eiA4Pd1OgHteWPlNfNZJIHVgnltRp0y69YLg5jYd8qMCO7rqeIfFO4ORLTyg"
+        <a href="{{ homepage_content.vault_atelier.top_right.link_url }}" data-hp-href="vault_atelier.top_right.link_url" class="group relative flex-1 rounded-md overflow-hidden bg-dark-surface text-dark-on-surface border border-dark-outline-variant p-gutter-lg md:p-gutter-xl min-h-[170px] flex items-center">
+          <img src="{{ homepage_content.vault_atelier.top_right.image_url }}"
+               data-hp-src="vault_atelier.top_right.image_url"
                onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1611591437281-460bfbe1220a?auto=format&fit=crop&w=1200&q=85';"
-               alt="Minimalist Chains"
+               alt="{{ homepage_content.vault_atelier.top_right.title }}"
                class="absolute inset-0 w-full h-full object-cover transition-transform duration-image-hover ease-image-hover group-hover:scale-105">
           <div class="absolute inset-0 bg-gradient-to-r from-dark-surface-container-lowest/95 via-dark-surface-container-lowest/90 to-dark-surface-container-lowest/45" aria-hidden="true"></div>
           <div class="relative z-10 flex flex-col gap-gutter-xs max-w-sm">
-            <span data-design-text-token="label-sm" class="font-label text-label-sm uppercase text-champagne">Everyday 18k Vermeil</span>
-            <h3 data-design-text-token="headline-sm" class="font-headline text-headline-sm text-dark-on-surface">Minimalist Chains &amp; Bands</h3>
-            <p data-design-text-token="body-sm" class="font-body text-body-sm text-dark-on-surface-variant">Lightweight pieces built for daily layering.</p>
+            <span data-design-text-token="label-sm" data-hp-field="vault_atelier.top_right.eyebrow" class="font-label text-label-sm uppercase text-champagne">{{ homepage_content.vault_atelier.top_right.eyebrow }}</span>
+            <h3 data-design-text-token="headline-sm" data-hp-field="vault_atelier.top_right.title" class="font-headline text-headline-sm text-dark-on-surface">{{ homepage_content.vault_atelier.top_right.title }}</h3>
+            <p data-design-text-token="body-sm" data-hp-field="vault_atelier.top_right.subtitle" class="font-body text-body-sm text-dark-on-surface-variant">{{ homepage_content.vault_atelier.top_right.subtitle }}</p>
           </div>
         </a>
 
-        <a href="{% url 'core:about' %}#boutiques" id="atelier" class="group relative flex-1 rounded-md overflow-hidden bg-dark-surface text-dark-on-surface border border-dark-outline-variant p-gutter-lg md:p-gutter-xl min-h-[170px] flex items-center">
-          <img src="https://lh3.googleusercontent.com/aida/ALJJyrDHGZiHeC86ec9VnTzChyJ-TGfu2w3-DtmXROisrYWPRrFiDBFFWiqYohh08pCPHl025IT0CYnWhOgT1Ktr8UwMCprbkosqUfb6qMgvxtBCWKg0Ymg5hKJE42jY0pqRVaL2-T50AUSlCSSeOYC65GbydQdjATTTk0NpcE-eXOzg4HckOpis0GQI5iCPEW6-AbLWMRXIobeLgaC8lzkCaMNFq7eq_ytd5z4A5pR_6RDNMOdXWs8Aua908z-gYdokUJY"
+        <a href="{{ homepage_content.vault_atelier.bottom_right.link_url }}" data-hp-href="vault_atelier.bottom_right.link_url" id="atelier" class="group relative flex-1 rounded-md overflow-hidden bg-dark-surface text-dark-on-surface border border-dark-outline-variant p-gutter-lg md:p-gutter-xl min-h-[170px] flex items-center">
+          <img src="{{ homepage_content.vault_atelier.bottom_right.image_url }}"
+               data-hp-src="vault_atelier.bottom_right.image_url"
                onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1603561591411-07134e71a2a9?auto=format&fit=crop&w=1200&q=85';"
-               alt="LUCKJARY Boutique"
+               alt="{{ homepage_content.vault_atelier.bottom_right.title }}"
                class="absolute inset-0 w-full h-full object-cover transition-transform duration-image-hover ease-image-hover group-hover:scale-105">
           <div class="absolute inset-0 bg-gradient-to-r from-dark-surface-container-lowest/95 via-dark-surface-container-lowest/90 to-dark-surface-container-lowest/45" aria-hidden="true"></div>
           <div class="relative z-10 flex flex-col gap-gutter-xs max-w-sm">
-            <span data-design-text-token="label-sm" class="font-label text-label-sm uppercase text-champagne">Private Salons</span>
-            <h3 data-design-text-token="headline-sm" class="font-headline text-headline-sm text-dark-on-surface">Visit a LUCKJARY Boutique</h3>
-            <p data-design-text-token="body-sm" class="font-body text-body-sm text-dark-on-surface-variant">Complimentary ultrasonic cleaning &amp; styling.</p>
+            <span data-design-text-token="label-sm" data-hp-field="vault_atelier.bottom_right.eyebrow" class="font-label text-label-sm uppercase text-champagne">{{ homepage_content.vault_atelier.bottom_right.eyebrow }}</span>
+            <h3 data-design-text-token="headline-sm" data-hp-field="vault_atelier.bottom_right.title" class="font-headline text-headline-sm text-dark-on-surface">{{ homepage_content.vault_atelier.bottom_right.title }}</h3>
+            <p data-design-text-token="body-sm" data-hp-field="vault_atelier.bottom_right.subtitle" class="font-body text-body-sm text-dark-on-surface-variant">{{ homepage_content.vault_atelier.bottom_right.subtitle }}</p>
           </div>
         </a>
       </div>
     </div>
   </section>
+  {% endif %}
 
 </div>
 {% endblock %}
 
 {% block footer %}
 <!-- Deep Burgundy Footer -->
-<footer id="siloar-footer" class="bg-dark-surface-container-lowest text-dark-on-surface border-t border-dark-outline-variant py-gutter-xl md:py-section-md">
+{% if is_builder_preview or homepage_content.footer.enabled %}
+<footer id="siloar-footer" data-hp-section="footer" class="bg-dark-surface-container-lowest text-dark-on-surface border-t border-dark-outline-variant py-gutter-xl md:py-section-md {% if not homepage_content.footer.enabled %}hidden{% endif %}">
   <div class="w-full px-3 sm:px-6 lg:px-10 grid grid-cols-2 md:grid-cols-12 gap-x-gutter-md gap-y-gutter-lg md:gap-gutter-xl">
     <div class="col-span-2 md:col-span-4 flex flex-col gap-gutter-xs md:gap-gutter-sm pb-gutter-md border-b border-dark-outline-variant md:pb-0 md:border-b-0">
-      <span data-design-text-token="headline-md" class="font-headline text-headline-md tracking-widest text-dark-on-surface uppercase">LUCKJARY</span>
-      <p data-design-text-token="body-md" class="font-body text-body-md text-dark-on-surface-variant">
-        Hallmarked 925 sterling silver, natural diamonds, and 18k vermeil heirlooms.
+      <span data-design-text-token="headline-md" data-hp-field="footer.brand_name" class="font-headline text-headline-md tracking-widest text-dark-on-surface uppercase">{{ homepage_content.footer.brand_name }}</span>
+      <p data-design-text-token="body-md" data-hp-field="footer.tagline" class="font-body text-body-md text-dark-on-surface-variant">
+        {{ homepage_content.footer.tagline }}
       </p>
     </div>
 
     <div class="col-span-1 md:col-span-2 flex flex-col gap-gutter-sm">
-      <h3 data-design-text-token="label-md" class="font-label text-label-md uppercase text-champagne">Know Your Jewelry</h3>
-      <a href="{% url 'core:faq' %}" class="font-body text-body-md text-dark-on-surface-variant hover:text-dark-on-surface transition-colors">Diamond Guide</a>
-      <a href="{% url 'core:about' %}" class="font-body text-body-md text-dark-on-surface-variant hover:text-dark-on-surface transition-colors">925 Silver Purity</a>
-      <a href="{% url 'core:faq' %}#sizing" class="font-body text-body-md text-dark-on-surface-variant hover:text-dark-on-surface transition-colors">Ring Size Guide</a>
+      <h3 data-design-text-token="label-md" data-hp-field="footer.col1_heading" class="font-label text-label-md uppercase text-champagne">{{ homepage_content.footer.col1_heading }}</h3>
+      {% for link in homepage_content.footer.col1_links %}
+      <a href="{{ link.url }}" data-hp-field="footer.col1_links.{{ forloop.counter0 }}.label" data-hp-href="footer.col1_links.{{ forloop.counter0 }}.url" class="font-body text-body-md text-dark-on-surface-variant hover:text-dark-on-surface transition-colors">{{ link.label }}</a>
+      {% endfor %}
     </div>
 
     <div class="col-span-1 md:col-span-2 flex flex-col gap-gutter-sm">
-      <h3 data-design-text-token="label-md" class="font-label text-label-md uppercase text-champagne">Customer Care</h3>
-      <a href="{% url 'core:faq' %}" class="font-body text-body-md text-dark-on-surface-variant hover:text-dark-on-surface transition-colors">15-Day Returns</a>
-      <a href="{% url 'orders:order_tracking' %}" class="font-body text-body-md text-dark-on-surface-variant hover:text-dark-on-surface transition-colors">Track Order</a>
-      <a href="{% url 'core:about' %}#boutiques" class="font-body text-body-md text-dark-on-surface-variant hover:text-dark-on-surface transition-colors">Find a Store</a>
+      <h3 data-design-text-token="label-md" data-hp-field="footer.col2_heading" class="font-label text-label-md uppercase text-champagne">{{ homepage_content.footer.col2_heading }}</h3>
+      {% for link in homepage_content.footer.col2_links %}
+      <a href="{{ link.url }}" data-hp-field="footer.col2_links.{{ forloop.counter0 }}.label" data-hp-href="footer.col2_links.{{ forloop.counter0 }}.url" class="font-body text-body-md text-dark-on-surface-variant hover:text-dark-on-surface transition-colors">{{ link.label }}</a>
+      {% endfor %}
     </div>
 
     <div class="col-span-2 md:col-span-4 flex flex-col gap-gutter-sm md:gap-gutter-md pt-gutter-md border-t border-dark-outline-variant md:pt-0 md:border-t-0">
-      <h3 data-design-text-token="label-md" class="font-label text-label-md uppercase text-champagne">Stay in Touch</h3>
+      <h3 data-design-text-token="label-md" data-hp-field="footer.newsletter_heading" class="font-label text-label-md uppercase text-champagne">{{ homepage_content.footer.newsletter_heading }}</h3>
       <form action="{% url 'core:subscribe_newsletter' %}" method="POST" class="flex flex-col gap-gutter-sm">
         {% csrf_token %}
         <div class="flex flex-row md:flex-col gap-gutter-xs md:gap-gutter-sm">
           <label class="flex-1 md:flex-none flex flex-col gap-gutter-xs">
             <span class="sr-only font-label text-label-md" data-design-text-token="label-md">Email address</span>
-            <input type="email" name="email" required placeholder="elena@example.com" class="w-full bg-dark-surface-container-low border border-dark-outline-variant rounded-sm px-4 py-2.5 font-body text-body-md text-dark-on-surface placeholder:text-dark-outline focus:border-champagne focus:outline-none focus:ring-1 focus:ring-champagne">
+            <input type="email" name="email" required data-hp-placeholder="footer.newsletter_placeholder" placeholder="{{ homepage_content.footer.newsletter_placeholder }}" class="w-full bg-dark-surface-container-low border border-dark-outline-variant rounded-sm px-4 py-2.5 font-body text-body-md text-dark-on-surface placeholder:text-dark-outline focus:border-champagne focus:outline-none focus:ring-1 focus:ring-champagne">
           </label>
           <button type="submit" class="shrink-0 bg-cream text-burgundy-deep px-5 py-2.5 rounded-sm uppercase tracking-wider hover:bg-white-pure transition-colors duration-state-change">
-            <span data-design-text-token="label-md" class="font-label text-label-md">Subscribe</span>
+            <span data-design-text-token="label-md" data-hp-field="footer.newsletter_button" class="font-label text-label-md">{{ homepage_content.footer.newsletter_button }}</span>
           </button>
         </div>
-        <p data-design-text-token="body-sm" class="font-body text-body-sm text-dark-on-surface-variant">Receive private previews and atelier offers.</p>
+        <p data-design-text-token="body-sm" data-hp-field="footer.newsletter_note" class="font-body text-body-sm text-dark-on-surface-variant">{{ homepage_content.footer.newsletter_note }}</p>
       </form>
     </div>
   </div>
 </footer>
+{% endif %}
 {% endblock %}
 
 {% block extra_scripts %}
@@ -686,7 +633,7 @@
     if (carouselTrack && prevSlide && nextSlide) {
       prevSlide.addEventListener('click', function () {
         if (window.innerWidth < 640) {
-          carouselTrack.scrollBy({ left: -188, behavior: 'smooth' });
+          carouselTrack.scrollBy({ left: -216, behavior: 'smooth' });
         } else {
           offset = (offset - pageSize + cards.length) % cards.length;
           renderDesktopSlide();
@@ -694,13 +641,61 @@
       });
       nextSlide.addEventListener('click', function () {
         if (window.innerWidth < 640) {
-          carouselTrack.scrollBy({ left: 188, behavior: 'smooth' });
+          carouselTrack.scrollBy({ left: 216, behavior: 'smooth' });
         } else {
           offset = (offset + pageSize) % cards.length;
           renderDesktopSlide();
         }
       });
     }
+
+    function resolvePath(obj, path) {
+      if (!obj || !path) return undefined;
+      return path.split('.').reduce(function (acc, part) {
+        if (acc === undefined || acc === null) return undefined;
+        return acc[part];
+      }, obj);
+    }
+
+    window.addEventListener('message', function (event) {
+      if (event.origin !== window.location.origin || !event.data) return;
+      if (event.data.type === 'luckjary_homepage_preview' && event.data.content) {
+        var content = event.data.content;
+        document.querySelectorAll('[data-hp-field]').forEach(function (el) {
+          var val = resolvePath(content, el.getAttribute('data-hp-field'));
+          if (val !== undefined && val !== null) el.textContent = String(val);
+        });
+        document.querySelectorAll('[data-hp-src]').forEach(function (el) {
+          var val = resolvePath(content, el.getAttribute('data-hp-src'));
+          if (val && el.getAttribute('src') !== val) el.setAttribute('src', val);
+        });
+        document.querySelectorAll('[data-hp-href]').forEach(function (el) {
+          var val = resolvePath(content, el.getAttribute('data-hp-href'));
+          if (val) el.setAttribute('href', val);
+        });
+        document.querySelectorAll('[data-hp-placeholder]').forEach(function (el) {
+          var val = resolvePath(content, el.getAttribute('data-hp-placeholder'));
+          if (val !== undefined && val !== null) el.setAttribute('placeholder', String(val));
+        });
+        document.querySelectorAll('[data-hp-section]').forEach(function (el) {
+          var key = el.getAttribute('data-hp-section');
+          if (key === 'hero.strip') {
+            el.classList.toggle('hidden', !(content.hero && content.hero.strip_enabled));
+          } else {
+            var sec = resolvePath(content, key);
+            if (sec && typeof sec.enabled === 'boolean') {
+              el.classList.toggle('hidden', !sec.enabled);
+            }
+          }
+        });
+      }
+      if (event.data.type === 'luckjary_homepage_focus' && event.data.section) {
+        var target = document.querySelector('[data-hp-section="' + event.data.section + '"]');
+        if (target && !target.classList.contains('hidden')) {
+          target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+      }
+    });
   })();
 </script>
 {% endblock %}
