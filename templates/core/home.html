@@ -285,11 +285,11 @@
 
         <!-- Right Overlaid White Product Carousel -->
         <div class="lg:col-span-6 p-gutter-md sm:p-gutter-lg flex flex-col justify-between gap-gutter-md sm:gap-gutter-lg">
-          <div id="carousel-track" class="flex sm:grid sm:grid-cols-3 gap-gutter-sm sm:gap-gutter-md items-stretch overflow-x-auto sm:overflow-visible snap-x snap-mandatory no-scrollbar">
+          <div id="carousel-track" class="-mx-gutter-md px-gutter-md sm:mx-0 sm:px-0 flex sm:grid sm:grid-cols-3 gap-gutter-sm sm:gap-gutter-md items-stretch overflow-x-auto sm:overflow-visible snap-x snap-mandatory scroll-pl-gutter-md sm:scroll-pl-0 no-scrollbar">
             {% if featured_products %}
               {% for prod in featured_products %}
               <a href="{{ prod.get_absolute_url }}"
-                 class="carousel-card {% if forloop.counter0 >= 3 %}sm:hidden{% endif %} w-44 shrink-0 snap-start sm:w-auto sm:shrink h-full bg-white-pure rounded-sm border border-light-outline-variant p-gutter-sm flex flex-col justify-between gap-gutter-sm hover:border-light-primary transition-colors duration-state-change">
+                 class="carousel-card {% if forloop.counter0 >= 3 %}sm:hidden{% endif %} w-52 shrink-0 snap-start sm:w-auto sm:shrink h-full bg-white-pure rounded-sm border border-light-outline-variant p-gutter-sm flex flex-col justify-between gap-gutter-sm hover:border-light-primary transition-colors duration-state-change">
                 <div class="aspect-square bg-light-surface-container-low rounded-sm overflow-hidden">
                   <img src="{{ prod.primary_image }}"
                        onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1599643477877-530eb83abc8e?auto=format&fit=crop&w=800&q=80';"
@@ -309,7 +309,7 @@
               {% endfor %}
             {% else %}
               <!-- Carousel Item 1 -->
-              <a href="{% url 'catalog:category_products' 'rings' %}" class="carousel-card w-44 shrink-0 snap-start sm:w-auto sm:shrink h-full bg-white-pure rounded-sm border border-light-outline-variant p-gutter-sm flex flex-col justify-between gap-gutter-sm hover:border-light-primary transition-colors duration-state-change">
+              <a href="{% url 'catalog:category_products' 'rings' %}" class="carousel-card w-52 shrink-0 snap-start sm:w-auto sm:shrink h-full bg-white-pure rounded-sm border border-light-outline-variant p-gutter-sm flex flex-col justify-between gap-gutter-sm hover:border-light-primary transition-colors duration-state-change">
                 <div class="aspect-square bg-light-surface-container-low rounded-sm overflow-hidden">
                   <img src="https://lh3.googleusercontent.com/aida/ALJJyrCjbhsSorM7Qp6-L5feydmQQVJlC-PhW8b2ugauC8c1RLZQOyR8EgO0ZbukbUQXIZjgYuEJgpXUH1SO88an6Qq8bBdHg_MYL9T9uVNOyg3BYk057GlYBi0wDgsGf_GsFiZW2T0s2zugvweVpeEUXCXVCPswOR0Vp8TtDt9j86UXej2I7bMJNBWJI6FfmgqszWD4Ejg0YTpnpDkUu71XsuCZZ3PWtcfJTdI1CbprNhEX4QcUx_n7xRKQ-YG1" alt="Anchor 925 Silver Ring" class="w-full h-full object-cover">
                 </div>
@@ -323,7 +323,7 @@
               </a>
 
               <!-- Carousel Item 2 -->
-              <a href="{% url 'catalog:category_products' 'bracelets' %}" class="carousel-card w-44 shrink-0 snap-start sm:w-auto sm:shrink h-full bg-white-pure rounded-sm border border-light-outline-variant p-gutter-sm flex flex-col justify-between gap-gutter-sm hover:border-light-primary transition-colors duration-state-change">
+              <a href="{% url 'catalog:category_products' 'bracelets' %}" class="carousel-card w-52 shrink-0 snap-start sm:w-auto sm:shrink h-full bg-white-pure rounded-sm border border-light-outline-variant p-gutter-sm flex flex-col justify-between gap-gutter-sm hover:border-light-primary transition-colors duration-state-change">
                 <div class="aspect-square bg-light-surface-container-low rounded-sm overflow-hidden">
                   <img src="https://lh3.googleusercontent.com/aida/ALJJyrCYw8Gviu40Rm80-l1jI7PVPGgrllhuiNz6S00c28x7MNitC3Psb9ENuBniBCL4rpJJVLVnX_aBgZ7oReUVCwm--LkGSD2LDyKWNjlFZutpbH2tWss5K7zNoy3LjDEmSBcj1n6f-xcvtGDMgZCqVcwXvUeEIUwKP2y2fs0qJ5S9Ed0NmnenQfpu-yltiA3wtCI0ffScsDB1-HnSBVartQykTnfFWdbnv1fOZ67pSq1CNLDyqqFXkpqwl8aBHBDV" alt="Alex 925 Gold-Plated Cuff" class="w-full h-full object-cover">
                 </div>
@@ -337,7 +337,7 @@
               </a>
 
               <!-- Carousel Item 3 -->
-              <a href="{% url 'catalog:category_products' 'earrings' %}" class="carousel-card w-44 shrink-0 snap-start sm:w-auto sm:shrink h-full bg-white-pure rounded-sm border border-light-outline-variant p-gutter-sm flex flex-col justify-between gap-gutter-sm hover:border-light-primary transition-colors duration-state-change">
+              <a href="{% url 'catalog:category_products' 'earrings' %}" class="carousel-card w-52 shrink-0 snap-start sm:w-auto sm:shrink h-full bg-white-pure rounded-sm border border-light-outline-variant p-gutter-sm flex flex-col justify-between gap-gutter-sm hover:border-light-primary transition-colors duration-state-change">
                 <div class="aspect-square bg-light-surface-container-low rounded-sm overflow-hidden">
                   <img src="https://lh3.googleusercontent.com/aida/ALJJyrBWYmHm5OOMLtcaoD8sIIKeIuQ8AXkOBmCm6woTG7JOxpo6PKicjQyOBwy0ByTjbbSJ3upXnMYQXm7-tNVz1UME1i8wQSrhOY9Uj6oMz4yhfuW0LrDfZhBDefcHt0orBrFfL8VIgQJhXoDyUM9BeJrs5uBNAAvhsXZlyPTNpv7iAs4M0zLyHrwstXMmR-y4M8GOeBYV3MCP_iA9UP_P9Mh6Yzq9LX4R09N3CzSQT81GQlh1gC2K6m5C5zUuWlIm" alt="Knot 925 Silver Hoops" class="w-full h-full object-cover">
                 </div>
@@ -616,40 +616,42 @@
 
 {% block footer %}
 <!-- Deep Burgundy Footer -->
-<footer id="siloar-footer" class="bg-dark-surface-container-lowest text-dark-on-surface border-t border-dark-outline-variant py-section-md">
-  <div class="w-full px-3 sm:px-6 lg:px-10 grid grid-cols-1 md:grid-cols-12 gap-gutter-xl">
-    <div class="md:col-span-4 flex flex-col gap-gutter-sm">
+<footer id="siloar-footer" class="bg-dark-surface-container-lowest text-dark-on-surface border-t border-dark-outline-variant py-gutter-xl md:py-section-md">
+  <div class="w-full px-3 sm:px-6 lg:px-10 grid grid-cols-2 md:grid-cols-12 gap-x-gutter-md gap-y-gutter-lg md:gap-gutter-xl">
+    <div class="col-span-2 md:col-span-4 flex flex-col gap-gutter-xs md:gap-gutter-sm pb-gutter-md border-b border-dark-outline-variant md:pb-0 md:border-b-0">
       <span data-design-text-token="headline-md" class="font-headline text-headline-md tracking-widest text-dark-on-surface uppercase">LUCKJARY</span>
       <p data-design-text-token="body-md" class="font-body text-body-md text-dark-on-surface-variant">
         Hallmarked 925 sterling silver, natural diamonds, and 18k vermeil heirlooms.
       </p>
     </div>
 
-    <div class="md:col-span-2 flex flex-col gap-gutter-sm">
+    <div class="col-span-1 md:col-span-2 flex flex-col gap-gutter-sm">
       <h3 data-design-text-token="label-md" class="font-label text-label-md uppercase text-champagne">Know Your Jewelry</h3>
       <a href="{% url 'core:faq' %}" class="font-body text-body-md text-dark-on-surface-variant hover:text-dark-on-surface transition-colors">Diamond Guide</a>
       <a href="{% url 'core:about' %}" class="font-body text-body-md text-dark-on-surface-variant hover:text-dark-on-surface transition-colors">925 Silver Purity</a>
       <a href="{% url 'core:faq' %}#sizing" class="font-body text-body-md text-dark-on-surface-variant hover:text-dark-on-surface transition-colors">Ring Size Guide</a>
     </div>
 
-    <div class="md:col-span-2 flex flex-col gap-gutter-sm">
+    <div class="col-span-1 md:col-span-2 flex flex-col gap-gutter-sm">
       <h3 data-design-text-token="label-md" class="font-label text-label-md uppercase text-champagne">Customer Care</h3>
       <a href="{% url 'core:faq' %}" class="font-body text-body-md text-dark-on-surface-variant hover:text-dark-on-surface transition-colors">15-Day Returns</a>
       <a href="{% url 'orders:order_tracking' %}" class="font-body text-body-md text-dark-on-surface-variant hover:text-dark-on-surface transition-colors">Track Order</a>
       <a href="{% url 'core:about' %}#boutiques" class="font-body text-body-md text-dark-on-surface-variant hover:text-dark-on-surface transition-colors">Find a Store</a>
     </div>
 
-    <div class="md:col-span-4 flex flex-col gap-gutter-md">
+    <div class="col-span-2 md:col-span-4 flex flex-col gap-gutter-sm md:gap-gutter-md pt-gutter-md border-t border-dark-outline-variant md:pt-0 md:border-t-0">
       <h3 data-design-text-token="label-md" class="font-label text-label-md uppercase text-champagne">Stay in Touch</h3>
       <form action="{% url 'core:subscribe_newsletter' %}" method="POST" class="flex flex-col gap-gutter-sm">
         {% csrf_token %}
-        <label class="flex flex-col gap-gutter-xs">
-          <span class="sr-only font-label text-label-md" data-design-text-token="label-md">Email address</span>
-          <input type="email" name="email" required placeholder="elena@example.com" class="w-full bg-dark-surface-container-low border border-dark-outline-variant rounded-sm px-4 py-2.5 font-body text-body-md text-dark-on-surface placeholder:text-dark-outline focus:border-champagne focus:outline-none focus:ring-1 focus:ring-champagne">
-        </label>
-        <button type="submit" class="bg-cream text-burgundy-deep px-5 py-2.5 rounded-sm uppercase tracking-wider hover:bg-white-pure transition-colors duration-state-change">
-          <span data-design-text-token="label-md" class="font-label text-label-md">Subscribe</span>
-        </button>
+        <div class="flex flex-row md:flex-col gap-gutter-xs md:gap-gutter-sm">
+          <label class="flex-1 md:flex-none flex flex-col gap-gutter-xs">
+            <span class="sr-only font-label text-label-md" data-design-text-token="label-md">Email address</span>
+            <input type="email" name="email" required placeholder="elena@example.com" class="w-full bg-dark-surface-container-low border border-dark-outline-variant rounded-sm px-4 py-2.5 font-body text-body-md text-dark-on-surface placeholder:text-dark-outline focus:border-champagne focus:outline-none focus:ring-1 focus:ring-champagne">
+          </label>
+          <button type="submit" class="shrink-0 bg-cream text-burgundy-deep px-5 py-2.5 rounded-sm uppercase tracking-wider hover:bg-white-pure transition-colors duration-state-change">
+            <span data-design-text-token="label-md" class="font-label text-label-md">Subscribe</span>
+          </button>
+        </div>
         <p data-design-text-token="body-sm" class="font-body text-body-sm text-dark-on-surface-variant">Receive private previews and atelier offers.</p>
       </form>
     </div>
